@@ -1,7 +1,7 @@
 <!--
 
-author:   Sebastian Zug & André Dietrich & Galina Rudolf
-email:    sebastian.zug@informatik.tu-freiberg.de & andre.dietrich@ovgu.de & Galina.Rudolf@informatik.tu-freiberg.de
+author:   Sebastian Zug & Georg Jäger
+email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
 version:  0.0.1
 language: de
 narrator: Deutsch Female
@@ -25,6 +25,53 @@ Veranstaltung richtet sich an Informatiker und Mathematiker und adressiert die f
 
 
 * Architekturkonzepte für Roboteranwendungen
+
+| Datum      | Titel      | GitHub-Link | LiaScript-Link |
+| ---------- | ---------- | ----------- | -------------- |
+| 14.10.2019 | Einführung | [Link](https://github.com/SebastianZug/SoftwareprojektRobotik/blob/master/00_Einfuehrung.md)            |  [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/00_Einfuehrung.md#1)              |
+
+
+## Organisatorisches (WS 2019/20)
+
+**Dozenten**
+
+| Name             | Email                                      |
+|:-----------------|:-------------------------------------------|
+| Sebastian Zug    | sebastian.zug@informatik.tu-freiberg.de    |
+| Georg Jäger      | georg.jaeger@informatik.tu-freiberg.de     |
+
+
+**Zielstellung der Veranstaltung**
+
+* Anwendungsbereites Programmierverständnis unter C++
+* Einstieg in ROS realisiert
+* Basiswissen in verschiedenen Bereichen der Robotik
+
+**Zeitaufwand und Engagement**
+
+Die Veranstaltung ist in zwei Teile gegliedert. Im Wintersemester werden Sie
+zunächst mit den Grundlagen vertraut gemacht, um :
+
+* als Informatiker am Ende eine mündliche Prüfung zu absolvieren und im Sommersemester eine praktische Aufgabe umzusetzen.
+* als Mathematiker mit einer kleineren Aufgabe am Ende des Semester die Veranstaltung abzuschließen.
+
+Der Zeitaufwand beträgt 180h und setzt sich zusammen aus 60h Präsenzzeit und
+120h Selbststudium. Letzteres umfasst die Vor- und Nachbereitung der
+Lehrveranstaltungen, die eigenständige Lösung von Übungsaufgaben sowie die
+Prüfungsvorbereitung.
+
+**Die eigene Beschäftigung mit der C++ Programmierung und den Konzepten von ROS ist für das erfolgreiche Bestehen der Veranstaltung unabdingbar!**
+
+## Literaturempfehlungen
+
+**Online Kurse**
+
+**Videotutorials**
+
+**Bücher**
+
+
+## Ein Wort zur Ausführungsumgebung
 
 Für den ersten Punkt wird der Quellcode direkt in das LiaScript-Dokument eingebettet und kann damit im Browser bearbeitet werden. Dabei ist ein "Versionssystem light" verfügbar, das Änderungen lokal im Browser abspeichert. Basis für die Ausführungsumgebung ist die API von Rextester https://rextester.com/. Vielen Dank für diesen Service!
 
@@ -101,3 +148,13 @@ int main()
 }
 ```
 @Rextester.eval(@CPP, false, ,`-Wall -std=c++98 -O2 -o a.out source_file.cpp`)
+
+## Wie können Sie zum Gelingen der Veranstaltung beitragen?
+
+* Stellen Sie Fragen, seinen Sie kommunikativ!
+* Organisieren Sie sich in Arbeitsgruppen!
+* Experimentieren Sie mit verschiedenen Entwicklungsumgebung um "Ihren Editor"
+  zu finden
+* Machen Sie Verbesserungsvorschläge für die Vorlesungsfolien!
+
+![Atom IDE Screenshot](./img/00_Einfuehrung/LiaScriptAtomScreenShot.png)<!-- width="100%" -->
