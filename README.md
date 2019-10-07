@@ -13,18 +13,22 @@ import: https://raw.githubusercontent.com/LiaTemplates/Rextester/master/README.m
 # Vorlesung Softwareprojekt
 
 Der vorliegende Kurs realisiert die Vorlesung "Softwareprojekt" an der TU Bergakademie
-Freiberg auf der Basis von LiaScript. Die
+Freiberg auf der Basis von LiaScript. Eine interaktive Darstellung der Inhalte ist unter
+
+[LiaScripLink](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/README.md#1)
+
+zu finden.
+
+Die
 Veranstaltung richtet sich an Informatiker und Mathematiker und adressiert die folgenden Punkte:
 
-* aufbauend auf dem vorangegangenen Kurs Softwareentwicklung werden die Konzepte von C++ erläutert
-* Einführung in das Robot Operating System (ROS)
-* Elemente von Robotersystemen und deren Implementierung wie
-  * Grundlagen der Sensoren und deren Einbettung in ROS
-  * Aktoren und deren Regelung
-  * Karten, deren Erzeugung und Nutzung
-
-
-* Architekturkonzepte für Roboteranwendungen
++ aufbauend auf dem vorangegangenen Kurs Softwareentwicklung werden die Konzepte von C++ erläutert
++ Einführung in das Robot Operating System (ROS)
++ Elemente von Robotersystemen und deren Implementierung wie
+     + Grundlagen der Sensoren und deren Einbettung in ROS
+     + Aktoren und deren Regelung
+     + Karten, deren Erzeugung und Nutzung
++ Architekturkonzepte für Roboteranwendungen
 
 | Datum      | Titel      | GitHub-Link | LiaScript-Link |
 | ---------- | ---------- | ----------- | -------------- |
@@ -44,8 +48,10 @@ Veranstaltung richtet sich an Informatiker und Mathematiker und adressiert die f
 **Zielstellung der Veranstaltung**
 
 * Anwendungsbereites Programmierverständnis unter C++
-* Einstieg in ROS realisiert
+* Verständnis für die Basiskonzepte von ROS und ein
 * Basiswissen in verschiedenen Bereichen der Robotik
+
+... als Vorbereitung auf die praktischen Aufgaben.
 
 **Zeitaufwand und Engagement**
 
@@ -70,8 +76,26 @@ Prüfungsvorbereitung.
 
 **Bücher**
 
++ Torsten T. Will, "C++ - Das umfassende Handbuch", Rheinwerk Computing 2019
 
-## Ein Wort zur Ausführungsumgebung
+## Ok, womit soll ich anfangen?
+
+1. Legen Sie sich ein Repository an, mit dem Sie arbeiten!
+2. Entscheiden Sie sich für Linux als Betriebssystem auf Ihrem Rechner :-), in diesem Fall sind alle Tools die Sie im Laufe des Semesters benötigen, sofort greifbar.
+3. Starten Sie mit kleinen Beispielen, um Ihre Algorithmischen Fähigkeiten zu schulen und sich zum anderen mit der Semantik von C++ vertraut zu machen.
+
+Wenn Sie Punkt 2. nicht uneingeschränkt folgen wollen, hätten Sie zumindest für die Einführung zu C++ unter Windows folgende Möglichkeiten:
+
+| Toolchain       | Link                                                                                  | Bemerkung |
+| --------------- | ------------------------------------------------------------------------------------- | --------- |
+| Visual Studio   |                                                                                       |           |
+| MinGW           | [MinGW Webseite](http://www.mingw.org/)                                               |           |
+| Cygwin          | [Cygwin Webseite](https://cygwin.com/)                                                |           |
+| Linux-Subsystem | [Microsoft Dokumentation](https://docs.microsoft.com/de-de/windows/wsl/install-win10) |           |
+
+Hinsichtlich Ihres Lieblingseditors haben Sie sicher schon eine Wahl getroffen.
+
+## Ein Wort LiaScript
 
 Für den ersten Punkt wird der Quellcode direkt in das LiaScript-Dokument eingebettet und kann damit im Browser bearbeitet werden. Dabei ist ein "Versionssystem light" verfügbar, das Änderungen lokal im Browser abspeichert. Basis für die Ausführungsumgebung ist die API von Rextester https://rextester.com/. Vielen Dank für diesen Service!
 
