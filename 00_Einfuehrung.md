@@ -43,24 +43,23 @@ C++ kombiniert die Effizienz von C mit den Abstraktionsmöglichkeiten der objekt
 | Programmierparadigma  | Prozedural       | Procedural, objektorientiert, funktional                    |
 | Kapselung             | keine            | Integration von Daten und Funktionen in structs und Klassen |
 | Überladen             | nein             | Funktions- und Operatorüberladung                           |
-| Programmierung        | C, Assemblercode | C, C++, Assemblercode                                       |
-| Konzept von Zeigern   | Pointer          | (smart) Pointer, Referenzen                                 |
+| Programmierung        | Präprozessor, C, Assemblercode | Präprozessor, C, C++, Assemblercode, Templates                                       |
+| Konzept von Zeigern   | Pointer          | (Smart-) Pointer, Referenzen                                 |
 | Integrationsfähigkeit | gering           | hoch (namespaces)                                           |
 
 Beispiel für eine C++ Implementierung eines `struct` mit den entsprechenden  Möglichkeiten, die C++ bereit hält.
 
 ```cpp                     structExample.cpp
 #include <iostream>
-using std::string; using std::cout;
 
 struct Student{
-  string name;
+  std::string name;
   int matrikel;
-  void printCertificate(string topic);
+  void printCertificate(std::string topic);
 };
 
-void Student::printCertificate(string topic){
-  cout << name << " passed " << topic;
+void Student::printCertificate(std::string topic){
+  std::cout << name << " passed " << topic;
 }
 
 int main()
@@ -116,7 +115,7 @@ Im Vergleich zwischen C++ und C# ergeben sich folgende Unterschiede / Gemeinsamk
 | Verwendung von Pointern   | Elementarer Bestandteil des Programmierkonzepts                                                                           | nur im `unsafe` mode                                                                                                                       |
 | Objektorientierung        | Fokus auf objektorientierte Anwendungen                                                                                   | pur objektorientiert                                                                                                                       |
 | Vererbung                 |                                                                                                                           | alle Objekte erben von einer Basisklasse `object`                                                                                          |
-|                           | unterstützt Mehrfachvererbung                                                                                             | keine Mehrfachvererbung                                                                                                                    |
+|                           | unterstützt Mehrfachvererbung  (ersetzt Interfaces)                                                                                           | keine Mehrfachvererbung                                                                                                                    |
 | Standard Zugriffsattribut | `public` für structs, `private` für Klassen                                                                               | `private`                                                                                                                                  |
 |                           
 
@@ -133,22 +132,22 @@ Die Sprache C++ verwendet nur etwa 60 Schlüsselwörter („Sprachkern“), manc
 | Grunddatentypen        | Wahrheitswerte       | bool, true, false                                       |
 |                        | Zeichen und Zahlen   | char, char16_t, char32_t, wchart_t                      |
 |                        | Zahlen               | int, double, float                                      |
-|                        | weitere              | auto, enum , typedef, void                              |
+|                        | weitere              | auto, enum , void                              |
 | Modifizierer           | Platzbedarf          | long, short                                             |
 |                        | Vorzeichen           | signed, unsigned                                        |
 |                        | Manipulierbarkeit    | const, constexpr, mutable, volatile                     |
 | Zusammengesetzte Typen | Klassen, Strukturen  | class, struct, union, explicit, this, virtual           |
 |                        | Zugriffsrechte       | friend, private, protected, public                      |
 | Typinformationen       |                      | alignof, decltype, sizeof, typeid, typename             |
-|                        |                      | const_cast, dynamic_cast, reinterpret_cast, static_cast |
+|                        |                      | const\_cast, dynamic\_cast, reinterpret\_cast, static_cast |
 | Ablaufsteuerung        | Schleifen            | do, for, while                                          |
 |                        | Verzweigungen        | if, else, default, switch, case                         |
 |                        | Sprünge              | break, continue, goto                                   |
-|                        | Ausnahmebehandlungen | catch, noexcept, static_assert, throw, try              |
+|                        | Ausnahmebehandlungen | catch, noexcept, static\_assert, throw, try              |
 | Assemblercode          |                      | asm                                                     |
 | Speicherhandling       |                      | delete, new, nullptr                                    |
 | Funktionen             |                      | inline, operator, return                                |
-| Namenbereiche          |                      | namespace, using                                        |
+| Namensbereiche und Alias          |                      | namespace, using, typedef                                        |
 | Schablonen             |                      | template                                                |
 
 
