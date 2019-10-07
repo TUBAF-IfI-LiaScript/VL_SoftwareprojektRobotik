@@ -25,9 +25,9 @@ Veranstaltung richtet sich an Informatiker und Mathematiker und adressiert die f
 + aufbauend auf dem vorangegangenen Kurs Softwareentwicklung werden die Konzepte von C++ erläutert
 + Einführung in das Robot Operating System (ROS)
 + Elemente von Robotersystemen und deren Implementierung wie
-     + Grundlagen der Sensoren und deren Einbettung in ROS
-     + Aktoren und deren Regelung
-     + Karten, deren Erzeugung und Nutzung
+  + Grundlagen der Sensoren und deren Einbettung in ROS
+  + Aktoren und deren Regelung
+  + Karten, deren Erzeugung und Nutzung
 + Architekturkonzepte für Roboteranwendungen
 
 | Datum      | Titel      | GitHub-Link | LiaScript-Link |
@@ -95,7 +95,7 @@ Wenn Sie Punkt 2. nicht uneingeschränkt folgen wollen, hätten Sie zumindest f�
 
 Hinsichtlich Ihres Lieblingseditors haben Sie sicher schon eine Wahl getroffen.
 
-## Ein Wort LiaScript
+## Ein Wort zu LiaScript
 
 Für den ersten Punkt wird der Quellcode direkt in das LiaScript-Dokument eingebettet und kann damit im Browser bearbeitet werden. Dabei ist ein "Versionssystem light" verfügbar, das Änderungen lokal im Browser abspeichert. Basis für die Ausführungsumgebung ist die API von Rextester https://rextester.com/. Vielen Dank für diesen Service!
 
@@ -103,10 +103,10 @@ Ausführbarer C++ Code sieht wie folgt aus, der Titel kann weggelassen werden.
 
 ```cpp                     HelloWorld.cpp
 #include <iostream>
-using namespace std;
 
 int main()
 {
+    using namespace std;
     cout << "Hello, World!";
     return 0;
 }
@@ -129,10 +129,10 @@ die Parameter in einem separaten Codeblock angefügt, gefolgt von der Anweisung
 
 ```cpp                     HelloWorld.cpp
 #include <iostream>
-using namespace std;
 
 int main()
 {
+    using namespace std;
     int input{};
     int output{};
 
@@ -161,10 +161,10 @@ kompiliert wird, versuchen `auto` und die uniforme Initialisierung zu nutzen (je
 
 ```cpp                     HelloWorld.cpp
 #include <iostream>
-using namespace std;
 
 int main()
 {
+    using namespace std;
     int output = 5;
     //auto output {5};
     cout << output;
