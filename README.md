@@ -30,19 +30,19 @@ Veranstaltung richtet sich an Informatiker und Mathematiker und adressiert die f
   + Karten, deren Erzeugung und Nutzung
 + Architekturkonzepte für Roboteranwendungen
 
-| Datum      | Titel      | GitHub-Link | LiaScript-Link |
-| ---------- | ---------- | ----------- | -------------- |
-| 14.10.2019 | Einführung | [Link](https://github.com/SebastianZug/SoftwareprojektRobotik/blob/master/00_Einfuehrung.md)            |  [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/00_Einfuehrung.md#1)              |
+| Datum      | Titel      | GitHub-Link                                                                                  | LiaScript-Link                                                                                                                               |
+|:-----------|:-----------|:---------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------|
+| 14.10.2019 | Einführung | [Link](https://github.com/SebastianZug/SoftwareprojektRobotik/blob/master/00_Einfuehrung.md) | [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/00_Einfuehrung.md#1) |
 
 
 ## Organisatorisches (WS 2019/20)
 
 **Dozenten**
 
-| Name             | Email                                      |
-|:-----------------|:-------------------------------------------|
-| Sebastian Zug    | sebastian.zug@informatik.tu-freiberg.de    |
-| Georg Jäger      | georg.jaeger@informatik.tu-freiberg.de     |
+| Name          | Email                                   |
+|:--------------|:----------------------------------------|
+| Sebastian Zug | sebastian.zug@informatik.tu-freiberg.de |
+| Georg Jäger   | georg.jaeger@informatik.tu-freiberg.de  |
 
 
 **Zielstellung der Veranstaltung**
@@ -68,6 +68,23 @@ Prüfungsvorbereitung.
 
 **Die eigene Beschäftigung mit der C++ Programmierung und den Konzepten von ROS ist für das erfolgreiche Bestehen der Veranstaltung unabdingbar!**
 
+**Ablaufplan Übungen**
+
+Übungstermine
+
+| Nr. | Datum                                    |
+|:----|:-----------------------------------------|
+| 1.  | ~23./24. Oktober~  -> **6./7. November** |
+| 2.  | 13./14. November                         |
+| 3.  | ~20./21. November~ -> **4./5. Dezember** |
+| 4.  | 18./19. Dezember                         |
+| 5.  | 15./16. Januar                           |
+| 6.  | 29./30. Januar                           |
+
+Tragt euch bitte in den Kurs [Softwaretechnologie-Projekt (Prototyp)](https://bildungsportal.sachsen.de/opal/auth/RepositoryEntry/18593513489/CourseNode/98504809493283) im e-learning System OPAL ein.
+
+**Jedes Aufgabenblatt beinhaltet Vorbereitungsaufgaben die eigenständig bearbeitet und in der Übung lediglich verglichen werden!**
+
 ## Literaturempfehlungen
 
 **Online Kurse**
@@ -87,7 +104,7 @@ Prüfungsvorbereitung.
 Wenn Sie Punkt 2. nicht uneingeschränkt folgen wollen, hätten Sie zumindest für die Einführung zu C++ unter Windows folgende Möglichkeiten:
 
 | Toolchain       | Link                                                                                  | Bemerkung |
-| --------------- | ------------------------------------------------------------------------------------- | --------- |
+|:----------------|:--------------------------------------------------------------------------------------|:----------|
 | Visual Studio   |                                                                                       |           |
 | MinGW           | [MinGW Webseite](http://www.mingw.org/)                                               |           |
 | Cygwin          | [Cygwin Webseite](https://cygwin.com/)                                                |           |
