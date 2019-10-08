@@ -82,8 +82,8 @@ typedef struct {
 } student;
 
 
-void printCertificate(student * self, char* label){
-  printf("%s passed %s", self->name, label);
+void printCertificate(void * self, char* label){
+  printf("%s passed %s", ((student*)self)->name, label);
 }
 
 int main()
