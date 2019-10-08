@@ -75,31 +75,30 @@ int main()
 #include<stdio.h>
 #include<string.h>
 
-typedef void (*Operation)(char* label);
-
-struct student{
-  char name[20];
+typedef struct {
+  char name[25];
   int matrikel;
-  Operation opt;  // funtion pointer
+  void (*print)(void *self, char *label);
 } student;
 
-void printCertificate(char* label){
-  printf("%s", label);
+
+void printCertificate(student * self, char* label){
+  printf("%s passed %s", self->name, label);
 }
 
 int main()
 {
-  struct student Humboldt;
-  strcpy(Humboldt.name, "Alexander Humboldt");
+  student Humboldt;
+  strcpy(Humboldt.name, "Alexander von Humboldt");
   Humboldt.matrikel = 1798;
-  Humboldt.opt = printCertificate;
-  Humboldt.opt("Softwareentwicklung");
+  Humboldt.print = &printCertificate;
+  (Humboldt.print)(&Humboldt, "Softwareentwicklung");
   return 0;
 }
 ```
 @Rextester.C
 
-> Gibt es eine Möglichkeit auf die Attribute des Arrays zurückzugreifen?
+> *"Encapsulation is pretty easy, polymorphism is doable - but inheritence is tricky"* [ Martin Beckett, www.stackoverflow.com]
 
 ### ... C#
 
