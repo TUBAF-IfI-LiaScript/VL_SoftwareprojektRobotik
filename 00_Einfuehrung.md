@@ -75,15 +75,18 @@ int main()
 #include<stdio.h>
 #include<string.h>
 
-typedef struct {
+typedef struct student student;
+
+typedef struct student {
   char name[25];
   int matrikel;
-  void (*print)(void *self, char *label);
+  void (*print)(student *self, char *label);
 } student;
 
 
-void printCertificate(void * self, char* label){
-  printf("%s passed %s", ((student*)self)->name, label);
+void printCertificate(student * self, char* label){
+
+  printf("%s passed %s", self->name, label);
 }
 
 int main()
