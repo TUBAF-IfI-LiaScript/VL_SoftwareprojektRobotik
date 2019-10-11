@@ -25,10 +25,14 @@ Veranstaltung richtet sich an Informatiker und Mathematiker und adressiert die f
 + aufbauend auf dem vorangegangenen Kurs Softwareentwicklung werden die Konzepte von C++ erläutert
 + Einführung in das Robot Operating System (ROS)
 + Elemente von Robotersystemen und deren Implementierung wie
+
   + Grundlagen der Sensoren und deren Einbettung in ROS
   + Aktoren und deren Regelung
   + Karten, deren Erzeugung und Nutzung
+
+
 + Architekturkonzepte für Roboteranwendungen
+
 
 | Datum      | Titel      | GitHub-Link                                                                                  | LiaScript-Link                                                                                                                               |
 |:-----------|:-----------|:---------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------|
@@ -47,19 +51,21 @@ Veranstaltung richtet sich an Informatiker und Mathematiker und adressiert die f
 
 **Zielstellung der Veranstaltung**
 
-* Anwendungsbereites Programmierverständnis unter C++
-* Verständnis für die Basiskonzepte von ROS und ein
-* Basiswissen in verschiedenen Bereichen der Robotik
++ Anwendungsbereites Programmierverständnis unter C++
++ Basiskonzepte von ROS und den entsprechenden Entwicklungswerkzeugen
++ Verständnis für generelle Architekurkonzepte und Lösungsansätze in verschiedenen Bereichen der Robotik
 
-... als Vorbereitung auf die praktischen Aufgaben.
+... als Vorbereitung auf die praktischen Aufgaben im Sommersemester.
 
-**Zeitaufwand und Engagement**
+**Prüfungsleistungen**
 
 Die Veranstaltung ist in zwei Teile gegliedert. Im Wintersemester werden Sie
 zunächst mit den Grundlagen vertraut gemacht, um :
 
-* als Informatiker am Ende eine mündliche Prüfung zu absolvieren und im Sommersemester eine praktische Aufgabe umzusetzen.
+* als Informatiker am Ende eine mündliche Prüfung zu absolvieren und im Sommersemester eine praktische Aufgabe umzusetzen. Diese wird separat bewertet.
 * als Mathematiker mit einer kleineren Aufgabe am Ende des Semester die Veranstaltung abzuschließen.
+
+**Zeitaufwand und Engagement**
 
 Der Zeitaufwand beträgt 180h und setzt sich zusammen aus 60h Präsenzzeit und
 120h Selbststudium. Letzteres umfasst die Vor- und Nachbereitung der
@@ -199,3 +205,21 @@ int main()
 * Machen Sie Verbesserungsvorschläge für die Vorlesungsfolien!
 
 ![Atom IDE Screenshot](./img/00_Einfuehrung/LiaScriptAtomScreenShot.png)<!-- width="100%" -->
+
+## Fragebogen zum Lernfortschritt
+
+Die Arbeitsgruppe ist in verschiedenen Projekten rund um die Digitalisierung des Lernens an Hochschulen involviert, die durch das Bundesministerium für Bildung und Forschung getragen werden, beteiligt [Industrial-eLab](http://www.elab.ovgu.de/). Entsprechend wollen wir verstehen, wie Sie in Ihrem Lernprozess vorgehen und wie wir Sie ggf. unterstützen können.
+
+Beispiel aus dem Projekt:
+
+![Atom IDE Screenshot](./img/00_Einfuehrung/LearningAnalyticsExample.png)<!-- width="100%" -->
+*Gegenüberstellung des Programmierverhaltens eines erfahrenen und eines weniger erfahrenen Studenten*
+[^1]: [Quelle](http://www.elab.ovgu.de/elab_media/_users/hawlitsc/Paper_FDIBA_eLab/FDIBA_eLab-p-90.pdf)
+
+Mit dem folgenden Fragebogen wollen wir ermitteln wie sich Ihr Wissensstand ausgehend von den Lehraktivitäten verbessert. Davon ausgehend wollen wir Anfang Dezember mit einem Test evaluieren, wie sich Ihr Wissen im Themengebiet verändert hat. Dies ist eine gute Vorbereitung auf die Prüfungen am Ende des Wintersemesters.
+
+**Die Erkenntnisse aus dieser Untersuchung bleiben anonym und beeinflussen in keinster Weise Ihr Ergebnis!**
+
+## Sie wollen gleich starten?
+
+Hinweis RoboCup Team
