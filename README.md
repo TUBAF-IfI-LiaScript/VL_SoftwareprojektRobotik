@@ -208,7 +208,7 @@ int main()
 
 ## Fragebogen zum Lernfortschritt
 
-Die Arbeitsgruppe ist in verschiedenen Projekten rund um die Digitalisierung des Lernens an Hochschulen involviert, die durch das Bundesministerium für Bildung und Forschung getragen werden, beteiligt [Industrial-eLab](http://www.elab.ovgu.de/). Entsprechend wollen wir verstehen, wie Sie in Ihrem Lernprozess vorgehen und wie wir Sie ggf. unterstützen können.
+Die Arbeitsgruppe ist in verschiedenen Projekten rund um die Digitalisierung des Lernens an Hochschulen involviert, die durch das Bundesministerium für Bildung und Forschung getragen werden, beteiligt [Industrial-eLab](http://www.elab.ovgu.de/). Entsprechend wollen wir gemeinsam mit Partnern der Hochschule Anhalt verstehen, wie Sie in Ihrem Lernprozess vorgehen und wie wir Sie ggf. unterstützen können.
 
 Beispiel aus dem Projekt:
 
@@ -216,7 +216,7 @@ Beispiel aus dem Projekt:
 *Gegenüberstellung des Programmierverhaltens eines erfahrenen und eines weniger erfahrenen Studenten*
 [^1]: [Quelle](http://www.elab.ovgu.de/elab_media/_users/hawlitsc/Paper_FDIBA_eLab/FDIBA_eLab-p-90.pdf)
 
-Mit dem folgenden Fragebogen wollen wir ermitteln wie sich Ihr Wissensstand ausgehend von den Lehraktivitäten verbessert. Davon ausgehend wollen wir Anfang Dezember mit einem Test evaluieren, wie sich Ihr Wissen im Themengebiet verändert hat. Dies ist eine gute Vorbereitung auf die Prüfungen am Ende des Wintersemesters.
+Mit dem Fragebogen wollen wir ermitteln wie sich Ihr Wissensstand ausgehend von den Lehraktivitäten verbessert. Davon ausgehend wollen wir Anfang Dezember mit einem Test evaluieren, wie sich Ihr Wissen im Themengebiet verändert hat. Dies ist eine gute Vorbereitung auf die Prüfungen am Ende des Wintersemesters.
 
 **Die Erkenntnisse aus dieser Untersuchung bleiben anonym und beeinflussen in keinster Weise Ihr Ergebnis!**
 
