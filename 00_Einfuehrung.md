@@ -137,17 +137,19 @@ using System;
 
 namespace Rextester
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-          int[] ar = {1, 2, 3, 4, 5};
-
-          // causing exception
-          for (int i = 0; i <= ar.Length; i++)
-              Console.WriteLine(ar[i]);
-        }
+  public class Program
+  {
+    public static void printArray(int[] array){
+    for (int i = 0; i <= array.Length; i++)
+      Console.WriteLine(array[i]);
     }
+
+    public static void Main(string[] args)
+    {
+      int[] array = {1, 2, 3, 4, 5};
+      printArray(array);
+    }
+  }
 }
 ```
 @Rextester.eval(@CSharp)
@@ -156,7 +158,7 @@ namespace Rextester
 #include <iostream>
 
 void printArray(int array []){
-	for (unsigned int i = 0; i < 51; i++){
+  for (unsigned int i = 0; i < 51; i++){
     std::cout << array[i] << ",";
   }
 }
