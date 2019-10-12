@@ -220,7 +220,7 @@ Die Sprache C++ verwendet nur etwa 60 Schlüsselwörter („Sprachkern“), manc
 
 In den folgenden Lehrveranstaltungen sollen einzelne Aspekte dieser Schlüsselworte anhand von Beispielen eingeführt werden.
 
-### Variablen
+### Variablenverwendung
 
 **Datentypen**
 
@@ -233,9 +233,10 @@ In den folgenden Lehrveranstaltungen sollen einzelne Aspekte dieser Schlüsselwo
 | Referenzen     | Indirektion mit `&`                 |                                                                |
 | Zeiger         | Indirektion mit `*`                 |                                                                |
 
+Während C# spezifische Größenangaben für die Variablen trifft [Link](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/integral-numeric-types) sind die maximalen Werte für
+C++ Programme systemabhängig.
 
-
-Auf die realisierten Größen kann mit zwei Klassen der StandardBibliothek zurückgegriffen werden.
+Auf die realisierten Größen kann mit zwei Klassen der Standardbibliothek zurückgegriffen werden.
 
 1. `climits.h` definiert ein Set von Makrokonstanten, die die zugehörigen Werte umfassen. Unter C++ wird diese Bibliothek mit `climits.h` eingebettet, da `limits` durch einen eignen namespace besetzt ist [Link mit Übersicht](http://www.cplusplus.com/reference/climits/)
 2. `numeric_limits.h` spezifiziert Templates für die Bereitstellung der entsprechenden Grenzwerte und ist damit deutlich flexibler.
@@ -251,6 +252,10 @@ int main () {
   std::cout << "Minimum value for char: " << CHAR_MIN << '\n';
   std::cout << "Maximum value for char: " << CHAR_MAX << '\n';
   std::cout << "----------------------------------------------------\n";
+  std::cout << "Bits for int16_t: " << INT16 << '\n';
+  std::cout << "Minimum value for int16_t: " << INT16_MIN << '\n';
+  std::cout << "Maximum value for int16_t: " << INT16_MAX << '\n';
+  std::cout << "----------------------------------------------------\n";
   std::cout << std::boolalpha;
   std::cout << "Minimum value for int: " << std::numeric_limits<int>::min() << '\n';
   std::cout << "Maximum value for int: " << std::numeric_limits<int>::max() << '\n';
@@ -261,6 +266,39 @@ int main () {
 }
 ```
 @Rextester.CPP
+
+Eine spezifische Definition erfolgt anhand der Typen:
+
+| Typ            | Beispiel        | Bedeutung                                                                      |
+| -------------- | --------------- | ------------------------------------------------------------------------------ |
+| `intN_t`       | `int8_t`        | "... denotes a signed integer type with a width of exactly N bits." (7.18.1.1.) |
+| `int_leastN_t` | `int_least32_t` | "... denotes a signed integer type with a width of at least N bits."   (7.18.1.2.)        |
+| `int_fastN_t` | `int_fast32_t` | "... designates the fastest unsigned integer type with a width of at least N."   (7.18.1.3.)        |
+
+```cpp                     Hello.cpp
+#include <iostream>
+#include <typeinfo>
+
+int main()
+{
+	std::cout<<typeid(int).name() << " - "<<  sizeof(int) << " Byte \n";
+  std::cout<<typeid(int32_t).name()  << " - "<<  sizeof(int32_t) << " Byte \n";
+  std::cout<<typeid(int_least32_t).name() << " - "<<  sizeof(int_least32_t) << " Byte \n";
+  std::cout<<typeid(int_fast32_t).name() << " - "<<  sizeof(int_fast32_t) << " Byte \n";
+}
+```
+@Rextester.CPP
+
+Dazu kommen entsprechende Pointer und max/min Makros.
+
+Die Herausforderung der architekturspezfischen Implmementierungen lässt sich sehr schön bei der Darstellung von Größenangaben von Speicherinhalten, wie zum Beispiel für Arrays, Standardcontainer oder Speicherbereiche illustrieren. Nehmen wir an Sie wollen
+eine Funktion spezifizieren mit der Sie einen Speicherblock reservieren. Welche Einschränkungen sehen Sie bei folgendem Ansatz:
+
+```cpp                     Hello.cpp
+void memcpy(void *s1, void const *s2, int  n);  
+```
+
+`size_t` umgeht dieses Problem, in dem ein plattformabhäniger Typendefinition erfolgt, die maximale Größe des adressierbaren Bereiches berücksichtigt.
 
 **Deklaration, Definition und Initialisierung**
 
@@ -298,27 +336,57 @@ In C++11 wurde die Initialisierung, die sich bisher für verschiedenen Kontexte 
 int numbers[] = { 1, 2, 4, 5, 9 };
 ```
 
-| Anweisung             | Bedeutung                                   |
-|:----------------------|:--------------------------------------------|
-| `int i{};`            | uninitialisierter Standardtyp               |
-| `int j{10};`          | initialisierter Standardtyp                 |
-| `int a[]{1, 2, 3, 4}` | aggregierte Initialisierung                 |
-| `X x1{};`             | Standardkonstruktor eine individuellen Typs |
-| `X x2{1,2};`          | Parameterisierter Konstruktor               |
-| `X x4{x3};`           | Copy-Konstruktor                            |
+| Anweisung               | Bedeutung                                   |
+|:----------------------- |:------------------------------------------- |
+| `int i{};`              | uninitialisierter Standardtyp               |
+| `int j{10};`            | initialisierter Standardtyp                 |
+| `int a[]{1, 2, 3, 4}`   | aggregierte Initialisierung                 |
+| `X x1{}; X x2();`       | Standardkonstruktor eine individuellen Typs |
+| `X x3{1,2}; X x4{1,2};` | Parameterisierter Konstruktor               |
+| `X x5{x3}; X x6(x3);`   | Copy-Konstruktor                            |
 
-> auto Initalisierung
+Die `auto`-Schlüsselwort weist den Compiler an den Initialisierungsausdruck einer deklarierten Variable oder einen lambdaausdrucksparameter zu verwenden, um den Typ herzuleiten. Damit ist eine explizite Angabe des Typs einer Variablen nicht nötig. Damit steigert sich die Stabilität, Benutzerfreundlichkeit und Effizienz des Codes.
 
-**Zeichenketten und Strings**
+```cpp                     Hello.cpp
+#include <iostream>
+#include <typeinfo>
+#include <cxxabi.h>
+
+int main()
+{
+  auto var1 = 4;
+  auto var2 {3.14159};
+  auto var3 = "Hallo";
+  auto var4 = L"Deutsch Umlaute ÜöÄ";
+  auto var5 = new double[10];
+
+  // Datentyp der Variablen ausgeben
+  std::cout << typeid(var1).name() << std::endl
+      << typeid(var2).name() << std::endl
+      << typeid(var3).name() << std::endl
+      << typeid(var4).name() << std::endl
+      << typeid(var5).name() << std::endl;
+
+  // aufräumen nicht vergessen
+  delete[] var5;
+}
+```
+@Rextester.CPP
+
+Wir werden `auto` im folgenden auch im Zusammenhang mit Funktionsrückgaben und der effizienten Implementierung von Schleifen einsetzen.
+
+### Zeichenketten, Strings und Streams
 
 Aus historischen Gründen kennt C++ zwei Möglichkeiten Zeichenketten darzustellen:
 
 + `const char *` aus dem C-Kontext und  
 + `std::string` die Darstellung der Standardbibliothek
 
+> "While cout is the proper C++ way, I believe that some people and companies (including Google) continue to use printf in C++ code because it is much easier to do formatted output with printf than with cout. "
+
 Für die Ausgabe einer nicht veränderlichen Zeichenkette arbeitet man
 
-### Streams
+
 
 **Grundlagen**
 
@@ -340,8 +408,10 @@ int main()
 
 **Diskussion cout vs. printf**
 
+### Pointer vs. Referenzen
 
-## Was passiert mit "Hello World"?
+
+## Wiederholung: Was passiert mit "Hello World"?
 
 ```cpp                     Hello.cpp
 #include <iostream>
@@ -355,7 +425,7 @@ int main()
 @Rextester.CPP
 
 <!--
-style="width: 60%; max-width: 860px; display: block; margin-left: auto; margin-right: auto;"
+style="width: 50%; max-width: 860px; display: block; margin-left: auto; margin-right: auto;"
 -->
 ````ascii
 
