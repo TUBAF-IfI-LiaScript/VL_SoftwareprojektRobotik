@@ -12,6 +12,18 @@ import: https://raw.githubusercontent.com/LiaTemplates/Rextester/master/README.m
 
 # Vorlesung I - Einführung
 
+Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/00_Einfuehrung.md#1)
+
+**Zielstellung der heutigen Veranstaltung**
+
++ Abgrenzung der Programmiersprache C++ zu anderen Sprachen
++ Wiederholung von Basiskonzepten und Schlüsselworten
++ Ablauf des Compile-Vorganges
+
+--------------------------------------------------------------------------------
+
+## Ausgangspunkt
+
 **Wie weit waren wir noch gekommen ... ein Rückblick auf die Veranstaltung Softwareentwicklung?**
 
 Ausgehend von der Einführung in C# haben wir uns mit:
@@ -30,9 +42,13 @@ beschäftigt.
 ## C++ vs ...
 
 ![Atom IDE Screenshot](./img/00_Einfuehrung/ObjectOrientedProgrammingLanguages.png)<!-- width="100%" -->
-Darstellung der Entwicklung von Programmiersprachen [^1]
+*Darstellung der Entwicklung von objektorientierten/nicht-objektorientieren Programmiersprachen* [^1]
 
 [^1]: Nepomuk Frädrich, Historie der objektorientierten Programmiersprachen, Wikimedia https://commons.wikimedia.org/wiki/File:History_of_object-oriented_programming_languages.svg
+
+Der Name C++ ist eine Wortschöpfung von Rick Mascitti, einem Mitarbeiter Stroustrups, und wurde zum ersten Mal im Dezember 1983 benutzt. Der Name kommt von der Verbindung der Vorgängersprache C und dem Inkrement-Operator „++“, der den Wert einer Variablen inkrementiert (um eins erhöht). Der Erfinder von C++, [Bjarne Stroustrup](https://de.wikipedia.org/wiki/Bjarne_Stroustrup) , nannte C++ zunächst „C mit Klassen“ (C with classes).
+
+Vortrag von Stroustrup auf der CppCon 2018: [“Concepts: The Future of Generic Programming (the future is here)”](https://www.youtube.com/watch?v=HddFGPTAmtU)
 
 ### ... C
 
@@ -40,14 +56,14 @@ C++ kombiniert die Effizienz von C mit den Abstraktionsmöglichkeiten der objekt
 
 | Kriterium             | C                              | C++                                                         |
 |:----------------------|:-------------------------------|:------------------------------------------------------------|
-| Programmierparadigma  | Prozedural                     | Procedural, objektorientiert, funktional                    |
-| Kapselung             | keine                          | Integration von Daten und Funktionen in structs und Klassen |
-| Überladen             | nein                           | Funktions- und Operatorüberladung                           |
+| Programmierparadigma  | Prozedural                     | Prozedural, objektorientiert, funktional                    |
+| Kapselung             | keine                          | Integration von Daten und Funktionen in `structs` und Klassen |
+| Überladen             | nein                           | Funktions- und Operator-Überladung                           |
 | Programmierung        | Präprozessor, C, Assemblercode | Präprozessor, C, C++, Assemblercode, Templates              |
 | Konzept von Zeigern   | Pointer                        | (Smart-) Pointer, Referenzen                                |
 | Integrationsfähigkeit | gering                         | hoch (namespaces)                                           |
 
-Beispiel für eine C++ Implementierung eines `struct` mit den entsprechenden  Möglichkeiten, die C++ bereit hält.
+Im folgenden soll die Verwendung eines `struct` unter C++ dem Bemühen um eine ähnliche Realisierung unter C mit dem nominell gleichen Schlüsselwort gegenübergestellt werden.
 
 ```cpp                     structExample.cpp
 #include <iostream>
@@ -107,6 +123,54 @@ int main()
 
 Im Vergleich zwischen C++ und C# ergeben sich folgende Unterschiede / Gemeinsamkeiten
 
+Zur Erinnerung sei noch mal auf das Ausführungskonzept von C# verwiesen.
+
+![Atom IDE Screenshot](./img/00_Einfuehrung/CLRexectutionConcept.png)<!-- width="100%" -->
+*.NET CLR Execution Model* [^1]
+
+[^1]:  Youtuber "MyPassionFor.NET", .NET CLR Execution Model, https://www.youtube.com/watch?v=gCHoBJf4htg
+
+Unter anderem aus der überwachten Ausführung ergeben sich zentrale Unterschiede beim Vergleich von C# und C++:
+
+```csharp    OutOfRange.cs
+using System;
+
+namespace Rextester
+{
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+          int[] ar = {1, 2, 3, 4, 5};
+
+          // causing exception
+          for (int i = 0; i <= ar.Length; i++)
+              Console.WriteLine(ar[i]);
+        }
+    }
+}
+```
+@Rextester.eval(@CSharp)
+
+```cpp                     OutOfRange.cpp
+#include <iostream>
+
+void printArray(int array []){
+	for (unsigned int i = 0; i < 51; i++){
+    std::cout << array[i] << ",";
+  }
+}
+
+int main()
+{
+  int array [] {1,2,3,4,5};
+  printArray(array);
+  return 0;
+}
+```
+@Rextester.CPP
+
+
 | Aspekt                    | C++                                                                                                                       | C#                                                                                                                                         |
 |:--------------------------|:--------------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------|
 | Entwicklung               | ab 1979 von Bjarne Stroustrup, Standardisierung 1998, aktueller Stand C++17 (von vielen Compilern noch nicht unterstützt) | ab 2001 von Microsoft  entwickelt, ab 2003 ISO genormt                                                                                     |
@@ -115,11 +179,11 @@ Im Vergleich zwischen C++ und C# ergeben sich folgende Unterschiede / Gemeinsamk
 | Plattformen               | Compiler für jedwede Architektur und Betriebssysteme                                                                      | setzt .NET Ausführungsumgebung voraus                                                                                                      |
 | Speicher Management       | Kein Speichermanagement                                                                                                   | die CLR umfasst unter anderem einen Garbage Collector                                                                                      |
 | Verwendung von Pointern   | Elementarer Bestandteil des Programmierkonzepts                                                                           | nur im `unsafe` mode                                                                                                                       |
-| Objektorientierung        | Fokus auf objektorientierte Anwendungen                                                                                   | pur objektorientiert                                                                                                                       |
+| Objektorientierung        | Fokus auf objektorientierte Anwendungen                                                                                   | pur objektorientiert (zum Beispiel keine globalen Funktionen)                                                                                                                      |
 | Vererbung                 |                                                                                                                           | alle Objekte erben von einer Basisklasse `object`                                                                                          |
 |                           | unterstützt Mehrfachvererbung  (ersetzt Interfaces)                                                                       | keine Mehrfachvererbung                                                                                                                    |
 | Standard Zugriffsattribut | `public` für structs, `private` für Klassen                                                                               | `private`                                                                                                                                  |
-|                           |                                                                                                                           |                                                                                                                                            |
+
 
 ## Elemente der Sprache C++
 
@@ -132,7 +196,7 @@ Die Sprache C++ verwendet nur etwa 60 Schlüsselwörter („Sprachkern“), manc
 | Bedeutung                | Inhalt               | Schlüsselwort                                              |
 |:-------------------------|:---------------------|:-----------------------------------------------------------|
 | Grunddatentypen          | Wahrheitswerte       | bool, true, false                                          |
-|                          | Zeichen und Zahlen   | char, char16_t, char32_t, wchart_t                         |
+|                          | Zeichen und Zahlen   | char, char16\_t, char32\_t, wchart\_t                         |
 |                          | Zahlen               | int, double, float                                         |
 |                          | weitere              | auto, enum , void                                          |
 | Modifizierer             | Platzbedarf          | long, short                                                |
@@ -152,6 +216,7 @@ Die Sprache C++ verwendet nur etwa 60 Schlüsselwörter („Sprachkern“), manc
 | Namensbereiche und Alias |                      | namespace, using, typedef                                  |
 | Schablonen               |                      | template                                                   |
 
+In den folgenden Lehrveranstaltungen sollen einzelne Aspekte dieser Schlüsselworte anhand von Beispielen eingeführt werden.
 
 ### Variablen
 
@@ -165,6 +230,8 @@ Die Sprache C++ verwendet nur etwa 60 Schlüsselwörter („Sprachkern“), manc
 | Zeichentypen   | `char`, `char16_t`, `char32_t`      | Die Größe von `char` entspricht dem kleinsten Ganzzahldatentyp |
 | Referenzen     | Indirektion mit `&`                 |                                                                |
 | Zeiger         | Indirektion mit `*`                 |                                                                |
+
+
 
 Auf die realisierten Größen kann mit zwei Klassen der StandardBibliothek zurückgegriffen werden.
 
