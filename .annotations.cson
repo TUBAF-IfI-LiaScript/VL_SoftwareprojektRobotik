@@ -1,0 +1,52 @@
+"00_Einfuehrung.md": [
+  {
+    lineNumber: 154
+    title: "containerExamples"
+    content: '''
+      **Ausgangspunkt: Implementierung mittels array, dann Umstieg auf generische Liste**
+      
+      Ausgangspunkt: Implementierung mittels array, dann Umstieg auf generische
+      Liste
+      + Diskussion von generischer und nichtgenerischer Liste
+          ```csharp
+          int[] array = {1, 2, 3, 4, 5};
+          ArrayList myAL = new ArrayList();
+          List<int> intList = new List<int>();
+          ```
+      + Abwandlung auf Interface bezogene Implementierung
+          ```
+          IList<int> intList = new List<int>();
+          ```
+      + Welche Nachteile bringt das Interface mit? Es implementiert nur eine Untermenge der List<int> Methoden
+      
+          ```
+          static bool isPositiveInt(int i)
+          {
+              return i > 0;
+          }
+          static void Main(string[] args)
+          {
+              List<int> intList = new List<int>(){10, 20, 30, 40};
+              bool res = intList.TrueForAll(isPositiveInt);
+          }
+          ```
+      
+      - Übertragung auf C++ C-nahe Implementierung mit array
+      - Anwendung von Standardcontainer
+          ```
+          #include <vector>
+          int main()
+          {
+              std::vector<int> v;
+              int i;
+              for (i=0; i<100; ++i) {
+                  v.push_back(i); // Fügt i ans Ende von v an.
+                  ++v[i]; // v[i] muss bereits existieren.
+              }
+          }
+          ```  
+      
+    '''
+    type: "markdown"
+  }
+]

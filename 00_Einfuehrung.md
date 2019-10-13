@@ -52,6 +52,9 @@ Vortrag von Stroustrup auf der CppCon 2018: [“Concepts: The Future of Generic 
 
 ### ... C
 
+                                  {{0-1}}
+*******************************************************************************
+
 C++ kombiniert die Effizienz von C mit den Abstraktionsmöglichkeiten der objektorientierten Programmierung. C++ Compiler können C Code überwiegend kompilieren, umgekehrt funktioniert das nicht.
 
 | Kriterium             | C                              | C++                                                         |
@@ -62,6 +65,11 @@ C++ kombiniert die Effizienz von C mit den Abstraktionsmöglichkeiten der objekt
 | Programmierung        | Präprozessor, C, Assemblercode | Präprozessor, C, C++, Assemblercode, Templates              |
 | Konzept von Zeigern   | Pointer                        | (Smart-) Pointer, Referenzen                                |
 | Integrationsfähigkeit | gering                         | hoch (namespaces)                                           |
+
+*******************************************************************************
+
+                                  {{1-2}}
+*******************************************************************************
 
 Im folgenden soll die Verwendung eines `struct` unter C++ dem Bemühen um eine ähnliche Realisierung unter C mit dem nominell gleichen Schlüsselwort gegenübergestellt werden.
 
@@ -119,7 +127,13 @@ int main()
 
 > *"Encapsulation is pretty easy, polymorphism is doable - but inheritence is tricky"* [ Martin Beckett, www.stackoverflow.com]
 
+*******************************************************************************
+
+
 ### ... C#
+
+                               {{0-1}}
+*******************************************************************************
 
 Im Vergleich zwischen C++ und C# ergeben sich folgende Unterschiede / Gemeinsamkeiten
 
@@ -130,7 +144,15 @@ Zur Erinnerung sei noch mal auf das Ausführungskonzept von C# verwiesen.
 
 [^1]:  Youtuber "MyPassionFor.NET", .NET CLR Execution Model, https://www.youtube.com/watch?v=gCHoBJf4htg
 
-Unter anderem aus der überwachten Ausführung ergeben sich zentrale Unterschiede beim Vergleich von C# und C++:
+*******************************************************************************
+
+
+                              {{1-2}}
+*******************************************************************************
+
+Lassen Sie uns die Gegenüberstellung der Konzepte anhand verschiedener Konstrukte für die Listendarstellung unter C# und C++ genauer untersuchen:
+
+
 
 ```csharp    OutOfRange.cs
 using System;
@@ -173,6 +195,11 @@ int main()
 @Rextester.CPP
 
 
+*******************************************************************************
+
+                               {{2-3}}
+*******************************************************************************
+
 | Aspekt                    | C++                                                                                                                       | C#                                                                                                                                         |
 |:--------------------------|:--------------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------|
 | Entwicklung               | ab 1979 von Bjarne Stroustrup, Standardisierung 1998, aktueller Stand C++17 (von vielen Compilern noch nicht unterstützt) | ab 2001 von Microsoft  entwickelt, ab 2003 ISO genormt                                                                                     |
@@ -186,6 +213,8 @@ int main()
 |                           | unterstützt Mehrfachvererbung  (ersetzt Interfaces)                                                                       | keine Mehrfachvererbung                                                                                                                    |
 | Standard Zugriffsattribut | `public` für structs, `private` für Klassen                                                                               | `private`                                                                                                                                  |
 
+
+*******************************************************************************
 
 ## Elemente der Sprache C++
 
@@ -308,18 +337,6 @@ In der aufgeregten Diskussion werden die folgenden Punkte häufig vermengt, dahe
 + Definition ... Anlegen von Speicher für die Variable
 + Initialisierung ... Zuweisung eines Anfangswertes
 
-```cpp                     Hello.cpp
-#include <iostream>
-
-int main()
-{
-    int index{};
-    std::cout << index << std::endl;
-    return 0;
-}
-```
-@Rextester.CPP
-
 | Anweisung              | Wirkung                                                    |
 |:-----------------------|:-----------------------------------------------------------|
 | `int i`                | Definition und Deklaration der Variablen i                 |
@@ -387,18 +404,15 @@ Aus historischen Gründen kennt C++ zwei Möglichkeiten Zeichenketten darzustell
 Für die Ausgabe einer nicht veränderlichen Zeichenkette arbeitet man
 
 
-
-**Grundlagen**
-
 ```cpp                     Hello.cpp
 #include <iostream>
 
 int main()
 {
-    const char * text = "some Unicode text òàäßèöé€§";
-      std::cout << sizeof(text) << std::endl;
-    for (int i=0; i<sizeof(text); i++){
-      std::cout << text[i] << std::endl;
+    char text[] = "abaasdösa";
+    std::cout << sizeof(text) << std::endl;
+    for (size_t i=0; i<20; i++){
+      std::cout << text[i] << " " << sizeof(text[i]) << std::endl;
     }
     std::cout << text;
     return 0;
