@@ -323,7 +323,7 @@ Dazu kommen entsprechende Pointer und max/min Makros.
 Die Herausforderung der architekturspezfischen Implmementierungen lässt sich sehr schön bei der Darstellung von Größenangaben von Speicherinhalten, wie zum Beispiel für Arrays, Standardcontainer oder Speicherbereiche illustrieren. Nehmen wir an Sie wollen
 eine Funktion spezifizieren mit der Sie einen Speicherblock reservieren. Welche Einschränkungen sehen Sie bei folgendem Ansatz:
 
-```cpp                     Hello.cpp
+```cpp                     memcpy.cpp
 void memcpy(void *s1, void const *s2, int  n);  
 ```
 
@@ -364,7 +364,7 @@ int numbers[] = { 1, 2, 4, 5, 9 };
 
 Die `auto`-Schlüsselwort weist den Compiler an den Initialisierungsausdruck einer deklarierten Variable oder einen lambdaausdrucksparameter zu verwenden, um den Typ herzuleiten. Damit ist eine explizite Angabe des Typs einer Variablen nicht nötig. Damit steigert sich die Stabilität, Benutzerfreundlichkeit und Effizienz des Codes.
 
-```cpp                     Hello.cpp
+```cpp                     auto.cpp
 #include <iostream>
 #include <typeinfo>
 #include <cxxabi.h>
@@ -394,36 +394,106 @@ Wir werden `auto` im folgenden auch im Zusammenhang mit Funktionsrückgaben und 
 
 ### Zeichenketten, Strings und Streams
 
+**Verwendung von Zeichenketten und Strings**
+
 Aus historischen Gründen kennt C++ zwei Möglichkeiten Zeichenketten darzustellen:
 
 + `const char *` aus dem C-Kontext und  
 + `std::string` die Darstellung der Standardbibliothek
 
-> "While cout is the proper C++ way, I believe that some people and companies (including Google) continue to use printf in C++ code because it is much easier to do formatted output with printf than with cout. "
+Für die Ausgabe einer nicht veränderlichen Zeichenkette kann man nach wie vor mit
+dem `const char` Konstrukt arbeiten:
 
-Für die Ausgabe einer nicht veränderlichen Zeichenkette arbeitet man
 
 
-```cpp                     Hello.cpp
+```cpp                    cStyleStrings.cpp
 #include <iostream>
 
 int main()
 {
-    char text[] = "abaasdösa";
+    //             01234567890123456789012
+    char text[] = "Softwareprojekt Robotik";
     std::cout << sizeof(text) << std::endl;
-    for (size_t i=0; i<20; i++){
-      std::cout << text[i] << " " << sizeof(text[i]) << std::endl;
-    }
-    std::cout << text;
+    std::cout << "Erstes Zeichen:  " <<  text[0] << "\n";
+    std::cout << "Sechstes Zeichen:" << *(text+5) << "\n";
+    std::cout << "Letztes Zeichen: " << text[sizeof(text)-2] << "\n";
+    std::cout << text << "\n";
+
+    char16_t * Umlaut = (char16_t*)(text+5);
+    std::cout << Umlaut;
     return 0;
 }
 ```
 @Rextester.CPP
 
+Der Hauptunterschied in der Anwendung der `std::string`-Klasse besteht darin, dass Sie den String nicht über einen char-Zeiger manipulieren können. Ein Pointer auf ein Objekt der Klasse `string` zeigt ja nicht auf den ersten Buchstaben, sondern auf das Objekt, das die Zeichen verwaltet.  Darüber steht eine Zahl von
+Elementfunktionen wie `length()`, `ìnsert(n,s)`, `find(s)` zur Verfügung.
+
+
+
+```cpp                    cStyleStrings.cpp
+#include <iostream>
+#include <string>
+
+int main()
+{
+    std::string Alexander {"Alexander von Humboldt"};
+    std::string uniName {"TU Bergakademie"};
+    std::cout << Alexander + ", " + uniName << "\n";
+    return 0;
+}
+```
+@Rextester.CPP
+
+Wie beispielhaft gezeigt können `char` Arrays und `string` Objekte miteinander
+in  einfachen Operatoren verglichen werden. Für das
+Durchlaufen der Zeichenreihe steht ein eigenes Zeigerkonstrukt, der Iterator bereit, der durch `.begin()` und `.end()` in seiner Weite definiert wird. In Kombination mit `auto` können sehr kompakte Darstellungen umgesetzt werden.
+
+> MERKE: Für konstante Textausgaben kann gern der `const char *` Typ verwendet
+> darüber hinaus kommen Instanzen der `std::string` Klasse zum Einsatz.
+
 **Diskussion cout vs. printf**
 
-### Pointer vs. Referenzen
+```cpp                    cStyleStrings.cpp
+#include <iostream>
+#include <string>
 
+struct Student{
+    std::string Vorname;
+    std::string Name;
+    int Matrikel;
+    std::ostream operator << (std::ostream, const Student);
+};
+
+std::ostream Student::operator << (std::ostream &out, const  Student &m) {
+    out << m.Name << m.Matrikel;
+    return out;
+}
+
+
+int main()
+{
+    Student Alexander {"Alexander", "von Humboldt",  1791};
+    Student Bernhard {"Bernhard", "von Cotta", 1827};
+    printf("%-20s %-20s %5s\n" , "Name" , "Vorname" , "Id" );
+    printf("%-20s %-20s %5d\n" , Alexander.Name.c_str(),
+                                 Alexander.Vorname.c_str(),
+                                 Alexander.Matrikel);
+    printf("%-20s %-20s %5d\n" , Bernhard.Name.c_str(),
+                                 Bernhard.Vorname.c_str(),
+                                 Bernhard.Matrikel);
+
+
+    std::cout << Alexander;
+    return 0;
+}
+```
+@Rextester.CPP
+
+> "While cout is the proper C++ way, I believe that some people and companies (including Google) continue to use printf in C++ code because it is much easier to do formatted output with printf than with cout. " [StackOverflow-Beitrag](https://stackoverflow.com/questions/4781819/printf-vs-stdcout)
+
+Hinsichtlich der Performance existieren einige sehr schöne, wenn auch etwas ältere Untersuchungen, die zum Beispiel im Blog von
+ Filip Janiszewski beschrieben werden [Link](https://filipjaniszewski.wordpress.com/2016/01/27/io-stream-performance/). Die Ergebnisse decken sich mit den vorangegangenen Empfehlungen.
 
 ## Wiederholung: Was passiert mit "Hello World"?
 
