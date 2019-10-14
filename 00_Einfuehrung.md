@@ -374,7 +374,7 @@ int main()
   auto var1 = 4;
   auto var2 {3.14159};
   auto var3 = "Hallo";
-  auto var4 = L"Deutsch Umlaute ÜöÄ";
+  auto var4 = "Deutsche Umlaute ÜöÄ";
   auto var5 = new double[10];
 
   // Datentyp der Variablen ausgeben
@@ -419,8 +419,9 @@ int main()
     std::cout << "Letztes Zeichen: " << text[sizeof(text)-2] << "\n";
     std::cout << text << "\n";
 
+    // Hier wird noch eine Lösung gesucht :-)
     char16_t * Umlaut = (char16_t*)(text+5);
-    std::cout << Umlaut;
+    printf("%#x", Umlaut);
     return 0;
 }
 ```
@@ -462,10 +463,9 @@ struct Student{
     std::string Vorname;
     std::string Name;
     int Matrikel;
-    std::ostream operator << (std::ostream, const Student);
 };
 
-std::ostream Student::operator << (std::ostream &out, const  Student &m) {
+std::ostream &operator << (std::ostream &out, const  Student &m) {
     out << m.Name << m.Matrikel;
     return out;
 }
@@ -497,13 +497,13 @@ Hinsichtlich der Performance existieren einige sehr schöne, wenn auch etwas äl
 
 ## Wiederholung: Was passiert mit "Hello World"?
 
-```cpp                     Hello.cpp
-#include <iostream>
+```cpp                     LimitedHello.cpp
+//#include <iostream>
 
 int main()
 {
-    std::cout << "Hello, World!";
-    return 0;
+    //std::cout << "Hello, World!";
+    return 1;
 }
 ```
 @Rextester.CPP
@@ -535,23 +535,18 @@ style="width: 50%; max-width: 860px; display: block; margin-left: auto; margin-r
 
 ````
 
+Durchlaufen Sie zunächst die Toolchain mit dem `reducedHello.cpp` Beispiel. Erklären Sie die die Inhalte der Einträge in
+
 ```
-g++ Hello.cpp -o Hello // Realisiert die gesamte Kette in einem Durchlauf
-ldd Hello
-g++ -E Hello.cpp -o Hello.ii // Stellt die Präprozessorausgabe bereit
-wc -l Hello.ii
-g++ -S Hello.cpp -o Hello.S // Stellt den Assemblercode bereit
-g++ -c Hello.cpp -o Hello.o // Generiert das Objektfile für HelloWorld.cpp
+g++ reducedHello.cpp -o Hello       // Realisiert die gesamte Kette in einem Durchlauf
+ldd Hello                           // Liste der referenzierten Bibliotheken
+g++ -E reducedHello.cpp -o Hello.ii // Stellt die Präprozessorausgabe bereit
+wc -l reducedHello.ii               // Zeilenzahl der Präcompilierten Datei
+g++ -S reducedHello.cpp -o Hello.S  // Stellt den Assemblercode bereit
+g++ -c reducedHello.cpp -o Hello.o  // Generiert das Objektfile für HelloWorld.cpp
 ```
 
-**Schritt 1 - Präprozessor**
-+ Guarded Headers
-
-**Schritt 2 - Kompiler**
- > Woher kennt der Compiler meine CPU-Spezifikation?
-
-https://godbolt.org/
-
-**Schritt 3 - Linker**
-
-> Erweiterung auf mehrere Dateien
+## Aufgabe bis zur nächsten Woche
++ Installieren Sie eine GCC Umgebung auf dem Rechner (Linux oder cygwin)
++ Erweitern Sie die Untersuchung auf ein Projekt mit mehrere Dateien. Wie müssen Sie vorgehen um hier eine Kompilierung zu realiseren? Wie kann sie Dabei ein Makefile unterstützen?
++ Arbeiten Sie sich in die Grundlagen der C++ Programmierung (Ausgaben, Eingaben, Programmfluss, Datentypen) ein.
