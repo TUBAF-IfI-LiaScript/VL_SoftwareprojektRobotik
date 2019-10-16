@@ -80,7 +80,7 @@ Prüfungsvorbereitung.
 
 | Nr. | Datum                                    |
 |:----|:-----------------------------------------|
-| 1.  | ~23./24. Oktober~  -> **6./7. November** |
+| 1.  | ~23./24. Oktober~ -> **6./7. November**  |
 | 2.  | 13./14. November                         |
 | 3.  | ~20./21. November~ -> **4./5. Dezember** |
 | 4.  | 18./19. Dezember                         |
@@ -93,9 +93,15 @@ Tragt euch bitte in den Kurs [Softwaretechnologie-Projekt (Prototyp)](https://bi
 
 ## Literaturempfehlungen
 
-**Online Kurse**
+**Vorlesungen**
+
++ Vorlesung "Objektorientierte Programmierung mit C++ " der Universität Ulm (Dr. Andreas F. Borchert) [Link](https://www.uni-ulm.de/mawi/mawi-numerik/lehrenumerik/vergangene-semester/sommersemester-2018/vorlesung-objektorientierte-programmierung-mit-c/)
++ Vorlesung "Programmieren in C++" der Universität Freiburg (Frau Prof. Dr. Hannah Bast) [Link](https://ad-wiki.informatik.uni-freiburg.de/teaching/ProgrammierenCplusplusSS2018)
 
 **Videotutorials**
+
++ Youtube Kanal von "The Cherno", [Link](https://www.youtube.com/playlist?list=PLlrATfBNZ98dudnM48yfGUldqGD0S4FFb)
++ Wikibooks "C++-Programmierung", [Link](https://de.wikibooks.org/wiki/C%2B%2B-Programmierung/_Inhaltsverzeichnis)
 
 **Bücher**
 
@@ -116,7 +122,18 @@ Wenn Sie Punkt 2. nicht uneingeschränkt folgen wollen, hätten Sie zumindest f�
 | Cygwin          | [Cygwin Webseite](https://cygwin.com/)                                                |           |
 | Linux-Subsystem | [Microsoft Dokumentation](https://docs.microsoft.com/de-de/windows/wsl/install-win10) |           |
 
-Hinsichtlich Ihres Lieblingseditors haben Sie sicher schon eine Wahl getroffen.
+Unter cygwin muss zunächst der Compiler `gcc-g++` installiert werden. Für Rekonfigurationen und neues Pakete führen Sie einfach den Installer nochmals aus. Zudem sollten Sie in Ihrem Home einen symbolischen Link anlegen, der auf Ihren Arbeitsordner verweist.
+
+```
+$ ln -s /cygdrive/c/Users/Sebas/OneDrive/Desktop/Softwareprojekt/ mySoftware
+```
+
+![Atom IDE Screenshot](./img/00_Einfuehrung/CygwinConfiguration.png)<!-- width="100%" -->
+
+![Atom IDE Screenshot](./img/00_Einfuehrung/ScreenshotCygwinConfiguration.png)<!-- width="100%" -->
+
+
+Hinsichtlich Ihres Lieblingseditors haben Sie sicher schon eine Wahl getroffen :-)
 
 ## Ein Wort zu LiaScript
 
@@ -216,10 +233,10 @@ Beispiel aus dem Projekt:
 *Gegenüberstellung des Programmierverhaltens eines erfahrenen und eines weniger erfahrenen Studenten*
 [^1]: [Quelle](http://www.elab.ovgu.de/elab_media/_users/hawlitsc/Paper_FDIBA_eLab/FDIBA_eLab-p-90.pdf)
 
-Mit dem Fragebogen wollen wir ermitteln wie sich Ihr Wissensstand ausgehend von den Lehraktivitäten verbessert. Davon ausgehend wollen wir Anfang Dezember mit einem Test evaluieren, wie sich Ihr Wissen im Themengebiet verändert hat. Dies ist eine gute Vorbereitung auf die Prüfungen am Ende des Wintersemesters.
-
 **Die Erkenntnisse aus dieser Untersuchung bleiben anonym und beeinflussen in keinster Weise Ihr Ergebnis!**
 
 ## Sie wollen gleich starten?
 
-Hinweis RoboCup Team
+Das RoboCup-Team der TU Bergakademie sucht noch Mitstreiter. Auch wenn Sie noch keine Erfahrung in der Programmierung haben sind Sie gern willkommen.
+
+![Atom IDE Screenshot](./img/00_Einfuehrung/RoboterNuernberg.jpg)<!-- width="100%" -->

@@ -52,6 +52,9 @@ Vortrag von Stroustrup auf der CppCon 2018: [“Concepts: The Future of Generic 
 
 ### ... C
 
+                                  {{0-1}}
+*******************************************************************************
+
 C++ kombiniert die Effizienz von C mit den Abstraktionsmöglichkeiten der objektorientierten Programmierung. C++ Compiler können C Code überwiegend kompilieren, umgekehrt funktioniert das nicht.
 
 | Kriterium             | C                              | C++                                                           |
@@ -62,6 +65,11 @@ C++ kombiniert die Effizienz von C mit den Abstraktionsmöglichkeiten der objekt
 | Programmierung        | Präprozessor, C, Assemblercode | Präprozessor, C, C++, Assemblercode, Templates                |
 | Konzept von Zeigern   | Pointer                        | (Smart-) Pointer, Referenzen                                  |
 | Integrationsfähigkeit | gering                         | hoch (namespaces)                                             |
+
+*******************************************************************************
+
+                                  {{1-2}}
+*******************************************************************************
 
 Im folgenden soll die Verwendung eines `struct` unter C++ dem Bemühen um eine ähnliche Realisierung unter C mit dem nominell gleichen Schlüsselwort gegenübergestellt werden.
 
@@ -173,6 +181,11 @@ int main()
 @Rextester.CPP
 
 
+*******************************************************************************
+
+                               {{2-3}}
+*******************************************************************************
+
 | Aspekt                    | C++                                                                                                                       | C#                                                                                                                                         |
 |:--------------------------|:--------------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------|
 | Entwicklung               | ab 1979 von Bjarne Stroustrup, Standardisierung 1998, aktueller Stand C++17 (von vielen Compilern noch nicht unterstützt) | ab 2001 von Microsoft  entwickelt, ab 2003 ISO genormt                                                                                     |
@@ -186,6 +199,8 @@ int main()
 |                           | unterstützt Mehrfachvererbung  (ersetzt Interfaces)                                                                       | keine Mehrfachvererbung                                                                                                                    |
 | Standard Zugriffsattribut | `public` für structs, `private` für Klassen                                                                               | `private`                                                                                                                                  |
 
+
+*******************************************************************************
 
 ## Elemente der Sprache C++
 
@@ -220,7 +235,7 @@ Die Sprache C++ verwendet nur etwa 60 Schlüsselwörter („Sprachkern“), manc
 
 In den folgenden Lehrveranstaltungen sollen einzelne Aspekte dieser Schlüsselworte anhand von Beispielen eingeführt werden.
 
-### Variablen
+### Variablenverwendung
 
 **Datentypen**
 
@@ -233,9 +248,10 @@ In den folgenden Lehrveranstaltungen sollen einzelne Aspekte dieser Schlüsselwo
 | Referenzen     | Indirektion mit `&`                 |                                                                |
 | Zeiger         | Indirektion mit `*`                 |                                                                |
 
+Während C# spezifische Größenangaben für die Variablen trifft [Link](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/integral-numeric-types) sind die maximalen Werte für
+C++ Programme systemabhängig.
 
-
-Auf die realisierten Größen kann mit zwei Klassen der StandardBibliothek zurückgegriffen werden.
+Auf die realisierten Größen kann mit zwei Klassen der Standardbibliothek zurückgegriffen werden.
 
 1. `climits.h` definiert ein Set von Makrokonstanten, die die zugehörigen Werte umfassen. Unter C++ wird diese Bibliothek mit `climits.h` eingebettet, da `limits` durch einen eignen namespace besetzt ist [Link mit Übersicht](http://www.cplusplus.com/reference/climits/)
 2. `numeric_limits.h` spezifiziert Templates für die Bereitstellung der entsprechenden Grenzwerte und ist damit deutlich flexibler.
@@ -251,6 +267,10 @@ int main () {
   std::cout << "Minimum value for char: " << CHAR_MIN << '\n';
   std::cout << "Maximum value for char: " << CHAR_MAX << '\n';
   std::cout << "----------------------------------------------------\n";
+  std::cout << "Bits for int16_t: " << INT16 << '\n';
+  std::cout << "Minimum value for int16_t: " << INT16_MIN << '\n';
+  std::cout << "Maximum value for int16_t: " << INT16_MAX << '\n';
+  std::cout << "----------------------------------------------------\n";
   std::cout << std::boolalpha;
   std::cout << "Minimum value for int: " << std::numeric_limits<int>::min() << '\n';
   std::cout << "Maximum value for int: " << std::numeric_limits<int>::max() << '\n';
@@ -262,6 +282,39 @@ int main () {
 ```
 @Rextester.CPP
 
+Eine spezifische Definition erfolgt anhand der Typen:
+
+| Typ            | Beispiel        | Bedeutung                                                                                    |
+|:---------------|:----------------|:---------------------------------------------------------------------------------------------|
+| `intN_t`       | `int8_t`        | "... denotes a signed integer type with a width of exactly N bits." (7.18.1.1.)              |
+| `int_leastN_t` | `int_least32_t` | "... denotes a signed integer type with a width of at least N bits."   (7.18.1.2.)           |
+| `int_fastN_t`  | `int_fast32_t`  | "... designates the fastest unsigned integer type with a width of at least N."   (7.18.1.3.) |
+
+```cpp                     Hello.cpp
+#include <iostream>
+#include <typeinfo>
+
+int main()
+{
+	std::cout<<typeid(int).name() << " - "<<  sizeof(int) << " Byte \n";
+  std::cout<<typeid(int32_t).name()  << " - "<<  sizeof(int32_t) << " Byte \n";
+  std::cout<<typeid(int_least32_t).name() << " - "<<  sizeof(int_least32_t) << " Byte \n";
+  std::cout<<typeid(int_fast32_t).name() << " - "<<  sizeof(int_fast32_t) << " Byte \n";
+}
+```
+@Rextester.CPP
+
+Dazu kommen entsprechende Pointer und max/min Makros.
+
+Die Herausforderung der architekturspezfischen Implmementierungen lässt sich sehr schön bei der Darstellung von Größenangaben von Speicherinhalten, wie zum Beispiel für Arrays, Standardcontainer oder Speicherbereiche illustrieren. Nehmen wir an Sie wollen
+eine Funktion spezifizieren mit der Sie einen Speicherblock reservieren. Welche Einschränkungen sehen Sie bei folgendem Ansatz:
+
+```cpp                     memcpy.cpp
+void memcpy(void *s1, void const *s2, int  n);  
+```
+
+`size_t` umgeht dieses Problem, in dem ein plattformabhäniger Typendefinition erfolgt, die maximale Größe des adressierbaren Bereiches berücksichtigt.
+
 **Deklaration, Definition und Initialisierung**
 
 In der aufgeregten Diskussion werden die folgenden Punkte häufig vermengt, daher noch mal eine Wiederholung:
@@ -269,18 +322,6 @@ In der aufgeregten Diskussion werden die folgenden Punkte häufig vermengt, dahe
 + Deklaration ... Spezifikation einer Variablen im Hinblick auf Typ und Namen gegenüber dem Compiler
 + Definition ... Anlegen von Speicher für die Variable
 + Initialisierung ... Zuweisung eines Anfangswertes
-
-```cpp                     Hello.cpp
-#include <iostream>
-
-int main()
-{
-    int index{};
-    std::cout << index << std::endl;
-    return 0;
-}
-```
-@Rextester.CPP
 
 | Anweisung              | Wirkung                                                    |
 |:-----------------------|:-----------------------------------------------------------|
@@ -298,72 +339,171 @@ In C++11 wurde die Initialisierung, die sich bisher für verschiedenen Kontexte 
 int numbers[] = { 1, 2, 4, 5, 9 };
 ```
 
-| Anweisung             | Bedeutung                                   |
-|:----------------------|:--------------------------------------------|
-| `int i{};`            | uninitialisierter Standardtyp               |
-| `int j{10};`          | initialisierter Standardtyp                 |
-| `int a[]{1, 2, 3, 4}` | aggregierte Initialisierung                 |
-| `X x1{};`             | Standardkonstruktor eine individuellen Typs |
-| `X x2{1,2};`          | Parameterisierter Konstruktor               |
-| `X x4{x3};`           | Copy-Konstruktor                            |
+| Anweisung               | Bedeutung                                   |
+|:------------------------|:--------------------------------------------|
+| `int i{};`              | uninitialisierter Standardtyp               |
+| `int j{10};`            | initialisierter Standardtyp                 |
+| `int a[]{1, 2, 3, 4}`   | aggregierte Initialisierung                 |
+| `X x1{}; X x2();`       | Standardkonstruktor eine individuellen Typs |
+| `X x3{1,2}; X x4{1,2};` | Parameterisierter Konstruktor               |
+| `X x5{x3}; X x6(x3);`   | Copy-Konstruktor                            |
 
-> auto Initalisierung
+Die `auto`-Schlüsselwort weist den Compiler an den Initialisierungsausdruck einer deklarierten Variable oder einen lambdaausdrucksparameter zu verwenden, um den Typ herzuleiten. Damit ist eine explizite Angabe des Typs einer Variablen nicht nötig. Damit steigert sich die Stabilität, Benutzerfreundlichkeit und Effizienz des Codes.
 
-**Zeichenketten und Strings**
+```cpp                     auto.cpp
+#include <iostream>
+#include <typeinfo>
+#include <cxxabi.h>
+
+int main()
+{
+  auto var1 = 4;
+  auto var2 {3.14159};
+  auto var3 = "Hallo";
+  auto var4 = "Deutsche Umlaute ÜöÄ";
+  auto var5 = new double[10];
+
+  // Datentyp der Variablen ausgeben
+  std::cout << typeid(var1).name() << std::endl
+      << typeid(var2).name() << std::endl
+      << typeid(var3).name() << std::endl
+      << typeid(var4).name() << std::endl
+      << typeid(var5).name() << std::endl;
+
+  // aufräumen nicht vergessen
+  delete[] var5;
+}
+```
+@Rextester.CPP
+
+Wir werden `auto` im folgenden auch im Zusammenhang mit Funktionsrückgaben und der effizienten Implementierung von Schleifen einsetzen.
+
+### Zeichenketten, Strings und Streams
+
+**Verwendung von Zeichenketten und Strings**
 
 Aus historischen Gründen kennt C++ zwei Möglichkeiten Zeichenketten darzustellen:
 
 + `const char *` aus dem C-Kontext und  
 + `std::string` die Darstellung der Standardbibliothek
 
-Für die Ausgabe einer nicht veränderlichen Zeichenkette arbeitet man
+Für die Ausgabe einer nicht veränderlichen Zeichenkette kann man nach wie vor mit
+dem `const char` Konstrukt arbeiten:
 
-### Streams
 
-**Grundlagen**
 
-```cpp                     Hello.cpp
+```cpp                    cStyleStrings.cpp
 #include <iostream>
 
 int main()
 {
-    const char * text = "some Unicode text òàäßèöé€§";
-      std::cout << sizeof(text) << std::endl;
-    for (int i=0; i<sizeof(text); i++){
-      std::cout << text[i] << std::endl;
-    }
-    std::cout << text;
+    //             01234567890123456789012
+    char text[] = "Softwareprojekt Robotik";
+    std::cout << sizeof(text) << std::endl;
+    std::cout << "Erstes Zeichen:  " <<  text[0] << "\n";
+    std::cout << "Sechstes Zeichen:" << *(text+5) << "\n";
+    std::cout << "Letztes Zeichen: " << text[sizeof(text)-2] << "\n";
+    std::cout << text << "\n";
+
+    // Hier wird noch eine Lösung gesucht :-)
+    char16_t * Umlaut = (char16_t*)(text+5);
+    printf("%#x", Umlaut);
     return 0;
 }
 ```
 @Rextester.CPP
 
-**Diskussion cout vs. printf**
+Der Hauptunterschied in der Anwendung der `std::string`-Klasse besteht darin, dass Sie den String nicht über einen char-Zeiger manipulieren können. Ein Pointer auf ein Objekt der Klasse `string` zeigt ja nicht auf den ersten Buchstaben, sondern auf das Objekt, das die Zeichen verwaltet.  Darüber steht eine Zahl von
+Elementfunktionen wie `length()`, `ìnsert(n,s)`, `find(s)` zur Verfügung.
 
 
-## Was passiert mit "Hello World"?
 
-```cpp                     Hello.cpp
+```cpp                    cStyleStrings.cpp
 #include <iostream>
+#include <string>
 
 int main()
 {
-    std::cout << "Hello, World!";
+    std::string Alexander {"Alexander von Humboldt"};
+    std::string uniName {"TU Bergakademie"};
+    std::cout << Alexander + ", " + uniName << "\n";
     return 0;
+}
+```
+@Rextester.CPP
+
+Wie beispielhaft gezeigt können `char` Arrays und `string` Objekte miteinander
+in  einfachen Operatoren verglichen werden. Für das
+Durchlaufen der Zeichenreihe steht ein eigenes Zeigerkonstrukt, der Iterator bereit, der durch `.begin()` und `.end()` in seiner Weite definiert wird. In Kombination mit `auto` können sehr kompakte Darstellungen umgesetzt werden.
+
+> MERKE: Für konstante Textausgaben kann gern der `const char *` Typ verwendet
+> darüber hinaus kommen Instanzen der `std::string` Klasse zum Einsatz.
+
+**Diskussion cout vs. printf**
+
+```cpp                    cStyleStrings.cpp
+#include <iostream>
+#include <string>
+
+struct Student{
+    std::string Vorname;
+    std::string Name;
+    int Matrikel;
+};
+
+std::ostream &operator << (std::ostream &out, const  Student &m) {
+    out << m.Name << m.Matrikel;
+    return out;
+}
+
+
+int main()
+{
+    Student Alexander {"Alexander", "von Humboldt",  1791};
+    Student Bernhard {"Bernhard", "von Cotta", 1827};
+    printf("%-20s %-20s %5s\n" , "Name" , "Vorname" , "Id" );
+    printf("%-20s %-20s %5d\n" , Alexander.Name.c_str(),
+                                 Alexander.Vorname.c_str(),
+                                 Alexander.Matrikel);
+    printf("%-20s %-20s %5d\n" , Bernhard.Name.c_str(),
+                                 Bernhard.Vorname.c_str(),
+                                 Bernhard.Matrikel);
+
+
+    std::cout << Alexander;
+    return 0;
+}
+```
+@Rextester.CPP
+
+> "While cout is the proper C++ way, I believe that some people and companies (including Google) continue to use printf in C++ code because it is much easier to do formatted output with printf than with cout. " [StackOverflow-Beitrag](https://stackoverflow.com/questions/4781819/printf-vs-stdcout)
+
+Hinsichtlich der Performance existieren einige sehr schöne, wenn auch etwas ältere Untersuchungen, die zum Beispiel im Blog von
+ Filip Janiszewski beschrieben werden [Link](https://filipjaniszewski.wordpress.com/2016/01/27/io-stream-performance/). Die Ergebnisse decken sich mit den vorangegangenen Empfehlungen.
+
+## Wiederholung: Was passiert mit "Hello World"?
+
+```cpp                     reducedHello.cpp
+//#include <iostream>
+
+int main()
+{
+    //std::cout << "Hello, World!";
+    return 1;
 }
 ```
 @Rextester.CPP
 
 <!--
-style="width: 60%; max-width: 860px; display: block; margin-left: auto; margin-right: auto;"
+style="width: 50%; max-width: 860px; display: block; margin-left: auto; margin-right: auto;"
 -->
 ````ascii
+
   +-------------------+       
   | Helloworld.cpp    |        
   +-------------------+        
-           |              +-------------------+
-     C Präprozessor <---- |#include <iostream>|
-                          +-------------------+    
+           |
+     C Präprozessor     
            |
      C++/C Compiler
            |
@@ -381,16 +521,18 @@ style="width: 60%; max-width: 860px; display: block; margin-left: auto; margin-r
 
 ````
 
+Durchlaufen Sie zunächst die Toolchain mit dem `reducedHello.cpp` Beispiel. Erklären Sie die die Inhalte der Einträge in
+
 ```
-g++ Hello.cpp -o Hello // Realisiert die gesamte Kette in einem Durchlauf
-ldd Hello
-g++ -E Hello.cpp -o Hello.ii // Stellt die Präprozessorausgabe bereit
-wc -l Hello.ii
-g++ -S Hello.cpp -o Hello.S // Stellt den Assemblercode bereit
-g++ -c Hello.cpp -o Hello.o // Generiert das Objektfile für HelloWorld.cpp
+g++ reducedHello.cpp -o Hello       // Realisiert die gesamte Kette in einem Durchlauf
+ldd Hello                           // Liste der referenzierten Bibliotheken
+g++ -E reducedHello.cpp -o Hello.ii // Stellt die Präprozessorausgabe bereit
+wc -l reducedHello.ii               // Zeilenzahl der Präcompilierten Datei
+g++ -S reducedHello.cpp -o Hello.S  // Stellt den Assemblercode bereit
+g++ -c reducedHello.cpp -o Hello.o  // Generiert das Objektfile für HelloWorld.cpp
 ```
 
-**Schritt 1 - Präprozessor**
+**Präprozessor**
 
 Der Präprozessor durchläuft alle Quelltextdateien (\*.cpp) noch vor der eigentlichen Kompilierung und reagiert auf enthaltene Präprozessordirektiven: Zeilen die mit "#" beginnen.
 
@@ -421,14 +563,7 @@ int main()
 ```
 @Rextester.CPP
 
-
-**Schritt 2 - Kompiler**
- > Woher kennt der Compiler meine CPU-Spezifikation?
-
-https://godbolt.org/
-
-**Schritt 3 - Linker**
-
-> Erweiterung auf mehrere Dateien
-
-* Definition vs. Deklaration. Der Kompiler mekert nicht, solang alle Funktionen/Klassen die genutzt werden, auch deklariert sind. Erst der Linker beschwert sich über fehlende Definitionen
+## Aufgabe bis zur nächsten Woche
++ Installieren Sie eine GCC Umgebung auf dem Rechner (Linux oder cygwin)
++ Erweitern Sie die Untersuchung auf ein Projekt mit mehrere Dateien. Wie müssen Sie vorgehen um hier eine Kompilierung zu realiseren? Wie kann sie Dabei ein Makefile unterstützen?
++ Arbeiten Sie sich in die Grundlagen der C++ Programmierung (Ausgaben, Eingaben, Programmfluss, Datentypen) ein.
