@@ -54,14 +54,14 @@ Vortrag von Stroustrup auf der CppCon 2018: [“Concepts: The Future of Generic 
 
 C++ kombiniert die Effizienz von C mit den Abstraktionsmöglichkeiten der objektorientierten Programmierung. C++ Compiler können C Code überwiegend kompilieren, umgekehrt funktioniert das nicht.
 
-| Kriterium             | C                              | C++                                                         |
-|:----------------------|:-------------------------------|:------------------------------------------------------------|
-| Programmierparadigma  | Prozedural                     | Prozedural, objektorientiert, funktional                    |
+| Kriterium             | C                              | C++                                                           |
+|:----------------------|:-------------------------------|:--------------------------------------------------------------|
+| Programmierparadigma  | Prozedural                     | Prozedural, objektorientiert, funktional                      |
 | Kapselung             | keine                          | Integration von Daten und Funktionen in `structs` und Klassen |
-| Überladen             | nein                           | Funktions- und Operator-Überladung                           |
-| Programmierung        | Präprozessor, C, Assemblercode | Präprozessor, C, C++, Assemblercode, Templates              |
-| Konzept von Zeigern   | Pointer                        | (Smart-) Pointer, Referenzen                                |
-| Integrationsfähigkeit | gering                         | hoch (namespaces)                                           |
+| Überladen             | nein                           | Funktions- und Operator-Überladung                            |
+| Programmierung        | Präprozessor, C, Assemblercode | Präprozessor, C, C++, Assemblercode, Templates                |
+| Konzept von Zeigern   | Pointer                        | (Smart-) Pointer, Referenzen                                  |
+| Integrationsfähigkeit | gering                         | hoch (namespaces)                                             |
 
 Im folgenden soll die Verwendung eines `struct` unter C++ dem Bemühen um eine ähnliche Realisierung unter C mit dem nominell gleichen Schlüsselwort gegenübergestellt werden.
 
@@ -181,7 +181,7 @@ int main()
 | Plattformen               | Compiler für jedwede Architektur und Betriebssysteme                                                                      | setzt .NET Ausführungsumgebung voraus                                                                                                      |
 | Speicher Management       | Kein Speichermanagement                                                                                                   | die CLR umfasst unter anderem einen Garbage Collector                                                                                      |
 | Verwendung von Pointern   | Elementarer Bestandteil des Programmierkonzepts                                                                           | nur im `unsafe` mode                                                                                                                       |
-| Objektorientierung        | Fokus auf objektorientierte Anwendungen                                                                                   | pur objektorientiert (zum Beispiel keine globalen Funktionen)                                                                                                                      |
+| Objektorientierung        | Fokus auf objektorientierte Anwendungen                                                                                   | pur objektorientiert (zum Beispiel keine globalen Funktionen)                                                                              |
 | Vererbung                 |                                                                                                                           | alle Objekte erben von einer Basisklasse `object`                                                                                          |
 |                           | unterstützt Mehrfachvererbung  (ersetzt Interfaces)                                                                       | keine Mehrfachvererbung                                                                                                                    |
 | Standard Zugriffsattribut | `public` für structs, `private` für Klassen                                                                               | `private`                                                                                                                                  |
@@ -198,7 +198,7 @@ Die Sprache C++ verwendet nur etwa 60 Schlüsselwörter („Sprachkern“), manc
 | Bedeutung                | Inhalt               | Schlüsselwort                                              |
 |:-------------------------|:---------------------|:-----------------------------------------------------------|
 | Grunddatentypen          | Wahrheitswerte       | bool, true, false                                          |
-|                          | Zeichen und Zahlen   | char, char16\_t, char32\_t, wchart\_t                         |
+|                          | Zeichen und Zahlen   | char, char16\_t, char32\_t, wchart\_t                      |
 |                          | Zahlen               | int, double, float                                         |
 |                          | weitere              | auto, enum , void                                          |
 | Modifizierer             | Platzbedarf          | long, short                                                |
@@ -358,12 +358,12 @@ int main()
 style="width: 60%; max-width: 860px; display: block; margin-left: auto; margin-right: auto;"
 -->
 ````ascii
-
   +-------------------+       
   | Helloworld.cpp    |        
   +-------------------+        
-           |
-     C Präprozessor     
+           |              +-------------------+
+     C Präprozessor <---- |#include <iostream>|
+                          +-------------------+    
            |
      C++/C Compiler
            |
@@ -391,7 +391,36 @@ g++ -c Hello.cpp -o Hello.o // Generiert das Objektfile für HelloWorld.cpp
 ```
 
 **Schritt 1 - Präprozessor**
-+ Guarded Headers
+
+Der Präprozessor durchläuft alle Quelltextdateien (\*.cpp) noch vor der eigentlichen Kompilierung und reagiert auf enthaltene Präprozessordirektiven: Zeilen die mit "#" beginnen.
+
+Pro Zeile kann lediglich eine Direktive angegeben werden. Eine Direktive kann sich jedoch über mehrere Zeilen erstrecken, wenn der Zeilenwechsel mit einem "\\" versehen wird.
+
+Typische Anwendungen:
+
+* #include - Inkludieren weiterer Header-Dateien
+* #define - Definition von Macros
+* #if-#else-#endif - Bedingte Kompilierung
+
+Die Nutzung von Macros in C++ sollte man limitieren:
+
+* Bugs sind schwer zu finden - Quelltext wird ersetzt bevor er kompiliert wird
+* Es gibt keine Namespaces für Macros - Bei unglücklicher Namensgebung können Funktionen/Variablen/Klassen aus C++ durch Präprozessormacros ersetzt werden.
+* Nichtintuitive Nebeneffekte:
+
+```cpp                     Hello.cpp
+#include <iostream>
+#define SQUARE(x) ((x) * (x))
+
+int main()
+{
+    int x = 1;
+    std::cout << "SQUARE(x) = " << SQUARE(x++) << std::endl;
+    return 0;
+}
+```
+@Rextester.CPP
+
 
 **Schritt 2 - Kompiler**
  > Woher kennt der Compiler meine CPU-Spezifikation?
@@ -401,3 +430,5 @@ https://godbolt.org/
 **Schritt 3 - Linker**
 
 > Erweiterung auf mehrere Dateien
+
+* Definition vs. Deklaration. Der Kompiler mekert nicht, solang alle Funktionen/Klassen die genutzt werden, auch deklariert sind. Erst der Linker beschwert sich über fehlende Definitionen
