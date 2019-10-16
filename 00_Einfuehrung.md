@@ -132,9 +132,6 @@ int main()
 
 ### ... C#
 
-                               {{0-1}}
-*******************************************************************************
-
 Im Vergleich zwischen C++ und C# ergeben sich folgende Unterschiede / Gemeinsamkeiten
 
 Zur Erinnerung sei noch mal auf das Ausführungskonzept von C# verwiesen.
@@ -144,15 +141,49 @@ Zur Erinnerung sei noch mal auf das Ausführungskonzept von C# verwiesen.
 
 [^1]:  Youtuber "MyPassionFor.NET", .NET CLR Execution Model, https://www.youtube.com/watch?v=gCHoBJf4htg
 
-*******************************************************************************
 
-
-                              {{1-2}}
-*******************************************************************************
+#### Am Beispiel
+<!--
+comment: OnlineHack
+         **Ausgangspunkt: Implementierung mittels array, dann Umstieg auf generische Liste**
+          + Diskussion von generischer und nichtgenerischer Liste
+            ```csharp
+               int[] array = {1, 2, 3, 4, 5};
+               ArrayList myAL = new ArrayList();
+               List<int> intList = new List<int>();
+            ```
+          + Abwandlung auf Interface bezogene Implementierung
+            ```
+               IList<int> intList = new List<int>();
+            ```
+          + Welche Nachteile bringt das Interface mit? Es implementiert nur eine Untermenge der List<int> Methoden
+          ```
+             static bool isPositiveInt(int i)
+             {
+                return i > 0;
+             }
+             static void Main(string[] args)
+             {
+                List<int> intList = new List<int>(){10, 20, 30, 40};
+                bool res = intList.TrueForAll(isPositiveInt);
+             }
+          ```
+      - Übertragung auf C++ C-nahe Implementierung mit array
+      - Anwendung von Standardcontainer
+          ```
+          #include <vector>
+          int main()
+          {
+              std::vector<int> v;
+              int i;
+              for (i=0; i<100; ++i) {
+                  v.push_back(i); // Fügt i ans Ende von v an.
+                  ++v[i]; // v[i] muss bereits existieren.
+              }
+          }
+-->
 
 Lassen Sie uns die Gegenüberstellung der Konzepte anhand verschiedener Konstrukte für die Listendarstellung unter C# und C++ genauer untersuchen:
-
-
 
 ```csharp    OutOfRange.cs
 using System;
@@ -195,10 +226,7 @@ int main()
 @Rextester.CPP
 
 
-*******************************************************************************
-
-                               {{2-3}}
-*******************************************************************************
+#### Im Detail
 
 | Aspekt                    | C++                                                                                                                       | C#                                                                                                                                         |
 |:--------------------------|:--------------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------|
@@ -393,6 +421,29 @@ int main()
 Wir werden `auto` im folgenden auch im Zusammenhang mit Funktionsrückgaben und der effizienten Implementierung von Schleifen einsetzen.
 
 ### Zeichenketten, Strings und Streams
+<!--
+comment: CplusplusStrings
+          + Anwendung von Operatoren auf string UND const char
+            ```cpp
+              char Bernhard[25] = "Bernard von Cotta";
+              if (Alexander < Bernhard){
+                std::cout << "A kommt vor B";
+              }
+            ```
+          + Implementierung von Iteratoren string::iterator und
+            string::reverse_iterator
+            ```cpp
+              for  (std::string::iterator i = Alexander.begin(); i!= Alexander.end(); i++){
+                std::cout << *i;
+              }
+            ```            
+          + Verschlankung mit auto
+          ```cpp
+            for  (auto i = Alexander.begin(); i!= Alexander.end(); i++){
+              std::cout << *i;
+            }
+          ```              
+-->
 
 **Verwendung von Zeichenketten und Strings**
 
@@ -403,8 +454,6 @@ Aus historischen Gründen kennt C++ zwei Möglichkeiten Zeichenketten darzustell
 
 Für die Ausgabe einer nicht veränderlichen Zeichenkette kann man nach wie vor mit
 dem `const char` Konstrukt arbeiten:
-
-
 
 ```cpp                    cStyleStrings.cpp
 #include <iostream>
@@ -430,9 +479,7 @@ int main()
 Der Hauptunterschied in der Anwendung der `std::string`-Klasse besteht darin, dass Sie den String nicht über einen char-Zeiger manipulieren können. Ein Pointer auf ein Objekt der Klasse `string` zeigt ja nicht auf den ersten Buchstaben, sondern auf das Objekt, das die Zeichen verwaltet.  Darüber steht eine Zahl von
 Elementfunktionen wie `length()`, `ìnsert(n,s)`, `find(s)` zur Verfügung.
 
-
-
-```cpp                    cStyleStrings.cpp
+```cpp                    CplusplusStrings.cpp
 #include <iostream>
 #include <string>
 
@@ -455,7 +502,7 @@ Durchlaufen der Zeichenreihe steht ein eigenes Zeigerkonstrukt, der Iterator ber
 
 **Diskussion cout vs. printf**
 
-```cpp                    cStyleStrings.cpp
+```cpp                    printfVscout.cpp
 #include <iostream>
 #include <string>
 
@@ -469,7 +516,6 @@ std::ostream &operator << (std::ostream &out, const  Student &m) {
     out << m.Name << m.Matrikel;
     return out;
 }
-
 
 int main()
 {
