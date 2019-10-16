@@ -57,14 +57,14 @@ Vortrag von Stroustrup auf der CppCon 2018: [“Concepts: The Future of Generic 
 
 C++ kombiniert die Effizienz von C mit den Abstraktionsmöglichkeiten der objektorientierten Programmierung. C++ Compiler können C Code überwiegend kompilieren, umgekehrt funktioniert das nicht.
 
-| Kriterium             | C                              | C++                                                         |
-|:----------------------|:-------------------------------|:------------------------------------------------------------|
-| Programmierparadigma  | Prozedural                     | Prozedural, objektorientiert, funktional                    |
+| Kriterium             | C                              | C++                                                           |
+|:----------------------|:-------------------------------|:--------------------------------------------------------------|
+| Programmierparadigma  | Prozedural                     | Prozedural, objektorientiert, funktional                      |
 | Kapselung             | keine                          | Integration von Daten und Funktionen in `structs` und Klassen |
-| Überladen             | nein                           | Funktions- und Operator-Überladung                           |
-| Programmierung        | Präprozessor, C, Assemblercode | Präprozessor, C, C++, Assemblercode, Templates              |
-| Konzept von Zeigern   | Pointer                        | (Smart-) Pointer, Referenzen                                |
-| Integrationsfähigkeit | gering                         | hoch (namespaces)                                           |
+| Überladen             | nein                           | Funktions- und Operator-Überladung                            |
+| Programmierung        | Präprozessor, C, Assemblercode | Präprozessor, C, C++, Assemblercode, Templates                |
+| Konzept von Zeigern   | Pointer                        | (Smart-) Pointer, Referenzen                                  |
+| Integrationsfähigkeit | gering                         | hoch (namespaces)                                             |
 
 *******************************************************************************
 
@@ -127,9 +127,6 @@ int main()
 
 > *"Encapsulation is pretty easy, polymorphism is doable - but inheritence is tricky"* [ Martin Beckett, www.stackoverflow.com]
 
-*******************************************************************************
-
-
 ### ... C#
 
 Im Vergleich zwischen C++ und C# ergeben sich folgende Unterschiede / Gemeinsamkeiten
@@ -183,7 +180,7 @@ comment: OnlineHack
           }
 -->
 
-Lassen Sie uns die Gegenüberstellung der Konzepte anhand verschiedener Konstrukte für die Listendarstellung unter C# und C++ genauer untersuchen:
+Unter anderem aus der überwachten Ausführung ergeben sich zentrale Unterschiede beim Vergleich von C# und C++:
 
 ```csharp    OutOfRange.cs
 using System;
@@ -236,7 +233,7 @@ int main()
 | Plattformen               | Compiler für jedwede Architektur und Betriebssysteme                                                                      | setzt .NET Ausführungsumgebung voraus                                                                                                      |
 | Speicher Management       | Kein Speichermanagement                                                                                                   | die CLR umfasst unter anderem einen Garbage Collector                                                                                      |
 | Verwendung von Pointern   | Elementarer Bestandteil des Programmierkonzepts                                                                           | nur im `unsafe` mode                                                                                                                       |
-| Objektorientierung        | Fokus auf objektorientierte Anwendungen                                                                                   | pur objektorientiert (zum Beispiel keine globalen Funktionen)                                                                                                                      |
+| Objektorientierung        | Fokus auf objektorientierte Anwendungen                                                                                   | pur objektorientiert (zum Beispiel keine globalen Funktionen)                                                                              |
 | Vererbung                 |                                                                                                                           | alle Objekte erben von einer Basisklasse `object`                                                                                          |
 |                           | unterstützt Mehrfachvererbung  (ersetzt Interfaces)                                                                       | keine Mehrfachvererbung                                                                                                                    |
 | Standard Zugriffsattribut | `public` für structs, `private` für Klassen                                                                               | `private`                                                                                                                                  |
@@ -255,7 +252,7 @@ Die Sprache C++ verwendet nur etwa 60 Schlüsselwörter („Sprachkern“), manc
 | Bedeutung                | Inhalt               | Schlüsselwort                                              |
 |:-------------------------|:---------------------|:-----------------------------------------------------------|
 | Grunddatentypen          | Wahrheitswerte       | bool, true, false                                          |
-|                          | Zeichen und Zahlen   | char, char16\_t, char32\_t, wchart\_t                         |
+|                          | Zeichen und Zahlen   | char, char16\_t, char32\_t, wchart\_t                      |
 |                          | Zahlen               | int, double, float                                         |
 |                          | weitere              | auto, enum , void                                          |
 | Modifizierer             | Platzbedarf          | long, short                                                |
@@ -326,11 +323,11 @@ int main () {
 
 Eine spezifische Definition erfolgt anhand der Typen:
 
-| Typ            | Beispiel        | Bedeutung                                                                      |
-| -------------- | --------------- | ------------------------------------------------------------------------------ |
-| `intN_t`       | `int8_t`        | "... denotes a signed integer type with a width of exactly N bits." (7.18.1.1.) |
-| `int_leastN_t` | `int_least32_t` | "... denotes a signed integer type with a width of at least N bits."   (7.18.1.2.)        |
-| `int_fastN_t` | `int_fast32_t` | "... designates the fastest unsigned integer type with a width of at least N."   (7.18.1.3.)        |
+| Typ            | Beispiel        | Bedeutung                                                                                    |
+|:---------------|:----------------|:---------------------------------------------------------------------------------------------|
+| `intN_t`       | `int8_t`        | "... denotes a signed integer type with a width of exactly N bits." (7.18.1.1.)              |
+| `int_leastN_t` | `int_least32_t` | "... denotes a signed integer type with a width of at least N bits."   (7.18.1.2.)           |
+| `int_fastN_t`  | `int_fast32_t`  | "... designates the fastest unsigned integer type with a width of at least N."   (7.18.1.3.) |
 
 ```cpp                     Hello.cpp
 #include <iostream>
@@ -382,7 +379,7 @@ int numbers[] = { 1, 2, 4, 5, 9 };
 ```
 
 | Anweisung               | Bedeutung                                   |
-|:----------------------- |:------------------------------------------- |
+|:------------------------|:--------------------------------------------|
 | `int i{};`              | uninitialisierter Standardtyp               |
 | `int j{10};`            | initialisierter Standardtyp                 |
 | `int a[]{1, 2, 3, 4}`   | aggregierte Initialisierung                 |
@@ -543,7 +540,7 @@ Hinsichtlich der Performance existieren einige sehr schöne, wenn auch etwas äl
 
 ## Wiederholung: Was passiert mit "Hello World"?
 
-```cpp                     LimitedHello.cpp
+```cpp                     reducedHello.cpp
 //#include <iostream>
 
 int main()
@@ -591,6 +588,37 @@ wc -l reducedHello.ii               // Zeilenzahl der Präcompilierten Datei
 g++ -S reducedHello.cpp -o Hello.S  // Stellt den Assemblercode bereit
 g++ -c reducedHello.cpp -o Hello.o  // Generiert das Objektfile für HelloWorld.cpp
 ```
+
+**Präprozessor**
+
+Der Präprozessor durchläuft alle Quelltextdateien (\*.cpp) noch vor der eigentlichen Kompilierung und reagiert auf enthaltene Präprozessordirektiven: Zeilen die mit "#" beginnen.
+
+Pro Zeile kann lediglich eine Direktive angegeben werden. Eine Direktive kann sich jedoch über mehrere Zeilen erstrecken, wenn der Zeilenwechsel mit einem "\\" versehen wird.
+
+Typische Anwendungen:
+
+* #include - Inkludieren weiterer Header-Dateien
+* #define - Definition von Macros
+* #if-#else-#endif - Bedingte Kompilierung
+
+Die Nutzung von Macros in C++ sollte man limitieren:
+
+* Bugs sind schwer zu finden - Quelltext wird ersetzt bevor er kompiliert wird
+* Es gibt keine Namespaces für Macros - Bei unglücklicher Namensgebung können Funktionen/Variablen/Klassen aus C++ durch Präprozessormacros ersetzt werden.
+* Nichtintuitive Nebeneffekte:
+
+```cpp                     Hello.cpp
+#include <iostream>
+#define SQUARE(x) ((x) * (x))
+
+int main()
+{
+    int x = 1;
+    std::cout << "SQUARE(x) = " << SQUARE(x++) << std::endl;
+    return 0;
+}
+```
+@Rextester.CPP
 
 ## Aufgabe bis zur nächsten Woche
 + Installieren Sie eine GCC Umgebung auf dem Rechner (Linux oder cygwin)

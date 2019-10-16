@@ -16,9 +16,6 @@ Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.gi
 
 **Zielstellung der heutigen Veranstaltung**
 
-+ Abgrenzung der Programmiersprache C++ zu anderen Sprachen
-+ Wiederholung von Basiskonzepten und Schlüsselworten
-+ Ablauf des Compile-Vorganges
 
 --------------------------------------------------------------------------------
 
@@ -47,7 +44,7 @@ int main()
 
 
 | Umsetzung                                                                             | Beispiel                                                          |
-| ------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+|:--------------------------------------------------------------------------------------|:------------------------------------------------------------------|
 | vollständige Liste in absteigender Folge (uniforme Initialisierung)                   | `Student Bernhard {"Cotta", 25, "Zillbach"};`                     |
 | unvollständige Liste (die fehlenden Werte werden durch Standard Defaultwerte ersetzt) | `Student Bernhard {"Cotta", 25};`                                 |
 | Elementinitialisierung nicht statischer Daten bei der Spezifikation (C++11)           | `struct Student{ std::string name = "unknown"; int alter = 18;};` |

@@ -79,9 +79,9 @@ Prüfungsvorbereitung.
 Übungstermine
 
 | Nr. | Datum                                    |
-|:--- |:---------------------------------------- |
-| 1.  | 23./24. Oktober                          |
-| 2.  | 13./14. November **??**                        |
+|:----|:-----------------------------------------|
+| 1.  | ~23./24. Oktober~ -> **6./7. November**  |
+| 2.  | 13./14. November                         |
 | 3.  | ~20./21. November~ -> **4./5. Dezember** |
 | 4.  | 18./19. Dezember                         |
 | 5.  | 15./16. Januar                           |
