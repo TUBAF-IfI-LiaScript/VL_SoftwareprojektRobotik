@@ -240,3 +240,6 @@ Beispiel aus dem Projekt:
 Das RoboCup-Team der TU Bergakademie sucht noch Mitstreiter. Auch wenn Sie noch keine Erfahrung in der Programmierung haben sind Sie gern willkommen.
 
 ![Atom IDE Screenshot](./img/00_Einfuehrung/RoboterNuernberg.jpg)<!-- width="100%" -->
+
+## Autoren
+Sebastian Zug, Georg Jäger, Hernán Valdés
