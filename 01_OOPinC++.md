@@ -42,17 +42,22 @@ struct Student{
 
 int main()
 {
-  struct Student Alexander {"Humboldt", 23};
-  std::cout << Alexander.ort;
+  Student alexander {"Humboldt", 23};
+  std::cout << alexander.ort << std::endl;
+
+  return EXIT_SUCCESS;
 }
 ```
 @Rextester.CPP
 
+**Elementinitialisierung:**
+
 | Umsetzung                                                                             | Beispiel                                                          |
-| ------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+|:--------------------------------------------------------------------------------------|:------------------------------------------------------------------|
+| Elementinitialisierung nicht statischer Daten bei der Definition (C++11)              | `struct Student{ std::string name = "unknown"; int alter = 18;};` |
 | vollständige Liste in absteigender Folge (uniforme Initialisierung)                   | `Student Bernhard {"Cotta", 25, "Zillbach"};`                     |
 | unvollständige Liste (die fehlenden Werte werden durch Standard Defaultwerte ersetzt) | `Student Bernhard {"Cotta", 25};`                                 |
-| Elementinitialisierung nicht statischer Daten bei der Spezifikation (C++11)           | `struct Student{ std::string name = "unknown"; int alter = 18;};` |
+
 
 Leider ist in C++11 die Elementinitialisierung nicht mit uniformen Initialisierungssyntax kompatibel und vermischbar. Folglich müssen Sie in C++11 entscheiden, ob Sie eine nicht statische Elementinitialisierung oder eine einheitliche Initialisierung verwenden möchten. In C++14 wird diese Einschränkung jedoch aufgehoben und beide können verwendet werden.
 
@@ -75,6 +80,8 @@ Leider ist in C++11 die Elementinitialisierung nicht mit uniformen Initialisieru
            Student gustav3 {"Anton"};
            gustav3 = gustav;
          ```
+
+      2. Erweitern des Beispiels um Move-Constructors und deren Einsatz mittels std::move
 -->
 
                             {{0-1}}
@@ -93,8 +100,8 @@ Kombinationen  initialisieren:
 Eine differenziertere Zuordnung der Reihenfolge `{name = "Zeuner", ort =
 "Chemnitz"}` unter Auslassung von Student.alter ist nicht möglich.
 
-Was passiert aber bei dem Aufruf? Der Kompiler generiert uns automatisch einen
-Standardkonstruktor, wenn Sie gar keinen eigenen Konstruktor generiert haben.
+Was passiert aber bei dem Aufruf `Student alexander {"Humboldt", 23};`? Der Kompiler generiert uns implizit/automatisch passende
+Konstruktor(en), wenn Sie gar keinen eigenen Konstruktor generiert haben. Diese werden daher auch *Implicit Constructors* genannt.
 
 <!--Ist es wirklich EIN Standardkonstruktor? immerhin habe ich ja 4 Signaturen?-->
 
@@ -110,21 +117,23 @@ ich individuelle Mechanismen für die Intialisierung eines Objektes definieren?
  1. Erzeugung auf der Basis eines Parametersets mit individuellem Konstruktor
 
 ```cpp  
-   Student Erstsemester(int alter);
+   int alter = 21;
+   Student erstsemester(alter);
 ```
 
- 2. Erzeugung auf der Basis einer existierenden Instanz, die als Parameter übergeben wird (copy constructor)
+ 2. Erzeugung auf der Basis einer existierenden Instanz, die als Parameter übergeben wird (*Copy Constructor*)
 
 ```cpp  
-   Student ErstsemesterTemplate();
-   Student Erstsemester(ErstsemesterTemplate);
+   Student erstsemester_template();
+   Student erstsemester(erstsemester_template);
 ```
 
- 3. Erzeugung auf der Basis einer existierenden Instanz, per Verschiebung (move constructor)
+ 3. Erzeugung auf der Basis einer existierenden Instanz, per Verschiebung (*Move Constructor*)
 
 ```cpp  
-  Student ErstsemesterTemplate();
-  Student Erstsemester ????
+  Student erstsemester_template();
+  ...
+  Student erstsemester (std::move(erstsemester_template));
 ```
 ********************************************************************************
 
@@ -137,10 +146,11 @@ ich individuelle Mechanismen für die Intialisierung eines Objektes definieren?
 #include <iostream>
 
 struct Student{
-  Student();
   std::string name;
   int alter;
   std::string ort;
+
+  Student();
   void printCertificate();
 };
 
@@ -148,7 +158,7 @@ void Student::printCertificate(){
     if (name != "unknown"){
       std::cout << "Super," << this->name << " passed the exam!\n";
     }else{
-      std::cout << "Student has not participated yet in a lecture!\n";
+      std::cout << "Student has not participated in a lecture yet!\n";
     }
 }
 
@@ -157,15 +167,15 @@ Student::Student() : name {"unknown"}, alter {18}, ort {"Freiberg"}
 
 int main()
 {
-  Student Erstsemester {};
-  Erstsemester.printCertificate();
+  Student erstsemester {};
+  erstsemester.printCertificate();
 }
 ```
 @Rextester.CPP
 
 Delegierende Konstruktoren rufen einen weiteren Konstruktor für die teilweise
-Initialisierung auf. Damit lassen sich Codedublikationen die sich aus der
-Kombination aller Paramter ergeben zumindest minimieren.
+Initialisierung auf. Damit lassen sich Codeduplikationen, die sich aus der
+Kombination aller Paramter ergeben, minimieren.
 
 ```cpp
 Student(string n, int a, string o): name{n}, alter{a}, ort{o} { }
@@ -185,10 +195,12 @@ Initialsierung übernehmen soll. Was halten Sie von dieser Idee?
 **Copy-Konstruktoren**
 
 Copy-Konstruktoren gehen einen anderen Weg und aggregieren die Informationen
-unmittelbar aus einer bestehenden Instanz. Welche Schritte sind im folgenden
+unmittelbar aus einer bestehenden Instanz.
+
+Welche Schritte sind im folgenden
 Beispiel notwendig, um einen Studenten aus der Bachelorliste in die Masterliste
-zu transferieren. Logischerweise sollte der Student dann nur noch in der
-Masterliste enthalten sein! Intuitiv würde diese bedeuten:
+zu transferieren? Logischerweise sollte der Student dann nur noch in der
+Masterliste enthalten sein! Intuitiv würde dies bedeuten:
 
 1. Erzeugen einer neuen Instanz von `Student` und initialisieren mit einer Kopie des existierenden Studenten
 2. Löschen des Studenten in der Bachelorliste
@@ -202,13 +214,15 @@ was für aufwändigere Datentypen (Bilder, Messungen) zu vermeiden ist!
 #include <iterator>
 
 struct Student{
-  Student(const Student&);
-  Student(std::string n);
-  Student(std::string n, int a, std::string o);
-  Student& operator=(const Student&);
   std::string name;
   int alter;
   std::string ort;
+
+  Student(std::string n);
+  Student(std::string n, int a, std::string o);
+
+  Student(const Student&);
+  Student& operator=(const Student&);
 };
 
 Student::Student(std::string n, int a, std::string o): name{n}, alter{a}, ort{o} {}
@@ -230,13 +244,13 @@ void showlist(std::list <Student> g)
 
 int main()
 {
-  std::list <Student> Bachelor, Master;
+  std::list <Student> bachelor, master;
   Student max {"Maier", 19, "Dresden"};
-  Bachelor.push_back(max);
+  bachelor.push_back(max);
   Student gustav {"Zeuner", 27, "Chemnitz"};
-  Master.push_back(gustav);
-  showlist(Bachelor);
-  showlist(Master);
+  master.push_back(gustav);
+  showlist(bachelor);
+  showlist(master);
 }
 ```
 @Rextester.CPP
@@ -244,28 +258,35 @@ int main()
 Der Verschiebungskonstruktor löst dieses Problem.
 
 ```cpp
-Student::Student(Student&& other){
-  // leeres Objekt erzeugen
-  // ???
+Student::Student(Student&& other) noexcept {
+  this->name = std::move(other.name);
+  this->alter = other.alter;
+  this->ort = std::move(other.ort);
 }
 ```
 
-Stop! Was bedeutet das &&?
+Während das '&' eine Variable als Referenz deklariert, legt '&&' eine 'rvalue-Referenz' an. D.h. eine Referenz auf ein Objekt, dessen Lebensdauer *am Ende ist*. (Mehr dazu später...)
 
 ********************************************************************************
 
 ### Destruktoren
+<!--
+  comment: Destructor.cpp:
+        - Show with different scopes {}
+        - Show with new/delete
+-->
 
-```cpp                     CopyConstructor.cpp
+```cpp                     Destructor.cpp
 #include <iostream>
 
 struct Student{
-  Student(std::string n, int a, std::string o);
-  ~Student();
-  Student& operator=(const Student&);
   std::string name;
   int alter;
   std::string ort;
+
+  Student(std::string n, int a, std::string o);
+  ~Student();
+  Student& operator=(const Student&);
 };
 
 Student::Student(std::string n, int a, std::string o): name{n}, alter{a}, ort{o} {}
@@ -284,12 +305,12 @@ int main()
 
 Destruktoren werden aufgerufen, wenn eines der folgenden Ereignisse eintritt:
 
-* Das Programm verlässt den Gültigkeitsbereich eines lokalen Objektes.
+* Das Programm verlässt den Gültigkeitsbereich (*Scope*, d.h. einen Bereich der mit `{...}` umschlossen ist) eines lokalen Objektes.
 * Ein Objekt, das `new`-erzeugt wurde, wird mithilfe von `delete` explizit aufgehoben (Speicherung auf dem Heap)
 * Ein Programm endet und es sind globale oder statische Objekte vorhanden.
 * Der Destruktor wird unter Verwendung des vollqualifizierten Namens der Funktion explizit aufgerufen.
 
-Einen Destruktor explizit aufzurufen, ist selten notwendig.
+Einen Destruktor explizit aufzurufen, ist selten notwendig (oder gar eine gute Idee!).
 
 > **Merke:** Ein Destruktor darf keine Exception auslösen!
 
@@ -308,7 +329,7 @@ Einen Destruktor explizit aufzurufen, ist selten notwendig.
            }
          }
          ```
-  comment: Comparison.cpp
+  comment: Assignment.cpp
   ..............................................................................
      1. Erläuterung zum Unterschied zwischen Zuweisung und Initiierung    
         ```cpp
@@ -335,13 +356,15 @@ wir den Abgleich des Namens und des Alters als ausreichend an.
 #include <algorithm>
 
 struct Student{
-  Student(const Student&);
-  Student(std::string n);
-  Student(std::string n, int a, std::string o);
-  bool operator==(const Student&);
   std::string name;
   int alter;
   std::string ort;
+
+  Student(const Student&);
+  Student(std::string n);
+  Student(std::string n, int a, std::string o);
+
+  bool operator==(const Student&);
 };
 
 Student::Student(std::string n): name{n}, alter{18}, ort{"Freiberg"}{}
@@ -400,8 +423,8 @@ Wie würden Sie vorgehen, wenn sich Ihr Auftraggeber hier eine größere Flexibi
 
 Zuweisungsoperatoren können in zwei Konfigurationen realisiert werden.
 
-* Kopierend ... die auf der rechten Seite stehende Instanz bleibt erhalten, so dass nach der Operation zwei Objekte bestehen (copy assignment)
-* Verschiebend ... die auf der rechten Seite stehend Instanz wird kopiert, so dass nur die linke Instanz weiter besteht (move assignment)
+* Kopierend ... die auf der rechten Seite stehende Instanz bleibt erhalten, so dass nach der Operation zwei Objekte bestehen (*Copy Assignment*)
+* Verschiebend ... die auf der rechten Seite stehend Instanz wird kopiert, so dass nur die linke Instanz weiter besteht (*Move Assignment*)
 
 Die Unterscheidung der Mechanismen erfolgt anhand der Signaturen der Operatorüberladungen:
 
@@ -415,7 +438,7 @@ myClass& operator=(const myClass& other)
 }
 
 // move assignment
-myClass& operator=(const myClass&& other)
+myClass& operator=(myClass&& other) noexcept
 {
     if(this != &other) { //1. Überprüfung der Zuweisung auf sich selbst
       // ...               2. Freigeben von bisherigen Ressourcen
@@ -426,20 +449,21 @@ myClass& operator=(const myClass&& other)
 ```
 
 Im Beispiel hat einer Ihrer Kommilitonen das Copy-Assignment implementiert. Die
-Lösung generiert aber eine unerwartete Ausgabe. Welche Irrtum ist der Kandidat
+Lösung generiert aber eine unerwartete Ausgabe. Welchem Irrtum ist der Kandidat
 erlegen?
 
 ```cpp                     Assignment.cpp
 #include <iostream>
 
 struct Student{
+  std::string name;
+  int alter;
+  std::string ort;
+
   Student(const Student&);
   Student(std::string n);
   Student(std::string n, int a, std::string o);
   Student& operator=(const Student&);
-  std::string name;
-  int alter;
-  std::string ort;
 };
 
 Student::Student(std::string n): name{n}, alter{18}, ort{"Freiberg"}{}
@@ -490,7 +514,7 @@ Der Kompiler generiert automatisch für Sie:
 + einen Standardkonstruktor (wenn Sie gar keinen Konstruktor selbst angelegt haben)
 + einen Destruktor
 + einen Kopierkonstruktor
-+ einen Kopierzuweisung
++ einen Kopierzuweisungsoperator
 + den Verschiebekonstruktor (seit C++11)
 + den Verschiebeoperator (seit C++11)
 
@@ -501,7 +525,7 @@ Super! Alles gelöst! Warum müssen wir also darüber nachdenken?
                                  {{1-2}}
 ********************************************************************************
 
-Falls eine Klasse jedoch eine andere Semantik hat, z. B. weil sie eine Ressource als Datenelement enthält, die nicht auf diese Weise kopiert oder abgeräumt werden kann, kann jede der genannten Konstruktoren/Destruktoren/Operatoren durch eine eigene Definition ersetzt werden. In den meisten Fällen erfordern solche Klassen dann, dass alle  eigene, benutzerdefinierte Implementierung benötigen.
+Falls eine Klasse jedoch eine andere Semantik hat, z. B. weil sie eine Ressource als Datenelement enthält, die nicht auf diese Weise kopiert oder abgeräumt werden kann, kann jede der genannten Konstruktoren/Destruktoren/Operatoren durch eine eigene Definition ersetzt werden. In den meisten Fällen erfordern solche Klassen dann, dass alle Konstruktoren/Destruktoren/Operatoren eigene, benutzerdefinierte Implementierungen benötigen.
 
 Beispiel:
 
@@ -513,7 +537,7 @@ public:
     : file(fopen(dateiname, "rb"))
     { /* Fehlerbehandlung usw. */ }
 
-    // Dreierregel:
+    // Rule of Three (bis C++11):
     Datei(const Datei&) = delete; // Kein Kopieren!
     ~Datei() { fclose(file); }
     void operator=(const Datei&) = delete; // Kein Kopieren!
@@ -541,4 +565,4 @@ class Example
 
 ## Aufgabe der Woche
 
-1. Implementieren Sie das Move Assignment Operation in Beispiel Assignment.cpp
+1. Implementieren Sie die Move Assignment Operation in Beispiel Assignment.cpp

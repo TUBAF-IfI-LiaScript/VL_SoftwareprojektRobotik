@@ -103,6 +103,11 @@ Tragt euch bitte in den Kurs [Softwaretechnologie-Projekt (Prototyp)](https://bi
 + Youtube Kanal von "The Cherno", [Link](https://www.youtube.com/playlist?list=PLlrATfBNZ98dudnM48yfGUldqGD0S4FFb)
 + Wikibooks "C++-Programmierung", [Link](https://de.wikibooks.org/wiki/C%2B%2B-Programmierung/_Inhaltsverzeichnis)
 
+**Talks**
+
++ Stroustrup, Bjarne - "The Essence of C++" , [Link](https://www.youtube.com/watch?v=86xWVb4XIyE)
++ Stroustrup, Bjarne - "Learning and Teaching Modern C++", [Link](https://www.youtube.com/watch?v=fX2W3nNjJIo)
+
 **Bücher**
 
 + Torsten T. Will, "C++ - Das umfassende Handbuch", Rheinwerk Computing 2019
