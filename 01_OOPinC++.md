@@ -53,8 +53,9 @@ int main()
 **Elementinitialisierung:**
 
 | Umsetzung                                                                             | Beispiel                                                          |
-|:--------------------------------------------------------------------------------------|:------------------------------------------------------------------|
+|:------------------------------------------------------------------------------------- |:----------------------------------------------------------------- |
 | Elementinitialisierung nicht statischer Daten bei der Definition (C++11)              | `struct Student{ std::string name = "unknown"; int alter = 18;};` |
+|                                                                                       |                                                                   |
 | vollständige Liste in absteigender Folge (uniforme Initialisierung)                   | `Student Bernhard {"Cotta", 25, "Zillbach"};`                     |
 | unvollständige Liste (die fehlenden Werte werden durch Standard Defaultwerte ersetzt) | `Student Bernhard {"Cotta", 25};`                                 |
 
@@ -80,7 +81,6 @@ Leider ist in C++11 die Elementinitialisierung nicht mit uniformen Initialisieru
            Student gustav3 {"Anton"};
            gustav3 = gustav;
          ```
-
       2. Erweitern des Beispiels um Move-Constructors und deren Einsatz mittels std::move
 -->
 
@@ -411,6 +411,13 @@ int main()
 ```
 @Rextester.CPP
 
+Analysieren Sie die Hinweise zur Sortiermethode in der Standard-Bibliothek
+
+https://en.cppreference.com/w/cpp/algorithm/sort
+
+Wie kann die entsprechende Sortierfunktion übergeben werden? Wann kann darauf
+verzichtet werden?
+
 Mit der Operatorüberladung von `>` haben wir ein Sortierkriterium abgebildet.
 Wie würden Sie vorgehen, wenn sich Ihr Auftraggeber hier eine größere Flexibilität wünscht und ein Set von Metriken bereit gehalten werden soll?
 
@@ -562,7 +569,98 @@ class Example
 
 ********************************************************************************
 
+## Wiederholung - Gültigkeitsbereich von Variablen
+
+Wie lange ist meine Variable, die ich deklariert und initialisiert habe verfügbar?
+
+C++ definiert dafür 5 Gültigkeitsbereiche eine Variablen, die einem jederzeit
+bewusst sein sollten, um "Irritationen" zu vermeiden:
+
+* Globalen Gültigkeitsbereich - eine Variable oder ein Objekt wird außerhalb von jeder Klasse, Funktion oder Namespace deklariert. C++ ordnet diese automatisch einem globalen Namespace zu.
+
+```cpp                    globalVariables.cpp
+#include <iostream>
+
+int i = 8;   // i has global scope, outside all blocks
+int j = 5;
+
+int main( int argc, char *argv[] ) {
+   int i = 4;   // das lokale i verdeckt das globale  
+   std::cout << "Block scope der Variable    : " << i << "\n";
+   std::cout << "Global scope der Variable i : " << ::i << "\n";
+   std::cout << "Global scope der Variable j : " << j << "\n";
+}
+```
+@Rextester.CPP
+
+* Namespace-Gültigkeitsbereiche - moduluarisiert Projekte, in die einzelenen Bestandteile individuell gekapselt werden. Variabeln, die innerhalb eines Namespaces "global" angelegt wurden sind nur in diesem sichtbar. Ein Namespace kann in mehreren Blöcken in verschiedene Dateien definiert werden.
+
+```cpp                    namespaces.cpp
+#include <iostream>
+
+int global = 10;
+
+namespace myFunction{
+  int global = 5;
+
+  void doubleGlobal(){
+    global += global;
+  }
+}
+
+int main( int argc, char *argv[] ) {
+   std::cout << "Block scope der Variable global         : " << global << "\n";
+   std::cout << "Variable global im namespace myFunction : " << myFunction::global << "\n";
+}
+```
+@Rextester.CPP
+
+* Lokaler Gültigkeitsbereich - Variablen oder Objekte, die innerhalb eines Anweisungsblock oder einem Lambda-Ausdrucks deklariert werden, haben lokale Gültigkeit. Alle Formen von `{ // Anweisungen}` definieren dabei einen eigenen Block (oder *scope*).
+
+```cpp                    localVariables.cpp
+#include <iostream>
+
+void myFunction(){
+  int i = 10;
+  std::cout << "Variable i im eingebetteten scope   : " << i << "\n";   
+}
+
+int main( int argc, char *argv[] ) {
+   int i = 0;
+   std::cout << "Variable i im aktuellen scope      : " << i << "\n";   
+   {
+     int i = 5;
+     std::cout << "Variable i im Scope der Funktion : " << i << "\n";   
+   }
+   std::cout << "Variable i im aktuellen scope      : " << i << "\n";   
+   myFunction();
+
+   //for (auto i = 0; i<10; i++){
+   // result += i;
+   //}
+   //std::cout << "Das Ergebnis für " << i << " Schleifen lautet " << result << "\n";
+}
+```
+@Rextester.CPP
+
+* Anweisungsbereichs - Anweisungsblöcke erweitern das Konzept des Anweisungsbereiches um die Parameter der Anweisung.
+
+```cpp                    localVariables.cpp
+#include <iostream>
+
+int main( int argc, char *argv[] ) {
+  for (auto i = 0; i<10; i++){
+    int j = 5;
+    result += i;
+  }
+  std::cout << "Das Ergebnis für " << i << " Schleifen lautet " << result << "\n";
+}
+```
+@Rextester.CPP
+
+* Klassengültigkeitsbereich - Membervariablen oder Funktionen, die im im Definitionsbereich der Klasse liegen, können nur über die entsprechenden Instanzen oder ggf. als statische Klassenelemente über den Klassennamen adressiert werden. Weiter gesteuert wird dieser Zugriff über öffentliche, private, und geschützt Schlüsselwörter.
 
 ## Aufgabe der Woche
 
 1. Implementieren Sie die Move Assignment Operation in Beispiel Assignment.cpp
+2. Implementieren Sie eine Klasse, die Lese-/Schreiboperationen für Sie realisiert. Warum ist es gerade hier notwendig die Rule-of-Five Idee zu berücksichtigen?
