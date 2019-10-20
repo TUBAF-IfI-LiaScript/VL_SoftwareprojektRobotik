@@ -22,10 +22,9 @@ Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.gi
 
 ## Von Strukturen und Klassen
 
-Klassen und Strukturen unterscheiden sich unter C++ nur in einem Punkt. Während
+Klassen (`class`) und Strukturen (`struct`) unterscheiden sich unter C++ nur in einem Punkt. Während
 bei erstgenannten immer das Zugriffsattribut private als Default-Wert angenommen
-wird, ist dies für `struct`s public. Um eine Übersicht über die spezifischen
-Konzepte unter C++ wurde im folgenden auf structs abgezielt.
+wird, ist dies für `struct`s public. Die folgenden Beispiele nutzen structs um C++ spezifische Eigenschaften darzustellen, können aber direkt auf Klassen übertragen werden.
 
 Eine Struktur (struct(ure)) ist ein Datentyp, der mehrere Variablen gleichen
 oder verschiedenen Typs zu einem neuen Datentyp zusammenfasst. Die Deklaration
@@ -53,7 +52,7 @@ int main()
 **Elementinitialisierung:**
 
 | Umsetzung                                                                             | Beispiel                                                          |
-|:------------------------------------------------------------------------------------- |:----------------------------------------------------------------- |
+|:--------------------------------------------------------------------------------------|:------------------------------------------------------------------|
 | Elementinitialisierung nicht statischer Daten bei der Definition (C++11)              | `struct Student{ std::string name = "unknown"; int alter = 18;};` |
 |                                                                                       |                                                                   |
 | vollständige Liste in absteigender Folge (uniforme Initialisierung)                   | `Student Bernhard {"Cotta", 25, "Zillbach"};`                     |
@@ -532,7 +531,7 @@ Super! Alles gelöst! Warum müssen wir also darüber nachdenken?
                                  {{1-2}}
 ********************************************************************************
 
-Falls eine Klasse jedoch eine andere Semantik hat, z. B. weil sie eine Ressource als Datenelement enthält, die nicht auf diese Weise kopiert oder abgeräumt werden kann, kann jede der genannten Konstruktoren/Destruktoren/Operatoren durch eine eigene Definition ersetzt werden. In den meisten Fällen erfordern solche Klassen dann, dass alle Konstruktoren/Destruktoren/Operatoren eigene, benutzerdefinierte Implementierungen benötigen.
+Falls eine Klasse jedoch eine andere Semantik hat, z. B. weil sie eine Ressource als Datenelement enthält, die nicht auf diese Weise kopiert oder abgeräumt werden kann, kann jede der genannten Konstruktoren/Destruktoren/Operatoren durch eine eigene Definition ersetzt werden. In den meisten Fällen erfordern solche Klassen dann, dass alle Konstruktoren/Destruktoren/Operatoren eigene, benutzerdefinierte Implementierungen haben.
 
 Beispiel:
 
@@ -571,9 +570,9 @@ class Example
 
 ## Wiederholung - Gültigkeitsbereich von Variablen
 
-Wie lange ist meine Variable, die ich deklariert und initialisiert habe verfügbar?
+Wie lange ist meine Variable, die ich deklariert und initialisiert habe, verfügbar?
 
-C++ definiert dafür 5 Gültigkeitsbereiche eine Variablen, die einem jederzeit
+C++ definiert dafür 5 Gültigkeitsbereiche einer Variable, die einem jederzeit
 bewusst sein sollten, um "Irritationen" zu vermeiden:
 
 * Globalen Gültigkeitsbereich - eine Variable oder ein Objekt wird außerhalb von jeder Klasse, Funktion oder Namespace deklariert. C++ ordnet diese automatisch einem globalen Namespace zu.
@@ -659,6 +658,22 @@ int main( int argc, char *argv[] ) {
 @Rextester.CPP
 
 * Klassengültigkeitsbereich - Membervariablen oder Funktionen, die im im Definitionsbereich der Klasse liegen, können nur über die entsprechenden Instanzen oder ggf. als statische Klassenelemente über den Klassennamen adressiert werden. Weiter gesteuert wird dieser Zugriff über öffentliche, private, und geschützt Schlüsselwörter.
+
+```cpp                    classMember.cpp
+#include <iostream>
+#include <string>
+
+struct Student{
+  std::string name;
+};
+
+int main()
+{
+  Student erstsemester {"Gustav"};
+  std::cout << "Membervariable 'name' of 'erstsemester' has value '" << erstsemester.name << "'\n";
+}
+```
+@Rextester.CPP
 
 ## Aufgabe der Woche
 
