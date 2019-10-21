@@ -16,7 +16,9 @@ Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.gi
 
 **Zielstellung der heutigen Veranstaltung**
 
-+ Das ist ein Test
++ Klassen/Strukturen
++ Rule of Five
++ Operatoren
 
 --------------------------------------------------------------------------------
 
@@ -102,9 +104,6 @@ Eine differenziertere Zuordnung der Reihenfolge `{name = "Zeuner", ort =
 Was passiert aber bei dem Aufruf `Student alexander {"Humboldt", 23};`? Der Kompiler generiert uns implizit/automatisch passende
 Konstruktor(en), wenn Sie gar keinen eigenen Konstruktor generiert haben. Diese werden daher auch *Implicit Constructors* genannt.
 
-<!--Ist es wirklich EIN Standardkonstruktor? immerhin habe ich ja 4 Signaturen?-->
-
-
 ********************************************************************************
 
                           {{1-2}}
@@ -149,7 +148,7 @@ struct Student{
   int alter;
   std::string ort;
 
-  Student();
+  Student(); // Default Constructor
   void printCertificate();
 };
 
@@ -291,12 +290,13 @@ struct Student{
 Student::Student(std::string n, int a, std::string o): name{n}, alter{a}, ort{o} {}
 
 Student::~Student(){
-  std::cout << "Destructor executed \n";
+  std::cout << "Destructing object of type 'Student' with name = '" << this->name << "'\n";
 }
 
 int main()
 {
   Student max {"Maier", 19, "Dresden"};
+  std::cout << "End...\n";
   return 0;
 }
 ```
@@ -417,7 +417,7 @@ https://en.cppreference.com/w/cpp/algorithm/sort
 Wie kann die entsprechende Sortierfunktion übergeben werden? Wann kann darauf
 verzichtet werden?
 
-Mit der Operatorüberladung von `>` haben wir ein Sortierkriterium abgebildet.
+Mit der Operatorüberladung von `<` haben wir ein Sortierkriterium abgebildet.
 Wie würden Sie vorgehen, wenn sich Ihr Auftraggeber hier eine größere Flexibilität wünscht und ein Set von Metriken bereit gehalten werden soll?
 
 ********************************************************************************
