@@ -396,13 +396,13 @@ int main()
   }else{
     std::cout << "Ungleiche Identitäten \n";
   }
-  std::vector<Student> StudentList {gustav, alexander, bernhard, gustav2};
-  for (auto &i: StudentList)
+  std::vector<Student> studentList {gustav, alexander, bernhard, gustav2};
+  for (auto &i: studentList)
       std::cout << i.name << ", ";
   std::cout << std::endl;
 
-  //std::sort(StudentList.begin(), StudentList.end());
-  //for (auto &i: StudentList)
+  //std::sort(studentList.begin(), studentList.end());
+  //for (auto &i: studentList)
   //    std::cout << i.name << ", ";
   //std::cout << std::endl;
 
