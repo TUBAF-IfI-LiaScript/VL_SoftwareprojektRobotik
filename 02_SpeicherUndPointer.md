@@ -24,14 +24,14 @@ Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.gi
 
 ## Komponenten des Speichers
 
-Wie wird der Speicher von einem Programm eigentlich verwaltet?
+Wie wird der Speicher von einem C++ Programm eigentlich verwaltet?
 
 <!--
 style="width: 70%; max-width: 860px; display: block; margin-left: auto; margin-right: auto;"
 -->
-````ascii
+```ascii
         ------>  +----------------------------+
-   höhere        | Commandozeilen Parameter   |    (1)
+   höhere        | Kommandozeilen Parameter   |    (1)
    Adresse       | und Umgebungsvariablen     |
                  +----------------------------+
                  | Stack                      |    (2)
@@ -50,21 +50,36 @@ style="width: 70%; max-width: 860px; display: block; margin-left: auto; margin-r
   kleinere       +----------------------------+
   Adresse        | Programmcode               |    (6)
        ------>   +----------------------------+                              
-````
+```
 
-|     | Speicherbestandteil  | engl.    | Bedeutung                              |
-| --- | -------------------- | -------- | -------------------------------------- |
-| 1   | Parameter            |          |                                        |
-| 2   | Stack                |          | LIFO Datenstruktur                     |
-| 3   | Heap                 |          |                                        |
-| 4   |                      | data/bss |                                        |
-| 5   | Initialisierte Daten | data     | Globale und statische Daten,           |
-| 6   | Programmcode         | text     | teilbar, häufig als read only Speicher |
+|     | Speicherbestandteil    | engl. | Bedeutung                              |
+| --- | ---------------------- | ----- | -------------------------------------- |
+| 1   | Parameter              |       |                                        |
+| 2   | Stack                  |       | LIFO Datenstruktur                     |
+| 3   | Heap                   |       | "Haldenspeicher"                       |
+| 4   | Uninitialisierte Daten | .bss  |                                        |
+| 5   | Initialisierte Daten   | .data | Globale und statische Daten,           |
+| 6   | Programmcode           | .text | teilbar, häufig als read only Speicher |
 
+### Untersuchung der ausführbaren Datei
 
-**Welche der Speicherelemente werden wann realisiert?**
+**Welche Anteile der Speicherstruktur sind zur Compilezeit analysierbar?**
 
-# Untersuchung der Ausführbaren Datei
+```cpp
+#include <iostream>
+
+int main(void)
+{
+    return 0;
+}
+```
+
+```bash
+gcc memory.c -o memory
+size memory
+text       data        bss        dec        hex    filename
+960        248         8          1216       4c0     memory
+```
 
 <table class="lia-inline lia-table">
     <thead class="lia-inline lia-table-head">
@@ -111,9 +126,7 @@ style="width: 70%; max-width: 860px; display: block; margin-left: auto; margin-r
 </table>
 
 
-## Stack vs Heap
-
-> Ich möchte gern dieses Format übernehmen. Gibt es da einen css, den ich referenzieren kann
+### Stack vs Heap
 
 | Parameter                   | Stack                          | Heap                           |
 | --------------------------- | ------------------------------ | ------------------------------ |
@@ -129,6 +142,7 @@ Welche Faktoren bestimmen eigentlich die Größe des verfügbaren Stacks?
 
 Für Ubuntu 18.04 ergibt sich mit dem Befehl `ulimit` folgende Ausgabe:
 
+```bash
 ulimit -a
 -t: cpu time (seconds)              unlimited
 -f: file size (blocks)              unlimited
@@ -146,15 +160,19 @@ ulimit -a
 -e: max nice                        0
 -r: max rt priority                 0
 -N 15:                              unlimited
+```
 
-Die Stackgröße ist auf 8192kB beschränkt. Wenn wir
+Die Stackgröße ist auf 8192kB beschränkt. Wenn wir also einen StackOverflow generieren wollen
+können wir dies realisieren, in dem wir Datenstrukturen generieren, die größer als dieser Wert sind.
+
+<Beispielrechnung>
 
 
-## Wiederholung (Raw-)Pointer vs. Referenzen
+## Wiederholung (Raw-)Pointer / Referenzen
 
 **Was war noch mal eine Referenz?**
 
-C und C ++ unterstützen das Konzept des **Zeigers**, die sich von den meisten anderen Programmiersprachen unterscheiden. Andere Sprachen wie C#, C++(!), Java, Python etc. implementieren **Referenzen**.
+C und C\+\+ unterstützen das Konzept des **Zeigers**, die sich von den meisten anderen Programmiersprachen unterscheiden. Andere Sprachen wie C#, C++(!), Java, Python etc. implementieren **Referenzen**.
 
 Oberflächlich betrachtet sind sich Referenzen und Zeiger sehr ähnlich, in beiden
 Fällen greifen wir indirekt auf einen Speicher zu:
