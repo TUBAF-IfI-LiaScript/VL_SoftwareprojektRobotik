@@ -24,7 +24,7 @@ Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.gi
 
 ## Komponenten des Speichers
 
-Wie wird der Speicher von einem C++ Programm eigentlich verwaltet?
+Wie wird der Speicher von einem C++ Programm eigentlich verwaltet? Wie wird diese Struktur ausgehend vom Start eines Programmes aufgebaut?
 
 <!--
 style="width: 70%; max-width: 860px; display: block; margin-left: auto; margin-right: auto;"
@@ -128,6 +128,100 @@ text       data        bss        dec        hex    filename
 
 ### Stack vs Heap
 
+**Zunächst mal ganz praktisch, was passiert auf dem Stack?**
+
+Ausgangspunkt unserer Untersuchung ist ein kleines Programm, das mit dem gnu Debugger `gdb` analysiert wurde:
+
+```
+g++ StackExample.cpp -o stackExample
+gdb stackExample
+(gdb) disas main
+(gdb) disas calc
+```
+
+```cpp                     StackExample.cpp
+#include <iostream>
+
+int calc(int factor1, int factor2){
+  return factor1 * factor2;
+}
+
+int main()
+{
+  int num1 {0x11};
+  int num2 {0x22};
+  int result {0};
+  result = calc(num1, num2);
+  std::cout << result << std::endl;
+}
+```
+@Rextester.CPP
+
+Was passiert beim starten des Programmes und beim  Aufruf der Funktion `calc` "unter der Haube"? Schauen wir zunächst die Einrichtung des Stacks von Seiten der `main` funktion bis zur Zeile 12.
+
+```
+0x089d <+0>:  push   %rbp                 # Initalisierung des
+                                          # main-Stackframes
+0x089e <+1>:  mov    %rsp,%rbp            
+0x08a1 <+4>:  sub    $0x10,%rsp           # Allokation der Variablen
+0x08a5 <+8>:  movl   $0x11,-0xc(%rbp)     # Initialisierung
+0x08ac <+15>: movl   $0x22,-0x8(%rbp)
+0x08b3 <+22>: movl   $0x0,-0x4(%rbp)
+0x08ba <+29>: mov    -0x8(%rbp),%edx      # Speichern der Parameter in
+0x08bd <+32>: mov    -0xc(%rbp),%eax      # edx und eax
+0x08c0 <+35>: mov    %edx,%esi
+0x08c2 <+37>: mov    %eax,%edi           
+0x08c4 <+39>: callq  0x88a <_Z4calcii>    # Aufruf der Funktion in Zeile 12
+0x08c9 <+44>: mov    %eax,-0x4(%rbp)
+0x08cc <+47>: mov    -0x4(%rbp),%eax
+0x08cf <+50>: mov    %eax,%esi
+0x08d1 <+52>: lea    0x200748(%rip),%rdi  # Aufruf der Betriebssystemfunktion für Ausgaben
+0x08d8 <+59>: callq  0x760 <_ZNSolsEi@plt>
+....
+```
+
+<!--
+style="width: 100%; max-width: 860px; display: block; margin-left: auto; margin-right: auto;"
+-->
+```ascii
+                                    kleinere Adresse
+
+            +----------------> |                           |
+            |                  +---------------------------+
+            |          rbp-x10 | ????                      |
+            |                  +---------------------------+
+            |          rbp-x0c | num1                      |
+      +------------+           +---------------------------+
+rsb   |stackpointer|   rbp-x08 | num2                      |
+      +------------+           +---------------------------+
+                       rbp-x04 | result                    |   
+      +------------+           +---------------------------+
+rbp   |basepointer |------->   | Alter Framepointer        |
+      +------------+           +---------------------------+       
+                               | Alter Instruktionspointer |        
+                               | ...                       |
+
+                                     größere Adresse              
+```
+
+Nun rufen wir die Funktion `calc` auf und führen die Berechnung aus. Dafür  
+wird ein neuer Stackframe angelegt. Wie entwickelt sich der Stack ausgehend von
+dem zugehörigen Assemblercode weiter?
+
+```
+0x088a <+0>:  push   %rbp
+0x088b <+1>:  mov    %rsp,%rbp
+0x088e <+4>:  mov    %edi,-0x4(%rbp)
+0x0891 <+7>:  mov    %esi,-0x8(%rbp)
+0x0894 <+10>: mov    -0x4(%rbp),%eax
+0x0897 <+13>: imul   -0x8(%rbp),%eax
+0x089b <+17>: pop    %rbp
+0x089c <+18>: retq
+```
+
+
+**Zusammenfassung**
+
 | Parameter                   | Stack                          | Heap                           |
 | --------------------------- | ------------------------------ | ------------------------------ |
 | Allokation und Deallokation | Automatisch durch den Compiler | Manuel durch den Programmierer |
@@ -137,8 +231,11 @@ text       data        bss        dec        hex    filename
 
 ### Stack Overflow
 
-Welche Faktoren bestimmen eigentlich die Größe des verfügbaren Stacks?
+Wenn ein Programm mehr Speicherplatz als die Stapelgröße belegt, tritt ein Stapelüberlauf auf und es kann zu einem Programmabsturz kommen. Es gibt zwei Fälle, in denen ein Stapelüberlauf auftreten kann:
 
++ Wenn wir eine große Anzahl lokaler Variablen deklarieren oder ein Array oder eine Matrix oder ein höherdimensionales Array mit großer Größe deklarieren, kann dies zu einem Überlauf des Stapels führen.
+
++ Wenn sich eine Funktion hinreichend  oft rekursiv selbst aufruft, kann der Stapel keine große Anzahl von lokalen Variablen speichern, die von jedem Funktionsaufruf verwendet werden, und führt zu einem Überlauf des Stapels.
 
 Für Ubuntu 18.04 ergibt sich mit dem Befehl `ulimit` folgende Ausgabe:
 
@@ -164,6 +261,10 @@ ulimit -a
 
 Die Stackgröße ist auf 8192kB beschränkt. Wenn wir also einen StackOverflow generieren wollen
 können wir dies realisieren, in dem wir Datenstrukturen generieren, die größer als dieser Wert sind.
+
+$$
+8192kB = 8192.000B = 1024.000 \cdot 8Byte
+$$
 
 <Beispielrechnung>
 
