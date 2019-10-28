@@ -79,14 +79,16 @@ Prüfungsvorbereitung.
 
 Übungstermine
 
-| Nr. | Datum                                    |
-|:----|:-----------------------------------------|
-| 1.  | ~23./24. Oktober~ -> **6./7. November**  |
-| 2.  | 13./14. November                         |
-| 3.  | ~20./21. November~ -> **4./5. Dezember** |
-| 4.  | 18./19. Dezember                         |
-| 5.  | 15./16. Januar                           |
-| 6.  | 29./30. Januar                           |
+| Nr. | Datum                             |
+|:--- |:--------------------------------- |
+|     | ~23./24. Oktober~  Labor gesperrt |
+| 1.  | 6./7. November                    | 
+|     | ~20. November~  Feiertag          |
+| 2.  | 21. November                      |
+| 3.  | 4./5. Dezember                    |
+| 4.  | 18./19. Dezember                  |
+| 5.  | 15./16. Januar                    |
+| 6.  | 29./30. Januar                    |
 
 Tragt euch bitte in den Kurs [Softwaretechnologie-Projekt (Prototyp)](https://bildungsportal.sachsen.de/opal/auth/RepositoryEntry/18593513489/CourseNode/98504809493283) im e-learning System OPAL ein.
 
