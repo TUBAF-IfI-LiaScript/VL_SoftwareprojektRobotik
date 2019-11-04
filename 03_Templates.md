@@ -184,7 +184,7 @@ Zwei Fragen bleiben noch offen:
 | Frage                                                                            | Antwort                                                                                                                                                                                                                                                                                                                                                                              |
 |:---------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Muss der Templateparameter zwingend angegeben werden?                            | Nein, wenn Sie im nachfolgenden Codebeispiel die Funktion `print(int value)` entfernen, funktioniert die Codegenerierung noch immer. Der Compiler erkennt den Typen anhand des übergebenen Wertes.                                                                                                                                                                                   |
-| Ist ein Nebeneinander von Funktionstemplates und allgemeinen Funktionen möglich? | Ja, denn der Compiler versucht immer die *spezifischste* Funktion zu nutzen. Das heißt, zunächst werden alle nicht-templatisierten Funktionen in betracht gezogen. Im zweiten Schritt werden teilweise-spezialisierte Templatefunktionen herangezogen und erst zu letzt werden vollständig templatisierte Funktionen genutzt. Untersuchen Sie das Beispiel mit `nm` und `c++filter`! |
+| Ist ein Nebeneinander von Funktionstemplates und allgemeinen Funktionen möglich? | Ja, denn der Compiler versucht immer die *spezifischste* Funktion zu nutzen. Das heißt, zunächst werden alle nicht-templatisierten Funktionen in betracht gezogen. Im zweiten Schritt werden teilweise-spezialisierte Funktionstemplates herangezogen und erst zu letzt werden vollständig templatisierte Funktionen genutzt. Untersuchen Sie das Beispiel mit `nm` und `c++filter`! |
 
 ```cpp                     FunctionTemplate.cpp
 #include <iostream>
@@ -361,6 +361,7 @@ class MyClass{
      std::string name;
    public:
      MyClass(std::string name) : name(name) {}
+     std::string getName() const {return this->name;}
 };
 
 int main(){
@@ -376,9 +377,9 @@ int main(){
     // Beispiel 2
     std::list<MyClass> objects;
 
-    objects.push_back()
-    for (it = objects.begin(); it!=objects.end(); it++) {
-      delete *it;
+    objects.emplace_back("Hello World!");
+    for (auto it = objects.begin(); it!=objects.end(); it++) {
+      std::cout << it->getName() << std::endl;
     }
 }
 ```
