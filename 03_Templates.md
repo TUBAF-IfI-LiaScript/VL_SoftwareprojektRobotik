@@ -173,16 +173,18 @@ Damit sollten folgende Begriffe festgehalten werden:
 
 + ein Funktionstemplate definiert ein Muster oder eine Schablone für die eigentliche Funktionalität
 + das Funktionstemplate wird initialisiert, in dem die Templateparameter festgelegt werden.
-+ der Compiler übernimmt das Matching und überprüft, ob eine Zuordnung des spezifischen Datentypes möglich ist und generiert eine Templatefunktion.
++ der Compiler übprüft ob die angegebenen Datentypen zu einer validen Funktionsdefinition führen und generiert diese bei einem positiven Match.
++ der Compiler versucht solange alle Funktionstemplates mit den angegebenen Datentypen zu initialisieren, bis diese erfolgreich war, oder kein weiteres Funktionstemplate zur Verfügung steht.
+
 
 Warum funktioniert das Konzept bisher so gut? Alle bisher verwendeten Typen bedienen den Operator `<<` für die Stream-Ausgabe. Eine Datenstruktur, die dieses Kriterium nicht erfüllt würde einen Compilerfehler generieren.
 
 Zwei Fragen bleiben noch offen:
 
-| Frage                                                                            | Antwort |
-| -------------------------------------------------------------------------------- | ------- |
-| Muss der Templateparameter zwingend angegeben werden?                            | Nein, wenn Sie im nachfolgenden Codebeispiel die Funktion `print(int value)` entfernen, funktioniert die Codegenerierung noch immer. Der Compiler erkennt den Typen anhand des übergebenen Wertes.         |
-| Ist ein Nebeneinander von Funktionstemplates und allgemeinen Funktionen möglich? | Ja, zunächst wird geprüft, ob eine nicht-templatisierte Funktion vorliegt und erst dann die Realisierung der templatisierten Funktion erzeugt. Untersuchen Sie das Beispiel mit `nm` und `c++filter`!      |
+| Frage                                                                            | Antwort                                                                                                                                                                                                                                                                                                                                                                              |
+|:---------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Muss der Templateparameter zwingend angegeben werden?                            | Nein, wenn Sie im nachfolgenden Codebeispiel die Funktion `print(int value)` entfernen, funktioniert die Codegenerierung noch immer. Der Compiler erkennt den Typen anhand des übergebenen Wertes.                                                                                                                                                                                   |
+| Ist ein Nebeneinander von Funktionstemplates und allgemeinen Funktionen möglich? | Ja, denn der Compiler versucht immer die *spezifischste* Funktion zu nutzen. Das heißt, zunächst werden alle nicht-templatisierten Funktionen in betracht gezogen. Im zweiten Schritt werden teilweise-spezialisierte Templatefunktionen herangezogen und erst zu letzt werden vollständig templatisierte Funktionen genutzt. Untersuchen Sie das Beispiel mit `nm` und `c++filter`! |
 
 ```cpp                     FunctionTemplate.cpp
 #include <iostream>
@@ -198,16 +200,25 @@ void print (T value){
   std::cout << value << std::endl;  
 }
 
+template<>
+void print<float> (float value){
+  std::cout << "Die spezialisierte Templatefunktion wird aufgerufen" << std::endl;
+  std::cout << value << std::endl;  
+}
+
 int main()
 {
   print(5);
-  print<int>(5);
+
+  double v = 5.0;
+  print<float>(v);
+  print(v);
   return EXIT_SUCCESS;
 }
 ```
 @Rextester.CPP
 
-Darüber hinaus sind Templatespezialisierungen möglich, die Ausnahmen von der generellen Abbildungsregel ermöglichen.
+Insbesondere teilweise und vollständige Templatespezialisierungen ermöglichen es Ausnahmen von generellen Abbildungsregeln darzustellen.
 
 ```cpp                     TemplateSpecialization.cpp
 #include <iostream>
@@ -236,7 +247,7 @@ Damit lassen sich dann insbesondere für Templates mit mehr als einem Typparamet
 template<class T, class U>  // Generische Funktion
 void f(T a, U b) {}
 
-template<class T>           // Überladenes Funktions-Template
+template<class T>           // Teilweise spezialisiertes Funktions-Template
 void f(T a, int b) {}
 
 template<>                  // Vollständig spezialisiert; immer noch Template
@@ -246,7 +257,7 @@ void f(int a, int b) {}
 Daraus ergibt sich folgende Aufrufstruktur:
 
 | Aufruf                | Adressierte Funktion                          |
-| --------------------- | --------------------------------------------- |
+|:----------------------|:----------------------------------------------|
 | `f<int, int> (3,7);`  | Generische Funktion                           |
 | `f<double> (3.5, 5);` | Überladenes Funktionstemplate                 |
 | `f(3.5, 5);`          | Überladenes Funktionstemplate                 |
@@ -321,11 +332,12 @@ int main(){
 @Rextester.CPP
 
 Auch in diesem Kontext kann eine Spezialisierung von Templates für bestimmte
-Typen erfolgen, integrieren Sie beispielsweise ein seperates Template die Methode `clear` für `std::string`, in der die zugehörige Variable auf einen leeren Ausdruck `""` gesetzt wird.  
+Typen erfolgen. Spezialisieren Sie beispielsweise das Template für den Typ `std::string`
+und setzen Sie in der Methode `clear` die zugehörige Variable auf einen leeren Ausdruck `""`.
 
 Nur am Rande ... Was wären alternative C++ Umsetzungen für die genannte Anwendung:
 
-+ Verwendung eines templatisierten SmartPointers ohe das eigene Template
++ Verwendung eines templatisierten SmartPointers ohne das eigene Template
 + Addressierung der Variablen mittels Zeiger und dessen Setzen auf `nullptr` für den Fall einess ungültigen Eintrages
 
 *******************************************************************************
@@ -382,7 +394,7 @@ int main(){
 
 Darüber hinaus können (wie auch bei den Funktionstemplates) mehrere Datentypen
 in Klassentemplates angegeben werden. Der vorliegende Code illustriert dies
-am Beispiel einer Klassifikation, die zum Beispiel mit einem Neuronalen Netz
+am Beispiel einer Klassifikation, die zum Beispiel mit einem neuronalen Netz
 erfolgte. Ein Set von Features wird auf eine Klasse abgebildet.
 
 ```cpp                           Container.cpp
@@ -425,6 +437,33 @@ vollständig spezialisieren.
 
 > Merke: Funktionstemplates können nicht partiell spezialisiert werden!
 
+...aber überladen werden:
+
+```cpp                           FunctionTemplateOverloading.cpp
+#include <iostream>
+
+template<typename T1, typename T2>
+void print2 (T1 value, T2 value2){
+  std::cout << "Die Templatefunktion wird aufgerufen" << std::endl;
+  std::cout << value << std::endl;
+  std::cout << value2 << std::endl;
+}
+
+template<typename T>
+void print2 (std::string value, T value2){
+  std::cout << "Die überladene Templatefunktion wird aufgerufen" << std::endl;
+  std::cout << value << std::endl;
+  std::cout << value2 << std::endl;
+}
+
+int main()
+{
+  print2(1, 3.14);
+  print2(std::string("Value: "), 1.0);
+  return EXIT_SUCCESS;
+}
+```
+@Rextester.CPP
 
 *******************************************************************************
 
@@ -667,10 +706,10 @@ wird dann durch `...` als Platzhalter ausgedrückt.
 https://www.artima.com/intv/generics.html#part2
 
 | Kriterium                          | C# Generics  | C++ Templates          |
-| ---------------------------------- | ------------ | ---------------------- |
+|:-----------------------------------|:-------------|:-----------------------|
 | Template-Ziele                     | Klassen      | Klassen und Funktionen |
 | Typisierung                        | Stark        | Schwach                |
-| Instanziierung                     | zur Laufzeit | zur Conpilezeit        |
+| Instanziierung                     | zur Laufzeit | zur Compilezeit        |
 | Default-Werte                      | nein         | ja                     |
 | Vollständige Spezialisierung       | nein         | ja                     |
 | Partielle Spezialisierung          | nein         | ja                     |
