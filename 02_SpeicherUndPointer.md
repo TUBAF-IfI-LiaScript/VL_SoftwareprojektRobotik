@@ -522,8 +522,6 @@ int main()
 
 **Nachteile bei der Verwendung von Raw Pointern**
 
-Raw Pointer werden im C++20 Standard nicht mehr enthalten sein!
-
 > "Raw pointers have been a pain in the backside for most students learning C++ in the last decades. They had a multi-purpose role as raw memory iterators, nullable, changeable nullable references and devices to manage memory that no-one really owns. This lead to a host of bugs and vulnerabilities and headaches and decades of human life spent debugging, and the loss of joy in programming completely." [Link](https://arne-mertz.de/2018/04/raw-pointers-are-gone/)
 
 > "In modernem C++ werden Rohzeiger nur in kleinen Codeblöcken mit begrenztem Gültigkeitsbereich, in Schleifen oder Hilfsfunktionen verwendet, in denen Leistung ausschlaggebend ist und keine Verwirrung über den Besitzer entstehen kann." [Microsoft](https://docs.microsoft.com/de-de/cpp/cpp/smart-pointers-modern-cpp?view=vs-2019)
@@ -607,7 +605,6 @@ Die Wirkungsweise eines intelligenten C++-Zeigers ähnelt dem Vorgehen bei der O
 
 C++11 implementiert verschiedene Pointer-Klassen für unterschiedliche Zwecke. Diese werden im folgenden vorgestellt:
 
-
 + std::unique_ptr — smart pointer der den Zugriff auf eine dynamisch allokierte Ressource verwaltet.
 + std::shared_ptr — smart pointer der den Zugriff auf eine dynamisch allokierte Ressource verwaltet, wobei mehrere Instanzen für ein und die selbe Ressource bestehen können.
 + std::weak_ptr — analog zum `std::shared_ptr` aber ohne Überwachung der entsprechenden Pointerinstanzen.
@@ -663,30 +660,52 @@ int main()
 ```
 @Rextester.CPP
 
-Warum sind keine Kopier- oder Zuweisungsoperationen möglich? Schauen Sie sich die Deklaration des Unique Pointers an. Die entsprechenden Methoden wurden mit "delete" markiert und generieren entsprechend eine Fehlermeldung.
+> Merke: Zu jedem Zeitpunkt verweist nur eine Instanz des `unique_ptr` auf eine Ressource. Die Idee lässt keine Kopien zu.
 
-```cpp
+Wie wird das softwaretechnisch abgefangen? Die entsprechenden Methoden wurden mit "delete" markiert und generieren entsprechend eine Fehlermeldung.
+
+```cpp                                
 unique_ptr(const _Myt&) = delete;
 _Myt& operator=(const _Myt&) = delete;
 ```
 
-Was geht also nicht?
+Dies ist dann insbesondere bei der Übergabe von `unique_ptr` an Funktionen von Bedeutung.
 
-```cpp
-void compute(std::unique_ptr<int[]> p) { ... }
-void compute_valid(std::unique_ptr<int[]> & p) { ... }
+```cpp    UniquePointerHandling.cpp
+#include <iostream>
+#include <memory>
+
+void callByValue(std::unique_ptr<std::string> input){
+    std::cout << *input << std::endl;
+}
+
+void callByReference(const std::unique_ptr<std::string> & input){
+    std::cout << *input << std::endl;
+}
+
+void callByRawPointer(std::string* input){
+    std::cout << *input << std::endl;
+}
 
 int main()
 {
-    std::unique_ptr<int[]> ptr = std::make_unique<int[]>(1024);
-    std::unique_ptr<int[]> ptr_copy = ptr; // ERROR! Copy is not allowed
-    compute(ptr);  // ERROR! `ptr` is passed by copy, and copy is not allowed
-
-    compute_valid(ptr);  // Valid operation
+  // Variante 1
+  //std::unique_ptr<std::string> A (new std::string("Hello World"))
+  // Variante 2
+  std::unique_ptr<std::string> A = std::make_unique<std::string>("Hello World");
+  // Ohne Veränderung der Ownership
+  //callbyValue(A);                     // Compilerfehler!!!
+  //callByReference(&A);
+  callByRawPointer(A.get());
+  // Mit Übergabe der Ownership
+  callByValue(std::move(A));
+  std::cout << A << std::endl;
+  return EXIT_SUCCESS;
 }
 ```
+@Rextester.CPP
 
-Diese Einschränkung bringt aber einen entscheidenden Vorteil mit sich. Der `unique` Pointer wird allein durch eine Adresse repräsentiert. Es ist kein weiterer Overhead für die Verwaltung des Konstrukts notwendig!
+Diese konzeptionelle Einschränkung bringt aber einen entscheidenden Vorteil mit sich. Der `unique` Pointer wird allein durch eine Adresse repräsentiert. Es ist kein weiterer Overhead für die Verwaltung des Konstrukts notwendig!
 Vergleichen Sie dazu die Darstellung unter [cppreference](https://de.cppreference.com/w/cpp/memory/unique_ptr)
 
 
@@ -710,8 +729,8 @@ Vergleichen Sie dazu die Darstellung unter [cppreference](https://de.cppreferenc
      ```
   2. Präsentiere die API des Shared POinter
      ```cpp
-     B->use_count();
-     B->unique();
+     B.use_count();
+     B.unique();
      ```
 -->
 
