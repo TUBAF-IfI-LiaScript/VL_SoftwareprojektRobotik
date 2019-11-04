@@ -182,7 +182,7 @@ Zwei Fragen bleiben noch offen:
 | Frage                                                                            | Antwort |
 | -------------------------------------------------------------------------------- | ------- |
 | Muss der Templateparameter zwingend angegeben werden?                            | Nein, wenn Sie im nachfolgenden Codebeispiel die Funktion `print(int value)` entfernen, funktioniert die Codegenerierung noch immer. Der Compiler erkennt den Typen anhand des übergebenen Wertes.         |
-| Ist ein Nebeneinander von Funktionstemplates und allgemeinen Funktionen möglich? | Ja, zunächst wird geprüft, ob eine nicht-templatisierte Funktion vorliegt und erst dann die Templatefunktion erzeugt. Untersuchen Sie das Beispiel mit `nm` und `c++filter`!      |
+| Ist ein Nebeneinander von Funktionstemplates und allgemeinen Funktionen möglich? | Ja, zunächst wird geprüft, ob eine nicht-templatisierte Funktion vorliegt und erst dann die Realisierung der templatisierten Funktion erzeugt. Untersuchen Sie das Beispiel mit `nm` und `c++filter`!      |
 
 ```cpp                     FunctionTemplate.cpp
 #include <iostream>
