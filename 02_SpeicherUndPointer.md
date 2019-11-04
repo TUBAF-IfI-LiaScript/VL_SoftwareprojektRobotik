@@ -694,12 +694,12 @@ int main()
   // Variante 2
   std::unique_ptr<std::string> A = std::make_unique<std::string>("Hello World");
   // Ohne Veränderung der Ownership
-  //callbyValue(A);                     // Compilerfehler!!!
-  //callByReference(&A);
+  callbyValue(A);                     // Compilerfehler!!!
+  callByReference(A);
   callByRawPointer(A.get());
   // Mit Übergabe der Ownership
   callByValue(std::move(A));
-  std::cout << A << std::endl;
+  //std::cout << A << std::endl;
   return EXIT_SUCCESS;
 }
 ```
