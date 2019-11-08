@@ -73,7 +73,7 @@ Leider ist in C++11 die Elementinitialisierung nicht mit uniformen Initialisieru
         Student::Student(std::string name) : name {name}, alter{18}, ort{"Freiberg"};
        ```
     2. Ein Beispiel für Delegation einfügen
-
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   comment: CopyConstructor.cpp
   ..............................................................................
       1. Was fällt Ihnen auf? Das Copy Assignment wird gar nicht ausgeführt!
@@ -83,6 +83,7 @@ Leider ist in C++11 die Elementinitialisierung nicht mit uniformen Initialisieru
            gustav3 = gustav;
          ```
       2. Erweitern des Beispiels um Move-Constructors und deren Einsatz mittels std::move
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -->
 
                             {{0-1}}
@@ -269,9 +270,11 @@ Während das '&' eine Variable als Referenz deklariert, legt '&&' eine 'rvalue-R
 
 ### Destruktoren
 <!--
-  comment: Destructor.cpp:
+  comment: Destructor.cpp
+  .............................................................................
         - Show with different scopes {}
         - Show with new/delete
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -->
 
 ```cpp                     Destructor.cpp
@@ -328,6 +331,7 @@ Einen Destruktor explizit aufzurufen, ist selten notwendig (oder gar eine gute I
            }
          }
          ```
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   
   comment: Assignment.cpp
   ..............................................................................
      1. Erläuterung zum Unterschied zwischen Zuweisung und Initiierung    

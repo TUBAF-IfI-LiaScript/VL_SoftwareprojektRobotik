@@ -180,6 +180,7 @@ Variablen abgelegt.
      std::cout << a [2] << std::endl;
   ...
   ```
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -->
 
 **Zunächst mal ganz praktisch, was passiert auf dem Stack?**
@@ -549,6 +550,7 @@ int main()
        }
      }
      ```
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -->
 
 Das folgende Beispiel greift einen Nachteil der Raw Pointer nochmals auf, um das
@@ -626,6 +628,7 @@ C++11 implementiert verschiedene Pointer-Klassen für unterschiedliche Zwecke. D
      ```cpp
      std:unique_ptr<MyClass> B = A;
      ```    
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -->
 
 Die `unique` Pointer stellen sicher, dass das eigentliche Objekt nur durch einen
@@ -732,6 +735,7 @@ Vergleichen Sie dazu die Darstellung unter [cppreference](https://de.cppreferenc
      B.use_count();
      B.unique();
      ```
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -->
 
 std::shared_ptr sind intelligente Zeiger, die ein Objekt über einen Zeiger "verwalten". Mehrere shared_ptr Instanzen können das selbe Objekt besitzen. Das Objekt wird zerstört, wenn:

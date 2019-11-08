@@ -26,10 +26,10 @@ Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.gi
   ..............................................................................
   Das generische Interface `IComparable<T>` erzwingt die Implementierung einer
   Methode `public int CompareTo(T)`. Dafür wird im Beispiel eine String Operation
-  verwendet. Die Methode String.Compare hat folgende Spezifikation bezüglich des Rückgabewertes:
-     Kleiner als 0 (null) 	strA steht in der Sortierreihenfolge vor strB.
-     Zero 	strA tritt in der Sortierreihenfolge an der gleichen Position wie strB auf.
-     Größer als 0 (null) 	strA steht in der Sortierreihenfolge hinter strB.
+  verwendet. Die `Methode String.Compare` hat folgende Spezifikation bezüglich des Rückgabewertes:
+  + Kleiner als 0 (null) 	strA steht in der Sortierreihenfolge vor strB.
+  + Zero 	strA tritt in der Sortierreihenfolge an der gleichen Position wie strB auf.
+  + Größer als 0 (null) 	strA steht in der Sortierreihenfolge hinter strB.
   ```csharp
   public class Student : IComparable<Student>
   {
@@ -45,6 +45,7 @@ Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.gi
     }
   }
   ```
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -->
 
 Innerhalb des .NET Frameworks definieren Generics Typparameter, wodurch Sie Klassen und Methoden entwerfen können, die die Angabe eines oder mehrerer Typen verzögern können, bis die Klasse oder Methode vom Clientcode deklariert und instanziiert wird. Ein Platzhalter, der, generischen Typparameter der häufig mit „T“ bezeichnet wird, definiert die Art einer Variablen, die von anderem Clientcode verwendet werden kann, ohne dass die Kosten und Risiken von Umwandlungen zur Laufzeit oder Boxingvorgängen anfallen.
@@ -115,6 +116,7 @@ In der C++-Standardbibliothek werden Templates zur Bereitstellung typsicherer Co
     print ((double)value);
   }
   ```
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -->
 Welche Möglichkeiten haben wir unter C++ schon kennengelernt, die einenn variablen
 Umgange von identischen Funktionsaufrufen mit unterschiedlichen Typen realsieren?
@@ -283,6 +285,7 @@ Methoden-Templates sind auch nur Funktionstemplates, dass heißt die gereade vor
      variable = "-";
   }
   ```
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -->
 
     {{0-1}}
