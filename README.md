@@ -39,7 +39,8 @@ Veranstaltung richtet sich an Informatiker und Mathematiker und adressiert die f
 | 14.10.2019 | Einführung             | [Link](https://github.com/SebastianZug/SoftwareprojektRobotik/blob/master/00_Einfuehrung.md) | [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/00_Einfuehrung.md#1) |
 | 21.10.2019 | Klassen und Strukturen | [Link](https://github.com/SebastianZug/SoftwareprojektRobotik/blob/master/01_OOPinC++.md)    | [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/01_OOPinC++.md#1)    |
 | 28.10.2019 | Speicher und Pointer   | [Link](https://github.com/SebastianZug/SoftwareprojektRobotik/blob/master/02_SpeicherUndPointer.md)    | [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/02_SpeicherUndPointer.md#1)    |
-| 04.11.2019 | Templates              | [Link](https://github.com/SebastianZug/SoftwareprojektRobotik/blob/master/03_Templates++.md)    | [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/03_Templates.md#1)    |
+| 04.11.2019 | Templates              | [Link](https://github.com/SebastianZug/SoftwareprojektRobotik/blob/master/03_Templates.md)    | [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/03_Templates.md#1)    |
+| 11.11.2019 | Standardbibliothek              | [Link](https://github.com/SebastianZug/SoftwareprojektRobotik/blob/master/04_STL.md)    | [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/04_STL.md#1)    |
 
 
 ## Organisatorisches (WS 2019/20)
