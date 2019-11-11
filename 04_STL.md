@@ -291,7 +291,7 @@ std::vector<std::string> b;
 
 **Welche Klassifikation sollte in Ihrem Kopf stattfinden?**
 
-![STL Container](./img/04_STLandDesignPatterns/STLContainer.png)<!-- width="100%" -->
+![STL Container](./img/04_STL/STLContainer.png)<!-- width="100%" -->
 *Darstellung des Entscheidungsprozesses für die Anwendung eines STL-Containers* [^1]
 
 [^1]: Mikael Persson  nach einem Entwurf von David Moore [Link](https://stackoverflow.com/questions/471432/in-which-scenario-do-i-use-a-particular-stl-container)
@@ -504,12 +504,12 @@ style="width: 80%; max-width: 860px; display: block; margin-left: auto; margin-r
          /    \                            /              \
         /      \                          /                \     
      +----+    +----+            +----+---------+    +----+---------+
-     |  7 |    | 10 |            |  7 | "Fritz" |    | 10 | "Julius"|
+     |  6 |    | 10 |            |  7 | "Fritz" |    | 10 | "Julius"|
      +----+    +----+            +----+---------+    +----+---------+
      /    \                      /              \
     /      \                    /                \
 +----+    +----+           +----+---------+    +----+---------+
-|  2 |    | 6  |           |  2 | "Agnes" |    | 6  | "Horst" |
+|  2 |    | 7  |           |  2 | "Agnes" |    | 6  | "Horst" |
 +----+    +----+           +----+---------+    +----+---------+
 ```
 
