@@ -16,7 +16,7 @@ Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.gi
 
 **Zielstellung der heutigen Veranstaltung**
 
-+ Anwendung von Designpatterns (Observer, Strategy, State) in Beispielanwendung
++ Anwendung von Designpatterns (Adapter, Observer, Strategy, State) in Beispielanwendung
 + Zusammenfassung der bisher betrachteten Aspekte der Programmiersprache C++
 
 --------------------------------------------------------------------------------
@@ -132,7 +132,7 @@ class AbstractSensorInterface{
      bool sensorIsActive = false;
    public:
      //virtual bool initSensorInterface();
-     virtual T readLastMeasurement();
+     virtual T readLastMeasurement() = 0;
 };
 
 template <class T>
@@ -142,7 +142,9 @@ class USBSensor: public AbstractSensorInterface<T>
     bool initSensorInterface(){
       // Configuration of corresponding USB Device
       // check its availability
-      //sensorIsActive = true;  // in case of success
+      // in case of success
+      this->sensorIsActive = true;
+      // further parameter settings
       return this->sensorIsActive;
     }
     T readLastMeasurement(){
@@ -168,6 +170,9 @@ Nun wird aber ein neuer Laserscanner eingekauft, der zwar auch über die
 USB-Schnittstelle angesprochen wird, für den aber der Hersteller ein  komplett unterschiedliches Interface definiert hat.
 
 <img src="http://www.plantuml.com/plantuml/png/hPBFIWCn4CRlynG3NbhAWkTQIYjuAAW7MnzWcftMO7OYcTajkEwxY_k7Ii7jnLC8tvVVBqooKgDaPH50txryKA82NI3LjLdo-z9uuw9i_IVZBK2Ru5fEB7afnngW0Q2zMY9dsAVzTikYCMt4E1t8CIvsoneGRwheSzGkrBKpNp4Wpke1q-0-ne1U_2LYChqexZ0nvO-aziIaPUA2nIRJEsY6gxvkxpl8e9-DmwyJ7-oDax3zC_QPJzt9STeXH38aEGP-OOsXD1-bLQZbytd5pc9QUB5bQvHVEkrzyES3VMNPUM3ZjM4ArxfPTlujiFfPY_0D">
+
+{{1-2}}
+********************************************************************************
 
 Wie betten wir den neuen Sensor in unsere Implementierung ein?
 
@@ -235,24 +240,35 @@ int main()
 ```
 @Rextester.CPP
 
+
+********************************************************************************
+
 ### Observer
 
 Allgemein finden Beobachter-Muster Anwendung, wenn die  Veränderung in einem Objekt anderen mitgeteilt werden soll. Dieses kann das selbst entscheiden, wie darauf zu reagieren ist.
 
 Das beobachtete Objekt (Subjekt) bietet einen Mechanismus, um Beobachter an- und abzumelden und diese über Änderungen zu informieren. Es kennt alle seine Beobachter nur über eine begrenzte gemeinsame Schnittstelle. Die avisierte Änderungen werden unspezifisch gegenüber jedem angemeldeten Beobachter angezeigt.
 
-Man unterscheidet drei verschiedene Arten, das Beobachter-Muster umzusetzen:
+Man unterscheidet zwei verschiedene Arten, das Beobachter-Muster umzusetzen. Beide
+implementieren eine "Push" Notifikation (vgl. im Unterschied dazu "Pull" Mechanismen).
+
+**HINWEIS POlling**
+
+
 
 | Art                      | Wirkung                                                                                                                                                                                                                                                                    |
 | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Push Notification        | Jedes Mal wenn sich das beobachtete Objekt ändert, werden alle Beobachter benachrichtigt. Es werden jedoch keine Daten mitgeschickt, weshalb diese Form immer die gleiche Beobachter-Schnittstelle hat. Die Beobachter müssen nach Eintreffen der Nachricht Daten abholen. |
 | Push-Update Notification | Jedes Mal wenn sich das beobachtete Objekt ändert, werden alle Beobachter benachrichtigt. Zusätzlich leitet das beobachtete Objekt die Update-Daten, die die Änderungen beschreiben, an die Beobachter weiter.                                                             |
-| Pull Notification        | Der Beobachter fragt selbstständig nach dem Zustand des beobachteten Objekts nach.                                                                                                                                                                                         |
+
 
 <img src="http://www.plantuml.com/plantuml/png/ZP7DJiCm48JlVegLkAGjaJXNLLK4brxWq2VOEDjYI9pAkq62q7V7-N5Kx1wuRNU-cSuwEnPqqjQLuWzZp-Ym1bqXywE8CqKhjDUDFPXlWWSr271eYtVIqYc0dALShol3idajcDmdkRqLSaVKjDn2C-tOeoiKGVsMfToCBNgif7zXjX5p_Chw-Mugv7zSbCA2nQ4M6CicENrjw09rWVPSef3tzkRHyzHOxKWeETHxZ3s1Do3q9PZasS_PbJYKkuPF4xD8yqEtJa7q3nPhWcGR7k1bLgEcI-1n6DJLV1gCNSCxtNIDr6ccO0qnDn1n-UnMs3t4rmpdgv2z-SdpE7uMytoRVZQLRFw615djo9PjNVq2">
 
 
 In unserem Roboterbeispiel wollen wir das Observer-Entwurfsmuster benutzen, um den Datenaustausch zwischen dem Modul für die Objekterkennung und der Notaus-Klasse und dem Navigationsmodul zu realisieren. Wir realisieren eine *Push-Update Notification*, die es jedem Beobachter überlässt auf den zugehörigen Distanzwert zu reagieren.
+
+**Switch to smart pointers**
+
 
 ```cpp                     Observer.cpp
 #include <list>
@@ -399,19 +415,34 @@ Welche Probleme sehen Sie?
 
 Betrachten Sie die Implementierung in [github](https://github.com/SebastianZug/SoftwareprojektRobotik/tree/master/examples/05_DesginPattern). Diese realisiert das Zustands-Pattern für das Roboterbeispiel.
 
-![STL Container](./img/05_Designpatterns/classDiagramState.png)<!-- width="100%" -->
+![STL Container](./img/05_Designpatterns/classDiagramState.png)<!-- width="50%" -->
 *Darstellung des Entscheidungsprozesses für die Anwendung eines STL-Containers* [^1]
 
 ### Strategy
 
+Meistens wird eine Strategie durch Klassen umgesetzt, die alle bestimmte Schnittstelle implementieren. Das kann zum Beispiel ein Suchalgorithmus über einer Zahlenmenge sein, der durch den Nutzer in Abhängigkeit des Vorwissens um das Datenset und dessen Konfiguration gewählt wird. Wie aber strukturieren wir
+die unterschiedlichen "Strategien"?
+
+<img src="http://www.plantuml.com/plantuml/png/fT2z2i9030VmFKzneo87Fe13sviwzmdICzR3-v1S2dxekolLWY2qGvSGyizlI8eioD873_dauXaPWx8USov5sBMzK6rJRDoDr1PWI9H9KUWYTr1gy-thT-K3MbgjuGc0RHP6A-e36c4Kwgw3A7sNsCanJ1kJecKI6csv15TBi9d4CAwfdTPf_CtFzA7r_p4pUJMJ6oWexllWNm00">
+
+Die Verwendung von Strategien bietet sich an, wenn
+
++ viele verwandte Klassen sich nur in ihrem Verhalten unterscheiden.
++ unterschiedliche (austauschbare) Varianten eines Algorithmus benötigt werden.
++ Daten innerhalb eines Algorithmus vor Klienten verborgen werden sollen.
+
 Nehmen wir an, dass wir unterschiedliche Strategien für die Reinigung nutzen wollen. Vergleichen Sie dazu entsprechende Publikationen wie zum Beispiel [Paper](https://www.semanticscholar.org/paper/Path-planning-algorithm-development-for-autonomous-Hasan-Abdullah-Al-Nahid/e39988d4ee80bd91aa3c125f885ce3c0382767ef)
 
-```cpp
-#include <iostream>
-#include <memory>
+```cpp    Strategy.cpp
 #include <type_traits>
+#include <typeinfo>
 
 using namespace std;
+
+class NotUsed{
+	private:
+		int useless = 1;
+};
 
 class AbstractStrategy {
 public:
@@ -421,47 +452,42 @@ public:
 
 class Context {
     shared_ptr<AbstractStrategy> _strat;
+    const std::type_info* type = &typeid(_strat);
+
 public:
     Context() : _strat(nullptr) {}
     void setStrategy(shared_ptr<AbstractStrategy> strat) {
-      //if (typeid(strat) == typeid(_strat)){
-      //if (std::is_same<decltype(strat), shared_ptr<AbstractStrategy>>::value){
-      if (_strat.get() != strat.get()){
-          _strat = strat;
-          std::cout << "Robot switched cleaning strategy!" << std::endl;
-      }
+	     _strat = strat;
     }
     void strategy()  { if (_strat) (*_strat)(); }
 };
 
 class RandomWalk : public AbstractStrategy {
 public:
-    void operator()() { cout << "Moving around without any strategy\n"; }
+    void operator()() { cout << "   Moving around without any strategy\n"; }
 };
 
 class LoopStrategy : public AbstractStrategy {
 public:
-    void operator()() { cout << "Operating in circular structures\n"; }
+    void operator()() { cout << "   Operating in circular structures\n"; }
 };
 
 class LinesStrategy : public AbstractStrategy {
 public:
-    void operator()() { cout << "Covering the operational area line by line\n"; }
+    void operator()() { cout << "   Covering the operational area line by line\n"; }
 };
 
 
 int main() {
     Context * c = new Context();
-    RandomWalk RWStrategy;
-    auto myStrategy = make_shared<AbstractStrategy>(RWStrategy);
 
-    c->setStrategy( myStrategy );
+    c->setStrategy( std::shared_ptr<AbstractStrategy>(new RandomWalk) );
     c->strategy();
 
-    c->setStrategy( shared_ptr<AbstractStrategy>(new LoopStrategy) );
+    c->setStrategy( std::shared_ptr<AbstractStrategy>(new LoopStrategy) );
     c->strategy();
 
-    c->setStrategy( shared_ptr<AbstractStrategy>(new LinesStrategy) );
+    c->setStrategy( std::shared_ptr<AbstractStrategy>(new LinesStrategy) );
     c->strategy();
 }
 ```
@@ -476,4 +502,4 @@ int main() {
 + Methoden für die Speicherung und den Datenzugriff auf der Basis eine Container-Klasse einfügt
 + die Zugriffsfunktion des Interfaces dahingehend erweitern.
 
-2. Templatisieren Sie das Observer-Entwurfsmuster aus dem Beispiel `Observer.cpp`.
+2. Templatisieren Sie das Observer-Entwurfsmuster aus dem Beispiel `Observer.cpp`. Wie können Sie sicherstellen, dass unterschiedliche Datentypen an die Observer weitergereicht werden können?
