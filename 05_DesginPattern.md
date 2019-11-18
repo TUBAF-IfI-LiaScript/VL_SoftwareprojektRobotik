@@ -12,7 +12,7 @@ import: https://raw.githubusercontent.com/liascript-templates/plantUML/master/RE
 
 # Vorlesung V - Entwurfsmuster
 
-Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/05_DesignPattern.md#1)
+Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/05_DesginPattern.md)
 
 **Zielstellung der heutigen Veranstaltung**
 
