@@ -434,8 +434,8 @@ Die Verwendung von Strategien bietet sich an, wenn
 Nehmen wir an, dass wir unterschiedliche Strategien für die Reinigung nutzen wollen. Vergleichen Sie dazu entsprechende Publikationen wie zum Beispiel [Paper](https://www.semanticscholar.org/paper/Path-planning-algorithm-development-for-autonomous-Hasan-Abdullah-Al-Nahid/e39988d4ee80bd91aa3c125f885ce3c0382767ef)
 
 ```cpp    Strategy.cpp
-#include <type_traits>
-#include <typeinfo>
+#include <iostream>
+#include <memory>
 
 using namespace std;
 
@@ -452,7 +452,6 @@ public:
 
 class Context {
     shared_ptr<AbstractStrategy> _strat;
-    const std::type_info* type = &typeid(_strat);
 
 public:
     Context() : _strat(nullptr) {}
@@ -464,12 +463,12 @@ public:
 
 class RandomWalk : public AbstractStrategy {
 public:
-    void operator()() { cout << "   Moving around without any strategy\n"; }
+    void operator()() { std::cout << "   Moving around without any strategy\n"; }
 };
 
 class LoopStrategy : public AbstractStrategy {
 public:
-    void operator()() { cout << "   Operating in circular structures\n"; }
+    void operator()() { std::cout << "   Operating in circular structures\n"; }
 };
 
 class LinesStrategy : public AbstractStrategy {
