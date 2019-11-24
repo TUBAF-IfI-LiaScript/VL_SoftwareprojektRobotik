@@ -10,13 +10,11 @@ narrator: Deutsch Female
 import: https://raw.githubusercontent.com/LiaTemplates/Rextester/master/README.md
 -->
 
-# Vorlesung V - Entwurfsmuster
+# Vorlesung VI - Einführung ROS2
 
-Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/06_Einfuehrung ROS.md)
+Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/06_EinfuehrungROS.md)
 
 **Zielstellung der heutigen Veranstaltung**
-
-
 
 
 --------------------------------------------------------------------------------
