@@ -235,42 +235,6 @@ https://www.fh-aachen.de/fachbereiche/maschinenbau-und-mechatronik/international
 
 *******************************************************************************
 
-## ROS2-Handling
-
-**Arbeit auf der Konsole**
-
-Die Exploration und Untersuchung eines ROS2 Systems erfolgt mittels des Tools "ros2". Mit diesem können die folgenden Konzepte adressiert werden. Dazu bietet das Tool folgendende API:
-
-```
->ros2
-usage: ros2 [-h] Call `ros2 <command> -h` for more detailed usage. ...
-
-ros2 is an extensible command-line tool for ROS 2.
-
-optional arguments:
-  -h, --help            show this help message and exit
-
-Commands:
-  action     Various action related sub-commands
-  component  Various component related sub-commands
-  daemon     Various daemon related sub-commands
-  launch     Run a launch file
-  lifecycle  Various lifecycle related sub-commands
-  msg        Various msg related sub-commands
-  multicast  Various multicast related sub-commands
-  node       Various node related sub-commands
-  param      Various param related sub-commands
-  pkg        Various package related sub-commands
-  run        Run a package specific executable
-  security   Various security related sub-commands
-  service    Various service related sub-commands
-  srv        Various srv related sub-commands
-  topic      Various topic related sub-commands
-
-  Call `ros2 <command> -h` for more detailed usage.
-```
-
-
 ## Basiskonzepte
 
 **Pakete** - Pakete kapseln einzelne Algorithmen und realisieren deren Abhängigkeiten. Letztendlich wird damit die Wiederverwendbarkeit einer Implementierung gewährleistet.
@@ -413,7 +377,41 @@ Einen Überblick bietet die Webseite unter folgendem [Link](http://design.ros2.o
 
 ## Einführungsbeispiele
 
-**Hello-World Implementierung**
+**Arbeit auf der Konsole**
+
+Die Exploration und Untersuchung eines ROS2 Systems erfolgt mittels des Tools "ros2". Mit diesem können die folgenden Konzepte adressiert werden. Dazu bietet das Tool folgendende API:
+
+```
+>ros2
+usage: ros2 [-h] Call `ros2 <command> -h` for more detailed usage. ...
+
+ros2 is an extensible command-line tool for ROS 2.
+
+optional arguments:
+  -h, --help            show this help message and exit
+
+Commands:
+  action     Various action related sub-commands
+  component  Various component related sub-commands
+  daemon     Various daemon related sub-commands
+  launch     Run a launch file
+  lifecycle  Various lifecycle related sub-commands
+  msg        Various msg related sub-commands
+  multicast  Various multicast related sub-commands
+  node       Various node related sub-commands
+  param      Various param related sub-commands
+  pkg        Various package related sub-commands
+  run        Run a package specific executable
+  security   Various security related sub-commands
+  service    Various service related sub-commands
+  srv        Various srv related sub-commands
+  topic      Various topic related sub-commands
+
+  Call `ros2 <command> -h` for more detailed usage.
+```
+
+
+###Hello-World Implementierung
 
 Wir versuchen das "Hello World"-Beispiel der ROS Community nachzuvollziehen, dass
 zwei einfache Knoten - "minimal publisher" und "minimal subscriber" - definiert.
@@ -531,14 +529,170 @@ ros2 run examples_rclcppp_minimal_subscriber subscriber_member_function
 ros2 run examples_rclcppp_minimal_publisher publisher_member_function
 ```
 
-**Turtlebot**
+Lassen Sie uns diese Konfiguration systematisch untersuchen:
 
-Das "turtlebot" Beispiel soll die verschiedenen Mechanismen der Kommunikation unter ROS verdeutlichen. Dabei wird unter anderem eine Publish-Subscribe Kommunikation zwischen einem Node für die Nutzereingaben und einer grafischen Ausgabe realisiert. Der Topic Name für die Geschwindigkeitsvorgaben lautet "turtle/cmd_vel".
+1. Welche Nachrichten werden in unserem bescheidenen ROS2 System ausgetauscht?
+
+```
+>ros2 topic list
+/parameter_events
+/rosout
+/topic
+>ros2 topic info /topic
+Topic: /topic
+Publisher count: 1
+Subscriber count: 1
+>ros2 topic hz /topic
+average rate: 2.011
+   min: 0.489s max: 0.500s std dev: 0.00474s window: 4
+...
+```
+
+2. Welche `msg`-Typ steht hinter unserem Topic?
+
+```
+>ros2 msg info /topic
+string data
+```
+
+3. Wie lassen sich mehrere Instanzen ein und des selben Knoten integrieren?
+
+Es soll nochmals darauf hingewiesen werden, `topic` ist ein willkürlich gewählter Name für unseren Kanal. Um beim Testen von verschiedenen Nodes eine schnelle Umbennenung zu ermöglichen können wir mittels Remapping die Topic und Nodenamen anpassen.
+
+```
+> ros2 run examples_rclcpp_minimal_publisher publisher_member_function /topic:=/topic2
+```
+
+```
+>ros2 topic info /topic
+Topic: /topic
+Publisher count: 1
+Subscriber count: 2
+```
+
+![RoboterSystem](./img/06_EinfuehrungROS/rosgraph.png)<!-- width="80%" -->
+*Screenshot des Tools `rgt_graph`*
+
+Natürlich können Sie auch den Topic-Namen aus der Kommandozeile anpassen. Damit entsteht ein neuer Kanal, der keine Subcriber hat.
+
+```
+> ros2 run examples_rclcpp_minimal_publisher publisher_member_function
+    /topic:=/topic2
+```
+
+![RoboterSystem](./img/06_EinfuehrungROS/rosgraph2.png)<!-- width="60%" -->
+*Screenshot des Tools `rgt_graph`*
+
+4. Kann ich auch einen Publisher in der Konsole erzeugen?
+
+Natürlich, dies ist ein wichtiges Element des Debugging. Starten Sie also zum Beispiel den Subscriber mit den bereits bekannten Kommandos und führen Sie dann in einer anderen Konsole den nachfolgenden Befehl aus.
+
+```
+ros2 topic pub /topic std_msgs/msgs/String  "data: Glück Auf" -n TUBAF
+```
+
+Informieren Sie sich zudem über die weiteren Parameter von `ros2 topic pub`. Sie können die Taktrate und die Qualitätskritieren der Übertragung definieren.
+
+### Turtlebot
+
+Das "turtlebot" Beispiel soll die verschiedenen Mechanismen der Kommunikation unter ROS verdeutlichen. Dabei wird unter anderem eine Publish-Subscribe Kommunikation zwischen einem Node für die Nutzereingaben und einer grafischen Ausgabe realisiert.
 
 ```
 ros2 run turtlesim turtle_teleop_key
 ros2 run turtlesim turtlesim_node
 ```
+
+![RoboterSystem](./img/06_EinfuehrungROS/turtleSim.png)<!-- width="90%" -->
+*Screenshot des TurtleSim-Knotens*
+
+Wir wollen wiederum das System inspizieren und nutzen dafür ein grafisches Inspektionssystem, das in ROS2 integriert ist. Hier werden die Methoden, die `ros2` auf der Kommandozeile bereithält in einer GUI abgebildet.
+
+```
+rqt
+```
+
+![RoboterSystem](./img/06_EinfuehrungROS/TurtleSim_rqt.png)<!-- width="90%" -->
+*Screenshot des TurtleSim-Knotens*
+
+
+### ros1_bridge
+
+`ros1_bridge` ermöglicht die Kombination beider ROS Konzepte in übergreifenden Anwendungen. Dabei treffen die unterschiedlichen Kommunikationskonzepte aufeinander, so dass die in ROS2 etablierten Kommunikations-Qualitätskritieren nicht übergreifend realisiert werden können.
+
+Allerdings ist diese Möglichkeit nur unter Linux und MacOS gegeben. In wieweit eine Interaktion zwischen verteilten Systemen möglich ist, wurde nicht evaluiert.
+
+<!--
+style="width: 80%; max-width: 860px; display: block; margin-left: auto; margin-right: auto;"
+-->
+```ascii
+
+                +-----------------+
+  ROS2 Nodes    | Robot-Control   |  ...
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+|    ros1_bridge                                                  |
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+  ROS1 Nodes    | Motion Planning |  | Sensor Interfaces  |   ...
+                +-----------------+  +--------------------+
+                         ^                      ^
+                         |                      |
+                         v                      v
+                +-------------------------------------------------+
+                | roscore                                         |
+                +-------------------------------------------------+
+```
+
+Eine gute Beschreibung findet sich unter [Projektordner ros1_bridge](https://github.com/ros2/ros1_bridge/blob/master/README.md#example-1a-ros-1-talker-and-ros-2-listener). Das nachfolgende Beispiel greift diese Idee auf und liest auf der ROS1 Seite Bilddaten einer Kamera ein, detektiert Gesichter und gibt ein entsprechend angereichertes Bild unter ROS2 in rqt aus.
+
+Wichtig ist, dass Sie die verschiedenen `setup.x` Aufrufe korrekt ausführen.
+
+```bash    ConsoleA
+# ROS1_Shell mit roscore
+> . /opt/ros/melodic/setup.bash
+> roscore
+```
+
+```bash    ConsoleB
+# ROS1_bridge
+> . /opt/ros/melodic/setup.bash
+> . /opt/ros/dashing/setup.bash
+> export ROS_MASTER_URI=http://localhost:11311
+> ros2 run ros1_bridge dynamic_bridge
+```
+
+Auf der ROS2 Seite nutzen wir nun das [image_tools](https://github.com/ros2/demos/tree/master/image_tools) Paket um unser Videosignal einzulesen.
+
+```bash    ConsoleC
+# ROS2_Shell die ein Kamerasignal erfasst
+> . /opt/ros/dashing/setup.bash
+> ros2 run image_tools cam2image  
+#ros2 run image_tools showimage   # zum testen
+```
+
+Im folgenden wird ein Knoten aus dem Paket [opencv_app](http://wiki.ros.org/opencv_apps) aktiviert, dass für die Erkennung der Gesichter verantwortlich ist. Diese ist
+bisher nicht für ROS2 verfügbar.
+
+```bash    ConsoleD
+# ROS1_Shell die ein Kamerasignal erfasst
+> . /opt/ros/melodic/setup.bash
+> rosrun opencv_apps face_detection image:=image
+```
+
+Nun können wir uns die Ausgabe auf der ROS1 Seite anschauen. Leider gibt es noch einen Fehler beim Zurückleiten des Bildes aus ROS1 nach ROS2, was das Bild komplett gemacht hätte. Der Typ des Bildes aus ROS1 war für ROS2 unbekannt. Damit verbleiben wir  hier für die Anzeige auf der Seite von ROS1.
+
+```bash    ConsoleE
+# ROS1_Shell die die Ausgabe koordiniert
+. /opt/ros/melodic/setup.bash
+> rostopic list
+/face_detection_1575145081472799322/face_image
+/face_detection_1575145081472799322/faces
+/face_detection_1575145081472799322/image
+/face_detection_1575145081472799322/parameter_descriptions
+/face_detection_1575145081472799322/parameter_updates
+> rosrun image_view image_view image:=/face_detection_1575145081472799322/image
+```
+
+![RoboterSystem](./img/06_EinfuehrungROS/FaceRecognition.png)<!-- width="80%" -->
+*Beispielhafte Ausgabe der erkannten Gesichter*
 
 
 ## Aufgabe der Woche
