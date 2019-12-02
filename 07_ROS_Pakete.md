@@ -16,7 +16,8 @@ Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.gi
 
 **Zielstellung der heutigen Veranstaltung**
 
-+
++ Aufbau von Paketen unter ROS2
++ Vorgehen bei der Kompilierung
 
 --------------------------------------------------------------------------------
 
@@ -95,7 +96,7 @@ Diese Struktur wird durch das jeweilige Build-System automatisch erweitert. `col
 
 Wir wollen die Funktionalität der `minimal_subscriber`/`minimal_publisher` Beispiel erweitern und einen neuen Knoten implementieren, der den Zählwert nicht als Bestandteil eines strings kommuniziert sondern als separaten Zahlenwert.
 
-Sie finden den Beispielcode im Repository dieses Kurses unter [Link]
+Sie finden den Beispielcode im Repository dieses Kurses unter [Link](https://github.com/SebastianZug/SoftwareprojektRobotik/tree/master/examples/07_ROS2Pakete/src)
 
 **Stufe 1: Individuelles Msg-Format**
 
@@ -194,9 +195,57 @@ hello world my_tutorial_package package
 
 Soweit so gut. Nun müssen wir allerdings auch noch die Logik in die Anwendung integrieren.
 
+```c++          data_generator.cpp
+#include <memory>
+
+#include "rclcpp/rclcpp.hpp"
+#include "std_msgs/msg/string.hpp"
+#include "my_msg_package/msg/my_msg.hpp"
+
+using std::placeholders::_1;
+
+using namespace std::chrono_literals;
+
+class MinimalPublisher : public rclcpp::Node
+{
+  public:
+    MinimalPublisher()
+    : Node("minimal_publisher"), count_(0)
+    {
+      publisher_ = this->create_publisher<my_msg_package::msg::MyMsg>("topic");
+      timer_ = this->create_wall_timer(
+      500ms, std::bind(&MinimalPublisher::timer_callback, this));
+    }
+
+  private:
+    void timer_callback()
+    {
+      auto message = my_msg_package::msg::MyMsg();
+      message.counter = count_++;
+      RCLCPP_INFO(this->get_logger(), "Publishing: '%d, %s'", message.counter, message.comment.c_str());
+      publisher_->publish(message);
+    }
+    rclcpp::TimerBase::SharedPtr timer_;
+    rclcpp::Publisher<my_msg_package::msg::MyMsg>::SharedPtr publisher_;
+    size_t count_;
+  };
+
+  int main(int argc, char * argv[])
+  {
+    rclcpp::init(argc, argv);
+    rclcpp::spin(std::make_shared<MinimalPublisher>());
+    rclcpp::shutdown();
+    return 0;
+}
+```
+
+Einen guten Überblick zur Behandlung von eigenen Datentypen im orginären Paket oder aber in einem anderen bietet:
 
 https://index.ros.org/doc/ros2/Tutorials/Rosidl-Tutorial/
 
+
+
+
 ## Aufgabe der Woche
 
-+ Implementieren Sie einen Subscriber für das oben beschriebene Beispiel. 
++ Implementieren Sie einen Subscriber für das oben beschriebene Beispiel.
