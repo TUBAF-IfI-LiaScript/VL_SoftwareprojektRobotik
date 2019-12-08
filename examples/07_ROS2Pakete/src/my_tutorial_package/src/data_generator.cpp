@@ -15,6 +15,7 @@ class MinimalPublisher : public rclcpp::Node
     : Node("minimal_publisher"), count_(0)
     {
       publisher_ = this->create_publisher<my_msg_package::msg::MyMsg>("topic");
+      RCLCPP_INFO(this->get_logger(), "Ok, let's start the MyMsg.msg publisher!");
       timer_ = this->create_wall_timer(
       500ms, std::bind(&MinimalPublisher::timer_callback, this));
     }

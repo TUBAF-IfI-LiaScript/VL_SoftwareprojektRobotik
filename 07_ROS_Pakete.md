@@ -152,7 +152,8 @@ ros2 topic pub /tralla my_msg_package/msg/MyMsg "{counter: '8'}"
 
 **Schritt 2: Integration einer Methode**
 
-
+Nunmehr wollen wir die neu definierte Nachricht auch in einem Node verwenden.
+Entsprechend nutzen wir den `minimal_publisher` Beispiel aus der vergangenen Vorlesung und ersetzen die `String` Message gegen unsere `My_Msg` Implementierung. Dafür muss für den Knoten eine Abhängigkeit zum Paket "my_msg_package" spezifiziert werden. Dies kann während der Inititalisierung des Paketes oder im Anschluss anhand der 'package.xml' und 'CMakeList.txt' erfolgen. Schauen Sie sich noch mal die Definition der Abhängigkeiten in unserem `my_msg_package` an.
 
 ```
 > ros2 pkg create --build-type ament_cmake --node-name data_generator my_tutorial_package
@@ -175,6 +176,34 @@ creating folder ./my_tutorial_package/include/my_tutorial_package
 creating ./my_tutorial_package/CMakeLists.txt
 creating ./my_tutorial_package/src/data_generator.cpp
 ```
+
+In diesem Beispiel ergänzen wir die Abhängigkeiten manuell. Integrieren Sie dafür in `CMakeList.txt` des Paketes `my_tutorial_package`.
+`find_package` ermittelt zunächst die Verfügbarkeit des Paketes, der zweite Teil basierend auf ament Makros bindet ist verantwortlich für die Verkettung der Build-Prozesse.
+
+```
+find_package(rclcpp REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(my_msg_package REQUIRED)
+
+ament_target_dependencies(
+  data_generator
+  "rclcpp"
+  "std_msgs"
+  "my_msg_package"
+)
+```
+
+Analoge Ergänzungen sind für `package.xml` notwendig. Wiederum werden die Basispakete `rclcpp` und `std_msgs` referenziert. Dazu kommt unser Message-Paket.
+
+```
+<depend>rclcpp</depend>
+<depend>std_msgs</depend>
+
+<build_depend>my_msg_package</build_depend>
+<exec_depend>my_msg_package</exec_depend>
+```
+
+Danach kann der übergreifende Build-Prozess gestartet werden.
 
 ```
 colcon build --symlink-install
@@ -239,13 +268,214 @@ class MinimalPublisher : public rclcpp::Node
 }
 ```
 
+Nachen einem weiteren Build-Prozess können wir das Paket nun im erwarteten Funktionsumfang starten.
 Einen guten Überblick zur Behandlung von eigenen Datentypen im orginären Paket oder aber in einem anderen bietet:
 
 https://index.ros.org/doc/ros2/Tutorials/Rosidl-Tutorial/
 
 
+## Aufzeichnen des Prozesses
+
+Die Aufzeichnung von ganzen Datensätzen ist einer der zentralen Debug-Techniken
+unter ROS. Das Mitschneiden von ausgetauschten Nachrichten :
+
++ ermöglicht das automatisierte Testen von Algorithmen
++ stellt eine Vergleichbarkeit der Evaluationen sicher
++ macht reale Sensoren in einigen Situationen überflüssig.
+
+Schauen wir uns das Ganze für einen Sensor an. Die Intel Realsense D435 eine
+RGB-D Kamera, mit einem ROS Interface. Der zugehörige Treiber findet sich unter folgendem [Link](https://github.com/intel/ros2_intel_realsense).
+
+```
+ros2 run realsense_ros2_camera realsense_ros2_camera
+ros2 run image_tools showimage /image:=/camera/color/image_raw
+```
+
+`ros2 bag` ermöglicht die Aufzeichnung von allen Topics oder aber eine selective
+Erfassung. Im Beispiel bedeutet dies:
+
+```
+> ros2 bag record -a
+[INFO] [rosbag2_storage]: Opened database 'rosbag2_2019_12_06-20_43_24'.
+[INFO] [rosbag2_transport]: Listening for topics...
+[INFO] [rosbag2_transport]: Subscribed to topic '/rosout'
+[INFO] [rosbag2_transport]: Subscribed to topic '/parameter_events'
+[INFO] [rosbag2_transport]: Subscribed to topic '/camera/depth/color/points'
+[INFO] [rosbag2_transport]: Subscribed to topic '/camera/infra2/image_rect_raw'
+[INFO] [rosbag2_transport]: Subscribed to topic '/camera/depth/camera_info'
+...
+
+> ros2 bag info rosbag2_2019_12_06-20_43_24/
+
+Files:             rosbag2_2019_12_06-20_43_24.db3
+Bag size:          1.0 GiB
+Storage id:        sqlite3
+Duration:          11.891s
+Start:             Dec  6 2019 20:43:24.812 (1575661404.812)
+End                Dec  6 2019 20:43:36.704 (1575661416.704)
+Messages:          954
+Topic information: Topic: /camera/aligned_depth_to_color/camera_info | Type: sensor_msgs/msg/CameraInfo | Count: 88 | Serialization Format: cdr
+                   Topic: /camera/aligned_depth_to_color/image_raw | Type: sensor_msgs/msg/Image | Count: 87 | Serialization Format: cdr
+                   Topic: /camera/color/camera_info | Type: sensor_msgs/msg/CameraInfo | Count: 87 | Serialization Format: cdr
+                   Topic: /camera/color/image_raw | Type: sensor_msgs/msg/Image | Count: 85 | Serialization Format: cdr
+                   Topic: /camera/depth/camera_info | Type: sensor_msgs/msg/CameraInfo | Count: 89 | Serialization Format: cdr
+                   Topic: /camera/depth/color/points | Type: sensor_msgs/msg/PointCloud2 | Count: 87 | Serialization Format: cdr
+                   Topic: /camera/depth/image_rect_raw | Type: sensor_msgs/msg/Image | Count: 85 | Serialization Format: cdr
+                   Topic: /camera/infra1/camera_info | Type: sensor_msgs/msg/CameraInfo | Count: 88 | Serialization Format: cdr
+                   Topic: /camera/infra1/image_rect_raw | Type: sensor_msgs/msg/Image | Count: 85 | Serialization Format: cdr
+                   Topic: /camera/infra2/camera_info | Type: sensor_msgs/msg/CameraInfo | Count: 88 | Serialization Format: cdr
+                   Topic: /camera/infra2/image_rect_raw | Type: sensor_msgs/msg/Image | Count: 85 | Serialization Format: cdr
+```
+
+Welche Informationen vermuten Sie hinter den einzelnen Einträgen, die hier publiziert werden? Wie gehen Sie vor, um deren Bedeutung zu ermitteln?
+
+Mit `play` können Sie die Inhalte wieder abspielen.
+
+```
+ros2 bag play rosbag2_2019_12_06-20_43_24.db3
+```
+
+Sehen Sie das Problem bei diesem Vorgehen, insbesondere im Zusammenhang mit RGB-D Daten?
+Die Messages wurden für etwa 11 Sekunden aufgenommen und trotzdem ist eine Datei mit einer Größe von einem GigaByte entstanden. Entsprechend ist es notwendig sich vor der Realisierung einer Aufzeichnung grundsätzlich Gedanken über die notwendigen Daten zu machen, um zwei Fehlkonfigurationen möglich:
+
++ Wenn zu wenige Daten aggregiert wurden, sinkt die Wiederverwendbarkeit des Datensatzes (vgl `camera_info` Daten für overlays).
++ Wenn zu viele Daten aggregiert wurden, wird die Perfomance des Systems möglicherweise überstrapaziert. Die Bandbreite der Schreiboperationen auf dem Speichermedium muss die Datenrate entsprechend abdecken.
+
+Ein Lösungsansatz ist die zeitliche Filterung der Informationen, in dem zum Beispiel nur jede 10te Nachricht gespeichert wird. Dies wiederum kann dann aber einen Einfluss auf das Verhalten des Algorithmus haben!
+
+An dieser Stelle wird sehr schon deutlich, wie der unter ROS1 erreichte
+Komfort noch nicht unter ROS2 realisiert ist. Das `rosbag` Tool unter ROS1 erreicht
+ein weit größeres Spektrum an Konfigurierbarkeit.
+
+!?[rosbagInfo](https://www.youtube.com/watch?time_continue=70&v=pwlbArh_neU&feature=emb_logo)
+
+Beispiel des Einsatzes eines Bagfiles anhand der Scan-Daten im deutschen Museum in München [Link](https://google-cartographer-ros.readthedocs.io/en/latest/demos.html).
+Laden Sie einen zugehörigen Datensatz mittels
+
+```
+wget -P ~/Downloads https://storage.googleapis.com/cartographer-public-data/bags/backpack_2d/b2-2016-04-05-14-44-52.bag
+```
+
+auf Ihren Rechner. Es handelt sich dabei um ein ROS1-bagfile!  
+
+1. Visualisierung der Dateninhalte mittels `rqt_bag`. Zuvor sollten Sie die notwendigen `rqt_bag_plugins` installieren.
+2. Starten des Bagfiles unter `ros2` mittels eines Plugins für die Konvertierung
+
+```
+> . start_melodic.sh
+> . start_dashing.sh
+ROS_DISTRO was set to 'melodic' before. Please make sure that the environment does not mix paths from different distributions.
+> ros2 bag play -s rosbag_v2 b2-2016-04-05-14-44-52.bag
+```
+
+## Steuerung des Startprozesses
+
+Sie sehen, dass wir immer weitere Konsolen öffnen um einzelne Knoten zu starten und zu parameterisieren. Dieses Vorgehen für die Arbeit mit Anwendungen, die mehr als 3 Knoten umfassen ungeeignet. Dabei definiert die Entwickler ein Set von
+Anwendungshorizonten für den Einsatz des `launch` Systems:
+
++ Komposition von Systemen in Systeme von Systemen zur Bewältigung der Komplexität
++ Verwenden einer `include` semantic, um Fragmente wiederzuverwenden, anstatt jedes von Grund auf neu zu schreiben
++ Defintion von Gruppen, um Einstellungen (z.B. remappings) auf Sammlungen von Knoten/Prozessen/enthaltenen Startdateien anzuwenden
++ Verwendung von Gruppen mit Namensräumen, um Hierarchien zu bilden.
++ Portabilität durch Abstraktion von Betriebssystemkonzepten, z.B. Umgebungsvariablen
++ Dienstprogramme, um Dateien auf dem Dateisystem auf eine verschiebbare und portable Weise zu finden, z.B. $(find <package_name>)
+
+ROS1 setzte dabei auf launch-Files, die eine XML Beschreibung der Konfiguration enthielten. Das zugehörige File für den Start eines Hokuyo Laserscanners hätte entsprechend folgende Struktur:
+
+```xml    /launch/hokuyo_node.launch
+<launch>
+  <node name="hokuyo" pkg="hokuyo_node" type="hokuyo_node" respawn="false" output="screen">
+     <param name="calibrate_time" type="bool" value="true"/>
+     <param name="port" type="string" value="/dev/ttyACM0"/>
+     <param name="intensity" type="bool" value="false"/>
+     <param name="min_ang" value="-2.2689"/>
+     <param name="max_ang" value="+2.2689"/>
+     <param name="cluster" value="1"/>
+     <param name="frame_id" value="hokuyo_laser_frame"/>
+  </node>
+</launch>
+```
+Üblicherweise wäre es in eine Hierachie von launch-Skripts eingebunden, die es zum Beispiel für ein SLAM Projekt referenzieren.
+
+```xml
+<launch>
+  <param name="pub_map_odom_transform" value="true"/>
+  <param name="map_frame" value="map"/>
+  <param name="base_frame" value="base_frame"/>
+  <param name="odom_frame" value="odom"/>
+
+  <include file="$(find hokuyo_node)/launch/hokuyo_node.launch"/>
+
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find hokuyo_hector_slam)/launch/rviz_cfg.rviz"/>
+
+  <include file="$(find hokuyo_hector_slam)/launch/default_mapping.launch"/>
+  <include file="$(find hector_geotiff)/launch/geotiff_mapper.launch"/>
+
+</launch>
+```
+
+Dabei werden verschiedene Nachteile von ROS1-launch beseitigt:
+
++ Zuordnung von Nodes zu Prozessen
++ Parameterdefinition
++ ROS1 kannte kein deterministisches Verhalten während der Startup-Prozesse ... *roslaunch does not guarantee any particular order to the startup of nodes -- although this is a frequently requested feature, it is not one that has any particular meaning in the ROS architecture as there is no way to tell when a node is initialized.*
++ "Dynamisierung" des Startup-Prozesses
+
+Hierfür war es notwendig die bisherige XML basierte Notation der Launch-Files aufzugeben und durch eine Skriptsprache zu ersetzen. Dabei lag es nahe Python
+als Grundlage zu verwenden. Zur Illustration einiger Features des wurde das Paket
+`my_tutorial_package` um einen minimalistischen Subscriber für unseren individuellen Message-Typ.
+
+```python  launchNodes.launch.py
+import launch
+import launch.actions
+import launch.substitutions
+import launch_ros.actions
+
+
+def generate_launch_description():
+    return launch.LaunchDescription([
+        launch.actions.DeclareLaunchArgument(
+            'node_prefix',
+            default_value=[launch.substitutions.EnvironmentVariable('USER'), '_'],
+            description='Prefix for node names'
+        ),
+        launch_ros.actions.Node(
+            package='my_tutorial_package', node_executable='data_generator', output='screen',
+            node_name=[launch.substitutions.LaunchConfiguration('node_prefix'), 'talker'],
+            arguments = ['/topic:=/newtopic']
+        )
+    ])
+```
+
+Innerhalb eines C++ Paketes müssen launch-Files für in der CMakeLists.txt spezifiziert werden, damit Sie in den Installationsprozess einfließen:
+
+```
+install(DIRECTORY
+  launch
+  DESTINATION share/${PROJECT_NAME}/
+)
+```
+
+Welche Ergänzungen sind notwendig, um den Subscriber entsprechend abzubilden?
+Nutzen Sie das Launch-File, um das "System" zu starten.
+
+```
+ros2 launch my_tutorial_package launchNodes.launch.py
+```
+
+Warum empfängt der Subscriber die Nachrichten des Publishers nicht?
+
+## Logging
+
+
+
+
+## Erweiterung des Knotenkonzepts
+
 
 
 ## Aufgabe der Woche
 
-+ Implementieren Sie einen Subscriber für das oben beschriebene Beispiel.
++ Machen Sie sich mit CMake und dessen Einbettung in ROS2 vertraut. Welche Aufgabe übernimmt das Ament-Tool?
++ Implementieren Sie einen objektorientierten Subscriber für das oben beschriebene Beispiel.
++ Schreiben Sie ein übergeordnetes Launch-File, dass das bestehende integriert.
