@@ -467,6 +467,49 @@ Warum empfängt der Subscriber die Nachrichten des Publishers nicht?
 
 ## Logging
 
+ROS1 und ROS2 implementieren ein eigenes Log-System, dass sowohl über Kommandozeilentools, wie auch mittels Python/C++ API configuriert werden kann. Den Protokollmeldungen ist eine Schweregrad zugeordnet, der eine Aktivierung oberhalb eines bestimmten Levels erlaubt. `DEBUG`, `INFO`, `WARNING`, `ERROR` oder `FATAL`, in aufsteigender Reihenfolge.
+
+Jedem Knoten ist ein Logger zugeordnet, der automatisch den Namen und den Namensraum des Knotens enthält. Wenn der Name des Knotens extern auf etwas anderes umgestellt wird, als im Quellcode definiert ist, wird er im Loggernamen reflektiert (vgl. Launch-File Beispiel).
+
+```bash
+ros2 run demo_nodes_cpp listener __log_level:=debug
+export RCUTILS_COLORIZED_OUTPUT=0  # 1 for forcing it or, on Windows:
+                                   # set "RCUTILS_COLORIZED_OUTPUT=0"
+```
+
+```cpp
+rcutils_logging_set_logger_level("logger_name", RCUTILS_LOG_SEVERITY_DEBUG);
+```
+
+Das Loggingsystem unter ROS2 findet sich noch im Aufbau. Die entsprechenden Makros, die bereits in der rclcpp API enthalten sind ([Link](http://docs.ros2.org/latest/api/rclcpp/logging_8hpp.html)), decken folgende Anwendungsfälle ab. Dabei zielt die Neuimplementierung aber darauf ab, ein Interface zu definieren, das es erlaubt Logging-Bibliotheken allgemein einzubetten:
+
+| Makro                 | Signatur                | Bedeutung                                                                    |
+| --------------------- | ----------------------- | ---------------------------------------------------------------------------- |
+| `RCLCPP_x`            | logger                  | Die Ausgabe der Log-Nachricht erfolgt bei jedem Durchlauf.                   |
+| `RCLCPP_x_ONCE`       | logger                  | Die Ausgabe erfolgt nur einmalig.                                            |
+| `RCLCPP_x_SKIPFIRST`  | logger                  | Beim ersten Durchlauf wird die Ausgabe unterdrückt, danach immer realisiert. |
+| `RCLCPP_x_EXPRESSION` | logger, expression      | Die Ausgabe erfolgt nur für den Fall, dass der Ausdruck war ist.             |
+| `RCLCPP_x_FUNCTION`   | logger, function        |    Die Ausgabe wird nur realisiert, wenn der Rückgabewert der Funktion wahr war.                                                                          |
+| `RCLCPP_x_THROTTLE`   | logger, clock, duration | Die Ausgabe erfolgt nur mit einer entsprechenden Periodizität, die über `duration` definiert wird.                                                                             |
+
+Anwendungsbespiele:
+
+```cpp Logging.cpp
+// This message will be logged only the first time this line is reached.
+RCLCPP_INFO_ONCE(this->get_logger(),  "This message will appear only once");
+// Filter even counter values
+RCLCPP_DEBUG_EXPRESSION(
+    this->get_logger(), (counter % 2) == 0, "Count is even (expression evaluated to true)");
+// Detect range overrun
+if (counter >= 2147483647) {
+    RCLCPP_FATAL(this->get_logger(), "Reseting count to 0");
+    counter = 0;
+}
+```
+
+Erweitern Sie die Ausgaben unseres Beispiels um eine vorgefilterte Ausgabe, so dass nur
+noch alle 10 Sekunden die entsprechenden Log-Nachrichten erscheinen.
+
 
 
 
