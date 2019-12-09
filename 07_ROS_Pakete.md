@@ -553,9 +553,7 @@ Für die Interaktion mit einem *managed node* stehen Ihnen unterschiedlichen Mö
 ros2 lifecycle set /nodename X   #State
 ``
 
-Ein Beispiel für die entsprechend Realisierung findet sich unter folgendem [Link](url)
-
-
+Ein Beispiel für die entsprechend Realisierung findet sich unter folgendem [Link](https://www.stereolabs.com/docs/ros2/lifecycle/#the-life-cycle-state-machine)
 
 ## Aufgabe der Woche
 
