@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  2.0.2
+version:  2.0.3
 language: de
 comment: In dieser Veranstaltung der Vorlesung werden die Paket und Buildkonzepte von ROS2 vorgestellt. Dabei entsteht ein einfaches eigenes Package.
 narrator: Deutsch Female
@@ -554,6 +554,8 @@ ros2 lifecycle set /nodename X   #State
 ``
 
 Ein Beispiel für die entsprechend Realisierung findet sich unter folgendem [Link](https://www.stereolabs.com/docs/ros2/lifecycle/#the-life-cycle-state-machine)
+
+
 
 ## Aufgabe der Woche
 
