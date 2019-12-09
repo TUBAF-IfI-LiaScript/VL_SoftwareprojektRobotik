@@ -547,13 +547,13 @@ ROS2 definiert vier Zustände `Unconfigured`, `Inactive`, `Active`, `Finalized` 
 ![STL Container](./img/07_ROSPakete/life_cycle_sm.png)<!-- width="100%" -->
 Autor: Geoffrey Biggs Tully Foote, https://design.ros2.org/articles/node_lifecycle.html
 
-Für die Interaktion mit einem *managed node* stehen Ihnen unterschiedlichen Möglichkeiten offen:
+Für die Interaktion mit einem *managed node* stehen Ihnen unterschiedlichen Möglichkeiten offen. Auf der Kommandozeile kann zwischen den States mittels
 
 ```
-ros2 lifecycle set /nodename X   #State
-``
+ros2 lifecycle set /nodename X   #State Id
+```
 
-Ein Beispiel für die entsprechend Realisierung findet sich unter folgendem [Link](https://www.stereolabs.com/docs/ros2/lifecycle/#the-life-cycle-state-machine)
+gewechselt werden. Komfortabler ist die Spezifikation in den launch-Files. Ein Beispiel für die entsprechend Realisierung findet sich unter folgendem [Link](https://www.stereolabs.com/docs/ros2/lifecycle/#the-life-cycle-state-machine)
 
 
 
