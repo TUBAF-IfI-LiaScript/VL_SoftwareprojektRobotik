@@ -18,6 +18,8 @@ Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.gi
 
 + Aufbau von Paketen unter ROS2
 + Vorgehen bei der Kompilierung
++ Verwendung des Logging, von Bagfiles
++ Launch Konzepte
 
 --------------------------------------------------------------------------------
 
@@ -268,8 +270,8 @@ class MinimalPublisher : public rclcpp::Node
 }
 ```
 
-Nachen einem weiteren Build-Prozess können wir das Paket nun im erwarteten Funktionsumfang starten.
-Einen guten Überblick zur Behandlung von eigenen Datentypen im orginären Paket oder aber in einem anderen bietet:
+Nach einem weiteren Build-Prozess können wir das Paket nun im erwarteten Funktionsumfang starten.
+Einen guten Überblick zur Behandlung von eigenen Datentypen im originären Paket oder aber in einem anderen bietet:
 
 https://index.ros.org/doc/ros2/Tutorials/Rosidl-Tutorial/
 
@@ -291,7 +293,7 @@ ros2 run realsense_ros2_camera realsense_ros2_camera
 ros2 run image_tools showimage /image:=/camera/color/image_raw
 ```
 
-`ros2 bag` ermöglicht die Aufzeichnung von allen Topics oder aber eine selective
+`ros2 bag` ermöglicht die Aufzeichnung von allen Topics oder aber eine selektive
 Erfassung. Im Beispiel bedeutet dies:
 
 ```
@@ -339,7 +341,7 @@ Sehen Sie das Problem bei diesem Vorgehen, insbesondere im Zusammenhang mit RGB-
 Die Messages wurden für etwa 11 Sekunden aufgenommen und trotzdem ist eine Datei mit einer Größe von einem GigaByte entstanden. Entsprechend ist es notwendig sich vor der Realisierung einer Aufzeichnung grundsätzlich Gedanken über die notwendigen Daten zu machen, um zwei Fehlkonfigurationen möglich:
 
 + Wenn zu wenige Daten aggregiert wurden, sinkt die Wiederverwendbarkeit des Datensatzes (vgl `camera_info` Daten für overlays).
-+ Wenn zu viele Daten aggregiert wurden, wird die Perfomance des Systems möglicherweise überstrapaziert. Die Bandbreite der Schreiboperationen auf dem Speichermedium muss die Datenrate entsprechend abdecken.
++ Wenn zu viele Daten aggregiert wurden, wird die Performanz des Systems möglicherweise überstrapaziert. Die Bandbreite der Schreiboperationen auf dem Speichermedium muss die Datenrate entsprechend abdecken.
 
 Ein Lösungsansatz ist die zeitliche Filterung der Informationen, in dem zum Beispiel nur jede 10te Nachricht gespeichert wird. Dies wiederum kann dann aber einen Einfluss auf das Verhalten des Algorithmus haben!
 
@@ -347,7 +349,7 @@ An dieser Stelle wird sehr schon deutlich, wie der unter ROS1 erreichte
 Komfort noch nicht unter ROS2 realisiert ist. Das `rosbag` Tool unter ROS1 erreicht
 ein weit größeres Spektrum an Konfigurierbarkeit.
 
-!?[rosbagInfo](https://www.youtube.com/watch?time_continue=70&v=pwlbArh_neU&feature=emb_logo)
+!?[rosbagInfo](https://www.youtube.com/watch?time_continue=70&v=pwlbArh_neU&feature=emb_logo)<!-- height="500px" width="800px" -->
 
 Beispiel des Einsatzes eines Bagfiles anhand der Scan-Daten im deutschen Museum in München [Link](https://google-cartographer-ros.readthedocs.io/en/latest/demos.html).
 Laden Sie einen zugehörigen Datensatz mittels
@@ -370,12 +372,14 @@ ROS_DISTRO was set to 'melodic' before. Please make sure that the environment do
 
 ## Steuerung des Startprozesses
 
-Sie sehen, dass wir immer weitere Konsolen öffnen um einzelne Knoten zu starten und zu parameterisieren. Dieses Vorgehen für die Arbeit mit Anwendungen, die mehr als 3 Knoten umfassen ungeeignet. Dabei definiert die Entwickler ein Set von
-Anwendungshorizonten für den Einsatz des `launch` Systems:
+Sie sehen, dass wir immer weitere Konsolen öffnen um einzelne Knoten zu starten
+und zu parameterisieren. Dieses Vorgehen für die Arbeit mit Anwendungen, die
+mehr als 3 Knoten umfassen ungeeignet. Dabei definiert die Entwickler ein Set
+von Anwendungshorizonten für den Einsatz des `launch` Systems:
 
 + Komposition von Systemen in Systeme von Systemen zur Bewältigung der Komplexität
 + Verwenden einer `include` semantic, um Fragmente wiederzuverwenden, anstatt jedes von Grund auf neu zu schreiben
-+ Defintion von Gruppen, um Einstellungen (z.B. remappings) auf Sammlungen von Knoten/Prozessen/enthaltenen Startdateien anzuwenden
++ Definition von Gruppen, um Einstellungen (z.B. remappings) auf Sammlungen von Knoten/Prozessen/enthaltenen Startdateien anzuwenden
 + Verwendung von Gruppen mit Namensräumen, um Hierarchien zu bilden.
 + Portabilität durch Abstraktion von Betriebssystemkonzepten, z.B. Umgebungsvariablen
 + Dienstprogramme, um Dateien auf dem Dateisystem auf eine verschiebbare und portable Weise zu finden, z.B. $(find <package_name>)
@@ -404,7 +408,7 @@ ROS1 setzte dabei auf launch-Files, die eine XML Beschreibung der Konfiguration 
   <param name="base_frame" value="base_frame"/>
   <param name="odom_frame" value="odom"/>
 
-  <include file="$(find hokuyo_node)/launch/hokuyo_node.launch"/>
+  <include file="$(find hokuyo_node)/launch/hokuyo_node.launch"/>    
 
   <node pkg="rviz" type="rviz" name="rviz" args="-d $(find hokuyo_hector_slam)/launch/rviz_cfg.rviz"/>
 
@@ -465,6 +469,27 @@ ros2 launch my_tutorial_package launchNodes.launch.py
 
 Warum empfängt der Subscriber die Nachrichten des Publishers nicht?
 
+Weitergehende Möglichkeiten eröffnen zeitliche Trigger für die Aktivierung einzelner Knoten. Das nachfolgende Beispiel, aktiviert den Knoten `heart_beat` erst mit einer Verzögerung von 5 Sekunden.
+
+```python  launchNodes.launch.py
+import launch
+import launch.actions
+import launch.substitutions
+import launch_ros.actions
+
+
+def generate_launch_description():
+    return launch.LaunchDescription([
+        launch.actions.TimerAction(
+            actions = [
+                launch_ros.actions.Node( package='my_tutorial_package', node_executable='heart_beat', output='screen')
+                ], period = 5.0
+        )
+    ])
+```
+
+Die Implementierung kann aber auch ohne die Nutzung von `ros2 launch` als einfaches Python Skript erfolgen. Ein Beispiel findet sich unter folgendem [Link](https://github.com/ros2/launch_ros/blob/master/launch_ros/examples/pub_sub_launch.py)  
+
 ## Logging
 
 ROS1 und ROS2 implementieren ein eigenes Log-System, dass sowohl über Kommandozeilentools, wie auch mittels Python/C++ API configuriert werden kann. Den Protokollmeldungen ist eine Schweregrad zugeordnet, der eine Aktivierung oberhalb eines bestimmten Levels erlaubt. `DEBUG`, `INFO`, `WARNING`, `ERROR` oder `FATAL`, in aufsteigender Reihenfolge.
@@ -483,14 +508,14 @@ rcutils_logging_set_logger_level("logger_name", RCUTILS_LOG_SEVERITY_DEBUG);
 
 Das Loggingsystem unter ROS2 findet sich noch im Aufbau. Die entsprechenden Makros, die bereits in der rclcpp API enthalten sind ([Link](http://docs.ros2.org/latest/api/rclcpp/logging_8hpp.html)), decken folgende Anwendungsfälle ab. Dabei zielt die Neuimplementierung aber darauf ab, ein Interface zu definieren, das es erlaubt Logging-Bibliotheken allgemein einzubetten:
 
-| Makro                 | Signatur                | Bedeutung                                                                    |
-| --------------------- | ----------------------- | ---------------------------------------------------------------------------- |
-| `RCLCPP_x`            | logger                  | Die Ausgabe der Log-Nachricht erfolgt bei jedem Durchlauf.                   |
-| `RCLCPP_x_ONCE`       | logger                  | Die Ausgabe erfolgt nur einmalig.                                            |
-| `RCLCPP_x_SKIPFIRST`  | logger                  | Beim ersten Durchlauf wird die Ausgabe unterdrückt, danach immer realisiert. |
-| `RCLCPP_x_EXPRESSION` | logger, expression      | Die Ausgabe erfolgt nur für den Fall, dass der Ausdruck war ist.             |
-| `RCLCPP_x_FUNCTION`   | logger, function        |    Die Ausgabe wird nur realisiert, wenn der Rückgabewert der Funktion wahr war.                                                                          |
-| `RCLCPP_x_THROTTLE`   | logger, clock, duration | Die Ausgabe erfolgt nur mit einer entsprechenden Periodizität, die über `duration` definiert wird.                                                                             |
+| Makro                 | Signatur                | Bedeutung                                                                                          |
+| --------------------- | ----------------------- | -------------------------------------------------------------------------------------------------- |
+| `RCLCPP_x`            | logger                  | Die Ausgabe der Log-Nachricht erfolgt bei jedem Durchlauf.                                         |
+| `RCLCPP_x_ONCE`       | logger                  | Die Ausgabe erfolgt nur einmalig.                                                                  |
+| `RCLCPP_x_SKIPFIRST`  | logger                  | Beim ersten Durchlauf wird die Ausgabe unterdrückt, danach immer realisiert.                       |
+| `RCLCPP_x_EXPRESSION` | logger, expression      | Die Ausgabe erfolgt nur für den Fall, dass der Ausdruck war ist.                                   |
+| `RCLCPP_x_FUNCTION`   | logger, function        | Die Ausgabe wird nur realisiert, wenn der Rückgabewert der Funktion wahr war.                      |
+| `RCLCPP_x_THROTTLE`   | logger, clock, duration | Die Ausgabe erfolgt nur mit einer entsprechenden Periodizität, die über `duration` definiert wird. |
 
 Anwendungsbespiele:
 
@@ -511,9 +536,19 @@ Erweitern Sie die Ausgaben unseres Beispiels um eine vorgefilterte Ausgabe, so d
 noch alle 10 Sekunden die entsprechenden Log-Nachrichten erscheinen.
 
 
-
-
 ## Erweiterung des Knotenkonzepts
+
+Ein verwalteter Lebenszyklus für Knoten (*managed nodes*) ermöglicht eine bessere Kontrolle über den Zustand des ROS-Systems. Es ermöglicht dem roslaunch, sicherzustellen, dass alle Komponenten korrekt instanziiert wurden, bevor es einer Komponente erlaubt, mit der Ausführung ihres Verhaltens zu beginnen. Es ermöglicht auch, dass Knoten online neu gestartet oder ersetzt werden können.
+
+Das wichtigste Konzept dieses Dokuments ist, dass ein verwalteter Knoten eine bekannte Schnittstelle darstellt, nach einem bekannten Lebenszyklus-Zustandsautomaten ausgeführt wird und ansonsten als Blackbox betrachtet werden kann.
+
+ROS2 definiert vier Zustände `Unconfigured`, `Inactive`, `Active`, `Finalized` und insgesamt 7 Transitionen.
+
+
+![STL Container](./img/07_ROSPakete/life_cycle_sm.png)<!-- width="100%" -->
+Autor: Geoffrey Biggs Tully Foote, https://design.ros2.org/articles/node_lifecycle.html
+
+
 
 
 
@@ -522,3 +557,4 @@ noch alle 10 Sekunden die entsprechenden Log-Nachrichten erscheinen.
 + Machen Sie sich mit CMake und dessen Einbettung in ROS2 vertraut. Welche Aufgabe übernimmt das Ament-Tool?
 + Implementieren Sie einen objektorientierten Subscriber für das oben beschriebene Beispiel.
 + Schreiben Sie ein übergeordnetes Launch-File, dass das bestehende integriert.
++ Entwickeln Sie einen Knoten, der ein bestimmtes Muster an Nachrichten empfängt, um seinen Zustand zu verändern.

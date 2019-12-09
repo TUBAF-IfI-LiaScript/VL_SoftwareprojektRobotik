@@ -18,6 +18,7 @@ find_package(my_msg_package REQUIRED)
 
 add_executable(data_generator src/data_generator.cpp)
 add_executable(non_composable_subscriber src/non_composable_subscriber.cpp)
+add_executable(heart_beat src/heart_beat.cpp)
 
 target_include_directories(data_generator PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -37,6 +38,13 @@ ament_target_dependencies(
   "my_msg_package"
 )
 
+ament_target_dependencies(
+  heart_beat
+  "rclcpp"
+  "std_msgs"
+  "my_msg_package"
+)
+
 install(TARGETS
   data_generator
   EXPORT export_${PROJECT_NAME}
@@ -45,6 +53,12 @@ install(TARGETS
 
 install(TARGETS
   non_composable_subscriber
+  EXPORT export_${PROJECT_NAME}
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+install(TARGETS
+  heart_beat
   EXPORT export_${PROJECT_NAME}
   DESTINATION lib/${PROJECT_NAME}
 )
