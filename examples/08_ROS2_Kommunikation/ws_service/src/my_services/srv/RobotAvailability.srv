@@ -1,5 +1,6 @@
 string robotname
 ---
+bool validname false
 string location
 bool busy
 float32 batterylevel

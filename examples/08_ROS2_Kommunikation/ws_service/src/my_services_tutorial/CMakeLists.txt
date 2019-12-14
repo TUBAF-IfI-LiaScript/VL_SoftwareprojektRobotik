@@ -28,7 +28,9 @@ ament_target_dependencies(
    my_services)
 
 install(
-TARGETS service
-DESTINATION lib/${PROJECT_NAME})
+  TARGETS service
+  EXPORT export_${PROJECT_NAME}
+  DESTINATION lib/${PROJECT_NAME}
+)
 
 ament_package()
