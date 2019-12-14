@@ -1,0 +1,5 @@
+string robotname
+---
+string location
+bool busy
+float32 batterylevel
