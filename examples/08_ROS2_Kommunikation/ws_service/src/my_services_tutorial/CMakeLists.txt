@@ -16,16 +16,16 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 # find dependencies
+find_package(rclcpp REQUIRED)
 find_package(ament_cmake REQUIRED)
 find_package(my_services REQUIRED)
-find_package(rclcpp REQUIRED)
 
 add_executable(service src/service.cpp)
 
 ament_target_dependencies(
    service
-   "rclcpp"
-   "my_service")
+   rclcpp
+   my_services)
 
 install(
 TARGETS service
