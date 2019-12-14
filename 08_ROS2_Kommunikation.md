@@ -153,10 +153,85 @@ Bisher haben wir über asynchrone Kommunikationsmechanismen gesprochen. Ein Publ
 
 In diesem Fall liegt eine Interaktion in Form eines Remote-Procedure-Calls (RPC) vor. Die Anfrage / Antwort erfolgt über einen Dienst, der durch ein Nachrichtenpaar definiert ist: eine für die Anfrage und eine für die Antwort. Ein bereitstellender ROS-Knoten bietet einen Dienst unter einem Stringnamen an, und ein Client ruft den Dienst auf, indem er die Anforderungsnachricht sendet und in seiner Ausführung innehält und auf die Antwort wartet. Die Client-Bibliotheken stellen diese Interaktion dem Programmierer so dar, als wäre es ein Remote Procedure Call.
 
-Ein Service wird über ein Service File definiert, dass analog zu den nutzerdefinierten Paketen die Struktur der auszutauschenden Daten beschreibt. Dabei wird sowohl die Struktur des Aufrufes, wie auch die Antwort des Services beschrieben. Dabei wird das gleiche Format wie bei den nutzerspezifischen Messages verwendet.
+Dafür sind 3 Schritte notwendig:
+
+1. Ein Service wird über ein Service File definiert, dass analog zu den nutzerdefinierten Paketen die Struktur der auszutauschenden Daten beschreibt. Dabei wird sowohl die Struktur des Aufrufes, wie auch die Antwort des Services beschrieben. Dabei wird das gleiche Format wie bei den nutzerspezifischen Messages verwendet.
+
+2. Die Logik des Service (Entgegennahme des Requests/ Ausliefern der Antwort) wird in einem Knoten implementiert. Hier werden die Parameter der Anfrage ausgewertet, die Antwort bestimmt und diese auf das Ausgabeformat abgebildet.
+
+Diese Vorgänge sollen nun in zwei Beispielen besprochen werden. Einmal anhand
+des Turtlesim-Beispiels und anhand einer eigenen Implementierung.
 
 ### Manuelle Interaktion mit ROS-Services
 
+```
+ros2 run turtlesim turtlesim_node
+```
+
+![RoboterSystem](./img/08_ROS_Kommunikation/SingleTurtle.png)<!-- width="60%" -->
+
+Wie explorieren Sie die Services, die durch den `turtlesim_node` bereitgestellt werden?
+
+`ros2` stellt zwei Schnittstellen für die Arbeit mit den Services bereit.
+
++ `service` erlaubt den Zugriff auf die tatsächlich angebotenen Services während
++ `srv` die Definitionsformate, die nicht zwingend auch genutzt werden darstellt.
+
+```bash
+> ros2 service list
+/clear
+/kill
+/reset
+/spawn
+/turtle1/set_pen
+/turtle1/teleport_absolute
+/turtle1/teleport_relative
+/turtlesim/describe_parameters
+/turtlesim/get_parameter_types
+/turtlesim/get_parameters
+/turtlesim/list_parameters
+/turtlesim/set_parameters
+/turtlesim/set_parameters_atomically
+>
+> ros2 srv list | grep turtlesim
+turtlesim/srv/Kill
+turtlesim/srv/SetPen
+turtlesim/srv/Spawn
+turtlesim/srv/TeleportAbsolute
+turtlesim/srv/TeleportRelative
+```
+
+Offenbar stellt die Turtlesim-Umgebung 5 Services bereit, deren Bedeutung selbsterklärend ist. Die zugehörigen Definitionen sind namensgleich zugeordnet. Auf die zusätzlich aufgezeigten Parameter wird im nächstfolgenden Abschnitt eingegangen.
+
+Das Format lässt sich entsprechend aus den srv Dateien ablesen:
+
+```
+> ros2 srv show turtlesim/srv/Spawn
+float32 x
+float32 y
+float32 theta
+string name # Optional. A unique name will be created and returned if this is empty
+---
+string name
+```
+
+Versuchen wir also eine Service mittels `ros2 service call` manuell zu starten. Der Aufruf setzt sich aus mehreren Elementen zusammen, deren Konfiguration zwischen den ROS2 Versionen schwanken. An erster Stelle steht der Dienstname gefolgt von der Service-Definition und dem eigentlichen Parametersatz.
+
+```
+> ros2 service call /spawn turtlesim/srv/Spawn "{x: 2, y: 2, theta: 0.2, name: ''}"
+
+waiting for service to become available...
+requester: making request: turtlesim.srv.Spawn_Request(x=2.0, y=2.0, theta=0.2, name='')
+
+response:
+turtlesim.srv.Spawn_Response(name='turtle2')
+```
+
+Offenbar wird eine neue Schildkröte in der Simulation erzeugt und mit einem generierten Namen versehen. In diesem Fall erfolgt als Reaktion auf den Request nicht nur eine allgemeine Antwort, vielmehr wird ein weiterer Knoten erzeugt der weitere Publisher und Subscriber öffnet.
+
+![RoboterSystem](./img/08_ROS_Kommunikation/MultipleTurtles.png)<!-- width="80%" -->
+
+Mit den anderen Services (`Kill`) kann dessen Verhalten nun adaptiert werden.
 
 
 
