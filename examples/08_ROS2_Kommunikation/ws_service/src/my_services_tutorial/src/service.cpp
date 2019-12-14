@@ -1,20 +1,20 @@
 #include <iostream>
 #include <memory>
 #include "rclcpp/rclcpp.hpp"
-#include "my_service/srv/robot_availability.hpp"
+#include "my_services/srv/robot_availability.hpp"
 
-using RobotAvailability = my_service::srv::RobotAvailability;
+using RobotAvailability = my_services::srv::RobotAvailability;
 rclcpp::Node::SharedPtr g_node = nullptr;
 
 void handle_service(
   const std::shared_ptr<rmw_request_id_t> request_header,
-  const std::shared_ptr<AddTwoInts::Request> request,
-  const std::shared_ptr<AddTwoInts::Response> response)
+  const std::shared_ptr<RobotAvailability::Request> request,
+  const std::shared_ptr<RobotAvailability::Response> response)
 {
   (void)request_header;
   RCLCPP_INFO(
     g_node->get_logger(),
-    "request: %" PRId64 " + %" PRId64, request->robotname);
+    "request: %s", request->robotname);
   response->location = "Kitchen";
 }
 
