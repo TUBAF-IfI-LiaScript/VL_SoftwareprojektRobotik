@@ -16,8 +16,8 @@ struct Robot{
         bool busy;
     public:
         //default constructor
-        Robot(int number, std::string name, float battery, bool busy){
-            roomNumber=number; name=name; battery=battery; busy=busy;}
+        Robot(int number, std::string robot_name, float battery, bool busy){
+            roomNumber=number; name=robot_name; battery=battery; busy=busy;}
 };
 
 
