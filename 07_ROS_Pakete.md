@@ -53,16 +53,16 @@ ament_cmake_auto
 ament_cmake_copyright
 ```
 
-Eine Paket umfasst aber nicht nur den eigentlichen Code sondern auch:
+Ein Paket umfasst aber nicht nur den eigentlichen Code sondern auch:
 
 + eine Spezifikation der Abhängigkeiten
 + die Konfiguration des Build-Systems
-+ die Definition der Nutzerspezifischen Messages
++ die Definition der nutzerspezifischen Messages
 + die `launch` Files für den Start der Anwendungen und deren Parameterisierung
 
 Ein minimales Paket umfasst zwei Dateien:
 
-+ package.xml - Informationen über das Paket selbst (Autor, Version, )
++ package.xml - Informationen über das Paket selbst (Autor, Version, ...)
 + CMakeLists.txt file - beschreibt wie das Paket gebaut wird und welche Abhängigkeiten bestehen
 
 Die Paketerstellung in ROS 2 verwendet [ament](https://design.ros2.org/articles/ament.html) als Build-System und [colcon](https://colcon.readthedocs.io/en/released/user/quick-start.html) als Build-Tool.
@@ -338,7 +338,9 @@ ros2 bag play rosbag2_2019_12_06-20_43_24.db3
 ```
 
 Sehen Sie das Problem bei diesem Vorgehen, insbesondere im Zusammenhang mit RGB-D Daten?
-Die Messages wurden für etwa 11 Sekunden aufgenommen und trotzdem ist eine Datei mit einer Größe von einem GigaByte entstanden. Entsprechend ist es notwendig sich vor der Realisierung einer Aufzeichnung grundsätzlich Gedanken über die notwendigen Daten zu machen, um zwei Fehlkonfigurationen möglich:
+Die Messages wurden für etwa 11 Sekunden aufgenommen und trotzdem ist eine Datei mit einer Größe von einem GigaByte entstanden. 
+Entsprechend ist es notwendig sich vor der Realisierung einer Aufzeichnung grundsätzlich Gedanken über die notwendigen Daten zu machen. 
+Unter anderem sollten zwei Fehlkonfigurationen vermieden werden:
 
 + Wenn zu wenige Daten aggregiert wurden, sinkt die Wiederverwendbarkeit des Datensatzes (vgl `camera_info` Daten für overlays).
 + Wenn zu viele Daten aggregiert wurden, wird die Performanz des Systems möglicherweise überstrapaziert. Die Bandbreite der Schreiboperationen auf dem Speichermedium muss die Datenrate entsprechend abdecken.
@@ -373,8 +375,8 @@ ROS_DISTRO was set to 'melodic' before. Please make sure that the environment do
 ## Steuerung des Startprozesses
 
 Sie sehen, dass wir immer weitere Konsolen öffnen um einzelne Knoten zu starten
-und zu parameterisieren. Dieses Vorgehen für die Arbeit mit Anwendungen, die
-mehr als 3 Knoten umfassen ungeeignet. Dabei definiert die Entwickler ein Set
+und zu parameterisieren. Dieses Vorgehen ist für die Arbeit mit Anwendungen, die
+mehr als 3 Knoten umfassen ungeeignet. Dabei definiert der Entwickler ein Set
 von Anwendungshorizonten für den Einsatz des `launch` Systems:
 
 + Komposition von Systemen in Systeme von Systemen zur Bewältigung der Komplexität
@@ -426,8 +428,8 @@ Dabei werden verschiedene Nachteile von ROS1-launch beseitigt:
 + "Dynamisierung" des Startup-Prozesses
 
 Hierfür war es notwendig die bisherige XML basierte Notation der Launch-Files aufzugeben und durch eine Skriptsprache zu ersetzen. Dabei lag es nahe Python
-als Grundlage zu verwenden. Zur Illustration einiger Features des wurde das Paket
-`my_tutorial_package` um einen minimalistischen Subscriber für unseren individuellen Message-Typ.
+als Grundlage zu verwenden. Zur Illustration einiger Features wurde das Paket
+`my_tutorial_package` um einen minimalistischen Subscriber für unseren individuellen Message-Typ erweitert.
 
 ```python  launchNodes.launch.py
 import launch
@@ -451,7 +453,7 @@ def generate_launch_description():
     ])
 ```
 
-Innerhalb eines C++ Paketes müssen launch-Files für in der CMakeLists.txt spezifiziert werden, damit Sie in den Installationsprozess einfließen:
+Innerhalb eines C++ Paketes müssen launch-Files in der CMakeLists.txt spezifiziert werden, damit Sie in den Installationsprozess einfließen:
 
 ```
 install(DIRECTORY
