@@ -21,7 +21,7 @@ struct Robot{
 };
 
 
-std::string locations[4] = { "Kitchen", "Livingroom", "Bedroom", "Batroom"};
+std::string locations[4] = { "Kitchen", "Livingroom", "Bedroom", "Bathroom"};
 
 std::vector<Robot> RobotDB {
     Robot(0, "Erika", 11.232, true),
