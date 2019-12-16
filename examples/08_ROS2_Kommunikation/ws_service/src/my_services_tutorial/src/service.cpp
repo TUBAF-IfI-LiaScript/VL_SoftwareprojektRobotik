@@ -15,11 +15,9 @@ struct Robot{
         float batterylevel;
         bool busy;
     public:
-        //default constructor
-        Robot(int number, std::string robot_name, float battery, bool busy){
-            roomNumber=number; name=robot_name; battery=battery; busy=busy;}
+        Robot(int number, std::string robot_name, float battery, bool actualbusy){
+            roomNumber=number; name=robot_name; batterylevel=battery; busy=actualbusy;}
 };
-
 
 std::string locations[4] = { "Kitchen", "Livingroom", "Bedroom", "Bathroom"};
 
@@ -41,9 +39,6 @@ void handle_service(
     g_node->get_logger(),
     "Received request for : %s", request->robotname.c_str());
   for (auto const& robot: RobotDB){
-    RCLCPP_INFO(
-      g_node->get_logger(),
-      "Similarity : ->%s<-", robot.name.c_str());
     if (request->robotname == robot.name){
       response->validname = true;
       response->location = locations[robot.roomNumber];
