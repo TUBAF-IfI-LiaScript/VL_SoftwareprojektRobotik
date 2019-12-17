@@ -307,7 +307,7 @@ Komplexe Typen werden wie folgt spezifiziert
 
 | Index | ROS2 msg Type           | C++                |
 | ----- | ----------------------- | ------------------ |
-| 0     | zB. `float32`               | `float`            |
+| 0     | zB. `float32`           | `float`            |
 | 1     | `string`                | `std::string`      |
 | 2     | static array            | `std::array<T, N>` |
 | 3     | unbounded dynamic array | `std::vector<T>`   |
