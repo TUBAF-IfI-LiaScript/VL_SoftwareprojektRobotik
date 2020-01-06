@@ -159,17 +159,17 @@ Das erste Paper, in dem die Basiskonzepte beschrieben wurden, ist unter [Link](h
 
 ###  ROS 1 vs. ROS 2
 
-| Merkmal                     | ROS1                                                    | ROS2                                                                                                                                    |
-| --------------------------- | ------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| Betriebssysteme             | Linux (Ubuntu, Gentoo, Debian), OS X                    | Linux  (Ubuntu), OS X, Windows 10                                                                                                       |
-| Programmiersprachen C       | C++03                                                   | C++11 (einzelne Konzepte von C++14)                                                                                                     |
-| Programmiersprachen Python  | Python 2                                                | Python 3.5                                                                                                                              |
-| Middleware                  | eigene Konzepte für den Datenaustausch                  | abstraktes Middlewarekonzept offen für spezifische Lösungen (aktuell DDS als Default-Implementierung), mit einem geeigneten Middleware-Ansatz sind Echtzeitanwendungen umsetzbar                                   |
-| Build System                | [CMake](https://cmake.org/) Projekte mit [catkin](https://docs.ros.org/api/catkin/html/)                              | CMake Projekte (mit colcon), andere Systeme können integriert werden                                                                                 |
-| Paketstruktur               | Integrierende Pakete möglich                            | aus Gründen der automatisierten Auflösung von Abhängigkeiten nur isolierte Pakete                                                       |
-| Message/Service Deklaration | Messageformatdefinitionen auf der Basis von Grundtypen, | einheitliche Namen in Python und C++, default Werte, separate Namespaces für Services und Messages, einheitliche Zeittypen für die APIs |
-| Systemkonfiguration         | XML Beschreibungen                                      | Python Code für den Systemstart mit komplexen Logiken                                                                                   |
-| Node vs. Nodelet            | unterschiedliche APIs für beide Konzepte                | Implementierungen zielen auf eine Shared Library - es wird zur Laufzeit entschieden, ob diese als separater Prozess oder innerhalb eines Prozesses ausgeführt wird.                                                                                                                                        |
+| Merkmal                     | ROS1                                                                                     | ROS2                                                                                                                                                                             |
+|:----------------------------|:-----------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Betriebssysteme             | Linux (Ubuntu, Gentoo, Debian), OS X                                                     | Linux  (Ubuntu), OS X, Windows 10                                                                                                                                                |
+| Programmiersprachen C       | C++03                                                                                    | C++11 (einzelne Konzepte von C++14)                                                                                                                                              |
+| Programmiersprachen Python  | Python 2                                                                                 | Python 3.5                                                                                                                                                                       |
+| Middleware                  | eigene Konzepte für den Datenaustausch                                                   | abstraktes Middlewarekonzept offen für spezifische Lösungen (aktuell DDS als Default-Implementierung), mit einem geeigneten Middleware-Ansatz sind Echtzeitanwendungen umsetzbar |
+| Build System                | [CMake](https://cmake.org/) Projekte mit [catkin](https://docs.ros.org/api/catkin/html/) | CMake Projekte (mit colcon), andere Systeme können integriert werden                                                                                                             |
+| Paketstruktur               | Integrierende Pakete möglich                                                             | aus Gründen der automatisierten Auflösung von Abhängigkeiten nur isolierte Pakete                                                                                                |
+| Message/Service Deklaration | Messageformatdefinitionen auf der Basis von Grundtypen,                                  | einheitliche Namen in Python und C++, default Werte, separate Namespaces für Services und Messages, einheitliche Zeittypen für die APIs                                          |
+| Systemkonfiguration         | XML Beschreibungen                                                                       | Python Code für den Systemstart mit komplexen Logiken                                                                                                                            |
+| Node vs. Nodelet            | unterschiedliche APIs für beide Konzepte                                                 | Implementierungen zielen auf eine Shared Library - es wird zur Laufzeit entschieden, ob diese als separater Prozess oder innerhalb eines Prozesses ausgeführt wird.              |
 
 Einen Überblick zu den genannten Features gibt die Webseite [Link](http://design.ros2.org/articles/changes.html)
 
@@ -198,11 +198,11 @@ sicherstellt.
    * Prüfen Sie Abhängigkeiten und die Aktualität der Bibliotheken.
    * Informieren Sie sich darüber in wie weit an dem Paket aktuell noch gearbeitet wird. Letzte Commits vor einigen Monaten sind immer ein schlechtes Zeichen :-)
 
-| ROS2    | ROS1                               | Hintergrund        |
-| --- | ---------------------------------- | ------------------ |
-| https://index.ros.org/doc/ros2/    | http://wiki.ros.org/               | Hauptseite des Projektes OSF |
-| https://discourse.ros.org/    | https://answers.ros.org/questions/ | ROS Forum          |
-| https://index.ros.org/doc/ros2/Tutorials/#tutorials     | http://wiki.ros.org/ROS/Tutorials  | ROS Tutorials      |
+| ROS2                                                | ROS1                               | Hintergrund                  |
+|:----------------------------------------------------|:-----------------------------------|:-----------------------------|
+| https://index.ros.org/doc/ros2/                     | http://wiki.ros.org/               | Hauptseite des Projektes OSF |
+| https://discourse.ros.org/                          | https://answers.ros.org/questions/ | ROS Forum                    |
+| https://index.ros.org/doc/ros2/Tutorials/#tutorials | http://wiki.ros.org/ROS/Tutorials  | ROS Tutorials                |
 
 *******************************************************************************
 
@@ -212,7 +212,7 @@ sicherstellt.
 2. Es existiert eine Vielzahl von Tutorials in Form von Videos, die einen Überblick versprechen oder einzelne Themen individuell adressieren.
 
 | Titel                    | Inhalt                                                              | Link                                                                                        |
-| ------------------------ | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+|:-------------------------|:--------------------------------------------------------------------|:--------------------------------------------------------------------------------------------|
 | ROS tutorial #1          | Installation, erste Schritte                                        | [Link](https://www.youtube.com/watch?v=9U6GDonGFHw&t=72s)                                   |
 | Programming for Robotics | 5 Kurse als Einführung in ROS1 der ETH Zürich                       | [Link](https://www.youtube.com/watch?v=0BxVPCInS3M&list=PLE-BQwvVGf8HOvwXPgtDfWoxd4Cc6ghiP) |
 | ROS2 Tutorials           | Tutorial des kommerziell orientierten Kursanbieters "The Construct" | [Link](https://www.youtube.com/playlist?list=PLK0b4e05LnzYNBzqXNm9vFD9YXWp6honJ)            |
@@ -246,7 +246,7 @@ https://fkromer.github.io/awesome-ros2/
 ![RoboterSystem](./img/06_EinfuehrungROS/rosgraph.png)<!-- width="100%" -->
 *Screenshot der Knoten eines umfangreicheren Projektes. Die Ellipsen repräsentieren die Knoten, die rechteckigen Boxen die "Datenkanäle" dazwischen.* [
 
-**Discovery** - Die Erkennung von *Nodes* erfolgt automatisch über die zugrunde liegende Middleware von ROS2. Daveu sind folgende Punkte zu beachten
+**Discovery** - Die Erkennung von *Nodes* erfolgt automatisch über die zugrunde liegende Middleware von ROS2. Dafür sind folgende Punkte zu beachten
 
 + Wenn ein Knoten gestartet wird, kündigt er seine Anwesenheit anderen Knoten im Netzwerk mit derselben ROS-Domäne an (festgelegt mit der Umgebungsvariablen `ROS_DOMAIN_ID`). Knoten antworten auf diese Ankündigung mit Informationen über sich selbst, so dass die entsprechenden Verbindungen hergestellt werden können und die Knoten kommunizieren können.
 
@@ -306,7 +306,7 @@ Die ROS2 Message-Spezifikation integriert verschiedene Konfigurationsmöglichkei
 Komplexe Typen werden wie folgt spezifiziert
 
 | Index | ROS2 msg Type           | C++                |
-| ----- | ----------------------- | ------------------ |
+|:------|:------------------------|:-------------------|
 | 0     | zB. `float32`           | `float`            |
 | 1     | `string`                | `std::string`      |
 | 2     | static array            | `std::array<T, N>` |
@@ -369,11 +369,11 @@ ros2 topic pub /test s
 
 Einen Überblick bietet die Webseite unter folgendem [Link](http://design.ros2.org/articles/interface_definition.html)
 
-| Parameter           | ROS1 node                                                                                      | ROS2 node                                                                                      |
-| ------------------- | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| Parameter           | ROS2 node                                                                                      | ROS1 node                                                                                      |
+|:--------------------|:-----------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------|
 | Zweck               | Ausführbares Programm im ROS1 Kontext, das in der Lage ist mit anderen Knoten zu kommunizieren | Ausführbares Programm im ROS1 Kontext, das in der Lage ist mit anderen Knoten zu kommunizieren |
 | Discovery           | Verteilte Discovery-Mechanismen (die nicht von einem einzelnen Knoten abhängen)                | ROS Master als zentrale Verwaltungsinstanz der Kommunikation                                   |
-| Client Bibliotheken | `rclcpp` = C++ client Library, `rclpy` = Python client library C++                                                                                               |      `roscpp` = C++ client Library, `rospy` = Python client library                                                                                          |
+| Client Bibliotheken | `rclcpp` = C++ client Library, `rclpy` = Python client library C++                             | `roscpp` = C++ client Library, `rospy` = Python client library                                 |
 
 ## Einführungsbeispiele
 
@@ -473,8 +473,8 @@ int main(int argc, char * argv[])
 }
 ```
 
-| Zeile | Bedeutung                                                                                                                                                                                                                                                                                                                                                                   |
-| ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Zeile | Bedeutung                                                                                                                                                                                                                                                                                                                                                                    |
+|:------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | 1-2   | Die `chrono`-Bibliothek ist eine Sammlung von flexiblen Typen, die das Benutzen von Zeiten, Zeiträumen und Zeitpunkten mit unterschiedlichen Präzisionsgraden ermöglicht ([Link](https://de.cppreference.com/w/cpp/chrono)). `memory` wird für die Verwendung von der Smart Pointer benötigt ([Link](https://en.cppreference.com/w/cpp/header/memory)).                      |
 | 4-5   | Integration der ROS2 spezifischen API-Definitionen für C++. Der Header `rclcpp.hpp` muss in jedem Fall eingebettet werden. Der avisierte Message Type `String` wird zudem inkludiert.                                                                                                                                                                                        |
 | 9     | Definition einer individuellen Knotenklasse, die von der API-Basisklasse `rclcpp::Node` erbt.                                                                                                                                                                                                                                                                                |

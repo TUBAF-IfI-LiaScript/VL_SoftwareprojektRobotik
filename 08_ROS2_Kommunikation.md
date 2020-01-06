@@ -13,7 +13,7 @@ import: https://raw.githubusercontent.com/liascript-templates/plantUML/master/RE
 
 # Vorlesung VIII - ROS2 Kommunikation
 
-Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/07_ROS_Pakete.md)
+Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/08_ROS2_Kommunikation.md)
 
 **Zielstellung der heutigen Veranstaltung**
 
