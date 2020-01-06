@@ -19,7 +19,6 @@ Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.gi
 
 + Typen von Sensoren in mobilen Robotern
 + Integration unter ROS
-+ Vorverarbeitung
 
 --------------------------------------------------------------------------------
 
@@ -72,6 +71,7 @@ style="width: 100%; max-width: 1024px; display: block; margin-left: auto; margin
 +-------------------------------- | Umgebung              | <-----------------------+
                                   .-----------------------.
 ```
+Beginnen wir also mit der Sensorik ...
 
 ### Sensorik des Menschen
 
@@ -107,43 +107,38 @@ Und wie funktioniert das? Sogenannten Rezeptoren ...
 
 ### Technische Sensoren
 
-+ Ein Sensor (lateinisch „fühlen“ ), (Messgrößen-)aufnehmer oder (Mess-)Fühler ist ein technisches Bauteil, das bestimmte physikalische oder chemische Eigenschaften  … qualitativ oder als Messgröße quantitativ erfassen kann. Diese Größen werden mittels physikalischer oder chemischer Effekte erfasst und in ein weiterverarbeitbares elektrisches Signal umgeformt.
 
-> Sensoren transformieren physikalische, chemische oder biologische Messgrößen in elektrische Signale und stellen damit das unmittelbare Interface eines Messsystems zur Umgebung dar.
+    {{0-1}}
+*******************************************************************************
 
-+ DIN 1319 1-4 … vermeidet den Begriff und spricht stattdessen in Abschnitt 2 vom „Messaufnehmer“ als dem Beginn der Messkette
-
+> Sensoren (lateinisch „fühlen“ ) transformieren physikalische, chemische oder biologische Messgrößen in elektrische Signale und stellen damit das unmittelbare Interface eines Messsystems zur Umgebung dar.
 
 ![RoboterSystem](./img/09_Sensoren/Fliehkrafregler.png)<!-- width="60%" -->
 *Fliehkraftregler als Beispiel für die nicht elektrische Ausgabe von Messungen (Drehzahl).* [Wikipedia Commons, Nutzer: Kino]
 
+Achtung, die einschlägige deutsche Norm DIN 1319 1-4 vermeidet den Begriff und spricht stattdessen in Abschnitt 2 vom „Messaufnehmer“ als dem Beginn der Messkette. Entsprechend ist die Abgrenzung des eingentlichen Sensorbegriffes auch domainspezifisch und individuell unterschiedlich.
+*******************************************************************************
 
-![RoboterSystem](./img/09_Sensoren/SensorIntegrationsLevel.png)<!-- width="60%" -->
-*Integrationsstufen von Sensoren* ["Architektur für verteilte, fehlertolerante Sensor-Aktor-Systeme", Sebastian Zug]
 
-Klassifikation von Sensoren
+    {{1-2}}
+*******************************************************************************
+
+![RoboterSystem](./img/09_Sensoren/SensorIntegrationsLevel.png)<!-- width="70%" -->
+*Integrationsstufen von Sensoren*
+
+*******************************************************************************
+
+    {{2-3}}
+*******************************************************************************
+__Klassifikation von Sensoren__
 
 + intern/extern ... bezogen auf den Messgegenstand (Radencoder vs. Kamera)
 + aktiv/passiv () ... mit und ohne Beeinflussung der Umgebung (Ultraschall vs. Kamera)
 + Ergebnisdimension ... 1, 2, 2.5, 3D
 + Modalitäten ... physikalische Messgröße
 
-Parameter eines Sensors
-
-|                     |                                                 |
-| ------------------- | ----------------------------------------------- |
-| Messbereich         | Ausdehnung erfassbaren physikalischen Messgröße |
-| Ausgangspanne       | Breite des Ausgabewertes                        |
-| Empfindlichkeit     |                                                 |
-| Querempfindlichkeit |                                                 |
-| Richtigkeit         |                                                 |
-
-
-
-Sensoren im Roboter
-
 <!--
-style="width: 100%; max-width: 1024px; display: block; margin-left: auto; margin-right: auto;"
+style="width: 80%; max-width: 1024px; display: block; margin-left: auto; margin-right: auto;"
 -->
 ```ascii
 
@@ -162,28 +157,39 @@ style="width: 100%; max-width: 1024px; display: block; margin-left: auto; margin
                       akustisch     optisch     bildbasiert   ....          
 ```
 
-Einheiten Ausgaben
+*******************************************************************************
 
-SI EInheiten
+    {{3-4}}
+*******************************************************************************
+Parameter eines Sensors
 
-| Basisgröße  | Einheit   | Einheitenzeichen |
-| ----------- | --------- | ---------------- |
-| Zeit        | Sekunde   | s                |
-| Länge       | Meter     | m                |
-| Masse       | Kilogramm | kg               |
-| Stromstärke | Ampere    | A                |
-| Temperatur  | Kelvin    | K                |
-| Stoffmenge  | Mol       | mol              |
-| Lichtstärke | Candela   | cd               |
+|  Parameter                             |                                                                                                     Bedeutung                     |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| Messbereich                   | Ausdehnung erfassbaren physikalischen Messgröße (DIN 1319)                                                               |
+| Auflösung                     | Vermögen physikalische Größen zu trennen und definiert über Granularitäten in Bezug auf Winkel, Entfernungen, Pixel usw. |
+| Linearität                    | Abbildungsverhalten in Bezug auf den Zusammenhang zwischen Eingangsgröße und Ausgabewert. Im linearen Fall gilt $y=mx+n$ |
+| Meßfrequenz                   | Häufigkeit der Abtastung                                                                                                 |
+| Querempfindlichkeit           | Abhängigkeit der Ausgabe von weiteren Parametern als der eigentlichen Messgröße                                          |
+| Ausgabeprotokoll                              |                Ausgabeschnittstelle für die weitere Verarbeitung                                                                                                          |
+| Öffnungswinkel                | Erfassungsbereich des Sensors bei gerichteter Datenerfassung                                                             |
+| Energieaufnahme, Bauraum, ... |                                                                                                                          |
 
-> ROS handhabt die Messdaten für die Länge, Masse, Zeit und den Strom in SI Einheiten alle anderen in sogenannten abg ! [Link](https://www.ros.org/reps/rep-0103.html)
+![RoboterSystem](./img/09_Sensoren/beam_srf235.gif)<!-- width="40%" -->
+![RoboterSystem](./img/09_Sensoren/beam_srf4.gif)<!-- width="40%" -->
+*Sensorkeulen verschiedener Ultraschallsensoren* [robot electronics faq](https://www.robot-electronics.co.uk/htm/sonar_faq.htm)
+
+Hinweis: Die Dämpfung eines Signals wird in "dB" angegeben und mittels $L = 20 · log(\frac{U_2}{U_1})$ beschrieben.  
+
+Auf die Aspekte der Sensorfehler wird in der nächstfolgenden Veranstaltung eingegangen.
+
+*******************************************************************************
 
 ## Inertialsensorik
 
 Ein Trägheitsnavigationssystem ermöglicht die Messung der Bewegungen über insgesamt sechs kinematische Freiheitsgrade. Über die physikalischen Beziehungen (Trägheits- und Impulsgesetze) der Größen
 
-+	Kraft,
-+	Beschleunigung,
++ Kraft,
++ Beschleunigung,
 + Winkelgeschwindigkeit (Drehrate),
 + Geschwindigkeit
 
@@ -219,6 +225,14 @@ Aus den Samples des Beschleunigungssensors lässt sich mittels $v=v_0 +\sum a_i\
 Aus der "Integration" der Samples über der Zeit folgt eine mangelnde Langzeitstabilität, daher koppelt man ein INS beispielsweise liefert eine Kombination mit einem Global Positioning System (GPS).
 
 ### Gyroskope
+
+Drehraten-Sensoren messen die Rotationsgeschwindigkeit eines Körpers. Durch Integration lässt sich daraus ableiten, um welchen Winkel sich ein Körper innerhalb einer Zeit gedreht hat. Die Drehraten um die drei Raumachsen bezeichnet man meist als
+
++ Gierrate (Drehung um Hochachse, engl. yaw)
++ Nickrate (Drehung um Querachse, engl. pitch)
++ Rollrate (Drehung um Längsachse, engl. roll)
+
+Wie kann man das Ganze anwenden?
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/s_V3mGRaxK0?start=10&end=26" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
@@ -270,11 +284,13 @@ Wie erfassen wir die Position eines rotierenden Elements, zum Beispiel eines Mot
 + photoelektrische Abtastung
 + induktive System mit entsprechenden Triggern (zum Beispiel größeres Zahnrad)
 
-![RoboterSystem](./img/09_Sensoren/Gabellichtschranke.jpg)<!-- width="40%" -->
+![RoboterSystem](./img/09_Sensoren/Gabellichtschranke.png)<!-- width="40%" -->
 *Encoder mit Gabellichtschranke* [Wikipedia Commons, Autor Tycho](https://commons.wikimedia.org/w/index.php?curid=4955638)
 
-Die Zahl der Zustands-/Flankenwechsel pro Zeiteinheit ist direkt proportional zur Rotationsgeschwindigkeit
+Die Zahl der Zustands-/Flankenwechsel pro Zeiteinheit ist direkt proportional zur Rotationsgeschwindigkeit.
 
+        {{1}}
+********************************************************************************
 __Inkrementelle Kodierung:__ zur Bestimmung der relativen Lage/Drehgeschwindigkeit anhand einer Impulsfolge,
 Abwägung der Impulszahl pro Drehung von der
 
@@ -287,6 +303,11 @@ moderne Drehimpulsgeber kleiner Bauform haben bis zu 6000 Segmente Aufbau üblic
 __Absolute Kodierung:__  Lageermittlung gegenüber einem Fixpunkt, aufwendige Drehimpulsgeber bis zu 720.000 Impulse pro Umdrehung, häufigste Codierung: Gray-Code (nur auf einem Ausgangssignal findet eine Signaländerung)
 
 Ein inkrementeller Encoder kann durch eine externe Beschaltung als absolute Kodierung genutzt werden. Über einen Nullschalter, wird ein Zähler resetet, der dann im Treiber die aktuelle Position durch Dekrementierung oder Inkrementierung bestimmt.
+
+********************************************************************************
+
+           {{2}}
+********************************************************************************
 
 Das Konzept eines einfachen Einkanal-Drehimpulsgeber (nur 1 Bit (Hell - Dunkel Übergang)) wird in der Praxis in zwei Richtungen erweitert:
 
@@ -314,10 +335,16 @@ dopplung  |   |  |  |  |  |  |  |        B ---|    |
           |   +--+  +--+  +--+                +----+
           +--------------------------->       
 ```
+********************************************************************************
 
 ## Entfernungsmessung
 
 Entfernungen lassen sich unabhängig von der Modalität mit vier grundlegenden Verfahren erfassen.
+
++ Amplitudenbasiert
++ Laufzeitbasiert
++ Phasenbasiert oder
++ Trigonometisch
 
 ### Amplitudenmessung
 
@@ -329,10 +356,14 @@ Die Größe eines Messsignals wird als Indikator für die Entfernung zum Objekt 
 Analoge Konzepte finden sich auch für berührungslose Schalter auf kapazitiver Basis.
 
 Nachteile:
+
 + Starke Abhängigkeit des Ausgabewertes vom Objekt und der Umgebungssituation
 + Totbereich
 
 ### Laufzeitmessung
+
+{{0-1}}
+********************************************************************************
 
 Das Laufzeitverfahren basiert auf der Messung des Zeitversatzes zwischen dem Aussenden eines Impulses und dem Empfang von dessen Reflexion.
 
@@ -344,7 +375,7 @@ style="width: 80%; max-width: 700px; display: block; margin-left: auto; margin-r
           ^       
           |      +-----+   
           |      |     |
-Kanal A   |      |     |     
+Sender    |      |     |     
           | -----+     +-----+
           |     Sendeimpuls
           |              
@@ -352,7 +383,7 @@ Kanal A   |      |     |
           |
           |                      .-----.     2. Echo
           |                      |     |   .---.
-          |   | Störungen   |    |     |   |   |
+Empfänger |   | Störungen   |    |     |   |   |
           | --+-------------+----.     .---.   .-----------
           +--------------------------------------------------->
                                   Zeit      
@@ -374,18 +405,39 @@ Die Schallgeschwindigkeit ist abhänig von
 + Luftdruck
 + Luftzusammensetzung (Anteil von CO$_2$, Luftfeuchte)
 
-Welchen Einfluß haben diese Größen?
-
-$v_1 (980 hPa, 0°) = 325\frac{m}{s}$
-
-$v_2 (1060 hPa, 25°) = 355\frac{m}{s}$
-
 ![RoboterSystem](./img/09_Sensoren/Schallgeschwindigkeit.png)<!-- width="60%" -->
 *Schallgeschwindigkeit in Abhängigkeit von der Temperatur und dem Luftdruck*
 
+Welchen Einfluß haben diese Größen? Für zwei Konfigurationen, die zwei unterschiedliche
+Wetterlagen repräsentieren ergibt sich bereits ein Fehler von 8%.
+
+$v_1 (980 hPa, 0°) = 325\frac{m}{s}$
+
+$v_2 (1040 hPa, 30°) = 355\frac{m}{s}$
+
+********************************************************************************
+
+    {{1-2}}
+********************************************************************************
+
 Das Konzept lässt sich aber auch auf höherfrequente Signale (Licht, Radar) übertragen. Mit der höheren Frequenz sinkt die Dämpfung in der Luft. Damit lassen sich dann größere Reichweiten umsetzen.
 
-https://de.wikipedia.org/wiki/TOF-Kamera
+TOF-Kameras (englisch: time of flight) verwendeten PMD-Sensor, die Szenen mittels eines Lichtpulses ausleuchten. Die Kamera misst für jeden Bildpunkt die Zeit, die das Licht bis zum Objekt und wieder zurück braucht. Die benötigte Zeit ist direkt proportional zur Distanz.
+
+
+Die Kamera liefert somit für jeden Bildpunkt die Entfernung des darauf abgebildeten Objektes. Das Prinzip entspricht dem Laserscanning mit dem Vorteil, dass eine ganze Szene auf einmal aufgenommen wird und nicht abgetastet werden muss.
+
+![RoboterSystem](./img/09_Sensoren/TOF-Kamera-Prinzip.png)<!-- width="80%" -->
+*Schematische Darstellung der Funktionalität eines TOF Pixels* [Wikimedia Commons, Autor Captaindistance](https://de.wikipedia.org/wiki/TOF-Kamera#/media/Datei:TOF-Kamera-Prinzip.jpg)
+
+| Vorteile | Nachteile |
+|----------|-----------|
+| Einfacher Aufbau ohne bewegliche Teile (vgl. Laserscanner) | Einfluß von Hintergrundlicht |
+| Synchrones Abbildungsverhalten         | Gegenseitige Störung         |
+| Musterunabhängigkeit (vgl. Stereokameras) |  Mehrfachreflexionen |
+
+
+********************************************************************************
 
 ### Phasenverschiebung
 
@@ -394,13 +446,23 @@ Die Phasenverschiebung des reflektierten Laserstrahls oder dessen Modulation geg
 ![RoboterSystem](./img/09_Sensoren/Phasenverschiebung.png)<!-- width="80%" -->
 *Phasenverschiebung zwischen einem ausgesandten und dem empfangenen Signal* [Wikimedia Commons, Autor Guy Muller ](https://de.wikipedia.org/wiki/Elektrooptische_Entfernungsmessung#/media/Datei:PhasenModulation.JPG)
 
+Der zentrale Nachteil des Verfahrens besteht darin, dass die Messung des Phasenunterschieds oberhalb einer Phasendifferenz von mehr als 360 Grad wegen des periodischen Charakters keine eindeutige Aussage zum Abstand mehr zulässt.
+
+$c=f\cdot \lambda$ für $f = 5Mhz$ ergibt sich eine Wellenlänge von 60m.
+
+Eine Lösung besteht darin verschiedene Frequenzen unterschiedlicher Wellenlänge durchzuschalten und durch logische Vergleiche der Messwerte eine große Reichweite und zudem eine hohe Genauigkeit erreichen
 
 ### Triangulation
 
+Triangulationsverfahren setzen auf einem bekannten Abstand zwischen von Empfänger und Sender auf. Die sogenannte *Baseline* ist dann Ausgangspunkt für die Bestimmung des Abstandes. An dieser Stelle seien zwei Beispiele gezeigt:
+
+![RoboterSystem](./img/09_Sensoren/Triangulation.png)<!-- width="80%" -->
+*Funktionsweise eines einfachen IR-Distanzsensors nach dem Triangulationsprinzip [Link](http://www.symmons.com/Press-Room/News/2010/november/S-6060-sensor-faucet.aspx)*
+
+Anwendung findet dieses Konzept auch bei RGB-D Kameras, sowohl bei Infrarotbasierten Systemen als auch bei Stereokameras.
 
 
-
-Vorteile des Infrarotspektrums
+## Exkurs - Vorteile des Infrarotspektrums
 
 + Fremdlichtunabhängigkeit
 + Diodenspezifika
@@ -410,9 +472,24 @@ Vorteile des Infrarotspektrums
 *Spektrum der Strahlungsintensität* [Wikipedia Commons](https://commons.wikimedia.org/wiki/File:Sonne_Strahlungsintensitaet.svg)
 
 
-## Praktische Anwendung
+## Beispielanwendung - Ultraschall
+
+Als Anwendungsbeispiel sollen die grundlegenden Herausforderungen anhand zweier Sensoren verdeutlicht werden:
+
+|Sensor| HC-SR04 | GP2D12|
+|------|---------|-------|
+| Modalität | Ultraschall | Infrarotes Licht |
+| Funktionsprinzip | Laufzeit | Trigonometrie |
+| Reichweite | 400cm | 10-80cm  |
+| Schnittstelle | Digital | Analog |
+
+Diese spezifischen Sensortypen spielen, obwohl die Reichweiten mit bis zu 400cm für den Ultraschallsensor angegeben werden nur in der unmittelbaren Nahfeldüberwachung eine Rolle. Häufig werden sie aber durch Laserscanner ersetzt.
+
+Die Messdaten beider Sensoren werden über einen Mikrocontroller erfasst und mit einem ROS-spezifischen Protokoll (rosserial) über die serielle Schnittstelle kommuniziert. Rosserial eröffnet die Möglichkeit Publish/Subscribe Methoden auch mit Geräten ohne Ethernetverbindung "nachzubilden".
 
 Entfernungen werden unter ROS als `sensor_msgs/Range.msg` dargestellt.
+
+> ROS handhabt die Messdaten für die Länge, Masse, Zeit und den Strom in SI Einheiten. In einigen Fällen weicht man davon ab (Temperaturangaben in Grad Celsius) ! [Link](https://www.ros.org/reps/rep-0103.html)
 
 ```
 Header header           # timestamp in the header is the time the ranger
@@ -447,11 +524,109 @@ float32 range           # range data [m]
                         # (Object out of range)
 ```
 
+<!--
+style="width: 100%; max-width: 700px; display: block; margin-left: auto; margin-right: auto;"
+-->
+```ascii                                      
+   .                                          !                            .-,(  ),-.
+   |\+--------+    +----------+  USB Serielle ! +-----------+ ROS       .-(          )-.
+   | | Sensor |----| Arduino  |---------------!-| rosserial |----------(    ROS         )-
+   |/+--------+    +----------+  Verbindung   ! +-----------+ Messages  '-(          ).-'
+   .                                          !                            '-.( ).-'
+
+```
+
+Starten Sie `rosserial` mit
+
+```
+rosrun rosserial_python serial_node.py /dev/ttyACM0
+```
+
+Das Programm für den Arduino-Knoten stellt sich wie folgt dar:
 
 
-Wir nutzen einen Mikrocontroller, um unsere Daten zu generieren. Da
+```c++    ReadUSValue.ino
+#define USE_USBCON
+
+#include <ros.h>
+#include <ros/time.h>
+#include <sensor_msgs/Range.h>
+#include <sensor_msgs/Imu.h>
+
+ros::NodeHandle  nh;
+
+sensor_msgs::Range range_msg;
+sensor_msgs::Imu imu_msg;
+
+ros::Publisher pub_range( "range_data", &range_msg);
+
+const int trigger_pin = 6;
+const int echo_pin    = 7;
+unsigned long range_timer;
+
+char frameid[] = "/us_ranger";
+
+// 333 m/s = 33300 cm/s = 33.300 cm/ms = 0.0333 cm/mus
+const float sonic_speed = 0.0333;
+
+unsigned long getDuration(int tPin,int ePin){
+  // Run-time measurment between activation of tPin and ePin
+  // Used for ultrasonic measurements here.
+  // returns Duration in [ns]
+  digitalWrite(tPin, LOW);  // Reset the trigger pin.
+  delayMicroseconds(2);
+  digitalWrite(tPin, HIGH);  // Start a measurement.
+  delayMicroseconds(10); //
+  digitalWrite(tPin, LOW);   // Complete the pulse.
+  // https://www.arduino.cc/reference/de/language/functions/advanced-io/pulsein/
+  return pulseIn(ePin, HIGH);  // Wait for a reflection pulse [ms]
+}
+
+void setup()
+{
+  nh.initNode();
+  nh.advertise(pub_range);
+
+  range_msg.radiation_type = sensor_msgs::Range::ULTRASOUND;
+  range_msg.header.frame_id =  frameid;
+  range_msg.field_of_view = 0.03;
+  range_msg.min_range = 0.03;
+  range_msg.max_range = 1.0;
+
+  pinMode(trigger_pin, OUTPUT);
+  pinMode(echo_pin, INPUT);
+}
+
+void loop()
+{
+  // publish the range value every 50 milliseconds
+  //   since it takes that long for the sensor to stabilize
+  if ( (millis()-range_timer) > 50){
+    long duration = getDuration(trigger_pin, echo_pin);
+    range_msg.range = (float)duration/2*sonic_speed;
+    range_msg.header.stamp = nh.now();
+    pub_range.publish(&range_msg);
+    range_timer =  millis() + 50;
+  }
+  nh.spinOnce();
+}
+```
+
+## Beispielanwendung - Kinect
+
+Die Kinect I arbeitet mit einem Infrarotbasierten Trigoniometrieverfahren. Dazu wird ein pseudo-zufälliges Muster auf den Hintergrund geworfen und mit einem Referenzsystem verglichen.
+
+```
+roslaunch openni2_launch openni2.launch
+```
+
+Dieses Muster kann mit dem zugehörigen Topic visualisiert werden.
+
+![RoboterSystem](./img/09_Sensoren/IRPattern.png)<!-- width="100%" -->
+*Spektrum der Strahlungsintensität* [Wikipedia Commons](https://commons.wikimedia.org/wiki/File:Sonne_Strahlungsintensitaet.svg)
+
 
 
 ## Aufgabe der Woche
 
-+ Schreiben Sie einen Knoten, der Bilddaten erfasst und Bereiche mit meinen bestimmten Farbwert extrahiert. Nutzen Sie dafür OpenCV.
++ Die Messdaten der Distanzsensoren wurden in einem Bag-File aufgezeichnet, dass sich im Projektordner unter Examples findet. Starten Sie den Importer für ROS1 Bag-Files und visualisieren Sie den Signalverlauf. Schreiben Sie einen Knoten, der die eingehenden Messwerte anhand eines Schwellwertes prüft und ggf. einen Signalton erzeugt, wenn dieser unterschritten wurde.
