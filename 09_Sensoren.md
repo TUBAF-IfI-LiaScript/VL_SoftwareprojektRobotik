@@ -623,8 +623,7 @@ roslaunch openni2_launch openni2.launch
 Dieses Muster kann mit dem zugehörigen Topic visualisiert werden.
 
 ![RoboterSystem](./img/09_Sensoren/IRPattern.png)<!-- width="100%" -->
-*Spektrum der Strahlungsintensität* [Wikipedia Commons](https://commons.wikimedia.org/wiki/File:Sonne_Strahlungsintensitaet.svg)
-
+*Spektrum der Strahlungsintensität*
 
 
 ## Aufgabe der Woche
