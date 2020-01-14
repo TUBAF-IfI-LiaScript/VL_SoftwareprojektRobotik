@@ -16,7 +16,132 @@ link: https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css
 
 link: https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css
 
-@eval
+-->
+
+# Vorlesung X - Sensordatenverarbeitung
+
+Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/09_Sensordatenverarbeitung.md)
+
+**Zielstellung der heutigen Veranstaltung**
+
++ Parameterisierung von Meßungenauigkeiten
++ Filterung von Messdaten
++ Schätzung
+
+--------------------------------------------------------------------------------
+
+## Wie weit waren wir gekommen?
+
+... wir generieren ein "rohes" Distanzmessignal.
+
+
+
+
+<!--
+style="width: 100%; max-width: 720px; display: block; margin-left: auto; margin-right: auto;"
+-->
+```ascii
+
+  Type A                     Type C             Type A                     Type C         
+  n Samples +-------------+  n Samples          n Samples +-------------+  m Samples          
+       ---->| Trans-      |---->                     ---->| Filterung   |---->
+            | formation   |                          ---->|             |
+            +-------------+                     (Type B)  +-------------+
+                                                n Samples      n ≥ m
+
+  Type A                     Type C             Type A                     Type C         
+  n Samples +-------------+  n Samples          n Samples +-------------+  m Samples          
+       ---->| Detektion   |---->                     ---->| Abstraktion |---->
+            |             |---->                          |             |
+            +-------------+  Fehler                       +-------------+
+                             Validität                         n ≥ m
+                                                  size(Type A) ≫ size(Type B)
+```         
+
+Beispiele für Datenvorverarbeitung
+
++ Aufbereitung der Daten, Standardisierung
++ zeitliche Anpassung
++ Fehler, Ausreißer und Rauschen erkennen und behandeln,
++ Integration oder Differenzierung
++ Abstraktion (Punktewolken auf Linien, Flächen, Objekte)
+
+## Transformation
+
+Ein Aspekt der Transformation ist die Abbildung der Messdaten, die ggf. als
+Rohdaten des Analog-Digital-Wandlers vorliegen auf die eigentlich intendierte
+Messgröße.
+
+Beispiel: Gyroskop MPU9250 mit internem 16bit ADC und variablem Meßbereich.
+
+<!--
+style="width: 80%; max-width: 500px; display: block; margin-left: auto; margin-right: auto;"
+-->
+```ascii
+Ausgabe-         Messbereich des Sensors        
+wert             2g             4g           8g           16g
+65535     --     -  g           -  2g
+           -     ^              ^
+           -     |              |
+40960      -     o              o
+32768      -     |              |
+           -     |              |
+           -     |              |
+           -     v              v
+    0     --     - ╸g           -  ╸2g
+```  
+
+$$a = \frac{Messbereich}{Auflösung} \cdot ADCvalue - \frac{1}{2} Messbereich$$
+
+> Offenbar haben wir es hier mit einem linearen Zusammenhang zwischen der Messgröße und dem ADC Wert zu tuen.
+
+Beispiel: Analoger Distanzsensor GP2D12
+
+
+
+Allgemeines Vorgehen bei der Approximation eines Polynoms
+
+Polynom $$y(x)= a_0 + a_1x + a_ax^2 + ... + a_nx^n$$
+
+1. Definition des Grades des Polynoms (lineare, quadratische, kubische … Relation)
+
+2. Generierung der Messpunkte (m-Stützstellen) – $x_m, y_m$
+
+3. Aufstellen des Gleichungssystems
+
+$$y_0(x_0) = a_0 + a_1x_0 + a_ax_0^2 + ... + a_nx_0^n$$
+$$y_1(x_2) = a_0 + a_1x_1 + a_ax_1^2 + ... + a_nx_1^n$$
+$$y_2(x_2) = a_0 + a_1x_2 + a_ax_2^2 + ... + a_nx_2^n$$
+$$y = Am$$
+
+4. Lösen des Gleichungssystems (Methode der kleinsten Quadrate)
+
+5. Evaluation des Ergebnispolynoms
+
+6. evtl. Neustart
+
+![RoboterSystem](./img/10_Sensordatenvorverarbeitung/PolynomApproximation.png)<!-- width="100%" -->
+*Abhängigkeit der Abbildung vom Grad des Polynoms *
+
+
+Umsetzung im RoboterSystem
+
+$$y(x)= a_0 + a_1x + a_ax^2 + ... + a_nx^n$$
+
+mit $2\cdot(n-1)$ Multiplikationen und $n$ Additionen.
+
+
+
+
+
+## Filterung
+
+Ein gleitender Mittelwert wird häufig als Allheilmittel für die Filterung von
+Messwerten dargestellt. Experimentieren Sie
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+
+@equal
 <script>
 function randn_bm() {
     var u = 0, v = 0;
@@ -34,28 +159,6 @@ function range(start, end, step = 1) {
 }
 </script>
 @end
-
--->
-
-# Vorlesung X - Sensordatenverarbeitung
-
-Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/09_Sensordatenverarbeitung.md)
-
-**Zielstellung der heutigen Veranstaltung**
-
-+ Parameterisierung von Meßungenauigkeiten
-+ Filterung von Messdaten
-+ Schätzung
-
---------------------------------------------------------------------------------
-
-
-## Filter
-
-Ein gleitender Mittelwert wird häufig als Allheilmittel für die Filterung von
-Messwerten dargestellt. Experimentieren Sie
-
-<link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
 
 ``` javascript  SlidingWindow.js
 // Initialize a Line chart in the container with the ID chart1
@@ -97,6 +200,11 @@ style="width: 70%; max-width: 7200px; display: block; margin-left: auto; margin-
 
 ```
 
+## Detektion
+
+
+
+## Abstraktion
 
 
 
