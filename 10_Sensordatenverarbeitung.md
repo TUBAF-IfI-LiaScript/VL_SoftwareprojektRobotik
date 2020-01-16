@@ -11,11 +11,12 @@ import: https://raw.githubusercontent.com/LiaTemplates/Rextester/master/README.m
 import: https://raw.githubusercontent.com/liascript-templates/plantUML/master/README.md
 
 script:   https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js
+          https://d3js.org/d3-random.v2.min.js
+          http://d3js.org/d3.v4.js
 
 link: https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css
 
 link: https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css
-
 -->
 
 # Vorlesung X - Sensordatenverarbeitung
@@ -130,57 +131,66 @@ $$y(x)= a_0 + a_1x + a_ax^2 + ... + a_nx^n$$
 
 mit $2\cdot(n-1)$ Multiplikationen und $n$ Additionen.
 
-
-
+### Koordinatentransformation
 
 
 ## Filterung
 
-Ein gleitender Mittelwert wird häufig als Allheilmittel für die Filterung von
-Messwerten dargestellt. Experimentieren Sie
+> (das/der) Filter (m., n., nach fr. filtrer, it. feltrare, „durchseihen“; ursprünglich „durch Filz laufen lassen“ zu germanisch *felt „Filz“)
 
-<link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+Ziel:
 
-@equal
-<script>
-function randn_bm() {
-    var u = 0, v = 0;
-    while(u === 0) u = Math.random(); //Converting [0,1) to (0,1)
-    while(v === 0) v = Math.random();
-    let num = Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v );
-    num = num / 10.0 + 0.5; // Translate to 0 -> 1
-    if (num > 1 || num < 0) return randn_bm(); // resample between 0 and 1
-    return num;
-}
++ Reduzierung des Rauschens
++ Löschung von fehlerhaften  		   Werten
++ Konzentration der Daten
 
-function range(start, end, step = 1) {
-  const len = Math.floor((end - start) / step) + 1
-  return Array(len).fill().map((_, idx) => start + (idx * step))
-}
-</script>
-@end
+Ein Filter bildet die Folge (xi) der Sensorwerte auf eine Folge (yi) ab.
 
-``` javascript  SlidingWindow.js
-// Initialize a Line chart in the container with the ID chart1
-function range(start, end, step = 1) {
-  const len = Math.floor((end - start) / step) + 1
-  return Array(len).fill().map((_, idx) => start + (idx * step))
-}
+Domäne: Zeit, Frequenzbereich
 
+Bezug: 	Signalspezifikation,  			Systemmodell
+
+
+### Glättung
+
+Ein Ansatz für die Glättung sind gleitende Fenster, innerhalb derer die Daten analysiert werden.
+
+> Anders als in (offline) Zeitreihen-Analysen leiten wir den Ausgabewert ausschließlich von den zuvor erfassten Werten ab.  
+
+$$y_k(x_k, x_{k-1}, x_{k-2} ... x_{k-N+1})$$ mit $N$ als Fenstergröße
+
+Zeitreihen würden auch die nachfolgenden Werte berücksichtigen!
+
+$$y_k( ... x_{k+2}, x_{k+1}, x_k, x_{k-1}, x_{k-2} ...)$$
+
+Damit laufen wir den Messdaten zeitlich gesehen hinterher!
+
+Ein gleitender Mittelwert wird häufig als Allheilmittel für die Filterung von Messwerten dargestellt.
+
+$y_k = \frac{1}{N}\sum_{i=0}^{i>N} x_{k-i}$
+
+Im folgenden Beispiel wird ein niederfrequentes Bewegungsmuster mit einem höherfrequenten Störsignal überlagert. Welche Veränderungen erkennen Sie am Ausgabesignal des Filters verglichen mit dem Originalsignal?
+
+```js  GenerateData.js
+//Actual filter method
 function slidingWindow(randoms, window_size) {
     var result = new Array(randoms.length).fill(null);
-    for (var i = 0; i < randoms.length - window_size; i++) {
-        var window = randoms.slice(i, i + window_size);
+    for (var i = window_size; i < randoms.length; i++) {
+        var window = randoms.slice(i - window_size, i);
         result[i] = window.reduce(function(p,c,i,a){return p + (c/a.length)},0);
     }
     return result;
 }
 
-var xrange = range(0, 4*Math.PI, 4 * Math.PI/100);
+var xrange = d3.range(0, 4*Math.PI, 4 * Math.PI/100);
 var ideal_values = xrange.map(x => Math.sin(x));
-var noisy_values = ideal_values.map(x => x + randn_bm() - 0.5);
+var noise = d3.range(0, 100, 1).map(d3.randomNormal(0, 0.1));
+var noisy_values = new Array(xrange.length).fill(0);
+for (var i = 0; i <= noise.length; i++){
+   noisy_values[i] = ideal_values[i] + noise[i];
+}
 
-const window_size = 15;
+const window_size = 3;
 var mean = slidingWindow(noisy_values, window_size);
 
 new Chartist.Line('#chart1', {
@@ -192,21 +202,105 @@ new Chartist.Line('#chart1', {
 
 <div class="ct-chart ct-golden-section" id="chart1"></div>
 
+### Medianfilter
 
-<!--
-style="width: 70%; max-width: 7200px; display: block; margin-left: auto; margin-right: auto;"
--->
-```ascii
+Einen alternativen Ansatz implementiert der Medianfilter. Hier werden die Werte des gleitenden Fensters sortiert und der Wert in der Mitte dieser Reihung zurückgegeben.
 
+```js  GenerateData.js
+//Actual filter method
+function slidingWindow(randoms, window_size) {
+  var result = new Array(randoms.length).fill(null);
+  for (var i = window_size; i < randoms.length; i++) {
+      var window = randoms.slice(i - window_size, i);
+        var sorted = window.sort((a, b) => a - b);
+        var half = Math.floor(window_size / 2);
+        if (window_size % 2)
+           result[i] = sorted[half];
+        else
+           result[i] = (values[half - 1] + values[half]) / 2.0;
+        console.log(result);
+    }
+    return result;
+}
+
+var xrange = d3.range(0, 4*Math.PI, 4 * Math.PI/100);
+var ideal_values = xrange.map(x => Math.sin(x));
+var noise = d3.range(0, 100, 1).map(d3.randomNormal(0, 0.1));
+var noisy_values = new Array(xrange.length).fill(0);
+for (var i = 0; i <= noise.length; i++){
+   noisy_values[i] = ideal_values[i] + noise[i];
+}
+
+const window_size = 5;
+var mean = slidingWindow(noisy_values, window_size);
+
+new Chartist.Line('#chart1', {
+  labels: [1, 2, 3, 4],
+  series: [ideal_values, noisy_values, mean]
+});
 ```
+<script>@input</script>
+
+<div class="ct-chart ct-golden-section" id="chart1"></div>
+
+Der Median-Filter ist ein nichtlinearer Filter, er entfernt Ausreißer und wirkt damit als Filter und Detektor.
+
+
+![RoboterSystem](./img/10_Sensordatenvorverarbeitung/medianfilter.png)<!-- width="100%" -->
+*Anwendung des Medianfilters auf Laserscans*
+
+### Koordinatentransformation
+
+
 
 ## Detektion
 
+Die Detektion zielt auf die Erfassung von Anomalien im Signalverlauf. Dabei werden Modelle des Signalverlaufes oder der Störung genutzt, um diese zu erfassen.
+
+An dieser Stelle sollen zwei Beispiele vorgestellt werden. Ein einfacher Schwellwert über dem Anstieg der Funktion und eine fensterbasierte statistische Analyse. Dabei soll ein Sprung im Signalverlauf idendentifiziert werden
+
+```js  GenerateData.js
+// Generate pseudo normalized values
+function generateStep(xrange, basis, step, step_index){
+  var result = new Array(xrange.length).fill(basis);
+  return result.fill(step, step_index);
+}
+
+var xrange = d3.range(0, 100, 1);
+var ideal_values = generateStep(xrange, 3.5, 1, 50);
+var noise = d3.range(0, 100, 1).map(d3.randomNormal(0, 0.1));
+var noisy_values = new Array(xrange.length).fill(0);
+for (var i = 0; i <= noise.length; i++){
+   noisy_values[i] = ideal_values[i] + noise[i];
+}
+
+new Chartist.Line('#chart1', {
+  series: [ideal_values, noisy_values]
+});
+
+var diff = new Array(xrange.length).fill(0);
+for (var i = 1; i <= noise.length; i++){
+   diff[i] = noisy_values[i-1] - noisy_values[i];
+}
+
+new Chartist.Line('#chart2', {
+  series: [diff]
+});
+```
+<script>@input</script>
+
+<div class="ct-chart ct-golden-section" id="chart1" data-y-axis="X axis label"></div>
+<div class="ct-chart ct-golden-section" id="chart2"></div>
 
 
 ## Abstraktion
 
 
+
+
+## Realisierung in ROS
+
+> Achtung: Die folgenden Beispiele werden anhand von ROS1 erläutert. Die tf Unterstützung von ROS2 ist noch minimal,
 
 
 ## Aufgabe der Woche
