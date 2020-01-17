@@ -12,7 +12,7 @@ import: https://raw.githubusercontent.com/liascript-templates/plantUML/master/RE
 
 script:   https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js
           https://d3js.org/d3-random.v2.min.js
-          http://d3js.org/d3.v4.js
+          https://d3js.org/d3.v4.min.js
           https://cdn.plot.ly/plotly-latest.min.js
 
 link: https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css
