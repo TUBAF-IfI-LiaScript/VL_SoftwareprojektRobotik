@@ -34,10 +34,8 @@ Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.gi
 
 ## Wie weit waren wir gekommen?
 
-... wir generieren ein "rohes" Distanzmessignal.
-
-
-
+... wir generieren ein "rohes" Distanzmessignal und wollen dies weiterverwenden.
+Dafür konfigurieren wir eine Verarbeitungskette aus den nachfolgenden Elementen.
 
 <!--
 style="width: 100%; max-width: 720px; display: block; margin-left: auto; margin-right: auto;"
@@ -53,8 +51,8 @@ style="width: 100%; max-width: 720px; display: block; margin-left: auto; margin-
 
   Type A                     Type C             Type A                     Type C         
   n Samples +-------------+  n Samples          n Samples +-------------+  m Samples          
-       ---->| Detektion   |---->                     ---->| Abstraktion |---->
-            |             |---->                          |             |
+       ---->| Detektion   |---->                     ---->| Feature     |---->
+            |             |---->                          | extraction  |
             +-------------+  Fehler                       +-------------+
                              Validität                         n ≥ m
                                                   size(Type A) ≫ size(Type B)
@@ -66,9 +64,11 @@ Beispiele für Datenvorverarbeitung
 + zeitliche Anpassung
 + Fehler, Ausreißer und Rauschen erkennen und behandeln,
 + Integration oder Differenzierung
-+ Abstraktion (Punktewolken auf Linien, Flächen, Objekte)
++ Feature-Extraktion (Gesichter auf Positionen, Punktewolken auf Linien, Flächen, Objekte)
 
 ## Transformation
+
+__Ableitung der eigentlichen Messgröße__
 
 Ein Aspekt der Transformation ist die Abbildung der Messdaten, die ggf. als
 Rohdaten des Analog-Digital-Wandlers vorliegen auf die eigentlich intendierte
@@ -95,11 +95,14 @@ wert             2g             4g           8g           16g
 
 $$a = \frac{Messbereich}{Auflösung} \cdot ADCvalue - \frac{1}{2} Messbereich$$
 
-> Offenbar haben wir es hier mit einem linearen Zusammenhang zwischen der Messgröße und dem ADC Wert zu tuen.
+> Die Gleichung beschreibt einen linearen Zusammenhang zwischen der Messgröße und dem ADC Wert zu tuen.
 
-Beispiel: Analoger Distanzsensor GP2D12
+Beispiel: Analoger Distanzsensor GP2D12 (vgl. Übersicht unter [Link](https://acroname.com/articles/sharp-infrared-ranger-comparison))
 
+![RoboterSystem](./img/10_Sensordatenvorverarbeitung/GP2y0a21MeasurementCharacteristic.png)<!-- width="100%" -->
+*Sensorkennlinie eines GP2Y0A21 Sensors [Link](https://www.robotshop.com/media/files/pdf2/gp2y0a21yk_e.pdf)*
 
+Offenbar benötigen wir hier ein nichtlinerares Approximationsmodell. Die Entsprechenden Funktionen können sehr unterschiedlich gewählt werden ein Beispiel ist die Erzeugung eines Polynoms, dass das intendierte Verhalten abbildet.
 
 Allgemeines Vorgehen bei der Approximation eines Polynoms
 
@@ -125,14 +128,94 @@ $$y = Am$$
 ![RoboterSystem](./img/10_Sensordatenvorverarbeitung/PolynomApproximation.png)<!-- width="100%" -->
 *Abhängigkeit der Abbildung vom Grad des Polynoms *
 
-
 Umsetzung im RoboterSystem
 
 $$y(x)= a_0 + a_1x + a_ax^2 + ... + a_nx^n$$
 
-mit $2\cdot(n-1)$ Multiplikationen und $n$ Additionen.
+mit $2\cdot(n-1)$ Multiplikationen und $n$ Additionen. Einen rechnerisch günstigere Implementierung bietet das Horner Schema, das die Exponentialfunktionen zerlegt:
 
-### Koordinatentransformation
+$$y(x)= a_0 + x \cdot (a_1 + x \cdot (... + a_nx^n))$$
+
+damit verbleiben $n$ Multiplikationen und $n$ Additionen.
+
+Für aufwändige mehrdimensionale Kennlinien bietet sich im Unterschied zur
+funktionalen Abbildung eine Look-Up-Table an, die die Daten in Form eines Arrays oder Vektors speichert.
+
+```c LookUpTable
+static const uint8_t lookup[256] =
+{0,0,0,0 … 20,23,26,30,31,30,28,-..,4,4,4,4,4,3,3,3,…0,0,0};
+distance= lookup[ADC_output]
+```
+
+Welche Vor- und Nachteile sehen Sie für die gegensätzlichen Ansätze?
+
+__Koordinatentransformation__
+
+Die Transformation eines Datensatzes aus einem Koordinatensystem in ein anderes betrifft sowohl die Übertragung zwischen unterschiedlichen Darstellungsformen als auch den Wechsel des Bezugsystems.
+
+Gehen wir von einem Laserscan aus. Dieser wurde in Polarkoordinaten erfasst, um aber die Frage zu klären, wie weit dieser von der Frontseite unserer Roboters entfernt ist, müssen wir zunächst die Sample in ein kartesisches Koordinaten übersetzen, dessen Ursprung wir auf die fordere Kante des Roboters legen.
+
+### Tests
+
+<!--
+style="width: 100%; max-width: 500px; display: block; margin-left: auto; margin-right: auto;"
+-->
+```ascii
+         .
+       .   .  .    Laserscanner Messungen
+      .         . . . .      .  
+      .                . . .  . .  . .
+     .                       /          .
+     .                      /
+    .               ^      /
+    .               |K    /       Ursprung
+  .           ╔═════o-->═/╗    -  karthesisches System
+ .          ╭╮║         / ║╭╮  ^
+  .         ││╢        /  ╟││  |  d
+.           ╰╯║    .-./   ║╰╯  v
+              ║   ( L )   ║    -  Ursprung   
+              ║    `-'    ║       Polarkoordnaten
+               <--------->        Laserscanner
+                    b
+```  
+
+Der Laserscanner generiert eine Folge von Paaren $[\rho, r]_k$, die die Winkellage und die zugehörige Entfernung zum Punkt bezeichnet.
+
+Schritt 1: Transformation der der Polarkoordinaten
+
+<!--
+style="width: 40%; max-width: 500px; display: block; margin-left: auto; margin-right: auto;"
+-->
+```ascii    
+       0°           
+     y ^ ... .  x,y
+  \    |    /.
+   \-α | α / .
+    \  |  /  .
+      .-.    .
+     ( o )-------> x   
+      `-'  
+```
+
+$$
+\begin{bmatrix}
+1 & x & x^2 \\
+1 & y & y^2 \\
+1 & z & z^2 \\
+\end{bmatrix}
+$$
+
+Schritt 2: Transformation in neues Koordinatensystem
+
+
+
+Schritt 3: Filtern der relevanten Datensamples
+
+$$-\frac{b}{2}<=x<=\frac{b}{2}$$
+
+
+Welche Konzepte stecken dahinter?
+
 
 
 ## Filterung
@@ -248,10 +331,6 @@ Der Median-Filter ist ein nichtlinearer Filter, er entfernt Ausreißer und wirkt
 ![RoboterSystem](./img/10_Sensordatenvorverarbeitung/medianfilter.png)<!-- width="100%" -->
 *Anwendung des Medianfilters auf Laserscans*
 
-### Koordinatentransformation
-
-
-
 ## Detektion
 
 Die Detektion zielt auf die Erfassung von Anomalien im Signalverlauf. Dabei werden Modelle des Signalverlaufes oder der Störung genutzt, um
@@ -268,9 +347,11 @@ zu erfassen. Auch hier lassen sich sehr unterschiedliche Ansätze implementieren
 Begonnen werden soll mit einem einfachen Schwellwerttest, der die Änderung zwischen zwei Messungen berücksichtigt. Welches Parameter des Signals sind für den Erfolg dieser Methode maßgeblich bestimmend?
 
 ```js  GenerateData.js
+var sampleCount = 100;
 var layout = {
     height : 300,
     width :  650,
+    xaxis: {range: [0, sampleCount]},
     margin: { l: 60, r: 10, b: 0, t: 10, pad: 4},
     showlegend: true,
     legend: { x: 1, xanchor: 'right', y: 1},
@@ -282,9 +363,9 @@ function generateStep(xrange, basis, step, step_index){
   return result.fill(step, step_index);
 }
 
-var xrange = d3.range(0, 100, 1);
+var xrange = d3.range(0, sampleCount, 1);
 var ideal_values = generateStep(xrange, 3.5, 1, 50);
-var noise = d3.range(0, 100, 1).map(d3.randomNormal(0, 0.1));
+var noise = d3.range(0, sampleCount, 1).map(d3.randomNormal(0, 0.1));
 var noisy_values = new Array(xrange.length).fill(0);
 for (var i = 0; i <= noise.length; i++){
    noisy_values[i] = ideal_values[i] + noise[i];
@@ -333,9 +414,11 @@ Allein aus dem Rauschen ergibt sich bei dieser Konfiguration $\sigma = 0.1$ eine
 Unter der Berücksichtigung des bisherigen gefilterten Signalverlaufes, der zum Beispiel mit einem Median-Filter erzeugt wurde, können wir aber auch versuchen die Erklärbarkeit der Messungen aus der Historie der Messwerte zu erklären.
 
 ```js  DetektorII.js
+var sampleCount = 100;
 var layout = {
     height : 300,
     width :  650,
+    xaxis: {range: [0, sampleCount]},
     margin: { l: 60, r: 10, b: 0, t: 10, pad: 4},
     showlegend: true,
     legend: { x: 1, xanchor: 'right', y: 1},
@@ -362,9 +445,9 @@ function medianFilter(inputs, window_size) {
   return result;
 }
 
-var xrange = d3.range(0, 100, 1);
+var xrange = d3.range(0, sampleCount, 1);
 var ideal_values = generateStep(xrange, 0.5, 1, 50);
-var noise = d3.range(0, 100, 1).map(d3.randomNormal(0, 0.1));
+var noise = d3.range(0, sampleCount, 1).map(d3.randomNormal(0, 0.1));
 var noisy_values = new Array(xrange.length).fill(0);
 for (var i = 0; i <= noise.length; i++){
    noisy_values[i] = ideal_values[i] + noise[i];
@@ -372,9 +455,6 @@ for (var i = 0; i <= noise.length; i++){
 
 const window_size = 5;
 var mean = medianFilter(noisy_values, window_size);
-console.log(mean)
-console.log(mean.slice(0,5))
-console.log(noisy_values.slice(0,5))
 
 var trace1 = {
   x: xrange,
@@ -397,7 +477,7 @@ var trace3 = {
   mode: 'line'
 };
 
-Plotly.newPlot('rawData', [trace1, trace2, trace3], layout);
+Plotly.newPlot('rawDataII', [trace1, trace2, trace3], layout);
 
 var diff = new Array(xrange.length).fill(0);
 for (var i = 1; i <= noise.length; i++){
@@ -409,13 +489,13 @@ var trace1 = {
   name: 'Difference between filtered and original signal',
   mode: 'line'
 };
-Plotly.newPlot('derivedData', [trace1], layout);
+Plotly.newPlot('derivedDataII', [trace1], layout);
 
 ```
 <script>@input</script>
 
-<div id="rawData"></div>
-<div id="derivedData"></div>
+<div id="rawDataII" width="100%"></div>
+<div id="derivedDataII"width="100%"></div>
 
 Im Ergebnis zeigt sich eine größere Robustheit des Detektors, da nunmehr nicht mehr die gesamte Streubreite des Rauschens berücksichtigt zu werden ist.
 
@@ -436,16 +516,21 @@ Im folgenden soll dies Anhand der Detektion von
 ![RoboterSystem](./img/10_Sensordatenvorverarbeitung/GP2D120FilterResult.png)<!-- width="100%" -->
 *Zeitliches Verhalten verschiedener Tests - Fligner (links), Mann-Whitney U (rechts))*
 
-
-
 ******************************************************************************
-
-
-
 
 ## Abstraktion
 
 
+<!--
+style="width: 100%; max-width: 500px; display: block; margin-left: auto; margin-right: auto;"
+-->
+```ascii    
+             Verständnis                     Verständnis            Verständnis
+  Rohdaten -----------------> Informationen --------------> Wissen ------------------> Weisheit
+             von Relationen                  von Mustern            von Prinzipien
+```
+
+data-information-knowledge-wisdom (DIKW) h
 
 ## Realisierung in ROS
 
