@@ -13,6 +13,7 @@ import: https://raw.githubusercontent.com/liascript-templates/plantUML/master/RE
 script:   https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js
           https://d3js.org/d3-random.v2.min.js
           http://d3js.org/d3.v4.js
+          https://cdn.plot.ly/plotly-latest.min.js
 
 link: https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css
 
@@ -207,20 +208,18 @@ new Chartist.Line('#chart1', {
 Einen alternativen Ansatz implementiert der Medianfilter. Hier werden die Werte des gleitenden Fensters sortiert und der Wert in der Mitte dieser Reihung zurückgegeben.
 
 ```js  GenerateData.js
-//Actual filter method
-function slidingWindow(randoms, window_size) {
-  var result = new Array(randoms.length).fill(null);
-  for (var i = window_size; i < randoms.length; i++) {
-      var window = randoms.slice(i - window_size, i);
-        var sorted = window.sort((a, b) => a - b);
-        var half = Math.floor(window_size / 2);
-        if (window_size % 2)
-           result[i] = sorted[half];
-        else
-           result[i] = (values[half - 1] + values[half]) / 2.0;
-        console.log(result);
-    }
-    return result;
+function medianFilter(inputs, window_size) {
+  var result = new Array(inputs.length).fill(null);
+  for (var i = window_size-1; i < inputs.length; i++) {
+      var window = inputs.slice(i - window_size + 1, i + 1);
+      var sorted = window.sort((a, b) => a - b);
+      var half = Math.floor(window_size / 2);
+      if (window_size % 2)
+         result[i] = sorted[half];
+      else
+         result[i] = (sorted[half - 1] + sorted[half]) / 2.0;
+  }
+  return result;
 }
 
 var xrange = d3.range(0, 4*Math.PI, 4 * Math.PI/100);
@@ -232,7 +231,7 @@ for (var i = 0; i <= noise.length; i++){
 }
 
 const window_size = 5;
-var mean = slidingWindow(noisy_values, window_size);
+var mean = medianFilter(noisy_values, window_size);
 
 new Chartist.Line('#chart1', {
   labels: [1, 2, 3, 4],
@@ -255,12 +254,29 @@ Der Median-Filter ist ein nichtlinearer Filter, er entfernt Ausreißer und wirkt
 
 ## Detektion
 
-Die Detektion zielt auf die Erfassung von Anomalien im Signalverlauf. Dabei werden Modelle des Signalverlaufes oder der Störung genutzt, um diese zu erfassen.
+Die Detektion zielt auf die Erfassung von Anomalien im Signalverlauf. Dabei werden Modelle des Signalverlaufes oder der Störung genutzt, um
 
-An dieser Stelle sollen zwei Beispiele vorgestellt werden. Ein einfacher Schwellwert über dem Anstieg der Funktion und eine fensterbasierte statistische Analyse. Dabei soll ein Sprung im Signalverlauf idendentifiziert werden
+* Ausreißer (single sample)
+* Level shifts (mehrere aufeinander folgende Samples)
+* veränderliches Noiseverhalten
+* ...
+
+zu erfassen. Auch hier lassen sich sehr unterschiedliche Ansätze implementieren, das Spektrum der Lösungen soll anhand von zwei Lösungsansätze diskutiert werden.
+
+                               {{1}}
+******************************************************************************
+Begonnen werden soll mit einem einfachen Schwellwerttest, der die Änderung zwischen zwei Messungen berücksichtigt. Welches Parameter des Signals sind für den Erfolg dieser Methode maßgeblich bestimmend?
 
 ```js  GenerateData.js
-// Generate pseudo normalized values
+var layout = {
+    height : 300,
+    width :  650,
+    margin: { l: 60, r: 10, b: 0, t: 10, pad: 4},
+    showlegend: true,
+    legend: { x: 1, xanchor: 'right', y: 1},
+    tracetoggle: false
+};
+
 function generateStep(xrange, basis, step, step_index){
   var result = new Array(xrange.length).fill(basis);
   return result.fill(step, step_index);
@@ -274,27 +290,160 @@ for (var i = 0; i <= noise.length; i++){
    noisy_values[i] = ideal_values[i] + noise[i];
 }
 
-new Chartist.Line('#chart1', {
-  series: [ideal_values, noisy_values]
-});
+var trace1 = {
+  x: xrange,
+  y: ideal_values,
+  name: 'Ideal step function',
+  mode: 'line'
+};
+
+var trace2 = {
+  x: xrange,
+  y: noisy_values,
+  name: 'Noisy measurements',
+  mode: 'markers'
+};
+
+Plotly.newPlot('rawData', [trace1, trace2], layout);
 
 var diff = new Array(xrange.length).fill(0);
 for (var i = 1; i <= noise.length; i++){
    diff[i] = noisy_values[i-1] - noisy_values[i];
 }
+var trace1 = {
+  x: xrange,
+  y: diff,
+  name: 'Derivation of the signal',
+  mode: 'line'
+};
+Plotly.newPlot('derivedData', [trace1], layout);
 
-new Chartist.Line('#chart2', {
-  series: [diff]
-});
 ```
 <script>@input</script>
 
-<div class="ct-chart ct-golden-section" id="chart1" data-y-axis="X axis label"></div>
-<div class="ct-chart ct-golden-section" id="chart2"></div>
+<div id="rawData"></div>
+<div id="derivedData"></div>
+
+Allein aus dem Rauschen ergibt sich bei dieser Konfiguration $\sigma = 0.1$ eine stochastisch mögliche Änderung von $6 \cdot \sigma = 0.6$. Für alle Werte oberhalb dieser Schranke kann mit an Sicherheit grenzender Wahrscheinlichkeit angenommen werden, dass eine Verschiebung des eigentlichen Messgröße vorliegt. Welche Verfeinerung sehen Sie für diesen Ansatz?
+
+******************************************************************************
+
+                                {{2}}
+******************************************************************************
+Unter der Berücksichtigung des bisherigen gefilterten Signalverlaufes, der zum Beispiel mit einem Median-Filter erzeugt wurde, können wir aber auch versuchen die Erklärbarkeit der Messungen aus der Historie der Messwerte zu erklären.
+
+```js  DetektorII.js
+var layout = {
+    height : 300,
+    width :  650,
+    margin: { l: 60, r: 10, b: 0, t: 10, pad: 4},
+    showlegend: true,
+    legend: { x: 1, xanchor: 'right', y: 1},
+    tracetoggle: false
+};
+
+function generateStep(xrange, basis, step, step_index){
+  var result = new Array(xrange.length).fill(basis);
+  return result.fill(step, step_index);
+}
+
+//Actual filter method
+function medianFilter(inputs, window_size) {
+  var result = new Array(inputs.length).fill(null);
+  for (var i = window_size-1; i < inputs.length; i++) {
+      var window = inputs.slice(i - window_size + 1, i + 1);
+      var sorted = window.sort((a, b) => a - b);
+      var half = Math.floor(window_size / 2);
+      if (window_size % 2)
+         result[i] = sorted[half];
+      else
+         result[i] = (sorted[half - 1] + sorted[half]) / 2.0;
+  }
+  return result;
+}
+
+var xrange = d3.range(0, 100, 1);
+var ideal_values = generateStep(xrange, 0.5, 1, 50);
+var noise = d3.range(0, 100, 1).map(d3.randomNormal(0, 0.1));
+var noisy_values = new Array(xrange.length).fill(0);
+for (var i = 0; i <= noise.length; i++){
+   noisy_values[i] = ideal_values[i] + noise[i];
+}
+
+const window_size = 5;
+var mean = medianFilter(noisy_values, window_size);
+console.log(mean)
+console.log(mean.slice(0,5))
+console.log(noisy_values.slice(0,5))
+
+var trace1 = {
+  x: xrange,
+  y: ideal_values,
+  name: 'Ideal step function',
+  mode: 'line'
+};
+
+var trace2 = {
+  x: xrange,
+  y: noisy_values,
+  name: 'Noisy measurements',
+  mode: 'markers'
+};
+
+var trace3 = {
+  x: xrange,
+  y: mean,
+  name: 'Filtered measurements',
+  mode: 'line'
+};
+
+Plotly.newPlot('rawData', [trace1, trace2, trace3], layout);
+
+var diff = new Array(xrange.length).fill(0);
+for (var i = 1; i <= noise.length; i++){
+   diff[i] = mean[i-1] - noisy_values[i];
+}
+var trace1 = {
+  x: xrange,
+  y: diff,
+  name: 'Difference between filtered and original signal',
+  mode: 'line'
+};
+Plotly.newPlot('derivedData', [trace1], layout);
+
+```
+<script>@input</script>
+
+<div id="rawData"></div>
+<div id="derivedData"></div>
+
+Im Ergebnis zeigt sich eine größere Robustheit des Detektors, da nunmehr nicht mehr die gesamte Streubreite des Rauschens berücksichtigt zu werden ist.
+
+******************************************************************************
+
+                         {{3}}
+******************************************************************************
+Alternative Filterkonzepte erweitern den Fensteransatz und bewerten die Verteilung der darin enthaltenen Samples. Dabei wird die Verteilung eines Referenzdatensatz mit der jeweiligen Fehlersituation verglichen und die Wahrscheinlichkeit bestimmt, dass die beiden Verteilungen zur gleichen Grundgesamtheit gehören.
+
+Im folgenden soll dies Anhand der Detektion von
+
+![RoboterSystem](./img/10_Sensordatenvorverarbeitung/GP2D120Sensor.png)<!-- width="100%" -->
+*Störabhängigkeit eines infrarot-lichtbasierten Distanzsensors in Bezug auf externe Beleuchtung *
+
+![RoboterSystem](./img/10_Sensordatenvorverarbeitung/GP2D120FilterConfiguration.png)<!-- width="100%" -->
+*Konfiguration der Größe des Referenzsamples und des Sliding Windows und deren Auswirkung auf die korrekte Klassifikation (Kolmogoroff-Smirnow) (links Referenzdatensatz, rechts gestörte Messung jeweils mit unterschiedlicher Zahl von Samples)*
+
+![RoboterSystem](./img/10_Sensordatenvorverarbeitung/GP2D120FilterResult.png)<!-- width="100%" -->
+*Zeitliches Verhalten verschiedener Tests - Fligner (links), Mann-Whitney U (rechts))*
+
+
+
+******************************************************************************
+
+
 
 
 ## Abstraktion
-
 
 
 
