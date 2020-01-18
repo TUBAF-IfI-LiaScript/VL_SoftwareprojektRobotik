@@ -175,7 +175,7 @@ style="width: 100%; max-width: 500px; display: block; margin-left: auto; margin-
 .           ╰╯║    .-./   ║╰╯  v
               ║   ( L )   ║    -  Ursprung   
               ║    `-'    ║       Polarkoordnaten
-               <--------->        Laserscanner
+            <-------------->      Laserscanner
                     b
 ```  
 
@@ -197,26 +197,45 @@ style="width: 40%; max-width: 500px; display: block; margin-left: auto; margin-r
       `-'  
 ```
 
-## Just for testing purposes
-
-Here comes a matrix :
-
 $$
-\begin{bmatrix}
-1 & x & x^2 \\
-1 & y & y^2 \\
-1 & z & z^2 \\
-\end{bmatrix}
+\begin{matrix}
+x_L \\
+y_L \\
+\end{matrix}
+=
+r \cdot
+\begin{matrix}
+sin(\rho) & \\
+cos(\rho) &
+\end{matrix}
 $$
 
 
 Schritt 2: Transformation in neues Koordinatensystem
 
+$$
+\begin{matrix}
+x_L \\
+y_L \\
+\end{matrix}
+=
+\begin{bmatrix}
+x_R \\
+y_R \\
+\end{bmatrix}
++
+\begin{matrix}
+0 \\
+d \\
+\end{matrix}
+$$
 
 
 Schritt 3: Filtern der relevanten Datensamples
 
-$$-\frac{b}{2}<=x<=\frac{b}{2}$$
+Wir filtern zunächst erst mal nach den Samples, die unmittelbar vor dem Roboter liegen, für die also gilt $-\frac{b}{2}<=x<=\frac{b}{2}$. Für diese wird dann geprüft, ob ein y-Wert kleiner als eine Schwelle vorliegt.
+
+Wie müssten wir die Berechnung anpassen, wenn der Laserscanner aus baulichen Gründen um 90 Grad verdreht wäre.
 
 
 Welche Konzepte stecken dahinter?
