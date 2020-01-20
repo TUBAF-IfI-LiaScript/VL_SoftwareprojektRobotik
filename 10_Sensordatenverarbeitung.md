@@ -102,7 +102,8 @@ $$a = \frac{Messbereich}{Auflösung} \cdot ADCvalue - \frac{1}{2} Messbereich$$
 
 Beispiel: Analoger Distanzsensor GP2D12 (vgl. Übersicht unter [Link](https://acroname.com/articles/sharp-infrared-ranger-comparison))
 
-![RoboterSystem](./img/10_Sensordatenvorverarbeitung/GP2y0a21MeasurementCharacteristic.png)<!-- width="80%" -->
+![RoboterSystem](./img/10_Sensordatenvorverarbeitung/GP2y0a21MeasurementCharacteristic.png)<!-- width="50%" -->
+
 *Sensorkennlinie eines GP2Y0A21 Sensors [Link](https://www.robotshop.com/media/files/pdf2/gp2y0a21yk_e.pdf)*
 
 Offenbar benötigen wir hier ein nichtlinerares Approximationsmodell. Die Entsprechenden Funktionen können sehr unterschiedlich gewählt werden ein Beispiel ist die Erzeugung eines Polynoms, dass das intendierte Verhalten abbildet.
@@ -254,8 +255,24 @@ Wie müssten wir die Berechnung anpassen, wenn der Laserscanner aus baulichen Gr
                     {{3-4}}
 ********************************************************************************
 
-Welche Konzepte stecken dahinter?
+Bisher haben wir lediglich Konzepte der translatorischen Transformation betrachtet. Rotationen folgendermaßen abgebildet werden:
 
+$$ x'=x\cos\varphi + y\sin\varphi,$$
+$$ y'= -x\sin\varphi + y\cos\varphi,$$
+$$ z'=z $$
+
+In der Matrizenschreibweise bedeutet dies
+
+$$\vec{x}' = \begin{pmatrix} \cos\varphi & \sin\varphi & 0 \\ -\sin\varphi & \cos\varphi & 0 \\ 0 & 0 & 1\end{pmatrix} \cdot \vec x = A \vec{x} $$
+
+
+Fassen wir nun Translation und Rotation zusammen, so können wir eine 2D Koordinatentransformation mit
+
+$$\vec{x}\,'=A \vec{x} + \vec{b}$$
+
+beschreiben.
+
+Wie muss dieses Konzept erweitert werden, um 3D Szenarien abbilden zu können?
 
 ********************************************************************************
 
@@ -269,11 +286,7 @@ Ziel:
 + Löschung von fehlerhaften Werten
 + Konzentration der Daten
 
-Ein Filter bildet die Folge (xi) der Sensorwerte auf eine Folge (yi) ab.
-
-Domäne: Zeit, Frequenzbereich
-
-Bezug: 	Signalspezifikation,  			Systemmodell
+Ein Filter bildet die Folge $x_i$ der Sensorwerte auf eine Folge $y_i$ ab. Die Domäne, in der der Filter arbeitet, kann im Zeit oder Frequenzbereich liegen. Als Vorwissen auf seiten des Entwicklers kann die Signalspezifikation oder ein Systemmodell angenommen werden.
 
 
 ### Gleitender Mittelwert
@@ -299,6 +312,7 @@ Im folgenden Beispiel wird ein niederfrequentes Bewegungsmuster mit einem höher
 
 ```js  -Data.js
 const window_size = 3;
+
 var xrange = d3.range(0, 4*Math.PI, 4 * Math.PI/100);
 var ideal_values = xrange.map(x => Math.sin(x));
 var noise = d3.range(0, 100, 1).map(d3.randomNormal(0, 0.1));
@@ -334,7 +348,10 @@ new Chartist.Line('#chart1', {
 
 <div class="ct-chart ct-golden-section" id="chart1"></div>
 
-Welche Abwandlungen sind möglich, um die Eigenschaften des Filters zu verbessern?
+                                        {{1}}
+********************************************************************************
+
+__Welche Abwandlungen sind möglich, um die Eigenschaften des Filters zu verbessern?__
 
 1. Gewichteter Mittelwert
 
@@ -352,12 +369,21 @@ $$\overline{y_k} = \alpha \cdot y_{k-1} + (1 - \alpha)\cdot y_k$$
 
 Der Wert von $\alpha$ bestimmt in welchem Maße die "Historie" der Mittelwerte einbezogen wird.
 
+********************************************************************************
+
 ### Medianfilter
 
-Einen alternativen Ansatz implementiert der Medianfilter. Hier werden die Werte des gleitenden Fensters sortiert und der Wert in der Mitte dieser Reihung zurückgegeben.
+Einen alternativen Ansatz implementiert der Medianfilter. Hier wird untersucht, welcher Wert den größten Abstand zu allen anderen hat und damit für einen vermuteten Ausreißer steht.
+
+$$\sum_{i=1}^{N}{\|\vec{x}_\text{VM}-\vec{x}_i\|_p} \leq \sum_{i=1}^{N}{\|\vec{x}_j-\vec{x}_i\|_p}$$
+$$ \vec{x}_\text{VM} = \arg\min_{\vec{x}_j \in X} \sum_{i=1}^{N}{\|\vec{x}_j-\vec{x}_i\|_p} $$
+
+Dabei stellt sich die Frage, wie viele
+
+Für einen eindimensionalen Wert wird für den Medianfilter eine Fenstergröße definiert und deren mittlerer Wert als Ausgabe übernommen.
 
 ```js  -GenerateData.js
-const window_size = 15;
+const window_size = 3;
 var xrange = d3.range(0, 4*Math.PI, 4 * Math.PI/100);
 var ideal_values = xrange.map(x => Math.sin(x));
 var noise = d3.range(0, 100, 1).map(d3.randomNormal(0, 0.1));
@@ -402,6 +428,8 @@ new Chartist.Line('#chart1', {
 
 Der Median-Filter ist ein nichtlinearer Filter, er entfernt Ausreißer und wirkt damit als Filter und Detektor!
 
+Die nachfolgende Abbildung zeigt ein Beispiel für die Anwendung des Medianfilters im 2d Raum. Laserscannerdaten werden hier geglättet. Die Punkte werden in Abhängigkeit von den Abständen zwischeneinander.
+
 
 ![RoboterSystem](./img/10_Sensordatenvorverarbeitung/medianfilter.png)<!-- width="100%" -->
 *Anwendung des Medianfilters auf Laserscans*
@@ -421,8 +449,27 @@ zu erfassen. Auch hier lassen sich sehr unterschiedliche Ansätze implementieren
 ******************************************************************************
 Begonnen werden soll mit einem einfachen Schwellwerttest, der die Änderung zwischen zwei Messungen berücksichtigt. Welches Parameter des Signals sind für den Erfolg dieser Methode maßgeblich bestimmend?
 
-```js  GenerateData.js
+```js -GenerateData.js
 var sampleCount = 100;
+function generateStep(xrange, basis, step, step_index){
+  var result = new Array(xrange.length).fill(basis);
+  return result.fill(step, step_index);
+}
+var xrange = d3.range(0, sampleCount, 1);
+var ideal_values = generateStep(xrange, 3.5, 1, 50);
+var noise = d3.range(0, sampleCount, 1).map(d3.randomNormal(0, 0.1));
+var noisy_values = new Array(xrange.length).fill(0);
+for (var i = 0; i <= noise.length; i++){
+   noisy_values[i] = ideal_values[i] + noise[i];
+}
+```
+```js +Processing.js
+var diff = new Array(xrange.length).fill(0);
+for (var i = 1; i <= noise.length; i++){
+   diff[i] = noisy_values[i-1] - noisy_values[i];
+}
+```
+```js -Visualization.js
 var layout = {
     height : 300,
     width :  650,
@@ -432,19 +479,6 @@ var layout = {
     legend: { x: 1, xanchor: 'right', y: 1},
     tracetoggle: false
 };
-
-function generateStep(xrange, basis, step, step_index){
-  var result = new Array(xrange.length).fill(basis);
-  return result.fill(step, step_index);
-}
-
-var xrange = d3.range(0, sampleCount, 1);
-var ideal_values = generateStep(xrange, 3.5, 1, 50);
-var noise = d3.range(0, sampleCount, 1).map(d3.randomNormal(0, 0.1));
-var noisy_values = new Array(xrange.length).fill(0);
-for (var i = 0; i <= noise.length; i++){
-   noisy_values[i] = ideal_values[i] + noise[i];
-}
 
 var trace1 = {
   x: xrange,
@@ -459,13 +493,8 @@ var trace2 = {
   name: 'Noisy measurements',
   mode: 'markers'
 };
-
 Plotly.newPlot('rawData', [trace1, trace2], layout);
 
-var diff = new Array(xrange.length).fill(0);
-for (var i = 1; i <= noise.length; i++){
-   diff[i] = noisy_values[i-1] - noisy_values[i];
-}
 var trace1 = {
   x: xrange,
   y: diff,
@@ -475,7 +504,11 @@ var trace1 = {
 Plotly.newPlot('derivedData', [trace1], layout);
 
 ```
-<script>@input</script>
+<script>
+  @input(0)
+  @input(1)
+  @input(2)
+</script>
 
 <div id="rawData"></div>
 <div id="derivedData"></div>
@@ -488,30 +521,12 @@ Allein aus dem Rauschen ergibt sich bei dieser Konfiguration $\sigma = 0.1$ eine
 ******************************************************************************
 Unter der Berücksichtigung des gefilterten Signalverlaufes, der zum Beispiel mit einem Mittelwert-Filter erzeugt wurde, können wir aber auch die Erklärbarkeit der Messungen untersuchen.
 
-```js  DetektorII.js
+```js -GenerateData.js
 var sampleCount = 100;
-var layout = {
-    height : 300,
-    width :  650,
-    xaxis: {range: [0, sampleCount]},
-    margin: { l: 60, r: 10, b: 0, t: 10, pad: 4},
-    showlegend: true,
-    legend: { x: 1, xanchor: 'right', y: 1},
-    tracetoggle: false
-};
 
 function generateStep(xrange, basis, step, step_index){
   var result = new Array(xrange.length).fill(basis);
   return result.fill(step, step_index);
-}
-
-function slidingAverage(randoms, window_size) {
-    var result = new Array(randoms.length).fill(null);
-    for (var i = window_size; i < randoms.length; i++) {
-        var window = randoms.slice(i - window_size, i);
-        result[i] = window.reduce(function(p,c,i,a){return p + (c/a.length)},0);
-    }
-    return result;
 }
 
 var xrange = d3.range(0, sampleCount, 1);
@@ -521,9 +536,35 @@ var noisy_values = new Array(xrange.length).fill(0);
 for (var i = 0; i <= noise.length; i++){
    noisy_values[i] = ideal_values[i] + noise[i];
 }
+```
+```js +Processing.js
+function slidingAverage(randoms, window_size) {
+    var result = new Array(randoms.length).fill(null);
+    for (var i = window_size; i < randoms.length; i++) {
+        var window = randoms.slice(i - window_size, i);
+        result[i] = window.reduce(function(p,c,i,a){return p + (c/a.length)},0);
+    }
+    return result;
+}
 
 const window_size = 5;
 var mean = slidingAverage(noisy_values, window_size);
+
+var diff = new Array(xrange.length).fill(0);
+for (var i = 1; i <= noise.length; i++){
+   diff[i] = mean[i-1] - noisy_values[i];
+}
+```
+```js -Visualization
+var layout = {
+    height : 300,
+    width :  650,
+    xaxis: {range: [0, sampleCount]},
+    margin: { l: 60, r: 10, b: 0, t: 10, pad: 4},
+    showlegend: true,
+    legend: { x: 1, xanchor: 'right', y: 1},
+    tracetoggle: false
+};
 
 var trace1 = {
   x: xrange,
@@ -548,10 +589,6 @@ var trace3 = {
 
 Plotly.newPlot('rawDataII', [trace1, trace2, trace3], layout);
 
-var diff = new Array(xrange.length).fill(0);
-for (var i = 1; i <= noise.length; i++){
-   diff[i] = mean[i-1] - noisy_values[i];
-}
 var trace1 = {
   x: xrange,
   y: diff,
@@ -559,9 +596,13 @@ var trace1 = {
   mode: 'line'
 };
 Plotly.newPlot('derivedDataII', [trace1], layout);
-
 ```
-<script>@input</script>
+<script>
+  @input(0)
+  @input(1)
+  @input(2)
+</script>
+
 
 <div id="rawDataII" width="100%"></div>
 <div id="derivedDataII"width="100%"></div>
@@ -579,32 +620,26 @@ Im folgenden soll dies Anhand der Detektion von
 ![RoboterSystem](./img/10_Sensordatenvorverarbeitung/GP2D120Sensor.png)<!-- width="100%" -->
 *Störabhängigkeit eines infrarot-lichtbasierten Distanzsensors in Bezug auf externe Beleuchtung *
 
-![RoboterSystem](./img/10_Sensordatenvorverarbeitung/GP2D120FilterConfiguration.png)<!-- width="100%" -->
+![RoboterSystem](./img/10_Sensordatenvorverarbeitung/GP2D120FilterConfiguration.png)<!-- width="80%" -->
 *Konfiguration der Größe des Referenzsamples und des Sliding Windows und deren Auswirkung auf die korrekte Klassifikation (Kolmogoroff-Smirnow) (links Referenzdatensatz, rechts gestörte Messung jeweils mit unterschiedlicher Zahl von Samples)*
 
-![RoboterSystem](./img/10_Sensordatenvorverarbeitung/GP2D120FilterResult.png)<!-- width="100%" -->
+![RoboterSystem](./img/10_Sensordatenvorverarbeitung/GP2D120FilterResult.png)<!-- width="80%" -->
 *Zeitliches Verhalten verschiedener Tests - Fligner (links), Mann-Whitney U (rechts))*
 
 ******************************************************************************
 
 ## Abstraktion
 
+> Have to be extended!
 
 <!--
-style="width: 100%; max-width: 500px; display: block; margin-left: auto; margin-right: auto;"
+style="width: 100%; max-width: 900px; display: block; margin-left: auto; margin-right: auto;"
 -->
 ```ascii    
              Verständnis                     Verständnis            Verständnis
   Rohdaten -----------------> Informationen --------------> Wissen ------------------> Weisheit
              von Relationen                  von Mustern            von Prinzipien
 ```
-
-data-information-knowledge-wisdom (DIKW) h
-
-## Realisierung in ROS
-
-> Achtung: Die folgenden Beispiele werden anhand von ROS1 erläutert. Die tf Unterstützung von ROS2 ist noch minimal,
-
 
 ## Aufgabe der Woche
 
