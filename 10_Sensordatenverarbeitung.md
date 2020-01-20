@@ -228,13 +228,13 @@ Schritt 2: Transformation in neues Koordinatensystem
 
 $$
 \begin{bmatrix}
-x_L \\
-y_L \\
+x_K \\
+y_K \\
 \end{bmatrix}
 =
 \begin{bmatrix}
-x_R \\
-y_R \\
+x_L \\
+y_L \\
 \end{bmatrix}
 +
 \begin{bmatrix}
@@ -552,7 +552,7 @@ var mean = slidingAverage(noisy_values, window_size);
 
 var diff = new Array(xrange.length).fill(0);
 for (var i = 1; i <= noise.length; i++){
-   diff[i] = mean[i-1] - noisy_values[i];
+   diff[i] = mean[i] - noisy_values[i];
 }
 ```
 ```js -Visualization
