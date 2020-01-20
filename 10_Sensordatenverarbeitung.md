@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  1.0.0
+version:  1.0.2
 language: de
 comment:  In dieser Vorlesungen werden die Schichten einer Roboterarchitektur adressiert.
 narrator: Deutsch Female
@@ -68,6 +68,9 @@ Beispiele für Datenvorverarbeitung
 
 ## Transformation
 
+    {{0-1}}
+********************************************************************************
+
 __Ableitung der eigentlichen Messgröße__
 
 Ein Aspekt der Transformation ist die Abbildung der Messdaten, die ggf. als
@@ -99,12 +102,18 @@ $$a = \frac{Messbereich}{Auflösung} \cdot ADCvalue - \frac{1}{2} Messbereich$$
 
 Beispiel: Analoger Distanzsensor GP2D12 (vgl. Übersicht unter [Link](https://acroname.com/articles/sharp-infrared-ranger-comparison))
 
-![RoboterSystem](./img/10_Sensordatenvorverarbeitung/GP2y0a21MeasurementCharacteristic.png)<!-- width="100%" -->
+![RoboterSystem](./img/10_Sensordatenvorverarbeitung/GP2y0a21MeasurementCharacteristic.png)<!-- width="80%" -->
 *Sensorkennlinie eines GP2Y0A21 Sensors [Link](https://www.robotshop.com/media/files/pdf2/gp2y0a21yk_e.pdf)*
 
 Offenbar benötigen wir hier ein nichtlinerares Approximationsmodell. Die Entsprechenden Funktionen können sehr unterschiedlich gewählt werden ein Beispiel ist die Erzeugung eines Polynoms, dass das intendierte Verhalten abbildet.
 
-Allgemeines Vorgehen bei der Approximation eines Polynoms
+
+********************************************************************************
+
+                 {{1-2}}
+********************************************************************************
+
+__Allgemeines Vorgehen bei der Approximation eines Polynoms__
 
 Polynom $$y(x)= a_0 + a_1x + a_ax^2 + ... + a_nx^n$$
 
@@ -128,7 +137,7 @@ $$y = Am$$
 ![RoboterSystem](./img/10_Sensordatenvorverarbeitung/PolynomApproximation.png)<!-- width="100%" -->
 *Abhängigkeit der Abbildung vom Grad des Polynoms *
 
-Umsetzung im RoboterSystem
+__Umsetzung im RoboterSystem__
 
 $$y(x)= a_0 + a_1x + a_ax^2 + ... + a_nx^n$$
 
@@ -149,13 +158,17 @@ distance= lookup[ADC_output]
 
 Welche Vor- und Nachteile sehen Sie für die gegensätzlichen Ansätze?
 
+
+********************************************************************************
+
+                 {{2-3}}
+********************************************************************************
+
 __Koordinatentransformation__
 
 Die Transformation eines Datensatzes aus einem Koordinatensystem in ein anderes betrifft sowohl die Übertragung zwischen unterschiedlichen Darstellungsformen als auch den Wechsel des Bezugsystems.
 
 Gehen wir von einem Laserscan aus. Dieser wurde in Polarkoordinaten erfasst, um aber die Frage zu klären, wie weit dieser von der Frontseite unserer Roboters entfernt ist, müssen wir zunächst die Sample in ein kartesisches Koordinaten übersetzen, dessen Ursprung wir auf die fordere Kante des Roboters legen.
-
-### Tests
 
 <!--
 style="width: 100%; max-width: 500px; display: block; margin-left: auto; margin-right: auto;"
@@ -184,7 +197,7 @@ Der Laserscanner generiert eine Folge von Paaren $[\rho, r]_k$, die die Winkella
 Schritt 1: Transformation der der Polarkoordinaten
 
 <!--
-style="width: 40%; max-width: 500px; display: block; margin-left: auto; margin-right: auto;"
+style="width: 30%; max-width: 500px; display: block; margin-left: auto; margin-right: auto;"
 -->
 ```ascii    
        0°           
@@ -198,36 +211,35 @@ style="width: 40%; max-width: 500px; display: block; margin-left: auto; margin-r
 ```
 
 $$
-\begin{matrix}
+\begin{bmatrix}
 x_L \\
 y_L \\
-\end{matrix}
+\end{bmatrix}
 =
 r \cdot
-\begin{matrix}
+\begin{bmatrix}
 sin(\rho) & \\
 cos(\rho) &
-\end{matrix}
+\end{bmatrix}
 $$
-
 
 Schritt 2: Transformation in neues Koordinatensystem
 
 $$
-\begin{matrix}
+\begin{bmatrix}
 x_L \\
 y_L \\
-\end{matrix}
+\end{bmatrix}
 =
 \begin{bmatrix}
 x_R \\
 y_R \\
 \end{bmatrix}
 +
-\begin{matrix}
+\begin{bmatrix}
 0 \\
 d \\
-\end{matrix}
+\end{bmatrix}
 $$
 
 
@@ -237,19 +249,24 @@ Wir filtern zunächst erst mal nach den Samples, die unmittelbar vor dem Roboter
 
 Wie müssten wir die Berechnung anpassen, wenn der Laserscanner aus baulichen Gründen um 90 Grad verdreht wäre.
 
+********************************************************************************
+
+                    {{3-4}}
+********************************************************************************
 
 Welche Konzepte stecken dahinter?
 
 
+********************************************************************************
 
 ## Filterung
 
-> (das/der) Filter (m., n., nach fr. filtrer, it. feltrare, „durchseihen“; ursprünglich „durch Filz laufen lassen“ zu germanisch *felt „Filz“)
+> das/der Filter feltrare, "durchseihen"; ursprünglich "durch Filz laufen lassen" zu germanisch felt = "Filz"
 
 Ziel:
 
 + Reduzierung des Rauschens
-+ Löschung von fehlerhaften  		   Werten
++ Löschung von fehlerhaften Werten
 + Konzentration der Daten
 
 Ein Filter bildet die Folge (xi) der Sensorwerte auf eine Folge (yi) ab.
@@ -259,7 +276,7 @@ Domäne: Zeit, Frequenzbereich
 Bezug: 	Signalspezifikation,  			Systemmodell
 
 
-### Glättung
+### Gleitender Mittelwert
 
 Ein Ansatz für die Glättung sind gleitende Fenster, innerhalb derer die Daten analysiert werden.
 
@@ -273,14 +290,25 @@ $$y_k( ... x_{k+2}, x_{k+1}, x_k, x_{k-1}, x_{k-2} ...)$$
 
 Damit laufen wir den Messdaten zeitlich gesehen hinterher!
 
-Ein gleitender Mittelwert wird häufig als Allheilmittel für die Filterung von Messwerten dargestellt.
+Ein gleitender Mittelwert wird häufig als Allheilmittel für die Filterung von Messwerten dargestellt, manipuliert das Signal aber auch entsprechend:
 
-$y_k = \frac{1}{N}\sum_{i=0}^{i>N} x_{k-i}$
+$$y_k = \frac{1}{N}\sum_{i=0}^{i<N} x_{k-i}$$
 
 Im folgenden Beispiel wird ein niederfrequentes Bewegungsmuster mit einem höherfrequenten Störsignal überlagert. Welche Veränderungen erkennen Sie am Ausgabesignal des Filters verglichen mit dem Originalsignal?
 
-```js  GenerateData.js
-//Actual filter method
+
+```js  -Data.js
+const window_size = 3;
+var xrange = d3.range(0, 4*Math.PI, 4 * Math.PI/100);
+var ideal_values = xrange.map(x => Math.sin(x));
+var noise = d3.range(0, 100, 1).map(d3.randomNormal(0, 0.1));
+var noisy_values = new Array(xrange.length).fill(0);
+for (var i = 0; i <= noise.length; i++){
+   noisy_values[i] = ideal_values[i] + noise[i];
+}
+```
+```js  SlidingWindow.js
+//Actual filter method (moving average)
 function slidingWindow(randoms, window_size) {
     var result = new Array(randoms.length).fill(null);
     for (var i = window_size; i < randoms.length; i++) {
@@ -289,16 +317,8 @@ function slidingWindow(randoms, window_size) {
     }
     return result;
 }
-
-var xrange = d3.range(0, 4*Math.PI, 4 * Math.PI/100);
-var ideal_values = xrange.map(x => Math.sin(x));
-var noise = d3.range(0, 100, 1).map(d3.randomNormal(0, 0.1));
-var noisy_values = new Array(xrange.length).fill(0);
-for (var i = 0; i <= noise.length; i++){
-   noisy_values[i] = ideal_values[i] + noise[i];
-}
-
-const window_size = 3;
+```
+```js -Visualize.js
 var mean = slidingWindow(noisy_values, window_size);
 
 new Chartist.Line('#chart1', {
@@ -306,15 +326,50 @@ new Chartist.Line('#chart1', {
   series: [ideal_values, noisy_values, mean]
 });
 ```
-<script>@input</script>
+<script>
+  @input(0)
+  @input(1)
+  @input(2)
+</script>
 
 <div class="ct-chart ct-golden-section" id="chart1"></div>
+
+Welche Abwandlungen sind möglich, um die Eigenschaften des Filters zu verbessern?
+
+1. Gewichteter Mittelwert
+
+Wir gewichten den Einfluß der einzelnen Elemente individuell. Damit können jüngere Anteile einen höheren Einfluß auf die Ausgabe nehmen als ältere.
+
+$$y_k = \sum_{i=0}^{i<N} w_i \cdot x_{k-i}$$ mit
+
+$$\sum_{i=0}^{i<N} w_i = 1$$
+
+2. Exponentielle Glättung
+
+Die Glättung der Mittelwerte selbst steigert die Filtereigenschaften und erhöht die Dynamik des Filters.
+
+$$\overline{y_k} = \alpha \cdot y_{k-1} + (1 - \alpha)\cdot y_k$$
+
+Der Wert von $\alpha$ bestimmt in welchem Maße die "Historie" der Mittelwerte einbezogen wird.
 
 ### Medianfilter
 
 Einen alternativen Ansatz implementiert der Medianfilter. Hier werden die Werte des gleitenden Fensters sortiert und der Wert in der Mitte dieser Reihung zurückgegeben.
 
-```js  GenerateData.js
+```js  -GenerateData.js
+const window_size = 15;
+var xrange = d3.range(0, 4*Math.PI, 4 * Math.PI/100);
+var ideal_values = xrange.map(x => Math.sin(x));
+var noise = d3.range(0, 100, 1).map(d3.randomNormal(0, 0.1));
+var noisy_values = new Array(xrange.length).fill(0);
+for (var i = 0; i <= noise.length; i++){
+  //if (noise[i] > 0.4) (Simulate outlier failure model instead of Gaussian noise)
+  noisy_values[i] = ideal_values[i] + noise[i];
+  //else
+  //noisy_values[i] = ideal_values[i];
+}
+```
+```js  +MedianFilter.js
 function medianFilter(inputs, window_size) {
   var result = new Array(inputs.length).fill(null);
   for (var i = window_size-1; i < inputs.length; i++) {
@@ -328,16 +383,8 @@ function medianFilter(inputs, window_size) {
   }
   return result;
 }
-
-var xrange = d3.range(0, 4*Math.PI, 4 * Math.PI/100);
-var ideal_values = xrange.map(x => Math.sin(x));
-var noise = d3.range(0, 100, 1).map(d3.randomNormal(0, 0.1));
-var noisy_values = new Array(xrange.length).fill(0);
-for (var i = 0; i <= noise.length; i++){
-   noisy_values[i] = ideal_values[i] + noise[i];
-}
-
-const window_size = 5;
+```
+```js  -Visualize.js
 var mean = medianFilter(noisy_values, window_size);
 
 new Chartist.Line('#chart1', {
@@ -345,11 +392,15 @@ new Chartist.Line('#chart1', {
   series: [ideal_values, noisy_values, mean]
 });
 ```
-<script>@input</script>
+<script>
+  @input(0)
+  @input(1)
+  @input(2)
+</script>
 
 <div class="ct-chart ct-golden-section" id="chart1"></div>
 
-Der Median-Filter ist ein nichtlinearer Filter, er entfernt Ausreißer und wirkt damit als Filter und Detektor.
+Der Median-Filter ist ein nichtlinearer Filter, er entfernt Ausreißer und wirkt damit als Filter und Detektor!
 
 
 ![RoboterSystem](./img/10_Sensordatenvorverarbeitung/medianfilter.png)<!-- width="100%" -->
@@ -435,7 +486,7 @@ Allein aus dem Rauschen ergibt sich bei dieser Konfiguration $\sigma = 0.1$ eine
 
                                 {{2}}
 ******************************************************************************
-Unter der Berücksichtigung des bisherigen gefilterten Signalverlaufes, der zum Beispiel mit einem Median-Filter erzeugt wurde, können wir aber auch versuchen die Erklärbarkeit der Messungen aus der Historie der Messwerte zu erklären.
+Unter der Berücksichtigung des gefilterten Signalverlaufes, der zum Beispiel mit einem Mittelwert-Filter erzeugt wurde, können wir aber auch die Erklärbarkeit der Messungen untersuchen.
 
 ```js  DetektorII.js
 var sampleCount = 100;
@@ -454,19 +505,13 @@ function generateStep(xrange, basis, step, step_index){
   return result.fill(step, step_index);
 }
 
-//Actual filter method
-function medianFilter(inputs, window_size) {
-  var result = new Array(inputs.length).fill(null);
-  for (var i = window_size-1; i < inputs.length; i++) {
-      var window = inputs.slice(i - window_size + 1, i + 1);
-      var sorted = window.sort((a, b) => a - b);
-      var half = Math.floor(window_size / 2);
-      if (window_size % 2)
-         result[i] = sorted[half];
-      else
-         result[i] = (sorted[half - 1] + sorted[half]) / 2.0;
-  }
-  return result;
+function slidingAverage(randoms, window_size) {
+    var result = new Array(randoms.length).fill(null);
+    for (var i = window_size; i < randoms.length; i++) {
+        var window = randoms.slice(i - window_size, i);
+        result[i] = window.reduce(function(p,c,i,a){return p + (c/a.length)},0);
+    }
+    return result;
 }
 
 var xrange = d3.range(0, sampleCount, 1);
@@ -478,7 +523,7 @@ for (var i = 0; i <= noise.length; i++){
 }
 
 const window_size = 5;
-var mean = medianFilter(noisy_values, window_size);
+var mean = slidingAverage(noisy_values, window_size);
 
 var trace1 = {
   x: xrange,
@@ -562,3 +607,5 @@ data-information-knowledge-wisdom (DIKW) h
 
 
 ## Aufgabe der Woche
+
++ Implementieren Sie eine exponentielle Glättung für den Durchschnitt im Beispiel zu gleitenden Mittelwert.
