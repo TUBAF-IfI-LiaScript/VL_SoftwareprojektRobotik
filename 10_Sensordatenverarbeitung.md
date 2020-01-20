@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  1.0.2
+version:  1.0.3
 language: de
 comment:  In dieser Vorlesungen werden die Schichten einer Roboterarchitektur adressiert.
 narrator: Deutsch Female
@@ -22,7 +22,7 @@ link: https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css
 
 # Vorlesung X - Sensordatenverarbeitung
 
-Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/09_Sensordatenverarbeitung.md)
+Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/10_Sensordatenverarbeitung.md)
 
 **Zielstellung der heutigen Veranstaltung**
 
