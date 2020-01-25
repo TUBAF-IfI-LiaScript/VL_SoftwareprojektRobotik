@@ -13,7 +13,7 @@ import: https://raw.githubusercontent.com/liascript-templates/plantUML/master/RE
 
 # Vorlesung IX - Sensoren
 
-Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/09_ROS2_Sensoren.md)
+Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/09_Sensoren.md)
 
 **Zielstellung der heutigen Veranstaltung**
 
