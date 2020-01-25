@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  1.0.3
+version:  1.0.4
 language: de
 comment:  In dieser Vorlesungen werden die Schichten einer Roboterarchitektur adressiert.
 narrator: Deutsch Female
@@ -630,7 +630,16 @@ Im folgenden soll dies Anhand der Detektion von
 
 ## Abstraktion
 
-> Have to be extended!
+Während der Abstraktion werden die Rohdaten im Hinblick auf relevante Aspekte segmentiert und vorverarbeitet. Beispiele dafür sind die
+
++ Extraktion von höherabstrakten Linien, Ebenen, usw. aus Laserscans oder Punktwolken oder Gesichtern in Bildern
++ Kategorisierung von Situationen (Form des Untergrundes anhand von Beschleunigungsdaten, Einparkhilfen beim Fahrzeug (grün, gelb, rot))
++ Identifikation von Anomalien
++ ...
+
+Das ganze fügt sich dann ein in die allgemeine Verarbeitungskette von Daten, die
+die Abbildung von Rohdaten auf Informationen, Features und letztendlich auf Entscheidungen realisiert. Dabei beruht dieser Fluß nicht auf den Daten eines
+einzigen Sensors sondern kombiniert verschiedene (multimodale) Inputs.
 
 <!--
 style="width: 100%; max-width: 900px; display: block; margin-left: auto; margin-right: auto;"
@@ -641,6 +650,180 @@ style="width: 100%; max-width: 900px; display: block; margin-left: auto; margin-
              von Relationen                  von Mustern            von Prinzipien
 ```
 
+Eine knappe Einführung in die Grundlagen der Datenfusion folgt in der kommenden Veranstaltung, eine Vertiefung im Sommersemester.
+
+## Anwendung einer Rohdatenverarbeitung in ROS
+
+> __Achtung:__ Die nachfolgende Erläuterung bezieht sich auf die ROS1 Implementierung. Unter ROS2 ist die Implementierung der entsprechenden Pakete noch nicht abgeschlosssen.
+
+                  {{0-1}}
+********************************************************************************
+__tf__
+
+Die Handhabung der unterschiedlichen Koordinatensystem in ROS1 ist über das `tf`-verteitle System gelöst.
+
+![RoboterSystem](./img/10_Sensordatenvorverarbeitung/Coordsystems.png)<!-- width="80%" -->
+
+_Darstellung verschiedener Koordinatensysteme innerhalb eines Roboterszenarios (Autor Bo im ROS Forum unter [answers.ros.org](https://answers.ros.org/question/265846/how-to-build-tf-topic-frame-tree-for-hector_slam-or-gmapping/))_
+
+`tf` spannt einen Baum aus Transformationen auf, innerhalb derer diese automatisiert aufgelöst werden können. Grundlage dieser Lösung ist die Integration einer Frame-ID in jeden Datensatz. Jede `sensor_msgs` enthält entsprechend einen header, der folgendermaßen strukturiert ist.
+
+```text  std_msgs/Header Message
+# sequence ID: consecutively increasing ID
+uint32 seq
+#Two-integer timestamp that is expressed as:
+# * stamp.sec: seconds (stamp_secs) since epoch (in Python the variable is called 'secs')
+# * stamp.nsec: nanoseconds since stamp_secs (in Python the variable is called 'nsecs')
+# time-handling sugar is provided by the client library
+time stamp
+#Frame this data is associated with
+string frame_id
+```
+
+Dabei werden die Relationen zwischen den Koordinatensystemen über eigene Publisher und Listener ausgetauscht. Am Ende bildet jede Applikation eine Baumstruktur aus den Transformationen zwischen den Frames. Isolierte Frames können entsprechend nicht in Verbindung mit anderen gesetzt werden.
+
+![RoboterSystem](./img/10_Sensordatenvorverarbeitung/view_frames.png)<!-- min-width="333px" max-width="700px" "width: 60%" -->
+
+_Beispielhafte Darstellung des tf-Trees eines ROS-Turtle Szenarios, das zwei Turtle umfasst. Die individuellen Posen werden jeweils gegenüber den globalen `world`-Frame beschrieben._
+
+Nehmen wir nun an, dass wir die Positionsinformation von `turtle2` im Koordindatensystem von `turtle1` darstellen wollen, um zum Beispiel eine Richtungsangabe zu bestimmen. Dafür subscrbieren wir uns für deren
+
+```cpp    MessageTfTransform.cpp
+#include "ros/ros.h"
+#include "tf/transform_listener.h"
+#include "tf/message_filter.h"
+#include "message_filters/subscriber.h"
+
+class PoseDrawer
+{
+public:
+  PoseDrawer() : tf_(),  target_frame_("turtle1")
+  {
+    point_sub_.subscribe(n_, "turtle_point_stamped", 10);
+    tf_filter_ = new tf::MessageFilter<geometry_msgs::PointStamped>(point_sub_, tf_, target_frame_, 10);
+    tf_filter_->registerCallback( boost::bind(&PoseDrawer::msgCallback, this, _1) );
+  } ;
+
+private:
+  message_filters::Subscriber<geometry_msgs::PointStamped> point_sub_;
+  tf::TransformListener tf_;
+  tf::MessageFilter<geometry_msgs::PointStamped> * tf_filter_;
+  ros::NodeHandle n_;
+  std::string target_frame_;
+
+  //  Callback to register with tf::MessageFilter to be called when transforms are available
+  void msgCallback(const boost::shared_ptr<const geometry_msgs::PointStamped>& point_ptr)
+  {
+    geometry_msgs::PointStamped point_out;
+    try
+    {
+      tf_.transformPoint(target_frame_, *point_ptr, point_out);
+
+      printf("point of turtle 3 in frame of turtle 1 Position(x:%f y:%f z:%f)\n",
+             point_out.point.x,
+             point_out.point.y,
+             point_out.point.z);
+    }
+    catch (tf::TransformException &ex)
+    {
+      printf ("Failure %s\n", ex.what()); //Print exception which was caught
+    }
+  };
+};
+
+int main(int argc, char ** argv)
+{
+  ros::init(argc, argv, "pose_drawer"); //Init ROS
+  PoseDrawer pd; //Construct class
+  ros::spin(); // Run until interupted
+};
+```
+
+********************************************************************************
+
+       {{1-2}}
+********************************************************************************
+
+Die aktuell größte Einschränkung des ROS tf-Konzeptes ist das Fehlen einer Unsicherheitsdarstellung für die Relationen.
+
+__laser-filters__
+
+Der primäre Inhalt des `laser_filters`-Pakets [(Link)](http://wiki.ros.org/laser_filters) besteht aus einer Reihe von Filtern und Transformationsalgorithem für Laserscanner-Rohdaten. Der Anwender konfiguriert dabei die Parameter der Filter in einem Beschreibungsfile, die eigentliche Ausführung übernehmen zwei Knoten, die dann mehrere Filter nacheinander ausführen. Der  `scan_to_scan_filter_chain` Knoten wendet eine Reihe von Filtern auf einen `sensor_msgs/LaserScan` an. Die `scan_to_cloud_filter_chain` implementiert zunächst eine Reihe von Filtern auf einen `sensor_msgs/LaserScan` an, wandelt ihn in einen `sensor_msgs/PointCloud` um und wendet dann eine Reihe von Filtern auf den `sensor_msgs/PointCloud` an.
+
+<!--
+style="width: 100%; max-width: 900px; display: block; margin-left: auto; margin-right: auto;"
+-->
+```ascii   
+        my_laser_config.yaml:
+        +-------------------------+
+        | scan_filter_chain:     \|
+        |   - name: shadows       |
+        |       type ...          |
+        |       ...               |
+        +-------------------------+         
+                     |
+                     v
+        +------------------------------------------------------------------------------+
+        | Parameter server                                                             |
+        +------------------------------------------------------------------------------+
+                                 |            |           |
+        scan_to_cloud_chain      v            v           v
+        ╔══════════════════════════════════════════════════════════════════════════════╗               
+        ║                        +---------------------------------------------------+ ║               
+        ║                        | filter_chain<sensor_msgs::LaserScan>              | ║               
+        ║  +-----------------+   |  +----------------+             +---------------+ | ║               
+  scan  ║  |                 |   |  |                |             |               | | ║ scan_filtered
+    ------>|tf-Messagefilter |----->| Scan filter 1  |--> .... --> |Scan filter N  | |------>          
+        ║  |                 |   |  |                |             |               | | ║               
+        ║  +-----------------+   |  +----------------+             +---------------+ | ║               
+        ║         ^              +---------------------------------------------------+ ║               
+tf data ║         |                                                         |          ║               
+    --------------.    .----------------------------------------------------.          ║               
+        ║         |    |         +---------------------------------------------------+ ║               
+        ║         v    v         | filter_chain<sensor_msgs::PointCloud>             | ║               
+        ║  +-----------------+   |  +----------------+             +---------------+ | ║               
+        ║  |                 |   |  |                |             |               | | ║ cloud_filtered
+        ║  |LaserProjection  |----->| Cloud filter 1 |             |Cloud filter N | |------>          
+        ║  |                 |   |  |                |             |               | | ║    
+        ║  +-----------------+   |  +----------------+             +---------------+ | ║               
+        ║                        +---------------------------------------------------+ ║   
+        ╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+```text  Examplary_laser_filter_config.yaml
+scan_filter_chain:
+- name: shadows
+  type: laser_filters/ScanShadowsFilter
+  params:
+    min_angle: 10
+    max_angle: 170
+    neighbors: 20
+    window: 1
+- name: dark_shadows
+  type: laser_filters/LaserScanIntensityFilter
+  params:
+    lower_threshold: 100
+    upper_threshold: 10000
+    disp_histogram: 0
+```
+
+Dabei sind folgende Filtertypen in das Konzept eingebettet:
+
+| Bezeichnung                           | Bedeutung |
+| ------------------------------------- | --------- |
+| `LaserArrayFilter`                    |           |
+| `ScanShadowsFilter`                   |           |
+| `InterpolationFilter`                 |           |
+| `LaserScanIntensityFilter`            |           |
+| `LaserScanRangeFilter`                |           |
+| `LaserScanAngularBoundsFilter`        |           |
+| `LaserScanAngularBoundsFilterInPlace` |           |
+| `LaserScanBoxFilter`                  |           |
+
+
+********************************************************************************
+
 ## Aufgabe der Woche
 
 + Implementieren Sie eine exponentielle Glättung für den Durchschnitt im Beispiel zu gleitenden Mittelwert.
++ Nutzen Sie Bag-Files, die Sie zum Beispiel unter folgendem [Link](https://code.google.com/archive/p/tu-darmstadt-ros-pkg/downloads) finden, um eine Toolchain für die Filterung von Messdaten zu implementieren. Experimentieren Sie mit den verschiedenen Filtern.
