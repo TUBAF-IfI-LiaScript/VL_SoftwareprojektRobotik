@@ -656,13 +656,20 @@ Eine knappe Einführung in die Grundlagen der Datenfusion folgt in der kommenden
 
 > __Achtung:__ Die nachfolgende Erläuterung bezieht sich auf die ROS1 Implementierung. Unter ROS2 ist die Implementierung der entsprechenden Pakete noch nicht abgeschlosssen.
 
+Wie werden Laserscanner-Informationen unter ROS abgebildet? Schauen wir uns dies an einem realen Beispiel an. Ein zugehöriges Bag-File finden Sie im `data` Ordner dieses Kurses.
+
+![RoboterSystem](./img/10_Sensordatenvorverarbeitung/LaserScanner.png)<!--  style="width:60%; max-width:300px; min-width:600px"-->
+
+Eine Kurz-Dokumentation einer häufig genutzen Scanners vom Typ Hokuyo URG04 finden Sie unter [Link](https://www.robotshop.com/media/files/pdf/hokuyo-urg-04lx-ug01-specifications.pdf)
+
+### Transformationen mit tf
+
                   {{0-1}}
 ********************************************************************************
-__tf__
 
 Die Handhabung der unterschiedlichen Koordinatensystem in ROS1 ist über das `tf`-verteitle System gelöst.
 
-![RoboterSystem](./img/10_Sensordatenvorverarbeitung/Coordsystems.png)<!-- width="80%" -->
+![RoboterSystem](./img/10_Sensordatenvorverarbeitung/Coordsystems.png)<!--  style="width:60%; max-width:300px; min-width:600px"-->
 
 _Darstellung verschiedener Koordinatensysteme innerhalb eines Roboterszenarios (Autor Bo im ROS Forum unter [answers.ros.org](https://answers.ros.org/question/265846/how-to-build-tf-topic-frame-tree-for-hector_slam-or-gmapping/))_
 
@@ -679,12 +686,21 @@ time stamp
 #Frame this data is associated with
 string frame_id
 ```
+********************************************************************************
+
+                   {{1-3}}
+********************************************************************************
 
 Dabei werden die Relationen zwischen den Koordinatensystemen über eigene Publisher und Listener ausgetauscht. Am Ende bildet jede Applikation eine Baumstruktur aus den Transformationen zwischen den Frames. Isolierte Frames können entsprechend nicht in Verbindung mit anderen gesetzt werden.
 
-![RoboterSystem](./img/10_Sensordatenvorverarbeitung/view_frames.png)<!-- min-width="333px" max-width="700px" "width: 60%" -->
+![RoboterSystem](./img/10_Sensordatenvorverarbeitung/view_frames.png)<!--  style="width:60%; max-width:300px; min-width:600px"-->
 
 _Beispielhafte Darstellung des tf-Trees eines ROS-Turtle Szenarios, das zwei Turtle umfasst. Die individuellen Posen werden jeweils gegenüber den globalen `world`-Frame beschrieben._
+
+********************************************************************************
+
+                   {{2-3}}
+********************************************************************************
 
 Nehmen wir nun an, dass wir die Positionsinformation von `turtle2` im Koordindatensystem von `turtle1` darstellen wollen, um zum Beispiel eine Richtungsangabe zu bestimmen. Dafür subscrbieren wir uns für deren
 
@@ -739,19 +755,23 @@ int main(int argc, char ** argv)
 };
 ```
 
-********************************************************************************
-
-       {{1-2}}
-********************************************************************************
+```
+point of turtle 3 in frame of turtle 1 Position(x:-0.603264 y:4.276489 z:0.000000)
+point of turtle 3 in frame of turtle 1 Position(x:-0.598923 y:4.291888 z:0.000000)
+point of turtle 3 in frame of turtle 1 Position(x:-0.594828 y:4.307356 z:0.000000)
+point of turtle 3 in frame of turtle 1 Position(x:-0.590981 y:4.322886 z:0.000000)
+```
 
 Die aktuell größte Einschränkung des ROS tf-Konzeptes ist das Fehlen einer Unsicherheitsdarstellung für die Relationen.
 
-__laser-filters__
+********************************************************************************
+
+### Anwendung laser-filters
 
 Der primäre Inhalt des `laser_filters`-Pakets [(Link)](http://wiki.ros.org/laser_filters) besteht aus einer Reihe von Filtern und Transformationsalgorithem für Laserscanner-Rohdaten. Der Anwender konfiguriert dabei die Parameter der Filter in einem Beschreibungsfile, die eigentliche Ausführung übernehmen zwei Knoten, die dann mehrere Filter nacheinander ausführen. Der  `scan_to_scan_filter_chain` Knoten wendet eine Reihe von Filtern auf einen `sensor_msgs/LaserScan` an. Die `scan_to_cloud_filter_chain` implementiert zunächst eine Reihe von Filtern auf einen `sensor_msgs/LaserScan` an, wandelt ihn in einen `sensor_msgs/PointCloud` um und wendet dann eine Reihe von Filtern auf den `sensor_msgs/PointCloud` an.
 
 <!--
-style="width: 100%; max-width: 900px; display: block; margin-left: auto; margin-right: auto;"
+style="width: 80%; max-width: 900px; display: block; margin-left: auto; margin-right: auto;"
 -->
 ```ascii   
         my_laser_config.yaml:
@@ -770,7 +790,7 @@ style="width: 100%; max-width: 900px; display: block; margin-left: auto; margin-
         scan_to_cloud_chain      v            v           v
         ╔══════════════════════════════════════════════════════════════════════════════╗               
         ║                        +---------------------------------------------------+ ║               
-        ║                        | filter_chain<sensor_msgs::LaserScan>              | ║               
+        ║                        | filter_chain mit sensor_msgs::LaserScan           | ║               
         ║  +-----------------+   |  +----------------+             +---------------+ | ║               
   scan  ║  |                 |   |  |                |             |               | | ║ scan_filtered
     ------>|tf-Messagefilter |----->| Scan filter 1  |--> .... --> |Scan filter N  | |------>          
@@ -780,7 +800,7 @@ style="width: 100%; max-width: 900px; display: block; margin-left: auto; margin-
 tf data ║         |                                                         |          ║               
     --------------.    .----------------------------------------------------.          ║               
         ║         |    |         +---------------------------------------------------+ ║               
-        ║         v    v         | filter_chain<sensor_msgs::PointCloud>             | ║               
+        ║         v    v         | filter_chain mit sensor_msgs::PointCloud          | ║               
         ║  +-----------------+   |  +----------------+             +---------------+ | ║               
         ║  |                 |   |  |                |             |               | | ║ cloud_filtered
         ║  |LaserProjection  |----->| Cloud filter 1 |             |Cloud filter N | |------>          
@@ -809,16 +829,15 @@ scan_filter_chain:
 
 Dabei sind folgende Filtertypen in das Konzept eingebettet:
 
-| Bezeichnung                           | Bedeutung |
-| ------------------------------------- | --------- |
-| `LaserArrayFilter`                    |           |
-| `ScanShadowsFilter`                   |           |
-| `InterpolationFilter`                 |           |
-| `LaserScanIntensityFilter`            |           |
-| `LaserScanRangeFilter`                |           |
-| `LaserScanAngularBoundsFilter`        |           |
-| `LaserScanAngularBoundsFilterInPlace` |           |
-| `LaserScanBoxFilter`                  |           |
+| Bezeichnung                           | Bedeutung                                                                                                             |
+| ------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `ScanShadowsFilter`                   | eleminiert Geisterreflexionen beim Scannen von Objektkanten.                                                          |
+| `InterpolationFilter`                 | interpoliert Punkte für ungültige Messungen                                                                           |
+| `LaserScanIntensityFilter`            | filtered anhand der Intensität des reflektierten Laserimpulses                                                        |
+| `LaserScanRangeFilter`                | beschränkt die Reichweite                                                                                             |
+| `LaserScanAngularBoundsFilter`        | entfernt Punkte, die außerhalb bestimmter Winkelgrenzen liegen, indem der minimale und maximale Winkel geändert wird. |
+| `LaserScanAngularBoundsFilterInPlace` | überschreibt Werte außerhalb der angegebenen Winkellage mit einem Distanzwert außerhalb der maximalen Reichweite                                                                                                                      |
+| `LaserScanBoxFilter`                  | selektiert Messungen, die in einem bestimmten kartesischen Raum liegen.                                               |
 
 
 ********************************************************************************
