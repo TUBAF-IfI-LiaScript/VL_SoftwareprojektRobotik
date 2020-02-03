@@ -350,7 +350,9 @@ _"Effects of varying PID parameters (Kp,Ki,Kd) on the step response of a system.
 
 ## Implementierung unter ROS
 
-still missing ...
+Für ROS gibt es ein Paket, welches einen PID Controller beispielhaft implementiert. Die entsprechende Dokumentation findet sich unter http://wiki.ros.org/pid
+
+Evaluieren Sie das Systemverhalten für verschiedene Reglerkonfigurationen! Nutzen Sie dafür die Möglichkeit auf die Parameter des Reglers über `dynamic_reconfigure` zurückzugreifen.
 
 ## Aufgaben
 
