@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  1.0.1
+version:  1.1.0
 language: de
 comment:  In dieser Vorlesungen werden die Schichten einer Roboterarchitektur adressiert.
 narrator: Deutsch Female
@@ -278,7 +278,7 @@ style="width: 100%; min-width: 380px; max-width: 720px; display: block; margin-l
            Schild erkannt        +------+------+
                          nein    | 1    |   7  |   8
                                  +------+------+
-                                   12       8     20
+                                   11       9     20
 ```  
 
 _Vierfeldertafel unseres "Schilderkenners"_
@@ -314,7 +314,7 @@ Wie können wir diese Sensorcharakteristik nun für unser Roboterbeispiel verwen
 import numpy as np
 
 markers = np.array([0, 1., 0, 0, 1., 1., 0, 0, 0, 0])
-truePositive = 0.72
+truePositive = 0.83
 belief = markers / sum(markers)*truePositive
 belief[markers == 0] = (1-truePositive)/np.count_nonzero(markers==0)
 print(belief)
@@ -374,7 +374,7 @@ $$posteriori = \frac{likelihood \cdot prior}{normalization}$$
 import numpy as np
 apriori = np.array([1./10]*10)
 markers = np.array([0, 1., 0, 0, 1., 1., 0, 0, 0, 0])
-truePositive = 0.72
+truePositive = 0.83
 belief = markers / sum(markers)*truePositive
 belief[markers == 0] = (1-truePositive)/np.count_nonzero(markers==0)
 posteriori = (apriori * belief) / sum(apriori*belief)
@@ -431,13 +431,13 @@ Wie können wir unsere Positionsschätzung verbessern:
 2. Einbettung weiterer Sensoren
 3. Wiederholung der Messungen (sofern wir von statistisch unabhängigen Messungen ausgehen)
 
-Lassen Sie uns die Messung einige Male wiederholen und diese Erkenntnis einfließen.
+Lassen Sie uns die Messung einige Male wiederholen. Das folgende Diagramm zeigt die Schätzung an der Position 1, nachdem mehrere Messungen fusioniert wurden.
 
 ```python                          constantPosition.py
 import numpy as np
 apriori = np.array([1./10]*10)
 markers = np.array([0, 1., 0, 0, 1., 1., 0, 0, 0, 0])
-truePositive = 0.72
+truePositive = 0.83
 belief = markers / sum(markers)*truePositive
 belief[markers == 0] = (1-truePositive)/np.count_nonzero(markers==0)
 p_1 = []; p_1.append(apriori[1])
@@ -588,7 +588,7 @@ def predict_move(belief, move, p_under, p_correct, p_over):
 belief = [0., 0., 1. , 0. , 0., 0., 0., 0., 0., 0.]
 #belief = [0., 0.,  .4,  .6, 0., 0., 0., 0., 0., 0.]
 print(belief)
-print( predict_move(belief, 1, .1, .8, .1))
+print( predict_move(belief, 1, .1, .7, .2))
 ```
 ```js -Visualization
 var lines = data.Result.split('\n');
@@ -659,9 +659,9 @@ Wie groß ist die Wahrscheinlichkeit, dass wir Segment x erreichen? Dabei berüc
 |   0     |          | nicht erreichbar |
 |   1     |          | nicht erreichbar |
 |   2     | $0.4 \cdot 0.1$         |  $0.04$ |
-|   3     | $0.4 \cdot 0.8 + 0.6 \cdot 0.1$  | $0.38$  |  
-|   4     | $0.4 \cdot 0.1 + 0.6 \cdot 0.8$  | $0.52$  |  
-|   5     | $0.6 \cdot 0.1$  | $0.06$  |  
+|   3     | $0.4 \cdot 0.7 + 0.6 \cdot 0.1$  | $0.34$  |  
+|   4     | $0.4 \cdot 0.2 + 0.6 \cdot 0.7$  | $0.5$  |  
+|   5     | $0.6 \cdot 0.2$  | $0.12$  |  
 |   6     |          | nicht erreichbar |
 |   7     |   | ... |
 
@@ -671,16 +671,21 @@ Grafisch dargestellt ergibt sich damit folgendes Bild:
 style="width: 100%; min-width: 380px; max-width: 720px; display: block; margin-left: auto; margin-right: auto;"
 -->
 ```ascii
-               |  0  |  1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  |
+             |  0  |  1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  |
 
-      priori      0     0    0.4   0.6    0     0     0     0     0     0      
-    [0.1   0.8   0.1]  -->  
+    priori      0     0    0.4   0.6    0     0     0     0     0     0      
 
-                [0.1   0.8   0.1]  
-                             0.04                
+Reihenfolge   [0.2   0.7   0.1]  An die Stelle i=2 kann ich von i=0 (p=0.2)  
+invertiert                 0.04  und i=1 (p=0.7) gelangen.        
+                           ====
 
-                      [0.1   0.8   0.1]  
-                                   0.38
+                    [0.2   0.8   0.1]  
+                                 0.34        
+                                 ====
+
+                           [0.2   0.8   0.1]  
+                                        0.5
+                                        ====
 ```   
 _Abbildung des Streckenmodels (O = Orange Warnschilder am Ufer, S = Starke Strömung, B = Brücken)_
 
@@ -696,7 +701,7 @@ from scipy import ndimage
 
 belief = [.05, .5, .05, .05, .05, .05, .05, .05, .05, .05]
 print(belief)
-kernel = [.1, 0.8, 0.1]
+kernel = [.1, 0.7, 0.2]
 prior = ndimage.convolve(np.roll(belief, len(kernel) / 2), kernel, mode='wrap')
 print(prior)
 #belief = prior   # Multiple movements
@@ -805,9 +810,9 @@ import numpy as np
 from scipy import ndimage
 
 priori = np.array([1./10]*10)
-kernel = [.1, 0.8, 0.1]
+kernel = [.1, 0.7, 0.2]
 markers = np.array([0, 1., 0, 0, 1., 1., 0, 0, 0, 0])
-truePositive = 0.72
+truePositive = 0.83
 belief = markers / sum(markers)*truePositive
 belief[markers == 0] = (1-truePositive)/np.count_nonzero(markers==0)
 # FIRST LOOP - prediction
