@@ -274,22 +274,39 @@ style="width: 100%; min-width: 380px; max-width: 720px; display: block; margin-l
                                Schild im Segement
                                     ja    nein
                                  +------+------+
-                           ja    | 0.8  | 0.3  |                               
+                           ja    | 10   |   2  |  12                          
            Schild erkannt        +------+------+
-                         nein    | 0.2  | 0.7  |
+                         nein    | 1    |   7  |   8
                                  +------+------+
-```
+                                   12       8     20
+```  
 
 _Vierfeldertafel unseres "Schilderkenners"_
+
+Abgebildet auf Wahrscheinlichkeiten bedeutet das ja:
+
+<!--
+style="width: 100%; min-width: 380px; max-width: 720px; display: block; margin-left: auto; margin-right: auto;"
+-->
+```ascii
+                               Schild im Segement
+                                    ja    nein
+                                 +------+------+
+                           ja    | 0.5  | 0.1  |   0.6                         
+           Schild erkannt        +------+------+
+                         nein    | 0.05 | 0.35 |   0.4
+                                 +------+------+
+                                   0.55   0.45     1.0
+```  
 
 Wie wahrscheinlich ist es also, dass wir uns tatsächlich an einem orangen Schild
 befinden, wenn wir eine entsprechende Messung vorliegen haben?
 
-$$p(x|z) = \frac{0.8}{0.8 \cdot 0.3} = 0.72$$
+$$p(x|z) = \frac{0.5}{0.5 + 0.1} = 0.83$$
 
 Wie wahrscheinlich ist eine Messung eines orangen Schildes, wenn wir gar keines erreicht haben?
 
-$$p(x|z) = \frac{0.3}{0.8 \cdot 0.3} = 0.27$$
+$$p(x|z) = \frac{0.1}{0.5 + 0.1} = 0.17$$
 
 Wie können wir diese Sensorcharakteristik nun für unser Roboterbeispiel verwenden? Unsere Klassifikation wird durch die verschiedenen Möglichkeiten, an denen sich der Roboter aufhalten kann, "verwässert". Wenn wir nur ein Segment mit einem Schild hätten müssten wir diesem eine Aufenthaltswahrscheinlichkeit von $p=0.72$ zuordnen. Da es aber mehrere Möglichkeiten gibt splitet sich diese auf.
 
