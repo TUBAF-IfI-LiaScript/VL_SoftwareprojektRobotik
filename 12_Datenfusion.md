@@ -17,6 +17,22 @@ script:   https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js
           https://cdn.plot.ly/plotly-latest.min.js
 
 link: https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css
+
+@eval: @Rextester._eval_(@uid, @Python, , , ,
+```
+    var string = data.Result.replace(/\n/g, ' ');
+    var lines = string.match(/(?<=\[).+?(?=\])/g);
+    var outcome = [];
+    for (var i=0; i<lines.length; i++){
+      outcome[i] = lines[i].split(' ').map(function(item) {
+          return parseFloat(item);
+      });  
+    }
+    @input(1);
+    Plotly.newPlot(span_id, plot, layout);  
+    console.log("Aus Maus");
+```)
+
 -->
 
 # Vorlesung XII - Datenfusion
@@ -188,16 +204,10 @@ belief = np.array([1./10]*10)
 print(belief)
 ```
 ```js -Visualization
-var line = data.Result.slice(1, data.Result.length-2);
-line = line.replace( /\s\s+/g, ' ' );
-var outcome = line.split(' ').map(function(item) {
-    return parseFloat(item);
-});
-
 var plot = [
   {
     x: d3.range(0, 10),
-    y: outcome,
+    y: outcome[0],
     type: 'bar',
     name: 'Potential positions',
   }
@@ -222,12 +232,9 @@ var layout = {
     legend: { x: 1, xanchor: 'right', y: 1},
     tracetoggle: false
 };
+```
+@eval
 
-Plotly.newPlot('Diagram1', plot, layout);
-console.log("Aus Maus")
-```@Rextester._eval_(@uid, @Python,`@0`,`@1`,` `,`@input(1)`)
-
-<div id="Diagram1"></div>
 
 Es wird deutlich, dass wir aktuell noch kein Wissen um die Position des Bootes haben. Man spricht vom "apriori-"Wissen.
 
@@ -320,12 +327,6 @@ belief[markers == 0] = (1-truePositive)/np.count_nonzero(markers==0)
 print(belief)
 ```
 ```js -Visualization
-var line = data.Result.slice(1, data.Result.length-2);
-line = line.replace( /\s\s+/g, ' ' );
-var outcome = line.split(' ').map(function(item) {
-    return parseFloat(item);
-});
-
 var plot = [
   {
     x: d3.range(0, 10),
@@ -354,12 +355,8 @@ var layout = {
     legend: { x: 1, xanchor: 'right', y: 1},
     tracetoggle: false
 };
-
-Plotly.newPlot('Diagram2', plot, layout);
-console.log("Aus Maus")
-```@Rextester._eval_(@uid, @Python,`@0`,`@1`,` `,`@input(1)`)
-
-<div id="Diagram2"></div>
+```
+@eval
 
 ### Abbildung auf apriori Wissen
 
@@ -381,12 +378,6 @@ posteriori = (apriori * belief) / sum(apriori*belief)
 print(posteriori)
 ```
 ```js -Visualization
-var line = data.Result.slice(1, data.Result.length-2);
-line = line.replace( /\s\s+/g, ' ' );
-var outcome = line.split(' ').map(function(item) {
-    return parseFloat(item);
-});
-
 var plot = [
   {
     x: d3.range(0, 10),
@@ -415,12 +406,8 @@ var layout = {
     legend: { x: 1, xanchor: 'right', y: 1},
     tracetoggle: false
 };
-
-Plotly.newPlot('Diagram2', plot, layout);
-console.log("Aus Maus")
-```@Rextester._eval_(@uid, @Python,`@0`,`@1`,` `,`@input(1)`)
-
-<div id="Diagram2"></div>
+```
+@eval
 
 Wie erwartet haben die Segmente mit Schildern eine deutlich höhere Wahrscheinlichkeit von $p=0.24$ als die anderen Bereiche. Welche Veränderung
 erwarten Sie, wenn wir die Qualität der Sensormessungen erhöhen?
@@ -448,12 +435,6 @@ for i in range(1, 10):
 print(p_1)
 ```
 ```js -Visualization
-var line = data.Result.slice(1, data.Result.length-2);
-line = line.replace( /\s\s+/g, ' ' );
-var outcome = line.split(' ').map(function(item) {
-    return parseFloat(item);
-});
-
 var plot = [
   {
     x: d3.range(0, 10),
@@ -482,12 +463,8 @@ var layout = {
     legend: { x: 1, xanchor: 'right', y: 1},
     tracetoggle: false
 };
-
-Plotly.newPlot('Diagram3', plot, layout);
-console.log("Aus Maus")
-```@Rextester._eval_(@uid, @Python,`@0`,`@1`,` `,`@input(1)`)
-
-<div id="Diagram3"></div>
+```
+@eval
 
 Unsere Positionsschätzung nähert sich der belief-Verteilung unsere Messung an. Der Einfluß des Anfangswissens geht zurück.
 
@@ -512,18 +489,6 @@ print(belief)
 print(perfect_predict(belief, 1))
 ```
 ```js -Visualization
-var lines = data.Result.split('\n');
-var line_0 = lines[0].slice(1, lines[0].length-1).replace( /\s\s+/g, ' ' );
-var line_1 = lines[1].slice(1, lines[1].length-1).replace( /\s\s+/g, ' ' );
-
-var outcome_0 = line_0.split(' ').map(function(item) {
-    return parseFloat(item);
-});
-
-var outcome_1 = line_1.split(' ').map(function(item) {
-    return parseFloat(item);
-});
-
 var plot = [
   {
     x: d3.range(0, 10),
@@ -559,12 +524,8 @@ var layout = {
     legend: { x: 1, xanchor: 'right', y: 1},
     tracetoggle: false
 };
-
-Plotly.newPlot('Diagram4', plot, layout);
-console.log("Aus Maus")
-```@Rextester._eval_(@uid, @Python,`@0`,`@1`,` `,`@input(1)`)
-
-<div id="Diagram4"></div>
+```
+@eval2
 
 Welche Probleme sehen Sie?
 
@@ -591,18 +552,6 @@ print(belief)
 print( predict_move(belief, 1, .1, .7, .2))
 ```
 ```js -Visualization
-var lines = data.Result.split('\n');
-var line_0 = lines[0].slice(1, lines[0].length-1).replace( /\s\s+/g, ' ' );
-var line_1 = lines[1].slice(1, lines[1].length-1).replace( /\s\s+/g, ' ' );
-
-var outcome_0 = line_0.split(' ').map(function(item) {
-    return parseFloat(item);
-});
-
-var outcome_1 = line_1.split(' ').map(function(item) {
-    return parseFloat(item);
-});
-
 var plot = [
   {
     x: d3.range(0, 10),
@@ -638,12 +587,8 @@ var layout = {
     legend: { x: 1, xanchor: 'right', y: 1},
     tracetoggle: false
 };
-
-Plotly.newPlot('Diagram5', plot, layout);
-console.log("Aus Maus")
-```@Rextester._eval_(@uid, @Python,`@0`,`@1`,` `,`@input(1)`)
-
-<div id="Diagram5"></div>
+```
+@eval2
 
 Was aber geschieht, wenn wir von einem unsicheren priori Wissen ausgehen?
 
@@ -805,6 +750,8 @@ style="width: 100%; min-width: 380px; max-width: 720px; display: block; margin-l
 
 Das folgende Codefragment bildet zwei Iterationen für unser Beispiel ab. Im ersten Durchlauf ändert die Prediktionsphase den Intertialen Wissenstand nicht. Die Faltung des Kernels ändert die Aufenthaltwahrscheinlichkeit nicht. Eine  Präzisierung erfährt diese mit der ersten Messung durch den Schildersensor.
 
+# asdfasöl
+
 ```python                          BayesFilter.py
 import numpy as np
 from scipy import ndimage
@@ -831,38 +778,18 @@ posteriori = posteriori * belief / sum(posteriori * belief )
 print(posteriori)
 ```
 ```js -Visualization
-var lines = data.Result.split('\n');
-var line_0 = lines[0].slice(1, lines[0].length-1).replace( /\s\s+/g, ' ' );
-var line_1 = lines[1].slice(1, lines[1].length-1).replace( /\s\s+/g, ' ' );
-var line_2 = lines[2].slice(1, lines[2].length-1).replace( /\s\s+/g, ' ' );
-var line_3 = lines[3].slice(1, lines[3].length-1).replace( /\s\s+/g, ' ' );
 
-var outcome_0 = line_0.split(' ').map(function(item) {
-    return parseFloat(item);
-});
-
-var outcome_1 = line_1.split(' ').map(function(item) {
-    return parseFloat(item);
-});
-
-var outcome_2 = line_2.split(' ').map(function(item) {
-    return parseFloat(item);
-});
-
-var outcome_3 = line_3.split(' ').map(function(item) {
-    return parseFloat(item);
-});
 
 var plot1 = [
   {
     x: d3.range(0, 10),
-    y: outcome_0,
+    y: outcome[0],
     type: 'bar',
     name: 'Apriori Knowledge'
   },
   {
     x: d3.range(0, 10),
-    y: outcome_1,
+    y: outcome[1],
     type: 'bar',
     name: 'After measurement'
   },  
@@ -871,13 +798,13 @@ var plot1 = [
 var plot2 = [
   {
     x: d3.range(0, 10),
-    y: outcome_2,
+    y: outcome[2],
     type: 'bar',
     name: 'After prediction'
   },
   {
     x: d3.range(0, 10),
-    y: outcome_3,
+    y: outcome[3],
     type: 'bar',
     name: 'After measurement'
   },  
