@@ -18,21 +18,21 @@ script:   https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js
 
 link: https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css
 
-@eval: @Rextester._eval_(@uid, @Python, , , ,
+@eval: @Rextester.eval(@uid,@Python, , , ,
 ```
-    var string = data.Result.replace(/\n/g, ' ');
-    var lines = string.match(/(?<=\[).+?(?=\])/g);
-    var outcome = [];
-    for (var i=0; i<lines.length; i++){
-      outcome[i] = lines[i].split(' ').map(function(item) {
-          return parseFloat(item);
-      });  
-    }
-    @input(1);
-    Plotly.newPlot(span_id, plot, layout);  
-    console.log("Aus Maus");
-```)
-
+  var string = data.Result.replace(/\n/g, ' ');
+  var lines = string.match(/(?<=\[).+?(?=\])/g);
+  var outcome = [];
+  for (var i=0; i<lines.length; i++){
+    outcome[i] = lines[i].split(' ').map(function(item) {
+        return parseFloat(item);
+    });  
+  }
+  @input(1);
+  Plotly.newPlot(span_id, plot, layout);  
+  console.log("Aus Maus");```
+)
+@end
 -->
 
 # Vorlesung XII - Datenfusion
