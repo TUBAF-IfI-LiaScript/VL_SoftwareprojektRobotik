@@ -18,20 +18,21 @@ script:   https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js
 
 link: https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css
 
-@eval: @Rextester.eval(@uid,@Python, , , ,
-```
-  var string = data.Result.replace(/\n/g, ' ');
-  var lines = string.match(/(?<=\[).+?(?=\])/g);
-  var outcome = [];
-  for (var i=0; i<lines.length; i++){
-    outcome[i] = lines[i].split(' ').map(function(item) {
-        return parseFloat(item);
-    });  
-  }
-  @input(1);
-  Plotly.newPlot(span_id, plot, layout);  
-  console.log("Aus Maus");```
-)
+@eval
+@Rextester._eval_(@uid, @Python, , , ,```
+    var lines = data.Result.replace(/\n/g, ' ')
+                           .replace(/\s{2,}/g, ' ')
+                           .match(/(?<=\[).+?(?=\])/g);
+    var outcome = [];
+    for (var i=0; i<lines.length; i++){
+      outcome[i] = lines[i].split(' ').map(function(item) {
+          return parseFloat(item);
+      });  
+    }
+    @input(1);
+    Plotly.newPlot(span_id, plot, layout);
+    console.log("Aus Maus");
+```)
 @end
 -->
 
@@ -330,7 +331,7 @@ print(belief)
 var plot = [
   {
     x: d3.range(0, 10),
-    y: outcome,
+    y: outcome[0],
     type: 'bar',
     name: 'Orange signs measurements',
   }
@@ -381,7 +382,7 @@ print(posteriori)
 var plot = [
   {
     x: d3.range(0, 10),
-    y: outcome,
+    y: outcome[0],
     type: 'bar',
     name: 'Posteriori probabilities',
   }
@@ -438,7 +439,7 @@ print(p_1)
 var plot = [
   {
     x: d3.range(0, 10),
-    y: outcome,
+    y: outcome[0],
     type: 'bar',
     name: 'Probability of segment [1]'
   }
@@ -492,13 +493,13 @@ print(perfect_predict(belief, 1))
 var plot = [
   {
     x: d3.range(0, 10),
-    y: outcome_0,
+    y: outcome[0],
     type: 'bar',
     name: 'Before prediction'
   },
   {
     x: d3.range(0, 10),
-    y: outcome_1,
+    y: outcome[1],
     type: 'bar',
     name: 'After prediction'
   },  
@@ -525,7 +526,7 @@ var layout = {
     tracetoggle: false
 };
 ```
-@eval2
+@eval
 
 Welche Probleme sehen Sie?
 
@@ -555,13 +556,13 @@ print( predict_move(belief, 1, .1, .7, .2))
 var plot = [
   {
     x: d3.range(0, 10),
-    y: outcome_0,
+    y: outcome[0],
     type: 'bar',
     name: 'Before prediction'
   },
   {
     x: d3.range(0, 10),
-    y: outcome_1,
+    y: outcome[1],
     type: 'bar',
     name: 'After prediction'
   },  
@@ -588,7 +589,7 @@ var layout = {
     tracetoggle: false
 };
 ```
-@eval2
+@eval
 
 Was aber geschieht, wenn wir von einem unsicheren priori Wissen ausgehen?
 
@@ -649,44 +650,27 @@ print(belief)
 kernel = [.1, 0.7, 0.2]
 prior = ndimage.convolve(np.roll(belief, len(kernel) / 2), kernel, mode='wrap')
 print(prior)
-#belief = prior   # Multiple movements
-#prior = ndimage.convolve(np.roll(belief, len(kernel) / 2), kernel, mode='wrap')
-#print(prior)
+belief = prior   # Multiple movements
+prior = ndimage.convolve(np.roll(belief, len(kernel) / 2), kernel, mode='wrap')
+print(prior)
 ```
 ```js -Visualization
-var lines = data.Result.split('\n');
-var line_0 = lines[0].slice(1, lines[0].length-1).replace( /\s\s+/g, ' ' );
-var line_1 = lines[1].slice(1, lines[1].length-1).replace( /\s\s+/g, ' ' );
-var line_2 = lines[2].slice(1, lines[2].length-1).replace( /\s\s+/g, ' ' );
-
-var outcome_0 = line_0.split(' ').map(function(item) {
-    return parseFloat(item);
-});
-
-var outcome_1 = line_1.split(' ').map(function(item) {
-    return parseFloat(item);
-});
-
-var outcome_2 = line_2.split(' ').map(function(item) {
-    return parseFloat(item);
-});
-
 var plot = [
   {
     x: d3.range(0, 10),
-    y: outcome_0,
+    y: outcome[0],
     type: 'bar',
     name: 'Before movement'
   },
   {
     x: d3.range(0, 10),
-    y: outcome_1,
+    y: outcome[1],
     type: 'bar',
     name: 'After movement'
   },  
   {
     x: d3.range(0, 10),
-    y: outcome_2,
+    y: outcome[2],
     type: 'bar',
     name: 'After second movement'
   },
@@ -712,12 +696,8 @@ var layout = {
     legend: { x: 1, xanchor: 'right', y: 1},
     tracetoggle: false
 };
-
-Plotly.newPlot('Diagram6', plot, layout);
-console.log("Aus Maus")
-```@Rextester._eval_(@uid, @Python,`@0`,`@1`,` `,`@input(1)`)
-
-<div id="Diagram6"></div>
+```
+@eval
 
 Mit jedem Prädiktionsschritt fächert die Breite der Unsicherheit entsprechend auf.
 
@@ -750,8 +730,6 @@ style="width: 100%; min-width: 380px; max-width: 720px; display: block; margin-l
 
 Das folgende Codefragment bildet zwei Iterationen für unser Beispiel ab. Im ersten Durchlauf ändert die Prediktionsphase den Intertialen Wissenstand nicht. Die Faltung des Kernels ändert die Aufenthaltwahrscheinlichkeit nicht. Eine  Präzisierung erfährt diese mit der ersten Messung durch den Schildersensor.
 
-# asdfasöl
-
 ```python                          BayesFilter.py
 import numpy as np
 from scipy import ndimage
@@ -778,7 +756,15 @@ posteriori = posteriori * belief / sum(posteriori * belief )
 print(posteriori)
 ```
 ```js -Visualization
-
+var lines = data.Result.replace(/\n/g, ' ')
+                       .replace(/\s{2,}/g, ' ')
+                       .match(/(?<=\[).+?(?=\])/g);
+var outcome = [];
+for (var i=0; i<lines.length; i++){
+  outcome[i] = lines[i].split(' ').map(function(item) {
+      return parseFloat(item);
+  });  
+}
 
 var plot1 = [
   {
