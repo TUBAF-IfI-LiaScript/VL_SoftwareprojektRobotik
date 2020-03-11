@@ -20,9 +20,8 @@ link: https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css
 
 @eval
 @Rextester._eval_(@uid, @Python, , , ,```
-    var lines = data.Result.replace(/\n/g, ' ')
-                           .replace(/\s{2,}/g, ' ')
-                           .match(/(?<=\[).+?(?=\])/g);
+    var lines = data.Result.replace(/\n/g, ' ').replace(/\s{2,}/g, ' ').match(/(?<=\[).+?(?=\])/g);
+
     var outcome = [];
     for (var i=0; i<lines.length; i++){
       outcome[i] = lines[i].split(' ').map(function(item) {
