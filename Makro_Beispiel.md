@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug
 email:    sebastian.zug@informatik.tu-freiberg.de
-version:  0.0.2
+version:  0.0.3
 language: de
 comment:  In dieser Vorlesungen werden die Schichten einer Roboterarchitektur adressiert.
 narrator: Deutsch Female
