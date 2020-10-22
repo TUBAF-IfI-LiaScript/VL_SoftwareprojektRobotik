@@ -102,11 +102,11 @@ int main()
 
 typedef struct student student;
 
-typedef struct student {
+struct student {
   char name[25];
   int matrikel;
   void (*print)(student *self, char *label);
-} student;
+};
 
 
 void printCertificate(student * self, char* label){
