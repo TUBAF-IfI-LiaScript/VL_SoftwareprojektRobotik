@@ -1,6 +1,6 @@
 <!--
 
-author:   Sebastian Zug & Georg Jäger
+author:   Sebastian Zug & Georg Jäger 
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
 version:  0.0.1
 language: de
