@@ -6,7 +6,8 @@ version:  0.0.1
 language: de
 narrator: Deutsch Female
 
-import: https://raw.githubusercontent.com/LiaTemplates/Rextester/master/README.md
+import:  https://raw.githubusercontent.com/liaScript/rextester_template/master/README.md
+         https://github.com/liascript/CodeRunner
 
 -->
 
@@ -93,7 +94,7 @@ int main()
   return 0;
 }
 ```
-@Rextester.CPP
+@LIA.eval(`["main.c"]`, `g++ -Wall main.c -o a.out`, `./a.out`)
 
 ```cpp                     structExample.c
 #include<stdio.h>
@@ -123,7 +124,7 @@ int main()
   return 0;
 }
 ```
-@Rextester.C
+@LIA.eval(`["main.c"]`, `gcc -Wall main.c -o a.out`, `./a.out`)
 
 > *"Encapsulation is pretty easy, polymorphism is doable - but inheritence is tricky"* [ Martin Beckett, www.stackoverflow.com]
 
@@ -349,7 +350,7 @@ Die Herausforderung der architekturspezfischen Implmementierungen lässt sich se
 eine Funktion spezifizieren mit der Sie einen Speicherblock reservieren. Welche Einschränkungen sehen Sie bei folgendem Ansatz:
 
 ```cpp                     memcpy.cpp
-void memcpy(void *s1, void const *s2, int  n);  
+void memcpy(void *s1, void const *s2, int  n);
 ```
 
 `size_t` umgeht dieses Problem, in dem ein plattformabhäniger Typendefinition erfolgt, die maximale Größe des adressierbaren Bereiches berücksichtigt.
@@ -433,20 +434,20 @@ comment: CplusplusStrings
               for  (std::string::iterator i = Alexander.begin(); i!= Alexander.end(); i++){
                 std::cout << *i;
               }
-            ```            
+            ```
           + Verschlankung mit auto
           ```cpp
             for  (auto i = Alexander.begin(); i!= Alexander.end(); i++){
               std::cout << *i;
             }
-          ```              
+          ```
 -->
 
 **Verwendung von Zeichenketten und Strings**
 
 Aus historischen Gründen kennt C++ zwei Möglichkeiten Zeichenketten darzustellen:
 
-+ `const char *` aus dem C-Kontext und  
++ `const char *` aus dem C-Kontext und
 + `std::string` die Darstellung der Standardbibliothek
 
 Für die Ausgabe einer nicht veränderlichen Zeichenkette kann man nach wie vor mit
@@ -556,24 +557,24 @@ style="width: 50%; max-width: 860px; display: block; margin-left: auto; margin-r
 -->
 ````ascii
 
-  +-------------------+       
-  | Helloworld.cpp    |        
-  +-------------------+        
+  +-------------------+
+  | Helloworld.cpp    |
+  +-------------------+
            |
-     C Präprozessor     
+     C Präprozessor
            |
      C++/C Compiler
            |
            v
-  +-------------------+        
-  | ObjectFile.o      |          
+  +-------------------+
+  | ObjectFile.o      |
   +-------------------+
            |
         Linker
            |
            v
-  +-------------------+        
-  | Ausführbare Datei |          
+  +-------------------+
+  | Ausführbare Datei |
   +-------------------+
 
 ````

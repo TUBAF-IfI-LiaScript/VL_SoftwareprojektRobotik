@@ -19,6 +19,37 @@ Freiberg auf der Basis von LiaScript. Eine interaktive Darstellung der Inhalte i
 
 zu finden.
 
+| Datum      | Titel                              | LiaScript Link                                                                               |
+|:---------- |:---------------------------------- | -------------------------------------------------------------------------------------------- |
+| 22.10.2019 | Einführung                         | [Link](https://github.com/SebastianZug/SoftwareprojektRobotik/blob/master/00_Einfuehrung.md) |
+| 29.10.2019 | Klassen und Strukturen             |                                                                                              |
+| 05.11.2019 | Speicher und Pointer               |                                                                                              |
+| 04.11.2019 | Templates                          |                                                                                              |
+| 12.11.2019 | Standardbibliothek                 |                                                                                              |
+| 19.11.2019 | Entwurfsmodelle                    |                                                                                              |
+| 26.11.2019 | Einführung ROS2                    |                                                                                              |
+| 03.12.2019 | ROS2 Entwicklungsprozess           |                                                                                              |
+| 10.12.2019 | ROS2 Entwicklungsprozess Beispiele |                                                                                              |
+| 17.12.2019 | ROS2 Kommunikation                 |                                                                                              |
+| 07.01.2020 | Sensoren                           |                                                                                              |
+| 14.01.2020 | Ausfall                            |                                                                                              |
+| 21.01.2020 | Sensordatenverarbeitung            |                                                                                              |
+| 28.01.2020 | Regelungstechnik                   |                                                                                              |
+| 04.02.2020 | Datenfusion                        |                                                                                              |
+| 11.02.2020 | Zusammenfassung                    |                                                                                              |
+
+## Organisatorisches (WS 2020/21)
+
+**Dozenten**
+
+| Name          | Email                                   |
+|:--------------|:----------------------------------------|
+| Sebastian Zug | sebastian.zug@informatik.tu-freiberg.de |
+| Georg Jäger   | georg.jaeger@informatik.tu-freiberg.de  |
+
+
+**Zielstellung der Veranstaltung**
+
 Die
 Veranstaltung richtet sich an Informatiker und Mathematiker und adressiert die folgenden Punkte:
 
@@ -31,44 +62,7 @@ Veranstaltung richtet sich an Informatiker und Mathematiker und adressiert die f
   + Sensordatenverarbeitung und Fusion
   + Aktoren und deren Regelung
 
-
-
-
-| Datum      | Titel                              | GitHub-Link                                                                                              | LiaScript-Link                                                                                                                                           |
-|:---------- |:---------------------------------- |:-------------------------------------------------------------------------------------------------------- |:-------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 14.10.2019 | Einführung                         | [Link](https://github.com/SebastianZug/SoftwareprojektRobotik/blob/master/00_Einfuehrung.md)             | [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/00_Einfuehrung.md#1)             |
-| 21.10.2019 | Klassen und Strukturen             | [Link](https://github.com/SebastianZug/SoftwareprojektRobotik/blob/master/01_OOPinC++.md)                | [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/01_OOPinC++.md#1)                |
-| 28.10.2019 | Speicher und Pointer               | [Link](https://github.com/SebastianZug/SoftwareprojektRobotik/blob/master/02_SpeicherUndPointer.md)      | [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/02_SpeicherUndPointer.md#1)      |
-| 04.11.2019 | Templates                          | [Link](https://github.com/SebastianZug/SoftwareprojektRobotik/blob/master/03_Templates.md)               | [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/03_Templates.md#1)               |
-| 11.11.2019 | Standardbibliothek                 | [Link](https://github.com/SebastianZug/SoftwareprojektRobotik/blob/master/04_STL.md)                     | [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/04_STL.md#1)                     |
-| 18.11.2019 | Entwurfsmodelle                    | [Link](https://github.com/SebastianZug/SoftwareprojektRobotik/blob/master/05_DesginPattern.md)           | [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/05_DesginPattern.md#1)           |
-| 25.11.2019 | Einführung ROS2                    | [Link](https://github.com/SebastianZug/SoftwareprojektRobotik/blob/master/06_EinfuehrungROS.md)          | [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/06_EinfuehrungROS.md#1)          |
-| 02.12.2019 | ROS2 Entwicklungsprozess           | [Link](https://github.com/SebastianZug/SoftwareprojektRobotik/blob/master/07_ROS_Pakete.md)              | [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/07_ROS_Pakete.md#1)              |
-| 09.12.2019 | ROS2 Entwicklungsprozess Beispiele |                                                                                                          |                                                                                                                                                          |
-| 16.12.2019 | ROS2 Kommunikation                 | [Link](https://github.com/SebastianZug/SoftwareprojektRobotik/blob/master/08_ROS2_Kommunikation.md)      | [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/08_ROS2_Kommunikation.md#1)      |
-| 06.01.2020 | Sensoren                           | [Link](https://github.com/SebastianZug/SoftwareprojektRobotik/blob/master/09_Sensoren.md)                | [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/09_Sensoren.md#1)                |
-| 13.01.2020 | Ausfall                            |                                                                                                          |                                                                                                                                                          |
-| 20.01.2020 | Sensordatenverarbeitung            | [Link](https://github.com/SebastianZug/SoftwareprojektRobotik/blob/master/10_Sensordatenverarbeitung.md) | [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/10_Sensordatenverarbeitung.md#1) |
-| 20.01.2020 | Regelungstechnik            | [Link](https://github.com/SebastianZug/SoftwareprojektRobotik/blob/master/11_Regelungstechnik.md) | [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/11_Regelungstechnik.md#1) |
-| 3.02.2020  |  Datenfusion                                  |                                                                                                          |                                                                                                                                                          |
-
-## Organisatorisches (WS 2019/20)
-
-**Dozenten**
-
-| Name          | Email                                   |
-|:--------------|:----------------------------------------|
-| Sebastian Zug | sebastian.zug@informatik.tu-freiberg.de |
-| Georg Jäger   | georg.jaeger@informatik.tu-freiberg.de  |
-
-
-**Zielstellung der Veranstaltung**
-
-+ Anwendungsbereites Programmierverständnis unter C++
-+ Basiskonzepte von ROS und den entsprechenden Entwicklungswerkzeugen
-+ Verständnis für generelle Architekurkonzepte und Lösungsansätze in verschiedenen Bereichen der Robotik
-
-... als Vorbereitung auf die praktischen Aufgaben im Sommersemester.
+> Vorbereitung auf die praktischen Aufgaben im Sommersemester.
 
 **Prüfungsleistungen**
 
@@ -80,10 +74,7 @@ zunächst mit den Grundlagen vertraut gemacht, um :
 
 **Zeitaufwand und Engagement**
 
-Der Zeitaufwand beträgt 180h und setzt sich zusammen aus 60h Präsenzzeit und
-120h Selbststudium. Letzteres umfasst die Vor- und Nachbereitung der
-Lehrveranstaltungen, die eigenständige Lösung von Übungsaufgaben sowie die
-Prüfungsvorbereitung.
+Die Veranstaltung wird mit 9 CP in Ihrem Studienverlauf abgebildet. Entsprechend beträgt der Zeitaufwand insgesamt 270 Stunden und setzt sich aus 105h Präsenzzeit und 165h Selbststudium zusammen.
 
 **Die eigene Beschäftigung mit der C++ Programmierung und den Konzepten von ROS ist für das erfolgreiche Bestehen der Veranstaltung unabdingbar!**
 
@@ -91,18 +82,16 @@ Prüfungsvorbereitung.
 
 Übungstermine
 
-| Nr. | Datum                             |
-|:--- |:--------------------------------- |
-|     | ~23./24. Oktober~  Labor gesperrt |
-| 1.  | 6./7. November                    |
-|     | ~20. November~  Feiertag          |
-| 2.  | 21. November                      |
-| 3.  | 4./5. Dezember                    |
-| 4.  | 18./19. Dezember                  |
-| 5.  | 15./16. Januar                    |
-| 6.  | 29./30. Januar                    |
+| Nr. | Datum         | Inhalt                      |
+|:--- | ------------- |:--------------------------- |
+| 1.  | nächste Woche | Einführung                  |
+| 2.  |               | Diskussion 1. Aufgabenblatt |
+| 3.  |               |                             |
+| 4.  |               |                             |
+| 5.  |               |                             |
+| 6.  |               |                             |
 
-Tragt euch bitte in den Kurs [Softwaretechnologie-Projekt (Prototyp)](https://bildungsportal.sachsen.de/opal/auth/RepositoryEntry/18593513489/CourseNode/98504809493283) im e-learning System OPAL ein.
+Tragen Sie sich bitte in den Kurs [Softwaretechnologie-Projekt (Prototyp)](https://bildungsportal.sachsen.de/opal/auth/RepositoryEntry/18593513489/CourseNode/98504809493283) im e-learning System OPAL ein.
 
 **Jedes Aufgabenblatt beinhaltet Vorbereitungsaufgaben die eigenständig bearbeitet und in der Übung lediglich verglichen werden!**
 
@@ -131,16 +120,17 @@ Tragt euch bitte in den Kurs [Softwaretechnologie-Projekt (Prototyp)](https://bi
 
 1. Legen Sie sich ein Repository an, mit dem Sie arbeiten!
 2. Entscheiden Sie sich für Linux als Betriebssystem auf Ihrem Rechner :-), in diesem Fall sind alle Tools die Sie im Laufe des Semesters benötigen, sofort greifbar.
-3. Starten Sie mit kleinen Beispielen, um Ihre Algorithmischen Fähigkeiten zu schulen und sich zum anderen mit der Semantik von C++ vertraut zu machen.
+3. Starten Sie mit kleinen Beispielen, um Ihre algorithmischen Fähigkeiten zu schulen und sich zum anderen mit der Semantik von C++ vertraut zu machen.
 
 Wenn Sie Punkt 2. nicht uneingeschränkt folgen wollen, hätten Sie zumindest für die Einführung zu C++ unter Windows folgende Möglichkeiten:
 
 | Toolchain       | Link                                                                                  | Bemerkung |
-|:----------------|:--------------------------------------------------------------------------------------|:----------|
+|:--------------- |:------------------------------------------------------------------------------------- |:--------- |
 | Visual Studio   |                                                                                       |           |
 | MinGW           | [MinGW Webseite](http://www.mingw.org/)                                               |           |
 | Cygwin          | [Cygwin Webseite](https://cygwin.com/)                                                |           |
-| Linux-Subsystem | [Microsoft Dokumentation](https://docs.microsoft.com/de-de/windows/wsl/install-win10) |           |
+| Linux-Subsystem | [Microsoft Dokumentation](https://docs.microsoft.com/de-de/windows/wsl/install-win10) | zu empfehlen          |
+|                 | [WSL Vergleich](https://docs.microsoft.com/de-de/windows/wsl/install-win10)           |           |
 
 Unter cygwin muss zunächst der Compiler `gcc-g++` installiert werden. Für Rekonfigurationen und neues Pakete führen Sie einfach den Installer nochmals aus. Zudem sollten Sie in Ihrem Home einen symbolischen Link anlegen, der auf Ihren Arbeitsordner verweist.
 
@@ -148,90 +138,12 @@ Unter cygwin muss zunächst der Compiler `gcc-g++` installiert werden. Für Reko
 $ ln -s /cygdrive/c/Users/Sebas/OneDrive/Desktop/Softwareprojekt/ mySoftware
 ```
 
-![Atom IDE Screenshot](./img/00_Einfuehrung/CygwinConfiguration.png)<!-- width="100%" -->
+![Atom IDE Screenshot](./image/00_Einfuehrung/CygwinConfiguration.png)<!-- width="100%" -->
 
-![Atom IDE Screenshot](./img/00_Einfuehrung/ScreenshotCygwinConfiguration.png)<!-- width="100%" -->
+![Atom IDE Screenshot](./image/00_Einfuehrung/ScreenshotCygwinConfiguration.png)<!-- width="100%" -->
 
 
 Hinsichtlich Ihres Lieblingseditors haben Sie sicher schon eine Wahl getroffen :-)
-
-## Ein Wort zu LiaScript
-
-Für den ersten Punkt wird der Quellcode direkt in das LiaScript-Dokument eingebettet und kann damit im Browser bearbeitet werden. Dabei ist ein "Versionssystem light" verfügbar, das Änderungen lokal im Browser abspeichert. Basis für die Ausführungsumgebung ist die API von Rextester https://rextester.com/. Vielen Dank für diesen Service!
-
-Ausführbarer C++ Code sieht wie folgt aus, der Titel kann weggelassen werden.
-
-```cpp                     HelloWorld.cpp
-#include <iostream>
-
-int main()
-{
-    using namespace std;
-    cout << "Hello, World!";
-    return 0;
-}
-```
-@Rextester.CPP
-
-Der Markdown-Quellcodeblock wird dafür um den Makroaufruf `@Rextester.CPP` am
-Ende ergänzt. Dabei können unterschiedliche Compiler (gcc, clang, Microsoft C++ Compiler) und Parametersets genutzt werden.
-
-```
-@Rextester.CPP
-@Rextester.CPP_clang
-@Rextester.CPP_vc
-```
-
-Im Weiteren ist es möglich "Kommandozeilenparameter" an die Rextester-Ausführungsumgebung
-zu übergeben und diese dann auch im Browser zu variieren. In diesem Fall werden
-die Parameter in einem separaten Codeblock angefügt, gefolgt von der Anweisung
-`@Rextester.CPP(true,@input(1))`
-
-```cpp                     HelloWorld.cpp
-#include <iostream>
-
-int main()
-{
-    using namespace std;
-    int input{};
-    int output{};
-
-    cout << "Bitte geben Sie eine Zahl ein!" << endl;
-    cin >> input;
-    output = input * 2;
-    cout << "Das Doppelte dieser Zahl ist " << output << "." << endl;
-    return 0;
-}
-```
-```
-5
-```
-@Rextester.CPP(false,`@input(1)`)
-
-Der boolsche Parameter kann genutzt werden um eine knappe Statistik der Kompilierung
-und der Ausführungsparameter abzurufen.
-
-Darüber hinaus können auch komplette Parameterset an den Compiler übergeben werden, um zum Beispiel die verschiedenen C++ Versionen zu evaluieren. Wenn Sie zum Beispiel in folgendem Beispiel, dass mit dem Makroaufruf
-
-```
-@Rextester.eval(@CPP, false, ,`-Wall -std=c++98 -O2 -o a.out source_file.cpp`)
-```
-
-kompiliert wird, versuchen `auto` und die uniforme Initialisierung zu nutzen (jeweils ab C++11), generiert der Compiler einen Fehler.
-
-```cpp                     HelloWorld.cpp
-#include <iostream>
-
-int main()
-{
-    using namespace std;
-    int output = 5;
-    //auto output {5};
-    cout << output;
-    return 0;
-}
-```
-@Rextester.eval(@CPP, false, ,`-Wall -std=c++98 -O2 -o a.out source_file.cpp`)
 
 ## Wie können Sie zum Gelingen der Veranstaltung beitragen?
 
@@ -241,25 +153,53 @@ int main()
   zu finden
 * Machen Sie Verbesserungsvorschläge für die Vorlesungsfolien!
 
-![Atom IDE Screenshot](./img/00_Einfuehrung/LiaScriptAtomScreenShot.png)<!-- width="100%" -->
+![Atom IDE Screenshot](./image/00_Einfuehrung/LiaScriptAtomScreenShot.png)<!-- width="100%" -->
 
-## Fragebogen zum Lernfortschritt
+## Wie sieht es um Ihre Teamkompetenz aus?
 
-Die Arbeitsgruppe ist in verschiedenen Projekten rund um die Digitalisierung des Lernens an Hochschulen involviert, die durch das Bundesministerium für Bildung und Forschung getragen werden, beteiligt [Industrial-eLab](http://www.elab.ovgu.de/). Entsprechend wollen wir gemeinsam mit Partnern der Hochschule Anhalt verstehen, wie Sie in Ihrem Lernprozess vorgehen und wie wir Sie ggf. unterstützen können.
+      {{0-1}}
+********************************************************************************
+Sie erinnern sich noch an das Sommersemester?
 
-Beispiel aus dem Projekt:
+![Atom IDE Screenshot](./image/00_Einfuehrung/Klausurergebnisse.png)<!-- width="70%" -->
 
-![Atom IDE Screenshot](./img/00_Einfuehrung/LearningAnalyticsExample.png)<!-- width="100%" -->
-*Gegenüberstellung des Programmierverhaltens eines erfahrenen und eines weniger erfahrenen Studenten*
-[^1]: [Quelle](http://www.elab.ovgu.de/elab_media/_users/hawlitsc/Paper_FDIBA_eLab/FDIBA_eLab-p-90.pdf)
+********************************************************************************
 
-**Die Erkenntnisse aus dieser Untersuchung bleiben anonym und beeinflussen in keinster Weise Ihr Ergebnis!**
+     {{1-2}}
+********************************************************************************
+
+Woher kommt das?
+
+![Atom IDE Screenshot](./image/00_Einfuehrung/Commits.png)<!-- width="100%" -->
+
+********************************************************************************
+
+
+     {{2-3}}
+********************************************************************************
+
+Woher kommt das?
+
+![Atom IDE Screenshot](./image/00_Einfuehrung/TeamModeloverview.png)<!-- width="50%" -->
+
+![Atom IDE Screenshot](./image/00_Einfuehrung/TeamModel.png)<!-- width="100%" -->
+
+********************************************************************************
 
 ## Sie wollen gleich starten?
 
 Das RoboCup-Team der TU Bergakademie sucht noch Mitstreiter. Auch wenn Sie noch keine Erfahrung in der Programmierung haben sind Sie gern willkommen.
 
-![Atom IDE Screenshot](./img/00_Einfuehrung/RoboterNuernberg.jpg)<!-- width="100%" -->
+![Team](./image/00_Einfuehrung/TUFbots.png)<!-- width="100%" -->
 
-## Autoren
-Sebastian Zug, Georg Jäger, Hernán Valdés
+Im vergangen Jahr zielten die praktischen Projekte der Veranstaltung auf
+
++ die Realsierung der Objektlokalisation und -identifikation
++ die Umsetzung der Arm-Kinematik
++ die Entwicklung eines neuen Greifmechanismus
+
+![Team](./image/00_Einfuehrung/TUFBotsPneumatischerGreifer.png)<!-- width="50%" -->
+
+## Los gehts ...
+
+... mit dem Thema
