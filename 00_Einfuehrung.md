@@ -42,7 +42,7 @@ beschäftigt.
 
 ## C++ vs ...
 
-![Atom IDE Screenshot](./img/00_Einfuehrung/ObjectOrientedProgrammingLanguages.png)<!-- width="100%" -->
+![Atom IDE Screenshot](./image/00_Einfuehrung/ObjectOrientedProgrammingLanguages.png)<!-- width="100%" -->
 *Darstellung der Entwicklung von objektorientierten/nicht-objektorientieren Programmiersprachen* [^1]
 
 [^1]: Nepomuk Frädrich, Historie der objektorientierten Programmiersprachen, Wikimedia https://commons.wikimedia.org/wiki/File:History_of_object-oriented_programming_languages.svg
@@ -110,7 +110,6 @@ typedef struct student {
 
 
 void printCertificate(student * self, char* label){
-
   printf("%s passed %s", self->name, label);
 }
 
@@ -128,13 +127,15 @@ int main()
 
 > *"Encapsulation is pretty easy, polymorphism is doable - but inheritence is tricky"* [ Martin Beckett, www.stackoverflow.com]
 
+*******************************************************************************
+
 ### ... C#
 
 Im Vergleich zwischen C++ und C# ergeben sich folgende Unterschiede / Gemeinsamkeiten
 
 Zur Erinnerung sei noch mal auf das Ausführungskonzept von C# verwiesen.
 
-![Atom IDE Screenshot](./img/00_Einfuehrung/CLRexectutionConcept.png)<!-- width="100%" -->
+![Atom IDE Screenshot](./image/00_Einfuehrung/CLRexectutionConcept.png)<!-- width="100%" -->
 *.NET CLR Execution Model* [^1]
 
 [^1]:  Youtuber "MyPassionFor.NET", .NET CLR Execution Model, https://www.youtube.com/watch?v=gCHoBJf4htg
@@ -221,7 +222,7 @@ int main()
   return 0;
 }
 ```
-@Rextester.CPP
+@LIA.eval(`["main.c"]`, `g++ -Wall main.c -o a.out`, `./a.out`)
 
 
 #### Im Detail
@@ -307,7 +308,6 @@ int main () {
   std::cout << "Minimum value for char: " << CHAR_MIN << '\n';
   std::cout << "Maximum value for char: " << CHAR_MAX << '\n';
   std::cout << "----------------------------------------------------\n";
-  std::cout << "Bits for int16_t: " << INT16 << '\n';
   std::cout << "Minimum value for int16_t: " << INT16_MIN << '\n';
   std::cout << "Maximum value for int16_t: " << INT16_MAX << '\n';
   std::cout << "----------------------------------------------------\n";
@@ -320,7 +320,7 @@ int main () {
   return 0;
 }
 ```
-@Rextester.CPP
+@LIA.eval(`["main.c"]`, `g++ -Wall main.c -o a.out `, `./a.out`)
 
 Eine spezifische Definition erfolgt anhand der Typen:
 
@@ -342,7 +342,7 @@ int main()
   std::cout<<typeid(int_fast32_t).name() << " - "<<  sizeof(int_fast32_t) << " Byte \n";
 }
 ```
-@Rextester.CPP
+@LIA.eval(`["main.c"]`, `g++ -Wall main.c -o a.out `, `./a.out`)
 
 Dazu kommen entsprechende Pointer und max/min Makros.
 
@@ -388,33 +388,49 @@ int numbers[] = { 1, 2, 4, 5, 9 };
 | `X x3{1,2}; X x4{1,2};` | Parameterisierter Konstruktor               |
 | `X x5{x3}; X x6(x3);`   | Copy-Konstruktor                            |
 
-Die `auto`-Schlüsselwort weist den Compiler an den Initialisierungsausdruck einer deklarierten Variable oder einen lambdaausdrucksparameter zu verwenden, um den Typ herzuleiten. Damit ist eine explizite Angabe des Typs einer Variablen nicht nötig. Damit steigert sich die Stabilität, Benutzerfreundlichkeit und Effizienz des Codes.
+Die `auto`-Schlüsselwort weist den Compiler an den Initialisierungsausdruck einer deklarierten Variable oder einen Lambdaausdrucksparameter zu verwenden, um den Typ herzuleiten. Damit ist eine explizite Angabe des Typs einer Variablen nicht nötig. Damit steigert sich die Stabilität, Benutzerfreundlichkeit und Effizienz des Codes.
 
 ```cpp                     auto.cpp
 #include <iostream>
 #include <typeinfo>
 #include <cxxabi.h>
+#include <iostream>
+#include <string>
+#include <memory>
+#include <cstdlib>
+
+std::string demangle(const char* mangled)
+{
+      int status;
+      std::unique_ptr<char[], void (*)(void*)> result(
+        abi::__cxa_demangle(mangled, 0, 0, &status), std::free);
+      return result.get() ? std::string(result.get()) : "error occurred";
+}
+
+template<class T>
+void foo(T t) { std::cout << demangle(typeid(t).name()) << std::endl; }
 
 int main()
 {
   auto var1 = 4;
   auto var2 {3.14159};
   auto var3 = "Hallo";
-  auto var4 = "Deutsche Umlaute ÜöÄ";
-  auto var5 = new double[10];
+  auto var4 = new double[10];
 
   // Datentyp der Variablen ausgeben
-  std::cout << typeid(var1).name() << std::endl
-      << typeid(var2).name() << std::endl
-      << typeid(var3).name() << std::endl
-      << typeid(var4).name() << std::endl
-      << typeid(var5).name() << std::endl;
+  std::cout << typeid(var3).name() << std::endl;
+
+  // ein bisschen hübscher .... für Linux Systeme
+  foo(var1);
+  foo(var2);
+  foo(var3);
+  foo(var4);
 
   // aufräumen nicht vergessen
-  delete[] var5;
+  delete[] var4;
 }
 ```
-@Rextester.CPP
+@LIA.eval(`["main.c"]`, `g++ -Wall main.c -o a.out `, `./a.out`)
 
 Wir werden `auto` im folgenden auch im Zusammenhang mit Funktionsrückgaben und der effizienten Implementierung von Schleifen einsetzen.
 
@@ -465,14 +481,9 @@ int main()
     std::cout << "Sechstes Zeichen:" << *(text+5) << "\n";
     std::cout << "Letztes Zeichen: " << text[sizeof(text)-2] << "\n";
     std::cout << text << "\n";
-
-    // Hier wird noch eine Lösung gesucht :-)
-    char16_t * Umlaut = (char16_t*)(text+5);
-    printf("%#x", Umlaut);
-    return 0;
 }
 ```
-@Rextester.CPP
+@LIA.eval(`["main.c"]`, `g++ -Wall main.c -o a.out `, `./a.out`)
 
 Der Hauptunterschied in der Anwendung der `std::string`-Klasse besteht darin, dass Sie den String nicht über einen char-Zeiger manipulieren können. Ein Pointer auf ein Objekt der Klasse `string` zeigt ja nicht auf den ersten Buchstaben, sondern auf das Objekt, das die Zeichen verwaltet.  Darüber steht eine Zahl von
 Elementfunktionen wie `length()`, `ìnsert(n,s)`, `find(s)` zur Verfügung.
@@ -489,7 +500,7 @@ int main()
     return 0;
 }
 ```
-@Rextester.CPP
+@LIA.eval(`["main.c"]`, `g++ -Wall main.c -o a.out `, `./a.out`)
 
 Wie beispielhaft gezeigt können `char` Arrays und `string` Objekte miteinander
 in  einfachen Operatoren verglichen werden. Für das
@@ -511,7 +522,7 @@ struct Student{
 };
 
 std::ostream &operator << (std::ostream &out, const  Student &m) {
-    out << m.Name << m.Matrikel;
+    out << m.Name << " " << m.Matrikel;
     return out;
 }
 
@@ -532,7 +543,7 @@ int main()
     return 0;
 }
 ```
-@Rextester.CPP
+@LIA.eval(`["main.c"]`, `g++ -Wall main.c -o a.out `, `./a.out`)
 
 > "While cout is the proper C++ way, I believe that some people and companies (including Google) continue to use printf in C++ code because it is much easier to do formatted output with printf than with cout. " [StackOverflow-Beitrag](https://stackoverflow.com/questions/4781819/printf-vs-stdcout)
 
@@ -550,7 +561,7 @@ int main()
     return 1;
 }
 ```
-@Rextester.CPP
+@LIA.eval(`["main.c"]`, `g++ -Wall main.c -o a.out `, `./a.out`)
 
 <!--
 style="width: 50%; max-width: 860px; display: block; margin-left: auto; margin-right: auto;"
@@ -619,9 +630,9 @@ int main()
     return 0;
 }
 ```
-@Rextester.CPP
+@LIA.eval(`["main.c"]`, `g++ -Wall main.c -o a.out `, `./a.out`)
 
 ## Aufgabe bis zur nächsten Woche
-+ Installieren Sie eine GCC Umgebung auf dem Rechner (Linux oder cygwin)
++ Installieren Sie eine GCC Umgebung auf dem Rechner (Linux, Windows mit wsl2 oder cygwin)
 + Erweitern Sie die Untersuchung auf ein Projekt mit mehrere Dateien. Wie müssen Sie vorgehen um hier eine Kompilierung zu realiseren? Wie kann sie Dabei ein Makefile unterstützen?
 + Arbeiten Sie sich in die Grundlagen der C++ Programmierung (Ausgaben, Eingaben, Programmfluss, Datentypen) ein.
