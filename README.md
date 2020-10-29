@@ -10,7 +10,7 @@ import: https://raw.githubusercontent.com/LiaTemplates/Rextester/master/README.m
 
 -->
 
-# Vorlesung Softwareprojekt
+# Vorlesung Robotik Projekt
 
 Der vorliegende Kurs realisiert die Vorlesung "Softwareprojekt" an der TU Bergakademie
 Freiberg auf der Basis von LiaScript. Eine interaktive Darstellung der Inhalte ist unter
