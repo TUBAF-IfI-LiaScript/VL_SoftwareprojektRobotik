@@ -86,9 +86,83 @@ Variablen abgelegt.
 
 > Achtung: Im Beispiel wurde keine Optimierung verwendet. Je nach Konfiguration ergeben sich hier unterschiedliche Resultate!
 
+<lia-keep>
+<table class="lia-inline lia-table">
+    <thead class="lia-inline lia-table-head">
+        <tr>
+          <th>Code</th>
+          <th>text</th>
+          <th>data</th>
+          <th>bss</th>
+          <th>dec</th>
+          <th>Bemerkung</th>
+        </tr>
+    </thead>
+        <tr class="lia-inline lia-table-row">
+          <td>
+          <code><pre 	style = "Lucida Console; font-size: 14px;font-style: normal; "> #include &lt;iostream&gt;
 
+ int main(void)
+ {
+     return EXIT_SUCCESS;
+ } </pre></code></td>
+          <td>1918</td>
+          <td>640</td>
+          <td style = "color: red;">8/4</td>
+          <td>2566</td>
+          <td>bss hängt von der Compiler-Konfiguation ab. Mit `-m32` entsteht eine lediglich 4Byte große, nicht initialisierte Variable </td>
+        </tr>
+        <tr class="lia-inline lia-table-row">
+          <td>
+          <code><pre 	style = "Lucida Console; font-size: 14px;font-style: normal; "> #include &lt;iostream&gt;
 
+ int global;
 
+ int main(void)
+ {
+    static int local;
+    return EXIT_SUCCESS;
+ } </pre></code></td>
+          <td>1918</td>
+          <td>640</td>
+          <td style = "color: red;">16</td>
+          <td>2566</td>
+          <td> Rückgabewert, global, local = 3 x 4 Byte </td>
+        </tr>
+        <tr class="lia-inline lia-table-row">
+          <td>
+          <code><pre 	style = "Lucida Console; font-size: 14px;font-style: normal; "> #include &lt;iostream&gt;
+
+ int global = 5;
+
+ int main(void)
+ {
+    static int local = 3;
+    return EXIT_SUCCESS;
+ } </pre></code></td>
+          <td>1918</td>
+          <td style = "color: red;">648</td>
+          <td >8</td>
+          <td>2574</td>
+          <td> Initialisierte globale/statische Variablen </td>
+        </tr>
+        <tr class="lia-inline lia-table-row">
+          <td>
+          <code><pre 	style = "Lucida Console; font-size: 14px;font-style: normal; "> #include &lt;iostream&gt;
+
+ int main(void)
+ {
+    int local = 3;
+    return EXIT_SUCCESS;
+ } </pre></code></td>
+          <td>1918</td>
+          <td >640</td>
+          <td >8</td>
+          <td>2566</td>
+          <td> Keine globalen/statischen Variablen </td>
+        </tr>
+</table>
+</lia-keep>
 
 ### Stack vs Heap
 <!--
