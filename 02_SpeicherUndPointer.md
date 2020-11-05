@@ -12,7 +12,7 @@ import:   https://github.com/liascript/CodeRunner
 
 # Speicher und Pointer
 
-Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/02_SpeicherUndPointer.md#1)
+Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/VL_SoftwareprojektRobotik/master/02_SpeicherUndPointer.md#1)
 
 **Zielstellung der heutigen Veranstaltung**
 
