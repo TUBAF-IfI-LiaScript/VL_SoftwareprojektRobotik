@@ -10,7 +10,7 @@ import:   https://github.com/liascript/CodeRunner
 
 -->
 
-# Vorlesung II - Objektorientierte Programmierung in C++
+# Objektorientierte Programmierung in C++
 
 Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/01_OOPinC++.md#1)
 
