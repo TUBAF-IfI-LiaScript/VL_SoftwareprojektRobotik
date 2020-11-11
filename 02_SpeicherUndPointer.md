@@ -168,7 +168,7 @@ Variablen abgelegt.
 <!--
   comment: StackvsHeap.cpp
   ..............................................................................
-  1. Illustriere die Bedeutung ind der Unterscheidung von Heap und Stack! Verweis auf die Warnings
+  1. Illustriere die Bedeutung und die Unterscheidung von Heap und Stack! Verweis auf die Warnings
   ```cpp
   int* CreateArray(){
      int array[] = {1,2,3,4,5};
@@ -455,6 +455,7 @@ int main(void)
     //double* array = new double [1024*1024];
     std::cout << array[1000] << std::endl;
     std::cout << sizeof(double) << std::endl;
+    // delete[] array;
     return EXIT_SUCCESS;
 }
 ```
