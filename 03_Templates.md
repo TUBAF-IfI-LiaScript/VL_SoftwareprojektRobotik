@@ -638,7 +638,7 @@ class Data{
     double value;
   public:
     Data(double data): value(data) {}
-    double get(){
+    double get() const{
       return value;
     }
 };
@@ -653,7 +653,7 @@ class TimeStampedData: public T{
     }
     void print(std::ostream& os) const{
 			std::time_t ttp = std::chrono::system_clock::to_time_t(time_point);
-    	os << "time: " << std::ctime(&ttp);// << " Value " << this->get();
+    	os << "time: " << std::ctime(&ttp) << "value: " << this->get();
     }
 };
 
@@ -714,7 +714,6 @@ class Foo
 
 Allerdings gibt es Unterschiede bei der Verwendung in Bezug auf Template-Templates (bis C++17) und bei abhängigen Typen.
 
->Beispiel !
 
 *******************************************************************************
 
