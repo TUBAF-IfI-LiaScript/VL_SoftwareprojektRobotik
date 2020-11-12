@@ -12,7 +12,7 @@ import:   https://github.com/liascript/CodeRunner
 
 # Speicher und Pointer
 
-Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/02_SpeicherUndPointer.md#1)
+Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/VL_SoftwareprojektRobotik/master/02_SpeicherUndPointer.md#1)
 
 **Zielstellung der heutigen Veranstaltung**
 
@@ -169,7 +169,7 @@ Variablen abgelegt.
 <!--
   comment: StackvsHeap.cpp
   ..............................................................................
-  1. Illustriere die Bedeutung ind der Unterscheidung von Heap und Stack! Verweis auf die Warnings
+  1. Illustriere die Bedeutung und die Unterscheidung von Heap und Stack! Verweis auf die Warnings
   ```cpp
   int* CreateArray(){
      int array[] = {1,2,3,4,5};
@@ -456,6 +456,7 @@ int main(void)
     //double* array = new double [1024*1024];
     std::cout << array[1000] << std::endl;
     std::cout << sizeof(double) << std::endl;
+    // delete[] array;
     return EXIT_SUCCESS;
 }
 ```
