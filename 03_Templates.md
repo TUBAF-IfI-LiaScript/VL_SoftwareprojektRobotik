@@ -19,7 +19,7 @@ Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.gi
 
 + Einführung in die Konzepte der generischen Programmierung unter C++
 + Beschreibung der aktuellen Entwicklungen in C++17 und C++20
-+ Abgrenzung zu den unter C# bekannten Ansätzen (*Templates* vs. *Generics*)
++ Abgrenzung zu den unter C# bekannten Ansätzen (ł*Templates* vs. *Generics*)
 
 --------------------------------------------------------------------------------
 ## Kurze Erinnerung
@@ -50,10 +50,10 @@ Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.gi
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -->
 
-Innerhalb des .NET Frameworks definieren Generics Typparameter, wodurch Sie Klassen und Methoden entwerfen können, die die Angabe eines oder mehrerer Typen verzögern können, bis die Klasse oder Methode vom Clientcode deklariert und instanziiert wird. Ein Platzhalter, der, generischen Typparameter der häufig mit `T` bezeichnet wird, definiert die Art einer Variablen, die von anderem Clientcode verwendet werden kann, ohne dass die Kosten und Risiken von Umwandlungen zur Laufzeit oder Boxingvorgängen anfallen.
+Innerhalb des .NET Frameworks definieren Generics Typparameter, wodurch Sie Klassen und Methoden entwerfen können, die die Angabe eines oder mehrerer Typen verzögern können, bis die Klasse oder Methode vom Clientcode deklariert und instantiiert wird. Ein Platzhalter, der, generischen Typparameter der häufig mit `T` bezeichnet wird, definiert die Art einer Variablen, die von anderem Clientcode verwendet werden kann, ohne dass die Kosten und Risiken von Umwandlungen zur Laufzeit oder Boxingvorgängen anfallen.
 
 Das folgende Beispiel zeigt eine Anwendung in Kombination mit einer Einschränkung
-des Types, die Sicherstellt, dass in jedem Fall die angeforderte Vergleichsoperation besteht.
+des Typs, die Sicherstellt, dass in jedem Fall die angeforderte Vergleichsoperation besteht.
 
 ```csharp      GenericsIComparable.cs
 using System;
@@ -143,8 +143,8 @@ Dabei unterschieden wir zwei grundsätzliche Anwendungsfälle:
 
 **Motivation**
 
-Welche Möglichkeiten haben wir unter C++ schon kennengelernt, die einenn variablen
-Umgange von identischen Funktionsaufrufen mit unterschiedlichen Typen realsieren?
+Welche Möglichkeiten haben wir unter C++ schon kennengelernt, die einen variablen
+Umgang von identischen Funktionsaufrufen mit unterschiedlichen Typen realisieren?
 Dabei unterstützen uns Cast-Operatoren und das Überladen von Funktionen.
 
 ```cpp                     FunctionOverloading.cpp
@@ -195,7 +195,7 @@ Was macht der Compiler daraus? Lassen Sie uns prüfen, welche Symbole erzeugt wu
 
 > Das Linux-Tool `nm` wird verwendet, um Binärdateien (einschließlich Bibliotheken, kompilierter Objektmodule, gemeinsam genutzter Objektdateien und eigenständiger ausführbarer Dateien) zu untersuchen und den Inhalt dieser Dateien oder die in ihnen gespeicherten Metainformationen, insbesondere die Symboltabelle, anzuzeigen.
 
-> Um die gleichnamigen Funktionen unterscheiden zu können, kodieren C++ sie in einen Low-Level-Assemblernamen, der jede unterschiedliche Version eindeutig identifiziert. Dieser Vorgang wird als _mangling_ bezeichnet. Das Programm c++filt führt die umgekehrte Abbildung durch: es dekodiert (demanguliert) Low-Level-Namen in User-Level-Namen, so dass sie gelesen werden können.
+> Um die gleichnamigen Funktionen unterscheiden zu können, kodieren C++ sie in einen Low-Level-Assemblernamen, der jede unterschiedliche Version eindeutig identifiziert. Dieser Vorgang wird als _mangling_ bezeichnet. Das Programm c++filt führt die umgekehrte Abbildung durch: es dekodiert (_demangled_) Low-Level-Namen in User-Level-Namen, so dass sie gelesen werden können.
 
 Offenbar wurde aus unserem Funktionstemplate entsprechend der Referenzierung 3 unterschiedliche Varianten generiert. Mit `c++filt` kann der Klarname rekonstruiert werden.
 
@@ -261,7 +261,7 @@ Zwei Fragen bleiben noch offen:
 | Frage                                                                            | Antwort                                                                                                                                                                                                                                                                                                                                                                              |
 |:---------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Muss der Templateparameter zwingend angegeben werden?                            | Nein, wenn Sie im nachfolgenden Codebeispiel die Funktion `print(int value)` entfernen, funktioniert die Codegenerierung noch immer. Der Compiler erkennt den Typen anhand des übergebenen Wertes.                                                                                                                                                                                   |
-| Ist ein Nebeneinander von Funktionstemplates und allgemeinen Funktionen möglich? | Ja, denn der Compiler versucht immer die *spezifischste* Funktion zu nutzen. Das heißt, zunächst werden alle nicht-templatisierten Funktionen in betracht gezogen. Im zweiten Schritt werden teilweise-spezialisierte Funktionstemplates herangezogen und erst zu letzt werden vollständig templatisierte Funktionen genutzt. Untersuchen Sie das Beispiel mit `nm` und `c++filter`! |
+| Ist ein Nebeneinander von Funktionstemplates und allgemeinen Funktionen möglich? | Ja, denn der Compiler versucht immer die *spezifischste* Funktion zu nutzen. Das heißt, zunächst werden alle nicht-templatisierten Funktionen in Betracht gezogen. Im zweiten Schritt werden teilweise-spezialisierte Funktionstemplates herangezogen und erst zuletzt werden vollständig templatisierte Funktionen genutzt. Untersuchen Sie das Beispiel mit `nm` und `c++filter`! |
 
 ```cpp                     FunctionTemplate.cpp
 #include <iostream>
@@ -342,7 +342,7 @@ Daraus ergibt sich folgende Aufrufstruktur:
 | `f(3.5, 5);`          | Überladenes Funktionstemplate                 |
 | `f(3, 5);`            | Vollständig spezialisiertes Funktionstemplate |
 
-Methoden-Templates sind auch nur Funktionstemplates, dass heißt die gereade vorstellten Mechanismen lassen sich im Kontext Funktion, die einer Klasse zugeordnet ist analog umsetzen.
+Methoden-Templates sind auch nur Funktionstemplates, dass heißt die gerade vorstellten Mechanismen lassen sich im Kontext Funktion, die einer Klasse zugeordnet ist analog umsetzen.
 
 
 *******************************************************************************
@@ -352,7 +352,7 @@ Methoden-Templates sind auch nur Funktionstemplates, dass heißt die gereade vor
 
 **Zahlen als Templateparameter**
 
-Es ist üblich, dass wir Typen als Templateparameter verwenden. Der C++ Standard lässt aber explizt auch die Übergabe von Zahlenwerten als Konfigurationsparameter zu. Wo brauche ich so was?
+Es ist üblich, dass wir Typen als Templateparameter verwenden. Der C++ Standard lässt aber explizit auch die Übergabe von Zahlenwerten als Konfigurationsparameter zu. Wo brauche ich so was?
 
 ```cpp                     TemplateSpecialization.cpp
 #include <iostream>
@@ -686,7 +686,7 @@ class YourClass {
 }
 ```
 
-Die Unterstützung von *constrains* analog zum Generics-Konzepts unter C#, wird im akutellen C++20 Standard mit *concepts* neu definiert. Prüfen Sie ggf. ob Ihr Compiler diese unterstützt!
+Die Unterstützung von *constraints* analog zum Generics-Konzepts unter C#, wird im aktuellen C++20 Standard mit *concepts* neu definiert. Prüfen Sie ggf. ob Ihr Compiler diese unterstützt!
 
 Zum Beispiel für den g++ unter ... https://gcc.gnu.org/projects/cxx-status.html
 
