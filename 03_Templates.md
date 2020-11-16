@@ -584,7 +584,6 @@ int main()
      {{3-4}}
 *******************************************************************************
 
-
 **Templates und Vererbung**
 
 Zwischen Klassentemplates können Vererbungsrelationen bestehen, wie zwischen konkreten Klassen. Dabei sind verschiedene Konfigurationen möglich:
@@ -669,28 +668,229 @@ Was ist kritisch an dieser Implementierung?
 + Die formelle Festlegung auf `double` in der Klasse `Data` schränkt die Wiederverwendbarkeit drastisch ein!
 + Das Klassentemplate setzt ein entsprechendes Interface voraus, dass einen Konstruktor, eine set-Funktion und ein Member data vom Typ double erwartet.
 
-Wir müssen also prüfen, ob die Member des Templateparameters mit diesen Signaturen übereinstimmen.
+********************************************************************************
+
+## Typprüfungen - SFINAE
+
+"Substitution Failure Is Not An Error"
+
+_"the point of SFINAE is to deactivate a piece of template code for certain types._ [Jonathan Boccara](https://www.fluentcpp.com/2018/05/15/make-sfinae-pretty-1-what-value-sfinae-brings-to-code/)
+
+Dieser Teil der Vorlesung wurde in starkem Maße durch den Blogbeitrag von Bartlomiej Filipek motiviert [Link](https://www.bfilipek.com/2016/02/notes-on-c-sfinae.html).
+
+```cpp                 SubstitiutionError.cpp
+#include <iostream>
+#include <list>
+#include <string>
+#include <chrono>
+
+struct Bar {
+    typedef double internalType;
+    int generateValue() {return 1;}
+};
+
+template <typename T>
+typename T::internalType foo(const T& t) {
+//int foo(const T& t) {
+    std::cout << "foo<T>\n";
+    std::cout << T::generateValue();
+    return 0;
+}
+
+int main() {
+    auto a = foo(Bar());
+    auto b = foo(0); // << error!
+}
+```
+@LIA.eval(`["main.c"]`, `g++ -Wall main.c -o a.out`, `./a.out`)
+
+Offenbar findet sich nach der Auflösung der Templateparameter T keine überladene Funktion, die für eine Integer-Variable gültig ist. Die Ersetzung scheitert am Aufruf des Rückgabewertes `T::interalType`, der für `int` nicht implementiert ist. Der Compiler realisiert also die fehlende Verfügbarkeit der Membervariable.
+
+> Warum klappt diese Überprüfung für Memberfunktionen nicht?
+
+
+> **Achtung:** Die folgenden Beispiele hängen von den jeweiligen Standards ab, die der Comiler abdeckt. Beim g++ zum Beispiel kann über `-std=c++17` angegeben werden, dass dieser den C++17 Standard und damit den Funktionsumfang der Standardbibliothek umfasst.
+
+### C++11 Methoden
+
+Ausgangspunkt `enable_if`
 
 ```
-#include <type_traits>
+template<bool Condition, typename T = void>
+struct enable_if
+{
+};
 
 template<typename T>
-class YourClass {
+struct enable_if<true, T>
+{
+    typedef T type;
+};
+```
 
-    YourClass() {
-        // Compile-time check
-        static_assert(std::is_base_of<BaseClass, T>::value, "type parameter of this class must derive from BaseClass");
+`enable_if` wurde in C++ in C++11 standardisiert. Das folgende Codebeispiel zeigt die Verwendung:
 
-        // ...
-    }
+```cpp                 enable_if.cpp
+#include <iostream>
+#include <list>
+#include <string>
+#include <chrono>
+
+struct Bar {
+    int x;
+};
+
+template <class T>
+typename std::enable_if<std::is_arithmetic<T>::value, T>::type
+foo(T t) {
+  std::cout << "foo<arithmetic T>\n";
+  return t;
+}
+
+int main() {
+    foo(5);
+    foo(10.0);
+    foo(Bar());
+}
+```
+@LIA.eval(`["main.c"]`, `g++ -Wall main.c -o a.out`, `./a.out`)
+
+
+```
+                                            Warum brauche ich
+                                            hier die explizite
+                                            Anforderung des Typ
+                                            noch mal?
+                                                  |
+std::enable_if<std::is_arithmetic<T>::value, T>::type
+                        |                    |
+                     Bedingung            Resultat
+```
+
+
+```
+std::is_abstract<>, std::is_base_of<>, std::is_const<>, std::is_object<>,
+std::is_same<> ...
+```
+
+http://www.cplusplus.com/reference/type_traits/is_arithmetic/
+
+Und mehrere Bedingungen?
+
+```cpp                 enable_and.cpp
+#include <iostream>
+#include <string>
+
+template <typename T>
+typename
+std::enable_if<std::__and_<std::is_floating_point<T>::type, std::is_integral<T>::type>::value, T>::type
+foo(T t) {
+  std::cout << "foo<arithmetic T>\n";
+  return t;
+}
+
+int main() {
+    foo(5);
+    //foo(Bar());
+}
+```
+@LIA.eval(`["main.c"]`, `g++ -Wall main.c -o a.out`, `./a.out`)
+
+> **Achtung!** ROS2 basiert auf C++11!
+
+### C++14/17 Methoden
+
+C++14 fügt eine Variation von `std::enable_if` - `std::enable_if_t` hinzu. Dies ist nur ein Alias für den Zugriff auf den `::type` innerhalb von `std::enable_if`. In der selben Art wurden auch Aliase für die Zugriffe auf die Werte `_v` eingefügt. Damit wurde `std::is_floating_point<T>::value` zu `std::is_floating_point_v<T>`. Das oben gezigte Beispiel in C++11 Syntax vereinfacht sich damit zu:
+
+```cpp                 enable_and.cpp
+#include <iostream>
+#include <string>
+
+template <typename T>
+typename std::enable_if_t<std::is_arithmetic_v<T>, T>
+foo(T t) {
+  std::cout << "foo<arithmetic T>\n";
+  return t;
+}
+
+int main() {
+    foo(5);
+    foo(15.6);
+    //foo(Bar());
+}
+```
+@LIA.eval(`["main.c"]`, `g++ -std=c++17 -Wall main.c -o a.out`, `./a.out`)
+
+```
+ std::enable_if_t<std::is_arithmetic_v<T>, T>
+                        |                  |
+                     Bedingung         Resultat
+```
+
+Irgendwelche Nachteile hat der SFINAE-Ansatz?
+
+SFINAE und `enable_if` sind überzeugende Merkmale, aber auch schwer in realen Anwendungen einzusetzen:
+
++ die Lesbarkeit des Codes und
++ die Lesbarkeit der Fehlermeldungen leiden (dramatisch).
+
+Zur Erinnerung an unsere Erfahrungen aus C# ... zumindestens die Angabe von verbindlichen Klassen und Interfaces ist deutlich besser lesbar gelöst.
+
+```Csharp    Generics
+class EmployeeList<T> where T : Employee, IEmployee, System.IComparable<T>
+{
+    // ...
 }
 ```
 
-Die Unterstützung von *constraints* analog zum Generics-Konzepts unter C#, wird im aktuellen C++20 Standard mit *concepts* neu definiert. Prüfen Sie ggf. ob Ihr Compiler diese unterstützt!
+### C++20 Methoden
 
-Zum Beispiel für den g++ unter ... https://gcc.gnu.org/projects/cxx-status.html
+**Variante 1 - Explizite Benennung von Requirements**
 
-*******************************************************************************
+```cpp                 enable_and.cpp
+#include <iostream>
+#include <string>
+#include <typeinfo>
+
+template <typename T>
+auto calc(const T a, const T b) requires std::is_arithmetic_v<T>
+{
+  std::cout << "calc für " << typeid(a).name() << std::endl;
+  return a + b;
+}
+
+int main() {
+    calc(5, 5);
+    calc(15.6, 234.345);
+    //calc(15.6, 234);
+}
+```
+@LIA.eval(`["main.c"]`, `g++ -std=c++20 -Wall main.c -o a.out`, `./a.out`)
+
+**Variante 2 - Concepts**
+
+```cpp                 enable_and.cpp
+#include <iostream>
+#include <string>
+#include <typeinfo>
+
+template<typename T>
+concept number = std::is_arithmetic_v<T> ;//|| std::is_floating_point_v<T>;
+
+template <number T>
+auto calc(const T a, const T b)
+{
+  std::cout << "calc für " << typeid(a).name() << std::endl;
+  return a + b;
+}
+
+int main() {
+    calc(5, 5);
+    calc(15.6, 234.345);
+    //calc(15.6, 234);
+}
+```
+@LIA.eval(`["main.c"]`, `g++ -std=c++20 -Wall main.c -o a.out`, `./a.out`)
 
 ## Template Parameter
 
