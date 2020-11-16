@@ -19,24 +19,24 @@ Freiberg auf der Basis von LiaScript. Eine interaktive Darstellung der Inhalte i
 
 zu finden.
 
-| Datum      | Titel                              | LiaScript Link                                                                               |
-|:---------- |:---------------------------------- | -------------------------------------------------------------------------------------------- |
-| 22.10.2019 | Einführung                         | [Link](https://github.com/SebastianZug/SoftwareprojektRobotik/blob/master/00_Einfuehrung.md) |
-| 29.10.2019 | Klassen und Strukturen             |                                                                                              |
-| 05.11.2019 | Speicher und Pointer               |                                                                                              |
-| 04.11.2019 | Templates                          |                                                                                              |
-| 12.11.2019 | Standardbibliothek                 |                                                                                              |
-| 19.11.2019 | Entwurfsmodelle                    |                                                                                              |
-| 26.11.2019 | Einführung ROS2                    |                                                                                              |
-| 03.12.2019 | ROS2 Entwicklungsprozess           |                                                                                              |
-| 10.12.2019 | ROS2 Entwicklungsprozess Beispiele |                                                                                              |
-| 17.12.2019 | ROS2 Kommunikation                 |                                                                                              |
-| 07.01.2020 | Sensoren                           |                                                                                              |
-| 14.01.2020 | Ausfall                            |                                                                                              |
-| 21.01.2020 | Sensordatenverarbeitung            |                                                                                              |
-| 28.01.2020 | Regelungstechnik                   |                                                                                              |
-| 04.02.2020 | Datenfusion                        |                                                                                              |
-| 11.02.2020 | Zusammenfassung                    |                                                                                              |
+| Datum      | Titel                                | LiaScript Link                                                                               |
+|:---------- |:------------------------------------ | -------------------------------------------------------------------------------------------- |
+| 22.10.2020 | Einführung                           | [Link](https://github.com/SebastianZug/SoftwareprojektRobotik/blob/master/00_Einfuehrung.md) |
+| 29.10.2020 | Klassen und Strukturen               |                                                                                              |
+| 05.11.2020 | Speicher und Pointer                 |                                                                                              |
+| 04.11.2020 | Templates                            |                                                                                              |
+| 12.11.2020 | Vererbung und C++ Standardbibliothek |                                                                                              |
+| 19.11.2020 | Entwurfsmodelle                      |                                                                                              |
+| 26.11.2020 | Einführung ROS2                      |                                                                                              |
+| 03.12.2020 | ROS2 Entwicklungsprozess             |                                                                                              |
+| 10.12.2020 | ROS2 Entwicklungsprozess Beispiele   |                                                                                              |
+| 17.12.2020 | ROS2 Kommunikation                   |                                                                                              |
+| 07.01.2021 | Sensoren                             |                                                                                              |
+| 14.01.2021 |                                      |                                                                                              |
+| 21.01.2021 | Sensordatenverarbeitung              |                                                                                              |
+| 28.01.2021 | Regelungstechnik                     |                                                                                              |
+| 04.02.2021 | Datenfusion                          |                                                                                              |
+| 11.02.2021 | Zusammenfassung                      |                                                                                              |
 
 ## Organisatorisches (WS 2020/21)
 
