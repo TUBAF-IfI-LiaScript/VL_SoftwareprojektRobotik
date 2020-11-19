@@ -672,48 +672,54 @@ Was ist kritisch an dieser Implementierung?
 
 ## Typprüfungen - SFINAE
 
-"Substitution Failure Is Not An Error"
+SFINAE - "Substitution Failure Is Not An Error" - sind ein zentrales Element der Verwendung von Templates in C++. Über den Generationen des Standards haben sich hier deutliche Vereinfachungen ergeben.
 
-_"the point of SFINAE is to deactivate a piece of template code for certain types._ [Jonathan Boccara](https://www.fluentcpp.com/2018/05/15/make-sfinae-pretty-1-what-value-sfinae-brings-to-code/)
+> _... the point of SFINAE is to deactivate a piece of template code for certain types._ [Jonathan Boccara](https://www.fluentcpp.com/2018/05/15/make-sfinae-pretty-1-what-value-sfinae-brings-to-code/)
 
-Dieser Teil der Vorlesung wurde in starkem Maße durch den Blogbeitrag von Bartlomiej Filipek motiviert [Link](https://www.bfilipek.com/2016/02/notes-on-c-sfinae.html).
+Dieser Teil der Vorlesung wurde in starkem Maße durch den Blogbeitrag von Bartlomiej Filipek motiviert [Link](https://www.bfilipek.com/2016/02/notes-on-c-sfinae.html). Beginnen wir zunächst mit einem Motivationsbeispiel, dass das Problem beschreiben soll. Wie können wir vermeiden, dass eine
 
-```cpp                 SubstitiutionError.cpp
+```cpp                 SubstitutionError.cpp
 #include <iostream>
-#include <list>
-#include <string>
-#include <chrono>
 
 struct Bar {
-    typedef double internalType;
-    int generateValue() {return 1;}
+    //typedef double internalType;
+    using internalType = double;
+    int generateValue() const {return 1;}
 };
 
 template <typename T>
-typename T::internalType foo(const T& t) {
-//int foo(const T& t) {
+//typename T::internalType foo(const T& t) {
+T foo(const T& t) {
     std::cout << "foo<T>\n";
-    std::cout << T::generateValue();
+    //std::cout << t.generateValue();   // Aufruf einer spezifischen Methode
     return 0;
 }
 
 int main() {
-    auto a = foo(Bar());
-    auto b = foo(0); // << error!
+    auto b = foo(0);
+   //auto a = foo(Bar());
 }
 ```
 @LIA.eval(`["main.c"]`, `g++ -Wall main.c -o a.out`, `./a.out`)
 
 Offenbar findet sich nach der Auflösung der Templateparameter T keine überladene Funktion, die für eine Integer-Variable gültig ist. Die Ersetzung scheitert am Aufruf des Rückgabewertes `T::interalType`, der für `int` nicht implementiert ist. Der Compiler realisiert also die fehlende Verfügbarkeit der Membervariable.
 
-> Warum klappt diese Überprüfung für Memberfunktionen nicht?
-
-
 > **Achtung:** Die folgenden Beispiele hängen von den jeweiligen Standards ab, die der Comiler abdeckt. Beim g++ zum Beispiel kann über `-std=c++17` angegeben werden, dass dieser den C++17 Standard und damit den Funktionsumfang der Standardbibliothek umfasst.
 
 ### C++11 Methoden
+<!--
+template <typename T>
+typename
+std::enable_if<(std::is_base_of<Bar, T>::value), T>::type
+foo(T t) {
+  std::cout << "foo<struct Bar T>\n";
+  return t;
+}
+-->
 
-Ausgangspunkt `enable_if`
+> **Achtung: ** Um es noch mal in aller Deutlichkeit zu sagen ... wir prüfen hier Typbezogene Bedingungen zur Compilezeit ab!
+
+Ausgangspunkt ist die Methode `enable_if`, die das Abprüfen von Bedingungen erlaubt. Die Implementierung besteht aus zwei Funktionstemplates - eine generischen und einer spezifizierten Variante.
 
 ```
 template<bool Condition, typename T = void>
@@ -724,7 +730,7 @@ struct enable_if
 template<typename T>
 struct enable_if<true, T>
 {
-    typedef T type;
+    using type = T;
 };
 ```
 
@@ -757,10 +763,8 @@ int main() {
 
 
 ```
-                                            Warum brauche ich
-                                            hier die explizite
-                                            Anforderung des Typ
-                                            noch mal?
+                                             Im Fall einer gültigen
+                                             Typrückgabe durch enable_if
                                                   |
 std::enable_if<std::is_arithmetic<T>::value, T>::type
                         |                    |
@@ -775,15 +779,19 @@ std::is_same<> ...
 
 http://www.cplusplus.com/reference/type_traits/is_arithmetic/
 
-Und mehrere Bedingungen?
+**Und mehrere Bedingungen?**
 
 ```cpp                 enable_and.cpp
 #include <iostream>
 #include <string>
 
+struct Bar {
+    int x;
+};
+
 template <typename T>
 typename
-std::enable_if<std::__and_<std::is_floating_point<T>::type, std::is_integral<T>::type>::value, T>::type
+std::enable_if<(std::is_floating_point<T>::value || std::is_integral<T>::value ), T>::type
 foo(T t) {
   std::cout << "foo<arithmetic T>\n";
   return t;
@@ -796,11 +804,17 @@ int main() {
 ```
 @LIA.eval(`["main.c"]`, `g++ -Wall main.c -o a.out`, `./a.out`)
 
-> **Achtung!** ROS2 basiert auf C++11!
+> **Achtung!** ROS2 basiert auf C++11! Entsprechend werden Sie dort nur Constraints in dem hier gezeigten Format finden.
 
 ### C++14/17 Methoden
 
 C++14 fügt eine Variation von `std::enable_if` - `std::enable_if_t` hinzu. Dies ist nur ein Alias für den Zugriff auf den `::type` innerhalb von `std::enable_if`. In der selben Art wurden auch Aliase für die Zugriffe auf die Werte `_v` eingefügt. Damit wurde `std::is_floating_point<T>::value` zu `std::is_floating_point_v<T>`. Das oben gezigte Beispiel in C++11 Syntax vereinfacht sich damit zu:
+
+```
+ std::enable_if_t<std::is_arithmetic_v<T>, T>
+                        |                  |
+                     Bedingung         Resultat
+```
 
 ```cpp                 enable_and.cpp
 #include <iostream>
@@ -816,16 +830,9 @@ foo(T t) {
 int main() {
     foo(5);
     foo(15.6);
-    //foo(Bar());
 }
 ```
 @LIA.eval(`["main.c"]`, `g++ -std=c++17 -Wall main.c -o a.out`, `./a.out`)
-
-```
- std::enable_if_t<std::is_arithmetic_v<T>, T>
-                        |                  |
-                     Bedingung         Resultat
-```
 
 Irgendwelche Nachteile hat der SFINAE-Ansatz?
 
@@ -844,6 +851,10 @@ class EmployeeList<T> where T : Employee, IEmployee, System.IComparable<T>
 ```
 
 ### C++20 Methoden
+<!--
+  Variante ohne expliziten Template-Header
+  auto calc(const number auto a, const number auto b)
+-->
 
 **Variante 1 - Explizite Benennung von Requirements**
 
@@ -875,7 +886,7 @@ int main() {
 #include <typeinfo>
 
 template<typename T>
-concept number = std::is_arithmetic_v<T> ;//|| std::is_floating_point_v<T>;
+concept number = std::is_arithmetic_v<T> ;
 
 template <number T>
 auto calc(const T a, const T b)
@@ -1028,3 +1039,5 @@ Und wie geht es weiter unter C++? Die Template-Metaprogrammierung greift noch we
 1. Recherchieren Sie die Möglichkeit *default* Werte bei der Angabe der Templateparameter zu berücksichtigen.
 
 2. Implementieren Sie ein Beispiel, dass partielle und vollständige Spezialisierung einer Templateklasse realisiert.
+
+3. Implementieren Sie eine Funktionstemplate, dass die Übergabe von Ganzzahlen und Floatingpoint-Zahlen in gemischter Form akzeptiert und verschiedene Casts für das Ergebnis realisiert.
