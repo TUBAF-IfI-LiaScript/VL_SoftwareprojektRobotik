@@ -708,14 +708,20 @@ Offenbar findet sich nach der Auflösung der Templateparameter T keine überlade
 
 ### C++11 Methoden
 <!--
-template <typename T>
-typename
-std::enable_if<(std::is_base_of<Bar, T>::value), T>::type
-foo(T t) {
-  std::cout << "foo<struct Bar T>\n";
-  return t;
-}
+  comment: enable_if.cpp
+  ..............................................................................
+  ```cpp
+  template <typename T>
+  typename
+  std::enable_if<(std::is_base_of<Bar, T>::value), T>::type
+  foo(T t) {
+    std::cout << "foo<struct Bar T>\n";
+    return t;
+  }
+  ```
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -->
+
 
 > **Achtung: ** Um es noch mal in aller Deutlichkeit zu sagen ... wir prüfen hier Typbezogene Bedingungen zur Compilezeit ab!
 
@@ -852,13 +858,17 @@ class EmployeeList<T> where T : Employee, IEmployee, System.IComparable<T>
 
 ### C++20 Methoden
 <!--
+  comment: concepts.cpp
+  ..............................................................................
   Variante ohne expliziten Template-Header
   auto calc(const number auto a, const number auto b)
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -->
+
 
 **Variante 1 - Explizite Benennung von Requirements**
 
-```cpp                 enable_and.cpp
+```cpp                 ecplicite.cpp
 #include <iostream>
 #include <string>
 #include <typeinfo>
@@ -880,7 +890,7 @@ int main() {
 
 **Variante 2 - Concepts**
 
-```cpp                 enable_and.cpp
+```cpp                 concepts.cpp
 #include <iostream>
 #include <string>
 #include <typeinfo>
