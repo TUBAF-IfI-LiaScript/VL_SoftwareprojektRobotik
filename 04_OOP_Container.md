@@ -17,8 +17,13 @@ Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.gi
 
 **Zielstellung der heutigen Veranstaltung**
 
-+ Zusammenfassung Objektorientierter Konzepte unter C++
++ Zusammenfassung Objektorientierter Konzepte unter C++ (in Ergänzung zu Vorlesung 01)
+
+   + Vererbungsmechanismen
+   + Mehrfachvererbung
+
 + knappe Einführung in die Container der Standardbibliothek
+
 + Überblick zu den Algorithmen über den Containertypen
 
 --------------------------------------------------------------------------------
@@ -36,6 +41,12 @@ Versuchen wir uns noch mal an die C#-Welt zu erinnern. Welche Konstrukte gab es 
 
 
 ### Vererbung in C++
+<!--
+  Thematisieren:
+  1. Initialisieren der Variablen in Zeile 6
+  2. Überladen des Konstruktors von Shape ABER keine Vererbung nach Rect
+  3. Protektionsmechanismen für Variablen / Vererbung
+-->
 
 ```cpp                 MinimalExample.cpp
 #include <iostream>
@@ -43,7 +54,7 @@ Versuchen wir uns noch mal an die C#-Welt zu erinnern. Welche Konstrukte gab es 
 // Base class
 class Shape {
    public:
-      Shape(): width(), height(0) {}
+      Shape(): width(0), height(0) {}
       Shape(int a, int b): width(a), height(b) {}
       void setWidth(int w) {
          width = w;
@@ -84,8 +95,6 @@ int main(void) {
 | abgeleitete Klasse   |                  | X                  | X               |
 | außerhalb            |                  |                    | X               |
 
-> Was hat es mit `friend` auf sich?
-
 Und wie verhält es sich bei der Vererbung?
 
 |                       | Member `private` | Member `protected` | Member `public` |
@@ -101,25 +110,6 @@ Und wie verhält es sich bei der Vererbung?
 + Variante 1: Expliziter Aufruf des Konstruktors der Basisklasse: `using Shape::Shape;`
 + Variante 2: Individueller Aufruf eines Basisklassenkonstruktors in einem Konstruktor der abgeleiteten Klasse `Rectangle(int width, int height): Shape(width, height)`
 
-**Virtuelle Memberfunktionen**
-
-C++ kennt die Differenzierung zwischen Interfaces und abstrakten Klassen nicht. Eine Klasse wird abstrakt gemacht, indem mindestens eine ihrer Funktionen als reine virtuelle Funktion deklariert wird. Eine rein virtuelle Funktion wird spezifiziert, indem "= 0" in ihre Deklaration wie folgt gesetzt wird
-
-```cpp                 Abstract.cpp
-#include <iostream>
-
-class Shape {
-   public:
-      // pure virtual function
-      virtual double getArea() = 0;
-
-   private:
-      double circumference;
-      double maxHeight;
-      double maxWidth;
-};
-```
-
 **Methodenaufruf in Vererbungsrelationen**
 
 Wie verhält es sich mit dem Methodenaufruf, wenn die spezifischen Implementierungen über verschiedene Elemente verstreut sind?
@@ -128,33 +118,33 @@ Wie verhält es sich mit dem Methodenaufruf, wenn die spezifischen Implementieru
 #include <iostream>
 
 class A{
-private:
-  std::string text = "Base class";
-public:
-  std::string getText() const {return text;}
-  void print(std::ostream& os) const {os << getText() << "\n";}
+  private:
+    std::string text = "Base class";
+  public:
+    std::string getText() const {return text;}
+    void print(std::ostream& os) const {os << getText() << "\n";}
 };
 
 class B: public A{
-private:
-  std::string text = "Derived class B";
-public:
-  void print(std::ostream& os) const {os << getText() <<"\n";}
+  private:
+    std::string text = "Derived class B";
+  public:
+    void print(std::ostream& os) const {os << getText() <<"\n";}
 };
 
 class C: public A{
-private:
-  std::string text = "Derived class C";
-public:
-  std::string getText() const {return text;}
+  private:
+    std::string text = "Derived class C";
+  public:
+    std::string getText() const {return text;}
 };
 
 class D: public A{
-private:
-  std::string text = "Derived class D";
-public:
-  std::string getText() const override {return text;}
-  void print(std::ostream& os) const {os << getText() << "\n";}
+  private:
+    std::string text = "Derived class D";
+  public:
+    std::string getText() const {return text;}
+    void print(std::ostream& os) const {os << getText() << "\n";}
 };
 
 int main(void){
@@ -174,9 +164,42 @@ int main(void){
 
 Interessant sind die Fälle `B a;` und `C a;`. Im ersten wird zwar die Methode `print()` reimplementiert, allerdings besteht `getText()` nur in der Basisklasse. Folglich wird auch auf die dortige Variable zurückgegriffen. Analog spielt sich der Fall für `C a;` ab. Die Methode `print()` ist aus der Basisklasse geerbt und wird von dort aufgerufen. Der Wert von `text` entstammt also der Basisklasse.
 
-`virtual` löst diese Situation auf. Eine virtuelle Funktion ist eine Memberfunktion, die potentiell in abgeleiteten Klassen neu definiert wird. Erklären Sie das Verhalten der obigen Funktionsaufrufe!
+`virtual` und damit virtuelle Methoden lösen diese Situation auf. Eine virtuelle Funktion ist eine Memberfunktion, die potentiell in abgeleiteten Klassen neu definiert wird. Mit Hilfe einer vtable wird zur Laufzeit identifiziert, welche der Methoden einen bestimmten Typ realisieren und automatisch eine Zuordnung vollzogen.
 
 > Sie sollten das Schlüsselwort `override` immer dann verwenden, wenn Sie beabsichtigen, eine Methode zu überschreiben. Wenn Sie sich in der abgeleiteten Klasse vertippen, erhalten Sie eine Fehlermeldung, die Ihnen mitteilt, dass keine Methode zum Überschreiben gefunden wurde.
+
+**Abstrakte Memberfunktionen / Abstrakte Klassen**
+
+C++ kennt die Differenzierung zwischen Interfaces und abstrakten Klassen nicht. Eine Klasse wird abstrakt gemacht, indem mindestens eine ihrer Funktionen als reine virtuelle Funktion deklariert wird. Eine rein virtuelle Funktion wird spezifiziert, indem `= 0` in ihre Deklaration wie folgt gesetzt wird:
+
+```cpp                 Abstract.cpp
+#include <iostream>
+
+class Shape {
+   public:
+      Shape(): width(0), height(0) {}
+      Shape(int a, int b): width(a), height(b) {}
+      virtual double getArea() {};
+      virtual double getCircumference() {};
+   protected:
+      int width;
+      int height;
+};
+
+class Rectangle: public Shape {
+   public:
+      double getArea() override {
+         return (width * height);
+      }
+};
+
+int main(void){
+	 Shape a;
+   return 0;
+}
+```
+@LIA.evalWithDebug(`["main.c"]`, `g++ -std=c++20 -Wall main.c -o a.out`, `./a.out`)
+
 
 ### Mehrfachvererbung
 
@@ -232,10 +255,10 @@ int main(void)
 ```
 @LIA.eval(`["main.c"]`, `g++ -std=c++20 -Wall main.c -o a.out`, `./a.out`)
 
-| Funktionsaufruf | Resultat                                                   | Bedeutung |
-| --------------- | ---------------------------------------------------------- | --------- |
-| `c.id();`       | `error: request for member ‘id’ is ambiguous` |           |
-| `c.f(2.0);`     |  `error: request for member ‘f’ is ambiguous`                                                           | Trotz unterschiedlicher Signaturen kann der Compiler die "passende" Funktion aus der Klasse B nicht zuordnen.          |
+| Funktionsaufruf | Resultat                                      | Bedeutung                                                                                                     |
+| --------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `c.id();`       | `error: request for member ‘id’ is ambiguous` |                                                                                                               |
+| `c.f(2.0);`     | `error: request for member ‘f’ is ambiguous`  | Trotz unterschiedlicher Signaturen kann der Compiler die "passende" Funktion aus der Klasse B nicht zuordnen. |
 
 Bei jedem Aufruf lässt sich aber explizit angeben, welche Funktion von welcher Basisklasse gewünscht ist. Der Bereichsauflösungsoperator `::` unter Benennung der Klasse gibt die konkrete Funktion an.
 
@@ -352,7 +375,7 @@ int main()
   return EXIT_SUCCESS;
 }
 ```
-@Rextester.CPP
+@LIA.evalWithDebug(`["main.c"]`, `g++ -std=c++20 -Wall main.c -o a.out`, `./a.out`)
 
 **Welche Nachteile ergeben sich aus diesem Lösungsansatz?**
 
@@ -396,7 +419,7 @@ int main()
   return EXIT_SUCCESS;
 }
 ```
-@Rextester.CPP
+@LIA.eval(`["main.c"]`, `g++ -std=c++20 -Wall main.c -o a.out`, `./a.out`)
 
 > **Merke**: Vermeiden Sie Raw-Arrays! In der Regel lassen sich die intendierten Strukturen
 > durch die Konstrukte Standardbibliothek wesentlich effizienter realisieren.
@@ -431,6 +454,7 @@ im Umgang mit Arrays. Die darauf anwendbaren Operationen sind:
 wobei die letzten beiden für die "Navigation" über den Daten eines container_Bs
 Verwendung findet:
 
+<lia-keep>
 <table class="lia-inline lia-table">
     <thead class="lia-inline lia-table-head">
         <tr>
@@ -478,6 +502,7 @@ if (itr2 > itr1) ... ;
           <td></td>
         </tr>
 </table>
+</lia-keep>
 
 Anmerkungen:
 
@@ -502,7 +527,7 @@ int main()
   return EXIT_SUCCESS;
 }
 ```
-@Rextester.CPP
+@LIA.eval(`["main.c"]`, `g++ -std=c++20 -Wall main.c -o a.out`, `./a.out`)
 
 ### Containerkonzepte
 
@@ -541,7 +566,7 @@ std::vector<std::string> b;
 
 **Welche Klassifikation sollte in Ihrem Kopf stattfinden?**
 
-![STL Container](./img/04_STL/STLContainer.png)<!-- width="100%" -->
+![STL Container](./image/04_OOP_STL/STLContainer.png)<!-- width="100%" -->
 *Darstellung des Entscheidungsprozesses für die Anwendung eines STL-Containers* [^1]
 
 [^1]: Mikael Persson  nach einem Entwurf von David Moore [Link](https://stackoverflow.com/questions/471432/in-which-scenario-do-i-use-a-particular-stl-container)
@@ -593,13 +618,14 @@ container_Bs.swap(container_A);
 int main()
 {
   std::list<int> vec (5,2);// {5,2};
+  std::cout << vec.size() << std::endl;
   for (auto it: vec){
      std::cout << it << ", ";
   }
   return EXIT_SUCCESS;
 }
 ```
-@Rextester.CPP
+@LIA.eval(`["main.c"]`, `g++ -std=c++20 -Wall main.c -o a.out`, `./a.out`)
 
 > **Merke**:  "() != {}" :-)
 
@@ -690,7 +716,7 @@ int main()
   return EXIT_SUCCESS;
 }
 ```
-@Rextester.CPP
+@LIA.eval(`["main.c"]`, `g++ -std=c++20 -Wall main.c -o a.out`, `./a.out`)
 
 ```cpp                      findExample.cpp
 #include <vector>
@@ -721,7 +747,7 @@ int main()
   return EXIT_SUCCESS;
 }
 ```
-@Rextester.CPP(true)
+@LIA.eval(`["main.c"]`, `g++ -std=c++20 -Wall main.c -o a.out`, `./a.out`)(true)
 
 
 #### Assoziative Container
@@ -818,7 +844,7 @@ int main()
   return EXIT_SUCCESS;
 }
 ```
-@Rextester.CPP
+@LIA.eval(`["main.c"]`, `g++ -std=c++20 -Wall main.c -o a.out`, `./a.out`)
 
 Ermitteln Sie alle Einträge, deren Wert größer als 3 und kleiner als 7 ist. Wie würde sich das vorgehen unterscheiden, wenn wir mit einem `vector`-Container starten würden?
 
@@ -841,7 +867,7 @@ int main()
   return EXIT_SUCCESS;
 }
 ```
-@Rextester.CPP
+@LIA.eval(`["main.c"]`, `g++ -std=c++20 -Wall main.c -o a.out`, `./a.out`)
 
 
 Anwendungsbeispiel: Führen Sie eine Datenbank der Studierenden einer Universität,
@@ -883,7 +909,7 @@ int main()
   return EXIT_SUCCESS;
 }
 ```
-@Rextester.CPP
+@LIA.eval(`["main.c"]`, `g++ -std=c++20 -Wall main.c -o a.out`, `./a.out`)
 
 ***********************************************************************
 
@@ -933,7 +959,7 @@ int main()
 
 }
 ```
-@Rextester.CPP
+@LIA.eval(`["main.c"]`, `g++ -std=c++20 -Wall main.c -o a.out`, `./a.out`)
 
 Daneben könnnen bei der Interation eigene Funktionen pro Element aufgerufen werden. Dabei unterscheidet man:
 
@@ -961,7 +987,7 @@ int main()
   std::for_each(vec.begin(), vec.end(), add2);
 }
 ```
-@Rextester.CPP
+@LIA.eval(`["main.c"]`, `g++ -std=c++20 -Wall main.c -o a.out`, `./a.out`)
 
 Die Beispiele können durch Lambda-Funktionen analog ausgedrückt werden. Dabei hat man den zusätzlichen Vorteil, dass der zusammengehörige Code nicht aufgesplittet und auf mehrere Positionen verteilt wird. Es sei denn, er wird mehrfach verwendet ...
 
