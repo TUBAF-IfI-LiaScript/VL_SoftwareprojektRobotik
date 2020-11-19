@@ -639,7 +639,7 @@ int main()
 | `vector`       | Wachstum des zugehörigen Speicher ausschließlich in einer Richtung |
 | `deque`        | Wachstum des zugehörigen Speicher beiden Richtungen                |
 | `list`         | Doppelt verlinkte Einträge                                         |
-| `forward_list` | Doppelt verlinkte Einträge                                         |
+| `forward_list` | verlinkte Einträge                                                 |
 
 | Eigenschaft              | array    | vector   | deque                 | list          | forward_list    |
 | ------------------------ | -------- | -------- | --------------------- | ------------- | --------------- |
@@ -656,7 +656,7 @@ int main()
 **Beispiel `vector`**
 
 <!--
-style="width: 60%; max-width: 860px; display: block; margin-left: auto; margin-right: auto;"
+style="width: 80%; max-width: 860px; display: block; margin-left: auto; margin-right: auto;"
 -->
 ```ascii
 
@@ -668,7 +668,7 @@ style="width: 60%; max-width: 860px; display: block; margin-left: auto; margin-r
  |0|1|2|3|4|5|6|7|8|?|?|?|?|?|
  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   ^               ^
-  | .begin()      | .end()
+  | .begin()      | .end()                                                     .
 ```
 
 
@@ -684,9 +684,6 @@ int main()
   vec.push_back(1);
   vec.push_back(7);
   //vec.pop_back();
-
-  //std::vector<int> vec(1000001);
-  //std::generate(vec.begin(), vec.end(), std::rand);
 
   std::cout << "Vector capacity/size: " << vec.capacity() << " / " << vec.size() << std::endl;
 
@@ -747,7 +744,7 @@ int main()
   return EXIT_SUCCESS;
 }
 ```
-@LIA.eval(`["main.c"]`, `g++ -std=c++20 -Wall main.c -o a.out`, `./a.out`)(true)
+@LIA.eval(`["main.c"]`, `g++ -std=c++20 -Wall main.c -o a.out`, `./a.out`)
 
 
 #### Assoziative Container
@@ -826,16 +823,17 @@ int main()
   auto value = 9;
   auto it = myset.find(value);
   if (it == myset.end()){
-    std::cout << "No value 7 in current set, added this value" << std::endl;
+    std::cout << "No value 9 in current set, added this value" << std::endl;
     myset.insert(value);
+    std::cout << "Add " << value << " - ";
   }
 
   auto ret = myset.insert(value);    // pair<std::set<int>>::iterator, bool>
   if (ret.second == false){
     it = ret.first;                // wir haben nun einen Zugriff auf den Iterator
+    std::cout << "Delete " << value << std::endl;
+    myset.erase(it);
   }
-
-  myset.erase(it);
 
   for (auto const& itr: myset){
     std::cout << itr << ", ";
@@ -846,7 +844,9 @@ int main()
 ```
 @LIA.eval(`["main.c"]`, `g++ -std=c++20 -Wall main.c -o a.out`, `./a.out`)
 
-Ermitteln Sie alle Einträge, deren Wert größer als 3 und kleiner als 7 ist. Wie würde sich das vorgehen unterscheiden, wenn wir mit einem `vector`-Container starten würden?
+Ermitteln Sie alle Einträge, deren Wert größer als 3 und kleiner als 7 ist. Wie würde sich das Vorgehen unterscheiden, wenn wir mit einem `vector`-Container starten würden?
+
+Erfassen Sie die API von `std::upper_bound` und `std::lower_bound` anhand der Dokumentation [cppreference](https://en.cppreference.com/w/cpp/algorithm/upper_bound).
 
 ```cpp                      filterExample.cpp
 #include <iostream>
