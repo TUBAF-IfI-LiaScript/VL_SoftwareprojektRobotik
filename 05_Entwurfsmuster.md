@@ -13,7 +13,7 @@ import: https://github.com/liascript/CodeRunner
 
 # Vorlesung V - Entwurfsmuster
 
-Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/05_DesginPattern.md)
+Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/VL_SoftwareprojektRobotik/master/05_Entwurfsmuster.md#1)
 
 **Zielstellung der heutigen Veranstaltung**
 
