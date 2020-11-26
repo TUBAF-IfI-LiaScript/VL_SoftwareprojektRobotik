@@ -1,0 +1,63 @@
+\documentclass{scrartcl}
+\usepackage{lmodern}  % for bold teletype font
+\usepackage{amsmath}  % for \hookrightarrow
+\usepackage{xcolor}   % for \textcolor
+\usepackage{hyperref}
+\usepackage{listings}
+\lstset{
+  language=C++,
+  basicstyle=\ttfamily,
+  columns=fullflexible,
+  frame=single,
+  breaklines=true,
+  postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+}
+
+\begin{document}
+
+\title{Einf\"uhrung C++11 - State Pattern}
+\author{Sebastian Zug \& Georg J\"ager}
+\date{}
+\maketitle
+
+\section{Comments }
+
+\begin{enumerate}
+  \item The corresponding code is available on \href{https://github.com/SebastianZug/SoftwareprojektRobotik/tree/master/examples/05_DesginPattern}{Github}
+  \item Please execute the compilation by
+
+  \begin{verbatim}
+  g++ main.cpp CleaningRobot.cpp RoomType.cpp Kitchen.cpp
+      Hall.cpp Bedroom.cpp
+  \end{verbatim}
+
+\end{enumerate}
+
+\section{main.cpp}
+
+\lstinputlisting[]{main.cpp}
+
+\section{RoomType.hpp/RoomType.cpp}
+
+\lstinputlisting[]{RoomType.hpp}
+\lstinputlisting[]{RoomType.cpp}
+
+\subsection{Bedroom.hpp/Bedroom.cpp}
+
+\lstinputlisting[]{Bedroom.hpp}
+\lstinputlisting[]{Bedroom.cpp}
+
+\subsection{Hall.hpp/Hall.cpp}
+
+\lstinputlisting[]{Hall.hpp}
+\lstinputlisting[]{Hall.cpp}
+
+\subsection{Kitchen.hpp/Kitchen.cpp}
+... no necessary
+
+\section{CleaningRobot.hpp/CleaningRobot.cpp}
+
+\lstinputlisting[]{CleaningRobot.hpp}
+\lstinputlisting[]{CleaningRobot.cpp}
+
+\end{document}
