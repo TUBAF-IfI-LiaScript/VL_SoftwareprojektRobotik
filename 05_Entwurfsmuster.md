@@ -28,7 +28,7 @@ Nehmen wir einmal an, Sie sind technischer Entwicklungsleiter in einem dynamisch
 
 Die Relevanz der Anwendung unterstreicht der Betrieb von Reinigungsrobotern in unterschiedlichen Anwendungsfeldern (Bahnhöfe, Krankenhäuser, etc.).
 
-![STL Container](./image/05_Entwurfsmuste/Reinigungsroboter_Berlin_HBF.jpg)<!-- width="80%" -->
+![STL Container](./image/05_Entwurfsmuster/Reinigungsroboter_Berlin_HBF.jpg)<!-- width="80%" -->
 *Teilnehmerfeld der Automated Cleaning Challenge im Hauptbahnhof Berlin 2018* [^1]
 
 [^1]:  Pressemitteilung DB AG (Pablo Castagnola)  [Link](https://www.deutschebahn.com/de/presse/pressestart_zentrales_uebersicht/reinigungsroboterrrennen-1201744)
@@ -331,7 +331,7 @@ class NewUSBSensor{
 class indivUSBSensor: public AbstractSensorInterface<std::vector<int>>
 {
   private:
-    NewUSBSensor* sensor;
+    NewUSBSensor* sensor = new NewUSBSensor();
     const float angleResolution = 1.;
   public:
     bool initSensorInterface(){
