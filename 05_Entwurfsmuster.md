@@ -285,7 +285,7 @@ int main()
 Nun wird aber ein neuer Laserscanner eingekauft, der zwar auch über die
 USB-Schnittstelle angesprochen wird, für den aber der Hersteller ein  komplett unterschiedliches Interface definiert hat.
 
-<img src="http://www.plantuml.com/plantuml/png/hPBFIWCn4CRlynG3NbhAWkTQIYjuAAW7MnzWcftMO7OYcTajkEwxY_k7Ii7jnLC8tvVVBqooKgDaPH50txryKA82NI3LjLdo-z9uuw9i_IVZBK2Ru5fEB7afnngW0Q2zMY9dsAVzTikYCMt4E1t8CIvsoneGRwheSzGkrBKpNp4Wpke1q-0-ne1U_2LYChqexZ0nvO-aziIaPUA2nIRJEsY6gxvkxpl8e9-DmwyJ7-oDax3zC_QPJzt9STeXH38aEGP-OOsXD1-bLQZbytd5pc9QUB5bQvHVEkrzyES3VMNPUM3ZjM4ArxfPTlujiFfPY_0D">
+<img src="https://www.plantuml.com/plantuml/png/hP9DImCn48Rlyoi6lBIK1S-rb5RqK50Fjlw0QNPQWzc9P6QtuBh_NTmF2WMt5qyXl6-U9nzPgL6oiWYW7ru-AL61Bf3gsYpvVMcySL6s_eln5g1DS2qdbhoKOmtG0D1UBP4pxDD-kcNHc3PYd0xa61UxPGs8DrNqEMeNwjgPhnWGP_M0QN0VOq0l_X8ncLuKTvYOyYTIUsRICd71OfFf7JJ3Lj-sznraqC_6uTU9Z_REITZ-6Vl2fsxbEEqG8XcI70E_iiPGce_IAjJo-RnYPp4jlDYoDJwGKQ-1Fz_bEylEzpHU6mv_hPjbvqy2gz-n23y0">
 
 {{1-2}}
 ********************************************************************************
@@ -302,6 +302,7 @@ Einen flexibleren Lösungsansatz bietet das Adapter-Entwurfsmuster. Wir kapseln 
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <random>
 
 template <class T>
 class AbstractSensorInterface{
@@ -309,7 +310,7 @@ class AbstractSensorInterface{
      bool sensorIsActive = true;
    public:
      //virtual bool initSensorInterface();
-     virtual T readLastMeasurement();
+     virtual T readLastMeasurement() = 0;
 };
 
 class NewUSBSensor{
@@ -322,8 +323,13 @@ class NewUSBSensor{
     }
     std::vector<int> readnMeasurements(unsigned int n){
       // simulate measurements
+      std::random_device rd;
+      std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
+      std::uniform_int_distribution<> distrib(1, 100);
+
       std::vector<int> v(n);
-      std::generate(v.begin(), v.end(), std::rand);
+      std::generate(v.begin(), v.end(), [&distrib, &gen](){return distrib(gen);});
+      //for(unsigned int i = 0; i<n; i++ ) v[i]=distrib(gen);
       return v;
     }
 };
@@ -331,8 +337,9 @@ class NewUSBSensor{
 class indivUSBSensor: public AbstractSensorInterface<std::vector<int>>
 {
   private:
-    NewUSBSensor* sensor = new NewUSBSensor();
+    NewUSBSensor* sensor;
     const float angleResolution = 1.;
+    const unsigned int beams = 10;
   public:
     bool initSensorInterface(){
       sensor->initSensorInterface(angleResolution);
@@ -340,7 +347,7 @@ class indivUSBSensor: public AbstractSensorInterface<std::vector<int>>
       return this->sensorIsActive;
     }
     std::vector<int> readLastMeasurement(){
-      return sensor->readnMeasurements(1);
+      return sensor->readnMeasurements(beams);
     }
 };
 
@@ -349,12 +356,17 @@ int main()
   indivUSBSensor A;
   bool stat = A.initSensorInterface();
   std::cout << "Sensor check .... " << stat << std::endl;
-  if (stat) std::cout << "Measured distance " << A.readLastMeasurement()[0] << std::endl;
+  if (stat){
+  	std::cout << "Measured distance(s) :";
+	  for (auto itr: A.readLastMeasurement()){
+	     std::cout << itr << ", ";
+	  }
+  }
   else std::cout << "Sensor not avialable";
   return EXIT_SUCCESS;
 }
 ```
-
+@LIA.eval(`["main.c"]`, `g++ -Wall main.c -o a.out `, `./a.out`)
 
 ********************************************************************************
 
@@ -374,7 +386,7 @@ implementieren eine "Push" Notifikation (vgl. im Unterschied dazu "Pull" Mechani
 | Push-Update Notification | Jedes Mal wenn sich das beobachtete Objekt ändert, werden alle Beobachter benachrichtigt. Zusätzlich leitet das beobachtete Objekt die Update-Daten, die die Änderungen beschreiben, an die Beobachter weiter.                                                             |
 
 
-<img src="http://www.plantuml.com/plantuml/png/ZP7DJiCm48JlVegLkAGjaJXNLLK4brxWq2VOEDjYI9pAkq62q7V7-N5Kx1wuRNU-cSuwEnPqqjQLuWzZp-Ym1bqXywE8CqKhjDUDFPXlWWSr271eYtVIqYc0dALShol3idajcDmdkRqLSaVKjDn2C-tOeoiKGVsMfToCBNgif7zXjX5p_Chw-Mugv7zSbCA2nQ4M6CicENrjw09rWVPSef3tzkRHyzHOxKWeETHxZ3s1Do3q9PZasS_PbJYKkuPF4xD8yqEtJa7q3nPhWcGR7k1bLgEcI-1n6DJLV1gCNSCxtNIDr6ccO0qnDn1n-UnMs3t4rmpdgv2z-SdpE7uMytoRVZQLRFw615djo9PjNVq2">
+<img src="https://www.plantuml.com/plantuml/png/ZP7DJiCm48JlVegLkAGjaJXNLLK4brxWq2VOEDjYI9pAkq62q7V7-N5Kx1wuRNU-cSuwEnPqqjQLuWzZp-Ym1bqXywE8CqKhjDUDFPXlWWSr271eYtVIqYc0dALShol3idajcDmdkRqLSaVKjDn2C-tOeoiKGVsMfToCBNgif7zXjX5p_Chw-Mugv7zSbCA2nQ4M6CicENrjw09rWVPSef3tzkRHyzHOxKWeETHxZ3s1Do3q9PZasS_PbJYKkuPF4xD8yqEtJa7q3nPhWcGR7k1bLgEcI-1n6DJLV1gCNSCxtNIDr6ccO0qnDn1n-UnMs3t4rmpdgv2z-SdpE7uMytoRVZQLRFw615djo9PjNVq2">
 
 
 In unserem Roboterbeispiel wollen wir das Observer-Entwurfsmuster benutzen, um den Datenaustausch zwischen dem Modul für die Objekterkennung und der Notaus-Klasse und dem Navigationsmodul zu realisieren. Wir realisieren eine *Push-Update Notification*, die es jedem Beobachter überlässt auf den zugehörigen Distanzwert zu reagieren.
@@ -487,11 +499,11 @@ Nachteile:
 
 Das Zustandsmuster wird zur Kapselung unterschiedlicher, zustandsabhängiger Verhaltensweisen eines Objektes eingesetzt. Dabei wird das zustandsabhängige Verhalten des Objekts in separate Klassen ausgelagert, wobei für jeden möglichen Zustand eine eigene Klasse eingeführt wird, die das Verhalten des Objekts UND ggf. den Zustandswechsel spezifiziert. Damit der Kontext die separaten Zustandsklassen einheitlich behandeln kann, wird eine gemeinsame Abstrahierung dieser Klassen definiert.
 
-<img src="http://www.plantuml.com/plantuml/png/hLAzJiCm4DxlAKwT6Y57q9cXQSJ0mf8dkBedY4XivBj8YD1t1-83DHKP45qY-VkNdQqe9Htw3kIv3I-Kg4VVaKYbcjhze7plOsZQDyPhW8d1EWRbLnq1qM6r5qtajL5IHZ-an24V0F4A3x69FUjJ6nxNnJbormaRAfnDwrbU0KS0CYJlcXUEatdybXndVRQpMDJO0jFzLZQLLBbbCVglURiBvzN_o0jH6LS-8-NFA-ITnGf9yE46yZLWMNuTp7FwrELfz-TNpBa1wvgi6u3vttBhN4HJd5FlpjdjBpAxHQQ6BOV3q7SV">
+<img src="https://www.plantuml.com/plantuml/png/hLAzJiCm4DxlAKwT6Y57q9cXQSJ0mf8dkBedY4XivBj8YD1t1-83DHKP45qY-VkNdQqe9Htw3kIv3I-Kg4VVaKYbcjhze7plOsZQDyPhW8d1EWRbLnq1qM6r5qtajL5IHZ-an24V0F4A3x69FUjJ6nxNnJbormaRAfnDwrbU0KS0CYJlcXUEatdybXndVRQpMDJO0jFzLZQLLBbbCVglURiBvzN_o0jH6LS-8-NFA-ITnGf9yE46yZLWMNuTp7FwrELfz-TNpBa1wvgi6u3vttBhN4HJd5FlpjdjBpAxHQQ6BOV3q7SV">
 
 Im Sequenzdiagramm stellen sich die entsprechenden Abläufe dann wie folgt dar:
 
-<img src="http://www.plantuml.com/plantuml/png/SoWkIImgAStDuNBEpoj9hIXHqBLJ22v9B4brj598oG_EpqqjoSZCIzS0aiMQN10P1LsW8gXwAuNYr1Ami0QOTDBamZ3A2TCeWgfSSufJaIrr8c2fGsfU2j0R0000">
+<img src="https://www.plantuml.com/plantuml/png/SoWkIImgAStDuNBEpoj9hIXHqBLJ22v9B4brj598oG_EpqqjoSZCIzS0aiMQN10P1LsW8gXwAuNYr1Ami0QOTDBamZ3A2TCeWgfSSufJaIrr8c2fGsfU2j0R0000">
 
 Welche Zustände aber kennt unser Robotersystem? Nehmen wir an, dass der Roboter eine Wohnung zu reinigen hat. Nach einer Exploration der Umgebung entsteht eine Karte, wobei 3 Räume erfasst wurden `Bedroom`, `Kitchen` und `Hall`.
 
@@ -539,7 +551,7 @@ Betrachten Sie die Implementierung in [github](https://github.com/SebastianZug/V
 Meistens wird eine Strategie durch Klassen umgesetzt, die alle bestimmte Schnittstelle implementieren. Das kann zum Beispiel ein Suchalgorithmus über einer Zahlenmenge sein, der durch den Nutzer in Abhängigkeit des Vorwissens um das Datenset und dessen Konfiguration gewählt wird. Wie aber strukturieren wir
 die unterschiedlichen "Strategien"?
 
-<img src="http://www.plantuml.com/plantuml/png/fT2z2i9030VmFKzneo87Fe13sviwzmdICzR3-v1S2dxekolLWY2qGvSGyizlI8eioD873_dauXaPWx8USov5sBMzK6rJRDoDr1PWI9H9KUWYTr1gy-thT-K3MbgjuGc0RHP6A-e36c4Kwgw3A7sNsCanJ1kJecKI6csv15TBi9d4CAwfdTPf_CtFzA7r_p4pUJMJ6oWexllWNm00">
+<img src="https://www.plantuml.com/plantuml/png/fT2z2i9030VmFKzneo87Fe13sviwzmdICzR3-v1S2dxekolLWY2qGvSGyizlI8eioD873_dauXaPWx8USov5sBMzK6rJRDoDr1PWI9H9KUWYTr1gy-thT-K3MbgjuGc0RHP6A-e36c4Kwgw3A7sNsCanJ1kJecKI6csv15TBi9d4CAwfdTPf_CtFzA7r_p4pUJMJ6oWexllWNm00">
 
 Die Verwendung von Strategien bietet sich an, wenn
 
