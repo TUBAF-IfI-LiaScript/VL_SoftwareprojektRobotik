@@ -67,27 +67,27 @@ Dabei stehen uns zwei Möglichkeiten offen:
 
 ## Motivation: Vererbung vs. Komposition
 
-Die Vererbung realisiert eine "ist ein" Relation und erlaubt in explizit die Codewiederverwendung. Methoden und Membervariablen aus Basisklassen können in abgeleiteten Klassen wiederverwendet werden.
+Die Vererbung realisiert eine "ist ein" Relation und erlaubt explizit die Codewiederverwendung. Methoden und Membervariablen aus Basisklassen können in abgeleiteten Klassen wiederverwendet werden.
 
 ```cpp                 Inheritance.cpp
 // Base class
 class Animal {
-  sleep();
   int feet;
+  void sleep();
 };
 
 // Derived class
 class Dog: public Animal {
-  guard();
+  void guard();
 };
 
 // Derived class
 class Cat : public Animal {
-  catchMice();
+  void catchMice();
 };
 ```
 
-Die abgeleitete Klassen sind nicht der eigene Herr ihrer Schnittstellen. Wenn in der Basisklasse eine zusätzliche `public` Methode - `swim()` - hinzufügt wird, erscheint diese auch in der Schnittstelle der abgeleiteten Klassen. Wir blähen die Schnittstelle der abgeleiteten Klasse auf.
+Die abgeleiteten Klassen sind nicht der eigene Herr ihrer Schnittstellen. Wenn in der Basisklasse eine zusätzliche `public` Methode - `swim()` - hinzufügt wird, erscheint diese auch in der Schnittstelle der abgeleiteten Klassen. Wir blähen die Schnittstelle der abgeleiteten Klasse auf.
 
 Die Lösung sollte über eine Komposition folgt der Beschreibung [Composition over inheritance](https://en.wikipedia.org/wiki/Composition_over_inheritance).
 
@@ -138,29 +138,31 @@ public:
 };
 ```
 ```cpp                 -Object.cpp
+#include <memory>
+
 class Object
 {
-    VisibilityDelegate* _v;
-    UpdateDelegate* _u;
-    CollisionDelegate* _c;
+    std::unique_ptr<VisibilityDelegate> v;
+    std::unique_ptr<UpdateDelegate> u;
+    std::unique_ptr<CollisionDelegate> c;
 
 public:
-    Object(VisibilityDelegate* v, UpdateDelegate* u, CollisionDelegate* c)
-        : _v(v)
-        , _u(u)
-        , _c(c)
+    Object(std::unique_ptr<VisibilityDelegate> _v, std::unique_ptr<UpdateDelegate> _u, std::unique_ptr<CollisionDelegate> _c)
+        : v(std::move(_v))
+        , u(std::move(_u))
+        , c(std::move(_c))
     {}
 
     void update() {
-        _u->update();
+        this->u->update();
     }
 
     void draw() {
-        _v->draw();
+        this->v->draw();
     }
 
     void collide(Object objects[]) {
-        _c->collide(objects);
+        this->c->collide(objects);
     }
 };
 ```
@@ -248,7 +250,7 @@ class AbstractSensorInterface{
      bool sensorIsActive = false;
    public:
      //virtual bool initSensorInterface();
-     virtual T readLastMeasurement() = 0;
+     virtual T readLastMeasurement() const = 0;
 };
 
 template <class T>
@@ -263,19 +265,27 @@ class USBSensor: public AbstractSensorInterface<T>
       // further parameter settings
       return this->sensorIsActive;
     }
-    T readLastMeasurement(){
+    virtual T readLastMeasurement() const {
       // Access sensor reading via USB
       return static_cast<T>(50);
     }
 };
+
+template<typename T>
+void print(const AbstractSensorInterface<T>& sensor)
+{
+	std::cout << "Measured distance " << sensor.readLastMeasurement() << std::endl;
+}
 
 int main()
 {
   USBSensor<float> MyDistanceSensor;
   bool stat = MyDistanceSensor.initSensorInterface();
   std::cout << "Sensor check .... " << stat << std::endl;
-  if (stat) std::cout << "Measured distance " << MyDistanceSensor.readLastMeasurement() << std::endl;
-  else std::cout << "Sensor not avialable";
+  if (stat) 
+  	print(MyDistanceSensor);
+  else 
+  	std::cout << "Sensor not avialable";
 
   return EXIT_SUCCESS;
 }
@@ -303,6 +313,7 @@ Einen flexibleren Lösungsansatz bietet das Adapter-Entwurfsmuster. Wir kapseln 
 #include <vector>
 #include <algorithm>
 #include <random>
+#include <memory>
 
 template <class T>
 class AbstractSensorInterface{
@@ -310,7 +321,7 @@ class AbstractSensorInterface{
      bool sensorIsActive = true;
    public:
      //virtual bool initSensorInterface();
-     virtual T readLastMeasurement() = 0;
+     virtual T readLastMeasurement() const = 0;
 };
 
 class NewUSBSensor{
@@ -321,7 +332,7 @@ class NewUSBSensor{
        // and some additional adjustments here
        return success;
     }
-    std::vector<int> readnMeasurements(unsigned int n){
+    std::vector<int> readnMeasurements(unsigned int n) const{
       // simulate measurements
       std::random_device rd;
       std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
@@ -334,33 +345,51 @@ class NewUSBSensor{
     }
 };
 
-class indivUSBSensor: public AbstractSensorInterface<std::vector<int>>
+class IndivUSBSensor: public AbstractSensorInterface<std::vector<int>>
 {
   private:
-    NewUSBSensor* sensor;
+    std::unique_ptr<NewUSBSensor> sensor;
     const float angleResolution = 1.;
     const unsigned int beams = 10;
   public:
     bool initSensorInterface(){
-      sensor->initSensorInterface(angleResolution);
+    	if(!sensor)
+    	{
+    		this->sensor = std::make_unique<NewUSBSensor>();
+    	}
+    	
+      this->sensor->initSensorInterface(angleResolution);
       //sensorIsActive = true;  // in case of success
       return this->sensorIsActive;
     }
-    std::vector<int> readLastMeasurement(){
-      return sensor->readnMeasurements(beams);
+    std::vector<int> readLastMeasurement() const {
+      return this->sensor->readnMeasurements(beams);
     }
 };
 
-int main()
+template<typename T>
+void print(const AbstractSensorInterface<T>& sensor)
 {
-  indivUSBSensor A;
-  bool stat = A.initSensorInterface();
-  std::cout << "Sensor check .... " << stat << std::endl;
-  if (stat){
-  	std::cout << "Measured distance(s) :";
-	  for (auto itr: A.readLastMeasurement()){
+	std::cout << "Measured distance " << sensor.readLastMeasurement() << std::endl;
+}
+
+
+void print(const IndivUSBSensor& sensor)
+{
+	std::cout << "Measured distance(s) :";
+	  for (auto itr: sensor.readLastMeasurement()){
 	     std::cout << itr << ", ";
 	  }
+}
+
+
+int main()
+{
+  IndivUSBSensor a;
+  bool stat = a.initSensorInterface();
+  std::cout << "Sensor check .... " << stat << std::endl;
+  if (stat){
+  	print(A);
   }
   else std::cout << "Sensor not avialable";
   return EXIT_SUCCESS;
