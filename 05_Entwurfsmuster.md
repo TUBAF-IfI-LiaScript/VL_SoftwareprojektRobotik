@@ -279,11 +279,11 @@ void print(const AbstractSensorInterface<T>& sensor)
 
 int main()
 {
-  USBSensor<float> MyDistanceSensor;
-  bool stat = MyDistanceSensor.initSensorInterface();
+  USBSensor<float> myDistanceSensor;
+  bool stat = myDistanceSensor.initSensorInterface();
   std::cout << "Sensor check .... " << stat << std::endl;
   if (stat) 
-  	print(MyDistanceSensor);
+  	print(myDistanceSensor);
   else 
   	std::cout << "Sensor not avialable";
 
@@ -426,24 +426,30 @@ In unserem Roboterbeispiel wollen wir das Observer-Entwurfsmuster benutzen, um d
 ```cpp                     Observer.cpp
 #include <list>
 #include <iostream>
+#include <memory>
+
+class ObserverInterface
+{
+public:
+	virtual void update() = 0;
+};
 
 ///// Subject
 
 class Subject{
 private:
-  std::list<ObserverInterface*> observers;
+  std::list<std::shared_ptr<ObserverInterface>> observers;
 
 public:
-	void attach(ObserverInterface* observer){
-	   observers.push_back(observer);
+	void attach(std::shared_ptr<ObserverInterface> observer){
+	   this->observers.push_back(observer);
   }
-	void detach(ObserverInterface* observer){
-	   observers.remove(observer);
+	void detach(std::shared_ptr<ObserverInterface> observer){
+	   this->observers.remove_if([&observer](const std::shared_ptr<ObserverInterface>& e){return (e.get() == observer.get());});
   }
 
 	void notify(){
-	   std::list<ObserverInterface*>::iterator iter = observers.begin();
-	   for (auto itr: observers)
+	   for (auto itr: this->observers)
 	   {
 		     itr->update();
 	   }
@@ -458,49 +464,45 @@ private:
 	std::string data;
 
 public:
-	void setData(std::string _data) { data = _data; }
-	std::string getData() { return data; }
+	void setData(std::string _data) { this->data = _data; }
+	std::string getData() { return this->data; }
 };
 
 /// Observer
 
-class ObserverInterface
-{
-public:
-	virtual void update() = 0;
-};
+
 
 class ConcreteObserver : public ObserverInterface
 {
 private:
 	std::string name;
 	std::string observerState;
-	ConcreteSubject* subject;
+	std::shared_ptr<ConcreteSubject> subject;
 
 public:
 	void update(){
-	   observerState = subject->getData();
-     std::cout << "Observer " << name << " hat neuen Zustand: " << observerState << std::endl;
+	   this->observerState = this->subject->getData();
+     std::cout << "Observer " << this->name << " hat neuen Zustand: " << this->observerState << std::endl;
   }
-	void setSubject(ConcreteSubject* subj){
-     subject = subj;
+	void setSubject(const std::shared_ptr<ConcreteSubject>& subj){
+     this->subject = subj;
   }
-	ConcreteSubject* getSubject(){
-     return subject;
+	std::shared_ptr<ConcreteSubject> getSubject(){
+     return this->subject;
   }
-	ConcreteObserver(ConcreteSubject* subj, std::string name){
-    name = name;
-subject = subj;
+	ConcreteObserver(const std::shared_ptr<ConcreteSubject>& subj, std::string _name){
+    this->name = _name;
+		this->subject = subj;
   }
 };
 
 int main()
 {
   // Hier noch ohne Smartpointer ... siehe Hausaufgaben
-	ConcreteSubject* subj = new ConcreteSubject();
+	std::shared_ptr<ConcreteSubject> subj = std::make_shared<ConcreteSubject>();
 
-	ObserverInterface* obs1 = new ConcreteObserver(subj,"NotStop");
-	ObserverInterface* obs2 = new ConcreteObserver(subj,"Navigationsmodul");
+	std::shared_ptr<ConcreteObserver> obs1 = std::make_shared<ConcreteObserver>(subj,"NotStop");
+	std::shared_ptr<ConcreteObserver> obs2 = std::make_shared<ConcreteObserver>(subj,"Navigationsmodul");
 
 	subj->attach(obs1);
 	subj->attach(obs2);
