@@ -596,8 +596,6 @@ Nehmen wir an, dass wir unterschiedliche Strategien für die Reinigung nutzen wo
 #include <iostream>
 #include <memory>
 
-using namespace std;
-
 class AbstractStrategy {
 public:
     virtual void operator()() = 0;
@@ -605,34 +603,34 @@ public:
 };
 
 class Context {
-    shared_ptr<AbstractStrategy> _strat;
+    std::shared_ptr<AbstractStrategy> strat;
 
 public:
-    Context() : _strat(nullptr) {}
-    void setStrategy(shared_ptr<AbstractStrategy> strat) {
-	     _strat = strat;
+    Context() : strat(nullptr) {}
+    void setStrategy(std::shared_ptr<AbstractStrategy> _strat) {
+	     this->strat = strat;
     }
-    void strategy()  { if (_strat) (*_strat)(); }
+    void strategy()  { if (this->strat) (*(this->strat))(); }
 };
 
 class RandomWalk : public AbstractStrategy {
 public:
-    void operator()() { std::cout << "   Moving around without any strategy\n"; }
+    virtual void operator()() override { std::cout << "   Moving around without any strategy\n"; }
 };
 
 class LoopStrategy : public AbstractStrategy {
 public:
-    void operator()() { std::cout << "   Operating in circular structures\n"; }
+    virtual void operator()() override { std::cout << "   Operating in circular structures\n"; }
 };
 
 class LinesStrategy : public AbstractStrategy {
 public:
-    void operator()() { cout << "   Covering the operational area line by line\n"; }
+    virtual void operator()() override { std::cout << "   Covering the operational area line by line\n"; }
 };
 
 
 int main() {
-    Context * c = new Context();
+    std::shared_ptr<Context>  c = std::make_shared<Context>();
 
     c->setStrategy( std::shared_ptr<AbstractStrategy>(new RandomWalk) );
     c->strategy();
