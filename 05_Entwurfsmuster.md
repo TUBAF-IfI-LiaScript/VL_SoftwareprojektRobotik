@@ -11,7 +11,7 @@ import: https://github.com/liascript/CodeRunner
 
 -->
 
-# Vorlesung V - Entwurfsmuster
+# Entwurfsmuster
 
 Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/VL_SoftwareprojektRobotik/master/05_Entwurfsmuster.md#1)
 
@@ -282,9 +282,9 @@ int main()
   USBSensor<float> myDistanceSensor;
   bool stat = myDistanceSensor.initSensorInterface();
   std::cout << "Sensor check .... " << stat << std::endl;
-  if (stat) 
+  if (stat)
   	print(myDistanceSensor);
-  else 
+  else
   	std::cout << "Sensor not avialable";
 
   return EXIT_SUCCESS;
@@ -357,7 +357,7 @@ class IndivUSBSensor: public AbstractSensorInterface<std::vector<int>>
     	{
     		this->sensor = std::make_unique<NewUSBSensor>();
     	}
-    	
+
       this->sensor->initSensorInterface(angleResolution);
       //sensorIsActive = true;  // in case of success
       return this->sensorIsActive;

@@ -11,7 +11,7 @@ import: https://raw.githubusercontent.com/LiaTemplates/Rextester/master/README.m
 
 -->
 
-# Vorlesung V - OOP und Container
+# OOP und Container
 
 Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/04_OOP_Container.md#1)
 

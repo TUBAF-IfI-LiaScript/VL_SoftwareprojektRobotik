@@ -11,7 +11,7 @@ import: https://raw.githubusercontent.com/LiaTemplates/Rextester/master/README.m
 
 -->
 
-# Vorlesung IV - Templates
+# Templates
 
 Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/03_Templates.md#1)
 
