@@ -691,7 +691,7 @@ Nun können wir uns die Ausgabe auf der ROS1 Seite anschauen. Leider gibt es noc
 > rosrun image_view image_view image:=/face_detection_1575145081472799322/image
 ```
 
-![RoboterSystem](./img/06_EinfuehrungROS/FaceRecognition.png)<!-- width="80%" -->
+![RoboterSystem](./image/06_EinfuehrungROS/FaceRecognition.png)<!-- width="80%" -->
 *Beispielhafte Ausgabe der erkannten Gesichter*
 
 ## Installation
