@@ -13,7 +13,7 @@ import: https://github.com/liascript/CodeRunner
 
 # Einführung in ROS2
 
-Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/AdvancedProgramming/master/Cplusplus.md#1)
+Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/VL_SoftwareprojektRobotik/master/06_EinfuehrungROS.md#1)
 
 **Zielstellung der heutigen Veranstaltung**
 
