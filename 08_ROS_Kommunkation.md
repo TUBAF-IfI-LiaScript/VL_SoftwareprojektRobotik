@@ -11,7 +11,7 @@ import: https://github.com/liascript/CodeRunner
 
 -->
 
-# ROS2 Pakete
+# ROS2 Kommunikationsmethoden
 
 Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/08_ROS_Kommunkation.md)
 
