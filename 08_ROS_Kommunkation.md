@@ -13,7 +13,7 @@ import: https://github.com/liascript/CodeRunner
 
 # ROS2 Pakete
 
-Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/07_ROS_Pakete.md)
+Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/08_ROS_Kommunkation.md)
 
 **Zielstellung der heutigen Veranstaltung**
 
@@ -197,11 +197,11 @@ Bisher haben wir über asynchrone Kommunikationsmechanismen gesprochen. Ein Publ
 + Aktiviere die Kamera
 + ...
 
-In diesem Fall liegt eine Interaktion in Form eines Remote-Procedure-Calls (RPC) vor. Die Anfrage / Antwort erfolgt über einen Dienst, der durch ein Nachrichtenpaar definiert ist: eine für die Anfrage und eine für die Antwort. Ein bereitstellender ROS-Knoten bietet einen Dienst unter einem Stringnamen an, und ein Client ruft den Dienst auf, indem er die Anforderungsnachricht sendet und in seiner Ausführung innehält und auf die Antwort wartet. Die Client-Bibliotheken stellen diese Interaktion dem Programmierer so dar, als wäre es ein Remote Procedure Call.
+In diesem Fall liegt eine Interaktion in Form eines Remote-Procedure-Calls (RPC) vor. Die Anfrage / Antwort erfolgt über einen Dienst, der durch ein Nachrichtenpaar definiert ist: eine für die Anfrage und eine für die Antwort. Ein bereitstellender ROS-Knoten bietet einen Dienst unter einem String-Namen an, und ein Client ruft den Dienst auf, indem er die Anforderungsnachricht sendet und in seiner Ausführung innehält und auf die Antwort wartet. Die Client-Bibliotheken stellen diese Interaktion dem Programmierer so dar, als wäre es ein Remote Procedure Call.
 
 Dafür sind 3 Schritte notwendig:
 
-1. Ein Service wird über ein Service File definiert, dass analog zu den nutzerdefinierten Paketen die Struktur der auszutauschenden Daten beschreibt. Dabei wird sowohl die Struktur des Aufrufes, wie auch die Antwort des Services beschrieben. Dabei wird das gleiche Format wie bei den nutzerspezifischen Messages verwendet.
+1. Ein Service wird über ein Service File definiert, dass analog zu den benutzerdefinierten Paketen die Struktur der auszutauschenden Daten beschreibt. Dabei wird sowohl die Struktur des Aufrufes, wie auch die Antwort des Services beschrieben. Dabei wird das gleiche Format wie bei den nutzerspezifischen Messages verwendet.
 
 2. Die Logik des Service (Entgegennahme des Requests/ Ausliefern der Antwort) wird in einem Knoten implementiert. Hier werden die Parameter der Anfrage ausgewertet, die Antwort bestimmt und diese auf das Ausgabeformat abgebildet.
 
@@ -214,7 +214,9 @@ des Turtlesim-Beispiels und anhand einer eigenen Implementierung.
 ros2 run turtlesim turtlesim_node
 ```
 
-![RoboterSystem](./img/08_ROS_Kommunikation/SingleTurtle.png)<!-- width="60%" -->
+
+![RoboterSystem](./image/08_ROS_Kommunikation/SingleTurtle.png)<!-- style="width: 80%; min-width: 420px; max-width: 800px;"-->
+
 
 Wie explorieren Sie die Services, die durch den `turtlesim_node` bereitgestellt werden?
 
@@ -275,7 +277,7 @@ turtlesim.srv.Spawn_Response(name='turtle2')
 
 Offenbar wird eine neue Schildkröte in der Simulation erzeugt und mit einem generierten Namen versehen. In diesem Fall erfolgt als Reaktion auf den Request nicht nur eine allgemeine Antwort, vielmehr wird ein weiterer Knoten erzeugt der weitere Publisher und Subscriber öffnet.
 
-![RoboterSystem](./img/08_ROS_Kommunikation/MultipleTurtles.png)<!-- width="80%" -->
+![RoboterSystem](./image/08_ROS_Kommunikation/MultipleTurtles.png)<!-- style="width: 80%; min-width: 420px; max-width: 800px;"-->
 
 Mit den anderen Services (`Kill`) kann dessen Verhalten nun adaptiert werden.
 
