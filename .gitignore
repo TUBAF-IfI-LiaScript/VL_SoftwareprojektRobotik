@@ -30,3 +30,15 @@
 *.exe
 *.out
 *.app
+
+.cmake
+.bin
+
+
+/examples/07_ROS_Pakete/src/log/*
+/examples/07_ROS_Pakete/src/build/*
+/examples/07_ROS_Pakete/src/install/*
+
+/examples/08_ROS_Kommunikation/ws_service/log/*
+/examples/08_ROS_Kommunikation/ws_service/build/*
+/examples/08_ROS_Kommunikation/ws_service/install/*
