@@ -427,7 +427,7 @@ Die Schallgeschwindigkeit ist abhänig von
 ![RoboterSystem](./image/09_Sensoren/Schallgeschwindigkeit.png)<!--style="width: 70%; max-width: 720px;"-->
 *Schallgeschwindigkeit in Abhängigkeit von der Temperatur und dem Luftdruck*
 
-Welchen Einfluß haben diese Größen? Für zwei Konfigurationen, die zwei unterschiedliche
+Welchen Einfluss haben diese Größen? Für zwei Konfigurationen, die zwei unterschiedliche
 Wetterlagen repräsentieren ergibt sich bereits ein Fehler von 8%.
 
 $v_1 (980 hPa, 0°) = 325\frac{m}{s}$
@@ -497,7 +497,6 @@ Triangulationsverfahren setzen auf einem bekannten Abstand zwischen von Empfäng
 
 Anwendung findet dieses Konzept auch bei RGB-D Kameras, sowohl bei Infrarotbasierten Systemen als auch bei Stereokameras.
 
-
 ## Exkurs - Vorteile des Infrarotspektrums
 
 + Fremdlichtunabhängigkeit
@@ -507,8 +506,32 @@ Anwendung findet dieses Konzept auch bei RGB-D Kameras, sowohl bei Infrarotbasie
 ![RoboterSystem](./image/09_Sensoren/Strahlungsintensitaet.png)<!-- width="60%" -->
 *Spektrum der Strahlungsintensität* [Wikipedia Commons](https://commons.wikimedia.org/wiki/File:Sonne_Strahlungsintensitaet.svg)
 
+## Anwendung der Messverfahren in 3D Kameras
 
-## Beispielanwendung - Ultraschall
+Zielstellung: Darstellung der Umgebung in mit einem Sensor in einer mehrdimensionalen Darstellung
+
+![RoboterSystem](./image/09_Sensoren/3D_Tiefe.png)<!-- width="40%" -->
+![RoboterSystem](./image/09_Sensoren/3D_image.png)<!-- width="40%" -->
+
+Eine Punktwolke _Point Cloud_ ist eine Menge von Punkten eines Vektorraums, die eine unorganisierte räumliche Struktur aufweist. Die Kontur eines Objektes wird durch die in der Punktwolke enthaltenen Einzelpunkte beschrieben, die jeweils durch ihre Raumkoordinaten erfasst sind. Zu den Punkten können zusätzlich Attribute, wie z. B. geometrische Normalen, Farbwerte, Aufnahmezeitpunkt oder Messgenauigkeit, erfasst sein.
+
+**Umsetzung**
+
++ Time of Flight (TOF)
++ Structured Light
+
+![RoboterSystem](./image/09_Sensoren/IR_Pattern.png)<!-- width="60%" -->
+
++ Passiv Stereo (Triangulation)
++ Active Stereo  
+
+**Nachteile**
+
++ _Time of Flight_-Systeme leiden unter Bewegungsartefakten und Mehrwege-Interferenzen.
++ _Structured Light_ ist anfällig für Umgebungsbeleuchtung und Interferenzen mehrerer Geräte.
++ _Passiv-Stereo_ kämpft in texturlosen Regionen, wo teure globale Optimierungstechniken erforderlich sind
+
+### Beispielanwendung - Ultraschall
 
 Als Anwendungsbeispiel sollen die grundlegenden Herausforderungen anhand zweier Sensoren verdeutlicht werden:
 
@@ -602,8 +625,8 @@ unsigned long range_timer;
 
 char frameid[] = "/us_ranger";
 
-// 333 m/s = 33300 cm/s = 33.300 cm/ms = 0.0333 cm/mus
-const float sonic_speed = 0.0333;
+// 333 m/s = 0.333 m/ms = 0.000333 m/mus
+const float sonic_speed = 0.000333;
 
 unsigned long getDuration(int tPin,int ePin){
   // Run-time measurment between activation of tPin and ePin
@@ -625,7 +648,7 @@ void setup()
 
   range_msg.radiation_type = sensor_msgs::Range::ULTRASOUND;
   range_msg.header.frame_id =  frameid;
-  range_msg.field_of_view = 0.03;
+  range_msg.field_of_view = 0.3;
   range_msg.min_range = 0.03;
   range_msg.max_range = 1.0;
 
@@ -648,19 +671,65 @@ void loop()
 }
 ```
 
-## Beispielanwendung - Kinect
+### Beispielanwendung - Kinect
 
-Die Kinect I arbeitet mit einem Infrarotbasierten Trigoniometrieverfahren. Dazu wird ein pseudo-zufälliges Muster auf den Hintergrund geworfen und mit einem Referenzsystem verglichen.
+Im Beispiel wird eine Intel Realsense 435 verwendet. Dieser Sensor implementiert das Active Stereo Verfahren [Link](https://www.intelrealsense.com/depth-camera-d435/).
+
+Die Instellation der Treiber ist unter
+
+https://index.ros.org/r/ros2_intel_realsense/
+
+beschrieben.
 
 ```
-roslaunch openni2_launch openni2.launch
+ros2 launch realsense_examples rs_camera.launch.py
 ```
 
-Dieses Muster kann mit dem zugehörigen Topic visualisiert werden.
+Der Point-Cloud Datentyp ist unter [Link](http://docs.ros.org/en/melodic/api/sensor_msgs/html/msg/PointCloud2.html) beschrieben.
 
 ![RoboterSystem](./image/09_Sensoren/IRPattern.png)<!-- width="100%" -->
-*Spektrum der Strahlungsintensität*
 
+## Positionsbestimmung mittels GNSS
+
+Globales Navigationssatellitensysteme dienen der Positionsbestimmung und Navigation auf der Erde und in der Luft durch den Empfang der Signale von Navigationssatelliten und Pseudoliten.
+
+Die Systeme bestehen aus:
+
++ Weltraumsegment  (mind. 24 Satelliten auf 6 Umlaufbahnen) - 4 bis 8 Satelliten sind immer sichtbar
++ Kontrollsegment (Kontrollstationen)
++ Benutzersegment (passive Empfänger)
+
+Etablierte Systeme:
+GPS, Galileo (Europa), GLONASS (Russland), BeiDou (China),
+
+![RoboterSystem](./image/09_Sensoren/ConstellationGPS.gif)<!-- width="30%" --> [^1]
+
+[^1]: Wikipedia, Autor El pak, [Link](https://commons.wikimedia.org/wiki/File:ConstellationGPS.gif)
+
+Ausgehend vom Zeitstempel der Satellitennachrichten werden die Distanzen zu den bekannten Satellitenpositionen bestimmt. Anhand der Signale von 3 Satelliten kann eine Kugelschnitt bestimmt werden.
+
+Die Satellitenanordnung beeinflusst Lokalisierungsgüte (schleifender Schnitt)
+
+![RoboterSystem](./image/09_Sensoren/Dilution_Of_Precision.svg.png)<!-- width="50%" --> [^2]
+
+[^1]: Wikipedia, Autor Xoneca, Example of Geometric Dilution Of Precision (GDOP) for simple Triangulation. Three different situations are shown: A) Triangulation. B) Triangulation with error. C) Triangulation with error and poor GDOP. [Link](https://commons.wikimedia.org/wiki/File:Geometric_Dilution_Of_Precision.svg)
+
+**Fehlerquellen**
+
++ "selective availability" (SA)  bis 2. Mai 2000  - künstliche Verfälschung der vom Satelliten übermittelten Uhrzeit im L1 Signal. Schwankungen um ca. 50 m in schmalen Zeitfenstern
++ Abblocken der Signale durch Hindernisse
++ Mehrwegeeffekte wegen Reflexionen an Umgebungsobjekten
++ Atmosphärische Effekte (Brechung, Geschwindigkeitsreduktion, unterschiedliche Strecken in verschiedenen Schichten)
+
+Satellitengestützte Zusatzsysteme (Satellite-Based Augmentation Systems (SBAS)), sind das europäische EGNOS, das US-amerikanische WAAS, die die Korrektursignale über geostationäre Satelliten abstrahlen, um letztgenannten Fehlertyp zu kompensieren.
+
+Durch stationäre Empfangsstationen kann die Positionsgenauigkeit verbessert werden. Sie übermitteln Korrektursignale (DGPS) an den eigentlichen Nutzer:
++ von den Landesvermessungsämtern wird das deutsche SAPOS-System betrieben. SAPOS stellt drei verschiedene Signaldienste zur Verfügung, die eine Genauigkeit von bis zu unter 1 cm erreichen.
++ eigene eingemessene Basisstationen im Kommunikationsbereich der mobilen Station.
+
+**Vorhersage von Signalqualitäten**
+
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/xOTSTg6cl00" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ## Aufgabe der Woche
 

@@ -23,8 +23,8 @@ unsigned long range_timer;
 
 char frameid[] = "/us_ranger";
 
-// 333 m/s = 33300 cm/s = 33.300 cm/ms = 0.0333 cm/mus
-const float sonic_speed = 0.0333;
+// 333 m/s = 0.333 m/ms = 0.000333 m/mus
+const float sonic_speed = 0.000333;
 
 unsigned long getDuration(int tPin,int ePin){
   // Run-time measurment between activation of tPin and ePin
@@ -46,12 +46,14 @@ void setup()
   
   range_msg.radiation_type = sensor_msgs::Range::ULTRASOUND;
   range_msg.header.frame_id =  frameid;
-  range_msg.field_of_view = 0.03;
+  range_msg.field_of_view = 0.3;
   range_msg.min_range = 0.03;
   range_msg.max_range = 1.0;
 
   pinMode(trigger_pin, OUTPUT);
   pinMode(echo_pin, INPUT);
+
+  Serial.begin(9600);
 }
 
 void loop()
@@ -60,7 +62,11 @@ void loop()
   //   since it takes that long for the sensor to stabilize
   if ( (millis()-range_timer) > 50){
     long duration = getDuration(trigger_pin, echo_pin);
-    range_msg.range = (float)duration/2*sonic_speed;
+    float result = ((float)duration)/2*sonic_speed;
+    if (result > range_msg.max_range)
+      result = 0;
+    Serial.println(int(result * 100));
+    range_msg.range = result;
     range_msg.header.stamp = nh.now();
     pub_range.publish(&range_msg);
     range_timer =  millis() + 50;
