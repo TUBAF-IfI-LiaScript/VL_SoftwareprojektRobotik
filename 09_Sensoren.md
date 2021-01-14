@@ -671,7 +671,7 @@ void loop()
 }
 ```
 
-### Beispielanwendung - Kinect
+### Beispielanwendung - Intel Realsense
 
 Im Beispiel wird eine Intel Realsense 435 verwendet. Dieser Sensor implementiert das Active Stereo Verfahren [Link](https://www.intelrealsense.com/depth-camera-d435/).
 
@@ -687,7 +687,7 @@ ros2 launch realsense_examples rs_camera.launch.py
 
 Der Point-Cloud Datentyp ist unter [Link](http://docs.ros.org/en/melodic/api/sensor_msgs/html/msg/PointCloud2.html) beschrieben.
 
-![RoboterSystem](./image/09_Sensoren/IRPattern.png)<!-- width="100%" -->
+![RoboterSystem](./image/09_Sensoren/rviz.png)<!-- width="100%" -->
 
 ## Positionsbestimmung mittels GNSS
 
