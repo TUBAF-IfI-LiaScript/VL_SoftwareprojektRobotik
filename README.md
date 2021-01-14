@@ -32,7 +32,7 @@ zu finden.
 | 10.12.2020 | ROS2 Entwicklungsprozess Beispiele   |                                                                                              |
 | 17.12.2020 | ROS2 Kommunikation                   |                                                                                              |
 | 07.01.2021 | Sensoren                             |                                                                                              |
-| 14.01.2021 |                                      |                                                                                              |
+| 14.01.2021 | Sensoren                                      |                                                                                              |
 | 21.01.2021 | Sensordatenverarbeitung              |                                                                                              |
 | 28.01.2021 | Regelungstechnik                     |                                                                                              |
 | 04.02.2021 | Datenfusion                          |                                                                                              |
