@@ -148,7 +148,11 @@ Dabei unterscheiden wir zwei grundlegende Regelungskonzepte:
 
 ## Allgemeines Vorgehen bei der Reglerauslegung
 
-In beiden Fällen muss man sich bewusst sein, dass die Strecke nicht unmittelbar auf die Reglerinputs "anspringt" sondern auf die Änderung der Führungsgröße mit einem eigenen Verzögerungsverhalten regiert. Entsprechend der Abbildung der Stellgröße $y$ auf die Regelgröße $x$ unterscheiden wir dabei folgende Basistypen, wobei jeweils die Sprungantwort gezeigt wird.
+In beiden Fällen muss man sich bewusst sein, dass die Strecke nicht
+unmittelbar auf die Reglerinputs "anspringt" sondern auf die Änderung
+der Führungsgröße mit einem eigenen Verzögerungsverhalten regiert.
+Entsprechend der Abbildung der Stellgröße $y$ auf die Regelgröße $x$
+unterscheiden wir dabei folgende Basistypen, wobei jeweils die Sprungantwort gezeigt wird.
 
 Die Diagramme in diesem Bereich gehen auf den Autor "Chris828" zurück und sind unter https://de.wikipedia.org zu finden.
 
@@ -214,10 +218,11 @@ style="width: 80%; min-width: 420px; max-width: 720px;"
 
 ### Diskrete Regler
 
-Für diskrete Regler exisitiert nur ein Spektrum an Zuständen, das als Basis der Regelung dient. Anhand eines Schwellwertes wird eine Heizungssteuerung an- oder ausgeschalten.
+Für diskrete Regler existiert nur ein Spektrum an Zuständen, das als Basis der Regelung dient. Anhand eines Schwellwertes wird eine Heizungssteuerung an- oder ausgeschaltet.
 
-![RoboterSystem](./image/11_Regelungstechnik/Zweipunktregler.png)<!-- width="50%" -->
-_Wikimedia Grafik des Autors "Heinrich Kümmeke"_
+![RoboterSystem](./image/11_Regelungstechnik/Zweipunktregler.png)<!-- width="50%" -->[^1]
+
+[^1]: _Wikimedia Grafik des Autors "Heinrich Kümmeke"_
 
 ### Kontinuierliche Regler
 
@@ -314,14 +319,13 @@ var e_sum  = 0;  // Summe über allen Fehlern
 for (var t = 1; t < plant.length; t++){
     ist = Regelstrecke(u);
     plant[t-1] = ist;
-    var e = target[t] - ist;
     e_old = e_now;
-    e_now = e;
+    e_now = target[t] - ist;
     e_sum = e_sum + e_now;
 
     // Bestimmung der neuen direkten Stellgröße
     u = Kp * e_now + Ki * e_sum + Kd * (e_now - e_old);
-    error[t]= e;
+    error[t]= e_now;
 }
 ```
 ```js -Visualization.js
