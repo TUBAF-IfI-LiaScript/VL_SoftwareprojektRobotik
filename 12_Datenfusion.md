@@ -283,6 +283,7 @@ Wie können wir diese Sensorcharakteristik nun für unser Roboterbeispiel verwen
 
 ```python                          generateMeasurements.py
 import numpy as np
+import matplotlib.pyplot as plt
 
 markers = np.array([0, 1., 0, 0, 1., 1., 0, 0, 0, 0])
 truePositive = 0.83
@@ -308,6 +309,8 @@ $$posteriori = \frac{likelihood \cdot prior}{normalization}$$
 
 ```python                          generateBelief.py
 import numpy as np
+import matplotlib.pyplot as plt
+
 # Vorwissen der Position
 apriori = np.array([1./10]*10)
 # Messungen
@@ -339,6 +342,8 @@ Lassen Sie uns die Messung einige Male wiederholen. Das folgende Diagramm zeigt 
 
 ```python                          constantPosition.py
 import numpy as np
+import matplotlib.pyplot as plt
+
 apriori = np.array([1./10]*10)
 markers = np.array([0, 1., 0, 0, 1., 1., 0, 0, 0, 0])
 truePositive = 0.83
@@ -368,6 +373,7 @@ Nehmen wir wiederum eine Aufenthaltwahrscheinlichkeit über unseren Segmenten an
 
 ```python                          movements.py
 import numpy as np
+import matplotlib.pyplot as plt
 
 def perfect_predict(belief, u):
     n = len(belief)
@@ -396,6 +402,7 @@ Zunächst berücksichtigen nur die beiden benachbarten Felder und ein perfektes 
 
 ```python                          uncertainmovements.py
 import numpy as np
+import matplotlib.pyplot as plt
 
 def predict_move(belief, move, p_under, p_correct, p_over):
     n = len(belief)
@@ -473,6 +480,7 @@ Wenn wir die Rechung also verallgemeinern können wir auf eine bestehende Implem
 ```python                          uncertainmovements.py
 import numpy as np
 from scipy import ndimage
+import matplotlib.pyplot as plt
 
 belief = [.05, .5, .05, .05, .05, .05, .05, .05, .05, .05]
 kernel = [.1, 0.7, 0.2]
@@ -525,6 +533,7 @@ Das folgende Codefragment bildet zwei Iterationen für unser Beispiel ab. Im ers
 ```python                          BayesFilter.py
 import numpy as np
 from scipy import ndimage
+import matplotlib.pyplot as plt
 
 priori = np.array([1./10]*10)
 kernel = [.1, 0.7, 0.2]
