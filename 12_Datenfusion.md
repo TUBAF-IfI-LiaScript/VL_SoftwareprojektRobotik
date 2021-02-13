@@ -208,9 +208,9 @@ Unser Roboter ist mit verschiedenen Sensorsystemen ausgestattet.
 
 1. Im Frontbereich des Roboters befindet sich ein Kamerasystem, dass aus Bilddaten features zu erkennen versucht. Dabei konzentrierte man sich auf orange Warnschilder und Brücken über die Mulde.
 
-![ImageMatching](./image/12_Datenfusion/opencv_matching.jpg)<!-- style="width: 50%;"-->
+   ![ImageMatching](./image/12_Datenfusion/opencv_matching.jpg)<!-- style="width: 50%;"-->
 
-*Examplarische Darstellung eines Image Matching Ansatzes auf der Basis einer SIFT Methode* [OpenCV Tutorial](https://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_feature2d/py_matcher/py_matcher.html)
+   *Examplarische Darstellung eines Image Matching Ansatzes auf der Basis einer SIFT Methode* [OpenCV Tutorial](https://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_feature2d/py_matcher/py_matcher.html)
 
 2. Ein Beschleunigungssensor bestimmt die Bewegungen des Bootes. Damit lassen sich zum Beispiel starke Strömungen gut erkennen.
 
@@ -279,7 +279,7 @@ Wie wahrscheinlich ist eine Messung eines orangen Schildes, wenn wir gar keines 
 
 $$p(x|z) = \frac{0.1}{0.5 + 0.1} = 0.17$$
 
-Wie können wir diese Sensorcharakteristik nun für unser Roboterbeispiel verwenden? Unsere Klassifikation wird durch die verschiedenen Möglichkeiten, an denen sich der Roboter aufhalten kann, "verwässert". Wenn wir nur ein Segment mit einem Schild hätten müssten wir diesem eine Aufenthaltswahrscheinlichkeit von $p=0.72$ zuordnen. Da es aber mehrere Möglichkeiten gibt splittet sich diese auf.
+Wie können wir diese Sensorcharakteristik nun für unser Roboterbeispiel verwenden? Unsere Klassifikation wird durch die verschiedenen Möglichkeiten, an denen sich der Roboter aufhalten kann, „verwässert“. Wenn wir nur ein Segment mit einem Schild hätten müssten wir diesem eine Aufenthaltswahrscheinlichkeit von $p=0.72$ zuordnen. Da es aber mehrere Möglichkeiten gibt, splittet sich diese auf.
 
 ```python                          generateMeasurements.py
 import numpy as np
@@ -565,7 +565,7 @@ Welche Einschränkungen sehen Sie in dem Beispiel?
 
 + Wir bilden nur eine Zustandsvariable ab. Bereits die Umsetzung eines 2D oder 3D Beispiels würde eine erhebliche Anpassung notwendig machen. Damit würde dann aber auch die Komplexität und die Berechnungsdauer entsprechend ansteigen.
 
-![ImageMatching](./image/12_Datenfusion/2DBayes.png)<!-- style="width: 70%;"-->
+  ![ImageMatching](./image/12_Datenfusion/2DBayes.png)<!-- style="width: 70%;"-->
 
 + Diese Überlegung ist in starkem Maße mit der Frage nach der Auflösung unserer Diskretisierung verbunden. Ein 100x100m große Fabrikhallen, die mit einem 10cm Grid überzogen werden soll, bedeutet, dass wir jeweils 1 Million Kacheln evaluieren müssen.
 
