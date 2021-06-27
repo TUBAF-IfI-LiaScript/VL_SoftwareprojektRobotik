@@ -702,17 +702,15 @@ Die Systeme bestehen aus:
 Etablierte Systeme:
 GPS, Galileo (Europa), GLONASS (Russland), BeiDou (China),
 
-![RoboterSystem](./image/09_Sensoren/ConstellationGPS.gif)<!-- width="30%" --> [^1]
+![RoboterSystem](./image/09_Sensoren/ConstellationGPS.gif "Bewegung der GPS Satelliten um die Erde [^WikimediaGPS]")
 
-[^1]: Wikipedia, Autor El pak, [Link](https://commons.wikimedia.org/wiki/File:ConstellationGPS.gif)
+
 
 Ausgehend vom Zeitstempel der Satellitennachrichten werden die Distanzen zu den bekannten Satellitenpositionen bestimmt. Anhand der Signale von 3 Satelliten kann eine Kugelschnitt bestimmt werden.
 
 Die Satellitenanordnung beeinflusst Lokalisierungsgüte (schleifender Schnitt)
 
-![RoboterSystem](./image/09_Sensoren/Dilution_Of_Precision.svg.png)<!-- width="50%" --> [^2]
-
-[^1]: Wikipedia, Autor Xoneca, Example of Geometric Dilution Of Precision (GDOP) for simple Triangulation. Three different situations are shown: A) Triangulation. B) Triangulation with error. C) Triangulation with error and poor GDOP. [Link](https://commons.wikimedia.org/wiki/File:Geometric_Dilution_Of_Precision.svg)
+![RoboterSystem](./image/09_Sensoren/Dilution_Of_Precision.svg.png "Qualität der Positionsbestimmung in Abhängigkeit von der Konfiguration der Satellitenpositionen [^WikimediaDoP]")
 
 **Fehlerquellen**
 
@@ -730,6 +728,10 @@ Durch stationäre Empfangsstationen kann die Positionsgenauigkeit verbessert wer
 **Vorhersage von Signalqualitäten**
 
 <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/xOTSTg6cl00" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+[^WikimediaGPS]: Wikipedia, Autor El pak, [Link](https://commons.wikimedia.org/wiki/File:ConstellationGPS.gif)
+
+[^WikimediaDoP]: Wikipedia, Autor Xoneca, Example of Geometric Dilution Of Precision (GDOP) for simple Triangulation. Three different situations are shown: A) Triangulation. B) Triangulation with error. C) Triangulation with error and poor GDOP. [Link](https://commons.wikimedia.org/wiki/File:Geometric_Dilution_Of_Precision.svg)
 
 ## Aufgabe der Woche
 
