@@ -19,26 +19,28 @@ Freiberg auf der Basis von LiaScript. Eine interaktive Darstellung der Inhalte i
 
 zu finden.
 
-| Datum      | Titel                                | LiaScript Link                                                                               |
-|:---------- |:------------------------------------ | -------------------------------------------------------------------------------------------- |
-| 22.10.2020 | Einführung                           | [Link](https://github.com/SebastianZug/SoftwareprojektRobotik/blob/master/00_Einfuehrung.md) |
-| 29.10.2020 | Klassen und Strukturen               |                                                                                              |
-| 05.11.2020 | Speicher und Pointer                 |                                                                                              |
-| 04.11.2020 | Templates                            |                                                                                              |
-| 12.11.2020 | Vererbung und C++ Standardbibliothek |                                                                                              |
-| 19.11.2020 | Entwurfsmodelle                      |                                                                                              |
-| 26.11.2020 | Einführung ROS2                      |                                                                                              |
-| 03.12.2020 | ROS2 Entwicklungsprozess             |                                                                                              |
-| 10.12.2020 | ROS2 Entwicklungsprozess Beispiele   |                                                                                              |
-| 17.12.2020 | ROS2 Kommunikation                   |                                                                                              |
-| 07.01.2021 | Sensoren                             |                                                                                              |
-| 14.01.2021 | Sensoren                                      |                                                                                              |
-| 21.01.2021 | Sensordatenverarbeitung              |                                                                                              |
-| 28.01.2021 | Regelungstechnik                     |                                                                                              |
-| 04.02.2021 | Datenfusion                          |                                                                                              |
-| 11.02.2021 | Zusammenfassung                      |                                                                                              |
+| Datum      | Titel                                |
+|:---------- |:------------------------------------ |
+| 19.10.2021 | Einführung                           |
+| 26.10.2021 | Klassen und Strukturen               |
+| 02.11.2021 | Speicher und Pointer                 |
+| 09.11.2021 | Templates                            |
+| 16.11.2021 | Vererbung und C++ Standardbibliothek |
+| 23.11.2021 | Entwurfsmodelle                      |
+| 30.11.2021 | Einführung ROS2                      |
+| 07.12.2021 | ROS2 Entwicklungsprozess             |
+| 14.12.2021 | ROS2 Entwicklungsprozess Beispiele   |
+| 21.12.2021 | ROS2 Kommunikation                   |
+| 11.01.2022 | Sensoren                             |
+| 18.01.2022 | Sensoren                             |
+| 25.01.2022 | Sensordatenverarbeitung              |
+| 01.02.2022 | Regelungstechnik                     |
+| 08.02.2022 | Datenfusion                          |
 
-## Organisatorisches (WS 2020/21)
+## Organisatorisches (WS 2021/22)
+
+                {{0}}
+********************************************************************************
 
 **Dozenten**
 
@@ -47,6 +49,11 @@ zu finden.
 | Sebastian Zug | sebastian.zug@informatik.tu-freiberg.de |
 | Georg Jäger   | georg.jaeger@informatik.tu-freiberg.de  |
 
+
+********************************************************************************
+
+                {{1}}
+********************************************************************************
 
 **Zielstellung der Veranstaltung**
 
@@ -62,15 +69,22 @@ Veranstaltung richtet sich an Informatiker und Mathematiker und adressiert die f
   + Sensordatenverarbeitung und Fusion
   + Aktoren und deren Regelung
 
-> Vorbereitung auf die praktischen Aufgaben im Sommersemester.
+Die Vorlesungen und Übungen dienen der Vorbereitung auf die praktischen Aufgaben im Sommersemester.
+
+> **Demo - ROS Integration von Sensoren**
+
+********************************************************************************
+
+                  {{2}}
+********************************************************************************
 
 **Prüfungsleistungen**
 
 Die Veranstaltung ist in zwei Teile gegliedert. Im Wintersemester werden Sie
 zunächst mit den Grundlagen vertraut gemacht, um :
 
-* als Informatiker am Ende eine mündliche Prüfung zu absolvieren und im Sommersemester eine praktische Aufgabe umzusetzen. Diese wird separat bewertet.
-* als Mathematiker mit einer kleineren Aufgabe am Ende des Semester die Veranstaltung abzuschließen.
+* als Informatiker schließen Sie die Veranstaltung am Ende des Sommersemesters mit der praktischen Arbeit ab,
+* als Mathematiker mit einer kleineren Aufgabe am Ende des Wintersemesters
 
 **Zeitaufwand und Engagement**
 
@@ -78,22 +92,24 @@ Die Veranstaltung wird mit 9 CP in Ihrem Studienverlauf abgebildet. Entsprechend
 
 **Die eigene Beschäftigung mit der C++ Programmierung und den Konzepten von ROS ist für das erfolgreiche Bestehen der Veranstaltung unabdingbar!**
 
+********************************************************************************
+
+                 {{3}}
+********************************************************************************
+
 **Ablaufplan Übungen**
 
-Übungstermine
+Wir stellen Ihnen ab November einen TurtleBot 3 zur Verfügung, den Sie für die Realsierung der Aufgaben nutzen können.
 
-| Nr. | Datum         | Inhalt                      |
-|:--- | ------------- |:--------------------------- |
-| 1.  | nächste Woche | Einführung                  |
-| 2.  |               | Diskussion 1. Aufgabenblatt |
-| 3.  |               |                             |
-| 4.  |               |                             |
-| 5.  |               |                             |
-| 6.  |               |                             |
+> Hallo zusammen,
+>
+> am nächsten Dienstag findet bereits die erste Vorlesung zum Robotik-Projekt in diesem Semester statt. Um auch den Auftakt in den  Übungsbetrieb nicht später starten zu lassen, wollen wir euch noch am selben Abend (19.10. um 18 Uhr) einen Überblick über die Inhalte und vor allem den Ablauf der Übungen geben ...
+> Viele Grüße,
+> Georg Jäger
 
 Tragen Sie sich bitte in den Kurs [Softwaretechnologie-Projekt (Prototyp)](https://bildungsportal.sachsen.de/opal/auth/RepositoryEntry/18593513489/CourseNode/98504809493283) im e-learning System OPAL ein.
 
-**Jedes Aufgabenblatt beinhaltet Vorbereitungsaufgaben die eigenständig bearbeitet und in der Übung lediglich verglichen werden!**
+********************************************************************************
 
 ## Literaturempfehlungen
 
@@ -124,13 +140,14 @@ Tragen Sie sich bitte in den Kurs [Softwaretechnologie-Projekt (Prototyp)](https
 
 Wenn Sie Punkt 2. nicht uneingeschränkt folgen wollen, hätten Sie zumindest für die Einführung zu C++ unter Windows folgende Möglichkeiten:
 
-| Toolchain       | Link                                                                                  | Bemerkung |
-|:--------------- |:------------------------------------------------------------------------------------- |:--------- |
-| Visual Studio   |                                                                                       |           |
-| MinGW           | [MinGW Webseite](http://www.mingw.org/)                                               |           |
-| Cygwin          | [Cygwin Webseite](https://cygwin.com/)                                                |           |
-| Linux-Subsystem | [Microsoft Dokumentation](https://docs.microsoft.com/de-de/windows/wsl/install-win10) | zu empfehlen          |
-|                 | [WSL Vergleich](https://docs.microsoft.com/de-de/windows/wsl/install-win10)           |           |
+| Toolchain          | Link                                                                                  | Bemerkung                 |
+|:------------------ |:------------------------------------------------------------------------------------- |:------------------------- |
+| Visual Studio Code | [Tutorial](https://code.visualstudio.com/docs/languages/cpp)                          | für C++ Teil zu empfehlen |
+| Visual Studio      |                                                                                       |                           |
+| MinGW              | [MinGW Webseite](http://www.mingw.org/)                                               |                           |
+| Cygwin             | [Cygwin Webseite](https://cygwin.com/)                                                |                           |
+| Linux-Subsystem    | [Microsoft Dokumentation](https://docs.microsoft.com/de-de/windows/wsl/install-win10) | zu empfehlen              |
+|                    | [WSL Vergleich](https://docs.microsoft.com/de-de/windows/wsl/install-win10)           |                           |
 
 Unter cygwin muss zunächst der Compiler `gcc-g++` installiert werden. Für Rekonfigurationen und neues Pakete führen Sie einfach den Installer nochmals aus. Zudem sollten Sie in Ihrem Home einen symbolischen Link anlegen, der auf Ihren Arbeitsordner verweist.
 
@@ -149,56 +166,22 @@ Hinsichtlich Ihres Lieblingseditors haben Sie sicher schon eine Wahl getroffen :
 
 * Stellen Sie Fragen, seinen Sie kommunikativ!
 * Organisieren Sie sich in Arbeitsgruppen!
-* Experimentieren Sie mit verschiedenen Entwicklungsumgebung um "Ihren Editor"
-  zu finden
+* Experimentieren Sie mit verschiedenen Entwicklungsumgebung um "Ihren Editor" zu finden
 * Machen Sie Verbesserungsvorschläge für die Vorlesungsfolien!
 
 ![Atom IDE Screenshot](./image/00_Einfuehrung/LiaScriptAtomScreenShot.png)<!-- width="100%" -->
 
 ## Wie sieht es um Ihre Teamkompetenz aus?
 
-      {{0-1}}
-********************************************************************************
-Sie erinnern sich noch an das Sommersemester?
-
-![Atom IDE Screenshot](./image/00_Einfuehrung/Klausurergebnisse.png)<!-- width="70%" -->
-
-********************************************************************************
-
-     {{1-2}}
-********************************************************************************
-
-Woher kommt das?
-
-![Atom IDE Screenshot](./image/00_Einfuehrung/Commits.png)<!-- width="100%" -->
-
-********************************************************************************
-
-
-     {{2-3}}
-********************************************************************************
-
-Woher kommt das?
-
-![Atom IDE Screenshot](./image/00_Einfuehrung/TeamModeloverview.png)<!-- width="50%" -->
-
-![Atom IDE Screenshot](./image/00_Einfuehrung/TeamModel.png)<!-- width="100%" -->
-
-********************************************************************************
+![Atom IDE Screenshot](./image/00_Einfuehrung/Vergleich_Team_Aktivitaeten.jpeg)<!-- width="70%" -->
 
 ## Sie wollen gleich starten?
 
-Das RoboCup-Team der TU Bergakademie sucht noch Mitstreiter. Auch wenn Sie noch keine Erfahrung in der Programmierung haben sind Sie gern willkommen.
+1. ... als studentischer Mitarbeiter
+
+2. ... in einem studentischen Projekt
 
 ![Team](./image/00_Einfuehrung/TUFbots.png)<!-- width="100%" -->
-
-Im vergangen Jahr zielten die praktischen Projekte der Veranstaltung auf
-
-+ die Realsierung der Objektlokalisation und -identifikation
-+ die Umsetzung der Arm-Kinematik
-+ die Entwicklung eines neuen Greifmechanismus
-
-![Team](./image/00_Einfuehrung/TUFBotsPneumatischerGreifer.png)<!-- width="50%" -->
 
 ## Los gehts ...
 

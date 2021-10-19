@@ -1,8 +1,3 @@
-/* 
- * rosserial US Sensors example  
- * 
- */
-
 #define USE_USBCON
 
 #include <ros.h>
@@ -53,7 +48,7 @@ void setup()
   pinMode(trigger_pin, OUTPUT);
   pinMode(echo_pin, INPUT);
 
-  Serial.begin(9600);
+  //Serial.begin(9600);
 }
 
 void loop()
@@ -65,7 +60,7 @@ void loop()
     float result = ((float)duration)/2*sonic_speed;
     if (result > range_msg.max_range)
       result = 0;
-    Serial.println(int(result * 100));
+    //Serial.println(int(result * 100));
     range_msg.range = result;
     range_msg.header.stamp = nh.now();
     pub_range.publish(&range_msg);

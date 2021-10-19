@@ -11,15 +11,20 @@ import:  https://raw.githubusercontent.com/liaScript/rextester_template/master/R
 
 -->
 
-# Vorlesung I - Einführung
+# Einführung
 
-Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/VL_SoftwareprojektRobotik/master/00_Einfuehrung.md#1)
+[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/VL_SoftwareprojektRobotik/master/00_Einfuehrung.md#1)
 
-**Zielstellung der heutigen Veranstaltung**
+| Parameter                | Kursinformationen                                                                                                                                                                          |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Veranstaltung:**       | `Softwareprojekt Robotik`                                                                                                                                                                     |
+| **Semester**             | `Wintersemester 2021/22`                                                                                                                                                                      |
+| **Hochschule:**          | `Technische Universität Freiberg`                                                                                                                                                          |
+| **Inhalte:**             | `Einführung und Abgrenzung von C++`                                                                                      |
+| **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_Softwareentwicklung/blob/master/00_Einfuehrung.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/00_Einfuehrung.md) |
+| **Autoren**              | @author                                                                                                                                                                                    |
 
-+ Abgrenzung der Programmiersprache C++ zu anderen Sprachen
-+ Wiederholung von Basiskonzepten und Schlüsselworten
-+ Ablauf des Compile-Vorganges
+![](https://media.giphy.com/media/1flAwtHCYosL6LWnHr/giphy-downsized.gif)
 
 --------------------------------------------------------------------------------
 
@@ -140,71 +145,28 @@ Zur Erinnerung sei noch mal auf das Ausführungskonzept von C# verwiesen.
 
 [^1]:  Youtuber "MyPassionFor.NET", .NET CLR Execution Model, https://www.youtube.com/watch?v=gCHoBJf4htg
 
-
 #### Am Beispiel
-<!--
-comment: OnlineHack
-         **Ausgangspunkt: Implementierung mittels array, dann Umstieg auf generische Liste**
-          + Diskussion von generischer und nichtgenerischer Liste
-            ```csharp
-               int[] array = {1, 2, 3, 4, 5};
-               ArrayList myAL = new ArrayList();
-               List<int> intList = new List<int>();
-            ```
-          + Abwandlung auf Interface bezogene Implementierung
-            ```
-               IList<int> intList = new List<int>();
-            ```
-          + Welche Nachteile bringt das Interface mit? Es implementiert nur eine Untermenge der List<int> Methoden
-          ```
-             static bool isPositiveInt(int i)
-             {
-                return i > 0;
-             }
-             static void Main(string[] args)
-             {
-                List<int> intList = new List<int>(){10, 20, 30, 40};
-                bool res = intList.TrueForAll(isPositiveInt);
-             }
-          ```
-      - Übertragung auf C++ C-nahe Implementierung mit array
-      - Anwendung von Standardcontainer
-          ```
-          #include <vector>
-          int main()
-          {
-              std::vector<int> v;
-              int i;
-              for (i=0; i<100; ++i) {
-                  v.push_back(i); // Fügt i ans Ende von v an.
-                  ++v[i]; // v[i] muss bereits existieren.
-              }
-          }
--->
 
 Unter anderem aus der überwachten Ausführung ergeben sich zentrale Unterschiede beim Vergleich von C# und C++:
 
 ```csharp    OutOfRange.cs
 using System;
 
-namespace Rextester
+public class Program
 {
-  public class Program
+  public static void printArray(int[] array){
+  for (int i = 0; i <= array.Length; i++)
+    Console.WriteLine(array[i]);
+  }
+  public static void Main(string[] args)
   {
-    public static void printArray(int[] array){
-    for (int i = 0; i <= array.Length; i++)
-      Console.WriteLine(array[i]);
-    }
-
-    public static void Main(string[] args)
-    {
-      int[] array = {1, 2, 3, 4, 5};
-      printArray(array);
-    }
+    int[] array = {1, 2, 3, 4, 5};
+    printArray(array);
   }
 }
 ```
-@Rextester.eval(@CSharp)
+@LIA.eval(`["main.cs"]`, `mono main.cs`, `mono main.exe`)
+
 
 ```cpp                     OutOfRange.cpp
 #include <iostream>
@@ -225,7 +187,8 @@ int main()
 @LIA.eval(`["main.c"]`, `g++ -Wall main.c -o a.out`, `./a.out`)
 
 
-#### Im Detail
+     {{1}}
+********************************************************************************
 
 | Aspekt                    | C++                                                                                                                       | C#                                                                                                                                         |
 |:--------------------------|:--------------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------|
@@ -239,7 +202,6 @@ int main()
 | Vererbung                 |                                                                                                                           | alle Objekte erben von einer Basisklasse `object`                                                                                          |
 |                           | unterstützt Mehrfachvererbung  (ersetzt Interfaces)                                                                       | keine Mehrfachvererbung                                                                                                                    |
 | Standard Zugriffsattribut | `public` für structs, `private` für Klassen                                                                               | `private`                                                                                                                                  |
-
 
 *******************************************************************************
 
