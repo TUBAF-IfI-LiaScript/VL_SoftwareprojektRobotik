@@ -12,13 +12,18 @@ import:   https://github.com/liascript/CodeRunner
 
 # Objektorientierte Programmierung in C++
 
-Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/01_OOPinC++.md#1)
+[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/VL_SoftwareprojektRobotik/master/01_OOPinC++.md#1)
 
-**Zielstellung der heutigen Veranstaltung**
+| Parameter            | Kursinformationen                                                                                                                                                                             |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Veranstaltung:**   | `Softwareprojekt Robotik`                                                                                                                                                                     |
+| **Semester**         | `Wintersemester 2021/22`                                                                                                                                                                      |
+| **Hochschule:**      | `Technische Universität Freiberg`                                                                                                                                                             |
+| **Inhalte:**         | `Klassen/Strukturen, Rule of Five, Operatoren`                                                                                                                                                |
+| **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_Softwareentwicklung/blob/master/00_Einfuehrung.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/01_OOPinC++.md) |
+| **Autoren**          | @author                                                                                                                                                                                       |
 
-+ Klassen/Strukturen
-+ Rule of Five
-+ Operatoren
+![](https://media.giphy.com/media/l46CwEYnbFtFfjZNS/giphy-downsized.gif)
 
 --------------------------------------------------------------------------------
 
@@ -28,7 +33,7 @@ Klassen (`class`) und Strukturen (`struct`) unterscheiden sich unter C++ nur in 
 bei erstgenannten immer das Zugriffsattribut private als Default-Wert angenommen
 wird, ist dies für `struct`s public. Die folgenden Beispiele nutzen structs um C++ spezifische Eigenschaften darzustellen, können aber direkt auf Klassen übertragen werden.
 
-Eine Struktur (struct(ure)) ist ein Datentyp, der mehrere Variablen gleichen
+Eine Struktur ist ein Datentyp, der mehrere Variablen gleichen
 oder verschiedenen Typs zu einem neuen Datentyp zusammenfasst. Die Deklaration
 erfolgt mit dem Schlüsselwort `struct`.
 
@@ -39,7 +44,7 @@ struct Student{
   std::string name;
   int alter;
   std::string ort;
-};   // <- Dieses Semikoln wird gern vergessen :-)
+};   // <- Dieses Semikolon wird gern vergessen :-)
 
 int main()
 {
@@ -114,7 +119,7 @@ Kombinationen  initialisieren:
 ```
 
 Eine differenziertere Zuordnung der Reihenfolge `{name = "Zeuner", ort =
-"Chemnitz"}` unter Auslassung von Student.alter ist nicht möglich.
+"Chemnitz"}` unter Auslassung von Student.alter ist nur möglich, wenn hierfür ein default Initializer vorgesehen ist.
 
 Was passiert aber bei dem Aufruf `Student alexander {"Humboldt", 23};`? Der Kompiler generiert uns implizit/automatisch passende
 Konstruktor(en), wenn Sie gar keinen eigenen Konstruktor generiert haben. Diese werden daher auch *Implicit Constructors* genannt.
@@ -168,14 +173,10 @@ struct Student{
 };
 
 void Student::printCertificate(){
-    if (name != "unknown"){
-      std::cout << "Super," << this->name << " passed the exam!\n";
-    }else{
-      std::cout << "Student has not participated in a lecture yet!\n";
-    }
+	  std::cout << "Student " << this->name << " " << this->alter << " passed the exam!\n";
 }
 
-Student::Student() : name {"unknown"}, alter {18}, ort {"Freiberg"}
+Student::Student() : name {"Cotta"}, alter {18}, ort {"Freiberg"}
 { }  // keine Funktionalität
 
 int main()

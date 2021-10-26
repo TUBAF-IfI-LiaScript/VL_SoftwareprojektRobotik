@@ -11,9 +11,9 @@ import:  https://raw.githubusercontent.com/liaScript/rextester_template/master/R
 
 -->
 
-# Einführung
-
 [![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/VL_SoftwareprojektRobotik/master/00_Einfuehrung.md#1)
+
+# Einführung
 
 | Parameter                | Kursinformationen                                                                                                                                                                          |
 | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -256,7 +256,7 @@ C++ Programme systemabhängig.
 
 Auf die realisierten Größen kann mit zwei Klassen der Standardbibliothek zurückgegriffen werden.
 
-1. `climits.h` definiert ein Set von Makrokonstanten, die die zugehörigen Werte umfassen. Unter C++ wird diese Bibliothek mit `climits.h` eingebettet, da `limits` durch einen eignen namespace besetzt ist [Link mit Übersicht](http://www.cplusplus.com/reference/climits/)
+1. `climits.h` definiert ein Set von Makrokonstanten, die die zugehörigen Werte umfassen. Unter C++ wird diese Bibliothek mit `climits.h` eingebettet, da `limits` durch einen eignen Namespace besetzt ist [Link mit Übersicht](http://www.cplusplus.com/reference/climits/)
 2. `numeric_limits.h` spezifiziert Templates für die Bereitstellung der entsprechenden Grenzwerte und ist damit deutlich flexibler.
 
 ```cpp                     Hello.cpp
@@ -347,7 +347,7 @@ int numbers[] = { 1, 2, 4, 5, 9 };
 | `int j{10};`            | initialisierter Standardtyp                 |
 | `int a[]{1, 2, 3, 4}`   | aggregierte Initialisierung                 |
 | `X x1{}; X x2();`       | Standardkonstruktor eine individuellen Typs |
-| `X x3{1,2}; X x4{1,2};` | Parameterisierter Konstruktor               |
+| `X x3{1,2}; X x4(1,2);` | Parameterisierter Konstruktor               |
 | `X x5{x3}; X x6(x3);`   | Copy-Konstruktor                            |
 
 Die `auto`-Schlüsselwort weist den Compiler an den Initialisierungsausdruck einer deklarierten Variable oder einen Lambdaausdrucksparameter zu verwenden, um den Typ herzuleiten. Damit ist eine explizite Angabe des Typs einer Variablen nicht nötig. Damit steigert sich die Stabilität, Benutzerfreundlichkeit und Effizienz des Codes.
@@ -514,6 +514,9 @@ Hinsichtlich der Performance existieren einige sehr schöne, wenn auch etwas äl
 
 ## Wiederholung: Was passiert mit "Hello World"?
 
+                                    {{0-1}}
+*******************************************************************************
+
 ```cpp                     reducedHello.cpp
 //#include <iostream>
 
@@ -537,13 +540,13 @@ style="width: 50%; max-width: 860px; display: block; margin-left: auto; margin-r
      C Präprozessor
            |
      C++/C Compiler
-           |
-           v
-  +-------------------+
-  | ObjectFile.o      |
-  +-------------------+
-           |
-        Linker
+           |                 
+           v                
+  +-------------------+    +-------------------+     +-------------------+
+  | ObjectFile.o      |    | C++ Standard Lib  |     | Andere Libs       |
+  +-------------------+    +-------------------+     +-------------------+
+           |                         :                         :
+        Linker <................................................
            |
            v
   +-------------------+
@@ -562,8 +565,15 @@ wc -l reducedHello.ii               // Zeilenzahl der Präcompilierten Datei
 g++ -S reducedHello.cpp -o Hello.S  // Stellt den Assemblercode bereit
 g++ -c reducedHello.cpp -o Hello.o  // Generiert das Objektfile für HelloWorld.cpp
 ```
+*******************************************************************************
+
+
+                            {{1-2}}
+*******************************************************************************
 
 **Präprozessor**
+
+> Ein Wort der Warnung ...
 
 Der Präprozessor durchläuft alle Quelltextdateien (\*.cpp) noch vor der eigentlichen Kompilierung und reagiert auf enthaltene Präprozessordirektiven: Zeilen die mit "#" beginnen.
 
@@ -587,12 +597,14 @@ Die Nutzung von Macros in C++ sollte man limitieren:
 
 int main()
 {
-    int x = 1;
+    int x = 5;
     std::cout << "SQUARE(x) = " << SQUARE(x++) << std::endl;
     return 0;
 }
 ```
 @LIA.eval(`["main.c"]`, `g++ -Wall main.c -o a.out `, `./a.out`)
+
+*******************************************************************************
 
 ## Aufgabe bis zur nächsten Woche
 + Installieren Sie eine GCC Umgebung auf dem Rechner (Linux, Windows mit wsl2 oder cygwin)
