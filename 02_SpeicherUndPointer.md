@@ -10,9 +10,22 @@ import:   https://github.com/liascript/CodeRunner
 
 -->
 
+[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/VL_SoftwareprojektRobotik/master/02_SpeicherUndPointer.md#1)
+
 # Speicher und Pointer
 
-Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/VL_SoftwareprojektRobotik/master/02_SpeicherUndPointer.md#1)
+| Parameter            | Kursinformationen                                                                                                                                                                             |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Veranstaltung:**   | `Softwareprojekt Robotik`                                                                                                                                                                     |
+| **Semester**         | `Wintersemester 2021/22`                                                                                                                                                                      |
+| **Hochschule:**      | `Technische Universität Freiberg`                                                                                                                                                             |
+| **Inhalte:**         | `Grundlagen der Speicherverwaltung unter C++`                                                                                                                                                |
+| **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_Softwareentwicklung/blob/master/02_SpeicherUndPointer.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/02_SpeicherUndPointer.md) |
+| **Autoren**          | @author                                                                                                                                                                                       |
+
+![](https://media.giphy.com/media/EizPK3InQbrNK/giphy.gif)
+
+--------------------------------------------------------------------------------
 
 **Zielstellung der heutigen Veranstaltung**
 
@@ -20,18 +33,21 @@ Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.gi
 + Gegenüberstellung von Basis-Pointern und Smart-Pointern
 + Herausforderungen beim Speichermanagement
 
-**Organisatorisches**
-
-Zur Terminfindung für die erste Blockveranstaltung haben wir eine Doodle-Umfrage aufgestzt, ihr findet sie [hier](https://doodle.com/poll/29reuubiuqzyvfh4?utm_source=poll&utm_medium=link). Tragt euch dort bitte bis zum 09.11.21 ein damit wir einen Termin festlegen können.
+> **Organisatorisches** Zur Terminfindung für die erste Blockveranstaltung haben wir eine Doodle-Umfrage aufgestzt, ihr findet sie [hier](https://doodle.com/poll/29reuubiuqzyvfh4?utm_source=poll&utm_medium=link). Tragt euch dort bitte bis zum 09.11.21 ein damit wir einen Termin festlegen können.
 
 --------------------------------------------------------------------------------
+
+## Fragen aus der vergangenen Woche
+
+<iframe src="https://pythontutor.com/cpp.html#code=%23include%20%3Cstdio.h%3E%0A%0Avoid%20function%28int%20*aux%29%7B%0A%20%20*aux%2B%2B%3B%0A%20%20printf%28%22Call%20by%20'Reference'%3A%20%25i%5Cn%22,%20*aux%29%3B%0A%7D%0A%0Avoid%20function%28int%20aux%29%7B%0A%20%20aux%2B%2B%3B%0A%20%20printf%28%22Call%20by%20Value%3A%20%25i%5Cn%22,%20aux%29%3B%0A%7D%0A%0Aint%20main%28%29%20%7B%0A%20%20int%20i%20%3D%203%3B%20%0A%20%20int%20j%20%3D%205%3B%0A%20%20%0A%20%20//%20Initialisierung%0A%20%20//%20--------------------------------------%0A%20%20//%20Pointer%20auf%20eine%20Variable%0A%20%20int%20*ptr%20%3D%20%26i%3B%20%0A%20%20int%20*empty_prt%3B%0A%20%20%0A%20%20//%20Referenz%20auf%20eine%20Variable%0A%20%20int%20%26ref%20%3D%20i%3B%20%0A%20%20int%20%26ref_b%20%3D%20i%3B%20%0A%20%20//int%20%26empty_ref%3B%20//%20Error!%0A%20%20%0A%20%20//%20Reassignment%0A%20%20ptr%20%3D%20%26j%3B%0A%20%20//ref%20%3D%20i%3B%20//%20Reassigment%20nicht%20m%C3%B6glich%20%0A%20%20%0A%20%20//%20Indirection%20-%20Funktioniert%20nicht%20mit%20Referenzen%0A%20%20int%20**ptr_ptr%3B%20%20//it%20is%20valid.%0A%20%20ptr%20%3D%20%26i%3B%0A%20%20ptr_ptr%20%3D%20%26ptr%3B%0A%20%20printf%28%220x%25p%20points%20at%20%25i%5Cn%22,%20%28void%20*%29ptr,%20i%29%3B%0A%20%20printf%28%220x%25p%20points%20at%200x%25p%5Cn%5Cn%22,%20%28void%20*%29ptr_ptr,%20*ptr_ptr%29%3B%0A%20%20%20%20%0A%20%20//%20Funktionsaufruf%0A%20%20function%28ptr%29%3B%0A%20%20printf%28%22Resultierendes%20i%3A%20%25i%5Cn%22,%20j%29%3B%0A%20%20function%28ref%29%3B%0A%20%20printf%28%22Resultierendes%20i%3A%20%25i%5Cn%22,%20i%29%3B%0A%20%20return%200%3B%0A%7D&mode=edit&origin=opt-frontend.js&py=cpp_g%2B%2B9.3.0&rawInputLstJSON=%5B%5D" width="12900" height="600">
+</iframe>
 
 ## Komponenten des Speichers
 
 Wie wird der Speicher von einem C++ Programm eigentlich verwaltet? Wie wird diese Struktur ausgehend vom Start eines Programmes aufgebaut?
 
 <!--
-style="width: 70%; max-width: 860px; display: block; margin-left: auto; margin-right: auto;"
+style="width: 70%; max-width: 660px; display: block; margin-left: auto; margin-right: auto;"
 -->
 ```ascii
         ------>  +----------------------------+
@@ -241,7 +257,7 @@ Was passiert beim starten des Programmes und beim  Aufruf der Funktion `calc` "u
 ```
 
 <!--
-style="width: 100%; max-width: 860px; display: block; margin-left: auto; margin-right: auto;"
+style="width: 100%; max-width: 660px; display: block; margin-left: auto; margin-right: auto;"
 -->
 ```ascii
                                     kleinere Adresse
@@ -282,7 +298,7 @@ dem zugehörigen Assemblercode weiter?
 ```
 
 <!--
-style="width: 100%; max-width: 860px; display: block; margin-left: auto; margin-right: auto;"
+style="width: 100%; max-width: 660px; display: block; margin-left: auto; margin-right: auto;"
 -->
 ```ascii
                                     kleinere Adresse
@@ -658,7 +674,7 @@ C++11 implementiert verschiedene Pointer-Klassen für unterschiedliche Zwecke. D
 
 ********************************************************************************
 
-### unique Pointers
+### Unique Pointers
 <!--
   comment: UniquePointer.cpp
   ..............................................................................
@@ -765,7 +781,7 @@ Diese konzeptionelle Einschränkung bringt aber einen entscheidenden Vorteil mit
 Vergleichen Sie dazu die Darstellung unter [cppreference](https://de.cppreference.com/w/cpp/memory/unique_ptr)
 
 
-### sharded Pointers
+### Shared Pointers
 <!--
   comment: SharedPointer.cpp
   ..............................................................................
@@ -832,7 +848,7 @@ Gegenwärtig sind Arrays noch etwas knifflig in der Representation und Handhabun
 Vergleiche [cppreference](https://en.cppreference.com/w/cpp/memory/shared_ptr) für die Nutzung der API.
 
 
-### weak Pointers
+### Weak Pointers
 
 Ein `weak_ptr` ist im Grunde ein shared Pointer, der die Referenzanzahl nicht erhöht. Es ist definiert als ein intelligenter Zeiger, der eine nicht-besitzende Referenz oder eine schwache Referenz auf ein Objekt enthält, das von einem anderen shared Pointer verwaltet wird.
 
@@ -870,6 +886,11 @@ Eine schöne Übersicht zu den Fehlern im Zusammenhang mit Smart Pointer ist unt
 [https://www.acodersjourney.com](https://www.acodersjourney.com/top-10-dumb-mistakes-avoid-c-11-smart-pointers/)
 zu finden:
 
++ _Using a shared pointer where an unique pointer suffices_
++ _Not making resources/objects shared by shared pointer threadsafe_
++ ...
++ _Not using `make_shared` to initialize a shared pointer_
++ ...
 
 ## Aufgabe der Woche
 
