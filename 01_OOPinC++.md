@@ -10,20 +10,28 @@ import:   https://github.com/liascript/CodeRunner
 
 -->
 
-# Objektorientierte Programmierung in C++
-
 [![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/VL_SoftwareprojektRobotik/master/01_OOPinC++.md#1)
+
+# Objektorientierte Programmierung in C++
 
 | Parameter            | Kursinformationen                                                                                                                                                                             |
 | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Veranstaltung:**   | `Softwareprojekt Robotik`                                                                                                                                                                     |
 | **Semester**         | `Wintersemester 2021/22`                                                                                                                                                                      |
 | **Hochschule:**      | `Technische Universität Freiberg`                                                                                                                                                             |
-| **Inhalte:**         | `Klassen/Strukturen, Rule of Five, Operatoren`                                                                                                                                                |
+| **Inhalte:**         | `Konstruktoren und Operatoren`                                                                                                                                                |
 | **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_Softwareentwicklung/blob/master/00_Einfuehrung.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/01_OOPinC++.md) |
 | **Autoren**          | @author                                                                                                                                                                                       |
 
 ![](https://media.giphy.com/media/l46CwEYnbFtFfjZNS/giphy-downsized.gif)
+
+--------------------------------------------------------------------------------
+
+**Zielstellung der heutigen Veranstaltung**
+
++ Klassen/Strukturen
++ Rule of Five
++ Operatoren
 
 --------------------------------------------------------------------------------
 
