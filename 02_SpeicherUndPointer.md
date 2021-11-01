@@ -20,6 +20,10 @@ Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.gi
 + Gegenüberstellung von Basis-Pointern und Smart-Pointern
 + Herausforderungen beim Speichermanagement
 
+**Organisatorisches**
+
+Zur Terminfindung für die erste Blockveranstaltung haben wir eine Doodle-Umfrage aufgestzt, ihr findet sie [hier](https://doodle.com/poll/29reuubiuqzyvfh4?utm_source=poll&utm_medium=link). Tragt euch dort bitte bis zum 09.11.21 ein damit wir einen Termin festlegen können.
+
 --------------------------------------------------------------------------------
 
 ## Komponenten des Speichers
