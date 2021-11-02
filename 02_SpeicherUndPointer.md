@@ -283,7 +283,7 @@ rbp   |basepointer |------->   | Alter Base/Framepointer   |  neuer Frame
                                | Alter Instruktionspointer |
                                | ...                       |
 
-                                     größere Adresse
+                                     größere Adresse                           .
 ```
 
 Nun rufen wir die Funktion `calc` auf und führen die Berechnung aus. Dafür
@@ -329,7 +329,7 @@ rbp   |basepointer |----+      | Alter Framepointer        | <.....
                                +---------------------------+
                                | ...                       |
 
-                                     größere Adresse
+                                     größere Adresse                           .
 ```
 
 **Heap**
@@ -489,7 +489,7 @@ int main(void)
 
 + Individuelle Analyse der statischen /dynamischen Codeelemente mit Hilfe des Compilers und Berücksichtigung der Aufrufhierarchie.
 
-+ Testen mit vorinitialisiertem Speicher zur bestimmung der maximalen Stack-Größe.
++ Testen mit vorinitialisiertem Speicher zur Bestimmung der maximalen Stack-Größe.
 
 **Identifikation**
 
@@ -727,7 +727,6 @@ int main()
 {
   {
      std::unique_ptr<MyClass> A (new MyClass());
-     //std::unique_ptr<MyClass> B = new MyClass();
      A->print();
   }
   return EXIT_SUCCESS;
