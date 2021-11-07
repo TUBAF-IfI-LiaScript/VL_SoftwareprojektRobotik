@@ -76,39 +76,36 @@ des Typs, die Sicherstellt, dass in jedem Fall die angeforderte Vergleichsoperat
 ```csharp      GenericsIComparable.cs
 using System;
 
-namespace Rextester
+public class Student
 {
-  public class Student
-  {
-    public string name;
-    // ... and some other information
+  public string name;
+  // ... and some other information
 
-    public Student(string name){
-      this.name = name;
-    }
+  public Student(string name){
+    this.name = name;
+  }
+}
+
+public class Program{
+
+  static void SwapIfGreater<T>(ref T lhs, ref T rhs)
+                where T : System.IComparable<T>
+  {
+      T temp;
+      if (lhs.CompareTo(rhs) > 0)
+      {
+          temp = lhs;
+          lhs = rhs;
+          rhs = temp;
+      }
   }
 
-  public class Program{
-
-    static void SwapIfGreater<T>(ref T lhs, ref T rhs)
-                  where T : System.IComparable<T>
-    {
-        T temp;
-        if (lhs.CompareTo(rhs) > 0)
-        {
-            temp = lhs;
-            lhs = rhs;
-            rhs = temp;
-        }
-    }
-
-    public static void Main(string[] args)
-    {
-        int a = 5;
-        int b = 7;
-        SwapIfGreater<int>(ref a, ref b);
-        System.Console.WriteLine("a=" + a + ", b=" + b);
-    }
+  public static void Main(string[] args)
+  {
+      int a = 5;
+      int b = 7;
+      SwapIfGreater<int>(ref a, ref b);
+      System.Console.WriteLine("a=" + a + ", b=" + b);
   }
 }
 ```
