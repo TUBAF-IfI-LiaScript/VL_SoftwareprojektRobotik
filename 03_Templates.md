@@ -6,20 +6,38 @@ version:  0.0.1
 language: de
 narrator: Deutsch Female
 
-import: https://raw.githubusercontent.com/LiaTemplates/Rextester/master/README.md
-        https://github.com/liascript/CodeRunner
+import:   https://github.com/liascript/CodeRunner
 
 -->
 
+[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/VL_SoftwareprojektRobotik/master/03_Templates.md#1)
+
 # Templates
 
-Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/03_Templates.md#1)
+| Parameter            | Kursinformationen                                                                                                                                                                             |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Veranstaltung:**   | `Softwareprojekt Robotik`                                                                                                                                                                     |
+| **Semester**         | `Wintersemester 2021/22`                                                                                                                                                                      |
+| **Hochschule:**      | `Technische Universität Freiberg`                                                                                                                                                             |
+| **Inhalte:**         | `Template-Konzepte in C++`                                                                                                                                                |
+| **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_Softwareentwicklung/blob/master/03_Templates.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/03_Templates.md) |
+| **Autoren**          | @author                                                                                                                                                                                       |
+
+![](https://media.giphy.com/media/3xz2BMiUCvcqJlgfgQ/giphy.gif)
+
+--------------------------------------------------------------------------------
 
 **Zielstellung der heutigen Veranstaltung**
 
 + Einführung in die Konzepte der generischen Programmierung unter C++
 + Beschreibung der aktuellen Entwicklungen in C++17 und C++20
-+ Abgrenzung zu den unter C# bekannten Ansätzen (ł*Templates* vs. *Generics*)
++ Abgrenzung zu den unter C# bekannten Ansätzen (*Templates* vs. *Generics*)
+
+--------------------------------------------------------------------------------
+
+## Fragen aus der vergangenen Woche
+
+
 
 --------------------------------------------------------------------------------
 ## Kurze Erinnerung
@@ -94,7 +112,7 @@ namespace Rextester
   }
 }
 ```
-@Rextester.eval(@CSharp)
+@LIA.eval(`["main.cs"]`, `mono main.cs`, `mono main.exe`)
 
 > Templates ermöglichen die Realsierung eines typunabhängigen Verhaltens und damit die Konzentration von Implementierungsaufwand.
 
