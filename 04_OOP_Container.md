@@ -11,9 +11,22 @@ import: https://raw.githubusercontent.com/LiaTemplates/Rextester/master/README.m
 
 -->
 
+[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/VL_SoftwareprojektRobotik/master/04_OOP_Container.md#1)
+
 # OOP und Container
 
-Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/04_OOP_Container.md#1)
+| Parameter            | Kursinformationen                                                                                                                                                                             |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Veranstaltung:**   | `Softwareprojekt Robotik`                                                                                                                                                                     |
+| **Semester**         | `Wintersemester 2021/22`                                                                                                                                                                      |
+| **Hochschule:**      | `Technische Universität Freiberg`                                                                                                                                                             |
+| **Inhalte:**         | `Template-Konzepte in C++`                                                                                                                                                |
+| **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_Softwareentwicklung/blob/master/04_OOP_Container.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/04_OOP_Container.md) |
+| **Autoren**          | @author                                                                                                                                                                                       |
+
+![](https://media.giphy.com/media/EVXkb6X5wi4VK5JAmC/giphy-downsized.gif)
+
+--------------------------------------------------------------------------------
 
 **Zielstellung der heutigen Veranstaltung**
 
@@ -28,272 +41,12 @@ Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.gi
 
 --------------------------------------------------------------------------------
 
-## Überblick OOP Konzepte in C++
-
-Versuchen wir uns noch mal an die C#-Welt zu erinnern. Welche Konstrukte gab es innerhalb der Vererbungsstruktur:
-
-| Konstrukt             | Bedeutung        | Wirkung                                                                                                                                                                                                                                                                                             |
-| --------------------- | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `abstract class A {}` | Abstrakte Klasse | Der `abstract`-Modifizierer in einer Klassendeklaration definiert, dass die Klasse nur die Basisklasse für andere Klassen sein kann und nicht selbst instanziiert wird. Als abstrakt markierte Member müssen von Klassen, die von nicht abstrakten Klassen abgeleitet wurden, implementiert werden. |
-| `interface IB {}`     | Interface        | Eine Schnittstelle definiert einen Vertrag. Jede class oder struct, die diesen Vertrag implementiert, muss eine Implementierung der in der Schnittstelle definierten Member bereitstellen. Ab C# 8.0 kann eine Schnittstelle eine Standardimplementierung für Member definieren.                    |
-| `class A {} : IB, A ` | Konkrete Klasse  | Eine konkrete Klasse erbt von abstrakten Klassen, konkreten Klassen oder Interfaces und (re)implementiert deren Member und     erweitert den Umfang.                                                                                                                                             |
-> Eine C# Klasse kann nur von einer Basisklasse erben. Gleichzeitig ist aber die Implementierung mehrerer Interfaces möglich.
+## Fragen aus der vergangenen Woche
 
 
-### Vererbung in C++
-<!--
-  Thematisieren:
-  1. Initialisieren der Variablen in Zeile 6
-  2. Überladen des Konstruktors von Shape ABER keine Vererbung nach Rect
-  3. Protektionsmechanismen für Variablen / Vererbung
--->
 
-```cpp                 MinimalExample.cpp
-#include <iostream>
+--------------------------------------------------------------------------------
 
-// Base class
-class Shape {
-   public:
-      Shape(): width(0), height(0) {}
-      Shape(int a, int b): width(a), height(b) {}
-      void setWidth(int w) {
-         width = w;
-      }
-      void setHeight(int h) {
-         height = h;
-      }
-   protected:
-      int width;
-      int height;
-};
-
-// Derived class
-class Rectangle: public Shape {
-   public:
-      int getArea() {
-         return (width * height);
-      }
-};
-
-int main(void) {
-   Rectangle Rect;
-
-   Rect.setWidth(5);
-   Rect.setHeight(7);
-   std::cout << "Total area: " << Rect.getArea() << std::endl;
-
-   return 0;
-}
-```
-@LIA.eval(`["main.c"]`, `g++ -std=c++20 -Wall main.c -o a.out`, `./a.out`)
-
-**Schutzmechanismen für Member**
-
-|                      | Member `private` | Member `protected` | Member `public` |
-| -------------------- | ---------------- | ------------------ | --------------- |
-| innerhalb der Klasse | X                | X                  | X               |
-| abgeleitete Klasse   |                  | X                  | X               |
-| außerhalb            |                  |                    | X               |
-
-Und wie verhält es sich bei der Vererbung?
-
-|                       | Member `private` | Member `protected` | Member `public` |
-| --------------------- | ---------------- | ------------------ | --------------- |
-| Vererbung `private`   | `private`        | `private`          | `private`       |
-| Vererbung `protected` | -                | `protected`        | `protected`     |
-| Vererbung `public `   | -                | `protected`        | `public`        |
-
-**Konstruktoren in der Klassenhierachie**
-
-> Die Konstruktoren werden nicht automatisch vererbt!
-
-+ Variante 1: Expliziter Aufruf des Konstruktors der Basisklasse: `using Shape::Shape;`
-+ Variante 2: Individueller Aufruf eines Basisklassenkonstruktors in einem Konstruktor der abgeleiteten Klasse `Rectangle(int width, int height): Shape(width, height)`
-
-**Methodenaufruf in Vererbungsrelationen**
-
-Wie verhält es sich mit dem Methodenaufruf, wenn die spezifischen Implementierungen über verschiedene Elemente verstreut sind?
-
-```cpp                 MinimalExample.cpp
-#include <iostream>
-
-class A{
-  private:
-    std::string text = "Base class";
-  public:
-    std::string getText() const {return text;}
-    void print(std::ostream& os) const {os << getText() << "\n";}
-};
-
-class B: public A{
-  private:
-    std::string text = "Derived class B";
-  public:
-    void print(std::ostream& os) const {os << getText() <<"\n";}
-};
-
-class C: public A{
-  private:
-    std::string text = "Derived class C";
-  public:
-    std::string getText() const {return text;}
-};
-
-class D: public A{
-  private:
-    std::string text = "Derived class D";
-  public:
-    std::string getText() const {return text;}
-    void print(std::ostream& os) const {os << getText() << "\n";}
-};
-
-int main(void){
-	 A a;
-   a.print(std::cout);
-   return 0;
-}
-```
-@LIA.eval(`["main.c"]`, `g++ -std=c++20 -Wall main.c -o a.out`, `./a.out`)
-
-| Aufruf                    | Resultat (ohne `virtual`) | Resultat (mit `virtual`) |
-| ------------------------- | ------------------------- | ------------------------ |
-| `A a; a.print(std::cout)` | `Base class`              | `Base class`             |
-| `B a; ...`                | `Base class`              | `Base class`             |
-| `C a; ...`                | `Base class`              | `Derived class C`        |
-| `D a; ...`                | `Derived class D`         | `Derived class D`        |
-
-Interessant sind die Fälle `B a;` und `C a;`. Im ersten wird zwar die Methode `print()` reimplementiert, allerdings besteht `getText()` nur in der Basisklasse. Folglich wird auch auf die dortige Variable zurückgegriffen. Analog spielt sich der Fall für `C a;` ab. Die Methode `print()` ist aus der Basisklasse geerbt und wird von dort aufgerufen. Der Wert von `text` entstammt also der Basisklasse.
-
-`virtual` und damit virtuelle Methoden lösen diese Situation auf. Eine virtuelle Funktion ist eine Memberfunktion, die potentiell in abgeleiteten Klassen neu definiert wird. Mit Hilfe einer vtable wird zur Laufzeit identifiziert, welche der Methoden einen bestimmten Typ realisieren und automatisch eine Zuordnung vollzogen.
-
-> Sie sollten das Schlüsselwort `override` immer dann verwenden, wenn Sie beabsichtigen, eine Methode zu überschreiben. Wenn Sie sich in der abgeleiteten Klasse vertippen, erhalten Sie eine Fehlermeldung, die Ihnen mitteilt, dass keine Methode zum Überschreiben gefunden wurde.
-
-**Abstrakte Memberfunktionen / Abstrakte Klassen**
-
-C++ kennt die Differenzierung zwischen Interfaces und abstrakten Klassen nicht. Eine Klasse wird abstrakt gemacht, indem mindestens eine ihrer Funktionen als reine virtuelle Funktion deklariert wird. Eine rein virtuelle Funktion wird spezifiziert, indem `= 0` in ihre Deklaration wie folgt gesetzt wird:
-
-```cpp                 Abstract.cpp
-#include <iostream>
-
-class Shape {
-   public:
-      Shape(): width(0), height(0) {}
-      Shape(int a, int b): width(a), height(b) {}
-      virtual double getArea() {};
-      virtual double getCircumference() {};
-   protected:
-      int width;
-      int height;
-};
-
-class Rectangle: public Shape {
-   public:
-      double getArea() override {
-         return (width * height);
-      }
-};
-
-int main(void){
-	 Shape a;
-   return 0;
-}
-```
-@LIA.evalWithDebug(`["main.c"]`, `g++ -std=c++20 -Wall main.c -o a.out`, `./a.out`)
-
-
-### Mehrfachvererbung
-
-Soll eine Klasse von mehreren Basisklassen abgeleitet werden, dann sieht dies in etwa wie folgt aus:
-
-```cpp
-class DerivedClass : AccessAttribute1 BaseClass1,
-                     AccessAttribute2 BaseClass2,
-                     ...
-                     AccessAttributen BaseClassn,
-{
-	/* --- Implementierung weiterer Methoden ---
-	...
-	*/
-};
-```
-
-Welche Konsequenzen hat das?
-
-```cpp                 MinimalExample.cpp
-#include <iostream>
-
-class A
-{
-public:
-	virtual char id(void) {return 'A';}
-	virtual int f(void) {return 1;}
-	virtual void h(void) {}
-};
-
-class B
-{
-public:
-	virtual char id(void) {return 'B';}
-	virtual double f(double d) {return d;}
-	virtual int i(void) {return 2;}
-};
-
-class C : public A, public B
-{
-};
-
-int main(void)
-{
-	C c;
-
-	c.id();
-	c.f(2.0);
-	c.h();       // Individuelle Funktion der Klasse A
-	c.i();       // Individuelle Funktion der Klasse B
-  return 0;
-}
-```
-@LIA.eval(`["main.c"]`, `g++ -std=c++20 -Wall main.c -o a.out`, `./a.out`)
-
-| Funktionsaufruf | Resultat                                      | Bedeutung                                                                                                     |
-| --------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `c.id();`       | `error: request for member ‘id’ is ambiguous` |                                                                                                               |
-| `c.f(2.0);`     | `error: request for member ‘f’ is ambiguous`  | Trotz unterschiedlicher Signaturen kann der Compiler die "passende" Funktion aus der Klasse B nicht zuordnen. |
-
-Bei jedem Aufruf lässt sich aber explizit angeben, welche Funktion von welcher Basisklasse gewünscht ist. Der Bereichsauflösungsoperator `::` unter Benennung der Klasse gibt die konkrete Funktion an.
-
-```cpp
-int main(void)
-{
-	C c;
-
-	c.A::id();
-	c.B::f(2.0);
-	c.h();
-	c.i();
-  return 0;
-}
-```
-
-Diese Aufgabe kann aber natürlich auch in eine überladene Memberfunktion verlagert werden:
-
-```cpp
-class C : public A, public B
-{
-  public:
-  	//A::f
-  	int f(void) {return A::f();}
-
-  	//B::f
-  	double f(double d) {return B::f(d);}
-
-  	//B::g
-  	using B::g;
-
-  	//A::id
-  	using A::id;
-};
-```
 
 ## STL Kurzeinführung
 <!--
@@ -507,7 +260,7 @@ if (itr2 > itr1) ... ;
 Anmerkungen:
 
 + Jede Containerklasse integriert eine Implementierung des Iteratorkonzeptes für unbeschränkten Zugriff `iterator` und lesenden Zugriff `const_iterator`. Entsprechend bestehen neben `.begin()` und `.end()` auch `.cbegin()` und `.cend()` (seit C++11).
-+ Die Pointerarithmetik kann für den wahlfreien Zugriff zum Beispiel mit `ìtr+=5` umgesetzt werden. Eine übergreifende Lösung bietet die `advance(itr, 5)`-Methode. Analog kann mit `distance(itr1, itr2)` der Abstand zwischen zwei Elementen bestimmt werden.
++ Die Pointerarithmetik kann für den wahlfreien Zugriff zum Beispiel mit `itr+=5` umgesetzt werden. Eine übergreifende Lösung bietet die `advance(itr, 5)`-Methode. Analog kann mit `distance(itr1, itr2)` der Abstand zwischen zwei Elementen bestimmt werden.
 
 Ein Haupteinsatzfeld ist die Segmentierung von Containerinhalten nach "innerhalb"
 und "außerhalb" Elementen, wobei eine bestimmte Funktionalität auf die innerhalb
@@ -566,8 +319,8 @@ std::vector<std::string> b;
 
 **Welche Klassifikation sollte in Ihrem Kopf stattfinden?**
 
-![STL Container](./image/04_OOP_STL/STLContainer.png)<!-- width="100%" -->
-*Darstellung des Entscheidungsprozesses für die Anwendung eines STL-Containers* [^1]
+![STL Container](./image/04_OOP_STL/STLContainer.png "Darstellung des Entscheidungsprozesses für die Anwendung eines STL-Containers [^1]")<!-- width="90%" -->
+
 
 [^1]: Mikael Persson  nach einem Entwurf von David Moore [Link](https://stackoverflow.com/questions/471432/in-which-scenario-do-i-use-a-particular-stl-container)
 
@@ -723,6 +476,7 @@ int main()
 int main()
 {
   std::vector<int> vec(100000000);
+  srand (time(NULL));
   std::generate(vec.begin(), vec.end(), []() {
 	  return rand() % 100;
   });
@@ -777,12 +531,12 @@ style="width: 80%; max-width: 860px; display: block; margin-left: auto; margin-r
          /    \                            /              \
         /      \                          /                \
      +----+    +----+            +----+---------+    +----+---------+
-     |  6 |    | 10 |            |  7 | "Fritz" |    | 10 | "Julius"|
+     |  6 |    | 10 |            |  6 | "Fritz" |    | 10 | "Julius"|
      +----+    +----+            +----+---------+    +----+---------+
      /    \                      /              \
     /      \                    /                \
 +----+    +----+           +----+---------+    +----+---------+
-|  2 |    | 7  |           |  2 | "Agnes" |    | 6  | "Horst" |
+|  2 |    | 7  |           |  2 | "Agnes" |    | 7  | "Horst" |
 +----+    +----+           +----+---------+    +----+---------+
 ```
 
@@ -804,7 +558,7 @@ C++11 erweitert diese Kategorie jeweils unsortierte Darstellungen (vgl. Diagramm
 ***********************************************************************
 **Beispiel `set`**
 
-Warum können die die Elemente nicht manipuliert werden?
+> **Frage:** Warum können die die Elemente nicht manipuliert werden?
 
 ```cpp                      setExample.cpp
 #include <iostream>
@@ -990,6 +744,275 @@ int main()
 @LIA.eval(`["main.c"]`, `g++ -std=c++20 -Wall main.c -o a.out`, `./a.out`)
 
 Die Beispiele können durch Lambda-Funktionen analog ausgedrückt werden. Dabei hat man den zusätzlichen Vorteil, dass der zusammengehörige Code nicht aufgesplittet und auf mehrere Positionen verteilt wird. Es sei denn, er wird mehrfach verwendet ...
+
+
+## OOP Konzepte in C++
+
+Versuchen wir uns noch mal an die C#-Welt zu erinnern. Welche Konstrukte gab es innerhalb der Vererbungsstruktur:
+
+| Konstrukt             | Bedeutung        | Wirkung                                                                                                                                                                                                                                                                                             |
+| --------------------- | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `abstract class A {}` | Abstrakte Klasse | Der `abstract`-Modifizierer in einer Klassendeklaration definiert, dass die Klasse nur die Basisklasse für andere Klassen sein kann und nicht selbst instanziiert wird. Als abstrakt markierte Member müssen von Klassen, die von nicht abstrakten Klassen abgeleitet wurden, implementiert werden. |
+| `interface IB {}`     | Interface        | Eine Schnittstelle definiert einen Vertrag. Jede class oder struct, die diesen Vertrag implementiert, muss eine Implementierung der in der Schnittstelle definierten Member bereitstellen. Ab C# 8.0 kann eine Schnittstelle eine Standardimplementierung für Member definieren.                    |
+| `class A {} : IB, A ` | Konkrete Klasse  | Eine konkrete Klasse erbt von abstrakten Klassen, konkreten Klassen oder Interfaces und (re)implementiert deren Member und     erweitert den Umfang.                                                                                                                                             |
+> Eine C# Klasse kann nur von einer Basisklasse erben. Gleichzeitig ist aber die Implementierung mehrerer Interfaces möglich.
+
+
+### Vererbung in C++
+<!--
+  Thematisieren:
+  1. Initialisieren der Variablen in Zeile 6
+  2. Überladen des Konstruktors von Shape ABER keine Vererbung nach Rect
+  3. Protektionsmechanismen für Variablen / Vererbung
+-->
+
+```cpp                 MinimalExample.cpp
+#include <iostream>
+
+// Base class
+class Shape {
+   public:
+      Shape(): width(0), height(0) {}
+      Shape(int a, int b): width(a), height(b) {}
+      void setWidth(int w) {
+         width = w;
+      }
+      void setHeight(int h) {
+         height = h;
+      }
+   protected:
+      int width;
+      int height;
+};
+
+// Derived class
+class Rectangle: public Shape {
+   public:
+      int getArea() {
+         return (width * height);
+      }
+};
+
+int main(void) {
+   Rectangle Rect;
+
+   Rect.setWidth(5);
+   Rect.setHeight(7);
+   std::cout << "Total area: " << Rect.getArea() << std::endl;
+
+   return 0;
+}
+```
+@LIA.eval(`["main.c"]`, `g++ -std=c++20 -Wall main.c -o a.out`, `./a.out`)
+
+**Schutzmechanismen für Member**
+
+|                      | Member `private` | Member `protected` | Member `public` |
+| -------------------- | ---------------- | ------------------ | --------------- |
+| innerhalb der Klasse | X                | X                  | X               |
+| abgeleitete Klasse   |                  | X                  | X               |
+| außerhalb            |                  |                    | X               |
+
+Und wie verhält es sich bei der Vererbung?
+
+|                       | Member `private` | Member `protected` | Member `public` |
+| --------------------- | ---------------- | ------------------ | --------------- |
+| Vererbung `private`   | `private`        | `private`          | `private`       |
+| Vererbung `protected` | -                | `protected`        | `protected`     |
+| Vererbung `public `   | -                | `protected`        | `public`        |
+
+**Konstruktoren in der Klassenhierachie**
+
+> Die Konstruktoren werden nicht automatisch vererbt!
+
++ Variante 1: Expliziter Aufruf des Konstruktors der Basisklasse: `using Shape::Shape;`
++ Variante 2: Individueller Aufruf eines Basisklassenkonstruktors in einem Konstruktor der abgeleiteten Klasse `Rectangle(int width, int height): Shape(width, height)`
+
+**Methodenaufruf in Vererbungsrelationen**
+
+Wie verhält es sich mit dem Methodenaufruf, wenn die spezifischen Implementierungen über verschiedene Elemente verstreut sind?
+
+```cpp                 MinimalExample.cpp
+#include <iostream>
+
+class A{
+  private:
+    std::string text = "Base class";
+  public:
+    std::string getText() const {return text;}
+    void print(std::ostream& os) const {os << getText() << "\n";}
+};
+
+class B: public A{
+  private:
+    std::string text = "Derived class B";
+  public:
+    void print(std::ostream& os) const {os << getText() <<"\n";}
+};
+
+class C: public A{
+  private:
+    std::string text = "Derived class C";
+  public:
+    std::string getText() const {return text;}
+};
+
+class D: public A{
+  private:
+    std::string text = "Derived class D";
+  public:
+    std::string getText() const {return text;}
+    void print(std::ostream& os) const {os << getText() << "\n";}
+};
+
+int main(void){
+	 A a;
+   a.print(std::cout);
+   return 0;
+}
+```
+@LIA.eval(`["main.c"]`, `g++ -std=c++20 -Wall main.c -o a.out`, `./a.out`)
+
+| Aufruf                    | Resultat (ohne `virtual`) | Resultat (mit `virtual`) |
+| ------------------------- | ------------------------- | ------------------------ |
+| `A a; a.print(std::cout)` | `Base class`              | `Base class`             |
+| `B a; ...`                | `Base class`              | `Base class`             |
+| `C a; ...`                | `Base class`              | `Derived class C`        |
+| `D a; ...`                | `Derived class D`         | `Derived class D`        |
+
+Interessant sind die Fälle `B a;` und `C a;`. Im ersten wird zwar die Methode `print()` reimplementiert, allerdings besteht `getText()` nur in der Basisklasse. Folglich wird auch auf die dortige Variable zurückgegriffen. Analog spielt sich der Fall für `C a;` ab. Die Methode `print()` ist aus der Basisklasse geerbt und wird von dort aufgerufen. Der Wert von `text` entstammt also der Basisklasse.
+
+`virtual` und damit virtuelle Methoden lösen diese Situation auf. Eine virtuelle Funktion ist eine Memberfunktion, die potentiell in abgeleiteten Klassen neu definiert wird. Mit Hilfe einer vtable wird zur Laufzeit identifiziert, welche der Methoden einen bestimmten Typ realisieren und automatisch eine Zuordnung vollzogen.
+
+> Sie sollten das Schlüsselwort `override` immer dann verwenden, wenn Sie beabsichtigen, eine Methode zu überschreiben. Wenn Sie sich in der abgeleiteten Klasse vertippen, erhalten Sie eine Fehlermeldung, die Ihnen mitteilt, dass keine Methode zum Überschreiben gefunden wurde.
+
+**Abstrakte Memberfunktionen / Abstrakte Klassen**
+
+C++ kennt die Differenzierung zwischen Interfaces und abstrakten Klassen nicht. Eine Klasse wird abstrakt gemacht, indem mindestens eine ihrer Funktionen als reine virtuelle Funktion deklariert wird. Eine rein virtuelle Funktion wird spezifiziert, indem `= 0` in ihre Deklaration wie folgt gesetzt wird:
+
+```cpp                 Abstract.cpp
+#include <iostream>
+
+class Shape {
+   public:
+      Shape(): width(0), height(0) {}
+      Shape(int a, int b): width(a), height(b) {}
+      virtual double getArea() {};
+      virtual double getCircumference() {};
+   protected:
+      int width;
+      int height;
+};
+
+class Rectangle: public Shape {
+   public:
+      double getArea() override {
+         return (width * height);
+      }
+};
+
+int main(void){
+	 Shape a;
+   std::cout << "Aus die Maus!";
+   return 0;
+}
+```
+@LIA.evalWithDebug(`["main.c"]`, `g++ -std=c++20 -Wall main.c -o a.out`, `./a.out`)
+
+
+### Mehrfachvererbung
+
+Soll eine Klasse von mehreren Basisklassen abgeleitet werden, dann sieht dies in etwa wie folgt aus:
+
+```cpp
+class DerivedClass : AccessAttribute1 BaseClass1,
+                     AccessAttribute2 BaseClass2,
+                     ...
+                     AccessAttributen BaseClassn,
+{
+	/* --- Implementierung weiterer Methoden ---
+	...
+	*/
+};
+```
+
+Welche Konsequenzen hat das?
+
+```cpp                 MinimalExample.cpp
+#include <iostream>
+
+class A
+{
+public:
+	virtual char id(void) {return 'A';}
+	virtual int f(void) {return 1;}
+	virtual void h(void) {}
+};
+
+class B
+{
+public:
+	virtual char id(void) {return 'B';}
+	virtual double f(double d) {return d;}
+	virtual int i(void) {return 2;}
+};
+
+class C : public A, public B
+{
+};
+
+int main(void)
+{
+	C c;
+
+	c.id();
+	c.f(2.0);
+	c.h();       // Individuelle Funktion der Klasse A
+	c.i();       // Individuelle Funktion der Klasse B
+  return 0;
+}
+```
+@LIA.eval(`["main.c"]`, `g++ -std=c++20 -Wall main.c -o a.out`, `./a.out`)
+
+| Funktionsaufruf | Resultat                                      | Bedeutung                                                                                                     |
+| --------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `c.id();`       | `error: request for member ‘id’ is ambiguous` |                                                                                                               |
+| `c.f(2.0);`     | `error: request for member ‘f’ is ambiguous`  | Trotz unterschiedlicher Signaturen kann der Compiler die "passende" Funktion aus der Klasse B nicht zuordnen. |
+
+Bei jedem Aufruf lässt sich aber explizit angeben, welche Funktion von welcher Basisklasse gewünscht ist. Der Bereichsauflösungsoperator `::` unter Benennung der Klasse gibt die konkrete Funktion an.
+
+```cpp
+int main(void)
+{
+	C c;
+
+	c.A::id();
+	c.B::f(2.0);
+	c.h();
+	c.i();
+  return 0;
+}
+```
+
+Diese Aufgabe kann aber natürlich auch in eine überladene Memberfunktion verlagert werden:
+
+```cpp
+class C : public A, public B
+{
+  public:
+  	//A::f
+  	int f(void) {return A::f();}
+
+  	//B::f
+  	double f(double d) {return B::f(d);}
+
+  	//B::g
+  	using B::g;
+
+  	//A::id
+  	using A::id;
+};
+```
 
 
 ## Aufgabe der Woche
