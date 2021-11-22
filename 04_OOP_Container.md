@@ -6,8 +6,7 @@ version:  0.0.1
 language: de
 narrator: Deutsch Female
 
-import: https://raw.githubusercontent.com/LiaTemplates/Rextester/master/README.md
-        https://github.com/liascript/CodeRunner
+import:   https://github.com/liascript/CodeRunner
 
 -->
 
@@ -679,6 +678,37 @@ Container-Adapter basieren auf Containern, um spezielle Formate zu definieren, d
 | `std::priority_queue` | FIFO-Speicher der den Elementen eine Priorität zuordnet.                                                                       | `push(obj)`, `pop()`, `front()`, `back()` |
 
 
+```cpp                      setExample.cpp
+#include <iostream>
+#include <stack>
+#include <string>
+
+int main()
+{
+
+   std::stack<std::string> weekdays;
+   weekdays.push("Saturday");
+   weekdays.push("Friday");
+   weekdays.push("Thursday");
+   weekdays.push("Wednesday");
+   weekdays.push("Tuesday");
+   weekdays.push("Monday");
+   weekdays.push("Sunday");
+
+   std::cout<<"Size of the stack: "<<weekdays.size()<<std::endl;
+
+   while(!weekdays.empty()) {
+      std::cout<<weekdays.top()<<std::endl;
+      weekdays.pop();
+   }
+
+  return EXIT_SUCCESS;
+}
+```
+@LIA.eval(`["main.c"]`, `g++ -std=c++20 -Wall main.c -o a.out`, `./a.out`)
+
+> Aufgabe: Tauschen Sie den Container-Adapter Typ aus (`std::queue<string> weekdays`)
+
 ### Algorithmen
 
 Die Algorithmen, die die STL bereitstellt, lassen sich sowohl auf die vorgestellten Containerkonzepte, wie auch auf native C++ arrays anwenden.
@@ -754,7 +784,8 @@ Versuchen wir uns noch mal an die C#-Welt zu erinnern. Welche Konstrukte gab es 
 | --------------------- | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `abstract class A {}` | Abstrakte Klasse | Der `abstract`-Modifizierer in einer Klassendeklaration definiert, dass die Klasse nur die Basisklasse für andere Klassen sein kann und nicht selbst instanziiert wird. Als abstrakt markierte Member müssen von Klassen, die von nicht abstrakten Klassen abgeleitet wurden, implementiert werden. |
 | `interface IB {}`     | Interface        | Eine Schnittstelle definiert einen Vertrag. Jede class oder struct, die diesen Vertrag implementiert, muss eine Implementierung der in der Schnittstelle definierten Member bereitstellen. Ab C# 8.0 kann eine Schnittstelle eine Standardimplementierung für Member definieren.                    |
-| `class A {} : IB, A ` | Konkrete Klasse  | Eine konkrete Klasse erbt von abstrakten Klassen, konkreten Klassen oder Interfaces und (re)implementiert deren Member und     erweitert den Umfang.                                                                                                                                             |
+| `class A {} : IB, A ` | Vererbung        | Eine Klasse erbt von abstrakten Klassen, implementierten Klassen oder Interfaces und (re)implementiert deren Member und     erweitert den Umfang.                                                                                                                                                   |
+
 > Eine C# Klasse kann nur von einer Basisklasse erben. Gleichzeitig ist aber die Implementierung mehrerer Interfaces möglich.
 
 
@@ -766,13 +797,19 @@ Versuchen wir uns noch mal an die C#-Welt zu erinnern. Welche Konstrukte gab es 
   3. Protektionsmechanismen für Variablen / Vererbung
 -->
 
+
+                                 {{0-3}}
+*******************************************************************************
+
 ```cpp                 MinimalExample.cpp
 #include <iostream>
 
 // Base class
 class Shape {
    public:
-      Shape(): width(0), height(0) {}
+      Shape(): width(2), height(2) {
+      	std::cout << "Calling Shape Constructor!" << std::endl;
+      }
       Shape(int a, int b): width(a), height(b) {}
       void setWidth(int w) {
          width = w;
@@ -794,10 +831,10 @@ class Rectangle: public Shape {
 };
 
 int main(void) {
-   Rectangle Rect;
+   Rectangle Rect(5, 6);
 
-   Rect.setWidth(5);
-   Rect.setHeight(7);
+   //Rect.setWidth(5);
+   //Rect.setHeight(7);
    std::cout << "Total area: " << Rect.getArea() << std::endl;
 
    return 0;
@@ -805,6 +842,22 @@ int main(void) {
 ```
 @LIA.eval(`["main.c"]`, `g++ -std=c++20 -Wall main.c -o a.out`, `./a.out`)
 
+*******************************************************************************
+
+                                 {{1-2}}
+*******************************************************************************
+
+**Konstruktoren in der Klassenhierachie**
+
+> Die Konstruktoren werden nicht automatisch vererbt!
+
++ Variante 1: Expliziter Aufruf des Konstruktors der Basisklasse: `using Shape::Shape;`
++ Variante 2: Individueller Aufruf eines Basisklassenkonstruktors in einem Konstruktor der abgeleiteten Klasse `Rectangle(int width, int height): Shape(width, height)`
+
+*******************************************************************************
+
+                                 {{2-3}}
+*******************************************************************************
 **Schutzmechanismen für Member**
 
 |                      | Member `private` | Member `protected` | Member `public` |
@@ -821,72 +874,54 @@ Und wie verhält es sich bei der Vererbung?
 | Vererbung `protected` | -                | `protected`        | `protected`     |
 | Vererbung `public `   | -                | `protected`        | `public`        |
 
-**Konstruktoren in der Klassenhierachie**
 
-> Die Konstruktoren werden nicht automatisch vererbt!
+*******************************************************************************
 
-+ Variante 1: Expliziter Aufruf des Konstruktors der Basisklasse: `using Shape::Shape;`
-+ Variante 2: Individueller Aufruf eines Basisklassenkonstruktors in einem Konstruktor der abgeleiteten Klasse `Rectangle(int width, int height): Shape(width, height)`
 
-**Methodenaufruf in Vererbungsrelationen**
+### Virtual Funktions
 
 Wie verhält es sich mit dem Methodenaufruf, wenn die spezifischen Implementierungen über verschiedene Elemente verstreut sind?
 
-```cpp                 MinimalExample.cpp
+```cpp                 Polymorphism.cpp
 #include <iostream>
 
 class A{
-  private:
-    std::string text = "Base class";
   public:
-    std::string getText() const {return text;}
-    void print(std::ostream& os) const {os << getText() << "\n";}
+    virtual void print(std::ostream& os) {os << "Base Class" << "\n";}
 };
 
 class B: public A{
-  private:
-    std::string text = "Derived class B";
   public:
-    void print(std::ostream& os) const {os << getText() <<"\n";}
+    void print(std::ostream& os) {os << "Derived Class" <<"\n";}
 };
 
-class C: public A{
-  private:
-    std::string text = "Derived class C";
-  public:
-    std::string getText() const {return text;}
-};
-
-class D: public A{
-  private:
-    std::string text = "Derived class D";
-  public:
-    std::string getText() const {return text;}
-    void print(std::ostream& os) const {os << getText() << "\n";}
-};
+void callPrint(A& object){
+	object.print(std::cout);
+}
 
 int main(void){
-	 A a;
-   a.print(std::cout);
+   A a;
+   callPrint(a);
+	 B b;
+   callPrint(b);
    return 0;
 }
 ```
-@LIA.eval(`["main.c"]`, `g++ -std=c++20 -Wall main.c -o a.out`, `./a.out`)
+@LIA.eval(`["main.c"]`, `g++ -Wall main.c -o a.out`, `./a.out`)
 
-| Aufruf                    | Resultat (ohne `virtual`) | Resultat (mit `virtual`) |
-| ------------------------- | ------------------------- | ------------------------ |
-| `A a; a.print(std::cout)` | `Base class`              | `Base class`             |
-| `B a; ...`                | `Base class`              | `Base class`             |
-| `C a; ...`                | `Base class`              | `Derived class C`        |
-| `D a; ...`                | `Derived class D`         | `Derived class D`        |
 
-Interessant sind die Fälle `B a;` und `C a;`. Im ersten wird zwar die Methode `print()` reimplementiert, allerdings besteht `getText()` nur in der Basisklasse. Folglich wird auch auf die dortige Variable zurückgegriffen. Analog spielt sich der Fall für `C a;` ab. Die Methode `print()` ist aus der Basisklasse geerbt und wird von dort aufgerufen. Der Wert von `text` entstammt also der Basisklasse.
+> `virtual` löst das intuitive Verhalten auf. Anhand der vtables wird dynamisch der Typ einer Funktion zugeordnet. Damit wird zur Laufzeit erkannt, welche Funktion die "richtige" ist.
 
-`virtual` und damit virtuelle Methoden lösen diese Situation auf. Eine virtuelle Funktion ist eine Memberfunktion, die potentiell in abgeleiteten Klassen neu definiert wird. Mit Hilfe einer vtable wird zur Laufzeit identifiziert, welche der Methoden einen bestimmten Typ realisieren und automatisch eine Zuordnung vollzogen.
+!?[vtable](https://www.youtube.com/watch?v=Qn719zRFyao)
 
-> Sie sollten das Schlüsselwort `override` immer dann verwenden, wenn Sie beabsichtigen, eine Methode zu überschreiben. Wenn Sie sich in der abgeleiteten Klasse vertippen, erhalten Sie eine Fehlermeldung, die Ihnen mitteilt, dass keine Methode zum Überschreiben gefunden wurde.
+> `overrides` C++11 erleichtert das Programmieren mit virtuellen Methoden
 
-**Abstrakte Memberfunktionen / Abstrakte Klassen**
+Fehlerfall                                                                                 
+- zu unserer mit `override` markierten Methode existiert in der Basisklasse keine Methode
+- zu unserer mit `override` markierten Methode existiert in der Basisklasse keine virtuelle Methode
+
+
+### Abstrakte Memberfunktionen / Abstrakte Klassen
 
 C++ kennt die Differenzierung zwischen Interfaces und abstrakten Klassen nicht. Eine Klasse wird abstrakt gemacht, indem mindestens eine ihrer Funktionen als reine virtuelle Funktion deklariert wird. Eine rein virtuelle Funktion wird spezifiziert, indem `= 0` in ihre Deklaration wie folgt gesetzt wird:
 
@@ -895,10 +930,8 @@ C++ kennt die Differenzierung zwischen Interfaces und abstrakten Klassen nicht. 
 
 class Shape {
    public:
-      Shape(): width(0), height(0) {}
-      Shape(int a, int b): width(a), height(b) {}
-      virtual double getArea() {};
-      virtual double getCircumference() {};
+      Shape(): width(5), height(6) {}
+      virtual double getArea() =  0;
    protected:
       int width;
       int height;
@@ -913,11 +946,17 @@ class Rectangle: public Shape {
 
 int main(void){
 	 Shape a;
-   std::cout << "Aus die Maus!";
+	 std::cout <<  a.getArea() << std::endl;
    return 0;
 }
 ```
 @LIA.evalWithDebug(`["main.c"]`, `g++ -std=c++20 -Wall main.c -o a.out`, `./a.out`)
+
+
+- Eine Klasse ist abstrakt, wenn sie mindestens eine rein virtuelle Funktion hat.
+- von einer abstrakten Klasse können keine Instanzen gebildet werden
+- Wenn wir die reine virtuelle Funktion in der abgeleiteten Klasse nicht überschreiben, wird die abgeleitete Klasse auch zur abstrakten Klasse.
+- Wir können aber Zeiger und Referenzen vom Typ der abstrakte Klasse haben.
 
 
 ### Mehrfachvererbung
