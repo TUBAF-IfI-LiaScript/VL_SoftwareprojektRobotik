@@ -6,10 +6,26 @@ version:  0.0.1
 language: de
 narrator: Deutsch Female
 
-import: https://github.com/liascript/CodeRunner
-        https://raw.githubusercontent.com/liascript-templates/plantUML/master/README.md
+import:   https://github.com/liascript/CodeRunner
 
 -->
+
+[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/VL_SoftwareprojektRobotik/master/05_Entwurfsmuster.md#1)
+
+# Entwurfsmuster
+
+| Parameter            | Kursinformationen                                                                                                                                                                             |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Veranstaltung:**   | `Softwareprojekt Robotik`                                                                                                                                                                     |
+| **Semester**         | `Wintersemester 2021/22`                                                                                                                                                                      |
+| **Hochschule:**      | `Technische Universität Freiberg`                                                                                                                                                             |
+| **Inhalte:**         | `Entwurfsmuster und deren Umsetzung in C++`                                                                                                                                                |
+| **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_Softwareentwicklung/blob/master/05_Entwurfsmuster.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/05_Entwurfsmuster.md) |
+| **Autoren**          | @author                                                                                                                                                                                       |
+
+![](https://media.giphy.com/media/Q1LPV0vs7oKqc/giphy-downsized.gif)
+
+--------------------------------------------------------------------------------
 
 # Entwurfsmuster
 
