@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.0.1
+version:  0.0.2
 language: de
 narrator: Deutsch Female
 
@@ -405,7 +405,7 @@ int main()
   bool stat = a.initSensorInterface();
   std::cout << "Sensor check .... " << stat << std::endl;
   if (stat){
-  	print(A);
+  	print(a);
   }
   else std::cout << "Sensor not avialable";
   return EXIT_SUCCESS;
@@ -486,8 +486,6 @@ public:
 
 /// Observer
 
-
-
 class ConcreteObserver : public ObserverInterface
 {
 private:
@@ -498,7 +496,7 @@ private:
 public:
 	void update(){
 	   this->observerState = this->subject->getData();
-     std::cout << "Observer " << this->name << " hat neuen Zustand: " << this->observerState << std::endl;
+     std::cout << "Observer: " << this->name << " hat neuen Zustand: " << this->observerState << std::endl;
   }
 	void setSubject(const std::shared_ptr<ConcreteSubject>& subj){
      this->subject = subj;
@@ -664,10 +662,15 @@ int main() {
 ## Aufgabe der Woche
 
 1. Erweitern Sie das Beispiel `SensorInterfaces.cpp` so dass Sie nicht nur einen Wert auslesen können. Dazu sollten Sie:
-+ das Template um einen Parameter `size` erweitern, der die Zahl der gespeicherten Sensordaten angibt
-+ Methoden für die Speicherung und den Datenzugriff auf der Basis eine Container-Klasse einfügt
-+ die Zugriffsfunktion des Interfaces dahingehend erweitern.
+
+    + das Template um einen Parameter `size` erweitern, der die Zahl der gespeicherten Sensordaten angibt
+    + Methoden für die Speicherung und den Datenzugriff auf der Basis eine Container-Klasse einfügt
+    + die Zugriffsfunktion des Interfaces dahingehend erweitern.
 
 2. Templatisieren Sie das Observer-Entwurfsmuster aus dem Beispiel `Observer.cpp`. Wie können Sie sicherstellen, dass unterschiedliche Datentypen an die Observer weitergereicht werden können?
 
 3. Implementieren Sie das Observer Beispiel auf der Basis von smart Pointern.
+
+4. Beschäftigen Sie sich mit Linux Terminal Grundlagen
+
+!?[LInux Introduction](https://www.youtube.com/watch?v=V6iym-VZMu0)
