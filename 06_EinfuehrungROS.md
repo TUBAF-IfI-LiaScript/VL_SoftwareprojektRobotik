@@ -11,9 +11,22 @@ import: https://github.com/liascript/CodeRunner
 
 -->
 
+[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/VL_SoftwareprojektRobotik/master/06_EinfuehrungROS.md#1)
+
 # Einführung in ROS2
 
-Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/VL_SoftwareprojektRobotik/master/06_EinfuehrungROS.md#1)
+| Parameter            | Kursinformationen                                                                                                                                                                             |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Veranstaltung:**   | `Softwareprojekt Robotik`                                                                                                                                                                     |
+| **Semester**         | `Wintersemester 2021/22`                                                                                                                                                                      |
+| **Hochschule:**      | `Technische Universität Freiberg`                                                                                                                                                             |
+| **Inhalte:**         | `Motivation für die Verwendung von ROS`                                                                                                                                                |
+| **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_Softwareentwicklung/blob/master/06_EinfuehrungROS.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/06_EinfuehrungROS.md) |
+| **Autoren**          | @author                                                                                                                                                                                       |
+
+![](https://media.giphy.com/media/xT8qB2PQF93mUbGvle/giphy-downsized.gif)
+
+--------------------------------------------------------------------------------
 
 **Zielstellung der heutigen Veranstaltung**
 
@@ -115,8 +128,8 @@ für die Robotikentwicklung adressiert. [^2]
 Eine zeitliche Entwicklung wird in folgendem (zeitlich etwas veralteten) Diagramm
 deutlich:
 
-![RoboterSystem](./image/06_EinfuehrungROS/DifferentRoboticFrameworks.png)<!-- width="80%" -->
-*Entwicklungspfade verschiedener Robotikframeworks* [^2]
+![RoboterSystem](./image/06_EinfuehrungROS/DifferentRoboticFrameworks.png "*Entwicklungspfade verschiedener Robotikframeworks* [^2]")<!-- width="80%" -->
+
 
 [^2]: Analyse und Vergleich von Frameworks für die Implementierung von Robotikanwendungen / Sebastian Zug ... Fakultät für Informatik, Otto-von-Guericke-Universität Magdeburg Zug, Sebastin ; Poltrock, Thomas ; Penzlin, Felix ; Walter, Christoph ; Hochgeschwender, Nico; 2013; [Link](http://digital.bibliothek.uni-halle.de/pe/content/titleinfo/2361399)
 
@@ -152,7 +165,7 @@ Seit Beginn der Entwicklung von ROS 2.0 wird zwischen ROS 1 und ROS 2 unterschie
 Die aktuellen Versionen sind
 
 + ROS1 - Noetic Ninjemys (Noetische Ninjemys Oweni) veröffentlicht im Mai 2020 und
-+ ROS2 - Foxy Fitzroy Veröffentlichung im Juni 2020.
++ ROS2 - Galactic Geochelone Veröffentlichung im Mai 2021.
 
 >  In der Fachwelt für das autonome Fahren werden auch gerne zumindest Teile von ROS eingesetzt. In der Robotik nutzen mittlerweile nahezu alle Forschungsgruppen zumindest teilweise ROS. Viele Forschungsgruppen besitzen gar kein eigenes Softwareframework mehr, sondern konzentrieren sich voll auf ROS. *golem.de [Beitrag - Für wen ist ROS?](https://www.golem.de/news/robot-operating-system-was-bratwurst-bot-und-autonome-autos-gemeinsam-haben-1612-124079-4.html)*
 
@@ -213,6 +226,7 @@ sicherstellt.
 
 2. Es existiert eine Vielzahl von Tutorials in Form von Videos, die einen Überblick versprechen oder einzelne Themen individuell adressieren.
 
+<!-- data-type="none" -->
 | Titel                    | Inhalt                                                              | Link                                                                                        |
 |:-------------------------|:--------------------------------------------------------------------|:--------------------------------------------------------------------------------------------|
 | ROS tutorial #1          | Installation, erste Schritte                                        | [Link](https://www.youtube.com/watch?v=9U6GDonGFHw&t=72s)                                   |
@@ -244,7 +258,7 @@ https://fkromer.github.io/awesome-ros2/
 **Node** - Ein Knoten ist Teilnehmer im ROS-Graphen. ROS-Knoten verwenden eine ROS-Clientbibliothek, um mit anderen Knoten zu kommunizieren. Knoten können ein *Subject* veröffentlichen oder abonnieren. *Nodes* können auch einen Dienst bereitstellen oder verwenden. Einem Knoten sind konfigurierbare Parameter zugeordnet. Verbindungen zwischen Knoten werden durch einen verteilten Erkennungsprozess hergestellt. Knoten können sich im selben Prozess, in unterschiedlichen Prozessen oder auf unterschiedlichen Rechnern befinden.
 
 ![RoboterSystem](./image/06_EinfuehrungROS/rosgraph.png)<!-- width="100%" -->
-*Screenshot der Knoten eines umfangreicheren Projektes. Die Ellipsen repräsentieren die Knoten, die rechteckigen Boxen die "Datenkanäle" dazwischen.* [
+*Screenshot der Knoten eines umfangreicheren Projektes. Die Ellipsen repräsentieren die Knoten, die rechteckigen Boxen die "Datenkanäle" dazwischen.*
 
 **Discovery** - Die Erkennung von *Nodes* erfolgt automatisch über die zugrunde liegende Middleware von ROS2. Dafür sind folgende Punkte zu beachten
 
@@ -305,6 +319,7 @@ Die ROS2 Message-Spezifikation integriert verschiedene Konfigurationsmöglichkei
 
 Komplexe Typen werden wie folgt spezifiziert
 
+<!-- data-type="none" -->
 | Index | ROS2 msg Type           | C++                |
 |:------|:------------------------|:-------------------|
 | 0     | zB. `float32`           | `float`            |
@@ -703,4 +718,7 @@ Nun können wir uns die Ausgabe auf der ROS1 Seite anschauen. Leider gibt es noc
 ## Aufgabe der Woche
 
 1. Beschäftigen Sie sich mit den Kommandozeilentools Ihres Betriebssystems. Machen Sie sich mit dem Anlegen, Löschen, Rechtemanagement usw. von Dateien und Ordnern vertraut.
+
+!?[alt-text](https://www.youtube.com/watch?v=2PGnYjbYuUo)
+
 2. Machen Sie sich mit den Möglichkeiten des Kommandozeilen-Tools `ros2` vertraut. Wie können Sie Topics anzeigen, generieren, visualisieren? Eine Hilfe dazu kann zum Beispiel https://ubuntu.com/blog/ros-2-command-line-interface sein.
