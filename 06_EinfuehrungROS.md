@@ -668,8 +668,8 @@ Wichtig ist, dass Sie die verschiedenen `setup.x` Aufrufe korrekt ausführen.
 
 ```bash    ConsoleB
 # ROS1_bridge
-> . /opt/ros/melodic/setup.bash
-> . /opt/ros/dashing/setup.bash
+> . /opt/ros/noetic/setup.bash
+> . /opt/ros/foxy/setup.bash
 > export ROS_MASTER_URI=http://localhost:11311
 > ros2 run ros1_bridge dynamic_bridge
 ```
@@ -678,7 +678,7 @@ Auf der ROS2 Seite nutzen wir nun das [image_tools](https://github.com/ros2/demo
 
 ```bash    ConsoleC
 # ROS2_Shell die ein Kamerasignal erfasst
-> . /opt/ros/dashing/setup.bash
+> . /opt/ros/foxy/setup.bash
 > ros2 run image_tools cam2image
 #ros2 run image_tools showimage   # zum testen
 ```

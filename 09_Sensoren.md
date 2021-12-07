@@ -685,7 +685,7 @@ beschrieben.
 ros2 launch realsense_examples rs_camera.launch.py
 ```
 
-Der Point-Cloud Datentyp ist unter [Link](http://docs.ros.org/en/melodic/api/sensor_msgs/html/msg/PointCloud2.html) beschrieben.
+Der Point-Cloud Datentyp ist unter [Link](http://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/PointCloud2.html) beschrieben.
 
 ![RoboterSystem](./image/09_Sensoren/rviz.png)<!-- width="100%" -->
 

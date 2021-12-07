@@ -142,7 +142,7 @@ Für ein ganzes Set von Paketen ist deutlich mehr Aufwand erforderlich:
 
 Wir wollen die Funktionalität der `minimal_subscriber`/`minimal_publisher` Beispiel erweitern und einen neuen Knoten implementieren, der den Zählwert nicht als Bestandteil eines strings kommuniziert sondern als separaten Zahlenwert.
 
-Sie finden den Beispielcode im Repository dieses Kurses unter [Link](https://github.com/SebastianZug/SoftwareprojektRobotik/tree/master/examples/07_ROS2Pakete/src)
+Sie finden den Beispielcode im Repository dieses Kurses unter [Link](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/tree/master/examples/07_ROS_Pakete/src)
 
 **Stufe 1: Individuelles Msg-Format**
 
@@ -457,9 +457,9 @@ auf Ihren Rechner. Es handelt sich dabei um ein ROS1-bagfile!
 2. Starten des Bagfiles unter `ros2` mittels eines Plugins für die Konvertierung
 
 ```
-> . start_melodic.sh
-> . start_dashing.sh
-ROS_DISTRO was set to 'melodic' before. Please make sure that the environment does not mix paths from different distributions.
+> source /opt/ros/noetic/setup.zsh
+> source /opt/ros/foxy/setup.zsh
+ROS_DISTRO was set to 'noetic' before. Please make sure that the environment does not mix paths from different distributions.
 > ros2 bag play -s rosbag_v2 b2-2016-04-05-14-44-52.bag
 ```
 
