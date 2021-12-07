@@ -662,7 +662,7 @@ Wichtig ist, dass Sie die verschiedenen `setup.x` Aufrufe korrekt ausführen.
 
 ```bash    ConsoleA
 # ROS1_Shell mit roscore
-> . /opt/ros/melodic/setup.bash
+> . /opt/ros/noetic/setup.bash
 > roscore
 ```
 
@@ -688,7 +688,7 @@ bisher nicht für ROS2 verfügbar.
 
 ```bash    ConsoleD
 # ROS1_Shell die ein Kamerasignal erfasst
-> . /opt/ros/melodic/setup.bash
+> . /opt/ros/noetic/setup.bash
 > rosrun opencv_apps face_detection image:=image
 ```
 
@@ -696,7 +696,7 @@ Nun können wir uns die Ausgabe auf der ROS1 Seite anschauen. Leider gibt es noc
 
 ```bash    ConsoleE
 # ROS1_Shell die die Ausgabe koordiniert
-. /opt/ros/melodic/setup.bash
+. /opt/ros/noetic/setup.bash
 > rostopic list
 /face_detection_1575145081472799322/face_image
 /face_detection_1575145081472799322/faces
