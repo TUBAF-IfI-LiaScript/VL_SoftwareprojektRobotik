@@ -166,7 +166,7 @@ creating folder ./my_msg_package/include/my_msg_package
 creating ./my_msg_package/CMakeLists.txt
 ```
 
-Nun ergänzen wir unsere eigentliche Beschreibungsdatei für die Definition der eigenen Nachricht. Dazu legen wir uns einen Ordner `src` an und integrieren wir eine Datei `MyMsg.msg`.
+Nun ergänzen wir unsere eigentliche Beschreibungsdatei für die Definition der eigenen Nachricht. Dazu legen wir uns einen Ordner `msg` an und integrieren wir eine Datei `MyMsg.msg`.
 
 ```
 int32 counter
