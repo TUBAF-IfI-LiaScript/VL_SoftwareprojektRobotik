@@ -300,7 +300,7 @@ digraph graphname {
 ```
 
 ```
-colcon graph --dot
+> colcon graph --dot
 digraph graphname {
   "my_tutorial_package";
   "my_msg_package";
