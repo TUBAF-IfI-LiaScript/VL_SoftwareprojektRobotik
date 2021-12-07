@@ -13,14 +13,19 @@ import: https://github.com/liascript/CodeRunner
 
 # ROS2 Pakete
 
-Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/07_ROS_Pakete.md)
+[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/VL_SoftwareprojektRobotik/master/07_ROS_Pakete.md#1)
 
-**Zielstellung der heutigen Veranstaltung**
 
-+ Aufbau von Paketen unter ROS2
-+ Vorgehen bei der Kompilierung
-+ Verwendung des Logging, von Bagfiles
-+ Launch Konzepte
+| Parameter            | Kursinformationen                                                                                                                                                                           |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Veranstaltung:**   | `Softwareprojekt Robotik`                                                                                                                                                                   |
+| **Semester**         | `Wintersemester 2021/22`                                                                                                                                                                    |
+| **Hochschule:**      | `Technische Universität Freiberg`                                                                                                                                                           |
+| **Inhalte:**         | `Umsetzung von ROS Paketen`                                                                                                                                                 |
+| **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_Softwareentwicklung/blob/master/07_ROS_Pakete.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/07_ROS_Pakete.md) |
+| **Autoren**          | @author                                                                                                                                                                                     |
+
+![](https://media.giphy.com/media/4VY76i2rbyg2ggLIGQ/giphy-downsized.gif)
 
 --------------------------------------------------------------------------------
 
