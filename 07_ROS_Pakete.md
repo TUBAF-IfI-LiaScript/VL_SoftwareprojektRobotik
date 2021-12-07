@@ -219,7 +219,7 @@ das neu definierte Work-Package in die Liste der verfügbaren Pakete aufgenommen
 > source install/setup.bash
 > ros2 msg list | grep my
 my_msg_package/msg/MyMsg
-ros2 topic pub /tralla my_msg_package/msg/MyMsg "{counter: '8'}"
+> ros2 topic pub /tralla my_msg_package/msg/MyMsg "{counter: '8'}"
 ```
 
 ```
