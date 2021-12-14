@@ -11,7 +11,7 @@ import:  https://raw.githubusercontent.com/liaScript/rextester_template/master/R
 
 -->
 
-[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/VL_SoftwareprojektRobotik/master/00_Einfuehrung.md#1)
+[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/LiaPlayground/Workshop_Freiberg_09-12-1021/main/README.md#1)
 
 # Einführung
 
