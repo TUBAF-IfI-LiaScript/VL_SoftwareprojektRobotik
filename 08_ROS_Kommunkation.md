@@ -11,16 +11,25 @@ import: https://github.com/liascript/CodeRunner
 
 -->
 
+
+[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/VL_SoftwareprojektRobotik/master/08_ROS_Kommunkation.md#1)
+
 # ROS2 Kommunikationsmethoden
 
-Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/08_ROS_Kommunkation.md)
 
-**Zielstellung der heutigen Veranstaltung**
+| Parameter            | Kursinformationen                                                                                                                                                                           |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Veranstaltung:**   | `Softwareprojekt Robotik`                                                                                                                                                                   |
+| **Semester**         | `Wintersemester 2021/22`                                                                                                                                                                    |
+| **Hochschule:**      | `Technische Universität Freiberg`                                                                                                                                                           |
+| **Inhalte:**         | `ROS Kommunikationsprinzipien`                                                                                                                                                 |
+| **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_Softwareentwicklung/blob/master/08_ROS_Kommunkation.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/08_ROS_Kommunkation.md) |
+| **Autoren**          | @author                                                                                                                                                                                     |
 
-+ Diskussion der ROS2 Kommunikationsinfrastruktur auf Basis von DDS
-+ Gegenüberstellung der ROS Kommunikationsgrundmuster und ihre Anwendungen
+![](https://media.giphy.com/media/C1sowzeUkI4kU/giphy-downsized.gif)
 
 --------------------------------------------------------------------------------
+
 
 # Was ist eigentlich eine Middleware?
 
@@ -137,7 +146,7 @@ https://index.ros.org/doc/ros2/Concepts/About-Quality-of-Service-Settings/
 https://index.ros.org/doc/ros2/Tutorials/Quality-of-Service/
 
 
-DDS ist ein Beispiel, alternative
+> DDS ist ein Beispiel einer Middleware.
 
 + *Durability* ... legt fest, ob und wie lange Daten, die bereits ausgetauscht worden sind,  "am Leben bleiben". `volatile` bedeutet, dass dahingehend kein Aufwand investiert wird, `transient` oder `persistent` gehen darüber hinaus.
 + *Reliability* ...  Die Reliability-QoS definiert, ob alle geschriebenen Datensätze (irgendwann) bei allen Readern angekommen sein müssen. Bei zuverlässiger (`reliable`) Kommunikation werden geschriebene Datensätze eines Topics, die aus irgendwelchen Gründen auf dem Netzwerk verloren gehen, von der Middleware wiederhergestellt, um diese Daten verlässlich den Readern zustellen zu können. Im Unterschied dazu definiert `best effort` eine schnellstmögliche Zustellung.
@@ -296,7 +305,7 @@ bool busy
 float32 batterylevel
 ```
 
-Für die Serverseite wurde eine Beispielimplementierung realisiert, die unter [Link]() zu finden ist. Hierfür wurde eine sehr rudimentäre Datenstruktur implementiert, die die Roboterliste enthält.
+Für die Serverseite wurde eine Beispielimplementierung realisiert, die unter [Link](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/tree/master/examples/08_ROS_Kommunikation/ws_service/src) zu finden ist. Hierfür wurde eine sehr rudimentäre Datenstruktur implementiert, die die Roboterliste enthält.
 
 ```cpp Service.cpp
 ...
