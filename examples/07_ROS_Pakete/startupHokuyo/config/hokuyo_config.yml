@@ -3,15 +3,14 @@ urg_node:
     serial_port: "/dev/ttyACM0"
     serial_baud: 115200
     laser_frame_id: laser
-    angle_max: 3.14
-    angle_min: -3.14
+    angle_min: -2.356194496154785
+    angle_max: 2.0923497676849365
+    angle_increment: 0.006135923322290182
+    scan_time: 0.1
+    range_min: 0.02
+    range_max: 5.0
     publish_intensity: false
     publish_multiecho: false
-    calibrate_time: false
-    default_user_latency: 0.
-    diagnostics_tolerance: 0.05
-    diagnostics_window_time: 5.0
-    error_limit: 4
-    get_detailed_status: false
-    cluster: 0
-    skip: 1
+
+
+
