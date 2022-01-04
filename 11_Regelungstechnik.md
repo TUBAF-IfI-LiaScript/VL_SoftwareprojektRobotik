@@ -8,8 +8,8 @@ comment:  In dieser Vorlesungen werden die Schichten einer Roboterarchitektur ad
 narrator: Deutsch Female
 attribute: thx
 
-import: https://raw.githubusercontent.com/LiaTemplates/Rextester/master/README.md
-import: https://raw.githubusercontent.com/liascript-templates/plantUML/master/README.md
+import:   https://raw.githubusercontent.com/liascript-templates/plantUML/master/README.md
+          https://github.com/LiaTemplates/Pyodide
 
 attribute: Danke an Andre Dietrich für seinen Kurs "Einführung Regelungstechnik" aus dem Teile übernommen wurden.
 
@@ -275,6 +275,13 @@ Schwierig zu handhaben sind dabei insbesondere:
 
 ## Implmentierung
 
+Die größte Herausforderung liegt in der Bestimmung der entsprechenden magischen Konstanten, die ein rasche Annäherung an die Sollgröße bei gleichzeitig minimalem Überschwingen gewährleistet.
+
+![RoboterSystem](./image/11_Regelungstechnik/PID_Compensation_Animated.gif)<!-- width="50%" -->
+_"Effects of varying PID parameters (Kp,Ki,Kd) on the step response of a system." Wikimedia Grafik des Autors "Physicsch" [Link](https://en.wikipedia.org/wiki/PID_controller#/media/File:PID_Compensation_Animated.gif)_
+
+### Beispiel 1
+
 Ein PID-Regler kann einfach durch Addition der einzelnen Regelglieder gebildet
 werden und die unterschiedlichen Faktoren ($K_P$, $K_I$, $K_D$) sind die
 Stellschräubchen an denen der Regler eingestellt werden kann. Mit einem Wert
@@ -285,93 +292,211 @@ $$ u(t) = \underbrace{K_P \cdot e(t)}_{\text{Proportionalteil}}
         + \underbrace{K_D \cdot (e(t) - e(t-1))}_{\text{Differenzialteil}}
 $$
 
-Anhand eines Anwendungsbeispiels soll nunmehr die Wirkung genauer untersucht werden.
+Anhand eines Anwendungsbeispiels soll nunmehr die Wirkung genauer untersucht werden. Nehmen wir an, dass wir die Anfahrbewegung eines Roboters in ihrem Zeitverhalten kennen.
 
-```js -System.js
-var sampleCount = 100;
-function generateStep(xrange, basis, step, step_index){
-  var result = new Array(xrange.length).fill(basis);
-  return result.fill(step, step_index);
-}
-var xrange = d3.range(0, sampleCount, 1);
-var target = generateStep(xrange, 0, 1, 20);
+```python system_simulation.py
+# https://www.csestack.org/control-systems-simulation-python-example/
+import math
+import matplotlib.pyplot as plt
+import numpy as np
 
-function Regelstrecke(u) {
-      return 0.25 * u
-}
+steps = 2000
+
+class SecondOrderSystem:
+  def __init__(self, d1, d2):
+    if d1 > 0:
+      e1 = -1.0 / d1
+      x1 = math.exp(e1)
+    else: x1 = 0
+    if d2 > 0:
+      e2 = -1.0 / d2
+      x2 = math.exp(e2)
+    else: x2 = 0
+    a = 1.0 - x1    # b = x1
+    c = 1.0 - x2    # d = x2
+    self.ac = a * c
+    self.bpd = x1 + x2
+    self.bd = x1 * x2
+    self.init_system()
+
+  def init_system(self):
+    self.Yppr = 0
+    self.Ypr = 0
+
+  def __call__(self, X):
+    Y = self.ac * X + self.bpd * self.Ypr - self.bd * self.Yppr
+    self.Yppr = self.Ypr
+    self.Ypr = Y
+    return Y
+
+fig, ax = plt.subplots()
+
+Plant = SecondOrderSystem(250, 100)     
+t = np.arange(0, steps)
+y = np.arange(0, steps, dtype = float)
+for speed in [10, 100, 150, 200]:
+  for index, value in enumerate(t):
+      y[index]=Plant(speed)
+  ax.plot(t, y, label = f"Voltage level '{speed}'")
+  Plant.init_system()
+
+plt.xlabel("Time")
+plt.ylabel("Speed")
+plt.legend()
+plt.grid()  
+plt.show()
+plot(fig) # <- this is required to plot the fig also on the LiaScript canvas
 ```
-```js +Processing.js
-var plant = new Float32Array(xrange.length).fill(0);
-var error = new Float32Array(xrange.length).fill(0);
+@Pyodide.eval
 
-var ist = 0;
-var u  = 0;   // Stellgröße (Druck auf das Gaspedal)
+Kombinieren wir nun das Ganze mit einem Regler, so lässt sich das Verhalten nach unterschiedlichen Parametern optimieren.
 
-var Kp = 0.3;  // proportional Faktor
-var Ki = 0.0;  // integral     Faktor (ausgeschaltet)
-var Kd = 0.0;   // differenzial Faktor (ausgeschaltet)
+```python control_loop.py
+# https://www.csestack.org/control-systems-simulation-python-example/
+import math
+import matplotlib.pyplot as plt
+import numpy as np
 
-var e_now  = 0;  // Regelabweichung e(t)
-var e_old  = 0;  // Regelabweichung e(t-1)
-var e_sum  = 0;  // Summe über allen Fehlern
+steps = 1000
 
-// Taktgeber
-for (var t = 1; t < plant.length; t++){
-    ist = Regelstrecke(u);
-    plant[t-1] = ist;
-    e_old = e_now;
-    e_now = target[t] - ist;
-    e_sum = e_sum + e_now;
+class PIDControlBlock:
+  def __init__(self, Kp, Ki, Kd):
+    self.Kp = Kp
+    self.Ki = Ki
+    self.Kd = Kd
+    self.Epr = 0
+    self.Eppr = 0
+    self.Epppr = 0
+    self.Sum = 0
 
-    // Bestimmung der neuen direkten Stellgröße
-    u = Kp * e_now + Ki * e_sum + Kd * (e_now - e_old);
-    error[t]= e_now;
-}
+  def __call__(self, E):
+    self.Sum += 0.5 * self.Ki * (E + self.Epr)      # where T ~1
+    U = self.Kp * E + self.Sum + 0.1667 * self.Kd * (E - self.Epppr + 3.0 * (self.Epr - self.Eppr))
+    self.Epppr = self.Eppr
+    self.Eppr = self.Epr
+    self.Epr = E
+    return U
+
+class ClosedLoopSystem:
+  def __init__(self, controller, plant) :
+    self.P = plant
+    self.C = controller
+    self.Ypr = 0
+
+  def __call__(self, X):
+    E = X - self.Ypr
+    U = self.C(E)
+    Y = self.P(U)
+    self.Ypr = Y
+    return Y
+
+Plant = SecondOrderSystem(250, 100)     
+#Pid = PIDControlBlock(5, 0.0143, 356.25)
+Pid = PIDControlBlock(2, 0, 0)
+Ctrl = ClosedLoopSystem(Pid, Plant)
+t = np.arange(0, 1001)
+setpoints = np.zeros(len(t))
+setpoints[np.where(t > 50)]= 100
+y = np.arange(0, 1001, dtype = float)
+for index, value in enumerate(setpoints):
+    y[index]=Ctrl(value)
+fig, ax = plt.subplots()
+ax.plot(t, setpoints, label = "Setpoint")
+ax.plot(t, y, label = "Controled speed level")
+plt.xlabel("Time")
+plt.ylabel("Speed")
+plt.legend()
+plt.grid()
+plt.show()
+
+plot(fig) # <- this is required to plot the fig also on the LiaScript canvas
 ```
-```js -Visualization.js
-var layout = {
-    height : 300,
-    width :  650,
-    xaxis: {range: [0, sampleCount]},
-    margin: { l: 60, r: 10, b: 0, t: 10, pad: 4},
-    showlegend: true,
-    legend: { x: 1, xanchor: 'right', y: 1},
-    tracetoggle: false
-};
+@Pyodide.eval
 
-var trace1 = {
-  x: xrange,
-  y: target,
-  name: 'Step function',
-  mode: 'line'
-};
 
-var trace2 = {
-  x: xrange,
-  y: plant,
-  name: 'System',
-  mode: 'line'
-};
-var trace3 = {
-  x: xrange,
-  y: error,
-  name: 'Error',
-  mode: 'line'
-};
-Plotly.newPlot('rawData', [trace1, trace2, trace3], layout);
-```
-<script>
-  @input(0)
-  @input(1)
-  @input(2)
-</script>
+### Beispiel 2
 
-<div id="rawData"></div>
+   --{{0}}--
+Das folgende Beispiel ist dem Buch von Peter Corke, "Robotics, Vision & Control", Springer 2017 entnommen. Der Code im Repository - `move_to_pose.py` - basiert auf einer Implementierung von AtsushiSakai - [Link](https://github.com/AtsushiSakai/PythonRobotics/tree/master/Control/move_to_pose). Der Code wurde so angepasst, dass mehrere Sätze von Reglerparamtern parallel evaluiert werden können.
 
-Die größte Herausforderung liegt in der Bestimmung der entsprechenden magischen Konstanten, die ein rasche Annäherung an die Sollgröße bei gleichzeitig minimalem Überschwingen gewährleistet.
+Wir wollen einen Roboter von einer Startposition zu einer Zielposition fahren lassen. Das Ganze allein mit einem PID als reaktives Verhalten umgesetzt werden.
 
-![RoboterSystem](./image/11_Regelungstechnik/PID_Compensation_Animated.gif)<!-- width="50%" -->
-_"Effects of varying PID parameters (Kp,Ki,Kd) on the step response of a system." Wikimedia Grafik des Autors "Physicsch" [Link](https://en.wikipedia.org/wiki/PID_controller#/media/File:PID_Compensation_Animated.gif)_
+Ausgangspunkt ist dabei das kinematische Modell eines differentiell getriebenen Roboters:
+
+$$
+\begin{pmatrix}
+\dot{x}\\
+\dot{y}\\
+\dot{\theta}
+\end{pmatrix}
+=
+\begin{pmatrix}
+cos\theta & 0 \\
+sin\theta & 0 \\
+0 & 1
+\end{pmatrix}
+\begin{pmatrix}
+v\\
+w
+\end{pmatrix}
+$$
+
+![RoboterSystem](./image/11_Regelungstechnik/robot_kinematic_model.png)
+
+Der Fehler zwischen der Start und der Zielposition lässt sich beschreiben mit:
+
+$$
+\begin{aligned}
+\rho &= \sqrt{\Delta_x^2 + \Delta_y^2} \\
+\alpha &= tan^{-1}\frac{\Delta_y}{\Delta_x} - \theta \\
+\beta &= -\theta - \alpha
+\end{aligned}
+$$
+
+Diese Darstellung kann auch als Polarkoordinatenrepresentation der Problems interpretiert werden. Lediglich die Richtungsinformation des Roboters im Ziel $\beta$ kommt als zusätzlicher Term hinzu.
+
+Die Bewegungsgleichung in Polarkoordinaten ergibt sich damit zu
+
+$$
+\begin{pmatrix}
+\dot{\rho}\\
+\dot{\alpha}\\
+\dot{\beta}
+\end{pmatrix}
+=
+\begin{pmatrix}
+-cos\alpha & 0 \\
+\frac{sin\alpha}{\rho}& -1 \\
+-\frac{sin\alpha}{\rho} & 0
+\end{pmatrix}
+\begin{pmatrix}
+v\\
+w
+\end{pmatrix}
+$$
+
+für $-\frac{1}{2}\pi <= \alpha < \frac{1}{2}\pi$.
+
+Da $\rho$, $\alpha$ und $\beta$ den Fehler gegenüber der Zielgröße darstellen können wir diese mit einer proportionalen Verstärkung auf die Bewegungsvorgaben abbilden.
+
+$$
+\begin{aligned}
+v &= k_\rho\rho \\
+w &= k_\alpha \alpha + k_\beta \beta
+\end{aligned}
+$$
+
+> **Aufgabe:** Erklären Sie den Einfluss der drei Proportionalen Regelerparamter bei der Bewegung des Roboters.
+
+![RoboterSystem](./image/11_Regelungstechnik/move_to_pose.png)
+
+<!-- data-type="none" -->
+| Trajektorie | $k_\rho$ | $k_\alpha$ | $k_\beta$ |
+| ----------- | -------- | ---------- | --------- |
+| rot         | 5        | 3          | 3         |
+| blau        | 5        | 15         | 3         |
+
+Welchen Einfluss haben dabei die Beschränkungen des Modells in Bezug auf die maximalen Geschwindigkeiten `MAX_LINEAR_SPEED` und `MAX_ANGULAR_SPEED`?
 
 ## Implementierung unter ROS
 
@@ -381,4 +506,4 @@ Evaluieren Sie das Systemverhalten für verschiedene Reglerkonfigurationen! Nutz
 
 ## Aufgaben
 
-+ Evaluieren Sie das Paket ROS control, dass einen PID Controller implementiert.
++ Evaluieren Sie das Paket ROS control, dass einen PID Controller implementiert. Implementieren Sie mit Ihrem Roboter eine Geradeausfahrt auf schwierigem Gelände.

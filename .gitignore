@@ -34,6 +34,9 @@
 .cmake
 .bin
 
+*.db3
+*.metadata.yaml
+
 
 /examples/07_ROS_Pakete/src/log/*
 /examples/07_ROS_Pakete/src/build/*
