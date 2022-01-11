@@ -11,14 +11,21 @@ import: https://github.com/liascript/CodeRunner
 
 -->
 
+[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/VL_SoftwareprojektRobotik/master/09_Sensoren.md#1)
+
 # Sensoren
 
-Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/09_Sensoren.md)
 
-**Zielstellung der heutigen Veranstaltung**
+| Parameter            | Kursinformationen                                                                                                                                                                           |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Veranstaltung:**   | `Softwareprojekt Robotik`                                                                                                                                                                   |
+| **Semester**         | `Wintersemester 2021/22`                                                                                                                                                                    |
+| **Hochschule:**      | `Technische Universität Freiberg`                                                                                                                                                           |
+| **Inhalte:**         | `Überblick Sensorsysteme`                                                                                                                                                 |
+| **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_Softwareentwicklung/blob/master/08_ROS_Kommunkation.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/09_Sensoren.md) |
+| **Autoren**          | @author                                                                                                                                                                                     |
 
-+ Typen von Sensoren in mobilen Robotern
-+ Integration unter ROS
+![](https://media.giphy.com/media/md1gcbifqcZUs/giphy.gif)
 
 --------------------------------------------------------------------------------
 
@@ -113,20 +120,21 @@ Und wie funktioniert das? Sogenannten Rezeptoren ...
 
 > Sensoren (lateinisch „fühlen“ ) transformieren physikalische, chemische oder biologische Messgrößen in elektrische Signale und stellen damit das unmittelbare Interface eines Messsystems zur Umgebung dar.
 
-![RoboterSystem](./image/09_Sensoren/Fliehkrafregler.png)<!--style="width: 50%; max-width: 720px;"--> [^1]
-
-[^1]: Fliehkraftregler als Beispiel für die nicht elektrische Ausgabe von Messungen (Drehzahl) [Wikipedia Commons, Nutzer: Kino]
+![RoboterSystem](./image/09_Sensoren/Fliehkrafregler.png "Fliehkraftregler [^Kino]")
 
 Achtung, die einschlägige deutsche Norm DIN 1319 1-4 vermeidet den Begriff und spricht stattdessen in Abschnitt 2 vom „Messaufnehmer“ als dem Beginn der Messkette. Entsprechend ist die Abgrenzung des eingentlichen Sensorbegriffes auch domainspezifisch und individuell unterschiedlich.
+
+[^Kino]: Fliehkraftregler als Beispiel für die nicht elektrische Ausgabe von Messungen (Drehzahl) [Wikipedia Commons, Nutzer: Kino]
+
 *******************************************************************************
 
 
     {{1-2}}
 *******************************************************************************
 
-![RoboterSystem](./image/09_Sensoren/SensorIntegrationsLevel.png)<!--style="width: 50%; max-width: 720px;"--> [^2]
+![RoboterSystem](./image/09_Sensoren/SensorIntegrationsLevel.png "[^Zug]")
 
-[^2]: Integrationsstufen von Sensoren
+[^Zug]: Integrationsstufen von Sensoren
 
 *******************************************************************************
 
@@ -176,8 +184,8 @@ Parameter eines Sensors
 | Öffnungswinkel                | Erfassungsbereich des Sensors bei gerichteter Datenerfassung                                                             |
 | Energieaufnahme, Bauraum, ... |                                                                                                                          |
 
-![RoboterSystem](./image/09_Sensoren/beam_srf235.gif)<!-- width="40%" -->
-![RoboterSystem](./image/09_Sensoren/beam_srf4.gif)<!-- width="40%" --> [^3]
+![RoboterSystem](./image/09_Sensoren/beam_srf235.gif "[^3]")
+![RoboterSystem](./image/09_Sensoren/beam_srf4.gif "[^3]")
 
 [^3]: Sensorkeulen verschiedener Ultraschallsensoren [robot electronics faq](https://www.robot-electronics.co.uk/htm/sonar_faq.htm)
 
@@ -212,21 +220,19 @@ Konzentrieren wir uns auf das letztgenannte Konzept.
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/eqZgxR6eRjo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-![RoboterSystem](./image/09_Sensoren/MEMSStruktur.png)<!-- style="width: 33%;"--> [^4]
+![Sensorsystem](./image/09_Sensoren/MPU-9255.png "Handbuch MPU 9255 [^InvenSense]")
 
-[^4]: *MEMS - Micro-Electro-Mechanical Systems* [Elektronik Kompendium](http://www.elektronik-kompendium.de/sites/bau/1503041.htm )]
-
-![Sensorsystem](./image/09_Sensoren/MPU-9255.png)<!--style="width: 70%; max-width: 720px;"-->
-*Handbuch MPU 9255* [InvenSense](https://stanford.edu/class/ee267/misc/MPU-9255-Datasheet.pdf)  ]
+[^InvenSense]: *Handbuch MPU 9255* [InvenSense](https://stanford.edu/class/ee267/misc/MPU-9255-Datasheet.pdf)  ]
 
 __Beispiel: Bewegung eines Fahrstuhles__
 
 Aus den Samples des Beschleunigungssensors lässt sich mittels $v=v_0 +\sum a_i\cdot t_i$ die Geschwindigkeit des Fahrstuhles bestimmen.
 
-![RoboterSystem](./image/09_Sensoren/BeschleunigungsSensor.png)<!--style="width: 30%; max-width: 720px;"-->
-![RoboterSystem](./image/09_Sensoren/BeschleunigungsSensorV.png)<!--style="width: 30%; max-width: 720px;"-->
-![RoboterSystem](./image/09_Sensoren/BeschleunigungsSensorS.png)<!--style="width: 30%; max-width: 720px;"-->
-*Aufzeichung einer Fahrstuhlfahrt mit der IMU des Mobiltelefones* [Jordi Kling, [Zurückgelegter Weg einer Fahrstuhlfahrt mit Handysensorik](https://blogs.hu-berlin.de/didaktikdigital/2016/11/20/zurckgelegter-weg-einer-fahrstuhlfahrt-mit-handysensorik/)  ]
+![RoboterSystem](./image/09_Sensoren/BeschleunigungsSensor.png "[^Kling]")
+![RoboterSystem](./image/09_Sensoren/BeschleunigungsSensorV.png "[^Kling]")
+![RoboterSystem](./image/09_Sensoren/BeschleunigungsSensorS.png "[^Kling]")
+
+[^Kling]: *Aufzeichung einer Fahrstuhlfahrt mit der IMU des Mobiltelefones* [Jordi Kling, [Zurückgelegter Weg einer Fahrstuhlfahrt mit Handysensorik](https://blogs.hu-berlin.de/didaktikdigital/2016/11/20/zurckgelegter-weg-einer-fahrstuhlfahrt-mit-handysensorik/)  ]
 
 Aus der "Integration" der Samples über der Zeit folgt eine mangelnde Langzeitstabilität, daher koppelt man ein INS beispielsweise liefert eine Kombination mit einem Global Positioning System (GPS).
 
@@ -411,7 +417,7 @@ Entfernung (in m) 𝑑 =1/2  𝑐 𝑡 aus Laufzeit t (in s) des
 
 **Herausforderung 1: Identifikation des Impulses**
 
-![RoboterSystem](./image/09_Sensoren/UltraschallEchos.png)<!--style="width: 70%; max-width: 720px;"--> [^3]
+![RoboterSystem](./image/09_Sensoren/UltraschallEchos.png "[^3]")
 
 [^3]: *Sendeimpuls und Echo eines Ultraschallsensors* aus G. Schober et al., Degree of Dispersion Monitoring by Ultrasonic Transmission Technique and Excitation of the Transducer's Harmonics, [Link](https://www.researchgate.net/publication/264385266_Degree_of_Dispersion_Monitoring_by_Ultrasonic_Transmission_Technique_and_Excitation_of_the_Transducer%27s_Harmonics)
 
@@ -424,8 +430,8 @@ Die Schallgeschwindigkeit ist abhänig von
 + Luftdruck
 + Luftzusammensetzung (Anteil von CO$_2$, Luftfeuchte)
 
-![RoboterSystem](./image/09_Sensoren/Schallgeschwindigkeit.png)<!--style="width: 70%; max-width: 720px;"-->
-*Schallgeschwindigkeit in Abhängigkeit von der Temperatur und dem Luftdruck*
+![RoboterSystem](./image/09_Sensoren/Schallgeschwindigkeit.png "Schallgeschwindigkeit in Abhängigkeit von der Temperatur und dem Luftdruck")
+
 
 Welchen Einfluss haben diese Größen? Für zwei Konfigurationen, die zwei unterschiedliche
 Wetterlagen repräsentieren ergibt sich bereits ein Fehler von 8%.
@@ -459,7 +465,7 @@ $$
 D= \frac{1}{2} \cdot c \cdot t_0 \cdot \frac{S2}{S1 + S2}
 $$
 
-![RoboterSystem](./image/09_Sensoren/TOF-Kamera-Prinzip.jpg)<!--style="width: 70%; max-width: 720px;"-->[^4]
+![RoboterSystem](./image/09_Sensoren/TOF-Kamera-Prinzip.jpg "[^4]")
 
 [^4]: *Schematische Darstellung der Funktionalität eines TOF Pixels* [Wikimedia Commons, Autor Captaindistance](https://de.wikipedia.org/wiki/TOF-Kamera#/media/Datei:TOF-Kamera-Prinzip.jpg)
 
@@ -503,8 +509,9 @@ Anwendung findet dieses Konzept auch bei RGB-D Kameras, sowohl bei Infrarotbasie
 + Diodenspezifika
 + Nicht sichtbar
 
-![RoboterSystem](./image/09_Sensoren/Strahlungsintensitaet.png)<!-- width="60%" -->
-*Spektrum der Strahlungsintensität* [Wikipedia Commons](https://commons.wikimedia.org/wiki/File:Sonne_Strahlungsintensitaet.svg)
+![RoboterSystem](./image/09_Sensoren/Strahlungsintensitaet.png "[^Infrared]")
+
+[^Infrared]: Spektrum der Strahlungsintensität [Wikipedia Commons](https://commons.wikimedia.org/wiki/File:Sonne_Strahlungsintensitaet.svg)
 
 ## Anwendung der Messverfahren in 3D Kameras
 
