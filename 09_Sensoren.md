@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.0.2
+version:  0.0.3
 language: de
 narrator: Deutsch Female
 
@@ -689,7 +689,7 @@ https://index.ros.org/r/ros2_intel_realsense/
 beschrieben.
 
 ```
-ros2 launch realsense_examples rs_camera.launch.py
+ros2 run realsense2_camera realsense2_camera_node  --ros-args -p filters:=pointcloud
 ```
 
 Der Point-Cloud Datentyp ist unter [Link](http://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/PointCloud2.html) beschrieben.
