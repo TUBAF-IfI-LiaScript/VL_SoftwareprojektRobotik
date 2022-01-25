@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.0.1
+version:  0.0.3
 language: de
 narrator: Deutsch Female
 
@@ -13,18 +13,27 @@ script:   https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js
           https://d3js.org/d3-random.v2.min.js
           https://d3js.org/d3.v4.min.js
           https://cdn.plot.ly/plotly-latest.min.js
+
 -->
+
+[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/VL_SoftwareprojektRobotik/master/10_Sensordatenverarbeitung.md#1)
 
 # Sensordatenverarbeitung
 
-Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/10_Sensordatenverarbeitung.md)
 
-**Zielstellung der heutigen Veranstaltung**
+| Parameter            | Kursinformationen                                                                                                                                                                                                     |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Veranstaltung:**   | `Softwareprojekt Robotik`                                                                                                                                                                                             |
+| **Semester**         | `Wintersemester 2021/22`                                                                                                                                                                                              |
+| **Hochschule:**      | `Technische Universität Freiberg`                                                                                                                                                                                     |
+| **Inhalte:**         | `Sensordatenverarbeitung Sensorsysteme`                                                                                                                                                                                             |
+| **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_Softwareentwicklung/blob/master/10_Sensordatenverarbeitung.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/10_Sensordatenverarbeitung.md) |
+| **Autoren**          | @author                                                                                                                                                                                                               |
 
-+ Basiskonzepte der Sensordatenvorverarbeitung
-+ Filterung und Identifikation
+![](https://media.giphy.com/media/kEaPIFo1xEne6Yxr2N/giphy-downsized.gif)
 
 --------------------------------------------------------------------------------
+
 
 ## Wie weit waren wir gekommen?
 
@@ -666,14 +675,12 @@ Alternative Filterkonzepte erweitern den Fensteransatz und bewerten die Verteilu
 
 Im folgenden soll dies Anhand der Detektion von
 
-![RoboterSystem](./image/10_Sensordatenvorverarbeitung/GP2D120Sensor.png)<!-- width="100%" -->
-*Störabhängigkeit eines infrarot-lichtbasierten Distanzsensors in Bezug auf externe Beleuchtung *
+![RoboterSystem](./image/10_Sensordatenvorverarbeitung/GP2D120Sensor.png "Störabhängigkeit eines infrarot-lichtbasierten Distanzsensors in Bezug auf externe Beleuchtung")<!-- width="100%" -->
 
-![RoboterSystem](./image/10_Sensordatenvorverarbeitung/GP2D120FilterConfiguration.png)<!-- width="80%" -->
-*Konfiguration der Größe des Referenzsamples und des Sliding Windows und deren Auswirkung auf die korrekte Klassifikation (Kolmogoroff-Smirnow) (links Referenzdatensatz, rechts gestörte Messung jeweils mit unterschiedlicher Zahl von Samples)*
+![RoboterSystem](./image/10_Sensordatenvorverarbeitung/GP2D120FilterConfiguration.png "Konfiguration der Größe des Referenzsamples und des Sliding Windows und deren Auswirkung auf die korrekte Klassifikation (Kolmogoroff-Smirnow) (links Referenzdatensatz, rechts gestörte Messung jeweils mit unterschiedlicher Zahl von Samples)")<!-- width="80%" -->
 
-![RoboterSystem](./image/10_Sensordatenvorverarbeitung/GP2D120FilterResult.png)<!-- width="80%" -->
-*Zeitliches Verhalten verschiedener Tests - Fligner (links), Mann-Whitney U (rechts))*
+
+![RoboterSystem](./image/10_Sensordatenvorverarbeitung/GP2D120FilterResult.png "Zeitliches Verhalten verschiedener Tests - Fligner (links), Mann-Whitney U (rechts))")<!-- width="80%" -->
 
 ******************************************************************************
 
@@ -751,7 +758,7 @@ _Beispielhafte Darstellung des tf-Trees eines ROS-Turtle Szenarios, das zwei Tur
                    {{2-3}}
 ********************************************************************************
 
-Nehmen wir nun an, dass wir die Positionsinformation von `turtle2` im Koordindatensystem von `turtle1` darstellen wollen, um zum Beispiel eine Richtungsangabe zu bestimmen. Dafür subscrbieren wir uns für deren
+Nehmen wir nun an, dass wir die Positionsinformation von `turtle2` im Koordindatensystem von `turtle1` darstellen wollen, um zum Beispiel eine Richtungsangabe zu bestimmen. Dafür subscrebieren wir uns für deren
 
 ```cpp    MessageTfTransform.cpp
 #include "ros/ros.h"
@@ -814,6 +821,17 @@ point of turtle 2 in frame of turtle 1 Position(x:-0.590981 y:4.322886 z:0.00000
 Die aktuell größte Einschränkung des ROS tf-Konzeptes ist das Fehlen einer Unsicherheitsdarstellung für die Relationen.
 
 ********************************************************************************
+
+
+                   {{3-4}}
+********************************************************************************
+
+Vergleichen Sie dazu das Tutorial auf [https://roboticsknowledgebase.com](https://roboticsknowledgebase.com/wiki/state-estimation/ros-navigation/)
+
+![RoboterSystem](./image/10_Sensordatenvorverarbeitung/ROS_tf_tree.png)<!--  style="width:60%; max-width:300px; min-width:600px"-->
+
+********************************************************************************
+
 
 ### Anwendung laser-filters
 
