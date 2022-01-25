@@ -21,15 +21,21 @@ script:   https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js
 link: https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css
 -->
 
+[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/VL_SoftwareprojektRobotik/master/11_Regelungstechnik.md#1)
+
 # Regelungstechnik
 
-Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/11_Regelungstechnik.md)
 
-**Zielstellung der heutigen Veranstaltung**
+| Parameter            | Kursinformationen                                                                                                                                                                                                     |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Veranstaltung:**   | `Softwareprojekt Robotik`                                                                                                                                                                                             |
+| **Semester**         | `Wintersemester 2021/22`                                                                                                                                                                                              |
+| **Hochschule:**      | `Technische Universität Freiberg`                                                                                                                                                                                     |
+| **Inhalte:**         | `Grundlegende Begriffe der Regelungstechnik`                                                                                                                                                                                             |
+| **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_Softwareentwicklung/blob/master/11_Regelungstechnik.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/11_Regelungstechnik.md) |
+| **Autoren**          | @author                                                                                                                                                                                                               |
 
-+ Grundlegende Begriffe der Regelungstechnik
-+ Abgrenzung zwischen Steuerung und Regelung
-+ Elemente und Parameter des PID-Reglers
+![](https://media.giphy.com/media/12psn8ymXy3dYs/giphy.gif)
 
 --------------------------------------------------------------------------------
 
