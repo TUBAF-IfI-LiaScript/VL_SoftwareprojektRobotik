@@ -202,7 +202,8 @@ def main():
   controller_B = PathFinderController(5, 3, 3)
   move_to_pose(controller_B, x_start, y_start, theta_start, x_goal, y_goal, theta_goal, '--r')
 
-  plt.savefig('move_to_pose.png')
+  #plt.savefig('move_to_pose.png')
+  plt.show()
   print("Aus die Maus")
 
 if __name__ == '__main__':
