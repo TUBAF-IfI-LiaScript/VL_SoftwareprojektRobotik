@@ -422,7 +422,6 @@ plot(fig) # <- this is required to plot the fig also on the LiaScript canvas
 
 ### Beispiel 2
 
-   --{{0}}--
 Das folgende Beispiel ist dem Buch von Peter Corke, "Robotics, Vision & Control", Springer 2017 entnommen. Der Code im Repository - `move_to_pose.py` - basiert auf einer Implementierung von AtsushiSakai - [Link](https://github.com/AtsushiSakai/PythonRobotics/tree/master/Control/move_to_pose). Der Code wurde so angepasst, dass mehrere Sätze von Reglerparamtern parallel evaluiert werden können.
 
 Wir wollen einen Roboter von einer Startposition zu einer Zielposition fahren lassen. Das Ganze allein mit einem PID als reaktives Verhalten umgesetzt werden.
