@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.1.1
+version:  0.1.2
 language: de
 narrator: Deutsch Female
 
@@ -21,7 +21,7 @@ import:  https://raw.githubusercontent.com/liaScript/rextester_template/master/R
 | **Semester**             | `Wintersemester 2022/23`                                                                                                                                                                      |
 | **Hochschule:**          | `Technische Universität Freiberg`                                                                                                                                                          |
 | **Inhalte:**             | `Einführung und Abgrenzung von C++`                                                                                      |
-| **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_Softwareentwicklung/blob/master/00_Einfuehrung.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/00_Einfuehrung.md) |
+| **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/00_Einfuehrung.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/00_Einfuehrung.md) |
 | **Autoren**              | @author                                                                                                                                                                                    |
 
 ![](https://media.giphy.com/media/1flAwtHCYosL6LWnHr/giphy-downsized.gif)
@@ -607,6 +607,8 @@ int main()
 *******************************************************************************
 
 ## Aufgabe bis zur nächsten Woche
-+ Installieren Sie eine GCC Umgebung auf dem Rechner (Linux, Windows mit wsl2 oder cygwin)
++ Installieren Sie eine C++ Entwicklungsumgebung auf dem Rechner (Windows mit wsl2 oder cygwin)
 + Erweitern Sie die Untersuchung auf ein Projekt mit mehrere Dateien. Wie müssen Sie vorgehen um hier eine Kompilierung zu realiseren? Wie kann sie Dabei ein Makefile unterstützen?
 + Arbeiten Sie sich in die Grundlagen der C++ Programmierung (Ausgaben, Eingaben, Programmfluss, Datentypen) ein.
+
+> Schreiben Sie ein Programm, dass eine positive ganze Zahl als Parameter entgegen nimmt und die größte Primzahl bestimmt, die kleiner als diese Zahl ist.
