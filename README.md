@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.0.1
+version:  0.0.2
 language: de
 narrator: Deutsch Female
 
@@ -21,23 +21,23 @@ zu finden.
 
 | Datum      | Titel                                |
 |:---------- |:------------------------------------ |
-| 19.10.2021 | Einführung                           |
-| 26.10.2021 | Klassen und Strukturen               |
-| 02.11.2021 | Speicher und Pointer                 |
-| 09.11.2021 | Templates                            |
-| 16.11.2021 | Vererbung und C++ Standardbibliothek |
-| 23.11.2021 | Entwurfsmodelle                      |
-| 30.11.2021 | Einführung ROS2                      |
-| 07.12.2021 | ROS2 Entwicklungsprozess             |
-| 14.12.2021 | ROS2 Entwicklungsprozess Beispiele   |
-| 21.12.2021 | ROS2 Kommunikation                   |
-| 11.01.2022 | Sensoren                             |
-| 18.01.2022 | Sensoren                             |
-| 25.01.2022 | Sensordatenverarbeitung              |
-| 01.02.2022 | Regelungstechnik                     |
-| 08.02.2022 | Datenfusion                          |
+| 18.10.2022 | Einführung                           |
+| 25.10.2022 | Klassen und Strukturen               |
+| 01.11.2022 | Speicher und Pointer                 |
+| 08.11.2022 | Templates                            |
+| 15.11.2022 | Vererbung und C++ Standardbibliothek |
+| 22.11.2022 | Entwurfsmodelle                      |
+| 29.11.2022 | Einführung ROS2                      |
+| 06.12.2022 | ROS2 Entwicklungsprozess             |
+| 13.12.2022 | ROS2 Entwicklungsprozess Beispiele   |
+| 20.12.2022 | ROS2 Kommunikation                   |
+| 10.01.2023 | Sensoren                             |
+| 17.01.2023 | Sensoren                             |
+| 24.01.2023 | Sensordatenverarbeitung              |
+| 31.02.2023 | Regelungstechnik                     |
+| 07.02.2023 | Datenfusion                          |
 
-## Organisatorisches (WS 2021/22)
+## Organisatorisches (WS 2022/23)
 
                 {{0}}
 ********************************************************************************
@@ -48,6 +48,7 @@ zu finden.
 |:--------------|:----------------------------------------|
 | Sebastian Zug | sebastian.zug@informatik.tu-freiberg.de |
 | Georg Jäger   | georg.jaeger@informatik.tu-freiberg.de  |
+| Gero Lichtr   | gero.licht@informatik.tu-freiberg.de    |
 
 
 ********************************************************************************
@@ -99,13 +100,8 @@ Die Veranstaltung wird mit 9 CP in Ihrem Studienverlauf abgebildet. Entsprechend
 
 **Ablaufplan Übungen**
 
-Wir stellen Ihnen ab November einen TurtleBot 3 zur Verfügung, den Sie für die Realsierung der Aufgaben nutzen können.
-
-> Hallo zusammen,
->
-> am nächsten Dienstag findet bereits die erste Vorlesung zum Robotik-Projekt in diesem Semester statt. Um auch den Auftakt in den  Übungsbetrieb nicht später starten zu lassen, wollen wir euch noch am selben Abend (19.10. um 18 Uhr) einen Überblick über die Inhalte und vor allem den Ablauf der Übungen geben ...
-> Viele Grüße,
-> Georg Jäger
+Wir beginnen zunächst mit den Übungen zur Verwendung von C++ (November) und starten im Dezember mit der Verwendung des "persönlichen" Roboters. Dafür 
+stellen wir Ihnen ab November einen TurtleBot 3 zur Verfügung, den Sie für die Realsierung der Aufgaben nutzen können.
 
 Tragen Sie sich bitte in den Kurs [Softwaretechnologie-Projekt (Prototyp)](https://bildungsportal.sachsen.de/opal/auth/RepositoryEntry/18593513489/CourseNode/98504809493283) im e-learning System OPAL ein.
 
@@ -134,7 +130,7 @@ Tragen Sie sich bitte in den Kurs [Softwaretechnologie-Projekt (Prototyp)](https
 
 ## Ok, womit soll ich anfangen?
 
-1. Legen Sie sich ein Repository an, mit dem Sie arbeiten!
+1. Legen Sie sich ein Repository an, mit dem Sie gemiensam mit Kommilitonen arbeiten!
 2. Entscheiden Sie sich für Linux als Betriebssystem auf Ihrem Rechner :-), in diesem Fall sind alle Tools die Sie im Laufe des Semesters benötigen, sofort greifbar.
 3. Starten Sie mit kleinen Beispielen, um Ihre algorithmischen Fähigkeiten zu schulen und sich zum anderen mit der Semantik von C++ vertraut zu machen.
 
@@ -171,17 +167,11 @@ Hinsichtlich Ihres Lieblingseditors haben Sie sicher schon eine Wahl getroffen :
 
 ![Atom IDE Screenshot](./image/00_Einfuehrung/LiaScriptAtomScreenShot.png)<!-- width="100%" -->
 
-## Wie sieht es um Ihre Teamkompetenz aus?
-
-![Atom IDE Screenshot](./image/00_Einfuehrung/Vergleich_Team_Aktivitaeten.jpeg)<!-- width="70%" -->
-
 ## Sie wollen gleich starten?
 
 1. ... als studentischer Mitarbeiter
 
 2. ... in einem studentischen Projekt
-
-![Team](./image/00_Einfuehrung/TUFbots.png)<!-- width="100%" -->
 
 ## Los gehts ...
 
