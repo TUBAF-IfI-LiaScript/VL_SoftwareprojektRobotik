@@ -48,7 +48,7 @@ zu finden.
 |:--------------|:----------------------------------------|
 | Sebastian Zug | sebastian.zug@informatik.tu-freiberg.de |
 | Georg Jäger   | georg.jaeger@informatik.tu-freiberg.de  |
-| Gero Lichtr   | gero.licht@informatik.tu-freiberg.de    |
+| Gero Licht    | gero.licht@informatik.tu-freiberg.de    |
 
 
 ********************************************************************************
