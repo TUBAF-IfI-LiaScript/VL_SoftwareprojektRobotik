@@ -14,14 +14,14 @@ import:   https://github.com/liascript/CodeRunner
 
 # Objektorientierte Programmierung in C++
 
-| Parameter            | Kursinformationen                                                                                                                                                                             |
-| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Veranstaltung:**   | `Softwareprojekt Robotik`                                                                                                                                                                     |
-| **Semester**         | `Wintersemester 2021/22`                                                                                                                                                                      |
-| **Hochschule:**      | `Technische Universität Freiberg`                                                                                                                                                             |
-| **Inhalte:**         | `Konstruktoren und Operatoren`                                                                                                                                                |
-| **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_Softwareentwicklung/blob/master/00_Einfuehrung.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/01_OOPinC++.md) |
-| **Autoren**          | @author                                                                                                                                                                                       |
+| Parameter                | Kursinformationen                                                                                                                                                                          |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Veranstaltung:**       | `Softwareprojekt Robotik`                                                                                                                                                                     |
+| **Semester**             | `Wintersemester 2022/23`                                                                                                                                                                      |
+| **Hochschule:**          | `Technische Universität Freiberg`                                                                                                                                                          |
+| **Inhalte:**             | `Konstruktoren und Operatoren`                                                                                      |
+| **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/01_OOPinC++.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/01_OOPinC++.md) |
+| **Autoren**              | @author                                                                                                                                                                                    |
 
 ![](https://media.giphy.com/media/l46CwEYnbFtFfjZNS/giphy-downsized.gif)
 
@@ -116,8 +116,9 @@ Wo ist bei den _Designated Initialisers_ der Unterschied zu C? Die C++ Implement
                             {{0-1}}
 ********************************************************************************
 
-Im Grunde können wir unsere drei Datenfelder im vorangegangen Beispiel in vier
-Kombinationen  initialisieren:
+Im Grunde können wir unsere drei Datenfelder im vorangegangen Beispiel mit der uniformen 
+Initialisierungssyntax oder dem Designated Initializer in vier Kombinationen 
+initialisieren:
 
 ```
 {name, alter, ort}
@@ -479,7 +480,7 @@ myClass& operator=(myClass&& other) noexcept
       // ...               2. Freigeben von bisherigen Ressourcen
       // ...               3. elementweises Übertragen
     }
-    return *this;       // 4. Rückgabe der
+    return *this;       // 4. Rückgabe des neuen Objektes
 }
 ```
 
