@@ -4,9 +4,8 @@
 
 int main(void)
 {
-    //char array[1024*1024];
-    double* array = new double [1024*1024];
-    //std::cout << array[1000] << std::endl;
+    double array[1024*1024];
+    std::cout << array[1000] << std::endl;
     std::cout << sizeof(double) << std::endl;
     return EXIT_SUCCESS;
 }

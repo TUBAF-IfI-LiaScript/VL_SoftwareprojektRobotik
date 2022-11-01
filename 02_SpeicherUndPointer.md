@@ -14,14 +14,14 @@ import:   https://github.com/liascript/CodeRunner
 
 # Speicher und Pointer
 
-| Parameter            | Kursinformationen                                                                                                                                                                             |
-| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Veranstaltung:**   | `Softwareprojekt Robotik`                                                                                                                                                                     |
-| **Semester**         | `Wintersemester 2021/22`                                                                                                                                                                      |
-| **Hochschule:**      | `Technische Universität Freiberg`                                                                                                                                                             |
-| **Inhalte:**         | `Grundlagen der Speicherverwaltung unter C++`                                                                                                                                                |
+| Parameter            | Kursinformationen                                                                                                                                                                                           |
+|----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Veranstaltung:**   | `Softwareprojekt Robotik`                                                                                                                                                                                   |
+| **Semester**         | `Wintersemester 2022/23`                                                                                                                                                                                    |
+| **Hochschule:**      | `Technische Universität Freiberg`                                                                                                                                                                           |
+| **Inhalte:**         | `Grundlagen der Speicherverwaltung unter C++`                                                                                                                                                               |
 | **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_Softwareentwicklung/blob/master/02_SpeicherUndPointer.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/02_SpeicherUndPointer.md) |
-| **Autoren**          | @author                                                                                                                                                                                       |
+| **Autoren**          | @author                                                                                                                                                                                                     |
 
 ![](https://media.giphy.com/media/EizPK3InQbrNK/giphy.gif)
 
@@ -36,15 +36,6 @@ import:   https://github.com/liascript/CodeRunner
 > **Organisatorisches** Zur Terminfindung für die erste Blockveranstaltung haben wir eine Doodle-Umfrage aufgestzt, ihr findet sie [hier](https://doodle.com/poll/29reuubiuqzyvfh4?utm_source=poll&utm_medium=link). Tragt euch dort bitte bis zum 09.11.21 ein damit wir einen Termin festlegen können.
 
 --------------------------------------------------------------------------------
-
-## Fragen aus der vergangenen Woche
-
-Wie war das noch mal `Referenzen` und `Pointer`?
-
-[PythonTutor](https://pythontutor.com/cpp.html#code=%23include%20%3Cstdio.h%3E%0A%0Avoid%20function%28int%20*aux%29%7B%0A%20%20*aux%2B%2B%3B%0A%20%20printf%28%22Call%20by%20'Reference'%3A%20%25i%5Cn%22,%20*aux%29%3B%0A%7D%0A%0Avoid%20function%28int%20aux%29%7B%0A%20%20aux%2B%2B%3B%0A%20%20printf%28%22Call%20by%20Value%3A%20%25i%5Cn%22,%20aux%29%3B%0A%7D%0A%0Aint%20main%28%29%20%7B%0A%20%20int%20i%20%3D%203%3B%20%0A%20%20int%20j%20%3D%205%3B%0A%20%20%0A%20%20//%20Initialisierung%0A%20%20//%20--------------------------------------%0A%20%20//%20Pointer%20auf%20eine%20Variable%0A%20%20int%20*ptr%20%3D%20%26i%3B%20%0A%20%20int%20*empty_prt%3B%0A%20%20%0A%20%20//%20Referenz%20auf%20eine%20Variable%0A%20%20int%20%26ref%20%3D%20i%3B%20%0A%20%20int%20%26ref_b%20%3D%20i%3B%20%0A%20%20//int%20%26empty_ref%3B%20//%20Error!%0A%20%20%0A%20%20//%20Reassignment%0A%20%20ptr%20%3D%20%26j%3B%0A%20%20//ref%20%3D%20i%3B%20//%20Reassigment%20nicht%20m%C3%B6glich%20%0A%20%20%0A%20%20//%20Indirection%20-%20Funktioniert%20nicht%20mit%20Referenzen%0A%20%20int%20**ptr_ptr%3B%20%20//it%20is%20valid.%0A%20%20ptr%20%3D%20%26i%3B%0A%20%20ptr_ptr%20%3D%20%26ptr%3B%0A%20%20printf%28%220x%25p%20points%20at%20%25i%5Cn%22,%20%28void%20*%29ptr,%20i%29%3B%0A%20%20printf%28%220x%25p%20points%20at%200x%25p%5Cn%5Cn%22,%20%28void%20*%29ptr_ptr,%20*ptr_ptr%29%3B%0A%20%20%20%20%0A%20%20//%20Funktionsaufruf%0A%20%20function%28ptr%29%3B%0A%20%20printf%28%22Resultierendes%20i%3A%20%25i%5Cn%22,%20j%29%3B%0A%20%20function%28ref%29%3B%0A%20%20printf%28%22Resultierendes%20i%3A%20%25i%5Cn%22,%20i%29%3B%0A%20%20return%200%3B%0A%7D&mode=edit&origin=opt-frontend.js&py=cpp_g%2B%2B9.3.0&rawInputLstJSON=%5B%5D)
-
-> *Achtung:* Im Code ist ein Pointer Anfängerfehler verborgen. Dessen Wirkung sollte mit der Ausgabe in Zeile 41 deutlich werden - Finden Sie ihn?
-
 
 ## Komponenten des Speichers
 
@@ -76,14 +67,14 @@ style="width: 70%; max-width: 660px; display: block; margin-left: auto; margin-r
        ------>   +----------------------------+
 ```
 
-|     | Speicherbestandteil    | engl. | Bedeutung                              |
-| --- | ---------------------- | ----- | -------------------------------------- |
-| 1   | Parameter              |       |                                        |
-| 2   | Stack                  |       | LIFO Datenstruktur                     |
-| 3   | Heap                   |       | "Haldenspeicher"                       |
-| 4   | Uninitialisierte Daten | .bss  |                                        |
-| 5   | Initialisierte Daten   | .data | Globale und statische Daten,           |
-| 6   | Programmcode           | .text | teilbar, häufig als read only Speicher |
+|   | Speicherbestandteil    | engl. | Bedeutung                              |
+|---|------------------------|-------|----------------------------------------|
+| 1 | Parameter              |       |                                        |
+| 2 | Stack                  |       | LIFO Datenstruktur                     |
+| 3 | Heap                   |       | "Haldenspeicher"                       |
+| 4 | Uninitialisierte Daten | .bss  |                                        |
+| 5 | Initialisierte Daten   | .data | Globale und statische Daten,           |
+| 6 | Programmcode           | .text | teilbar, häufig als read only Speicher |
 
 ### Untersuchung der ausführbaren Datei
 
@@ -356,7 +347,7 @@ delete «Speicheradresse»
 ```
 
 |                   | `new`                        | `malloc`                        |
-| ----------------- | ---------------------------- | ------------------------------- |
+|-------------------|------------------------------|---------------------------------|
 | Bedeutung         | Schlüsselwort, Operator      | Funktion der Standardbibliothek |
 | Rückgabewert      | Pointer vom Typ des Objektes | `void` Pointer                  |
 | Fehlerfall        | Ausnahme                     | NULL Pointer                    |
@@ -397,7 +388,7 @@ int main(){
 **Zusammenfassung**
 
 | Parameter                   | Stack                          | Heap                            |
-| --------------------------- | ------------------------------ | ------------------------------- |
+|-----------------------------|--------------------------------|---------------------------------|
 | Allokation und Deallokation | Automatisch durch den Compiler | Manuel durch den Programmierer  |
 | Kosten                      | gering                         | ggf. höher durch Fragmentierung |
 | Flexibilität                | feste Größe                    | Anpassungen möglich             |
@@ -442,7 +433,7 @@ Wenn ein Programm mehr Speicherplatz als die Stapelgröße belegt, tritt ein Sta
 
 2. Wenn sich eine Funktion hinreichend  oft rekursiv selbst aufruft, kann der Stapel keine große Anzahl von lokalen Variablen speichern, die von jedem Funktionsaufruf verwendet werden, und führt zu einem Überlauf des Stapels.
 
-Für Ubuntu 18.04 ergibt sich mit dem Befehl `ulimit` folgende Ausgabe:
+Für Ubuntu 22.04 ergibt sich mit dem Befehl `ulimit` folgende Ausgabe:
 
 ```bash
 ulimit -a
@@ -452,12 +443,12 @@ ulimit -a
 -s: stack size (kbytes)             8192
 -c: core file size (blocks)         0
 -m: resident set size (kbytes)      unlimited
--u: processes                       61608
+-u: processes                       127043
 -n: file descriptors                1024
--l: locked-in-memory size (kbytes)  16384
+-l: locked-in-memory size (kbytes)  4074208
 -v: address space (kbytes)          unlimited
 -x: file locks                      unlimited
--i: pending signals                 61608
+-i: pending signals                 127043
 -q: bytes in POSIX msg queues       819200
 -e: max nice                        0
 -r: max rt priority                 0
@@ -477,10 +468,8 @@ $$
 int main(void)
 {
     double array[1024*1024];
-    //double* array = new double [1024*1024];
     std::cout << array[1000] << std::endl;
     std::cout << sizeof(double) << std::endl;
-    // delete[] array;
     return EXIT_SUCCESS;
 }
 ```
@@ -502,25 +491,6 @@ int main(void)
 + Integration sogenannter "Canaries" als Muster im Speicher, die hinweise auf unberechtigte Schreiboperationen geben.
 
 ## (Raw-)Pointer / Referenzen
-<!--
-  comment: SelfDesignedUniquePointer.cpp
-  ..............................................................................
-  1.
-     ```cpp
-     int  i = 15;
-     int& r = i;         // die Referenz r zeigt auf i.
-     r = 17;             // i besitzt nun den Wert 17 statt 15.
-     int& v;             // Fehler! v muss bei ihrer Deklaration
-                         // initialisiert werden.
-     ++r;                // Wert von i um Eins erhöhen.
-     int* p = &r;        // Der Zeiger p erhält die Adresse von i, nicht von r!
-     string s{"Text"};   // Erzeuge ein string-Objekt.
-     string& z = s;
-     z.erase();          // lösche den Inhalt von s.
-     ```
-   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
--->
-
 
 C und C\+\+ unterstützen das Konzept des **Zeigers**, die sich von den meisten anderen Programmiersprachen unterscheiden. Andere Sprachen wie C#, C++(!), Java, Python etc. implementieren **Referenzen**.
 
@@ -531,17 +501,58 @@ Fällen greifen wir indirekt auf einen Speicher zu:
 
 + Eine Referenz ist ein Alias, das heißt ein anderer Name für eine bereits vorhandene Variable. Eine Referenz wird wie ein Zeiger implementiert, indem die Adresse eines Objekts gespeichert wird. Entsprechend kann eine Referenz auch nur für ein bestehendes Objekt angelegt werden. In der Nutzungsphase unterscheidet sich der Zugriff auf eine Referenz nicht von einem Direktzugriff
 
-```cpp            Stack OverFlow.cpp
-#include <iostream>
+```cpp    ReferencesVsPointer.cpp
+#include <stdio.h>
 
-int main(void)
-{
-    int  i = 15;
-    std::cout << i << std::endl;
-    return EXIT_SUCCESS;
+void function(int *aux){
+  *aux++;
+  printf("Call by 'Reference': %i\n", *aux);
+}
+
+void function(int aux){
+  aux++;
+  printf("Call by Value: %i\n", aux);
+}
+
+int main() {
+  int i = 3; 
+  int j = 5;
+  
+  // Initialisierung
+  // --------------------------------------
+  // Pointer auf eine Variable
+  int *ptr = &i; 
+  int *empty_prt;
+  
+  // Referenz auf eine Variable
+  int &ref = i; 
+  int &ref_b = i; 
+  //int &empty_ref; // Error!
+  
+  // Reassignment
+  ptr = &j;
+  //ref = i; // Reassigment nicht möglich 
+  
+  // Indirection - Funktioniert nicht mit Referenzen
+  int **ptr_ptr;  //it is valid.
+  ptr = &i;
+  ptr_ptr = &ptr;
+  printf("0x%p points at %i\n", (void *)ptr, i);
+  printf("0x%p points at 0x%p\n\n", (void *)ptr_ptr, *ptr_ptr);
+    
+  // Funktionsaufruf
+  function(ptr);
+  printf("Resultierendes i: %i\n", j);
+  function(ref);
+  printf("Resultierendes i: %i\n", i);
+  return 0;
 }
 ```
 @LIA.eval(`["main.c"]`, `g++ -Wall main.c -o a.out`, `./a.out`)
+
+Führen Sie das Beispiel im [PythonTutor](https://pythontutor.com/cpp.html#code=%23include%20%3Cstdio.h%3E%0A%0Avoid%20function%28int%20*aux%29%7B%0A%20%20*aux%2B%2B%3B%0A%20%20printf%28%22Call%20by%20'Reference'%3A%20%25i%5Cn%22,%20*aux%29%3B%0A%7D%0A%0Avoid%20function%28int%20aux%29%7B%0A%20%20aux%2B%2B%3B%0A%20%20printf%28%22Call%20by%20Value%3A%20%25i%5Cn%22,%20aux%29%3B%0A%7D%0A%0Aint%20main%28%29%20%7B%0A%20%20int%20i%20%3D%203%3B%20%0A%20%20int%20j%20%3D%205%3B%0A%20%20%0A%20%20//%20Initialisierung%0A%20%20//%20--------------------------------------%0A%20%20//%20Pointer%20auf%20eine%20Variable%0A%20%20int%20*ptr%20%3D%20%26i%3B%20%0A%20%20int%20*empty_prt%3B%0A%20%20%0A%20%20//%20Referenz%20auf%20eine%20Variable%0A%20%20int%20%26ref%20%3D%20i%3B%20%0A%20%20int%20%26ref_b%20%3D%20i%3B%20%0A%20%20//int%20%26empty_ref%3B%20//%20Error!%0A%20%20%0A%20%20//%20Reassignment%0A%20%20ptr%20%3D%20%26j%3B%0A%20%20//ref%20%3D%20i%3B%20//%20Reassigment%20nicht%20m%C3%B6glich%20%0A%20%20%0A%20%20//%20Indirection%20-%20Funktioniert%20nicht%20mit%20Referenzen%0A%20%20int%20**ptr_ptr%3B%20%20//it%20is%20valid.%0A%20%20ptr%20%3D%20%26i%3B%0A%20%20ptr_ptr%20%3D%20%26ptr%3B%0A%20%20printf%28%220x%25p%20points%20at%20%25i%5Cn%22,%20%28void%20*%29ptr,%20i%29%3B%0A%20%20printf%28%220x%25p%20points%20at%200x%25p%5Cn%5Cn%22,%20%28void%20*%29ptr_ptr,%20*ptr_ptr%29%3B%0A%20%20%20%20%0A%20%20//%20Funktionsaufruf%0A%20%20function%28ptr%29%3B%0A%20%20printf%28%22Resultierendes%20i%3A%20%25i%5Cn%22,%20j%29%3B%0A%20%20function%28ref%29%3B%0A%20%20printf%28%22Resultierendes%20i%3A%20%25i%5Cn%22,%20i%29%3B%0A%20%20return%200%3B%0A%7D&mode=edit&origin=opt-frontend.js&py=cpp_g%2B%2B9.3.0&rawInputLstJSON=%5B%5D) aus und beobachten Sie den Unterschied zwischen Referenz und Pointer.
+
+> *Achtung:* Im obenstehenden Code ist ein Pointer Anfängerfehler verborgen. Dessen Wirkung sollte mit der Ausgabe in Zeile 41 deutlich werden - Finden Sie ihn?
 
 Die Funktionsweise im Vergleich soll am Beispiel einer Parameterübergabe verdeutlicht werden:
 
@@ -581,7 +592,7 @@ int main()
 > "Raw pointers have been a pain in the backside for most students learning C++ in the last decades. They had a multi-purpose role as raw memory iterators, nullable, changeable nullable references and devices to manage memory that no-one really owns. This lead to a host of bugs and vulnerabilities and headaches and decades of human life spent debugging, and the loss of joy in programming completely." [Link](https://arne-mertz.de/2018/04/raw-pointers-are-gone/)
 
 > "In modernem C++ werden Rohzeiger nur in kleinen Codeblöcken mit begrenztem Gültigkeitsbereich, in Schleifen oder Hilfsfunktionen verwendet, in denen Leistung ausschlaggebend ist und keine Verwirrung über den Besitzer entstehen kann." [Microsoft](https://docs.microsoft.com/de-de/cpp/cpp/smart-pointers-modern-cpp?view=vs-2019)
-
+                                                  
 ## Smart Pointer
 <!--
   comment: SelfDesignedUniquePointer.cpp
