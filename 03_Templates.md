@@ -16,8 +16,8 @@ import:   https://github.com/liascript/CodeRunner
 
 | Parameter            | Kursinformationen                                                                                                                                                                             |
 | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Veranstaltung:**   | `Softwareprojekt Robotik`                                                                                                                                                                     |
-| **Semester**         | `Wintersemester 2021/22`                                                                                                                                                                      |
+| **Veranstaltung:**   | `Softwareprojekt Robotik`                                                                                                                                                                                   |
+| **Semester**         | `Wintersemester 2022/23`                                                                                                                                                                                    |
 | **Hochschule:**      | `Technische Universität Freiberg`                                                                                                                                                             |
 | **Inhalte:**         | `Template-Konzepte in C++`                                                                                                                                                |
 | **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_Softwareentwicklung/blob/master/03_Templates.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/03_Templates.md) |
@@ -73,7 +73,7 @@ Innerhalb des .NET Frameworks definieren Generics Typparameter, wodurch Sie Klas
 Das folgende Beispiel zeigt eine Anwendung in Kombination mit einer Einschränkung
 des Typs, die Sicherstellt, dass in jedem Fall die angeforderte Vergleichsoperation besteht.
 
-```csharp      GenericsIComparable.cs
+```csharp     Example.csp
 using System;
 
 public class Student
@@ -109,7 +109,20 @@ public class Program{
   }
 }
 ```
-@LIA.eval(`["main.cs"]`, `mono main.cs`, `mono main.exe`)
+```xml      -project.csproj
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>
+```
+@LIA.eval(`["Program.cs", "project.csproj"]`, `dotnet build -nologo`, `dotnet run`)
+
 
 > Templates ermöglichen die Realsierung eines typunabhängigen Verhaltens und damit die Konzentration von Implementierungsaufwand.
 
@@ -697,23 +710,24 @@ Dieser Teil der Vorlesung wurde in starkem Maße durch den Blogbeitrag von Bartl
 #include <iostream>
 
 struct Bar {
-    //typedef double internalType;
-    using internalType = double;
-    int generateValue() const {return 1;}
+    typedef double internalType;  
 };
 
-template <typename T>
-//typename T::internalType foo(const T& t) {
-T foo(const T& t) {
-    std::cout << "foo<T>\n";
-    //std::cout << t.generateValue();   // Aufruf einer spezifischen Methode
-    return 0;
+template <typename T> 
+typename T::internalType foo(const T& t) { 
+    std::cout << "foo<T>\n"; 
+    return 0; 
 }
 
+//int foo(int i) { 
+//  cout << "foo(int)\n"; return 0; 
+//}
+
 int main() {
-    auto b = foo(0);
-   //auto a = foo(Bar());
+    foo(Bar());
+    foo(0); // << error!
 }
+
 ```
 @LIA.eval(`["main.c"]`, `g++ -Wall main.c -o a.out`, `./a.out`)
 
@@ -738,7 +752,7 @@ Offenbar findet sich nach der Auflösung der Templateparameter T keine überlade
 -->
 
 
-> **Achtung: ** Um es noch mal in aller Deutlichkeit zu sagen ... wir prüfen hier Typbezogene Bedingungen zur Compilezeit ab!
+> **Achtung: ** Um es noch mal in aller Deutlichkeit zu sagen ... wir prüfen hier typbezogene Bedingungen zur Compilezeit ab!
 
 Ausgangspunkt ist die Methode `enable_if`, die das Abprüfen von Bedingungen erlaubt. Die Implementierung besteht aus zwei Funktionstemplates - eine generischen und einer spezifizierten Variante.
 
