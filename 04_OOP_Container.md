@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.0.1
+version:  0.0.2
 language: de
 narrator: Deutsch Female
 
@@ -16,10 +16,10 @@ import:   https://github.com/liascript/CodeRunner
 
 | Parameter            | Kursinformationen                                                                                                                                                                             |
 | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Veranstaltung:**   | `Softwareprojekt Robotik`                                                                                                                                                                     |
-| **Semester**         | `Wintersemester 2021/22`                                                                                                                                                                      |
+| **Veranstaltung:**   | `Softwareprojekt Robotik`                                                                                                                                                                                   |
+| **Semester**         | `Wintersemester 2022/23`                                                                                                                                                                                    |
 | **Hochschule:**      | `Technische Universität Freiberg`                                                                                                                                                             |
-| **Inhalte:**         | `Template-Konzepte in C++`                                                                                                                                                |
+| **Inhalte:**         | `Container in C++`                                                                                                                                                |
 | **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_Softwareentwicklung/blob/master/04_OOP_Container.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/04_OOP_Container.md) |
 | **Autoren**          | @author                                                                                                                                                                                       |
 
@@ -203,7 +203,7 @@ im Umgang mit Arrays. Die darauf anwendbaren Operationen sind:
 + Vergleich `itA == itB`
 + Inkrementierung `it++` oder `++it`
 
-wobei die letzten beiden für die "Navigation" über den Daten eines container_Bs
+wobei die letzten beiden für die "Navigation" über den Daten eines Containers
 Verwendung findet:
 
 <lia-keep>
@@ -357,10 +357,10 @@ container_Bs.swap(container_A);
 
 ************************************************
 
-                {{3-4}}
+                {{3-5}}
 ************************************************
 
-**Vorsicht Falle!**
+> __Aufgabe:__ Erklären Sie das vorliegende Verhalten!
 
 ```cpp                      initPitfall.cpp
 #include <vector>
@@ -378,6 +378,11 @@ int main()
 }
 ```
 @LIA.eval(`["main.c"]`, `g++ -std=c++20 -Wall main.c -o a.out`, `./a.out`)
+
+************************************************
+
+                {{4-5}}
+************************************************
 
 > **Merke**:  "() != {}" :-)
 
@@ -513,7 +518,7 @@ int main()
 | `multiset` | sortierte Menge von Elementen, die mehrfach vorkommen |
 | `multimap` | Schlüssel referenzieren ggf. mehrere Einträge         |
 
-Wie Sie in folgender Tabellarischem Vergleich sehen können, realisieren die
+Wie Sie in folgender tabellarischem Vergleich sehen können, realisieren die
 assoziativen Container ein homogeneres Gesamtbild. Der zentrale Unterschied liegt in der Idee eines Schlüssels, der die Daten selbst repräsentiert oder aber auf den
 eigentlichen Datensatz verweist.
 
@@ -916,14 +921,15 @@ int main(void){
 
 > `overrides` C++11 erleichtert das Programmieren mit virtuellen Methoden
 
-Fehlerfall                                                                                 
+Fehlerfall:
+                                                                                 
 - zu unserer mit `override` markierten Methode existiert in der Basisklasse keine Methode
 - zu unserer mit `override` markierten Methode existiert in der Basisklasse keine virtuelle Methode
 
 
 ### Abstrakte Memberfunktionen / Abstrakte Klassen
 
-C++ kennt die Differenzierung zwischen Interfaces und abstrakten Klassen nicht. Eine Klasse wird abstrakt gemacht, indem mindestens eine ihrer Funktionen als reine virtuelle Funktion deklariert wird. Eine rein virtuelle Funktion wird spezifiziert, indem `= 0` in ihre Deklaration wie folgt gesetzt wird:
+C++ kennt die Differenzierung zwischen Interfaces und abstrakten Klassen nicht. Eine Klasse wird abstrakt gemacht, indem mindestens eine ihrer Methoden als reine virtuelle Funktion deklariert wird. Eine rein virtuelle Funktion wird spezifiziert, indem `= 0` in ihre Deklaration wie folgt gesetzt wird:
 
 ```cpp                 Abstract.cpp
 #include <iostream>
