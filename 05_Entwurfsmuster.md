@@ -17,7 +17,7 @@ import:   https://github.com/liascript/CodeRunner
 | Parameter            | Kursinformationen                                                                                                                                                                             |
 | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Veranstaltung:**   | `Softwareprojekt Robotik`                                                                                                                                                                     |
-| **Semester**         | `Wintersemester 2021/22`                                                                                                                                                                      |
+| **Semester**         | `Wintersemester 2022/23`                                                                                                                                                                      |
 | **Hochschule:**      | `Technische Universität Freiberg`                                                                                                                                                             |
 | **Inhalte:**         | `Entwurfsmuster und deren Umsetzung in C++`                                                                                                                                                |
 | **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_Softwareentwicklung/blob/master/05_Entwurfsmuster.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/05_Entwurfsmuster.md) |
@@ -27,8 +27,6 @@ import:   https://github.com/liascript/CodeRunner
 
 --------------------------------------------------------------------------------
 
-# Entwurfsmuster
-
 Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/VL_SoftwareprojektRobotik/master/05_Entwurfsmuster.md#1)
 
 **Zielstellung der heutigen Veranstaltung**
@@ -37,6 +35,70 @@ Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.gi
 + Zusammenfassung der bisher betrachteten Aspekte der Programmiersprache C++
 
 --------------------------------------------------------------------------------
+
+# Einschub: Lambdaausdrücke in C++
+
+```c++
+#include <algorithm>
+#include <iostream>
+#include <string>
+
+int main()
+{
+  std::string s = "Hello, Lambda Expressions in C++11!";
+
+  std::for_each(s.begin(), s.end(),
+    [] (char c) { std::cout << c; }       // <-- hier
+  );
+  std::cout << std::endl;
+}
+```
+@LIA.eval(`["main.c"]`, `g++ -Wall main.c -o a.out`, `./a.out`)
+
+```c++
+#include <algorithm>
+#include <iostream>
+#include <string>
+
+int main()
+{
+  std::string s = "Hello, Lambda Expressions in C++11!";
+  std::string uppercase;
+  std::copy_if(s.begin(), s.end(), 
+    std::back_inserter(uppercase), 
+    [] (char c) -> bool              // Angabe des Rückgabewertes
+    { 
+      return ('A' <= c && c <= 'Z'); 
+    }
+  );
+  std::cout << uppercase << std::endl;
+}
+```
+@LIA.eval(`["main.c"]`, `g++ -Wall main.c -o a.out`, `./a.out`)
+
+
+```c++
+#include <algorithm>
+#include <iostream>
+#include <vector>
+#include <string>
+
+int main()
+{
+  std::string s = "Hello, lambda expressions in C++11!";
+  char low = 'A', high = 'Z';
+
+  std::for_each(s.begin(), s.end(),
+    [low, high] (char c)            // closure by value
+    { 
+      if (low <= c && c <= high) std::cout << c; 
+    }
+  ); 
+  std::cout << std::endl;
+}
+```
+@LIA.eval(`["main.c"]`, `g++ -Wall main.c -o a.out`, `./a.out`)
+
 
 ## Anwendungsfall ...
 
@@ -320,8 +382,8 @@ Wie betten wir den neuen Sensor in unsere Implementierung ein?
 
 | Variante                                                                                                           | Diskussion                                                                                                                                                                                                                                                          |
 | ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Überladen der Methode `initSensorInterface()`, so dass die entsprechende Signatur von `NewUSBSensor` bedient wird. | Damit wird die Schnittstelle unseres `AbstractSensorInterface` generell aufgebläht. Durch immer neue, spezifische Funktionen verlieren wir die Einheitlichkeit. Zudem verringert sich die Wartbarkeit, wenn von jeder Version n Varianten nebeneinander exisiteren. |
-| Anpassung der Klasse `NewUSBSensor` in Bezug auf unsere `AbstractSensorInterface` Definition                       | Es ist fraglich, ob wir nicht ggf. mit weiteren Versionen dieser Klasse des Treibers konfrontiert werden. Die Integration müsste dann jeweils neu vorgenommen werden.                                                                                               |
+| Überladen der Methode `initSensorInterface()`, so dass die entsprechende Signatur von `NewSensor` bedient wird. | Damit wird die Schnittstelle unseres `AbstractSensorInterface` generell aufgebläht. Durch immer neue, spezifische Funktionen verlieren wir die Einheitlichkeit. Zudem verringert sich die Wartbarkeit, wenn von jeder Version n Varianten nebeneinander exisiteren. |
+| Anpassung der Klasse `NewSensor` in Bezug auf unsere `AbstractSensorInterface` Definition                       | Es ist fraglich, ob wir nicht ggf. mit weiteren Versionen dieser Klasse des Treibers konfrontiert werden. Die Integration müsste dann jeweils neu vorgenommen werden.                                                                                               |
 Einen flexibleren Lösungsansatz bietet das Adapter-Entwurfsmuster. Wir kapseln die individuellen Eigenschaften des neuen Treibers in einer Wrapper-Klasse, die die Schnittstelle zwischen Hersteller-Implementierung und unserer Definition bietet.
 
 ```cpp                      Adapter.cpp
@@ -340,7 +402,7 @@ class AbstractSensorInterface{
      virtual T readLastMeasurement() const = 0;
 };
 
-class NewUSBSensor{
+class NewSensor{
   public:
     bool initSensorInterface(float angleResolution){
        // sent angleResolution to sensor
@@ -364,14 +426,14 @@ class NewUSBSensor{
 class IndivUSBSensor: public AbstractSensorInterface<std::vector<int>>
 {
   private:
-    std::unique_ptr<NewUSBSensor> sensor;
+    std::unique_ptr<NewSensor> sensor;
     const float angleResolution = 1.;
     const unsigned int beams = 10;
   public:
     bool initSensorInterface(){
     	if(!sensor)
     	{
-    		this->sensor = std::make_unique<NewUSBSensor>();
+    		this->sensor = std::make_unique<NewSensor>();
     	}
 
       this->sensor->initSensorInterface(angleResolution);
@@ -512,7 +574,6 @@ public:
 
 int main()
 {
-  // Hier noch ohne Smartpointer ... siehe Hausaufgaben
 	std::shared_ptr<ConcreteSubject> subj = std::make_shared<ConcreteSubject>();
 
 	std::shared_ptr<ConcreteObserver> obs1 = std::make_shared<ConcreteObserver>(subj,"NotStop");
@@ -552,7 +613,7 @@ Im Sequenzdiagramm stellen sich die entsprechenden Abläufe dann wie folgt dar:
 
 Welche Zustände aber kennt unser Robotersystem? Nehmen wir an, dass der Roboter eine Wohnung zu reinigen hat. Nach einer Exploration der Umgebung entsteht eine Karte, wobei 3 Räume erfasst wurden `Bedroom`, `Kitchen` und `Hall`.
 
-Hinsichtlich der Bewegung zwischen diesen Räumen sind zwei Basisfunktionen - `nextroom()` und `goHome()` - zu implmenetieren. Während bei erstgenanntem die Reihenfolge bei der Reihnigung/Inspektion durch den Nutzer vorgegeben wird, ist das Ziel der letzteren durch den Standort der Ladestation definiert.
+Hinsichtlich der Bewegung zwischen diesen Räumen sind zwei Basisfunktionen - `nextroom()` und `goHome()` - zu implementieren. Während bei erstgenanntem die Reihenfolge bei der Reihnigung/Inspektion durch den Nutzer vorgegeben wird, ist das Ziel der letzteren durch den Standort der Ladestation definiert.
 
 | Bewegungsbefehl | Kitchen | Hall    | Bedroom |
 | --------------- | ------- | ------- | ------- |
@@ -573,7 +634,7 @@ void nextroom(){
   if ((isCleaning) && (cleaningReady)){
     if (currentState == "Kitchen"){
       Robot.setSpeed(10);
-      Robot.switchWarningLightOn(true);
+      Robot.switchWarningLightOn(true);s
       Robot.nextGoal = "Bedroom";
     }
     if (currentState == "Bedroom"){
