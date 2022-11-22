@@ -2,7 +2,7 @@
 #include "CleaningRobot.hpp"
 #include "RoomType.hpp"
 
-const int roomNumber = 3;
+const int roomNumber = 6;
 
 std::ostream& operator<<(std::ostream& os, const CleaningRobot& robot)
 {
@@ -28,3 +28,5 @@ int main(){
     std::cout << my_robot;
     return EXIT_SUCCESS;
 }
+
+// g++ main.cpp Bedroom.cpp CleaningRobot.cpp Hall.cpp Kitchen.cpp RoomType.cpp
