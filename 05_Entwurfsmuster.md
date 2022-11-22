@@ -683,7 +683,7 @@ class Context {
 public:
     Context() : strat(nullptr) {}
     void setStrategy(std::shared_ptr<AbstractStrategy> _strat) {
-	     this->strat = strat;
+	     this->strat = _strat;
     }
     void strategy()  { if (this->strat) (*(this->strat))(); }
 };
