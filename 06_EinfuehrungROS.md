@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.0.2
+version:  0.0.3
 language: de
 narrator: Deutsch Female
 
@@ -404,18 +404,23 @@ Die Exploration und Untersuchung eines ROS2 Systems erfolgt mittels des Tools "r
 >ros2
 usage: ros2 [-h] Call `ros2 <command> -h` for more detailed usage. ...
 
-ros2 is an extensible command-line tool for ROS 2.
-
-optional arguments:
+options:
   -h, --help            show this help message and exit
+  --use-python-default-buffering
+                        Do not force line buffering in stdout and instead use
+                        the python default buffering, which might be affected
+                        by PYTHONUNBUFFERED/-u and depends on whatever stdout
+                        is interactive or not
 
 Commands:
   action     Various action related sub-commands
+  bag        Various rosbag related sub-commands
   component  Various component related sub-commands
   daemon     Various daemon related sub-commands
+  doctor     Check ROS setup and other potential issues
+  interface  Show information about ROS interfaces
   launch     Run a launch file
   lifecycle  Various lifecycle related sub-commands
-  msg        Various msg related sub-commands
   multicast  Various multicast related sub-commands
   node       Various node related sub-commands
   param      Various param related sub-commands
@@ -423,8 +428,8 @@ Commands:
   run        Run a package specific executable
   security   Various security related sub-commands
   service    Various service related sub-commands
-  srv        Various srv related sub-commands
   topic      Various topic related sub-commands
+  wtf        Use `wtf` as alias to `doctor`
 
   Call `ros2 <command> -h` for more detailed usage.
 ```
@@ -567,14 +572,7 @@ average rate: 2.011
 ...
 ```
 
-2. Welche `msg`-Typ steht hinter unserem Topic?
-
-```
->ros2 msg info /topic
-string data
-```
-
-3. Wie lassen sich mehrere Instanzen ein und des selben Knoten integrieren?
+2. Wie lassen sich mehrere Instanzen ein und des selben Knoten integrieren?
 
 Es soll nochmals darauf hingewiesen werden, `topic` ist ein willkürlich gewählter Name für unseren Kanal. Um beim Testen von verschiedenen Nodes eine schnelle Umbennenung zu ermöglichen können wir mittels Remapping die Topic und Nodenamen anpassen.
 
@@ -595,8 +593,7 @@ Subscriber count: 2
 Natürlich können Sie auch den Topic-Namen aus der Kommandozeile anpassen. Damit entsteht ein neuer Kanal, der keine Subcriber hat.
 
 ```
-> ros2 run examples_rclcpp_minimal_publisher publisher_member_function
-    /topic:=/topic2
+> ros2 run examples_rclcpp_minimal_publisher publisher_member_function --ros-args --remap /topic:=/topic2
 ```
 
 ![RoboterSystem](./image/06_EinfuehrungROS/rosgraph2.png)<!-- width="60%" -->
@@ -607,7 +604,7 @@ Natürlich können Sie auch den Topic-Namen aus der Kommandozeile anpassen. Dami
 Natürlich, dies ist ein wichtiges Element des Debugging. Starten Sie also zum Beispiel den Subscriber mit den bereits bekannten Kommandos und führen Sie dann in einer anderen Konsole den nachfolgenden Befehl aus.
 
 ```
-ros2 topic pub /topic std_msgs/msgs/String  "data: Glück Auf" -n TUBAF
+ros2 topic pub /topic std_msgs/String  "data: Glück Auf" -n TUBAF
 ```
 
 Informieren Sie sich zudem über die weiteren Parameter von `ros2 topic pub`. Sie können die Taktrate und die Qualitätskritieren der Übertragung definieren.
