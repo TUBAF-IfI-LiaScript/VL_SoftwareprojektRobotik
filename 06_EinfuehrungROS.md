@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.0.1
+version:  0.0.2
 language: de
 narrator: Deutsch Female
 
@@ -15,14 +15,14 @@ import: https://github.com/liascript/CodeRunner
 
 # Einführung in ROS2
 
-| Parameter            | Kursinformationen                                                                                                                                                                             |
-| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Veranstaltung:**   | `Softwareprojekt Robotik`                                                                                                                                                                     |
-| **Semester**         | `Wintersemester 2021/22`                                                                                                                                                                      |
-| **Hochschule:**      | `Technische Universität Freiberg`                                                                                                                                                             |
-| **Inhalte:**         | `Motivation für die Verwendung von ROS`                                                                                                                                                |
+| Parameter            | Kursinformationen                                                                                                                                                                                   |
+|----------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Veranstaltung:**   | `Softwareprojekt Robotik`                                                                                                                                                                           |
+| **Semester**         | `Wintersemester 2022/23`                                                                                                                                                                            |
+| **Hochschule:**      | `Technische Universität Freiberg`                                                                                                                                                                   |
+| **Inhalte:**         | `Motivation für die Verwendung von ROS`                                                                                                                                                             |
 | **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_Softwareentwicklung/blob/master/06_EinfuehrungROS.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/06_EinfuehrungROS.md) |
-| **Autoren**          | @author                                                                                                                                                                                       |
+| **Autoren**          | @author                                                                                                                                                                                             |
 
 ![](https://media.giphy.com/media/xT8qB2PQF93mUbGvle/giphy-downsized.gif)
 
@@ -164,8 +164,8 @@ Seit Beginn der Entwicklung von ROS 2.0 wird zwischen ROS 1 und ROS 2 unterschie
 
 Die aktuellen Versionen sind
 
-+ ROS1 - Noetic Ninjemys (Noetische Ninjemys Oweni) veröffentlicht im Mai 2020 und
-+ ROS2 - Galactic Geochelone Veröffentlichung im Mai 2021.
++ ROS1 - _Noetic Ninjemys_ (Noetische Ninjemys Oweni) veröffentlicht im Mai 2020 und
++ ROS2 - _Humble Hawksbill_ (bescheidene Echte Karettschildkröte) Veröffentlichung im Mai 2021.
 
 >  In der Fachwelt für das autonome Fahren werden auch gerne zumindest Teile von ROS eingesetzt. In der Robotik nutzen mittlerweile nahezu alle Forschungsgruppen zumindest teilweise ROS. Viele Forschungsgruppen besitzen gar kein eigenes Softwareframework mehr, sondern konzentrieren sich voll auf ROS. *golem.de [Beitrag - Für wen ist ROS?](https://www.golem.de/news/robot-operating-system-was-bratwurst-bot-und-autonome-autos-gemeinsam-haben-1612-124079-4.html)*
 
@@ -191,13 +191,17 @@ Einen Überblick zu den genannten Features gibt die Webseite [Link](http://desig
 *******************************************************************************
 **Ersetzt ROS2 als ROS1 vollständig?**
 
-> *The quick answer is: Yes but with drawbacks. So ROS2 Crystal has worked with the new GAzebo with ROS2 support, so you have access to creating your own simulations using only ROS2. You have access to the main ROS packages like tf, navigation, image_transport, rqt, and the big RVIZ. So it would seem that 90% of the current ROS users would be satisfied. ...*
+Blick zurück ...
+
+> *The quick answer is: Yes but with drawbacks. So ROS2 Crystal has worked with the new Gazebo with ROS2 support, so you have access to creating your own simulations using only ROS2. You have access to the main ROS packages like tf, navigation, image_transport, rqt, and the big RVIZ. So it would seem that 90% of the current ROS users would be satisfied. ...*
 
 > *But the reality is that a huge amount of packages don’t come out of the box working for ROS2 or are installed through debians.* [^Ref]
 
 [^Ref]: The Construct, "ROS2 vs ROS1? Or more like ROS2 + ROS1?" https://www.theconstructsim.com/ros2-vs-ros1/, 2018
 
-Unterstützung bietet dabei ein Paket `ros1_bridge`, das die Kommunikation zwischen einem ROS1 und einen ROS2 Graphen
+> Akutell sollten neue Projekte immer auf ROS2 aufsetzen!
+
+Falls es Probleme bei der Umsetzung einzelner Pakete gibt, bietet das Paket `ros1_bridge` Hilfe, das die Kommunikation zwischen einem ROS1 und einen ROS2 Graphen
 sicherstellt.
 
 *******************************************************************************
