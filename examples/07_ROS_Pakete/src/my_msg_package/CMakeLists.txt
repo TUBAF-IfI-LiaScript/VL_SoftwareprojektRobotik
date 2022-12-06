@@ -34,7 +34,7 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
-rosidl_generate_interfaces(new_msg
+rosidl_generate_interfaces(my_msg_package
   "msg/MyMsg.msg"
   DEPENDENCIES builtin_interfaces
 )
