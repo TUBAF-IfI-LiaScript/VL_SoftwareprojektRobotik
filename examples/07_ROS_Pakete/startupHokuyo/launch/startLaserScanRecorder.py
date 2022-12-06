@@ -27,3 +27,6 @@ def generate_launch_description():
               output = 'screen',
             )
     ])
+
+
+# ros2 run urg_node urg_node_driver --ros-args --params-file hokuyo_config.yml 

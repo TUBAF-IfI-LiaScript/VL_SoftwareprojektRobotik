@@ -29,9 +29,12 @@ import: https://github.com/liascript/CodeRunner
 
 --------------------------------------------------------------------------------
 
-## Beispiel
+## ROS2 auf mehreren Rechnern
 
-Verteilung einer Anwendung ...
+Während die Organisation von Anwendungen über mehreren Rechnern unter ROS1 aufwändiger war, ist die Realsierung in ROS2 außerordentlich einfach.
+
+https://roboticsbackend.com/ros2-multiple-machines-including-raspberry-pi/
+
 
 ## Konzept
 
@@ -62,7 +65,7 @@ Commands:
   prefix       Output the prefix path of a package
 
   Call `ros2 pkg <command> -h` for more detailed usage.
-zug@humboldt:~$ ros2 pkg list
+> ros2 pkg list
 action_msgs
 action_tutorials
 actionlib_msgs
@@ -112,7 +115,7 @@ Diese Struktur wird durch das jeweilige Build-System automatisch erweitert. `col
 
 + Das `log` Verzeichnis enthält verschiedene Protokollinformationen zu jedem Colcon-Aufruf.
 
-## Compilieren eines Paketes  / mehreren Paketen
+## Compilieren eines Paketes  / mehrerer Paketen
 
 Warum ist ein Build-System erforderlich? Für eine einzelne Datei ist der Vorgang überschaubar
 
@@ -217,7 +220,7 @@ das neu definierte Work-Package in die Liste der verfügbaren Pakete aufgenommen
 
 ```
 > source install/setup.bash
-> ros2 msg list | grep my
+> ros2 interface list | grep my
 my_msg_package/msg/MyMsg
 > ros2 topic pub /tralla my_msg_package/msg/MyMsg "{counter: '8'}"
 ```
@@ -599,7 +602,7 @@ export RCUTILS_COLORIZED_OUTPUT=0  # 1 for forcing it or, on Windows:
 rcutils_logging_set_logger_level("logger_name", RCUTILS_LOG_SEVERITY_DEBUG);
 ```
 
-Das Loggingsystem unter ROS2 findet sich noch im Aufbau. Die entsprechenden Makros, die bereits in der rclcpp API enthalten sind ([Link](http://docs.ros2.org/latest/api/rclcpp/logging_8hpp.html)), decken folgende Anwendungsfälle ab. Dabei zielt die Neuimplementierung aber darauf ab, ein Interface zu definieren, das es erlaubt Logging-Bibliotheken allgemein einzubetten:
+Das Loggingsystem unter ROS2 bildet folgende Makros ab, die in der  rclcpp API enthalten sind ([Link](http://docs.ros2.org/latest/api/rclcpp/logging_8hpp.html)). Dabei zielt die Neuimplementierung aber darauf ab, ein Interface zu definieren, das es erlaubt Logging-Bibliotheken allgemein einzubetten:
 
 | Makro                 | Signatur                | Bedeutung                                                                                          |
 | --------------------- | ----------------------- | -------------------------------------------------------------------------------------------------- |
@@ -631,7 +634,7 @@ noch alle 10 Sekunden die entsprechenden Log-Nachrichten erscheinen.
 
 ## Erweiterung des Knotenkonzepts
 
-Ein verwalteter Lebenszyklus für Knoten (*managed nodes*) ermöglicht eine bessere Kontrolle über den Zustand des ROS-Systems. Es ermöglicht dem roslaunch, sicherzustellen, dass alle Komponenten korrekt instantiiert wurden, bevor es einer Komponente erlaubt, mit der Ausführung ihres Verhaltens zu beginnen. Es ermöglicht auch, dass Knoten online neu gestartet oder ersetzt werden können.
+Ein verwalteter Lebenszyklus für Knoten (*managed nodes*) ermöglicht eine bessere Kontrolle über den Zustand des ROS-Systems. Es ermöglicht dem ros2 launch, sicherzustellen, dass alle Komponenten korrekt instantiiert wurden, bevor es einer Komponente erlaubt, mit der Ausführung ihres Verhaltens zu beginnen. Es ermöglicht auch, dass Knoten online neu gestartet oder ersetzt werden können.
 
 Das wichtigste Konzept dieses Dokuments ist, dass ein verwalteter Knoten eine bekannte Schnittstelle darstellt, nach einem bekannten Lebenszyklus-Zustandsautomaten ausgeführt wird und ansonsten als Blackbox betrachtet werden kann.
 
