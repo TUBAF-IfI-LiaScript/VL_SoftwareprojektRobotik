@@ -20,7 +20,7 @@ import: https://github.com/liascript/CodeRunner
 | Parameter            | Kursinformationen                                                                                                                                                                           |
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Veranstaltung:**   | `Softwareprojekt Robotik`                                                                                                                                                                   |
-| **Semester**         | `Wintersemester 2021/22`                                                                                                                                                                    |
+| **Semester**         | `Wintersemester 2022/23`                                                                                                                                                                    |
 | **Hochschule:**      | `Technische Universität Freiberg`                                                                                                                                                           |
 | **Inhalte:**         | `ROS Kommunikationsprinzipien`                                                                                                                                                 |
 | **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_Softwareentwicklung/blob/master/08_ROS_Kommunkation.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/08_ROS_Kommunkation.md) |
@@ -54,6 +54,8 @@ Eine Middleware befreit die Applikation davon diese Frage zu beantworten. Vielme
 + eine unabhängigen Netzzugriff unabhängig vom Netztyp sicherzustellen
 + einen zuverlässigen Datenaustausch sicherzustellen.
 
+> __Merke:__ DDS ist ein Beispiel einer Middleware.
+
 ********************************************************************************
 
                          {{1-2}}
@@ -68,13 +70,15 @@ abstraktes Interface für ein Einbettung von Middelware-Lösungen, die den DDS S
 DDS stellt einen "Globalen Daten Raum" zur Verfügung, der diese allen interessierten
 verteilten Anwendungen zur Verfügung stellt.
 
+![RoboterSystem](./image/08_ROS_Kommunikation/Notional_OMG_DDS_Interoperability.jpg "Interoperatbilität als Ziel von standardisierten Middlewarekonzepten [^Stavros]")<!-- style="width: 60%; min-width: 420px; max-width: 800px;"-->
+
 + Datenobjekte werden mit einer Domain-ID, einem Topic und einen Schlüssel adressiert.
 + Die Nachfrager (Subscriber) sind von den Produzenten (Publisher) entkoppelt.
 + Filter ermöglichen die inhaltliche Definition von relevanten Informationen auf Subscriberseite.
 + Die Verbindung wird über _Contracts_ spezifiziert, die die _Quality_ _of_ _Service_ (QoS) definiert
 + Die Verbindung zwischen Subscribern und Publishern wird automatisch hergestellt.
 
-Der DDS Standard wurde durch verschiedene Unternehmen und Organisationen unter dem Dach der Object Management Group vorangetrieben. Eine Beschreibung findet sich unter [Link](https://www.omg.org/spec/DDS/).
+Der DDS Standard wurde durch verschiedene Unternehmen und Organisationen unter dem Dach der Object Management Group (OMG) vorangetrieben. Eine Beschreibung findet sich unter [Link](https://www.omg.org/spec/DDS/).
 
 ********************************************************************************
 
@@ -86,7 +90,7 @@ ROS2 hat als Default Lösung die Implementierung `rmw_fastrtps_cpp`, die von der
 vgl. https://index.ros.org/doc/ros2/Concepts/DDS-and-ROS-middleware-implementations/
 
 <!--
-style="width: 80%; min-width: 420px; max-width: 720px;"
+style="width: 80%; min-width: 520px; max-width: 820px;"
 -->
 ```ascii
 
@@ -146,12 +150,12 @@ https://index.ros.org/doc/ros2/Concepts/About-Quality-of-Service-Settings/
 https://index.ros.org/doc/ros2/Tutorials/Quality-of-Service/
 
 
-> DDS ist ein Beispiel einer Middleware.
-
 + *Durability* ... legt fest, ob und wie lange Daten, die bereits ausgetauscht worden sind,  "am Leben bleiben". `volatile` bedeutet, dass dahingehend kein Aufwand investiert wird, `transient` oder `persistent` gehen darüber hinaus.
 + *Reliability* ...  Die Reliability-QoS definiert, ob alle geschriebenen Datensätze (irgendwann) bei allen Readern angekommen sein müssen. Bei zuverlässiger (`reliable`) Kommunikation werden geschriebene Datensätze eines Topics, die aus irgendwelchen Gründen auf dem Netzwerk verloren gehen, von der Middleware wiederhergestellt, um diese Daten verlässlich den Readern zustellen zu können. Im Unterschied dazu definiert `best effort` eine schnellstmögliche Zustellung.
 + *History* ... definiert, wie viele der letzten zu sendenden Daten und empfangenen Daten gespeichert werden. `Keep last` speichert n Samples, wobei die n durch den QoS Parameter _Depth_ definiert wird. `Keep all` speichert alle Samples
 + *Depth* ... erfasst die Größe der Queue für die History fest, wenn `Keep last` gewählt wurde.
+
+Die _quality of service profiles_ (QOS) fassen diese Parameter zusammen:
 
 | Konfiguration          | Durability | Reliability | History   | Depth  |
 | ---------------------- | ---------- | ----------- | --------- | ------ |
@@ -175,11 +179,23 @@ Die QoS Parameter werden gegeneinander abgewogen und ggf. abgestimmt.
 Evaluieren Sie die QoS Mechanismen, in dem Sie die Qualität Ihrer Netzverbindung
 manipulieren. Eine Anleitung findet sich zum Beispiel unter [Link](https://index.ros.org/doc/ros2/Tutorials/Quality-of-Service/)
 
+Eine Inspektion der Konfiguration der QoS Parameter ist mit 
+
+```
+ros2 topic info /turtle1/cmd_vel --verbose
+```
+
+möglich.
+
 ********************************************************************************
+
+[^Stavros]: R. W. "Nick" Stavros, https://commons.wikimedia.org/wiki/File:Notional_OMG_DDS_Interoperability.jpg
 
 ## ROS Publish-Subscribe
 
-Das Publish/Subscribe-Paradigma, bei dem der Publisher hat überhaupt kein Wissen darüber, wer der/die Subscriber sind generiert folgende Vorteile:
+> Das Publish/Subscribe-Paradigma, wurde bereits in der vorangegangenen Veranstaltung eingeführt und soll hier der vollständigkeit halber noch mal genannt sein.
+
+Das Konzept, dass der Publisher überhaupt kein Wissen darüber hat, wer der/die Subscriber sind generiert folgende Vorteile:
 
 + Es entkoppelt Subsysteme, die damit unabhängig von einander werden. Damit steigt die Skalierbarkeit des Systems und gleichzeitig die Handhabbarkeit.
 + Die Abarbeitung erfolgt asynchron und ohne Kontrollflussübergabe. Der Knoten ist damit allein auf den eigenen Zustand fokussiert.
@@ -206,7 +222,7 @@ Bisher haben wir über asynchrone Kommunikationsmechanismen gesprochen. Ein Publ
 + Aktiviere die Kamera
 + ...
 
-In diesem Fall liegt eine Interaktion in Form eines Remote-Procedure-Calls (RPC) vor. Die Anfrage / Antwort erfolgt über einen Dienst, der durch ein Nachrichtenpaar definiert ist: eine für die Anfrage und eine für die Antwort. Ein bereitstellender ROS-Knoten bietet einen Dienst unter einem String-Namen an, und ein Client ruft den Dienst auf, indem er die Anforderungsnachricht sendet und in seiner Ausführung innehält und auf die Antwort wartet. Die Client-Bibliotheken stellen diese Interaktion dem Programmierer so dar, als wäre es ein Remote Procedure Call.
+In diesem Fall liegt eine Interaktion in Form eines Remote-Procedure-Calls (RPC) vor. Die Anfrage / Antwort erfolgt über einen Dienst, der durch ein Nachrichtenpaar definiert ist, eine für die Anfrage und eine für die Antwort. Ein bereitstellender ROS-Knoten bietet einen Dienst unter einem String-Namen an, und ein Client ruft den Dienst auf, indem er die Anforderungsnachricht sendet und in seiner Ausführung innehält und auf die Antwort wartet. Die Client-Bibliotheken stellen diese Interaktion dem Programmierer so dar, als wäre es ein Remote Procedure Call.
 
 Dafür sind 3 Schritte notwendig:
 
@@ -232,7 +248,7 @@ Wie explorieren Sie die Services, die durch den `turtlesim_node` bereitgestellt 
 `ros2` stellt zwei Schnittstellen für die Arbeit mit den Services bereit.
 
 + `service` erlaubt den Zugriff auf die tatsächlich angebotenen Services während
-+ `srv` die Definitionsformate, die nicht zwingend auch genutzt werden darstellt.
++ `interfaces`  die Definitionsformate offeriert
 
 ```bash
 > ros2 service list
@@ -250,7 +266,7 @@ Wie explorieren Sie die Services, die durch den `turtlesim_node` bereitgestellt 
 /turtlesim/set_parameters
 /turtlesim/set_parameters_atomically
 >
-> ros2 srv list | grep turtlesim
+> ros2 interface list | grep turtlesim
 turtlesim/srv/Kill
 turtlesim/srv/SetPen
 turtlesim/srv/Spawn
@@ -459,6 +475,32 @@ Das _Action_ Konzept von ROS spezifiziert 3 Nachrichtentypen, die der Client an 
 | Feedback  | Server -> Client    | ... ermöglicht es eine Information zum aktuellen Stand der Abarbeitung zu erhalten. Für das Bewegen der Basis kann dies die aktuelle Pose des Roboters entlang des Weges sein.                                                                                                                                           |
 | Result    |Server -> Client       | ... wird vom ActionServer an den ActionClient gesendet, wenn das Ziel erreicht ist. Dies ist anders als Feedback, da es genau einmal gesendet wird.                                                                                                                                                                      |
 
+```text @plantUML.png
+@startuml
+
+Action_client -> Action_server: goal request
+activate Action_client
+activate Action_server
+
+Action_server -> User_method: activate algorithm
+activate User_method
+Action_server --> Action_client: goal response
+
+Action_client -> Action_server: result request
+
+User_method -> Action_client: publish feedback
+User_method -> Action_client: publish feedback
+User_method -> Action_client: publish feedback
+
+User_method -> Action_server: set result
+deactivate User_method
+
+Action_server --> Action_client: result response
+deactivate Action_server
+deactivate Action_client
+@enduml
+```
+
 Beschrieben wird das Interface wiederum mit einem eigenen Filetyp, den sogenannten `.action` Files. Im Beispiel sehe Sie eine _Action_, die sich auf die Bewegung eines Outdoorroboters zu einer angegebenen GPS-Koordinate bezieht.
 
 ```
@@ -478,7 +520,6 @@ Hinzu kommt noch die Möglichkeit eine _Action_ mit _chancel_ zu stoppen. Hierf�
 
 #### Beispiel
 
-Achtung: Das folgende Beispiel ist erst unter ROS2 Eloquent lauffähig!
 Das Beispiel wurde der ROS2 Dokumentation unter [Link](https://index.ros.org/doc/ros2/Tutorials/Understanding-ROS2-Actions/) entnommen.
 
 ```
@@ -536,4 +577,4 @@ ros2 action send_goal /turtle1/rotate_absolute turtlesim/action/RotateAbsolute {
 
 ## Aufgabe der Woche
 
-+ Schreiben Sie einen neuen Service, der es erlaubt die Roboter abzufragen, die sich in einem Raum befinden.
++  Im Projektordner finden Sie einen Workspace `ws_opencv`. Dieser baut auf dem Standardtutorial für Image-Publisher und Subscriber auf und ergänzt diese um eine kleine OpenCV basierte Bildverarbeitungspipeline. Ergänzen Sie hier die Parameter des Canny-Edge Algorithmus als Services, so dass diese zur Laufzeit angepasst werden können. 
