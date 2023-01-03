@@ -350,6 +350,10 @@ print(p_O[0:2])
 
 > Aufgabe: Berechnen Sie die die Koordinatenangabe im System $B$
 
+## 3D Koordinaten
+
+ToDo
+
 ## Umsetzung in ROS
 
 Die Handhabung der unterschiedlichen Koordinatensystem in ROS ist über das `tf`-verteitle System gelöst.
@@ -385,6 +389,10 @@ Eine Transformation kann entweder
 + dynamisch (kann sich im Laufe der Zeit ändern, muss es aber nicht) 
 
 sein. Die Unterscheidung ist aus Fehlertoleranzgründen wichtig, robuste Systeme müssen wissen, ob ihre Informationen ggf. veraltet sind. Statische Transformationen können einmal gesendet werden und können dann als bekannt vorausgesetzt werden.
+
+### TF Basis Features 
+
+ToDo ... Hinweis auf Quaternion vs Eulerwinkel Darstellung
 
 ### Beispiel 1 Laserscanner
 
