@@ -16,12 +16,9 @@ script:   https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js
 
 -->
 
-[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/VL_SoftwareprojektRobotik/master/10_Sensordatenverarbeitung.md#1)
+[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/VL_SoftwareprojektRobotik/master/10_Sensordatenhandling.md#1)
 
 # Koordinaten-Transformation
-
-[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/VL_SoftwareprojektRobotik/master/10_Sensordatenverarbeitung.md#1)
-
 
 | Parameter            | Kursinformationen                                                                                                                                                                           |
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -29,7 +26,7 @@ script:   https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js
 | **Semester**         | `Wintersemester 2022/23`                                                                                                                                                                    |
 | **Hochschule:**      | `Technische Universität Freiberg`                                                                                                                                                           |
 | **Inhalte:**         | `Umsetzung von ROS Paketen`                                                                                                                                                 |
-| **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_Softwareentwicklung/blob/master/10_Sensordatenverarbeitung.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/10_Sensordatenverarbeitung.md) |
+| **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_Softwareentwicklung/blob/master/10_Sensordatenhandling.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/10_Sensordatenhandling.md) |
 | **Autoren**          | @author                                                                                                                                                                                     |
 
 ![](https://media.giphy.com/media/3o85xwc5c8DCoAF440/giphy-downsized.gif)
