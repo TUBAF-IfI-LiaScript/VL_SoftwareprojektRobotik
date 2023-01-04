@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.0.3
+version:  0.0.4
 language: de
 narrator: Deutsch Female
 
@@ -42,14 +42,14 @@ Roboter spannen mit ihren Sensoren und Aktoren jeweils eigene Koordinatensysteme
 
 > Beispiel 2: Ein stationärer Manipulator erfasst alle Objekte auf der Arbeitsfläche in dem er eine Kamera über diese bewegt. Entsprechend werden alle Objekte im Koordinatensystem der Kamera beschrieben. Für die Planung der Greifoperation müssen wir deren Lage aber auf das Basiskoordinatensystem des Roboters überführen.
 
-![ImageMatching](./image/99_Koordinatenstransformation/MWChallengePoster_medium.jpg "Visualisierung der Aufgabenstellung der _Autonomous Robot Manipulation Challenge_ beim RoboCup 2022 [^RoboCup]")<!-- style="width: 70%;"-->
+![ImageMatching](./image/10_Sensordatenhandling/MWChallengePoster_medium.jpg "Visualisierung der Aufgabenstellung der _Autonomous Robot Manipulation Challenge_ beim RoboCup 2022 [^RoboCup]")<!-- style="width: 70%;"-->
 
 
 ## Mathematische Beschreibung 
 
 Entsprechend beziehen sich Punkte als Vekoren $\textbf{p}=[x, y]$ im Raum immer auf ein Bezugskoordinatensystem $A$, dass bei deren Spezifikation als Index angegeben wird $\textbf{p}_A$.
 
-![ImageMatching](./image/10_Sensordatenvorverarbeitung/MultipleCoordSystems.svg "Darstellung eines Punktes in verschiedenen kartesischen Koordinatensystemen $A$, $B$, $C$, $D$")<!-- style="width: 50%;"-->
+![ImageMatching](./image/10_Sensordatenhandling/MultipleCoordSystems.svg "Darstellung eines Punktes in verschiedenen kartesischen Koordinatensystemen $A$, $B$, $C$, $D$")<!-- style="width: 50%;"-->
 
 ### Relevante Transformationen
 
@@ -66,13 +66,13 @@ $$
 \end{align*} 
 $$
 
-![ImageMatching](./image/10_Sensordatenvorverarbeitung/Translation.svg "Translation von kartesischen Koordinatensystemen $A$ und $B$")<!-- style="width: 50%;"-->
+![ImageMatching](./image/10_Sensordatenhandling/Translation.svg "Translation von kartesischen Koordinatensystemen $A$ und $B$")<!-- style="width: 50%;"-->
 
 2. Rotation
 
     Bisher haben wir lediglich Konzepte der translatorischen Transformation betrachtet. Rotationen um den Winkel $\varphi$ lassen sich folgendermaßen abbilden.
 
-    ![ImageMatching](./image/10_Sensordatenvorverarbeitung/Rotation.svg "Rotation von kartesischen Koordinatensystemen $A$ und $B$")<!-- style="width: 20%;"-->
+    ![ImageMatching](./image/10_Sensordatenhandling/Rotation.svg "Rotation von kartesischen Koordinatensystemen $A$ und $B$")<!-- style="width: 20%;"-->
 
 
     $$ x_B = x_A\cos\varphi + y_A\sin\varphi,$$
@@ -94,7 +94,7 @@ $$
 
 ### Homogene Koordinaten
 
-![ImageMatching](./image/10_Sensordatenvorverarbeitung/HomogenouseCoords.svg "Überlagerung von Translation und Rotation von kartesischen Koordinatensystemen $A$ und $B$")<!-- style="width: 35%;"-->
+![ImageMatching](./image/10_Sensordatenhandling/HomogenouseCoords.svg "Überlagerung von Translation und Rotation von kartesischen Koordinatensystemen $A$ und $B$")<!-- style="width: 35%;"-->
 
 Fassen wir nun Translation und Rotation zusammen, so können wir eine 2D Koordinatentransformation mit 
 
@@ -358,7 +358,7 @@ ToDo
 
 Die Handhabung der unterschiedlichen Koordinatensystem in ROS ist über das `tf`-verteitle System gelöst.
 
-![RoboterSystem](./image/10_Sensordatenvorverarbeitung/Coordsystems.png)<!--  style="width:60%; max-width:300px; min-width:600px"-->
+![RoboterSystem](./image/10_Sensordatenhandling/Coordsystems.png)<!--  style="width:60%; max-width:300px; min-width:600px"-->
 
 _Darstellung verschiedener Koordinatensysteme innerhalb eines Roboterszenarios (Autor Bo im ROS Forum unter [answers.ros.org](https://answers.ros.org/question/265846/how-to-build-tf-topic-frame-tree-for-hector_slam-or-gmapping/))_
 
@@ -368,7 +368,7 @@ ROS stellt unter dem namen _tf2_ mehrere Pakete bereit, um Transformationen zu h
 + mathematische Darstellung der Translations-/Rotationsparameter
 + ggf. Kommunikation von Änderungen der Translation-/Rotationsparameter
 
-![RoboterSystem](./image/10_Sensordatenvorverarbeitung/ROS_tf_tree.png)<!--  style="width:60%; max-width:300px; min-width:600px"-->
+![RoboterSystem](./image/10_Sensordatenhandling/ROS_tf_tree.png)<!--  style="width:60%; max-width:300px; min-width:600px"-->
 
 Grundlage dieser Lösung ist die Integration einer Frame-ID in jeden Datensatz. Jede `sensor_msgs` enthält entsprechend einen header, der folgendermaßen strukturiert ist.
 
@@ -425,7 +425,7 @@ rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
 from 'laser' to 'world'
 ```
 
-![RoboterSystem](./image/10_Sensordatenvorverarbeitung/LaserScannerWithCoordinateTransformation.png "Screenshot aus rviz2 mit aktivierten TF Knotendarstellungen")<!--  style="width:80%; max-width:300px; min-width:600px"-->
+![RoboterSystem](./image/10_Sensordatenhandling/LaserScannerWithCoordinateTransformation.png "Screenshot aus rviz2 mit aktivierten TF Knotendarstellungen")<!--  style="width:80%; max-width:300px; min-width:600px"-->
 
 > **Aufgabe** Ermitteln Sie die neue Konfiguration der Argumentenübergabe für die Translations- und Rotationselemente in ROS Humble!
 
@@ -433,7 +433,7 @@ from 'laser' to 'world'
 
 Dabei werden die Relationen zwischen den Koordinatensystemen über eigene Publisher und Listener ausgetauscht. Am Ende bildet jede Applikation eine Baumstruktur aus den Transformationen zwischen den Frames. Isolierte Frames können entsprechend nicht in Verbindung mit anderen gesetzt werden.
 
-![RoboterSystem](./image/10_Sensordatenvorverarbeitung/view_frames.png)<!--  style="width:60%; max-width:300px; min-width:600px"-->
+![RoboterSystem](./image/10_Sensordatenhandling/view_frames.png)<!--  style="width:60%; max-width:300px; min-width:600px"-->
 
 _Beispielhafte Darstellung des tf-Trees eines ROS-Turtle Szenarios, das zwei Turtle umfasst. Die individuellen Posen werden jeweils gegenüber den globalen `world`-Frame beschrieben._
 
