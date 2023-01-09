@@ -279,7 +279,7 @@ Offenbar stellt die Turtlesim-Umgebung 5 Services bereit, deren Bedeutung selbst
 Das Format lässt sich entsprechend aus den srv Dateien ablesen:
 
 ```
-> ros2 srv show turtlesim/srv/Spawn
+> ros2 interface show turtlesim/srv/Spawn
 float32 x
 float32 y
 float32 theta
