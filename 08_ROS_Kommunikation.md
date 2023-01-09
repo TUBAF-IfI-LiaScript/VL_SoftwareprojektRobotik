@@ -417,7 +417,7 @@ Der Vorteil des Parameterkonzepts liegt nun darin, dass wir:
 Der Aufruf kann dann entweder in der Kommandozeile erfolgen
 
 ```
-ros2 run turtlesim turtlesim_node __params:=turtlesim.yaml
+ros2 run turtlesim turtlesim_node --ros-args --params-file turtlesim.yaml
 ```
 
 oder aber im Launch file
