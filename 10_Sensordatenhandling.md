@@ -1,7 +1,7 @@
 <!--
 
 author:   Sebastian Zug & Georg Jäger
-email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
+email:    sebastian.zug@informatik.tu-freiberg.de & georg.Jaeger@informatik.tu-freiberg.de
 version:  0.0.4
 language: de
 narrator: Deutsch Female
@@ -26,7 +26,7 @@ script:   https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js
 | **Semester**         | `Wintersemester 2022/23`                                                                                                                                                                    |
 | **Hochschule:**      | `Technische Universität Freiberg`                                                                                                                                                           |
 | **Inhalte:**         | `Umsetzung von ROS Paketen`                                                                                                                                                 |
-| **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_Softwareentwicklung/blob/master/10_Sensordatenhandling.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/10_Sensordatenhandling.md) |
+| **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/10_Sensordatenhandling.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/10_Sensordatenhandling.md) |
 | **Autoren**          | @author                                                                                                                                                                                     |
 
 ![](https://media.giphy.com/media/3o85xwc5c8DCoAF440/giphy-downsized.gif)
@@ -47,30 +47,34 @@ Roboter spannen mit ihren Sensoren und Aktoren jeweils eigene Koordinatensysteme
 
 ## Mathematische Beschreibung 
 
-Entsprechend beziehen sich Punkte als Vekoren $\textbf{p}=[x, y]$ im Raum immer auf ein Bezugskoordinatensystem $A$, dass bei deren Spezifikation als Index angegeben wird $\textbf{p}_A$.
+Mathematisch werden diese Informationen als Punkte (bzw. Vektoren) $\textbf{p}=[x, y]$ dargestellt. Zur Interpretation ist jedem Punkt ein Bezugskoordinatensystem $A$ zugeordnet. Um dieses explizit für jeden Punkt darzustellen, wird es als Index hinzugefügt: $\textbf{p}_A$.
 
 ![ImageMatching](image/10_Sensordatenhandling/MultipleCoordSystems.svg "Darstellung eines Punktes in verschiedenen kartesischen Koordinatensystemen $A$, $B$, $C$, $D$")<!-- style="width: 50%;"-->
 
 ### Relevante Transformationen
 
-Aus dem Kontext der _körpererhaltende Transformationen_ (im Unterschied zu Scherung und Skalierung) müsen zwei Relationen berücksichtigt werden:
+Aus dem Kontext der _körpererhaltende Transformationen_ (im Unterschied zu Scherung und Skalierung) müsen zwei Transformationen berücksichtigt werden:
 
 1. Translation 
 
-Die Darstellung eines Punkte im Koordinatensystem $A$ kann mit dem Translationsvektor $t_{A\rightarrow B}$ bestimmt werden.
+Die Translation beschreibt die lineare Verschiebung eines Punktes mit dem Translationsvektor $t_{A\rightarrow B}$. Angewandt auf einen Punkt $\textbf{p}_A$ im Bezugskoordinatensystem $A$ wird dieser in das Bezugskoordinatensystem $B$ transformiert - d.h verschoben:
 
+
+<!-- Warum wurde hier -t_AB gerechnet? -->
 $$
 \begin{align*} 
-\textbf{p}_A - \textbf{p}_B &= \textbf{t}_{A\rightarrow B} \\
-\textbf{p}_B &= \textbf{p}_A - \textbf{t}_{A\rightarrow B} 
+\textbf{p}_B &= \textbf{p}_A + \textbf{t}_{A\rightarrow B} 
 \end{align*} 
 $$
+
+
+_Hinweis:_ Subtraktionen können durch negative elemente im Translationsvektor dargestellt werden.
 
 ![ImageMatching](image/10_Sensordatenhandling/Translation.svg "Translation von kartesischen Koordinatensystemen $A$ und $B$")<!-- style="width: 50%;"-->
 
 2. Rotation
 
-    Bisher haben wir lediglich Konzepte der translatorischen Transformation betrachtet. Rotationen um den Winkel $\varphi$ lassen sich folgendermaßen abbilden.
+    Koordinatensysteme können jedoch zusätzlich verdreht zueinander sein. In diesem Fall müssen die einzelnen Elemente eines Punktes $\textbf{p}_A$ im Bezugskoordinatensystem $A$ um den Winkel $\varphi$ gedreht werden um die Darstellung des selben Punktes im Bezugskoordinatensystem $B$ zu erhalten.
 
     ![ImageMatching](image/10_Sensordatenhandling/Rotation.svg "Rotation von kartesischen Koordinatensystemen $A$ und $B$")<!-- style="width: 20%;"-->
 
@@ -91,19 +95,21 @@ $$
 \textbf{p}_B \\
 $$
 
+Während die Translation durch die Addition von Vektoren dargestellt werden kann, benötigt die Rotation die Multiplikation von Matrizen.
 
-### Homogene Koordinaten
+
+### Homogene Koordinatentransformationen
 
 ![ImageMatching](image/10_Sensordatenhandling/HomogenouseCoords.svg "Überlagerung von Translation und Rotation von kartesischen Koordinatensystemen $A$ und $B$")<!-- style="width: 35%;"-->
 
-Fassen wir nun Translation und Rotation zusammen, so können wir eine 2D Koordinatentransformation mit 
+Es können jedoch Translation und Rotation in einer 2D Koordinatentransformation zusammengefasst werden:
 
 $$\textbf{p}_B=\begin{bmatrix}
 \cos\varphi & \sin\varphi \\ 
 -\sin\varphi & \cos\varphi
-\end{bmatrix}_{A\rightarrow B} \cdot \textbf{p}_A - \textbf{t}_{A\rightarrow B}$$
+\end{bmatrix}_{A\rightarrow B} \cdot \textbf{p}_A + \textbf{t}_{A\rightarrow B}$$
 
-beschreiben. Problematisch ist, dass 
+Problematisch ist, dass 
 
 + die Translation auf einer Addition und 
 + die Rotation auf der Multiplikation von Matrizen 
@@ -123,8 +129,8 @@ $$
 &=
 \underbrace{
 \begin{bmatrix}
-1 & 0 & -t_x\\ 
-0 & 1 & -t_y \\
+1 & 0 & t_x\\ 
+0 & 1 & t_y \\
 0 & 0 & 1 \\
 \end{bmatrix}}_{\textbf{T}_{A\rightarrow B}}
 \cdot
@@ -202,8 +208,8 @@ $$
 $$
 T_{A\rightarrow B} \cdot T_{A\rightarrow B}^{-1} = 
 \begin{bmatrix}
-1 & 0 & -t_x\\ 
-0 & 1 & -t_y \\
+1 & 0 & t_x\\ 
+0 & 1 & t_y \\
 0 & 0 & 1 \\
 \end{bmatrix}
 \cdot
@@ -299,8 +305,8 @@ R_{A\rightarrow B} \cdot T_{A\rightarrow B}
 \end{bmatrix} 
 = 
 \begin{bmatrix}
-\cos\varphi & \sin\varphi & -t_x\\ 
--\sin\varphi & \cos\varphi & -t_y \\
+\cos\varphi & \sin\varphi & t_x\\ 
+-\sin\varphi & \cos\varphi & t_y \\
 0 & 0 & 1 \\
 \end{bmatrix}
 \cdot 
