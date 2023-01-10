@@ -574,7 +574,7 @@ Welche Elemente des Turtlesim-Interfaces können Sie erklären? Wie gehen Sie vo
 Welche Struktur hat das Action-Interface?
 
 ```
-> ros2 interface show turtlesim/action/RotateAbsolute.action
+> ros2 interface show turtlesim/action/RotateAbsolute
 
   # The desired heading in radians
   float32 theta
