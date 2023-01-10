@@ -279,7 +279,7 @@ Offenbar stellt die Turtlesim-Umgebung 5 Services bereit, deren Bedeutung selbst
 Das Format lässt sich entsprechend aus den srv Dateien ablesen:
 
 ```
-> ros2 srv show turtlesim/srv/Spawn
+> ros2 interface show turtlesim/srv/Spawn
 float32 x
 float32 y
 float32 theta
@@ -417,7 +417,7 @@ Der Vorteil des Parameterkonzepts liegt nun darin, dass wir:
 Der Aufruf kann dann entweder in der Kommandozeile erfolgen
 
 ```
-ros2 run turtlesim turtlesim_node __params:=turtlesim.yaml
+ros2 run turtlesim turtlesim_node --ros-args --params-file turtlesim.yaml
 ```
 
 oder aber im Launch file
@@ -533,10 +533,28 @@ Danach können Sie für unseren Turtlesim Umgebung sämtliche Kommunikationsinte
 > ros2 node info /turtlesim
 /turtlesim
   Subscribers:
-
+    /parameter_events: rcl_interfaces/msg/ParameterEvent
+    /turtle1/cmd_vel: geometry_msgs/msg/Twist
   Publishers:
-
-  Services:
+    /parameter_events: rcl_interfaces/msg/ParameterEvent
+    /rosout: rcl_interfaces/msg/Log
+    /turtle1/color_sensor: turtlesim/msg/Color
+    /turtle1/pose: turtlesim/msg/Pose
+  Service Servers:
+    /clear: std_srvs/srv/Empty
+    /kill: turtlesim/srv/Kill
+    /reset: std_srvs/srv/Empty
+    /spawn: turtlesim/srv/Spawn
+    /turtle1/set_pen: turtlesim/srv/SetPen
+    /turtle1/teleport_absolute: turtlesim/srv/TeleportAbsolute
+    /turtle1/teleport_relative: turtlesim/srv/TeleportRelative
+    /turtlesim/describe_parameters: rcl_interfaces/srv/DescribeParameters
+    /turtlesim/get_parameter_types: rcl_interfaces/srv/GetParameterTypes
+    /turtlesim/get_parameters: rcl_interfaces/srv/GetParameters
+    /turtlesim/list_parameters: rcl_interfaces/srv/ListParameters
+    /turtlesim/set_parameters: rcl_interfaces/srv/SetParameters
+    /turtlesim/set_parameters_atomically: rcl_interfaces/srv/SetParametersAtomically
+  Service Clients:
 
   Action Servers:
     /turtle1/rotate_absolute: turtlesim/action/RotateAbsolute
@@ -556,7 +574,7 @@ Welche Elemente des Turtlesim-Interfaces können Sie erklären? Wie gehen Sie vo
 Welche Struktur hat das Action-Interface?
 
 ```
-> ros2 interface show turtlesim/action/RotateAbsolute.action
+> ros2 interface show turtlesim/action/RotateAbsolute
 
   # The desired heading in radians
   float32 theta
