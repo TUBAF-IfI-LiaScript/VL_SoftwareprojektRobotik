@@ -465,7 +465,7 @@ Anmerkung zu Zeile 11: Hier wird eine Lambda-Expression genutzt, um die Funktion
 
 ## ROS Actions
 
-_Actions_ sind lang laufende Aufgaben vorgesehen sind, der Client wartet aber nicht auf das Eintreten des Resultats sondern setzt seine Arbeit fort. Entsprechend wird eine _Action_ als asynchroner Call bezeichnet, der sich an einen _Action_ _Server_ richtet.
+_Actions_ sind für lang laufende Aufgaben vorgesehen. Der Client wartet dabei nicht auf das Eintreten des Resultats sondern setzt seine Arbeit fort. Entsprechend wird eine _Action_ als asynchroner Call bezeichnet, der sich an einen _Action_ _Server_ richtet.
 
 Das _Action_ Konzept von ROS spezifiziert 3 Nachrichtentypen, die der Client an den Server richten kann:
 
