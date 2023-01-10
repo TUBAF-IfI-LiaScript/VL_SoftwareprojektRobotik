@@ -536,7 +536,7 @@ Das Unified Robot Description Format (URDF) ist eine Variante davon. Auf der Bas
     </visual>
   </link>
 
-  <joint name="base_to_right_leg" type="fixed">
+  <joint name="base_to_right_leg" type="continuous">
     <parent link="base_link"/>
     <child link="right_leg"/>
     <origin xyz="0 -0.22 0.25"/>
