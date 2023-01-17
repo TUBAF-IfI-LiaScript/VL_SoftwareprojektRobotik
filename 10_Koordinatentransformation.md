@@ -1,7 +1,7 @@
 <!--
 
 author:   Sebastian Zug & Georg Jäger
-email:    sebastian.zug@informatik.tu-freiberg.de & georg.Jaeger@informatik.tu-freiberg.de
+email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
 version:  0.0.4
 language: de
 narrator: Deutsch Female
@@ -16,9 +16,9 @@ script:   https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js
 
 -->
 
-[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/VL_SoftwareprojektRobotik/master/10_Sensordatenhandling.md#1)
+[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/VL_SoftwareprojektRobotik/master/10_Koordinatentransformation.md#1)
 
-# Koordinaten-Transformation
+# Koordinatentransformation
 
 | Parameter            | Kursinformationen                                                                                                                                                                           |
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -26,10 +26,10 @@ script:   https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js
 | **Semester**         | `Wintersemester 2022/23`                                                                                                                                                                    |
 | **Hochschule:**      | `Technische Universität Freiberg`                                                                                                                                                           |
 | **Inhalte:**         | `Umsetzung von ROS Paketen`                                                                                                                                                 |
-| **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/10_Sensordatenhandling.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/10_Sensordatenhandling.md) |
+| **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_Softwareentwicklung/blob/master/10_Koordinatentransformation.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/10_Koordinatentransformation.md) |
 | **Autoren**          | @author                                                                                                                                                                                     |
 
-![](https://media.giphy.com/media/3o85xwc5c8DCoAF440/giphy-downsized.gif)
+![](https://media.giphy.com/media/kEaPIFo1xEne6Yxr2N/giphy-downsized.gif)
 
 --------------------------------------------------------------------------------
 
@@ -45,36 +45,32 @@ Roboter spannen mit ihren Sensoren und Aktoren jeweils eigene Koordinatensysteme
 ![ImageMatching](image/10_Sensordatenhandling/MWChallengePoster_medium.jpg "Visualisierung der Aufgabenstellung der _Autonomous Robot Manipulation Challenge_ beim RoboCup 2022 [^RoboCup]")<!-- style="width: 70%;"-->
 
 
-## Mathematische Beschreibung 
+### Mathematische Beschreibung 
 
-Mathematisch werden diese Informationen als Punkte (bzw. Vektoren) $\textbf{p}=[x, y]$ dargestellt. Zur Interpretation ist jedem Punkt ein Bezugskoordinatensystem $A$ zugeordnet. Um dieses explizit für jeden Punkt darzustellen, wird es als Index hinzugefügt: $\textbf{p}_A$.
+Entsprechend beziehen sich Punkte als Vekoren $\textbf{p}=[x, y]$ im Raum immer auf ein Bezugskoordinatensystem $A$, dass bei deren Spezifikation als Index angegeben wird $\textbf{p}_A$.
 
 ![ImageMatching](image/10_Sensordatenhandling/MultipleCoordSystems.svg "Darstellung eines Punktes in verschiedenen kartesischen Koordinatensystemen $A$, $B$, $C$, $D$")<!-- style="width: 50%;"-->
 
 ### Relevante Transformationen
 
-Aus dem Kontext der _körpererhaltende Transformationen_ (im Unterschied zu Scherung und Skalierung) müsen zwei Transformationen berücksichtigt werden:
+Aus dem Kontext der _körpererhaltende Transformationen_ (im Unterschied zu Scherung und Skalierung) müsen zwei Relationen berücksichtigt werden:
 
 1. Translation 
 
-Die Translation beschreibt die lineare Verschiebung eines Punktes mit dem Translationsvektor $t_{A\rightarrow B}$. Angewandt auf einen Punkt $\textbf{p}_A$ im Bezugskoordinatensystem $A$ wird dieser in das Bezugskoordinatensystem $B$ transformiert - d.h verschoben:
+Die Darstellung eines Punkte im Koordinatensystem $A$ kann mit dem Translationsvektor $t_{A\rightarrow B}$ bestimmt werden.
 
-
-<!-- Warum wurde hier -t_AB gerechnet? -->
 $$
 \begin{align*} 
-\textbf{p}_B &= \textbf{p}_A + \textbf{t}_{A\rightarrow B} 
+\textbf{p}_A - \textbf{p}_B &= \textbf{t}_{A\rightarrow B} \\
+\textbf{p}_B &= \textbf{p}_A - \textbf{t}_{A\rightarrow B} 
 \end{align*} 
 $$
-
-
-_Hinweis:_ Subtraktionen können durch negative elemente im Translationsvektor dargestellt werden.
 
 ![ImageMatching](image/10_Sensordatenhandling/Translation.svg "Translation von kartesischen Koordinatensystemen $A$ und $B$")<!-- style="width: 50%;"-->
 
 2. Rotation
 
-    Koordinatensysteme können jedoch zusätzlich verdreht zueinander sein. In diesem Fall müssen die einzelnen Elemente eines Punktes $\textbf{p}_A$ im Bezugskoordinatensystem $A$ um den Winkel $\varphi$ gedreht werden um die Darstellung des selben Punktes im Bezugskoordinatensystem $B$ zu erhalten.
+    Bisher haben wir lediglich Konzepte der translatorischen Transformation betrachtet. Rotationen um den Winkel $\varphi$ lassen sich folgendermaßen abbilden.
 
     ![ImageMatching](image/10_Sensordatenhandling/Rotation.svg "Rotation von kartesischen Koordinatensystemen $A$ und $B$")<!-- style="width: 20%;"-->
 
@@ -95,21 +91,19 @@ $$
 \textbf{p}_B \\
 $$
 
-Während die Translation durch die Addition von Vektoren dargestellt werden kann, benötigt die Rotation die Multiplikation von Matrizen.
 
-
-### Homogene Koordinatentransformationen
+### Homogene Koordinaten
 
 ![ImageMatching](image/10_Sensordatenhandling/HomogenouseCoords.svg "Überlagerung von Translation und Rotation von kartesischen Koordinatensystemen $A$ und $B$")<!-- style="width: 35%;"-->
 
-Es können jedoch Translation und Rotation in einer 2D Koordinatentransformation zusammengefasst werden:
+Fassen wir nun Translation und Rotation zusammen, so können wir eine 2D Koordinatentransformation mit 
 
 $$\textbf{p}_B=\begin{bmatrix}
 \cos\varphi & \sin\varphi \\ 
 -\sin\varphi & \cos\varphi
-\end{bmatrix}_{A\rightarrow B} \cdot \textbf{p}_A + \textbf{t}_{A\rightarrow B}$$
+\end{bmatrix}_{A\rightarrow B} \cdot \textbf{p}_A - \textbf{t}_{A\rightarrow B}$$
 
-Problematisch ist, dass 
+beschreiben. Problematisch ist, dass 
 
 + die Translation auf einer Addition und 
 + die Rotation auf der Multiplikation von Matrizen 
@@ -129,8 +123,8 @@ $$
 &=
 \underbrace{
 \begin{bmatrix}
-1 & 0 & t_x\\ 
-0 & 1 & t_y \\
+1 & 0 & -t_x\\ 
+0 & 1 & -t_y \\
 0 & 0 & 1 \\
 \end{bmatrix}}_{\textbf{T}_{A\rightarrow B}}
 \cdot
@@ -208,8 +202,8 @@ $$
 $$
 T_{A\rightarrow B} \cdot T_{A\rightarrow B}^{-1} = 
 \begin{bmatrix}
-1 & 0 & t_x\\ 
-0 & 1 & t_y \\
+1 & 0 & -t_x\\ 
+0 & 1 & -t_y \\
 0 & 0 & 1 \\
 \end{bmatrix}
 \cdot
@@ -287,10 +281,6 @@ $$\textbf{p}_D=\underbrace{\bm{R}_{A\rightarrow B} \bm{R}_{B\rightarrow C} \bm{R
 
 Bedeutsamer ist die Kombination aus beiden Typen - dabei gilt die Aussage $T \cdot R = R \cdot T$ nicht!
 
-1. Translation + Rotation ($T \cdot R \cdot p$)
-
-In diesem Fall erfolgt zuerst die Drehung um den Ursprung und dann die Verschiebung. Verschiebung und Drehung können gemeinsam in einer Matrix behandelt werden.
-
 $$
 \begin{bmatrix}
 \textbf{p}_B \\
@@ -305,8 +295,8 @@ R_{A\rightarrow B} \cdot T_{A\rightarrow B}
 \end{bmatrix} 
 = 
 \begin{bmatrix}
-\cos\varphi & \sin\varphi & t_x\\ 
--\sin\varphi & \cos\varphi & t_y \\
+\cos\varphi & \sin\varphi & -t_x\\ 
+-\sin\varphi & \cos\varphi & -t_y \\
 0 & 0 & 1 \\
 \end{bmatrix}
 \cdot 
@@ -316,9 +306,6 @@ R_{A\rightarrow B} \cdot T_{A\rightarrow B}
 \end{bmatrix} 
 $$
 
-2. Rotation + Translation ($R \cdot T \cdot p$)
-
-???
 
 ## Beispiel Anwendungsfall 2D
 
@@ -358,7 +345,47 @@ print(p_O[0:2])
 
 ## 3D Koordinaten
 
-ToDo
+![RoboterSystem](image/10_Koordinatentransformation/Coord_planes_color.svg.png "3D Koordinatensystem")<!--  style="width:50%; max-width:300px; min-width:600px"-->
+
+> Merke: _The Axes display shows a set of axes, located at the origin of the target frame - __red - x green - y blue -z ___
+
+Die entsprechende translatorische Transformation in homogenen Koordinaten ergibt sich nun mit einer erweiterten Matrix:
+
+$$
+T_{A\rightarrow B}
+= 
+\begin{bmatrix}
+1 & 0 & 0 & -t_x\\ 
+0 & 1 & 0 & -t_y \\
+0 & 0 & 1 & -t_z\\
+0 & 0 & 0 & 1\\
+\end{bmatrix}
+$$
+
+> Wie ist es um die Rotationen bestellt? 
+
+Nunmehr müssen wir drei Rotationsachsen betrachten.
+
+| Bezeichnung | Achse | Transformationsmatrix |
+|------------|--------|---------------|
+| Gieren (Hochachse) | z      | $ R^z_{A\rightarrow B} =  \begin{bmatrix} \cos\varphi & \sin\varphi & 0 & 0\\  -\sin\varphi & \cos\varphi & 0 & 0\\ 0 & 0 & 1 & 0\\  0 & 0 & 0 & 1 \\ \end{bmatrix} $ |
+| Nicken (Querachse)    | y      | $ R^y_{A\rightarrow B} =  \begin{bmatrix} \cos\varphi &  0 & \sin\varphi & 0\\  0 & 1 & 0  & 0\\  -\sin\varphi &  0 & \cos\varphi & 0\\ 0 & 0 & 0 & 1 \\ \end{bmatrix} $ |
+| Rollen (Längsachse)      | x      | $ R^x_{A\rightarrow B} =  \begin{bmatrix} 1 & 0 & 0 & 0\\ 0 & \cos\varphi & \sin\varphi & 0 \\ 0 & -\sin\varphi & \cos\varphi & 0 \\ 0 & 0 & 0 & 1 \\ \end{bmatrix} $ |
+
+Positiv:
+
++ Intuitiv benutzbar
++ Gut geeignet für die Bewegung in Animationen - die virtuelle Kamer lässt sich gut durch die Eulerwinkel interpolieren!
+
+Negativ: 
+
+− Gimbal Lock (Unstetigkeit)
+
+− Für allgemeine Rotationen bestimmen sich die Eulerwinkel nicht eindeutig
+
+> ROS nutzt für die Darstellung von Rotationen Quaternionen. Diese überwinden die Einschränkungen der Euler-Winkel Darstellung sind aber nicht so anschaulich. Entsprechend stellt die TF Bibliothek Transformationsvorschriften bereit, um zwischen beiden Formaten zu wechseln.
+
+!?[Tutorial](https://www.youtube.com/watch?v=_t4HZ8r_qFM) 
 
 ## Umsetzung in ROS
 
@@ -395,10 +422,6 @@ Eine Transformation kann entweder
 + dynamisch (kann sich im Laufe der Zeit ändern, muss es aber nicht) 
 
 sein. Die Unterscheidung ist aus Fehlertoleranzgründen wichtig, robuste Systeme müssen wissen, ob ihre Informationen ggf. veraltet sind. Statische Transformationen können einmal gesendet werden und können dann als bekannt vorausgesetzt werden.
-
-### TF Basis Features 
-
-ToDo ... Hinweis auf Quaternion vs Eulerwinkel Darstellung
 
 ### Beispiel 1 Laserscanner
 
@@ -509,10 +532,10 @@ Dann können wir darauf reagieren und die Position von Schildkröte 1 ansteuern.
 
 Die Konfiguration der Transformationen lässt sich auch abstrakt anhand konkreter Modelle in einer eigenen Sprache darstellen. Die beschreiben 
 
-a) geometrische Dimensionen einzelner Komponenten und  
-b) physikalische Eigenschaften deren
-c) Relationen anhand sog. Joints 
-d) integrierte Sensoren/Aktoren 
+1. geometrische Dimensionen einzelner Komponenten und  
+2.  physikalische Eigenschaften deren
+3. Relationen anhand sog. Joints 
+4. integrierte Sensoren/Aktoren 
 
 Das Unified Robot Description Format (URDF) ist eine Variante davon. Auf der Basis eines XML formates können die oben genannten Parameter beschrieben werden. Die Beschreibungssprache XACO erweitert die darstellbaren Inhalte und ermöglicht insbesondere die Referenzierung von Sub-Dokumenten.
 
@@ -541,7 +564,6 @@ Das Unified Robot Description Format (URDF) ist eine Variante davon. Auf der Bas
     <child link="right_leg"/>
     <origin xyz="0 -0.22 0.25"/>
   </joint>
-
 </robot>
 ```
 
@@ -551,5 +573,13 @@ Das gezeigt Listing
 ```
 ros2 launch urdf_tutorial display.launch.py model:=examples/10_Sensordatenhandling/urdf_example/example.urdf
 ```
+
+Ein umfangreicheres Modell lässt sich zum Beispiel nach dem Aufruf von  
+
+```
+ros2 launch urdf_tutorial display.launch.py model:=`ros2 pkg prefix --share urdf_tutorial`/urdf/06-flexible.urdf
+```
+
+evaluieren.
 
 
