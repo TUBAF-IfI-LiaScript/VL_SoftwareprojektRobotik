@@ -124,17 +124,13 @@ Und wie funktioniert das? Sogenannten Rezeptoren ...
 
 Achtung, die einschlägige deutsche Norm DIN 1319 1-4 vermeidet den Begriff und spricht stattdessen in Abschnitt 2 vom „Messaufnehmer“ als dem Beginn der Messkette. Entsprechend ist die Abgrenzung des eingentlichen Sensorbegriffes auch domainspezifisch und individuell unterschiedlich.
 
-[^Kino]: Fliehkraftregler als Beispiel für die nicht elektrische Ausgabe von Messungen (Drehzahl) [Wikipedia Commons, Nutzer: Kino]
-
 *******************************************************************************
 
 
     {{1-2}}
 *******************************************************************************
 
-![RoboterSystem](./image/09_Sensoren/SensorIntegrationsLevel.png "[^Zug]")
-
-[^Zug]: Integrationsstufen von Sensoren
+![RoboterSystem](./image/09_Sensoren/SensorIntegrationsLevel.png "Integrationsebenen von Sensoren (eigene Darstellung)")
 
 *******************************************************************************
 
@@ -187,13 +183,16 @@ Parameter eines Sensors
 ![RoboterSystem](./image/09_Sensoren/beam_srf235.gif "[^3]")
 ![RoboterSystem](./image/09_Sensoren/beam_srf4.gif "[^3]")
 
-[^3]: Sensorkeulen verschiedener Ultraschallsensoren [robot electronics faq](https://www.robot-electronics.co.uk/htm/sonar_faq.htm)
+
 
 Hinweis: Die Dämpfung eines Signals wird in "dB" angegeben und mittels $L = 20 · log(\frac{U_2}{U_1})$ beschrieben.  
 
 Auf die Aspekte der Sensorfehler wird in der nächstfolgenden Veranstaltung eingegangen.
 
 *******************************************************************************
+[^3]: Sensorkeulen verschiedener Ultraschallsensoren [robot electronics faq](https://www.robot-electronics.co.uk/htm/sonar_faq.htm)
+
+[^Kino]: Fliehkraftregler als Beispiel für die nicht elektrische Ausgabe von Messungen (Drehzahl) [Wikipedia Commons, Nutzer: Kino]
 
 ## Inertialsensorik
 
@@ -302,9 +301,7 @@ Wie erfassen wir die Position eines rotierenden Elements, zum Beispiel eines Mot
 + photoelektrische Abtastung
 + induktive System mit entsprechenden Triggern (zum Beispiel größeres Zahnrad)
 
-![RoboterSystem](./image/09_Sensoren/Gabellichtschranke.png)<!--style="width: 30%; max-width: 720px;"-->[^2]
-
-[^2]: *Encoder mit Gabellichtschranke* [Wikipedia Commons, Autor Tycho](https://commons.wikimedia.org/w/index.php?curid=4955638)
+![RoboterSystem](./image/09_Sensoren/Gabellichtschranke.png "[^2]")<!--style="width: 30%; max-width: 720px;"-->
 
 Die Zahl der Zustands-/Flankenwechsel pro Zeiteinheit ist direkt proportional zur Rotationsgeschwindigkeit.
 
@@ -316,8 +313,6 @@ Abwägung der Impulszahl pro Drehung von der
 + Leistungsfähigkeit der Auswertehardware
 + Drehzahlen
 + Störgrößen
-
-moderne Drehimpulsgeber kleiner Bauform haben bis zu 6000 Segmente Aufbau üblicherweise vor dem Getriebe.
 
 __Absolute Kodierung:__  Lageermittlung gegenüber einem Fixpunkt, aufwendige Drehimpulsgeber bis hunderttausenden Impulsen pro Umdrehung, häufigste Codierung: Gray-Code (nur auf einem Ausgangssignal findet eine Signaländerung)
 
@@ -356,6 +351,8 @@ dopplung  |   |  |  |  |  |  |  |        B ---|    |
 ```
 ********************************************************************************
 
+[^2]: *Encoder mit Gabellichtschranke* [Wikipedia Commons, Autor Tycho](https://commons.wikimedia.org/w/index.php?curid=4955638)
+
 ## Entfernungsmessung
 
 Entfernungen lassen sich unabhängig von der Modalität mit vier grundlegenden Verfahren erfassen.
@@ -369,9 +366,7 @@ Entfernungen lassen sich unabhängig von der Modalität mit vier grundlegenden V
 
 Die Größe eines Messsignals wird als Indikator für die Entfernung zum Objekt genutzt.
 
-![RoboterSystem](./image/09_Sensoren/AmplitudenMessung.png)<!--style="width: 90%; max-width: 720px;"-->
-
-*Infrarot Distanzsensor auf Reflexionsbasis* [AVAGO Technologies, APDS 9103 Sensor](http://www.produktinfo.conrad.com/datenblaetter/125000-149999/140269-da-01-en-IR_SENSOR_APDS_9103_L22.pdf)
+![RoboterSystem](./image/09_Sensoren/AmplitudenMessung.png "Infrarot Distanzsensor auf Reflexionsbasis [^AVAGO]")<!--style="width: 90%; max-width: 720px;"-->
 
 Analoge Konzepte finden sich auch für berührungslose Schalter auf kapazitiver Basis.
 
@@ -379,6 +374,8 @@ Nachteile:
 
 + Starke Abhängigkeit des Ausgabewertes vom Objekt und der Umgebungssituation
 + Totbereich
+
+
 
 ### Laufzeitmessung
 
@@ -419,8 +416,6 @@ Entfernung (in m) 𝑑 =1/2  𝑐 𝑡 aus Laufzeit t (in s) des
 
 ![RoboterSystem](./image/09_Sensoren/UltraschallEchos.png "[^3]")
 
-[^3]: *Sendeimpuls und Echo eines Ultraschallsensors* aus G. Schober et al., Degree of Dispersion Monitoring by Ultrasonic Transmission Technique and Excitation of the Transducer's Harmonics, [Link](https://www.researchgate.net/publication/264385266_Degree_of_Dispersion_Monitoring_by_Ultrasonic_Transmission_Technique_and_Excitation_of_the_Transducer%27s_Harmonics)
-
 **Herausforderung 2: Querabhängigkeiten**
 
 Neben den Reflexionsmechanismen sind auch die Ausbreitungsparameter des Schallimpulses von der Umgebung abhängig.
@@ -431,7 +426,6 @@ Die Schallgeschwindigkeit ist abhänig von
 + Luftzusammensetzung (Anteil von CO$_2$, Luftfeuchte)
 
 ![RoboterSystem](./image/09_Sensoren/Schallgeschwindigkeit.png "Schallgeschwindigkeit in Abhängigkeit von der Temperatur und dem Luftdruck")
-
 
 Welchen Einfluss haben diese Größen? Für zwei Konfigurationen, die zwei unterschiedliche
 Wetterlagen repräsentieren ergibt sich bereits ein Fehler von 8%.
@@ -459,26 +453,28 @@ $$
 D_{max}= \frac{1}{2} \cdot c \cdot t_0 = 7.5m
 $$
 
-Allerdings sind die Systeme in starkem Maße von der Hintergrundbeleuchtung abhängig. Trotz Filtern stören irreguläre Beleuchtungsanteile die Messung. Eine Lösungsmöglichkeit ist die redundante Messung über zwei phasenverschobene Elemente. Im Bild werden zwei Speicherelemente S1 und S2 durch zwei Schalter G1 und G2 aktiviert. S1 integriert die Spannung über dem Photosensitiven Element auf, bis die Aussendung abgeschlossen ist. Danach wird G2 aktiviert und S2 zeichnet den verbleibenen Impulsanteil auf. Der Distanzwert ergibt sich zu:
+Allerdings sind die Systeme in starkem Maße von der Hintergrundbeleuchtung abhängig. Trotz Filtern stören irreguläre Beleuchtungsanteile die Messung. Eine Lösungsmöglichkeit ist die redundante Messung über zwei phasenverschobene Elemente. Im Bild werden zwei Speicherelemente S1 und S2 durch zwei Schalter G1 und G2 aktiviert. S1 integriert die Spannung über dem photosensitiven Element auf, bis die Aussendung abgeschlossen ist. Danach wird G2 aktiviert und S2 zeichnet den verbleibenen Impulsanteil auf. Der Distanzwert ergibt sich zu:
 
 $$
 D= \frac{1}{2} \cdot c \cdot t_0 \cdot \frac{S2}{S1 + S2}
 $$
 
-![RoboterSystem](./image/09_Sensoren/TOF-Kamera-Prinzip.jpg "[^4]")
-
-[^4]: *Schematische Darstellung der Funktionalität eines TOF Pixels* [Wikimedia Commons, Autor Captaindistance](https://de.wikipedia.org/wiki/TOF-Kamera#/media/Datei:TOF-Kamera-Prinzip.jpg)
+![RoboterSystem](./image/09_Sensoren/TOF-Kamera-Prinzip.jpg "Schematische Darstellung der Funktionalität eines TOF Pixels [^4]")
 
 Die Kamera liefert somit für jeden Bildpunkt die Entfernung des darauf abgebildeten Objektes. Das Prinzip entspricht dem Laserscanning mit dem Vorteil, dass eine ganze Szene auf einmal aufgenommen wird und nicht abgetastet werden muss.
 
 | Vorteile                                                   | Nachteile                    |
 | ---------------------------------------------------------- | ---------------------------- |
-| Einfacher Aufbau ohne bewegliche Teile (vgl. Laserscanner) | Einfluß von Hintergrundlicht |
+| Einfacher Aufbau ohne bewegliche Teile (vgl. konventioneller Laserscanner) | Einfluß von Hintergrundlicht |
 | Synchrones Abbildungsverhalten                             | Gegenseitige Störung         |
 | Musterunabhängigkeit (vgl. Stereokameras)                  | Mehrfachreflexionen          |
 
 
 ********************************************************************************
+
+[^3]: *Sendeimpuls und Echo eines Ultraschallsensors* aus G. Schober et al., Degree of Dispersion Monitoring by Ultrasonic Transmission Technique and Excitation of the Transducer's Harmonics, [Link](https://www.researchgate.net/publication/264385266_Degree_of_Dispersion_Monitoring_by_Ultrasonic_Transmission_Technique_and_Excitation_of_the_Transducer%27s_Harmonics)
+
+[^4]: *Schematische Darstellung der Funktionalität eines TOF Pixels* [Wikimedia Commons, Autor Captaindistance](https://de.wikipedia.org/wiki/TOF-Kamera#/media/Datei:TOF-Kamera-Prinzip.jpg)
 
 ### Phasenverschiebung
 
@@ -498,10 +494,11 @@ Eine Lösung besteht darin verschiedene Frequenzen unterschiedlicher Wellenläng
 
 Triangulationsverfahren setzen auf einem bekannten Abstand zwischen von Empfänger und Sender auf. Die sogenannte *Baseline* ist dann Ausgangspunkt für die Bestimmung des Abstandes. An dieser Stelle seien zwei Beispiele gezeigt:
 
-![RoboterSystem](./image/09_Sensoren/Triangulation.png)<!-- width="80%" -->
-*Funktionsweise eines einfachen IR-Distanzsensors nach dem Triangulationsprinzip [Link](http://www.symmons.com/Press-Room/News/2010/november/S-6060-sensor-faucet.aspx)*
+![RoboterSystem](./image/09_Sensoren/Triangulation.png "Funktionsweise eines einfachen IR-Distanzsensors nach dem Triangulationsprinzip [^6]")<!-- width="60%" -->
 
 Anwendung findet dieses Konzept auch bei RGB-D Kameras, sowohl bei Infrarotbasierten Systemen als auch bei Stereokameras.
+
+[^6]: Funktionsweise eines einfachen IR-Distanzsensors nach dem Triangulationsprinzip [Link](http://www.symmons.com/Press-Room/News/2010/november/S-6060-sensor-faucet.aspx)
 
 ## Exkurs - Vorteile des Infrarotspektrums
 
@@ -538,7 +535,7 @@ Eine Punktwolke _Point Cloud_ ist eine Menge von Punkten eines Vektorraums, die 
 + _Structured Light_ ist anfällig für Umgebungsbeleuchtung und Interferenzen mehrerer Geräte.
 + _Passiv-Stereo_ kämpft in texturlosen Regionen, wo teure globale Optimierungstechniken erforderlich sind
 
-### Beispielanwendung - Ultraschall
+### Beispielanwendung in ROS1 - Ultraschall
 
 Als Anwendungsbeispiel sollen die grundlegenden Herausforderungen anhand zweier Sensoren verdeutlicht werden:
 
@@ -710,8 +707,6 @@ Etablierte Systeme:
 GPS, Galileo (Europa), GLONASS (Russland), BeiDou (China),
 
 ![RoboterSystem](./image/09_Sensoren/ConstellationGPS.gif "Bewegung der GPS Satelliten um die Erde [^WikimediaGPS]")
-
-
 
 Ausgehend vom Zeitstempel der Satellitennachrichten werden die Distanzen zu den bekannten Satellitenpositionen bestimmt. Anhand der Signale von 3 Satelliten kann eine Kugelschnitt bestimmt werden.
 
