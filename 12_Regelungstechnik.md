@@ -9,7 +9,7 @@ narrator: Deutsch Female
 attribute: thx
 
 import:   https://raw.githubusercontent.com/liascript-templates/plantUML/master/README.md
-          https://github.com/LiaTemplates/Pyodide
+          https://github.com/liascript/CodeRunner
 
 attribute: Danke an Andre Dietrich für seinen Kurs "Einführung Regelungstechnik" aus dem Teile übernommen wurden.
 
@@ -28,8 +28,8 @@ link: https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css
 
 | Parameter            | Kursinformationen                                                                                                                                                                                                     |
 | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Veranstaltung:**   | `Softwareprojekt Robotik`                                                                                                                                                                                             |
-| **Semester**         | `Wintersemester 2021/22`                                                                                                                                                                                              |
+| **Veranstaltung:**   | `Softwareprojekt Robotik`                                                                                                                                                                   |
+| **Semester**         | `Wintersemester 2022/23`                                                                                                                                                                    |
 | **Hochschule:**      | `Technische Universität Freiberg`                                                                                                                                                                                     |
 | **Inhalte:**         | `Grundlegende Begriffe der Regelungstechnik`                                                                                                                                                                                             |
 | **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_Softwareentwicklung/blob/master/11_Regelungstechnik.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/11_Regelungstechnik.md) |
@@ -42,6 +42,37 @@ link: https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css
 ## Wie weit waren wir gekommen?
 
 ... wir generieren ein "rohes" Distanzmessignal und haben es gefiltert.
+
+<!--
+style="width: 70%; max-width: 720px; display: block; margin-left: auto; margin-right: auto;"
+-->
+```ascii
+                       +----------------------+
+                       | Handlungsplanung     |   Strategie
+                       +----------------------+
+                                ^ ^ ^
+                                | | |                  
+                                v v v
+                       +----------------------+
+                       | Ausführung           |   Taktik
+                       +----------------------+
+                                ^ ^ ^
+                                | | |
+                                v v v
+                       +----------------------+
+                       | Reaktive Überwachung |   Ausführung
+                       +----------------------+
+ Sensordatenerfassung    ^ ^ ^          | | |    
+ Aktuatoroperationen     | | |          v v v     
+                       .-----------------------.
+                       | Umgebung              |
+                       .-----------------------.                               .
+```
+
+Im weiteren Verlauf der Veranstaltung werden wir uns auf den letzte Ebene fokussieren
+und die elementare Verarbeitungskette verschiedener Sensorsysteme analysieren.
+
+
 
 <!--
 style="width: 70%; max-width: 7200px; display: block; margin-left: auto; margin-right: auto;"
@@ -164,42 +195,42 @@ Die Diagramme in diesem Bereich gehen auf den Autor "Chris828" zurück und sind 
 
 __Proportionale Strecke__
 
-![RoboterSystem](./image/11_Regelungstechnik/Step-p.png)<!-- width="60%" -->
+![RoboterSystem](./image/11_Regelungstechnik/Step-p.png)
 $x(t) = K_p \cdot y(t)$ mit $K_p = 2$
 
 Beispiele: Verstärker, Spannungsteiler, Sensoren mit vernachlässigbarem Verzögerungsverhalten
 
 __Integral wirkende Strecke__
 
-![RoboterSystem](./image/11_Regelungstechnik/Step-i.png)<!-- width="60%" -->
+![RoboterSystem](./image/11_Regelungstechnik/Step-i.png)
 $\dot y(t) = K_i \cdot u(t)$ mit $K_i = 2$
 
 Beispiele: Wassertank, Kondensator, Geschwindigkeit als Integration
 
 __Verzögerungsglied 0.Ordnung (Totzeitglied)__
 
-![RoboterSystem](./image/11_Regelungstechnik/Step-t0.png)<!-- width="60%" -->
+![RoboterSystem](./image/11_Regelungstechnik/Step-t0.png)
 $y(t) = u(t-T_t)$ mit $T_t = 0.5s$
 
 Beispiele: Rechenzeit für die Sensordatenverarbeitung, Material auf einem Förderband,
 
 __Verzögerungsglied 1.Ordnung (PT1-Glied)__
 
-![RoboterSystem](./image/11_Regelungstechnik/Step_PT1.png)<!-- width="60%" -->
+![RoboterSystem](./image/11_Regelungstechnik/Step_PT1.png)
 $y(t) = K(1-e^{-\frac{t}{T}})$ mit $K =2, T = 1s$
 
 Beispiele: Gleichstrommotor
 
 __Verzögerungsglied 2.Ordnung (PT2-Glied)__
 
-![RoboterSystem](./image/11_Regelungstechnik/Step_PT2.png)<!-- width="60%" -->
+![RoboterSystem](./image/11_Regelungstechnik/Step_PT2.png)
  $a_2 \ddot y(t)+a_1 \dot y(t)+a_0 y(t) =b_0 u(t)$ mit  $K = 2, T = 1, D = {0.2, 1, 5}$ mit D als Dämpfung
 
 Beispiele: Zwei hintereinander geschaltete PT1-Glieder, Gleichstrommotor (Spannung → Drehzahl) mit berücksichtigter Induktivität
 
 Wie kann eine Strecke anhand des Modells weiter charakterisiert werden?
 
-![RoboterSystem](./image/11_Regelungstechnik/Bode_PT1.png)<!-- width="60%" -->
+![RoboterSystem](./image/11_Regelungstechnik/Bode_PT1.png)
 _Bode-Diagramm einer PT1 Strecke_
 
 ## Regler
@@ -226,7 +257,7 @@ style="width: 80%; min-width: 420px; max-width: 720px;"
 
 Für diskrete Regler existiert nur ein Spektrum an Zuständen, das als Basis der Regelung dient. Anhand eines Schwellwertes wird eine Heizungssteuerung an- oder ausgeschaltet.
 
-![RoboterSystem](./image/11_Regelungstechnik/Zweipunktregler.png)<!-- width="50%" -->[^1]
+![RoboterSystem](./image/11_Regelungstechnik/Zweipunktregler.png "Zweipunktregler [^1]")
 
 [^1]: _Wikimedia Grafik des Autors "Heinrich Kümmeke"_
 
@@ -283,8 +314,9 @@ Schwierig zu handhaben sind dabei insbesondere:
 
 Die größte Herausforderung liegt in der Bestimmung der entsprechenden magischen Konstanten, die ein rasche Annäherung an die Sollgröße bei gleichzeitig minimalem Überschwingen gewährleistet.
 
-![RoboterSystem](./image/11_Regelungstechnik/PID_Compensation_Animated.gif)<!-- width="50%" -->
-_"Effects of varying PID parameters (Kp,Ki,Kd) on the step response of a system." Wikimedia Grafik des Autors "Physicsch" [Link](https://en.wikipedia.org/wiki/PID_controller#/media/File:PID_Compensation_Animated.gif)_
+![RoboterSystem](./image/11_Regelungstechnik/PID_Compensation_Animated.gif "Einfluss der Parameter des Reglers [^3]")
+
+[^3]: _"Effects of varying PID parameters (Kp,Ki,Kd) on the step response of a system." Wikimedia Grafik des Autors "Physicsch" [Link](https://en.wikipedia.org/wiki/PID_controller#/media/File:PID_Compensation_Animated.gif)_
 
 ### Beispiel 1
 
@@ -350,10 +382,10 @@ plt.xlabel("Time")
 plt.ylabel("Speed")
 plt.legend()
 plt.grid()  
-plt.show()
-plot(fig) # <- this is required to plot the fig also on the LiaScript canvas
+#plt.show()
+plt.savefig('foo.png')
 ```
-@Pyodide.eval
+@LIA.eval(`["main.py"]`, `none`, `python3 main.py`)
 
 Kombinieren wir nun das Ganze mit einem Regler, so lässt sich das Verhalten nach unterschiedlichen Parametern optimieren.
 
@@ -364,6 +396,33 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 steps = 1000
+
+class SecondOrderSystem:
+  def __init__(self, d1, d2):
+    if d1 > 0:
+      e1 = -1.0 / d1
+      x1 = math.exp(e1)
+    else: x1 = 0
+    if d2 > 0:
+      e2 = -1.0 / d2
+      x2 = math.exp(e2)
+    else: x2 = 0
+    a = 1.0 - x1    # b = x1
+    c = 1.0 - x2    # d = x2
+    self.ac = a * c
+    self.bpd = x1 + x2
+    self.bd = x1 * x2
+    self.init_system()
+
+  def init_system(self):
+    self.Yppr = 0
+    self.Ypr = 0
+
+  def __call__(self, X):
+    Y = self.ac * X + self.bpd * self.Ypr - self.bd * self.Yppr
+    self.Yppr = self.Ypr
+    self.Ypr = Y
+    return Y
 
 class PIDControlBlock:
   def __init__(self, Kp, Ki, Kd):
@@ -413,11 +472,10 @@ plt.xlabel("Time")
 plt.ylabel("Speed")
 plt.legend()
 plt.grid()
-plt.show()
-
-plot(fig) # <- this is required to plot the fig also on the LiaScript canvas
+#plt.show()
+plt.savefig('foo.png')
 ```
-@Pyodide.eval
+@LIA.eval(`["main.py"]`, `none`, `python3 main.py`)
 
 
 ### Beispiel 2

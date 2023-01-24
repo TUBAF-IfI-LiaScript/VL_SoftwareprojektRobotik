@@ -611,13 +611,12 @@ Eine knappe Einführung in die Grundlagen der Datenfusion folgt in der kommenden
 
 ## Anwendung einer Rohdatenverarbeitung in ROS
 
-> __Achtung:__ Die nachfolgende Erläuterung bezieht sich auf die ROS1 Implementierung. Unter ROS2 ist die Implementierung der entsprechenden Pakete noch nicht abgeschlosssen.
-
-Wie werden Laserscanner-Informationen unter ROS abgebildet? Schauen wir uns dies an einem realen Beispiel an. Ein zugehöriges Bag-File finden Sie im `data` Ordner dieses Kurses.
-
 ![RoboterSystem](./image/10_Sensordatenhandling/LaserScanner.png)<!--  style="width:60%; max-width:300px; min-width:600px"-->
 
-Eine Kurz-Dokumentation einer häufig genutzen Scanners vom Typ Hokuyo URG04 finden Sie unter [Link](https://www.robotshop.com/media/files/pdf/hokuyo-urg-04lx-ug01-specifications.pdf)
++ Kapselung des Sensorinterfaces
++ Standardisierung der Nachrichten
++ Integration von Metainformationen (Frame ID, Zeitstempel)
++ Plausibilitätsinformationen
 
 ### Transformationen mit tf
 
@@ -626,6 +625,8 @@ Eine Kurz-Dokumentation einer häufig genutzen Scanners vom Typ Hokuyo URG04 fin
 !?[Tutorial](https://www.youtube.com/watch?v=_t4HZ8r_qFM)
 
 ### Anwendung laser-filters
+
+> Die Aussagen hier beziehen sich auf die ROS1 Implementierung!
 
 Der primäre Inhalt des `laser_filters`-Pakets [(Link)](http://wiki.ros.org/laser_filters) besteht aus einer Reihe von Filtern und Transformationsalgorithem für Laserscanner-Rohdaten. Der Anwender konfiguriert dabei die Parameter der Filter in einem Beschreibungsfile, die eigentliche Ausführung übernehmen zwei Knoten, die dann mehrere Filter nacheinander ausführen. Der  `scan_to_scan_filter_chain` Knoten wendet eine Reihe von Filtern auf einen `sensor_msgs/LaserScan` an. Die `scan_to_cloud_filter_chain` implementiert zunächst eine Reihe von Filtern auf einen `sensor_msgs/LaserScan` an, wandelt ihn in einen `sensor_msgs/PointCloud` um und wendet dann eine Reihe von Filtern auf den `sensor_msgs/PointCloud` an.
 
