@@ -4,29 +4,77 @@ author:   Sebastian Zug & Georg Jäger
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
 version:  1.0.1
 language: de
-comment:  In dieser Vorlesungen werden die Schichten einer Roboterarchitektur adressiert.
+comment:  In dieser Vorlesungen werden die Grundkonzepte der Datenfusion adressiert.
 narrator: Deutsch Female
 attribute: thx
 
-import: https://github.com/LiaTemplates/Pyodide
+import: https://github.com/liascript/CodeRunner
 
 -->
 
+[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/VL_SoftwareprojektRobotik/master/10_Koordinatentransformation.md#1)
+
+
 # Datenfusion
 
-Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/12_Datenfusion.md)
+| Parameter            | Kursinformationen                                                                                                                                                                                                     |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Veranstaltung:**   | `Softwareprojekt Robotik`                                                                                                                                                                   |
+| **Semester**         | `Wintersemester 2022/23`                                                                                                                                                                    |
+| **Hochschule:**      | `Technische Universität Freiberg`                                                                                                                                                                                     |
+| **Inhalte:**         | `Grundlegende Begriffe der Regelungstechnik`                                                                                                                                                                                             |
+| **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_Softwareentwicklung/blob/master/13_Datenfusion.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/13_Datenfusion.md) |
+| **Autoren**          | @author                                                                                                                                                                                                               |
+
+![](https://media.giphy.com/media/665kTzjPTFGL9J2fNf/giphy-downsized.gif)
+
+--------------------------------------------------------------------------------
+
+
+
+Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/13_Datenfusion.md)
 
 **Zielstellung der heutigen Veranstaltung**
 
 + Vermittlung eines Grundverständnisses für die Datenfusion
 + Einführung eines Bayes basierten Schätzers als diskreten Filter
-+ Ausblick auf die Praktischen Themenstellungen des folgenden Semesters
 
 --------------------------------------------------------------------------------
 
 ## Wie weit waren wir gekommen?
 
 ... wir generieren ein "rohes" Distanzmessignal und haben es gefiltert.
+
+<!--
+style="width: 70%; max-width: 720px; display: block; margin-left: auto; margin-right: auto;"
+-->
+```ascii
+                       +----------------------+
+                       | Handlungsplanung     |   Strategie
+                       +----------------------+
+                                ^ ^ ^
+                                | | |                  
+                                v v v
+                       +----------------------+
+                       | Ausführung           |   Taktik
+                       +----------------------+
+                                ^ ^ ^
+                                | | |
+                                v v v
+                       +----------------------+
+                       | Reaktive Überwachung |   Ausführung
+                       +----------------------+
+ Sensordatenerfassung    ^ ^ ^          | | |    
+ Aktuatoroperationen     | | |          v v v     
+                       .-----------------------.
+                       | Umgebung              |
+                       .-----------------------.                                .
+```
+
+Im weiteren Verlauf der Veranstaltung werden wir uns auf den letzte Ebene fokussieren
+und die elementare Verarbeitungskette verschiedener Sensorsysteme analysieren.
+
+
 
 <!--
 style="width: 70%; max-width: 7200px; display: block; margin-left: auto; margin-right: auto;"
@@ -120,9 +168,9 @@ Environment           .-----.                +-----+              .-.
 ```   
 _Unterschiedliche Fusionsansätze analog zu Brooks und Iyengar (1997)_
 
-+ Eine __komplementäre Fusion__ hat das Ziel, die Vollständigkeit der Daten zu erhöhen. Unabhängige Sensoren betrachten hierfür unterschiedliche Sichtbereiche und Phänomene oder messen zu unterschiedlichen Zeiten.
-
 + Bei der __konkurrierenden Fusion__ erfassen Sensoren gleichzeitig denselben Sichtbereich und liefern Daten gleicher Art. Die (oft gewichtete) Verknüpfung solcher, "konkurrierender" Daten kann die Genauigkeit des Gesamtsystems erhöhen.
+
++ Eine __komplementäre Fusion__ hat das Ziel, die Vollständigkeit der Daten zu erhöhen. Unabhängige Sensoren betrachten hierfür unterschiedliche Sichtbereiche und Phänomene oder messen zu unterschiedlichen Zeiten.
 
 + Reale Sensoren erbringen die gewünschten Informationen oft nicht allein. So ergibt sich beispielsweise die benötigte Information erst aus dem Zusammensetzen der verschiedenen Ausgabedaten. Eine solche Fusion wird als __kooperative Fusion__ bezeichnet.
 
@@ -195,9 +243,10 @@ print(belief)
 fig, ax = plt.subplots(figsize=(8,4))
 ax.bar(np.arange(len(belief)), belief)
 plt.ylim(0, 1)
-plot(fig)
+#plt.show()  
+plt.savefig('foo.png') # notwendig für die Ausgabe in LiaScript
 ```
-@Pyodide.eval
+@LIA.eval(`["main.py"]`, `none`, `python3 main.py`)
 
 
 Es wird deutlich, dass wir aktuell noch kein Wissen um die Position des Bootes haben. Man spricht vom "apriori-"Wissen.
@@ -294,9 +343,12 @@ print(belief)
 fig, ax = plt.subplots(figsize=(8,4))
 ax.bar(np.arange(len(belief)), belief)
 plt.ylim(0, 1)
-plot(fig)
+#plt.show()  
+plt.savefig('foo.png') # notwendig für die Ausgabe in LiaScript
 ```
-@Pyodide.eval
+@LIA.eval(`["main.py"]`, `none`, `python3 main.py`)
+
+Wenn wir nur ein Segment mit einem Schild hätten müssten wir diesem eine Aufenthaltswahrscheinlichkeit von $p=0.72$ zuordnen. Da es aber mehrere Möglichkeiten gibt, splittet sich diese auf.
 
 ### Abbildung auf apriori Wissen
 
@@ -325,9 +377,10 @@ width = 0.35
 ax.bar(np.arange(len(apriori)), apriori, width)
 ax.bar(np.arange(len(posteriori)) + width, posteriori, width)
 plt.ylim(0, 1)
-plot(fig)
+#plt.show()  
+plt.savefig('foo.png') # notwendig für die Ausgabe in LiaScript
 ```
-@Pyodide.eval
+@LIA.eval(`["main.py"]`, `none`, `python3 main.py`)
 
 Wie erwartet haben die Segmente mit Schildern eine deutlich höhere Wahrscheinlichkeit von $p=0.24$ als die anderen Bereiche. Welche Veränderung
 erwarten Sie, wenn wir die Qualität der Sensormessungen erhöhen?
@@ -359,9 +412,10 @@ print(p_1)
 fig, ax = plt.subplots(figsize=(8,4))
 ax.bar(np.arange(len(p_1)), p_1)
 plt.ylim(0, 1)
-plot(fig)
+#plt.show()  
+plt.savefig('foo.png') # notwendig für die Ausgabe in LiaScript
 ```
-@Pyodide.eval
+@LIA.eval(`["main.py"]`, `none`, `python3 main.py`)
 
 Unsere Positionsschätzung nähert sich der belief-Verteilung unsere Messung an. Der Einfluß des Anfangswissens geht zurück.
 
@@ -390,9 +444,10 @@ width = 0.35
 ax.bar(np.arange(len(belief)), belief, width)
 ax.bar(np.arange(len(result)) + width, result, width)
 plt.ylim(0, 1)
-plot(fig)
+#plt.show()  
+plt.savefig('foo.png') # notwendig für die Ausgabe in LiaScript
 ```
-@Pyodide.eval
+@LIA.eval(`["main.py"]`, `none`, `python3 main.py`)
 
 Welche Probleme sehen Sie?
 
@@ -423,9 +478,10 @@ width = 0.35
 ax.bar(np.arange(len(belief)), belief, width)
 ax.bar(np.arange(len(result)) + width, result, width)
 plt.ylim(0, 1)
-plot(fig)
+#plt.show()  
+plt.savefig('foo.png') # notwendig für die Ausgabe in LiaScript
 ```
-@Pyodide.eval
+@LIA.eval(`["main.py"]`, `none`, `python3 main.py`)
 
 Was aber geschieht, wenn wir von einem unsicheren priori Wissen ausgehen?
 
@@ -436,6 +492,7 @@ belief = [0., 0., .4, .6,  0., 0., 0., 0., 0., 0.]
 
 Wie groß ist die Wahrscheinlichkeit, dass wir Segment x erreichen? Dabei berücksichtigen wir nun die verschiedenen Startpunkte, in dem wir die Abbildungsfunktion von $u$ auf alle Kombinationen anwenden.
 
+<!-- data-type="none" -->
 | Segment | Rechnung                        | Ergebnis         |
 | ------- | ------------------------------- | ---------------- |
 | 0       |                                 | nicht erreichbar |
@@ -450,7 +507,7 @@ Wie groß ist die Wahrscheinlichkeit, dass wir Segment x erreichen? Dabei berüc
 Grafisch dargestellt ergibt sich damit folgendes Bild:
 
 <!--
-style="width: 100%; min-width: 380px; max-width: 720px; display: block; margin-left: auto; margin-right: auto;"
+style="width: 100%; min-width: 380px; max-width: 920px; display: block; margin-left: auto; margin-right: auto;"
 -->
 ```ascii
              |  0  |  1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  |
@@ -477,6 +534,7 @@ $$(f * g)(n) = \sum_{k \in D} f(k) g(n - k)$$
 
 Wenn wir die Rechung also verallgemeinern können wir auf eine bestehende Implementierung zurückgreifen. Die `scipy` Bibliothek hält eine Funktion `convolve` bereit [Link](https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.convolve.html)
 
+
 ```python                          uncertainmovements.py
 import numpy as np
 from scipy import ndimage
@@ -494,9 +552,10 @@ width = 0.35
 ax.bar(np.arange(len(belief)), belief, width)
 ax.bar(np.arange(len(prior)) + prior, prior, width)
 plt.ylim(0, 1)
-plot(fig)
+#plt.show()  
+plt.savefig('foo.png') # notwendig für die Ausgabe in LiaScript
 ```
-@Pyodide.eval
+@LIA.eval(`["main.py"]`, `none`, `python3 main.py`)
 
 
 Mit jedem Prädiktionsschritt fächert die Breite der Unsicherheit entsprechend auf.
@@ -505,11 +564,11 @@ Mit jedem Prädiktionsschritt fächert die Breite der Unsicherheit entsprechend 
 
 Fassen wir nun beide Aspekte, die Vorhersage des Systemverhaltens und die Korrektur anhand der Messdaten zusammen. Aus dieser Konstallation wird deutlich, dass wir einen iterativen Prozess realisieren, in dessen Ablauf eine Zustandsvariable, hier unser Positionsindex "verfolgt" wird.
 
-| Zustand         | Bedeutung |
-|-----------------|-----------|
-| Initialisierung | Definition einer Anfangsschätzung |
+| Zustand         | Bedeutung                                                                                              |
+| --------------- | ------------------------------------------------------------------------------------------------------ |
+| Initialisierung | Definition einer Anfangsschätzung                                                                      |
 | Vorhersage      | Auf der Grundlage des unsicheren Systemverhaltens den Zustand für den nächsten Zeitschritt vorhersagen |
-| Aktualisierung  | Eintreffen einer Messung, Abbildung auf die Wahrscheinlichkeit eines Systemzustandes |
+| Aktualisierung  | Eintreffen einer Messung, Abbildung auf die Wahrscheinlichkeit eines Systemzustandes                   |
 
 
 <!--
@@ -557,9 +616,10 @@ width = 0.35
 ax.bar(np.arange(len(priori)), priori, width)
 ax.bar(np.arange(len(posteriori)) + width, posteriori, width)
 plt.ylim(0, 1)
-plot(fig)
+#plt.show()  
+plt.savefig('foo.png') # notwendig für die Ausgabe in LiaScript
 ```
-@Pyodide.eval
+@LIA.eval(`["main.py"]`, `none`, `python3 main.py`)
 
 Welche Einschränkungen sehen Sie in dem Beispiel?
 
@@ -573,6 +633,65 @@ Welche Einschränkungen sehen Sie in dem Beispiel?
 
 + Die Modalität des Sensors wurde so gewählt, dass dessen Daten einfach zu integrieren sind. Wie würden Sie die Informationen des Beschleunigungssensors berücksichtigen?
 
+## Übertragung auf kontinuierliche Systeme 
+
++ Im Allgemeinen ist der Zustandsraum so groß, dass der Bayesscher Filter-Algorithmus nicht direkt implementiert werden kann.
++ Wahrscheinlichkeiten können durch Wahrscheinlichkeitsgitter approximiert werden (grid-Verfahren). Gitter können dann aber immer noch unpraktikabel groß werden.
++ Falls Wahrscheinlichkeiten als Normalverteilungen angenommen werden, dann ergibt sich der Kalman-Filter.
+
+![ImageMatching](./image/12_Datenfusion/Normalverteilung.png)<!-- style="width: 70%;"-->
+
+> Merke: Alle Größen sind normalverteilt: Vorteil: Radikal vereinfachte Berechnung!
+
+### Kalman-Filter Grundlagen
+
+Der Kalman-Filter basiert auf zwei grundsätzlichen Gleichungen, die das Systemverhalten beschreiben - der Systemgleichung und der Messgleichung.
+
+$$
+\begin{align*}
+x_t &=a \cdot x_{t-1} + b\cdot u_t + \epsilon\\
+z_t &= c\cdot x_t + \delta 
+\end{align*}
+$$
+
+Zustand $x_t$, Steuerbefehl $u_t$ und Sensorwert $z_t$ sind eindimensional.
+
++ $a$ repräsentiert die Transformationsbedingung des Zustandes und $b$ die Eingabematrix
+
++ $\epsilon$ und $\delta$ sind Weißes Gauß'sches Rauschen (d.h. normalverteilt mit Mittelwert 0)
+
+### Kalman-Filter als Prozess
+
+1. Vorhersage-Schritt (prediction step):
+	Mit Hilfe eines Systemmodells (z.B. Bewegungsmodell) wird aus 	dem alten Zustand $x_{t-1}$ und einem Steuerbefehl $u_t$ der neue	Zustand $x_t$ geschätzt.
+
+![ImageMatching](./image/12_Datenfusion/KalmanPrediktion.png)<!-- style="width: 60%;"-->
+
+$$
+\begin{align*}
+\overline{\mu_t}&= a \mu_{t-1} + b u_t  \\
+\overline{\sigma^2_t} &= a \sigma^2_{t-1} + {\sigma^2_\epsilon} 
+\end{align*}
+$$
+
+2. Korrektur-Schritt (correction step; measurement update):
+  Aus dem vorhergesagtem Zustand $μ_t$ und der Messgleichung lässt sich ein Messwert $c\mu_t$ schätzen. Aus der Differenz des tatsächlichen Messwertes $z_t$ und des geschätzten Messwerts lässt sich Zustand $\overline{\mu_t}$ korrigieren:
+
+![ImageMatching](./image/12_Datenfusion/KalmanKorrektur.png)<!-- style="width: 60%;"-->
+
+$$
+\begin{align*}
+\mu_t&=\overline{\mu_t} + k_t(z_t-c\mu_t)\\
+k_t&=\frac{c^2\overline{\sigma^2_t}}{c^2\overline{\sigma^2_t} + \sigma^2_\delta}
+\end{align*}
+$$
+
+Wenn wir den Ablauf auf ein n-dimensionales Problem anwenden, ergibt sich folgendes Standardschaubild zum Ablauf.
+
+![ImageMatching](./image/12_Datenfusion/Kalman.png)<!-- style="width: 80%;"-->
+
+_S. Maybeck, Stochastic models, estimation, and control, 1977_
+
 ## Ausblick
 
 > Merke: Datenfusion generiert einen erheblichen Aufwand und erfordert Annahmen zur Umgebung des Systems. Gleichzeitig ist sie kein Garant für ein funktionsfähiges System!
@@ -580,20 +699,6 @@ Welche Einschränkungen sehen Sie in dem Beispiel?
 ![ImageMatching](./image/12_Datenfusion/Nahin.png)<!-- style="width: 70%;"-->
 
 _Nahin, John L., Can Two Plus Two Equal Five? 1980_
-
-## Nächstes Semester
-
-**Prinzipstudie Lieferroboter**
-
-![ImageMatching](./image/12_Datenfusion/husky.jpg)<!-- style="width: 70%;"-->
-
-![ImageMatching](./image/12_Datenfusion/Beschleunigungsdaten.png)<!-- style="width: 70%;"-->
-
-+ Fernsteuerung
-+ Navigation in einer bekannten Umgebung
-+ Erfassung potentieller Hindernisse und Reaktion darauf
-+ Evaluation der Bewegungsdaten
-
 
 ## Aufgaben
 
