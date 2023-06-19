@@ -21,7 +21,7 @@ script:   https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js
 link: https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css
 -->
 
-[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/VL_SoftwareprojektRobotik/master/11_Regelungstechnik.md#1)
+[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/12_Regelungstechnik.md#1)
 
 # Regelungstechnik
 
