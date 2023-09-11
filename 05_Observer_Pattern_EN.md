@@ -1,8 +1,8 @@
 <!--
 
-author:   Sebastian Zug & Georg Jäger
-email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  25.0.0
+author:   Georg Jäger
+email:    georg.jaeger@informatik.tu-freiberg.de
+version:  0.0.1
 language: en
 narrator: UK English Female
 
@@ -256,6 +256,9 @@ CodeRunner.send(
 Based on the course [Softwareprojekt Robotik](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/VL_SoftwareprojektRobotik/master/05_Entwurfsmuster.md#1) taught at TU Bergakademie Freiberg.
 
 --------------------------------------------------------------------------------
+<div style="text-align:center">
+![](https://iq.opengenus.org/content/images/2019/06/ob3.JPG)<!-- width="40%"  -->
+</div>
 
 **Goal of the Course**
 
@@ -269,6 +272,12 @@ Based on the course [Softwareprojekt Robotik](https://liascript.github.io/course
   + Specifically: Inheritance, STL-Containers, Smart Pointers
 
 --------------------------------------------------------------------------------
+**Resources and Further Reading**
+
++ Book: [Design Patterns: Elements of Reusable Object-Oriented Software](https://www.oreilly.com/library/view/design-patterns-elements/0201633612/)
++ Tutorial: [In-depth talk by Mike Shah at Cppcon 2022](https://www.youtube.com/watch?v=4GU2YNsHrwg)
++ Tutorial: [A shorter version by Mike Shah](https://www.youtube.com/watch?v=BKmH7m_OrPI)
+
 
 ## Overview of the Observer Design Pattern
 
@@ -283,39 +292,37 @@ With this approach, the design pattern can be used in event-driven systems, for 
 
 ## Elements and Types
 
-For implementing the Observer pattern, two interfaces (**ObserverInterface**, **ObservableInterface**) are required along with two or more concrete implementations thereof:
+For implementing the Observer pattern, two interfaces (`ObserverInterface`, `SubjectInterface`) are required along with two or more concrete implementations thereof:
 
-![UML Observer](./image/05_Entwurfsmuster/ObserverPattern.drawio.svg)<!-- align="center" width="70%"  -->
+<div style="text-align:center">
+![UML Observer](./image/05_Entwurfsmuster/ObserverPattern.drawio.svg)<!-- width="70%"  -->
+</div>
 
-**Classes**
+
 
 | Name                         | Description                                                                                                                                                                                                                                         |
 | ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **ObserverInterface**        | Interface to be implemented by the observing class. The **update()** method is called by when the observed object has changed, e.g. because new data is available. |
-| **ObservableInterface** | Interface to be implemented by an object that is to be observable. Next to **attach()** and **detach()** methods for registering and un-registering observers, the **notify()** methods is central to dispatch notifications to observers.                                       |
+| **ObserverInterface**        | Interface to be implemented by the observing class. The `update()` method is called by when the observed object has changed, e.g. because new data is available. |
+| **SubjectInterface** | Interface to be implemented by an object that is to be observable. Next to `attach()` and `detach()` methods for registering and un-registering observers, the `notify()` methods is central to dispatch notifications to observers.|
+| **ConcreteObserver** | A concrete observer is an object that implements the `ObserverInterface` and thus provides an `update()` method to be called by the `ConcreteSubject` when its state changes.|
+| **ConcreteSubject** | A concrete subject inherits methods and members of the `SubjectInterface` to notify registered observers. Once new data is generated or an event is triggered, it notifies all registered observers using the inherited `notify()` method, e.g. when the method `generate()` is called.|
 
 
 > The observed object provides a mechanism to **attach** and **detach** observers and informs them about changes. 
 > It only knows its observers through a limited common interface. :
 > The intended changes are notified in a manner to each registered observer.
 
+## How to Implement?
 
-## Implementation Variants
+Let's look at a specific example:
 
-There are two different ways to implement the Observer Pattern, both of which use a "push" notification (in contrast to "pull" mechanisms):
-
-
-| Type                         | Description                                                                                                                                                                                                                                         |
-| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Push Notification**        | In this approach, observers are informed about changes when they specifically request it. The observed object provides an interface for observers to query the current state. When the state changes, observers can query it and react accordingly. |
-| **Push-Update Notification** | In this approach, the observed object actively and automatically notifies all observers when there are changes. Observers receive the updated information directly and do not need to actively request it.  In this variant, **notify()** and **update()** need to receive an additional argument - that fixes the information received but loosens the connection between observed object and observer.|
+<div style="text-align:center">
+![UML Observer example](./image/05_Entwurfsmuster/ObserverPattern3.drawio.svg)<!-- align="center" width="70%"  -->
+</div>
 
 
-![UML Observer](./image/05_Entwurfsmuster/ObserverPattern2.drawio.svg)<!-- align="center" width="120%"  --> 
 
-## The Code
-
-```c++ observer_interface.hpp
+```cpp -observer_interface.hpp
 #ifndef OBSERVER_INTERFACE_HPP
 #define OBSERVER_INTERFACE_HPP
 
@@ -331,9 +338,9 @@ class ObserverInterface
 };
 #endif
 ```
-```c++ observable_interface.hpp
-#ifndef OBSERVABLE_INTERFACE_HPP
-#define OBSERVABLE_INTERFACE_HPP
+```cpp -subject_interface.hpp
+#ifndef SUBJECT_INTERFACE_HPP
+#define SUBJECT_INTERFACE_HPP
 
 #include <memory>
 #include <list>
@@ -342,7 +349,7 @@ class ObserverInterface
 /**
  * @brief Defines the interface for an observable object
  */
-class Observable
+class SubjectInterface
 {
   private:
     std::list<std::weak_ptr<ObserverInterface>> observers;
@@ -381,18 +388,18 @@ class Observable
 };
 #endif
 ```
-```c++ distance_sensor.hpp
+```cpp -distance_sensor.hpp
 #ifndef DISTANCE_SENSOR_HPP
 #define DISTANCE_SENSOR_HPP
 
 #include <random>
 
-#include "observable_interface.hpp"
+#include "subject_interface.hpp"
 
 /**
  *@brief An observable object could be, for instance, any data generating or processing source. For instance a sensor
  */
- class DistanceSensor : public Observable
+ class DistanceSensor : public SubjectInterface
  {
   private:
     double distance_observation;
@@ -424,7 +431,7 @@ class Observable
  };
  #endif
 ```
-```c++ printer.hpp
+```cpp -printer.hpp
 #ifndef PRINTER_HPP
 #define PRINTER_HPP
 
@@ -461,7 +468,7 @@ class Printer : public ObserverInterface
 };
 #endif
 ```
-```c++ main.cpp
+```cpp main.cpp
 #include <iostream>
 #include "printer.hpp"
 
@@ -479,6 +486,60 @@ int main(int argc, char** argv)
   return EXIT_SUCCESS;
 }
 ```
-@LIA.eval(`["observer_interface.hpp", "observable_interface.hpp", "distance_sensor.hpp", "printer.hpp", "main.cpp"]`, `g++ -Wall main.cpp observer_interface.hpp observable_interface.hpp distance_sensor.hpp printer.hpp -o a.out`, `./a.out`)
+@LIA.eval(`["observer_interface.hpp", "subject_interface.hpp", "distance_sensor.hpp", "printer.hpp", "main.cpp"]`, `g++ -Wall main.cpp observer_interface.hpp subject_interface.hpp distance_sensor.hpp printer.hpp -o a.out`, `./a.out`)
 
-## Summary
+## Implementation Variants
+
+There are different ways to implement the Observer Pattern depending on the way information is provided to the observer as well as the way observers can distinguish the source of information:
+
++ **Push Notification**
++ **Push-Update Notification**
++ **Multiple Subjects**
+
+
+### Push Notification
+
+In this approach, observers are informed about changes when they specifically request it. The observed object provides an interface for observers to query the current state. When the state changes, observers can query it and react accordingly. The required elements and their connections are shown in the following diagram.
+
+<div style="text-align:center">
+![UML Observer with update](./image/05_Entwurfsmuster/ObserverPattern.drawio.svg)<!-- align="center" width="120%"  --> 
+</div>
+
+
+### Push-Update Notification
+
+In this approach, the observed object actively and automatically notifies all observers when there are changes. Observers receive the updated information directly and do not need to actively request it.  In this variant, `notify()` and `update()` need to receive an additional argument - that fixes the information received but loosens the connection between observed object and observer.
+
+<div style="text-align:center">
+![UML Observer with update](./image/05_Entwurfsmuster/ObserverPattern2.drawio.svg)<!-- align="center" width="120%"  --> 
+</div>
+
+
+### Multiple Subjects
+
+This approach may be used together with both of the already presented variants. Instead of locally storing a reference to the `Subject`, a pointer to the `Subject` the notification is coming from is provided along with the `update()` function. This changes its signature as shown in the following diagram. 
+
+<div style="text-align:center">
+![UML Observer with update](./image/05_Entwurfsmuster/ObserverPattern3.drawio.svg)<!-- align="center" width="120%"  --> 
+</div>
+
+## Takeaways
+
+* **The Observer Pattern defines a one-to-many dependency** between objects so that when one object changes its state, all its dependents are notified and updated.
+* **The implementation of the pattern depends on the context.** Variants such as the Push, Push-Update, and Multiple Subjects are options but can be adapted further.
+* **The Observer Pattern** enables event-driven systems where sources of events are loosely coupled with consumers of events.
+
+### Quiz
+
+Which variant of the Observer Pattern was implemented by the shown code?
+
+- [(X)] Push Notification
+- [( )] Push-Update Notification
+- [( )] Multiple Subjects
+
+What dependency-relation does the Observer Pattern implement?
+
+- [( )] one-to-one
+- [( )] many-to-many
+- [(X)] one-to-many
+
