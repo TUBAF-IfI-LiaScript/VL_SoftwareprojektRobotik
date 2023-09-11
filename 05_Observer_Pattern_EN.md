@@ -260,7 +260,13 @@ Based on the course [Softwareprojekt Robotik](https://liascript.github.io/course
 ![](https://iq.opengenus.org/content/images/2019/06/ob3.JPG)<!-- width="40%"  -->
 </div>
 
-**Goal of the Course**
+**Motivation**
+
+In this tutorial, we will learn about the Observer design pattern that can be used to decouple components producing events or data (for instance sensors) from their consumers (for instance databases, monitoring dashboards, or control applications) to simplify dependency management and enable loosely coupled software structures.
+
+This design pattern is one way of implementing a **publish-subscribe** communication structure that is often used in applications continuously processing data, for instance in robotic applications.
+
+**Goal of the Tutorial**
 
 + Understand the structure of the Observer design pattern
 + Understand its application scenarios and principles it can be used for
