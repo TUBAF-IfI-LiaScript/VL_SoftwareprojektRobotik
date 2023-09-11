@@ -56,8 +56,8 @@ window.CodeRunner = {
 }
 
 //window.CodeRunner.init("wss://coderunner.informatik.tu-freiberg.de/")
-//window.CodeRunner.init("ws://127.0.0.1:8000/")
-window.CodeRunner.init("wss://ancient-hollows-41316.herokuapp.com/")
+window.CodeRunner.init("ws://127.0.0.1:8001/")
+//window.CodeRunner.init("wss://ancient-hollows-41316.herokuapp.com/")
 @end
 
 
@@ -316,7 +316,10 @@ There are two different ways to implement the Observer Pattern, both of which us
 ## The Code
 
 ```c++ observer_interface.hpp
-#pragma once 
+#ifndef OBSERVER_INTERFACE_HPP
+#define OBSERVER_INTERFACE_HPP
+
+#include <iostream>
 
 /**
  * @brief Defines the interface to be known by the observable object, that is, the subject
@@ -326,13 +329,15 @@ class ObserverInterface
   public:
     virtual void update() = 0;
 };
+#endif
 ```
-
 ```c++ observable_interface.hpp
-#pragma once 
+#ifndef OBSERVABLE_INTERFACE_HPP
+#define OBSERVABLE_INTERFACE_HPP
 
 #include <memory>
 #include <list>
+#include "observer_interface.hpp"
 
 /**
  * @brief Defines the interface for an observable object
@@ -374,10 +379,11 @@ class Observable
       }
     }
 };
+#endif
 ```
-
 ```c++ distance_sensor.hpp
-#pragma once 
+#ifndef DISTANCE_SENSOR_HPP
+#define DISTANCE_SENSOR_HPP
 
 #include <random>
 
@@ -416,14 +422,16 @@ class Observable
       this->notify();
     }
  };
+ #endif
 ```
-
 ```c++ printer.hpp
-#pragma once 
+#ifndef PRINTER_HPP
+#define PRINTER_HPP
 
 #include <iostream>
 #include <memory>
 
+#include "distance_sensor.hpp"
 /**
   *@brief A concrete observer that executes work depending on the observed object
   */
@@ -451,11 +459,10 @@ class Printer : public ObserverInterface
       }
     }
 };
+#endif
 ```
-
-
 ```c++ main.cpp
-#include "distance_sensor.hpp"
+#include <iostream>
 #include "printer.hpp"
 
 int main(int argc, char** argv)
@@ -472,7 +479,6 @@ int main(int argc, char** argv)
   return EXIT_SUCCESS;
 }
 ```
-@LIA.evalWithDebug(`["observer_interface.hpp","observable_interface.hpp","distance_sensor.hpp","printer.hpp","main.cpp"]`, `g++ -Wall main.cpp -o a.out`, `./a.out`)
-
+@LIA.eval(`["observer_interface.hpp", "observable_interface.hpp", "distance_sensor.hpp", "printer.hpp", "main.cpp"]`, `g++ -Wall main.cpp observer_interface.hpp observable_interface.hpp distance_sensor.hpp printer.hpp -o a.out`, `./a.out`)
 
 ## Summary
