@@ -1,4 +1,4 @@
-<mxfile host="Electron" modified="2023-09-12T08:36:00.906Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.3.7 Chrome/112.0.5615.204 Electron/24.5.0 Safari/537.36" etag="x6-Oi9h33TLNVoKopUN7" version="21.3.7" type="device">
+<mxfile host="Electron" modified="2023-09-12T08:40:22.446Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.3.7 Chrome/112.0.5615.204 Electron/24.5.0 Safari/537.36" etag="kgUXUhyv-LsoaR_O0hDB" version="21.3.7" type="device">
   <diagram id="00mgp1i6vqHrrqFQswAH" name="Page-1">
     <mxGraphModel dx="2284" dy="958" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -17,10 +17,10 @@
           <mxGeometry y="60" width="350" height="60" as="geometry" />
         </mxCell>
         <mxCell id="Byc3J_6M6dVSgXxMsRis-10" value="ObserverInterface" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" parent="1" vertex="1">
-          <mxGeometry x="-190" y="475" width="140" height="52" as="geometry" />
+          <mxGeometry x="-230" y="475" width="210" height="52" as="geometry" />
         </mxCell>
-        <mxCell id="Byc3J_6M6dVSgXxMsRis-11" value="+ update(void) : void" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="Byc3J_6M6dVSgXxMsRis-10" vertex="1">
-          <mxGeometry y="26" width="140" height="26" as="geometry" />
+        <mxCell id="Byc3J_6M6dVSgXxMsRis-11" value="+ update(ConcreteSubject) : void" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="Byc3J_6M6dVSgXxMsRis-10" vertex="1">
+          <mxGeometry y="26" width="210" height="26" as="geometry" />
         </mxCell>
         <mxCell id="Byc3J_6M6dVSgXxMsRis-18" value="ConcreteSubject" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" parent="1" vertex="1">
           <mxGeometry x="155" y="670" width="140" height="52" as="geometry" />
@@ -29,10 +29,10 @@
           <mxGeometry y="26" width="140" height="26" as="geometry" />
         </mxCell>
         <mxCell id="Byc3J_6M6dVSgXxMsRis-20" value="ConcreteObserver" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" parent="1" vertex="1">
-          <mxGeometry x="-190" y="670" width="140" height="52" as="geometry" />
+          <mxGeometry x="-230" y="670" width="210" height="52" as="geometry" />
         </mxCell>
-        <mxCell id="Byc3J_6M6dVSgXxMsRis-21" value="+ update(void) : void" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="Byc3J_6M6dVSgXxMsRis-20" vertex="1">
-          <mxGeometry y="26" width="140" height="26" as="geometry" />
+        <mxCell id="Byc3J_6M6dVSgXxMsRis-21" value="+ update(ConcreteSubject) : void" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="Byc3J_6M6dVSgXxMsRis-20" vertex="1">
+          <mxGeometry y="26" width="210" height="26" as="geometry" />
         </mxCell>
         <mxCell id="Byc3J_6M6dVSgXxMsRis-22" value="Extends" style="endArrow=block;endSize=16;endFill=0;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.497;entryY=1.05;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="Byc3J_6M6dVSgXxMsRis-18" target="Byc3J_6M6dVSgXxMsRis-5" edge="1">
           <mxGeometry width="160" relative="1" as="geometry">

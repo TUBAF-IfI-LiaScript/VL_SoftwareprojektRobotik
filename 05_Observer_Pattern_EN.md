@@ -251,20 +251,35 @@ CodeRunner.send(
 
 [![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/VL_SoftwareprojektRobotik/master/05_Entwurfsmuster.md#1)
 
-# The Observer Design Pattern in C++
+# The Observer Design Pattern
 
 Based on the course [Softwareprojekt Robotik](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/VL_SoftwareprojektRobotik/master/05_Entwurfsmuster.md#1) taught at TU Bergakademie Freiberg.
 
 --------------------------------------------------------------------------------
 <div style="text-align:center">
-![](https://iq.opengenus.org/content/images/2019/06/ob3.JPG)<!-- width="40%"  -->
+![](https://iq.opengenus.org/content/images/2019/06/ob3.JPG)<!-- width="60%"  -->
 </div>
+Image: [iq.opengenus.org](https://iq.opengenus.org/observer-pattern-cpp/)
 
 **Motivation**
 
 In this tutorial, we will learn about the Observer design pattern that can be used to decouple components producing events or data (for instance sensors) from their consumers (for instance databases, monitoring dashboards, or control applications) to simplify dependency management and enable loosely coupled software structures.
 
 This design pattern is one way of implementing a **publish-subscribe** communication structure that is often used in applications continuously processing data, for instance in robotic applications.
+
+**Applications**
+
+The Observer Pattern is generally used when **changes in an object need to be communicated to others**, allowing them to decide how to react to those changes.
+With this approach, the design pattern can be used in event-driven systems, for instance:
+
+| Scenario                         | Description                                                                                                                                                                                                                                         |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Sensor and IoT Applications**        | Sensors can serve as observed objects, informing various systems about changes. These systems can then react to the sensor values. |
+| **Database Updates**        | In database-based applications, multiple parts of the application can respond to changes in the database by waiting for updates. |
+| **User Interfaces and GUI Elements**        | GUI elements (observers) can react to changes in underlying data or models (observed objects) by updating their display. |
+
+
+## Preliminaries
 
 **Goal of the Tutorial**
 
@@ -284,27 +299,17 @@ This design pattern is one way of implementing a **publish-subscribe** communica
 + Tutorial: [In-depth talk by Mike Shah at Cppcon 2022](https://www.youtube.com/watch?v=4GU2YNsHrwg)
 + Tutorial: [A shorter version by Mike Shah](https://www.youtube.com/watch?v=BKmH7m_OrPI)
 
-
-## Overview of the Observer Design Pattern
-
-The Observer Pattern is generally used when **changes in an object need to be communicated to others**, allowing them to decide how to react to those changes.
-With this approach, the design pattern can be used in event-driven systems, for instance:
-
-| Scenario                         | Description                                                                                                                                                                                                                                         |
-| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Sensor and IoT Applications**        | Sensors can serve as observed objects, informing various systems about changes. These systems can then react to the sensor values. |
-| **Database Updates**        | In database-based applications, multiple parts of the application can respond to changes in the database by waiting for updates. |
-| **User Interfaces and GUI Elements**        | GUI elements (observers) can react to changes in underlying data or models (observed objects) by updating their display. |
-
 ## Elements and Types
+
 
 For implementing the Observer pattern, two interfaces (`ObserverInterface`, `SubjectInterface`) are required along with two or more concrete implementations thereof:
 
+
 <div style="text-align:center">
-![UML Observer](./image/05_Entwurfsmuster/ObserverPattern.drawio.svg)<!-- width="70%"  -->
+![](./image/05_Entwurfsmuster/ObserverPattern.drawio.svg)<!-- width="90%"  -->
 </div>
 
-
+### Explanation
 
 | Name                         | Description                                                                                                                                                                                                                                         |
 | ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -314,16 +319,14 @@ For implementing the Observer pattern, two interfaces (`ObserverInterface`, `Sub
 | **ConcreteSubject** | A concrete subject inherits methods and members of the `SubjectInterface` to notify registered observers. Once new data is generated or an event is triggered, it notifies all registered observers using the inherited `notify()` method, e.g. when the method `generate()` is called.|
 
 
-> The observed object provides a mechanism to **attach** and **detach** observers and informs them about changes. 
-> It only knows its observers through a limited common interface. :
-> The intended changes are notified in a manner to each registered observer.
 
-## How to Implement?
+
+## How to Implement? - Some C++
 
 Let's look at a specific example:
 
 <div style="text-align:center">
-![UML Observer example](./image/05_Entwurfsmuster/ObserverPattern3.drawio.svg)<!-- align="center" width="70%"  -->
+![UML Observer example](./image/05_Entwurfsmuster/ObserverPattern3.drawio.svg)<!-- align="center" width="80%"  -->
 </div>
 
 
@@ -526,14 +529,20 @@ In this approach, the observed object actively and automatically notifies all ob
 This approach may be used together with both of the already presented variants. Instead of locally storing a reference to the `Subject`, a pointer to the `Subject` the notification is coming from is provided along with the `update()` function. This changes its signature as shown in the following diagram. 
 
 <div style="text-align:center">
-![UML Observer with update](./image/05_Entwurfsmuster/ObserverPattern3.drawio.svg)<!-- align="center" width="120%"  --> 
+![UML Observer with update](./image/05_Entwurfsmuster/ObserverPattern4.drawio.svg)<!-- align="center" width="120%"  --> 
 </div>
 
 ## Takeaways
 
-* **The Observer Pattern defines a one-to-many dependency** between objects so that when one object changes its state, all its dependents are notified and updated.
-* **The implementation of the pattern depends on the context.** Variants such as the Push, Push-Update, and Multiple Subjects are options but can be adapted further.
-* **The Observer Pattern** enables event-driven systems where sources of events are loosely coupled with consumers of events.
+* The Observer Pattern defines a **one-to-many dependency** between objects so that when one object changes its state, all its dependents are notified and updated.
+* The Observer Pattern enables **event-driven systems** where sources of events are loosely coupled with consumers of events.
+* Variants of implementation are **context dependent** - the Push, Push-Update, and Multiple Subjects are options but can be adapted further.
+
+
+<div style="text-align:center">
+![](https://iq.opengenus.org/content/images/2019/06/ob3.JPG)<!-- width="60%"  -->
+</div>
+Image: [iq.opengenus.org](https://iq.opengenus.org/observer-pattern-cpp/)
 
 ### Quiz
 
