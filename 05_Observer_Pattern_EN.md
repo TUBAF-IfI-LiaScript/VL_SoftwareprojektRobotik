@@ -249,7 +249,8 @@ CodeRunner.send(
 @end
 -->
 
-[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/VL_SoftwareprojektRobotik/master/05_Entwurfsmuster.md#1)
+[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/VL_SoftwareprojektRobotik/observer_en/05_Observer_Pattern_EN.md#1)
+
 
 # The Observer Design Pattern
 
@@ -557,4 +558,3 @@ What dependency-relation does the Observer Pattern implement?
 - [( )] one-to-one
 - [( )] many-to-many
 - [(X)] one-to-many
-
