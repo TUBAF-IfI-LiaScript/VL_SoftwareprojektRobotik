@@ -17,7 +17,7 @@ import:   https://github.com/liascript/CodeRunner
 | Parameter                | Kursinformationen                                                                                                                                                                          |
 | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | **Veranstaltung:**       | `Softwareprojekt Robotik`                                                                                                                                                                     |
-| **Semester**             | `Wintersemester 2022/23`                                                                                                                                                                      |
+| **Semester**             | `Wintersemester 2023/24`                                                                                                                                                                      |
 | **Hochschule:**          | `Technische Universität Freiberg`                                                                                                                                                          |
 | **Inhalte:**             | `Konstruktoren und Operatoren`                                                                                      |
 | **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/01_OOPinC++.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/01_OOPinC++.md) |

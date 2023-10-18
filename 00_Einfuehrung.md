@@ -2,12 +2,12 @@
 
 author:   Sebastian Zug & Georg Jäger
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.1.2
+version:  0.1.3
 language: de
 narrator: Deutsch Female
 
-import:  https://raw.githubusercontent.com/liaScript/rextester_template/master/README.md
-         https://github.com/liascript/CodeRunner
+import:  https://github.com/liascript/CodeRunner
+         https://github.com/LiaTemplates/AVR8js/main/README.md#10
 
 -->
 
@@ -18,7 +18,7 @@ import:  https://raw.githubusercontent.com/liaScript/rextester_template/master/R
 | Parameter                | Kursinformationen                                                                                                                                                                          |
 | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | **Veranstaltung:**       | `Softwareprojekt Robotik`                                                                                                                                                                     |
-| **Semester**             | `Wintersemester 2022/23`                                                                                                                                                                      |
+| **Semester**             | `Wintersemester 2023/24`                                                                                                                                                                      |
 | **Hochschule:**          | `Technische Universität Freiberg`                                                                                                                                                          |
 | **Inhalte:**             | `Einführung und Abgrenzung von C++`                                                                                      |
 | **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/00_Einfuehrung.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/00_Einfuehrung.md) |
@@ -47,8 +47,7 @@ beschäftigt.
 
 ## C++ vs ...
 
-![Atom IDE Screenshot](./image/00_Einfuehrung/ObjectOrientedProgrammingLanguages.png)<!-- width="100%" -->
-*Darstellung der Entwicklung von objektorientierten/nicht-objektorientieren Programmiersprachen* [^1]
+![Atom IDE Screenshot](./image/00_Einfuehrung/ObjectOrientedProgrammingLanguages.png "Darstellung der Entwicklung von objektorientierten/nicht-objektorientieren Programmiersprachen [^1]")
 
 [^1]: Nepomuk Frädrich, Historie der objektorientierten Programmiersprachen, Wikimedia https://commons.wikimedia.org/wiki/File:History_of_object-oriented_programming_languages.svg
 
@@ -140,8 +139,7 @@ Im Vergleich zwischen C++ und C# ergeben sich folgende Unterschiede / Gemeinsamk
 
 Zur Erinnerung sei noch mal auf das Ausführungskonzept von C# verwiesen.
 
-![Atom IDE Screenshot](./image/00_Einfuehrung/CLRexectutionConcept.png)<!-- width="100%" -->
-*.NET CLR Execution Model* [^1]
+![Atom IDE Screenshot](./image/00_Einfuehrung/CLRexectutionConcept.png ".NET CLR Execution Model* [^1]")
 
 [^1]:  Youtuber "MyPassionFor.NET", .NET CLR Execution Model, https://www.youtube.com/watch?v=gCHoBJf4htg
 
@@ -165,8 +163,7 @@ public class Program
   }
 }
 ```
-@LIA.eval(`["main.cs"]`, `mono main.cs`, `mono main.exe`)
-
+@LIA.eval(`["main.cs"]`, `mcs main.cs`, `mono main.exe`)
 
 ```cpp                     OutOfRange.cpp
 #include <iostream>
@@ -283,6 +280,20 @@ int main () {
 }
 ```
 @LIA.eval(`["main.c"]`, `g++ -Wall main.c -o a.out `, `./a.out`)
+
+Vergleichen wir das Ergebnis mal mit einem (simulierten) 8-Bit Mikrocontroller
+
+```cpp helloWorldinArduino.cpp
+void setup() {
+  Serial.begin(9600);
+  Serial.print("Size of int: ");
+  Serial.println(sizeof(int));
+}
+
+void loop() {
+}
+```
+@AVR8js.sketch
 
 Eine spezifische Definition erfolgt anhand der Typen:
 
@@ -459,6 +470,10 @@ int main()
     std::string Alexander {"Alexander von Humboldt"};
     std::string uniName {"TU Bergakademie"};
     std::cout << Alexander + ", " + uniName << "\n";
+
+    for  (auto i = Alexander.begin(); i!= Alexander.end(); i++){
+          std::cout << *i;
+    }
     return 0;
 }
 ```
@@ -528,9 +543,6 @@ int main()
 ```
 @LIA.eval(`["main.c"]`, `g++ -Wall main.c -o a.out `, `./a.out`)
 
-<!--
-style="width: 50%; max-width: 860px; display: block; margin-left: auto; margin-right: auto;"
--->
 ````ascii
 
   +-------------------+
@@ -551,7 +563,7 @@ style="width: 50%; max-width: 860px; display: block; margin-left: auto; margin-r
            v
   +-------------------+
   | Ausführbare Datei |
-  +-------------------+
+  +-------------------+                                                                             .
 
 ````
 
