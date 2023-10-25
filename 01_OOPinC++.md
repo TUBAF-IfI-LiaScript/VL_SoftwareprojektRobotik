@@ -68,19 +68,14 @@ int main()
 **Elementinitialisierung:**
 
 | Umsetzung                                                                             | Beispiel                                      |
-|:------------------------------------------------------------------------------------- |:--------------------------------------------- |
+| :------------------------------------------------------------------------------------ | :-------------------------------------------- |
 | vollständige Liste in absteigender Folge (uniforme Initialisierung)                   | `Student Bernhard {"Cotta", 25, "Zillbach"};` |
 | unvollständige Liste (die fehlenden Werte werden durch Standard Defaultwerte ersetzt) | `Student Bernhard {"Cotta", 25};`             |
-| vollständig leere Liste, die zum Setzen von Defaultwerten führt                                                                                      | `Student Bernhard {};`                        |
-| Aggregierende Initialisierung (C++20)                                                                                      |   `Student alexander = { .ort = "unknown"}; `                                             |
+| vollständig leere Liste, die zum Setzen von Defaultwerten führt                       | `Student Bernhard {};`                        |
+| Aggregierende Initialisierung (C++20)                                                 | `Student alexander = { .ort = "unknown"}; `   |
 
 C++11 führte die uniformen Initialisierungssyntax ein. In C++20 wird dieser Mechanismus um die die _Designated Initialisers_, die Sie aus C kennen erweitert.
-
-Wo ist bei den _Designated Initialisers_ der Unterschied zu C? Die C++ Implementierung integriert nicht:
-
-+ eine variable Reihenfolge der Member zu initialisieren.
-+ die Member eines verschachtelten Aggregates zu initialisieren.
-+ Designated Initializers und reguläre Initialisierer zu vermischen.
+Sie ermöglicht es Entwicklern oder Programmierern, Datenelemente einer Struktur oder eines Arrays in beliebiger Reihenfolge zu initialisieren, was eine lesbarere und flexiblere Art der Initialisierung von Datenelementen darstellt.
 
 
 ### Konstruktoren
@@ -117,7 +112,7 @@ Wo ist bei den _Designated Initialisers_ der Unterschied zu C? Die C++ Implement
 ********************************************************************************
 
 Im Grunde können wir unsere drei Datenfelder im vorangegangen Beispiel mit der uniformen 
-Initialisierungssyntax oder dem Designated Initializer in vier Kombinationen 
+Initialisierungssyntax oder dem Designated Initializer in unterschiedlichen Kombinationen 
 initialisieren:
 
 ```
@@ -127,11 +122,7 @@ initialisieren:
 {}
 ```
 
-Eine differenziertere Zuordnung der Reihenfolge `{name = "Zeuner", ort =
-"Chemnitz"}` unter Auslassung von Student.alter ist nur möglich, wenn hierfür ein default Initializer vorgesehen ist.
-
-Was passiert aber bei dem Aufruf `Student alexander {"Humboldt", 23};`? Der Kompiler generiert uns implizit/automatisch passende
-Konstruktor(en), wenn Sie gar keinen eigenen Konstruktor generiert haben. Diese werden daher auch *Implicit Constructors* genannt.
+Was passiert aber bei dem Aufruf `Student alexander {"Humboldt", 23};`? Der Kompiler generiert uns implizit/automatisch passende Konstruktor(en), wenn Sie gar keinen eigenen Konstruktor generiert haben. Diese werden daher auch *Implicit Constructors* genannt.
 
 ********************************************************************************
 
@@ -215,7 +206,7 @@ Initialsierung übernehmen soll. Was halten Sie von dieser Idee?
    {{3-4}}
 ********************************************************************************
 
-**Copy-Konstruktoren**
+**Copy-Konstruktoren (Assignment Operator)**
 
 Copy-Konstruktoren gehen einen anderen Weg und aggregieren die Informationen
 unmittelbar aus einer bestehenden Instanz.
@@ -281,6 +272,18 @@ int main()
 ```
 @LIA.eval(`["main.c"]`, `g++ -Wall main.c -o a.out`, `./a.out`)
 
+|                    | Copy-Konstruktor                                                                                                        | Zuweisungs-Operator                                                                                                           |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| Idee               | Der Kopierkonstruktor ist eine Form des überladenen Konstruktors.                                                       | Der Zuweisungsoperator ist einfach ein Operator, der Datenmitgliedern, Objekten einen Wert zuweist.                           |
+|                    | Der Kopierkonstruktor initialisiert ein neues Objekt durch ein bereits vorhandenes Objekt derselben Klasse.             | Er ordnet den Wert eines Objekts einem anderen Objekt zu, das bereits erstellt wurde.                                         |
+| Speicherverwaltung | Das alte Objekt, das erstellt wurde, und das neue Objekt, das aufgerufen wird, teilen sich verschiedene Speicherplätze. | Das erste Objekt und das zweite Objekt, dem der Wert des ersten Objekts zugewiesen wird, teilen sich denselben Speicherplatz. |
+
+********************************************************************************
+
+
+   {{4-5}}
+********************************************************************************
+
 Der Verschiebungskonstruktor löst dieses Problem.
 
 ```cpp
@@ -291,7 +294,7 @@ Student::Student(Student&& other) noexcept {
 }
 ```
 
-Während das '&' eine Variable als Referenz deklariert, legt '&&' eine 'rvalue-Referenz' an. D.h. eine Referenz auf ein Objekt, dessen Lebensdauer *am Ende ist*. (Mehr dazu später...)
+Während das '&' eine Variable als Referenz deklariert, legt `&&` eine 'rvalue-Referenz' an. D.h. eine Referenz auf ein Objekt, dessen Lebensdauer *am Ende ist*. (Mehr dazu später...)
 
 ********************************************************************************
 
@@ -324,7 +327,11 @@ Student::~Student(){
 
 int main()
 {
+  // Objekt im Stack
   Student max {"Maier", 19, "Dresden"};
+  // Objekt im Heap
+  Student *gustav = new Student("Zeuner", 20, "Freiberg");
+  delete gustav;
   std::cout << "End...\n";
   return 0;
 }
@@ -349,7 +356,7 @@ Einen Destruktor explizit aufzurufen, ist selten notwendig (oder gar eine gute I
       1. std::sort greift bei den Objekten auf die "<" Operation zurück.
          Fügen Sie eine Operatorüberladung für "<" ein und sortieren Sie die Liste.
          ```cpp
-         bool Student::operator==(const Student& other){
+         bool Student::operator<(const Student& other){
            if (this->name > other.name) {
              return true;
            }else{
@@ -438,7 +445,7 @@ int main()
 
 }
 ```
-@LIA.eval(`["main.c"]`, `g++ -Wall main.c -o a.out`, `./a.out`)
+@LIA.evalWithDebug(`["main.c"]`, `g++ -Wall main.c -o a.out`, `./a.out`)
 
 Analysieren Sie die Hinweise zur Sortiermethode in der Standard-Bibliothek
 
@@ -598,7 +605,13 @@ class Example
 };
 ```
 
+> __Rule of Three/Five__: Die Dreierregel (vor C++11) bzw. Fünferregel (ab C++11) bezeichnet eine Empfehlung, die besagt, dass in einer Klasse, die eine der folgenden drei bzw. fünf Elementfunktionen definiert, auch die jeweils anderen beiden bzw. vier definiert werden sollten
+
 ********************************************************************************
+
+## Codestruktur 
+
+Header files, `includes`, `pragma once` ... am Beispiel
 
 ## Wiederholung - Gültigkeitsbereich von Variablen
 
