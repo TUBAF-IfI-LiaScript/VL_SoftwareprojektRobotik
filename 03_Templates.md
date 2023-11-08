@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.0.1
+version:  0.0.2
 language: de
 narrator: Deutsch Female
 
@@ -17,7 +17,7 @@ import:   https://github.com/liascript/CodeRunner
 | Parameter            | Kursinformationen                                                                                                                                                                             |
 | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Veranstaltung:**   | `Softwareprojekt Robotik`                                                                                                                                                                                   |
-| **Semester**         | `Wintersemester 2022/23`                                                                                                                                                                                    |
+| **Semester**         | `Wintersemester 2023/24`                                                                                                                                                                                    |
 | **Hochschule:**      | `Technische Universität Freiberg`                                                                                                                                                             |
 | **Inhalte:**         | `Template-Konzepte in C++`                                                                                                                                                |
 | **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_Softwareentwicklung/blob/master/03_Templates.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/03_Templates.md) |
@@ -35,11 +35,6 @@ import:   https://github.com/liascript/CodeRunner
 
 --------------------------------------------------------------------------------
 
-## Fragen aus der vergangenen Woche
-
-
-
---------------------------------------------------------------------------------
 ## Kurze Erinnerung
 <!--
   comment: GenericsIComparable.cs
@@ -286,9 +281,9 @@ int main()
 
 Zwei Fragen bleiben noch offen:
 
-| Frage                                                                            | Antwort                                                                                                                                                                                                                                                                                                                                                                              |
-|:---------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Muss der Templateparameter zwingend angegeben werden?                            | Nein, wenn Sie im nachfolgenden Codebeispiel die Funktion `print(int value)` entfernen, funktioniert die Codegenerierung noch immer. Der Compiler erkennt den Typen anhand des übergebenen Wertes.                                                                                                                                                                                   |
+| Frage                                                                            | Antwort                                                                                                                                                                                                                                                                                                                                                                             |
+| :------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Muss der Template-Parameter zwingend angegeben werden?                           | Nein, wenn Sie im nachfolgenden Codebeispiel die Funktion `print(int value)` entfernen, funktioniert die Codegenerierung noch immer. Der Compiler erkennt den Typen anhand des übergebenen Wertes.                                                                                                                                                                                  |
 | Ist ein Nebeneinander von Funktionstemplates und allgemeinen Funktionen möglich? | Ja, denn der Compiler versucht immer die *spezifischste* Funktion zu nutzen. Das heißt, zunächst werden alle nicht-templatisierten Funktionen in Betracht gezogen. Im zweiten Schritt werden teilweise-spezialisierte Funktionstemplates herangezogen und erst zuletzt werden vollständig templatisierte Funktionen genutzt. Untersuchen Sie das Beispiel mit `nm` und `c++filter`! |
 
 ```cpp                     FunctionTemplate.cpp
@@ -323,7 +318,7 @@ int main()
   return EXIT_SUCCESS;
 }
 ```
-@LIA.eval(`["main.c"]`, `g++ -Wall main.c -o a.out`, `./a.out`)
+@LIA.evalWithDebug(`["main.c"]`, `g++ -Wall main.c -o a.out`, `./a.out`)
 
 Insbesondere teilweise und vollständige Templatespezialisierungen ermöglichen es Ausnahmen von generellen Abbildungsregeln darzustellen.
 
@@ -335,7 +330,8 @@ void print (T value){
   std::cout << value << std::endl;
 }
 
-template <> void print<bool> (bool value){
+template <> 
+void print<bool> (bool value){
   std::cout << (value ? "true" : "false") << std::endl;
 }
 
@@ -351,7 +347,7 @@ int main()
 Damit lassen sich dann insbesondere für Templates mit mehr als einem Typparameter komplexe Regelsets aufstellen:
 
 ```cpp
-template<class T, class U>  // Generische Funktion
+template<class T, class U>  // Generisches Funktions-Template
 void f(T a, U b) {}
 
 template<class T>           // Teilweise spezialisiertes Funktions-Template
@@ -437,7 +433,7 @@ Ein Klassen-Template geht einen Schritt weiter und wendet die Template-Konzepte 
 Klassen sein oder Klassen, die zum Beispiel in der C++ Standardbibliothek
 (STL) eingebettet sind und Container für Daten definieren.
 
-Das folgende Bespiel definiert ein eigenes Klassentemplate, dass die Verwaltung einer Variablen übernimmt. Sofern ein gültiger Wert hinterlegt wurde, ist die entsprechende
+Das folgende Beispiel definiert ein eigenes Klassentemplate, dass die Verwaltung einer Variablen übernimmt. Sofern ein gültiger Wert hinterlegt wurde, ist die entsprechende
 Kontrollvariable gesetzt:
 
 ```cpp                    ClassTemplate.cpp
@@ -577,9 +573,6 @@ einem formalen Datentypen auch bei der Spezialisierung berücksichtigen lässt.
 Ja, in vollem Umfang lassen sich die Kombinationen der Typparameter partiell UND
 vollständig spezialisieren.
 
-> Merke: Funktionstemplates können nicht partiell spezialisiert werden!
-
-...aber überladen werden:
 
 ```cpp                           FunctionTemplateOverloading.cpp
 #include <iostream>
