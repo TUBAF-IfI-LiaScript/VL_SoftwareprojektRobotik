@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.0.1
+version:  0.0.2
 language: de
 narrator: Deutsch Female
 
@@ -17,7 +17,7 @@ import:   https://github.com/liascript/CodeRunner
 | Parameter            | Kursinformationen                                                                                                                                                                                           |
 |----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Veranstaltung:**   | `Softwareprojekt Robotik`                                                                                                                                                                                   |
-| **Semester**         | `Wintersemester 2022/23`                                                                                                                                                                                    |
+| **Semester**         | `Wintersemester 2023/24`                                                                                                                                                                                    |
 | **Hochschule:**      | `Technische Universität Freiberg`                                                                                                                                                                           |
 | **Inhalte:**         | `Grundlagen der Speicherverwaltung unter C++`                                                                                                                                                               |
 | **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_Softwareentwicklung/blob/master/02_SpeicherUndPointer.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/02_SpeicherUndPointer.md) |
@@ -101,103 +101,9 @@ Variablen abgelegt.
 
 > Achtung: Im Beispiel wurde keine Optimierung verwendet. Je nach Konfiguration ergeben sich hier unterschiedliche Resultate!
 
-<lia-keep>
-<table class="lia-inline lia-table">
-    <thead class="lia-inline lia-table-head">
-        <tr>
-          <th>Code</th>
-          <th>text</th>
-          <th>data</th>
-          <th>bss</th>
-          <th>dec</th>
-          <th>Bemerkung</th>
-        </tr>
-    </thead>
-        <tr class="lia-inline lia-table-row">
-          <td>
-          <code><pre 	style = "Lucida Console; font-size: 14px;font-style: normal; "> #include &lt;iostream&gt;
-
- int main(void)
- {
-     return EXIT_SUCCESS;
- } </pre></code></td>
-          <td>1918</td>
-          <td>640</td>
-          <td style = "color: red;">8/4</td>
-          <td>2566</td>
-          <td>bss hängt von der Compiler-Konfiguation ab. Mit `-m32` entsteht eine lediglich 4Byte große, nicht initialisierte Variable </td>
-        </tr>
-        <tr class="lia-inline lia-table-row">
-          <td>
-          <code><pre 	style = "Lucida Console; font-size: 14px;font-style: normal; "> #include &lt;iostream&gt;
-
- int global;
-
- int main(void)
- {
-    static int local;
-    return EXIT_SUCCESS;
- } </pre></code></td>
-          <td>1918</td>
-          <td>640</td>
-          <td style = "color: red;">16</td>
-          <td>2566</td>
-          <td> Rückgabewert, global, local = 3 x 4 Byte </td>
-        </tr>
-        <tr class="lia-inline lia-table-row">
-          <td>
-          <code><pre 	style = "Lucida Console; font-size: 14px;font-style: normal; "> #include &lt;iostream&gt;
-
- int global = 5;
-
- int main(void)
- {
-    static int local = 3;
-    return EXIT_SUCCESS;
- } </pre></code></td>
-          <td>1918</td>
-          <td style = "color: red;">648</td>
-          <td >8</td>
-          <td>2574</td>
-          <td> Initialisierte globale/statische Variablen </td>
-        </tr>
-        <tr class="lia-inline lia-table-row">
-          <td>
-          <code><pre 	style = "Lucida Console; font-size: 14px;font-style: normal; "> #include &lt;iostream&gt;
-
- int main(void)
- {
-    int local = 3;
-    return EXIT_SUCCESS;
- } </pre></code></td>
-          <td>1918</td>
-          <td >640</td>
-          <td >8</td>
-          <td>2566</td>
-          <td> Keine globalen/statischen Variablen </td>
-        </tr>
-</table>
-</lia-keep>
-
+DEMO
 
 ### Stack vs Heap
-<!--
-  comment: StackvsHeap.cpp
-  ..............................................................................
-  1. Illustriere die Bedeutung und die Unterscheidung von Heap und Stack! Verweis auf die Warnings
-  ```cpp
-  int* CreateArray(){
-     int array[] = {1,2,3,4,5};
-     return array;
-   }
-  int main()
-  {
-     int* a = CreateArray();
-     std::cout << a [2] << std::endl;
-  ...
-  ```
-  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
--->
 
 **Zunächst mal ganz praktisch, was passiert auf dem Stack?**
 
@@ -465,12 +371,17 @@ $$
 ```cpp            Stack OverFlow.cpp
 #include <iostream>
 
-int main(void)
+int recursion(int a)
 {
-    double array[1024*1024];
-    std::cout << array[1000] << std::endl;
-    std::cout << sizeof(double) << std::endl;
-    return EXIT_SUCCESS;
+        return recursion(a+1);
+}
+
+int main()
+{
+        std::cout << "Stack Overflow about to occur!\n";
+        double array[1024*1024];
+        // recursion(0);
+        return EXIT_FAILURE;
 }
 ```
 
@@ -542,7 +453,7 @@ int main() {
     
   // Funktionsaufruf
   function(ptr);
-  printf("Resultierendes i: %i\n", j);
+  printf("Resultierendes j: %i\n", j);
   function(ref);
   printf("Resultierendes i: %i\n", i);
   return 0;
