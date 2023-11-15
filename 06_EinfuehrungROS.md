@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.0.3
+version:  0.0.4
 language: de
 narrator: Deutsch Female
 
@@ -18,7 +18,7 @@ import: https://github.com/liascript/CodeRunner
 | Parameter            | Kursinformationen                                                                                                                                                                                   |
 |----------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Veranstaltung:**   | `Softwareprojekt Robotik`                                                                                                                                                                           |
-| **Semester**         | `Wintersemester 2022/23`                                                                                                                                                                            |
+| **Semester**         | `Wintersemester 2023/24`                                                                                                                                                                            |
 | **Hochschule:**      | `Technische Universität Freiberg`                                                                                                                                                                   |
 | **Inhalte:**         | `Motivation für die Verwendung von ROS`                                                                                                                                                             |
 | **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_Softwareentwicklung/blob/master/06_EinfuehrungROS.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/06_EinfuehrungROS.md) |
@@ -122,25 +122,6 @@ für die Robotikentwicklung adressiert. [^2]
 
 ********************************************************************************
 
-                                  {{4-5}}
-********************************************************************************
-
-Eine zeitliche Entwicklung wird in folgendem (zeitlich etwas veralteten) Diagramm
-deutlich:
-
-![RoboterSystem](./image/06_EinfuehrungROS/DifferentRoboticFrameworks.png "*Entwicklungspfade verschiedener Robotikframeworks* [^2]")<!-- width="80%" -->
-
-
-[^2]: Analyse und Vergleich von Frameworks für die Implementierung von Robotikanwendungen / Sebastian Zug ... Fakultät für Informatik, Otto-von-Guericke-Universität Magdeburg Zug, Sebastin ; Poltrock, Thomas ; Penzlin, Felix ; Walter, Christoph ; Hochgeschwender, Nico; 2013; [Link](http://digital.bibliothek.uni-halle.de/pe/content/titleinfo/2361399)
-
-Einen Überblick über weitere Robotikframeworks bietet zum Beispiel die Arbeit von Pericles und Mitkas:
-
-*Tsardoulias, Emmanouil & Mitkas, Pericles. (2017). Robotic frameworks, architectures and middleware comparison.*
-
-die unter folgendem Link zu finden ist [Link](https://www.researchgate.net/publication/321180717_Robotic_frameworks_architectures_and_middleware_comparison) zu finden.
-
-********************************************************************************
-
 ## ROS, was ist das?
 
 Robot Operating System (ROS) ist ein Framework für die Entwicklung von Robotern. Dabei ist ROS kein Betriebssystem sondern eine Middleware mit aufgesetzter Paketstruktur. 2020 listeten die Statistiken mehrere tausend Repositories und Pakete. ROS wird unter der BSD-Lizenz veröffentlicht und ist somit der Open-Source-Szene zuzuordnen.
@@ -165,7 +146,8 @@ Seit Beginn der Entwicklung von ROS 2.0 wird zwischen ROS 1 und ROS 2 unterschie
 Die aktuellen Versionen sind
 
 + ROS1 - _Noetic Ninjemys_ (Noetische Ninjemys Oweni) veröffentlicht im Mai 2020 und
-+ ROS2 - _Humble Hawksbill_ (bescheidene Echte Karettschildkröte) Veröffentlichung im Mai 2021.
++ ROS2 - _Humble Hawksbill_ (bescheidene Echte Karettschildkröte) Veröffentlichung im Mai 2021 (LTS Version).
++ ROS2 - _Iron Irwini_ (eiserne Irwins Schildkröte) Veröffentlichung im Mai 2023.
 
 >  In der Fachwelt für das autonome Fahren werden auch gerne zumindest Teile von ROS eingesetzt. In der Robotik nutzen mittlerweile nahezu alle Forschungsgruppen zumindest teilweise ROS. Viele Forschungsgruppen besitzen gar kein eigenes Softwareframework mehr, sondern konzentrieren sich voll auf ROS. *golem.de [Beitrag - Für wen ist ROS?](https://www.golem.de/news/robot-operating-system-was-bratwurst-bot-und-autonome-autos-gemeinsam-haben-1612-124079-4.html)*
 
@@ -249,7 +231,7 @@ sicherstellt.
                                  {{3-4}}
 *******************************************************************************
 
-4. Das Angebot an Literatur über ROS ist überschaubar, zu ROS2 existieren bisher nur wenige Publikationen. Zu empfehlen ist das Buch von Newmann "A Systematic Approach to Learning Robot Programming with ROS" oder aber von Kane "A Gentle Introduction to ROS". Letzteres ist online unter [Link](https://cse.sc.edu/~jokane/agitr/agitr-letter.pdf) zu finden.
+4. Zu empfehlen ist das Buch von Newmann "A Systematic Approach to Learning Robot Programming with ROS" oder aber von Kane "A Gentle Introduction to ROS". Letzteres ist online unter [Link](https://cse.sc.edu/~jokane/agitr/agitr-letter.pdf) zu finden. Beide beziehen sich aber auf ROS 1.
 
 *******************************************************************************
 
