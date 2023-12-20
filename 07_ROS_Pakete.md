@@ -31,14 +31,28 @@ import: https://github.com/liascript/CodeRunner
 
 ## ROS2 auf mehreren Rechnern
 
+> Frage: Was hat es mit dem folgenden Befehl auf sich, den Sie in den Übungen verwenden?
+
+```bash
+export ROS_DOMAIN_ID=5
+```
+
+              {{1-2}}
+********************************************
+
+> This number will be used as the DDS Domain ID, which is a number that identifies the DDS domain to which the nodes belong. Nodes in the same domain can communicate with each other, while nodes in different domains cannot. The default value is 0, which means that all nodes belong to the same domain. This is fine if you are running all nodes on the same machine, but if you want to run nodes on different machines, you need to use different domain IDs for each machine.
+
+
 Während die Organisation von Anwendungen über mehreren Rechnern unter ROS1 aufwändiger war, ist die Realsierung in ROS2 außerordentlich einfach.
 
-https://roboticsbackend.com/ros2-multiple-machines-including-raspberry-pi/
+vgl. Beschreibung der Einrichtung einer Verbindung zwischen einem RaspberryPi und einem Entwicklungsrechner [Link](https://roboticsbackend.com/ros2-multiple-machines-including-raspberry-pi/)
 
+
+********************************************
 
 ## Konzept
 
-ROS1 und 2 sind in Pakten organisiert, diese kann man als Container für zusammengehörigen Code betrachten.
+ROS1 und 2 sind in Paketen organisiert, diese kann man als Container für zusammengehörigen Code betrachten.
 
 Softwareengineering Ziele:
 
@@ -127,7 +141,7 @@ Für ein ganzes Set von Paketen ist deutlich mehr Aufwand erforderlich:
 
 + Voraussetzungen:
 
-  + Verfügbarkeit von System-Abhängigkeiten (abhängige Pakete) [rosdep](http://wiki.ros.org/rosdep/Tutorials/How%20to%20add%20a%20system%20dependency)
+  + Verfügbarkeit von System-Abhängigkeiten (abhängige Pakete)
   + Setzen der notwendigen Umgebungsvariablen
 
 + Eingabe: Code und Konfigurationsdateien der Pakete
@@ -141,13 +155,13 @@ Für ein ganzes Set von Paketen ist deutlich mehr Aufwand erforderlich:
 
 > **Merke:** ROS / ROS2 umfasst eine Fülle von Tools für die Organisation dieses Prozesses.
 
-## Realisierung eines eigenen Paketes
+## Realisierung eigener Pakete
 
 Wir wollen die Funktionalität der `minimal_subscriber`/`minimal_publisher` Beispiel erweitern und einen neuen Knoten implementieren, der den Zählwert nicht als Bestandteil eines strings kommuniziert sondern als separaten Zahlenwert.
 
 Sie finden den Beispielcode im Repository dieses Kurses unter [Link](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/tree/master/examples/07_ROS_Pakete/src)
 
-**Stufe 1: Individuelles Msg-Format**
+### Stufe 1: Individuelles Msg-Format 
 
 ```
 > ros2 pkg create my_msg_package --build-type ament_cmake --dependencies rclcpp std_msgs
@@ -230,7 +244,11 @@ my_msg_package/msg/MyMsg
 > ros2 topic echo /tralla
 ```
 
-**Schritt 2: Integration einer Methode**
+Einen guten Überblick zur Behandlung von eigenen Datentypen im originären Paket oder aber in einem anderen bietet:
+
+https://github.com/ros2/rosidl
+
+### Schritt 2: Integration in einen C++ Knoten
 
 Nunmehr wollen wir die neu definierte Nachricht auch in einem Node verwenden.
 Entsprechend nutzen wir den `minimal_publisher` Beispiel aus der vergangenen Vorlesung und ersetzen die `String` Message gegen unsere `My_Msg` Implementierung. Dafür muss für den Knoten eine Abhängigkeit zum Paket `my_msg_package` spezifiziert werden. Dies kann während der Inititalisierung des Paketes oder im Anschluss anhand der 'package.xml' und 'CMakeList.txt' erfolgen. Schauen Sie sich noch mal die Definition der Abhängigkeiten in unserem `my_msg_package` an.
@@ -337,7 +355,7 @@ class MinimalPublisher : public rclcpp::Node
     MinimalPublisher()
     : Node("minimal_publisher"), count_(0)
     {
-      publisher_ = this->create_publisher<my_msg_package::msg::MyMsg>("topic", 10);
+      publisher_ = this->create_publisher<my_msg_package::msg::MyMsg>("interestingTopic", 10);
       timer_ = this->create_wall_timer(
       500ms, std::bind(&MinimalPublisher::timer_callback, this));
     }
@@ -364,11 +382,99 @@ class MinimalPublisher : public rclcpp::Node
 }
 ```
 
-Nach einem weiteren Build-Prozess können wir das Paket nun im erwarteten Funktionsumfang starten.
-Einen guten Überblick zur Behandlung von eigenen Datentypen im originären Paket oder aber in einem anderen bietet:
+### Schritt 3: Integration in einen Python Knoten
 
-https://index.ros.org/doc/ros2/Tutorials/Rosidl-Tutorial/
+Die Integration in einen Python Knoten ist analog zu der C++ Implementierung. Wir nutzen das `minimal_subscriber` Beispiel aus der vergangenen Vorlesung und ersetzen die `String` Message gegen unsere `My_Msg` Implementierung. Dafür muss für den Knoten eine Abhängigkeit zum Paket `my_msg_package` spezifiziert werden. Dies kann während der Inititalisierung des Paketes oder im Anschluss anhand der 'package.xml' und 'CMakeList.txt' erfolgen. Schauen Sie sich noch mal die Definition der Abhängigkeiten in unserem `my_msg_package` an.
 
+```bash
+> ros2 pkg create --build-type ament_python my_py_subscriber --node-name py_subscriber --dependencies rclpy std_msgs my_msg_package
+going to create a new package
+package name: my_py_subscriber
+destination directory: /home/sebastian/Desktop/Vorlesungen/WiSe_2023-24/VL_SoftwareprojektRobotik/examples/07_ROS_Pakete/src
+package format: 3
+version: 0.0.0
+description: TODO: Package description
+maintainer: ['sebastian <sebastian.zug@informatik.tu-freiberg.de>']
+licenses: ['TODO: License declaration']
+build type: ament_python
+dependencies: ['rclpy', 'std_msgs', 'my_msg_package']
+node_name: py_subscriber
+creating folder ./my_py_subscriber
+creating ./my_py_subscriber/package.xml
+creating source folder
+creating folder ./my_py_subscriber/my_py_subscriber
+creating ./my_py_subscriber/setup.py
+creating ./my_py_subscriber/setup.cfg
+creating folder ./my_py_subscriber/resource
+creating ./my_py_subscriber/resource/my_py_subscriber
+creating ./my_py_subscriber/my_py_subscriber/__init__.py
+creating folder ./my_py_subscriber/test
+creating ./my_py_subscriber/test/test_copyright.py
+creating ./my_py_subscriber/test/test_flake8.py
+creating ./my_py_subscriber/test/test_pep257.py
+creating ./my_py_subscriber/my_py_subscriber/py_subscriber.py
+```
+
+> In dem wir den Node-Namen explizit angeben, wird dieser auch in der `setup.py` Datei integriert. Dies ist notwendig, da Python Pakete nicht über einen `main` Eintrag gestartet werden.
+
+```python   setup.py
+    entry_points={
+        'console_scripts': [
+            'py_subscriber = my_py_subscriber.py_subscriber:main'
+        ],
+    },
+```
+
+Die eigentliche Implementierung gestaltet sich dann wie folgt:
+
+```python   py_subscriber.py
+import rclpy
+from rclpy.node import Node
+
+from std_msgs.msg import String
+from my_msg_package.msg import MyMsg  # Include the new message type
+
+class MinimalSubscriber(Node):
+
+    def __init__(self):
+        super().__init__('minimal_subscriber')
+        self.subscription = self.create_subscription(
+            MyMsg,                   # Adapting message type
+            '/interestingTopic',     # Adapting topic name
+            self.listener_callback,
+            10)
+        self.subscription  # prevent unused variable warning
+
+    def listener_callback(self, msg):
+        self.get_logger().info(f'I heard: "{msg.counter} - {msg.comment}')
+
+
+def main(args=None):
+    rclpy.init(args=args)
+
+    minimal_subscriber = MinimalSubscriber()
+
+    rclpy.spin(minimal_subscriber)
+    minimal_subscriber.destroy_node()
+    rclpy.shutdown()
+
+if __name__ == '__main__':
+    main()
+```
+
+Werfen wir noch einen kurzen Blick auf die Abhängigkeiten, die `colcon` nunmehr erkennt.
+
+```text @plantUML.png
+@startuml
+digraph graphname {
+  "my_tutorial_package";
+  "my_py_subscriber";
+  "my_msg_package";
+  "my_tutorial_package" -> "my_msg_package" [color="#0000ff:#ff0000"];
+  "my_py_subscriber" -> "my_msg_package" [color="#0000ff:#ff0000"];
+}
+@enduml
+```
 
 ## Aufzeichnen des Prozesses
 
@@ -440,31 +546,6 @@ Unter anderem sollten zwei Fehlkonfigurationen vermieden werden:
 + Wenn zu viele Daten aggregiert wurden, wird die Performanz des Systems möglicherweise überstrapaziert. Die Bandbreite der Schreiboperationen auf dem Speichermedium muss die Datenrate entsprechend abdecken.
 
 Ein Lösungsansatz ist die zeitliche Filterung der Informationen, in dem zum Beispiel nur jede 10te Nachricht gespeichert wird. Dies wiederum kann dann aber einen Einfluss auf das Verhalten des Algorithmus haben!
-
-An dieser Stelle wird schon deutlich, wie der unter ROS1 erreichte
-Komfort noch nicht unter ROS2 realisiert ist. Das `rosbag` Tool unter ROS1 erreicht
-ein weit größeres Spektrum an Konfigurierbarkeit.
-
-!?[rosbagInfo](https://www.youtube.com/watch?time_continue=70&v=pwlbArh_neU&feature=emb_logo)<!-- height="500px" width="800px" -->
-
-Beispiel des Einsatzes eines Bagfiles anhand der Scan-Daten im deutschen Museum in München [Link](https://google-cartographer-ros.readthedocs.io/en/latest/demos.html).
-Laden Sie einen zugehörigen Datensatz mittels
-
-```
-wget -P ~/Downloads https://storage.googleapis.com/cartographer-public-data/bags/backpack_2d/b2-2016-04-05-14-44-52.bag
-```
-
-auf Ihren Rechner. Es handelt sich dabei um ein ROS1-bagfile!
-
-1. Visualisierung der Dateninhalte mittels `rqt_bag`. Zuvor sollten Sie die notwendigen `rqt_bag_plugins` installieren.
-2. Starten des Bagfiles unter `ros2` mittels eines Plugins für die Konvertierung
-
-```
-> source /opt/ros/noetic/setup.zsh
-> source /opt/ros/foxy/setup.zsh
-ROS_DISTRO was set to 'noetic' before. Please make sure that the environment does not mix paths from different distributions.
-> ros2 bag play -s rosbag_v2 b2-2016-04-05-14-44-52.bag
-```
 
 ## Steuerung des Startprozesses
 
@@ -602,7 +683,7 @@ export RCUTILS_COLORIZED_OUTPUT=0  # 1 for forcing it or, on Windows:
 rcutils_logging_set_logger_level("logger_name", RCUTILS_LOG_SEVERITY_DEBUG);
 ```
 
-Das Loggingsystem unter ROS2 bildet folgende Makros ab, die in der  rclcpp API enthalten sind ([Link](http://docs.ros2.org/latest/api/rclcpp/logging_8hpp.html)). Dabei zielt die Neuimplementierung aber darauf ab, ein Interface zu definieren, das es erlaubt Logging-Bibliotheken allgemein einzubetten:
+Das Loggingsystem unter ROS2 bildet folgende Makros ab, die in der rclcpp API enthalten sind ([Link](http://docs.ros2.org/latest/api/rclcpp/logging_8hpp.html)). Dabei zielt die Neuimplementierung aber darauf ab, ein Interface zu definieren, das es erlaubt Logging-Bibliotheken allgemein einzubetten:
 
 | Makro                 | Signatur                | Bedeutung                                                                                          |
 | --------------------- | ----------------------- | -------------------------------------------------------------------------------------------------- |
@@ -640,8 +721,8 @@ Das wichtigste Konzept dieses Dokuments ist, dass ein verwalteter Knoten eine be
 
 ROS2 definiert vier Zustände `Unconfigured`, `Inactive`, `Active`, `Finalized` und insgesamt 7 Transitionen.
 
-![STL Container](./image/07_ROSPakete/life_cycle_sm.png)<!-- width="100%" -->
-Autor: Geoffrey Biggs Tully Foote, https://design.ros2.org/articles/node_lifecycle.html
+![STL Container](./image/07_ROSPakete/life_cycle_sm.png "Autor: Geoffrey Biggs Tully Foote, https://design.ros2.org/articles/node_lifecycle.html")
+
 
 Für die Interaktion mit einem *managed node* stehen Ihnen unterschiedlichen Möglichkeiten offen. Auf der Kommandozeile kann zwischen den States mittels
 
@@ -649,4 +730,4 @@ Für die Interaktion mit einem *managed node* stehen Ihnen unterschiedlichen Mö
 ros2 lifecycle set /nodename X   #State Id
 ```
 
-gewechselt werden. Komfortabler ist die Spezifikation in den launch-Files. Ein Beispiel für die entsprechend Realisierung findet sich unter folgendem [Link](https://www.stereolabs.com/docs/ros2/lifecycle/#the-life-cycle-state-machine)
+gewechselt werden. Komfortabler ist die Spezifikation in den launch-Files.

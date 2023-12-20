@@ -243,6 +243,8 @@ https://fkromer.github.io/awesome-ros2/
 
 **Node** - Ein Knoten ist Teilnehmer im ROS-Graphen. ROS-Knoten verwenden eine ROS-Clientbibliothek, um mit anderen Knoten zu kommunizieren. Knoten können ein *Subject* veröffentlichen oder abonnieren. *Nodes* können auch einen Dienst bereitstellen oder verwenden. Einem Knoten sind konfigurierbare Parameter zugeordnet. Verbindungen zwischen Knoten werden durch einen verteilten Erkennungsprozess hergestellt. Knoten können sich im selben Prozess, in unterschiedlichen Prozessen oder auf unterschiedlichen Rechnern befinden.
 
+**Messages** - To enable the communication of data packets between the nodes, their structure and content format must be specified. Which data formats are used, where is the sending sensor located, which units of measurement represent the information? ROS defines abstract message types for this purpose.
+
 ![RoboterSystem](./image/06_EinfuehrungROS/rosgraph.png)<!-- width="100%" -->
 *Screenshot der Knoten eines umfangreicheren Projektes. Die Ellipsen repräsentieren die Knoten, die rechteckigen Boxen die "Datenkanäle" dazwischen.*
 
@@ -666,8 +668,7 @@ Auf der ROS2 Seite nutzen wir nun das [image_tools](https://github.com/ros2/demo
 #ros2 run image_tools showimage   # zum testen
 ```
 
-Im folgenden wird ein Knoten aus dem Paket [opencv_app](http://wiki.ros.org/opencv_apps) aktiviert, dass für die Erkennung der Gesichter verantwortlich ist. Diese ist
-bisher nicht für ROS2 verfügbar.
+Im folgenden wird ein Knoten aus dem Paket [opencv_app](http://wiki.ros.org/opencv_apps) aktiviert, dass für die Erkennung der Gesichter verantwortlich ist. Diese war für die verwendete Version `foxy` im November 2021 nicht für ROS2 verfügbar.
 
 ```bash    ConsoleD
 # ROS1_Shell die ein Kamerasignal erfasst
