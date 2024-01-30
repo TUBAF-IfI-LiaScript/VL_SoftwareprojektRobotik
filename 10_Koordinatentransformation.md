@@ -2,12 +2,11 @@
 
 author:   Sebastian Zug & Georg Jäger
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.0.4
+version:  0.0.6
 language: de
 narrator: Deutsch Female
 
 import:  https://github.com/liascript/CodeRunner
-         https://raw.githubusercontent.com/liaTemplates/PyScript/main/README.md
 
 script:   https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js
           https://d3js.org/d3-random.v2.min.js
@@ -23,7 +22,7 @@ script:   https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js
 | Parameter            | Kursinformationen                                                                                                                                                                           |
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Veranstaltung:**   | `Softwareprojekt Robotik`                                                                                                                                                                   |
-| **Semester**         | `Wintersemester 2022/23`                                                                                                                                                                    |
+| **Semester**         | `Wintersemester 2023/24`                                                                                                                                                                    |
 | **Hochschule:**      | `Technische Universität Freiberg`                                                                                                                                                           |
 | **Inhalte:**         | `Umsetzung von ROS Paketen`                                                                                                                                                 |
 | **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_Softwareentwicklung/blob/master/10_Koordinatentransformation.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/10_Koordinatentransformation.md) |
@@ -33,7 +32,57 @@ script:   https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js
 
 --------------------------------------------------------------------------------
 
-## Motivation 
+## Einordnung 
+
+... wir generieren ein "rohes" Distanzmesssignal und wollen dies weiterverwenden.
+Dafür konfigurieren wir eine Verarbeitungskette aus den nachfolgenden Elementen.
+
+<!--
+style="width: 100%; max-width: 720px; display: block; margin-left: auto; margin-right: auto;"
+-->
+```ascii
+
+  Type A                     Type C             Type A                     Type C         
+  n Samples +-------------+  n Samples          n Samples +-------------+  m Samples          
+       ---->| Trans-      |---->                     ---->| Filterung   |---->
+            | formation   |                          ---->|             |
+            +-------------+                     (Type B)  +-------------+
+                                                n Samples      n ≥ m
+
+  Type A                     Type C             Type A                     Type C         
+  n Samples +-------------+  n Samples          n Samples +-------------+  m Samples          
+       ---->| Detektion   |---->                     ---->| Feature     |---->
+            |             |---->                          | extraction  |
+            +-------------+  Fehler                       +-------------+
+                             Validität                         n ≥ m
+                                                  size(Type A) ≫ size(Type B)
+```         
+
+Beispiele für Datenvorverarbeitung
+
++ Aufbereitung der Daten, Standardisierung
++ zeitliche Anpassung
++ Fehler, Ausreißer und Rauschen erkennen und behandeln,
++ Integration oder Differenzierung
++ Feature-Extraktion (Gesichter auf Positionen, Punktewolken auf Linien, Flächen, Objekte)
+
+Das ganze fügt sich dann ein in die allgemeine Verarbeitungskette von Daten, die
+die Abbildung von Rohdaten auf Informationen, Features und letztendlich auf Entscheidungen realisiert. Dabei beruht dieser Fluss nicht auf den Daten eines
+einzigen Sensors sondern kombiniert verschiedene (multimodale) Inputs.
+
+<!--
+style="width: 100%; max-width: 900px; display: block; margin-left: auto; margin-right: auto;"
+-->
+```ascii    
+             Verständnis                     Verständnis            Verständnis
+  Rohdaten -----------------> Informationen --------------> Wissen ------------------> Weisheit
+             von Relationen                  von Mustern            von Prinzipien
+```
+
+> Im Rahmen dieser Veranstaltung fokussieren wir uns auf die Umsetzung der Koordinatentransformation.
+
+
+## Motivation und mathematische Darstellung
 
 --{{0}}--
 Roboter spannen mit ihren Sensoren und Aktoren jeweils eigene Koordinatensysteme auf. Diese dienen als Bezug für die Darstellung von erfassten Hindernissen, intendierten Wegpunkten oder Orientierungen im 2 oder 3D Raum.
@@ -42,14 +91,14 @@ Roboter spannen mit ihren Sensoren und Aktoren jeweils eigene Koordinatensysteme
 
 > Beispiel 2: Ein stationärer Manipulator erfasst alle Objekte auf der Arbeitsfläche in dem er eine Kamera über diese bewegt. Entsprechend werden alle Objekte im Koordinatensystem der Kamera beschrieben. Für die Planung der Greifoperation müssen wir deren Lage aber auf das Basiskoordinatensystem des Roboters überführen.
 
-![ImageMatching](image/10_Sensordatenhandling/MWChallengePoster_medium.jpg "Visualisierung der Aufgabenstellung der _Autonomous Robot Manipulation Challenge_ beim RoboCup 2022 [^RoboCup]")<!-- style="width: 70%;"-->
+![ImageMatching](image/10_Koordinatentransformation/MWChallengePoster_medium.jpg "Visualisierung der Aufgabenstellung der _Autonomous Robot Manipulation Challenge_ beim RoboCup 2022 [^RoboCup]")<!-- style="width: 70%;"-->
 
 
 ### Mathematische Beschreibung 
 
 Entsprechend beziehen sich Punkte als Vekoren $\textbf{p}=[x, y]$ im Raum immer auf ein Bezugskoordinatensystem $A$, dass bei deren Spezifikation als Index angegeben wird $\textbf{p}_A$.
 
-![ImageMatching](image/10_Sensordatenhandling/MultipleCoordSystems.svg "Darstellung eines Punktes in verschiedenen kartesischen Koordinatensystemen $A$, $B$, $C$, $D$")<!-- style="width: 50%;"-->
+![ImageMatching](image/10_Koordinatentransformation/MultipleCoordSystems.svg "Darstellung eines Punktes in verschiedenen kartesischen Koordinatensystemen $A$, $B$, $C$, $D$")<!-- style="width: 50%;"-->
 
 ### Relevante Transformationen
 
@@ -66,13 +115,13 @@ $$
 \end{align*} 
 $$
 
-![ImageMatching](image/10_Sensordatenhandling/Translation.svg "Translation von kartesischen Koordinatensystemen $A$ und $B$")<!-- style="width: 50%;"-->
+![ImageMatching](image/10_Koordinatentransformation/Translation.svg "Translation von kartesischen Koordinatensystemen $A$ und $B$")<!-- style="width: 50%;"-->
 
 2. Rotation
 
     Bisher haben wir lediglich Konzepte der translatorischen Transformation betrachtet. Rotationen um den Winkel $\varphi$ lassen sich folgendermaßen abbilden.
 
-    ![ImageMatching](image/10_Sensordatenhandling/Rotation.svg "Rotation von kartesischen Koordinatensystemen $A$ und $B$")<!-- style="width: 20%;"-->
+    ![ImageMatching](image/10_Koordinatentransformation/Rotation.svg "Rotation von kartesischen Koordinatensystemen $A$ und $B$")<!-- style="width: 20%;"-->
 
 
     $$ x_B = x_A\cos\varphi + y_A\sin\varphi,$$
@@ -94,7 +143,7 @@ $$
 
 ### Homogene Koordinaten
 
-![ImageMatching](image/10_Sensordatenhandling/HomogenouseCoords.svg "Überlagerung von Translation und Rotation von kartesischen Koordinatensystemen $A$ und $B$")<!-- style="width: 35%;"-->
+![ImageMatching](image/10_Koordinatentransformation/HomogenouseCoords.svg "Überlagerung von Translation und Rotation von kartesischen Koordinatensystemen $A$ und $B$")<!-- style="width: 35%;"-->
 
 Fassen wir nun Translation und Rotation zusammen, so können wir eine 2D Koordinatentransformation mit 
 
@@ -218,7 +267,7 @@ $$
 
 2. Rotation
 
-Analog ergibt sich die Umkehrung der Rotation mit $\varphi$ kann über einen entgegengesetzte Rotation mit $-\varphi$ umgesetzt werden. In homogenen Koordinaten gilt:
+Analog ergibt sich die Umkehrung der Rotation mit $\varphi$ über einen entgegengesetzte Rotation mit $-\varphi$ umgesetzt werden. In homogenen Koordinaten gilt:
 
 $$
 \begin{align*}
@@ -319,7 +368,7 @@ Der grüne Vektor markiert die gesuchte Größe - die Abbildung des Hindernisses
 
 Die nachfolgende Berechnung zeigt, wie die zuvor gezeigten Koordinatentransformationen für die Abbildung des Punktes F genutzt werden können.
 
-```python @PyScript.repl
+```python    coordinates.py
 import numpy as np
 from numpy.linalg import inv
  
@@ -340,6 +389,7 @@ Xi_OB = np.dot(T_OB, R_OB)
 p_O= Xi_OB.dot(np.append(p_A, 1))
 print(p_O[0:2])
 ```
+@LIA.eval(`["main.py"]`, `none`, `python3 main.py`)
 
 > Aufgabe: Berechnen Sie die die Koordinatenangabe im System $B$
 
@@ -347,7 +397,7 @@ print(p_O[0:2])
 
 ![RoboterSystem](image/10_Koordinatentransformation/Coord_planes_color.svg.png "3D Koordinatensystem")<!--  style="width:50%; max-width:300px; min-width:600px"-->
 
-> Merke: _The Axes display shows a set of axes, located at the origin of the target frame - __red - x green - y blue -z ___
+> Merke: _The Axes display shows a set of axes, located at the origin of the target frame - __red - x green - y blue -z__
 
 Die entsprechende translatorische Transformation in homogenen Koordinaten ergibt sich nun mit einer erweiterten Matrix:
 
@@ -391,9 +441,7 @@ Negativ:
 
 Die Handhabung der unterschiedlichen Koordinatensystem in ROS ist über das `tf`-verteitle System gelöst.
 
-![RoboterSystem](image/10_Sensordatenhandling/Coordsystems.png)<!--  style="width:60%; max-width:300px; min-width:600px"-->
-
-_Darstellung verschiedener Koordinatensysteme innerhalb eines Roboterszenarios (Autor Bo im ROS Forum unter [answers.ros.org](https://answers.ros.org/question/265846/how-to-build-tf-topic-frame-tree-for-hector_slam-or-gmapping/))_
+![RoboterSystem](image/10_Koordinatentransformation/Coordsystems.png "Darstellung verschiedener Koordinatensysteme innerhalb eines Roboterszenarios (Autor Bo im ROS Forum unter [answers.ros.org](https://answers.ros.org/question/265846/how-to-build-tf-topic-frame-tree-for-hector_slam-or-gmapping/))")
 
 ROS stellt unter dem namen _tf2_ mehrere Pakete bereit, um Transformationen zu handhaben. Um die Abbildung von Daten aus einem Koordinatensystem in ein anderes zu realsieren müssen diese in einer Baumstruktur verbunden sein. Ausgehend davon können wir eine Information aus einem _Frame_ (Knoten im Baum) in einen anderen überführen.
 
@@ -401,7 +449,7 @@ ROS stellt unter dem namen _tf2_ mehrere Pakete bereit, um Transformationen zu h
 + mathematische Darstellung der Translations-/Rotationsparameter
 + ggf. Kommunikation von Änderungen der Translation-/Rotationsparameter
 
-![RoboterSystem](image/10_Sensordatenhandling/ROS_tf_tree.png)<!--  style="width:60%; max-width:300px; min-width:600px"-->
+![RoboterSystem](image/10_Koordinatentransformation/ROS_tf_tree.png "Beispielhafter TF Baum")
 
 Grundlage dieser Lösung ist die Integration einer Frame-ID in jeden Datensatz. Jede `sensor_msgs` enthält entsprechend einen header, der folgendermaßen strukturiert ist.
 
@@ -426,7 +474,8 @@ sein. Die Unterscheidung ist aus Fehlertoleranzgründen wichtig, robuste Systeme
 ### Beispiel 1 Laserscanner
 
 ```bash    RunLaserScanner
-ros2 run urg_node urg_node_driver --ros-args --params-file ./examples/07_ROS_Pakete/startupHokuyo/config/hokuyo_config.yml
+ros2 run urg_node urg_node_driver --ros-args 
+      --params-file ./examples/07_ROS_Pakete/startupHokuyo/config/hokuyo_config.yml
 ```
 
 ```bash 
@@ -446,23 +495,24 @@ urg_node:
 ```
 
 ```bash  StartTransformPublisher
-ros2 run tf2_ros static_transform_publisher 1 0 0 0 0 0 laser world
-[WARN] [1672660636.223769001] []: Old-style arguments are deprecated; see --help for new-style arguments
-[INFO] [1672660636.231239054] [static_transform_publisher_VY5dCRuDnDi6Md07]: Spinning until stopped - publishing transform
+# deprecated version
+# ros2 run tf2_ros static_transform_publisher 1 0 0 0 0 0 laser world
+ros2 run tf2_ros static_transform_publisher --x 1 --y 0 --z 0 
+                                            --yaw 0 --pitch 0 --roll 0 
+                                            --frame-id laser --child-frame-id world     
+[INFO] [1706605092.505727237] [static_transform_publisher_Bb8HJhELdkMTNFcb]: Spinning until stopped - publishing transform
 translation: ('1.000000', '0.000000', '0.000000')
 rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
 from 'laser' to 'world'
 ```
 
-![RoboterSystem](image/10_Sensordatenhandling/LaserScannerWithCoordinateTransformation.png "Screenshot aus rviz2 mit aktivierten TF Knotendarstellungen")<!--  style="width:80%; max-width:300px; min-width:600px"-->
-
-> **Aufgabe** Ermitteln Sie die neue Konfiguration der Argumentenübergabe für die Translations- und Rotationselemente in ROS Humble!
+![RoboterSystem](image/10_Koordinatentransformation/LaserScannerWithCoordinateTransformation.png "Screenshot aus rviz2 mit aktivierten TF Knotendarstellungen")
 
 ### Beispiel 2 - Turtle
 
 Dabei werden die Relationen zwischen den Koordinatensystemen über eigene Publisher und Listener ausgetauscht. Am Ende bildet jede Applikation eine Baumstruktur aus den Transformationen zwischen den Frames. Isolierte Frames können entsprechend nicht in Verbindung mit anderen gesetzt werden.
 
-![RoboterSystem](image/10_Sensordatenhandling/view_frames.png)<!--  style="width:60%; max-width:300px; min-width:600px"-->
+![RoboterSystem](image/10_Koordinatentransformation/view_frames.png)
 
 _Beispielhafte Darstellung des tf-Trees eines ROS-Turtle Szenarios, das zwei Turtle umfasst. Die individuellen Posen werden jeweils gegenüber den globalen `world`-Frame beschrieben._
 
@@ -537,7 +587,7 @@ Die Konfiguration der Transformationen lässt sich auch abstrakt anhand konkrete
 3. Relationen anhand sog. Joints 
 4. integrierte Sensoren/Aktoren 
 
-Das Unified Robot Description Format (URDF) ist eine Variante davon. Auf der Basis eines XML formates können die oben genannten Parameter beschrieben werden. Die Beschreibungssprache XACO erweitert die darstellbaren Inhalte und ermöglicht insbesondere die Referenzierung von Sub-Dokumenten.
+Das Unified Robot Description Format (URDF) ist eine Variante davon. Auf der Basis eines XML-Formates können die oben genannten Parameter beschrieben werden. Die Beschreibungssprache XACO erweitert die darstellbaren Inhalte und ermöglicht insbesondere die Referenzierung von Sub-Dokumenten.
 
 ```xml
 <?xml version="1.0"?>
@@ -568,10 +618,10 @@ Das Unified Robot Description Format (URDF) ist eine Variante davon. Auf der Bas
 ```
 
 Das gezeigt Listing 
-[example.urdf](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/tree/master/examples/10_Sensordatenhandling/urdf_example/example.urdf) finden Sie im Projektrepository.
+[example.urdf](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/tree/master/examples/10_Koordinatentransformation/urdf_example/example.urdf) finden Sie im Projektrepository.
 
 ```
-ros2 launch urdf_tutorial display.launch.py model:=examples/10_Sensordatenhandling/urdf_example/example.urdf
+ros2 launch urdf_tutorial display.launch.py model:=examples/10_Koordinatentransformation/urdf_example/example.urdf
 ```
 
 Ein umfangreicheres Modell lässt sich zum Beispiel nach dem Aufruf von  
@@ -581,5 +631,3 @@ ros2 launch urdf_tutorial display.launch.py model:=`ros2 pkg prefix --share urdf
 ```
 
 evaluieren.
-
-

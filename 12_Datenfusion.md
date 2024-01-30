@@ -12,7 +12,7 @@ import: https://github.com/liascript/CodeRunner
 
 -->
 
-[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/VL_SoftwareprojektRobotik/master/10_Koordinatentransformation.md#1)
+[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/VL_SoftwareprojektRobotik/master/12_Datenfusion.md#1)
 
 
 # Datenfusion
@@ -20,19 +20,16 @@ import: https://github.com/liascript/CodeRunner
 | Parameter            | Kursinformationen                                                                                                                                                                                                     |
 | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Veranstaltung:**   | `Softwareprojekt Robotik`                                                                                                                                                                   |
-| **Semester**         | `Wintersemester 2022/23`                                                                                                                                                                    |
+| **Semester**         | `Wintersemester 2023/24`                                                                                                                                                                    |
 | **Hochschule:**      | `Technische Universität Freiberg`                                                                                                                                                                                     |
 | **Inhalte:**         | `Grundlegende Begriffe der Regelungstechnik`                                                                                                                                                                                             |
-| **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_Softwareentwicklung/blob/master/13_Datenfusion.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/13_Datenfusion.md) |
+| **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_Softwareentwicklung/blob/master/12_Datenfusion.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/12_Datenfusion.md) |
 | **Autoren**          | @author                                                                                                                                                                                                               |
 
 ![](https://media.giphy.com/media/665kTzjPTFGL9J2fNf/giphy-downsized.gif)
 
 --------------------------------------------------------------------------------
 
-
-
-Eine interaktive Version des Kurses finden Sie unter [Link](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/SoftwareprojektRobotik/master/13_Datenfusion.md)
 
 **Zielstellung der heutigen Veranstaltung**
 

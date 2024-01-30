@@ -21,7 +21,7 @@ script:   https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js
 link: https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css
 -->
 
-[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/12_Regelungstechnik.md#1)
+[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/11_Regelungstechnik.md#1)
 
 # Regelungstechnik
 
@@ -29,7 +29,7 @@ link: https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css
 | Parameter            | Kursinformationen                                                                                                                                                                                                     |
 | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Veranstaltung:**   | `Softwareprojekt Robotik`                                                                                                                                                                   |
-| **Semester**         | `Wintersemester 2022/23`                                                                                                                                                                    |
+| **Semester**         | `Wintersemester 2023/24`                                                                                                                                                                    |
 | **Hochschule:**      | `Technische Universität Freiberg`                                                                                                                                                                                     |
 | **Inhalte:**         | `Grundlegende Begriffe der Regelungstechnik`                                                                                                                                                                                             |
 | **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_Softwareentwicklung/blob/master/11_Regelungstechnik.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/11_Regelungstechnik.md) |
