@@ -14,13 +14,13 @@ import: https://github.com/liascript/CodeRunner
 
 [![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/SebastianZug/VL_SoftwareprojektRobotik/master/08_ROS_Kommunikation.md#1)
 
-# ROS2 Kommunikationsmethoden
+# ROS2 Kommunikation
 
 
 | Parameter            | Kursinformationen                                                                                                                                                                           |
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Veranstaltung:**   | `Softwareprojekt Robotik`                                                                                                                                                                   |
-| **Semester**         | `Wintersemester 2022/23`                                                                                                                                                                    |
+| **Semester**         | `Wintersemester 2023/24`                                                                                                                                                                    |
 | **Hochschule:**      | `Technische Universität Freiberg`                                                                                                                                                           |
 | **Inhalte:**         | `ROS Kommunikationsprinzipien`                                                                                                                                                 |
 | **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_Softwareentwicklung/blob/master/08_ROS_Kommunkation.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/08_ROS_Kommunkation.md) |
@@ -31,7 +31,7 @@ import: https://github.com/liascript/CodeRunner
 --------------------------------------------------------------------------------
 
 
-# Was ist eigentlich eine Middleware?
+## Was ist eigentlich eine Middleware?
 
                          {{0-1}}
 ********************************************************************************
@@ -85,7 +85,7 @@ Der DDS Standard wurde durch verschiedene Unternehmen und Organisationen unter d
                          {{2-3}}
 ********************************************************************************
 
-ROS2 hat als Default Lösung die Implementierung `rmw_fastrtps_cpp`, die von der Firma eProsima unter einer Appache 2.0 Lizenz verbreitet wird, integriert. Alternative Umsetzungen lassen sich anhand der unterstützten Hardware, des Overheads für den Nachrichtenaustausch bzw. anhand der Dauer für die Nachrichtenverbreitung abgrenzen. (vgl [A performance comparsion of OpenSplice and RTI implementations](https://www.researchgate.net/publication/271550363_Data_Distribution_Service_DDS_A_performance_comparison_of_OpenSplice_and_RTI_implementations)). Daher sieht ROS2 ein abstraktes Interface vor, dass ein Maximum an Austauschbarkeit gewährleisten soll.
+ROS2 hat als Default Lösung die Implementierung `rmw_fastrtps_cpp`, die von der Firma eProsima unter einer Apache 2.0 Lizenz verbreitet wird, integriert. Alternative Umsetzungen lassen sich anhand der unterstützten Hardware, des Overheads für den Nachrichtenaustausch bzw. anhand der Dauer für die Nachrichtenverbreitung abgrenzen. (vgl [A performance comparsion of OpenSplice and RTI implementations](https://www.researchgate.net/publication/271550363_Data_Distribution_Service_DDS_A_performance_comparison_of_OpenSplice_and_RTI_implementations)). Daher sieht ROS2 ein abstraktes Interface vor, dass ein Maximum an Austauschbarkeit gewährleisten soll.
 
 vgl. https://index.ros.org/doc/ros2/Concepts/DDS-and-ROS-middleware-implementations/
 
@@ -182,6 +182,7 @@ manipulieren. Eine Anleitung findet sich zum Beispiel unter [Link](https://index
 Eine Inspektion der Konfiguration der QoS Parameter ist mit 
 
 ```
+ros2 run turtlesim turtle_teleop_key
 ros2 topic info /turtle1/cmd_vel --verbose
 ```
 
@@ -198,10 +199,10 @@ möglich.
 Das Konzept, dass der Publisher überhaupt kein Wissen darüber hat, wer der/die Subscriber sind generiert folgende Vorteile:
 
 + Es entkoppelt Subsysteme, die damit unabhängig von einander werden. Damit steigt die Skalierbarkeit des Systems und gleichzeitig die Handhabbarkeit.
-+ Die Abarbeitung erfolgt asynchron und ohne Kontrollflussübergabe. Der Knoten ist damit allein auf den eigenen Zustand fokussiert.
-+ Der Publisher zusätzlich zum Veröffentlichen nicht auch noch komplexe Zielinformationen angeben muss.
-+ Publisher und Subscriber können die Arbeit jederzeit einstellen. Aus rein Kommunikationstechnischen Gründen beeinflusst dies das System nicht.
-+ Publisher und Subscriber können eine spezifische Nachrichtenstruktur verwenden, die auf die Anwendung zugeschnitten ist.
++ Die Abarbeitung erfolgt asynchron und ohne Kontrollflussübergabe.
++ Der Publisher muss zum Veröffentlichen keine "komplexe Zielinformationen" angeben.
++ Publisher und Subscriber können die Arbeit jederzeit einstellen.
++ Publisher und Subscriber können eine spezifische Nachrichtenstruktur verwenden.
 
 Auf der anderen Seite ergeben sich genau daraus auch die zentralen Nachteile:
 
@@ -209,7 +210,7 @@ Auf der anderen Seite ergeben sich genau daraus auch die zentralen Nachteile:
 + Der Ausfall einer Komponente wird nicht zwangsläufig erkannt.
 + Das Pub/Sub-Pattern skaliert gut für kleine Netzwerke mit einer geringen Anzahl von Publisher- und Subscriber-Knoten und geringem Nachrichtenvolumen. Mit zunehmender Anzahl von Knoten und Nachrichten steigt jedoch die Wahrscheinlichkeit von Instabilitäten,
 
-ROS implementiert eine themenbasierte Registrierung (topic based), andere Pub/Sub Systeme eine parameterbasierte (content based).
+> ROS implementiert eine themenbasierte Registrierung (topic based), andere Pub/Sub Systeme eine parameterbasierte (content based).
 
 ![RoboterSystem](./image/08_ROS_Kommunikation/TurtlesSimMitKey.png)<!-- style="width: 80%; min-width: 420px; max-width: 800px;"-->
 
@@ -222,9 +223,9 @@ Bisher haben wir über asynchrone Kommunikationsmechanismen gesprochen. Ein Publ
 + Aktiviere die Kamera
 + ...
 
-In diesem Fall liegt eine Interaktion in Form eines Remote-Procedure-Calls (RPC) vor. Die Anfrage / Antwort erfolgt über einen Dienst, der durch ein Nachrichtenpaar definiert ist, eine für die Anfrage und eine für die Antwort. Ein bereitstellender ROS-Knoten bietet einen Dienst unter einem String-Namen an, und ein Client ruft den Dienst auf, indem er die Anforderungsnachricht sendet und in seiner Ausführung innehält und auf die Antwort wartet. Die Client-Bibliotheken stellen diese Interaktion dem Programmierer so dar, als wäre es ein Remote Procedure Call.
+In diesem Fall liegt eine Interaktion in Form eines Remote-Procedure-Calls (RPC) vor. Die Anfrage / Antwort erfolgt über einen Dienst, der durch ein Nachrichtenpaar definiert ist, eine für die Anfrage und eine für die Antwort. Ein bereitstellender ROS-Knoten bietet einen Dienst unter einem String-Namen an, und ein Client ruft den Dienst auf, indem er die Anforderungsnachricht sendet und in seiner Ausführung innehält und auf die Antwort wartet. Die Client-Bibliotheken stellen diese Interaktion dem Programmierer so dar, als wäre es ein [Remote Procedure Call](https://de.wikipedia.org/wiki/Remote_Procedure_Call).
 
-Dafür sind 3 Schritte notwendig:
+Dafür sind 2 Schritte notwendig:
 
 1. Ein Service wird über ein Service File definiert, dass analog zu den benutzerdefinierten Paketen die Struktur der auszutauschenden Daten beschreibt. Dabei wird sowohl die Struktur des Aufrufes, wie auch die Antwort des Services beschrieben. Dabei wird das gleiche Format wie bei den nutzerspezifischen Messages verwendet.
 

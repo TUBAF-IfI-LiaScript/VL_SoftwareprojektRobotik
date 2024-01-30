@@ -12,7 +12,7 @@ class MinimalPublisher : public rclcpp::Node
 {
   public:
     MinimalPublisher()
-    : Node("minimal_publisher"), count_(0)
+    : Node("talker"), count_(0)
     {
       publisher_ = this->create_publisher<my_msg_package::msg::MyMsg>("interestingTopic", 10);
       timer_ = this->create_wall_timer(

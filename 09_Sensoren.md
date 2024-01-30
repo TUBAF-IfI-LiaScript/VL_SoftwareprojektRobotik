@@ -19,7 +19,7 @@ import: https://github.com/liascript/CodeRunner
 | Parameter            | Kursinformationen                                                                                                                                                                           |
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Veranstaltung:**   | `Softwareprojekt Robotik`                                                                                                                                                                   |
-| **Semester**         | `Wintersemester 2021/22`                                                                                                                                                                    |
+| **Semester**         | `Wintersemester 2023/24`                                                                                                                                                                    |
 | **Hochschule:**      | `Technische Universität Freiberg`                                                                                                                                                           |
 | **Inhalte:**         | `Überblick Sensorsysteme`                                                                                                                                                 |
 | **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_Softwareentwicklung/blob/master/08_ROS_Kommunkation.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/09_Sensoren.md) |
@@ -679,7 +679,7 @@ void loop()
 
 Im Beispiel wird eine Intel Realsense 435 verwendet. Dieser Sensor implementiert das Active Stereo Verfahren [Link](https://www.intelrealsense.com/depth-camera-d435/).
 
-Die Instellation der Treiber ist unter
+Die Installation der Treiber ist unter
 
 https://index.ros.org/r/ros2_intel_realsense/
 
