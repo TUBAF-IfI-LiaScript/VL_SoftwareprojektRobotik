@@ -1,7 +1,9 @@
 #include <iostream>
 
+int global;
+
 int main(void)
 {
-    std::cout << "Hello World!" << std::endl;
+    static int i = 100;
     return EXIT_SUCCESS;
 }

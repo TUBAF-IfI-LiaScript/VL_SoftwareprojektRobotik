@@ -1,11 +1,16 @@
-//g++ StackOverflow.cpp -fstack-check
+//g++ StackOverflow.cpp
 
 #include <iostream>
 
-int main(void)
+int recursion(int a)
 {
-    double array[1024*1024];
-    std::cout << array[1000] << std::endl;
-    std::cout << sizeof(double) << std::endl;
-    return EXIT_SUCCESS;
+        return recursion(a+1);
+}
+
+int main()
+{
+        std::cout << "Stack Overflow about to occur!\n";
+        double array[1024*1024];
+        // recursion(0);
+        return EXIT_FAILURE;
 }
