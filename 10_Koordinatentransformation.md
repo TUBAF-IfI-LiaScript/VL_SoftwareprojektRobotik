@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.0.6
+version:  0.0.7
 language: de
 narrator: Deutsch Female
 
@@ -123,9 +123,10 @@ $$
 
     ![ImageMatching](image/10_Koordinatentransformation/Rotation.svg "Rotation von kartesischen Koordinatensystemen $A$ und $B$")<!-- style="width: 20%;"-->
 
-
     $$ x_B = x_A\cos\varphi + y_A\sin\varphi,$$
     $$ y_B= -x_A\sin\varphi + y_A\cos\varphi,$$
+
+    ![](image/10_Koordinatentransformation/Rotation_in_x.jpg "Herleitung der Gleichung für $x_B$ als Summe aus $x_A\cos\varphi$ (grün) und $y_A\sin\varphi$ (rot)")
 
     In der Matrizenschreibweise bedeutet dies
 
@@ -139,7 +140,6 @@ $$
 \cdot
 \textbf{p}_B \\
 $$
-
 
 ### Homogene Koordinaten
 
