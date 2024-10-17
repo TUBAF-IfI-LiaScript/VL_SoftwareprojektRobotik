@@ -31,24 +31,34 @@ Prof. Dr. Sebastian Zug, Technische Universität Bergakademie Freiberg
 
 # Vorlesung Robotik Projekt
 
-**Zielstellung der Veranstaltung**
+Zielstellung der Veranstaltung im Wintersemester
+============================
 
 Die
 Veranstaltung richtet sich an Informatiker und Mathematiker und adressiert die folgenden Punkte:
 
-+ aufbauend auf dem vorangegangenen Kurs Softwareentwicklung werden die Konzepte von C++ erläutert
 + Einführung in das Robot Operating System (ROS)
 + Gegenüberstellung von ROS1 und ROS2
 + Elemente von Robotersystemen und deren Implementierung wie
 
   + Grundlagen der Sensoren und deren Einbettung in ROS
   + Sensordatenverarbeitung und Fusion
+  + zentrale Algorithmen in Robotikanwendungen
   + Aktoren und deren Regelung
   + Verhaltensplanung für Roboter
 
-Die Vorlesungen und Übungen dienen der Vorbereitung auf die praktischen Aufgaben im Sommersemester.
++ Softwareengineering für Robotikanwendungen
 
-## Organisatorisches (WS 2023/24)
+
+Zielstellung der Veranstaltung im Sommersemester
+============================
+
+Die Vorlesungen und Übungen dienen der Vorbereitung auf die praktischen Aufgaben im Sommersemester 2025.
+
+!?[](https://github.com/user-attachments/assets/9ccb6e25-ef94-4707-b858-812347618593)
+
+
+## Organisatorisches (WS 2024/25)
 
                 {{0-1}}
 ********************************************************************************
@@ -66,7 +76,7 @@ Die Vorlesungen und Übungen dienen der Vorbereitung auf die praktischen Aufgabe
                 {{1-2}}
 ********************************************************************************
 
-**Inhalte der Veranstaltung**
+**Ursprüngliche Inhalte der Veranstaltung 2023/24**
 
 | Datum      | Titel                                |
 |:---------- |:------------------------------------ |
@@ -87,7 +97,26 @@ Die Vorlesungen und Übungen dienen der Vorbereitung auf die praktischen Aufgabe
 | 07.02.2024 | Datenfusion                          |
 
 
-> **Demo - ROS Integration von Sensoren**
+**Inhalte der Veranstaltung 2024/25**
+
+| Datum      | Titel                                |
+|:---------- |:------------------------------------ |
+| 17.10.2024 | Einführung                           |
+| 24.10.2024 | Einführung ROS2                      |
+| 31.10.2024 | _Feiertag_                           |
+| 07.11.2024 | ROS2 Entwicklungsprozess             |
+| 14.11.2024 | ROS2 Entwicklungsprozess Beispiele   |
+| 21.11.2024 | ROS2 Kommunikation                   |
+| 28.11.2024 |                                      |
+| 05.12.2024 |                                      |
+| 12.12.2024 | ...                                  |
+| 19.12.2024 |                                      |
+| 09.01.2025 | Regelungstechnik                     |
+| 16.01.2025 | Datenfusion                          |
+| 23.01.2025 |                                      |
+| 30.01.2025 | ...                                  |
+| 06.02.2025 |                                      |
+
 
 ********************************************************************************
 
@@ -109,7 +138,7 @@ zunächst mit den Grundlagen vertraut gemacht, um :
 
 **Ablaufplan Übungen der Übungen dieses Semesters**
 
-Wir beginnen zunächst mit den Übungen zur Verwendung von C++ (November) und starten im Dezember mit der Verwendung des "persönlichen" Roboters. Dafür 
+Wir beginnen zunächst mit den Übungen zur Verwendung von C++/Python (nächste Woche) unter ROS starten im November mit der Verwendung des "persönlichen" Roboters. Dafür 
 stellen wir Ihnen ab November einen TurtleBot 3 zur Verfügung, den Sie für die Realisierung der Aufgaben nutzen können.
 
 Tragen Sie sich bitte in den Kurs [Softwaretechnologie-Projekt (Prototyp)](https://bildungsportal.sachsen.de/opal/auth/RepositoryEntry/18593513489/CourseNode/98504809493283) im e-learning System OPAL ein.
@@ -126,7 +155,7 @@ Tragen Sie sich bitte in den Kurs [Softwaretechnologie-Projekt (Prototyp)](https
 
 !?[](https://www.youtube.com/watch?v=47YnSBAssOM&list=PLRG6WP3c31_V3SVb6UHCnbEgqEy7etwFI&index=8)
 
-Für den kommenden Donnerstag nächster Woche ist eine Präsentation der Ergebnisse des vergangenen Semesters geplant. Diese Veranstaltung findet online statt. Einzelheiten dazu werden im OPAL geteilt.
+> Wir bemühen uns darum ein Team aus dem vergangen Jahr zu überreden, Ihnen nochmals die Ergebnisse vorzustellen. Damit gewinnen Sie einen Überblick zur Komplexität des Projektes.
 
 ********************************************************************************
 
@@ -137,7 +166,7 @@ Für den kommenden Donnerstag nächster Woche ist eine Präsentation der Ergebni
 
 Die Veranstaltung wird mit 9 CP in Ihrem Studienverlauf abgebildet. Entsprechend beträgt der Zeitaufwand insgesamt 270 Stunden und setzt sich aus 105h Präsenzzeit und 165h Selbststudium zusammen.
 
-**Die eigene Beschäftigung mit der C++ Programmierung und den Konzepten von ROS ist für das erfolgreiche Bestehen der Veranstaltung unabdingbar!**
+**Die eigene Beschäftigung mit der Programmierung unter Linux und den Konzepten von ROS ist für das erfolgreiche Bestehen der Veranstaltung unabdingbar!**
 
 ********************************************************************************
 
