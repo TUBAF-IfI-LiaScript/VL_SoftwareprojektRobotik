@@ -138,11 +138,11 @@ Welche technologischen Herausforderungen gilt es bei der Umsetzung von mobilen R
 
 + **Soziale und rechtliche Herausforderungen**
 
-    - Sicherheitsanforderungen
-    - Regulatorische Rahmenbedingungen
-    - Ethik und Datenschutz
-    - Arbeitsplatzverdrängung
-    - ...
+   - Sicherheitsanforderungen
+   - Regulatorische Rahmenbedingungen
+   - Ethik und Datenschutz
+   - Arbeitsplatzverdrängung
+   - ...
 
 > Welche dieser Probleme sehen Sie als relevant bei den zwei Szenarien Lieferroboter und Aquatischer Roboter? 
 
@@ -225,6 +225,7 @@ erfassung       | | |       v v v       Aktuator
 
 > Wer soll das denn alles implementieren?
 
+*************************************************
 
 ## Motivation für ROS
 
@@ -234,9 +235,8 @@ für die Robotikentwicklung adressiert. [^2]
 
 [^2]: Willow Garage, http://www.willowgarage.com/blog/2010/04/27/reinventing-wheel, 2010
 
-********************************************************************************
-
 ## ROS gut und schön ...
 
 ... aber die eigentliche (Forschungs-)Arbeit fängt dann erst an.
 
+https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/00_Einfuehrung/images/ROSE2024_Chemnitz.pdf
