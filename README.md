@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.0.2
+version:  0.0.3
 language: de
 narrator: Deutsch Female
 
@@ -17,7 +17,7 @@ import: https://raw.githubusercontent.com/LiaTemplates/Rextester/master/README.m
 
 -------------------------------------------------------------------------------
 
-> <font size="6"> Vorlesung Robotik Projekt </font>
+> <font size="4"> ... zum Semesterbeginn und zur Vorlesung Robotik Projekt </font>
 
 ![](https://media.giphy.com/media/3oriNKQe0D6uQVjcIM/giphy-downsized.gif "Source: http://giphy.com")
 

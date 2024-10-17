@@ -6,22 +6,23 @@ version:  0.1.3
 language: de
 narrator: Deutsch Female
 
-import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/main/config.md
+import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/config.md
   
 -->
 
-[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/00_Einfuehrung.md#1)
+[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/00_Einfuehrung/00_Einfuehrung.md)
 
 # Einführung
 
-| Parameter            | Kursinformationen                                                                                                                                                                                |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Veranstaltung:**   | @config.lecture                                                                                                                                                                                  |    
-| **Semester**         | @config.semester                                                                                                                                                                                 |
-| **Hochschule:**      | `Technische Universität Freiberg`                                                                                                                                                                |
-| **Inhalte:**         | `Abgrenzung und einordnung`                                                                                                                                                                      |
-| **Link auf GitHub:** | [https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/00_Einfuehrung.md](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/00_Einfuehrung.md) |
-| **Autoren**          | @author                                                                                                                                                                                 |
+<!-- data-type="none" -->
+| Parameter            | Kursinformationen                                                                                             |
+| -------------------- | ------------------------------------------------------------------------------------------------------------- |
+| **Veranstaltung:**   | @config.lecture                                                                                               |
+| **Semester**         | @config.semester                                                                                              |
+| **Hochschule:**      | `Technische Universität Freiberg`                                                                             |
+| **Inhalte:**         | `Abgrenzung und einordnung`                                                                                   |
+| **Link auf GitHub:** | https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/00_Einfuehrung/00_Einfuehrung.md |
+| **Autoren**          | @author                                                                                                       |
 
 ![](https://media.giphy.com/media/1flAwtHCYosL6LWnHr/giphy-downsized.gif)
 
@@ -51,6 +52,7 @@ beschäftigt.
 
 **Warum sollten wir uns nun mit einer weiteren Programmiersprache beschäftigen? Welche Möglichkeiten eröffnen sich draus?**
 
+<!-- data-type="none" -->
 | Merkmal                     | **C#**                                      | **C++**                                    | **Python**                                    |
 |-----------------------------|---------------------------------------------|--------------------------------------------|-----------------------------------------------|
 | **Typisierung**              | Statisch typisiert                          | Statisch typisiert                         | Dynamisch typisiert                           |
@@ -160,8 +162,8 @@ Befehle          v   |
             +-----------------------+
             | Handlungsplanung      |  "$Strategie   $"
             +-----------------------+
-                 |   ^     | | |        Folge von Aktionen     
-                 v   |     v v v
+                 |   ^      | | |       Folge von Aktionen     
+                 v   |      v v v
             +-----------------------+
             | Ausführung            |  "$Taktik$    "           
             +-----------------------+
@@ -170,8 +172,8 @@ Status               |      v v v       Verhalten
             +-----------------------+
             | Reaktive Überwachung  |  "$Ausführung$        "
             +-----------------------+
-Sensordaten-    ^ ^ ^        | | |      Steuerbefehle an den 
-erfassung       | | |        v v v      Aktuator 
+Sensordaten-    ^ ^ ^       | | |       Steuerbefehle an den 
+erfassung       | | |       v v v       Aktuator 
             +----------+ +----------+
             | Sensoren | | Aktoren  |                               
             +----------+ +----------+
@@ -197,8 +199,8 @@ Befehle          v   |
             +-----------------------+                                                                 
             | Handlungsplanung      |  "$Strategie   $"                  Verhaltensmodell                        
             +-----------------------+                                                                 
-                 |   ^     | | |        Folge von Aktionen                                                      
-                 v   |     v v v                                                                 
+                 |   ^      | | |       Folge von Aktionen                                                      
+                 v   |      v v v                                                                 
             +-----------------------+                                                                 
             | Ausführung            |  "$Taktik$    "                    Weltmodell, Handungsmuster Kontexterkennung
             +-----------------------+                                                                 
@@ -207,8 +209,8 @@ Status               |      v v v       Verhalten
             +-----------------------+                                                                 
             | Reaktive Überwachung  |  "$Ausführung$        "            Regelung, Energiemanagement                  
             +-----------------------+                                    Notaus-Erkennung                             
-Sensordaten-    ^ ^ ^        | | |      Steuerbefehle an den                                             
-erfassung       | | |        v v v      Aktuator                                                                  
+Sensordaten-    ^ ^ ^       | | |       Steuerbefehle an den                                             
+erfassung       | | |       v v v       Aktuator                                                                  
             +----------+ +----------+                                                                 
             | Sensoren | | Aktoren  |                                    Hardwaretreiber                          
             +----------+ +----------+                                                                 
@@ -223,11 +225,8 @@ erfassung       | | |        v v v      Aktuator
 
 > Wer soll das denn alles implementieren?
 
-*************************************************
 
-
-                                  {{2-3}}
-********************************************************************************
+## Motivation für ROS
 
 ![RoboterSystem](images/willow_p1_02s.640w.jpg)<!-- width="80%" -->
 Comic auf der Webseite der Firma Willow Garage, das die individuellen Frameworks
@@ -236,3 +235,8 @@ für die Robotikentwicklung adressiert. [^2]
 [^2]: Willow Garage, http://www.willowgarage.com/blog/2010/04/27/reinventing-wheel, 2010
 
 ********************************************************************************
+
+## ROS gut und schön ...
+
+... aber die eigentliche (Forschungs-)Arbeit fängt dann erst an.
+
