@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.0.3
+version:  0.0.4
 language: de
 narrator: Deutsch Female
 
@@ -306,7 +306,7 @@ Mit den anderen Services (`Kill`) kann dessen Verhalten nun adaptiert werden.
 
 https://medium.com/@danieljeswin/introduction-to-programming-with-ros2-services-77273d7e8ddc
 
-Nehmen wir an, dass wir ein Multiroboter-Szenario die Zustände der einzelnen Roboter in einer Datenbank speichert. Diese senden Ihre aktuelle Position an die Datenbank. Daraufhin können die Dispatcher-Knoten, diese Datenbank kontaktieren, um einen geeigneten Roboter für eine Aufgaben zu identifizieren. Wir gehen davon aus, dass dem Knoten die Roboter in einem Raum bekannt sind. Nun möchte er mehr über deren Zustand wissen. Entsprechend verschickt er eine Serviceanfrage an unsere Datenbank, die folgende Struktur aufweist:
+Nehmen wir an, dass wir ein Multiroboter-Szenario die Zustände der einzelnen Roboter zentral aggregiert wird. Diese senden Ihre aktuelle Position an die Datenbank. Daraufhin können die Dispatcher-Knoten, diese Datenbank kontaktieren, um einen geeigneten Roboter für eine Aufgaben zu identifizieren. Wir gehen davon aus, dass dem Knoten die Roboter in einem Raum bekannt sind. Nun möchte er mehr über deren Zustand wissen. Entsprechend verschickt er eine Serviceanfrage an unsere Datenbank, die folgende Struktur aufweist:
 
 ```
 string robotname
@@ -428,33 +428,31 @@ ld = LaunchDescription([
 
 Die Implementierung erfolgt anhand eines knoten-internen Parameterservers der wie folgt initialisiert wird:
 
-```cpp        ParameterImplementation.cpp
-//Definition and Initialization
-auto parameters_client = std::make_shared<rclcpp::SyncParametersClient>(node);
-while (!parameters_client->wait_for_service(1s)) {
-  if (!rclcpp::ok()) {
-    RCLCPP_ERROR(node->get_logger(), "Interrupted while waiting for the service. Exiting.");
-    return 0;
-  }
-  RCLCPP_INFO(node->get_logger(), "service not available, waiting again...");
-}
+```cpp        ParameterImplementation.py
+import rclpy
+from rclpy.node import Node
+class TestParams(Node):
+    def __init__(self):
+        super().__init__('test_params_rclpy')
+        self.declare_parameters(
+            namespace='',
+            parameters=[
+                ('my_str', rclpy.Parameter.Type.STRING),
+                ('my_int', rclpy.Parameter.Type.INTEGER),
+                ('my_double_array', rclpy.Parameter.Type.DOUBLE_ARRAY)
+            ]
+        )
 
-// Setup callback for changes to parameters.
-auto sub = parameters_client->on_parameter_event(
-  [node](const rcl_interfaces::msg::ParameterEvent::SharedPtr event) -> void
-  {
-    on_parameter_event(event, node->get_logger());
-  });
+# The following is just to start the node
+def main(args=None):
+    rclpy.init(args=args)
+    node = TestParams()
+    rclpy.spin(node)
+    node.destroy_node()
+    rclpy.shutdown()
 
-// Declare parameters that may be set on this node
-node->declare_parameter("foo");
-node->declare_parameter("bar");
-
-// Set several different types of parameters.
-auto set_parameters_results = parameters_client->set_parameters({
-  rclcpp::Parameter("foo", 2),
-  rclcpp::Parameter("bar", "hello"),
-});
+if __name__ == "__main__":
+    main()
 ```
 
 Anmerkung zu Zeile 11: Hier wird eine Lambda-Expression genutzt, um die Funktion, die im Falle einer Parameteranfrage aufgerufen wird, zu spezifizieren.
