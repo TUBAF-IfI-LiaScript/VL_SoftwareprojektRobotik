@@ -39,7 +39,7 @@ https://roboticsbackend.com/ros2-multiple-machines-including-raspberry-pi/
 Die `ROS_DOMAIN_ID` trennt einzelne ROS2 Umgebungen voneinander. 
 
 ```
-ps -ax| grep ros-domain
+echo $ROS_DOMAIN_ID
 ```
 
 Damit bleibt 
