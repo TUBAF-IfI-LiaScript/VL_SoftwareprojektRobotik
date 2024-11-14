@@ -661,7 +661,7 @@ Autor: Geoffrey Biggs Tully Foote, https://design.ros2.org/articles/node_lifecyc
 Für die Interaktion mit einem *managed node* stehen Ihnen unterschiedlichen Möglichkeiten offen. Auf der Kommandozeile kann zwischen den States mittels
 
 ```
-ros2 lifecycle set /nodename X   #State Id
+ros2 lifecycle set /nodename X   #Transtition name oder id
 ```
 
 gewechselt werden. Komfortabler ist die Spezifikation in den launch-Files. Ein Beispiel für die entsprechend Realisierung findet sich unter folgendem [Link](https://www.stereolabs.com/docs/ros2/lifecycle/#the-life-cycle-state-machine)
