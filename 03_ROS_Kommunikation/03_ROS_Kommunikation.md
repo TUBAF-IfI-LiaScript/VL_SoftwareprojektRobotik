@@ -455,8 +455,6 @@ if __name__ == "__main__":
     main()
 ```
 
-Anmerkung zu Zeile 11: Hier wird eine Lambda-Expression genutzt, um die Funktion, die im Falle einer Parameteranfrage aufgerufen wird, zu spezifizieren.
-
 ## ROS Actions
 
 _Actions_ sind für lang laufende Aufgaben vorgesehen. Der Client wartet dabei nicht auf das Eintreten des Resultats sondern setzt seine Arbeit fort. Entsprechend wird eine _Action_ als asynchroner Call bezeichnet, der sich an einen _Action_ _Server_ richtet.
