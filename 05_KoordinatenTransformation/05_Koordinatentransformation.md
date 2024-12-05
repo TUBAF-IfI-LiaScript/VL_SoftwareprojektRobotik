@@ -121,7 +121,7 @@ $$
 1 \\
 \end{bmatrix}
 &=
-\underbrace{https://raw.githubusercontent.com/LiaScript/CodeRunner/master/README.md
+\underbrace{
 -\sin\varphi & \cos\varphi & 0 \\
 0 & 0 & 1 \\
 \end{bmatrix}}_{\textbf{R}_{A\rightarrow B}}
