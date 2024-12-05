@@ -3,7 +3,7 @@
 
 author:   Sebastian Zug & Georg Jäger
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.0.5
+version:  0.0.6
 language: de
 narrator: Deutsch Female
 
@@ -33,7 +33,7 @@ script:   https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js
 ![](https://media.giphy.com/media/xT8qB2PQF93mUbGvle/giphy-downsized.gif)
 
 --------------------------------------------------------------------------------
-https://raw.githubusercontent.com/LiaScript/CodeRunner/master/README.md
+
 
 > Beispiel 1: Zwei Roboter operieren in einem Areal. Einer erkennt ein kritisches Hindernis - wo befindet es sich in Bezug auf den anderen Roboter?
 
@@ -50,7 +50,7 @@ Entsprechend beziehen sich Punkte als Vekoren $\textbf{p}=[x, y]$ im Raum immer 
 
 ### Relevante Transformationen
 
-Aus dem Kontext der _körpererhaltendehttps://raw.githubusercontent.com/LiaScript/CodeRunner/master/README.md Transformationen_ (im Unterschied zu Scherung und Skalierung) müsen zwei Relationen berücksichtigt werden:
+Aus dem Kontext der _körpererhaltende Transformationen_ (im Unterschied zu Scherung und Skalierung) müsen zwei Relationen berücksichtigt werden:
 
 1. Translation 
 
@@ -76,11 +76,22 @@ $$
     $$ y_B= -x_A\sin\varphi + y_A\cos\varphi,$$
 
     In der Matrizenschreibweise bedeutet dies
-https://raw.githubusercontent.com/LiaScript/CodeRunner/master/README.md
+
+    $$
+    \textbf{p}_B 
+    =
+    \begin{bmatrix}
+    \cos\varphi & \sin\varphi \\ 
+    -\sin\varphi & \cos\varphi
+    \end{bmatrix}_{A\rightarrow B}
+    \cdot
+    \textbf{p}_B \\
+    $$
 
 ### Homogene Koordinaten
 
-![ImageMatching](./images/HomogenouseCoords.svg "Überlagerung von Translation und Rotation von kartesischen Koordinatensystemen $A$ und $B$")<!-- style="width: 35%;"-->
+
+![ImageMatching](image/10_Sensordatenhandling/HomogenouseCoords.svg "Überlagerung von Translation und Rotation von kartesischen Koordinatensystemen $A$ und $B$")<!-- style="width: 35%;"-->
 
 Fassen wir nun Translation und Rotation zusammen, so können wir eine 2D Koordinatentransformation mit 
 
@@ -89,7 +100,16 @@ $$\textbf{p}_B=\begin{bmatrix}
 -\sin\varphi & \cos\varphi
 \end{bmatrix}_{A\rightarrow B} \cdot \textbf{p}_A - \textbf{t}_{A\rightarrow B}$$
 
-beschreiben. Problematisch ist, dass https://raw.githubusercontent.com/LiaScript/CodeRunner/master/README.md
+beschreiben. Problematisch ist, dass 
+
++ die Translation auf einer Addition und 
++ die Rotation auf der Multiplikation von Matrizen 
+
+beruhen. 
+
+Homogene Koordinaten lösen dieses Problem durch das Hinzufügen einer weiteren, virtuellen Koordinate. Der Wert der Matrix bleibt dabei unverändert!
+
+1. Translation 
 
 $$
 \begin{align*} 
@@ -122,6 +142,8 @@ $$
 \end{bmatrix}
 &=
 \underbrace{
+\begin{bmatrix}
+\cos\varphi & \sin\varphi & 0\\ 
 -\sin\varphi & \cos\varphi & 0 \\
 0 & 0 & 1 \\
 \end{bmatrix}}_{\textbf{R}_{A\rightarrow B}}
