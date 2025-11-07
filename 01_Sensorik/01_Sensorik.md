@@ -501,7 +501,7 @@ $$
 \end{cases}
 $$
 
-Diese vier Gleichungen können (z. B. iterativ durch lineare Approximation) gelöst werden.
+Diese vier Gleichungen können iterativ durch lineare Approximation). Wenn mehr als vier Satelliten verfügbar sind, kann das System überbestimmt gelöst werden (z.B. mittels Kleinste-Quadrate).
 
 #### Genauigkeit und Fehlerquellen bei GNSS
 

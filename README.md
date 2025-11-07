@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.0.3
+version:  0.0.4
 language: de
 narrator: Deutsch Female
 
@@ -64,9 +64,6 @@ Die Vorlesungen und Übungen dienen der Vorbereitung auf die praktischen Aufgabe
 
 ## Organisatorisches (WS 2025/26)
 
-                {{0-1}}
-********************************************************************************
-
 **Dozenten**
 
 | Name          | Email                                   |
@@ -74,12 +71,6 @@ Die Vorlesungen und Übungen dienen der Vorbereitung auf die praktischen Aufgabe
 | Sebastian Zug | sebastian.zug@informatik.tu-freiberg.de |
 | -             |                                         |
 
-********************************************************************************
-
-                {{1-2}}
-********************************************************************************
-
-**Vorlesungsplan WS 2025/26**
 
 ### Phase I – Grundlagen (VL 1–5)
 
@@ -120,23 +111,15 @@ Die Vorlesungen und Übungen dienen der Vorbereitung auf die praktischen Aufgabe
 
 Tragen Sie sich bitte in den Kurs [Softwaretechnologie-Projekt (Prototyp)](https://bildungsportal.sachsen.de/opal/auth/RepositoryEntry/18593513489/CourseNode/98504809493283) im e-learning System OPAL ein.
 
-********************************************************************************
-
-                  {{2-3}}
-********************************************************************************
-
-**Prüfungsleistungen**
+### Prüfungsleistungen
 
 Die Veranstaltung ist in zwei Teile gegliedert. Im Wintersemester werden Sie
 zunächst mit den Grundlagen vertraut gemacht, um :
 
-* als Informatiker schließen Sie die Veranstaltung am Ende des Sommersemesters mit der praktischen Arbeit ab,
-* als Mathematiker mit einer kleineren Aufgabe am Ende des Wintersemesters
+* als Informatikstudierende schließen Sie die Veranstaltung am Ende des Sommersemesters mit der praktischen Arbeit ab,
+* als Mathematikstudierende mit einer kleineren Aufgabe am Ende des Wintersemesters
 
-********************************************************************************
-
-                 {{3-4}}
-********************************************************************************
+> Die Bewertung erfolgt anhand der erbrachten praktischen Leistungen.
 
 **Zeitaufwand und Engagement**
 
@@ -144,7 +127,6 @@ Die Veranstaltung wird mit 9 CP in Ihrem Studienverlauf abgebildet. Entsprechend
 
 **Die eigene Beschäftigung mit der Programmierung unter Linux und den Konzepten von ROS ist für das erfolgreiche Bestehen der Veranstaltung unabdingbar!**
 
-********************************************************************************
 
 ## Python oder C++?
 
@@ -212,18 +194,9 @@ Hinsichtlich Ihres Lieblingseditors haben Sie sicher schon eine Wahl getroffen.
 
 > Experimentieren Sie mit Large Language Models (LLMs) wie ChatGPT, um Ihre Programmierfähigkeiten zu verbessern und Unterstützung bei der Codeentwicklung zu erhalten. Nutzen Sie diese Tools verantwortungsbewusst und kritisch, um Ihre eigenen Fähigkeiten zu erweitern. 
 
-![Video-Link](https://www.youtube.com/watch?v=zeKc7FFSSv0)
+!?[Video-Link](https://www.youtube.com/watch?v=zeKc7FFSSv0)
 
 > Das vido ist nicht ganz aktuell, geht aber systematisch durch die Nutzung von LLMs beim Programmieren.
-
-## Wie können Sie zum Gelingen der Veranstaltung beitragen?
-
-* Stellen Sie Fragen, seinen Sie kommunikativ!
-* Organisieren Sie sich in Arbeitsgruppen!
-* Experimentieren Sie mit verschiedenen Entwicklungsumgebung um "Ihren Editor" zu finden
-* Machen Sie Verbesserungsvorschläge für die Vorlesungsfolien!
-
-![Atom IDE Screenshot](./image/00_Einfuehrung/LiaScriptAtomScreenShot.png)<!-- width="100%" -->
 
 ## Los gehts ...
 
