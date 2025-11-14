@@ -1,19 +1,13 @@
-
 <!--
 
 author:   Sebastian Zug & Georg Jäger
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.0.6
+version:  0.0.7
 language: de
 narrator: Deutsch Female
 
 import:  https://github.com/liascript/CodeRunner
          https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/config.md
-
-script:   https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js
-          https://d3js.org/d3-random.v2.min.js
-          https://d3js.org/d3.v4.min.js
-          https://cdn.plot.ly/plotly-latest.min.js
 
 -->
 
@@ -32,8 +26,20 @@ script:   https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js
 
 ![](https://media.giphy.com/media/xT8qB2PQF93mUbGvle/giphy-downsized.gif)
 
+
 --------------------------------------------------------------------------------
 
+**Zielstellung der heutigen Veranstaltung**
+
+- Wie kann man die Lage und Orientierung eines Roboters oder Objekts im Raum eindeutig beschreiben?
+- Wie rechnet man Koordinaten von Punkten zwischen verschiedenen Bezugssystemen um?
+- Was sind Translation, Rotation und homogene Koordinaten – und warum braucht man sie?
+- Wie setzt man Transformationsmatrizen auf und verkettet sie?
+- Was sind Euler-Winkel, wo liegen ihre Grenzen, und warum nutzt man manchmal Quaternionen?
+- Wie werden Koordinatentransformationen in ROS (tf2, URDF) praktisch eingesetzt?
+
+
+## Motivation
 
 > Beispiel 1: Zwei Roboter operieren in einem Areal. Einer erkennt ein kritisches Hindernis - wo befindet es sich in Bezug auf den anderen Roboter?
 
@@ -41,6 +47,17 @@ script:   https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js
 
 ![ImageMatching](./images/MWChallengePoster_medium.jpg "Visualisierung der Aufgabenstellung der _Autonomous Robot Manipulation Challenge_ beim RoboCup 2022 [^RoboCup]")<!-- style="width: 70%;"-->
 
+
+## Mathematische Grundlagen
+
+Objekte im Raum werden anhand ihrer Position und Orientierung beschrieben, die sich auf ein bestimmtes Koordinatensystem beziehen. 
+
++ in der Ebene sind dies kartesische Koordinaten $(x,y)$ und die Orientierung als Winkel $\varphi$
++ im Raum sind dies kartesische Koordinaten $(x,y,z)$ und die Orientierung als Euler-Winkel $(\varphi, \theta, \psi)$ oder Quaternionen $(q_w, q_x, q_y, q_z)$
+
+Das Bezugssystem bestimmt dabei den Wert der einzelnen Angaben.
+
+> Transformationen zwischen verschiedenen Koordinatensystemen (Polarkoordinaten, kartesische Koordinaten) werden hier nicht betrachtet.
 
 ### Mathematische Beschreibung 
 
@@ -91,7 +108,7 @@ $$
 ### Homogene Koordinaten
 
 
-![ImageMatching](image/10_Sensordatenhandling/HomogenouseCoords.svg "Überlagerung von Translation und Rotation von kartesischen Koordinatensystemen $A$ und $B$")<!-- style="width: 35%;"-->
+![ImageMatching](./images/HomogenouseCoords.svg "Überlagerung von Translation und Rotation von kartesischen Koordinatensystemen $A$ und $B$")<!-- style="width: 35%;"-->
 
 Fassen wir nun Translation und Rotation zusammen, so können wir eine 2D Koordinatentransformation mit 
 
@@ -270,6 +287,18 @@ $$
 
 ### Kombination von Transformationen
 
+Transformationen werden in der Robotik oft verkettet, um z. B. von Weltkoordinaten über Roboter- und Sensor-Frames bis zum Messpunkt zu gelangen.
+
+```
+world --> base_link --> camera --> sensor
+```
+
+**Praxisbeispiel:**
+Angenommen, ein Punkt ist im Sensor-Frame gegeben. Um seine Koordinaten im Welt-Frame zu berechnen, multipliziert man alle Transformationen entlang des Pfades:
+$$
+\mathbf{p}_{world} = T_{base\rightarrow world} \cdot T_{camera\rightarrow base} \cdot T_{sensor\rightarrow camera} \cdot \mathbf{p}_{sensor}
+$$
+
 Sofern sich in dieser Kette weitere Koordinatenssysteme wiederfinden können weitere Transformationsmatrizen $T_{M\rightarrow N}$ oder $R_{M\rightarrow N}$ integriert werden. Dabei sind sich wiederholende Verschiebungen oder Rotationen als Aggregation zu betrachten.
 
 $$\textbf{p}_D=\underbrace{\bm{T}_{A\rightarrow B} \bm{T}_{B\rightarrow C} \bm{T}_{C\rightarrow D}}_{\substack{\bm{T}_{A\rightarrow D}}} \cdot \textbf{p}_A$$
@@ -303,6 +332,12 @@ R_{A\rightarrow B} \cdot T_{A\rightarrow B}
 \end{bmatrix} 
 $$
 
+
+**Typische Fehlerquellen:**
+
+- Reihenfolge der Matrizen vertauscht
+- Falsche Inverse verwendet
+- Verwechslung von Frame- und Punkt-Notation (In welcher Richtung wird transformiert?)
 
 ## Beispiel Anwendungsfall 2D
 
@@ -347,6 +382,8 @@ print(p_O[0:2])
 
 > Merke: _The Axes display shows a set of axes, located at the origin of the target frame - __red - x green - y blue -z ___
 
+### Homogene Koordinaten in 3D
+
 Die entsprechende translatorische Transformation in homogenen Koordinaten ergibt sich nun mit einer erweiterten Matrix:
 
 $$
@@ -377,19 +414,80 @@ Positiv:
 
 Negativ: 
 
-− Gimbal Lock (Unstetigkeit)
++ Gimbal Lock (Unstetigkeit)
 
-− Für allgemeine Rotationen bestimmen sich die Eulerwinkel nicht eindeutig
+   ![](https://upload.wikimedia.org/wikipedia/commons/4/49/Gimbal_Lock_Plane.gif)
+
++ Die Eulerwinkel sind nicht injektiv: Mehrere Winkeltriple können zur gleichen Orientierung führen.
 
 > ROS nutzt für die Darstellung von Rotationen Quaternionen. Diese überwinden die Einschränkungen der Euler-Winkel Darstellung sind aber nicht so anschaulich. Entsprechend stellt die TF Bibliothek Transformationsvorschriften bereit, um zwischen beiden Formaten zu wechseln.
 
 !?[Tutorial](https://www.youtube.com/watch?v=_t4HZ8r_qFM) 
 
+### Quaternionen
+
+> **Motivation:**
+> Euler-Winkel sind anschaulich, aber sie haben Schwächen: Gimbal Lock, Mehrdeutigkeit und numerische Instabilität. In der Robotik und Computergrafik werden daher oft **Quaternionen** verwendet, um Rotationen im Raum zu beschreiben.
+
+Ein Quaternion ist eine Erweiterung komplexer Zahlen auf vier Dimensionen:
+
+$$
+q = q_w + q_x i + q_y j + q_z k
+$$
+
+Oft wird $q$ als Vektor geschrieben:
+
+$$
+q = \begin{bmatrix} q_w \\ q_x \\ q_y \\ q_z \end{bmatrix}
+$$
+
+**Eigenschaften:**
+
+- $q_w$ ist der Skalaranteil, $q_x, q_y, q_z$ der Vektoranteil.
+- Ein Quaternion beschreibt eine Drehung um eine Achse $\vec{u}$ mit Winkel $\theta$:
+
+  $$
+  q = \begin{bmatrix} \cos(\theta/2) \\ u_x \sin(\theta/2) \\ u_y \sin(\theta/2) \\ u_z \sin(\theta/2) \end{bmatrix}
+  $$
+
+
+- Keine Singularitäten (kein Gimbal Lock)
+- Eindeutige, stabile Repräsentation
+- Effiziente Interpolation (SLERP)
+- Kompakte Speicherung (4 Werte statt 9 für Rotationsmatrix)
+
+> In ROS und vielen Bibliotheken gibt es fertige Funktionen für die Umrechnung. Prinzipiell gilt:
+
+Von Quaternion zu Rotationsmatrix:
+
+$$
+R(q) = \begin{bmatrix}
+1-2(q_y^2+q_z^2) & 2(q_x q_y - q_z q_w) & 2(q_x q_z + q_y q_w) \\
+2(q_x q_y + q_z q_w) & 1-2(q_x^2+q_z^2) & 2(q_y q_z - q_x q_w) \\
+2(q_x q_z - q_y q_w) & 2(q_y q_z + q_x q_w) & 1-2(q_x^2+q_y^2)
+\end{bmatrix}
+$$
+
+Von Rotationsachse $\vec{u}$ und Winkel $\theta$ zu Quaternion:
+
+$$
+q = \begin{bmatrix} \cos(\theta/2) \\ u_x \sin(\theta/2) \\ u_y \sin(\theta/2) \\ u_z \sin(\theta/2) \end{bmatrix}
+$$
+
+
+Eine Drehung um $\varphi$ um die $z$-Achse:
+
+$$
+q = \begin{bmatrix} \cos(\varphi/2) \\ 0 \\ 0 \\ \sin(\varphi/2) \end{bmatrix}
+$$
+
+> Quaternionen sind die Standardrepräsentation für Rotationen in ROS, Computergrafik und moderner Robotik. Sie vermeiden die Probleme der Euler-Winkel und sind für Interpolation und numerische Berechnungen optimal geeignet.
+
 ## Umsetzung in ROS
 
 Die Handhabung der unterschiedlichen Koordinatensystem in ROS ist über das `tf`-verteitle System gelöst.
 
-![RoboterSystem](image/10_Sensordatenhandling/Coordsystems.png)<!--  style="width:60%; max-width:300px; min-width:600px"-->
+![RoboterSystem](./images/Coordsystems.png)<!--  style="width:60%; max-width:300px; min-width:600px"-->
 
 _Darstellung verschiedener Koordinatensysteme innerhalb eines Roboterszenarios (Autor Bo im ROS Forum unter [answers.ros.org](https://answers.ros.org/question/265846/how-to-build-tf-topic-frame-tree-for-hector_slam-or-gmapping/))_
 

@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.0.5
+version:  0.0.6
 language: de
 narrator: Deutsch Female
 
@@ -10,7 +10,7 @@ import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_Softwareproje
   
 -->
 
-[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/01_EinfuehrungROS/01_EinfuehrungROS.md)
+[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/03_EinfuehrungROS/03_EinfuehrungROS.md)
 
 
 # Einführung in ROS2
@@ -21,7 +21,7 @@ import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_Softwareproje
 | **Semester**         | @config.semester                                                                                              |
 | **Hochschule:**      | `Technische Universität Freiberg`                                                                                                                                                                   |
 | **Inhalte:**         | `Motivation für die Verwendung von ROS`                                                                                                                                                             |
-| **Link auf GitHub:** | https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/01_EinfuehrungROS/01_EinfuehrungROS.md |
+| **Link auf GitHub:** | https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/03_ROS_Grundlagen_I/03_EinfuehrungROS.md |
 | **Autoren**          | @author                                                                                                       |
 
 ![](https://media.giphy.com/media/xT8qB2PQF93mUbGvle/giphy-downsized.gif)
