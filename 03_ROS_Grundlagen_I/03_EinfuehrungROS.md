@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.0.6
+version:  0.0.7
 language: de
 narrator: Deutsch Female
 
@@ -147,7 +147,8 @@ Die aktuellen Versionen sind
 
 + ROS1 - _Noetic Ninjemys_ (Noetische Ninjemys Oweni) veröffentlicht im Mai 2020 und
 + ROS2 - _Humble Hawksbill_ (bescheidene Echte Karettschildkröte) Veröffentlichung im Mai 2021 (LTS Version).
-+ ROS2 - _Iron Irwini_ (eiserne Irwins Schildkröte) Veröffentlichung im Mai 2023.
++ ROS2 - _Jazzy Jalisco_ (eiserne Irwins Schildkröte) Veröffentlichung im Mai 2024.
++ ROS2 - _Kilted Kaiju _ (Kilt-tragender Kaijū) Veröffentlichung im Mai 2025.
 
 >  In der Fachwelt für das autonome Fahren werden auch gerne zumindest Teile von ROS eingesetzt. In der Robotik nutzen mittlerweile nahezu alle Forschungsgruppen zumindest teilweise ROS. Viele Forschungsgruppen besitzen gar kein eigenes Softwareframework mehr, sondern konzentrieren sich voll auf ROS. *golem.de [Beitrag - Für wen ist ROS?](https://www.golem.de/news/robot-operating-system-was-bratwurst-bot-und-autonome-autos-gemeinsam-haben-1612-124079-4.html)*
 
@@ -224,13 +225,6 @@ sicherstellt.
 *******************************************************************************
 
 3. Verschiedene Hochschulen und Institutionen bieten Kurse und Summer Schools an. Achtung, diese sind teilweise kostenpflichtig! Trotzdem eine gute Gelegenheit Netzwerke zu entwicklen.
-
-*******************************************************************************
-
-                                 {{3-4}}
-*******************************************************************************
-
-4. Zu empfehlen ist das Buch von Newmann "A Systematic Approach to Learning Robot Programming with ROS" oder aber von Kane "A Gentle Introduction to ROS". Letzteres ist online unter [Link](https://cse.sc.edu/~jokane/agitr/agitr-letter.pdf) zu finden. Beide beziehen sich aber auf ROS 1.
 
 *******************************************************************************
 
@@ -367,6 +361,46 @@ Kommandozeile erzeugen. Damit besteht für Tests eigener Subscriber die Möglich
 | Discovery           | Verteilte Discovery-Mechanismen (die nicht von einem einzelnen Knoten abhängen)                | ROS Master als zentrale Verwaltungsinstanz der Kommunikation                                   |
 | Client Bibliotheken | `rclcpp` = C++ client Library, `rclpy` = Python client library C++                             | `roscpp` = C++ client Library, `rospy` = Python client library                                 |
 
+## Architektur von ROS2 
+
+<!--
+style="width: 80%; min-width: 520px; max-width: 820px;"
+-->
+```ascii
+
+              User Applications
++---------+---------+---------+
+| rclcpp  | rclpy   | rcljava | ...
++---------+---------+---------+-----------------------------+
+| rcl (C API) ROS client library interface                  |
+| Services, Parameters, Time, Names ...                     |
++-----------------------------------------------------------+
+| rmw (C API) ROS middleware interface                      |
+| Pub/Sub, Services, Discovery, ...                         |
++-----------+-----------+-------------+-----+---------------+
+| DDS       | DDS       | DDS         | ... | Intra-process |
+| Adapter 0 | Adapter 1 | Adapter 2   |     |      API      |
++-----------+-----------+-------------+     +---------------+
+| FastRTPS  | RTI       | PrismTech   | ...
+|           | Context   | OpenSplice  |
++-----------+-----------+-------------+                                        .
+```
+
+> **Merkkasten: Ebenen der ROS2-Architektur**
+>
+> - **User Applications**: Programme in Python, C++, Java etc., die ROS2 nutzen.
+> - **rcl/rclcpp/rclpy**: ROS2-Client-Libraries – bieten die ROS-API für verschiedene Sprachen.
+> - **rmw**: Abstraktes Middleware-Interface – trennt ROS2-Logik von der konkreten Kommunikations-Implementierung.
+> - **DDS-Adapter**: Bindeglied zu verschiedenen DDS-Implementierungen (z.B. FastRTPS, RTI, OpenSplice).
+> - **DDS**: Die eigentliche Middleware, die für Discovery, Nachrichtenübertragung und QoS sorgt.
+>
+> *Vorteil:* ROS2 kann flexibel mit verschiedenen Kommunikations-Backends betrieben werden und ist nicht an einen Anbieter gebunden.
+
+
+ROS2 hat als Default Lösung die Implementierung `rmw_fastrtps_cpp`, die von der Firma eProsima unter einer Appache 2.0 Lizenz verbreitet wird, integriert. Alternative Umsetzungen lassen sich anhand der unterstützten Hardware, des Overheads für den Nachrichtenaustausch bzw. anhand der Dauer für die Nachrichtenverbreitung abgrenzen. (vgl [A performance comparsion of OpenSplice and RTI implementations](https://www.researchgate.net/publication/271550363_Data_Distribution_Service_DDS_A_performance_comparison_of_OpenSplice_and_RTI_implementations)). Daher sieht ROS2 ein abstraktes Interface vor, dass ein Maximum an Austauschbarkeit gewährleisten soll.
+
+vgl. https://index.ros.org/doc/ros2/Concepts/DDS-and-ROS-middleware-implementations/
+
 ## Einführungsbeispiele
 
 **Arbeit auf der Konsole**
@@ -482,38 +516,46 @@ int main(int argc, char * argv[])
 | 32    | `init` aktiviert die abstrakte Middelwareschnittstelle von ROS2 für einen Knoten. Dabei können unterschiedliche Parameter für die Konfiguration (zum Beispiel Logging-Levels, Kommunikationsparameter, usw.) übergeben werden.                                                                                                                                               |
 | 33    | Aktivierung des Knotens über den einmaligen Aufruf von `spin()`. Diese Funktion sollte der Knoten nur im Fehlerfall verlassen.                                                                                                                                                                                                                                               |
 
-```cpp    Subscriber.cpp
-#include <memory>
+> Den Subscriber Knoten haben wir in Python realisiert. Schlagen Sie jeweils die Umsetzung des Publishers in Python und die des Subscribers in C++ nach, um die Unterschiede der beiden Programmiersprachen zu erkennen.
 
-#include "rclcpp/rclcpp.hpp"
-#include "std_msgs/msg/string.hpp"
-using std::placeholders::_1;
+```py    Subscriber.cpp
+import rclpy
+from rclpy.node import Node
 
-class MinimalSubscriber : public rclcpp::Node
-{
-  public:
-    MinimalSubscriber()
-    : Node("minimal_subscriber")
-    {
-      subscription_ = this->create_subscription<std_msgs::msg::String>(
-      "topic", 10, std::bind(&MinimalSubscriber::topic_callback, this, _1));
-    }
+from std_msgs.msg import String
 
-  private:
-    void topic_callback(const std_msgs::msg::String::SharedPtr msg) const
-    {
-      RCLCPP_INFO(this->get_logger(), "I heard: '%s'", msg->data.c_str());
-    }
-    rclcpp::Subscription<std_msgs::msg::String>::SharedPtr subscription_;
-};
 
-int main(int argc, char * argv[])
-{
-  rclcpp::init(argc, argv);
-  rclcpp::spin(std::make_shared<MinimalSubscriber>());
-  rclcpp::shutdown();
-  return 0;
-}
+class MinimalSubscriber(Node):
+
+    def __init__(self):
+        super().__init__('minimal_subscriber')
+        self.subscription = self.create_subscription(
+            String,
+            'topic',
+            self.listener_callback,
+            10)
+        self.subscription  # prevent unused variable warning
+
+    def listener_callback(self, msg):
+        self.get_logger().info('I heard: "%s"' % msg.data)
+
+
+def main(args=None):
+    rclpy.init(args=args)
+
+    minimal_subscriber = MinimalSubscriber()
+
+    rclpy.spin(minimal_subscriber)
+
+    # Destroy the node explicitly
+    # (optional - otherwise it will be done automatically
+    # when the garbage collector destroys the node object)
+    minimal_subscriber.destroy_node()
+    rclpy.shutdown()
+
+
+if __name__ == '__main__':
+    main()
 ```
 
 Ok, wie lassen sich diese beiden Knoten nun starten. In dieser Veranstaltung
