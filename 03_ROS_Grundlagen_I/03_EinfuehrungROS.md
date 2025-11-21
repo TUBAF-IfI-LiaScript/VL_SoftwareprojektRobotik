@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.0.7
+version:  0.0.8
 language: de
 narrator: Deutsch Female
 
@@ -228,6 +228,46 @@ sicherstellt.
 
 *******************************************************************************
 
+## Architektur von ROS2 
+
+<!--
+style="width: 80%; min-width: 520px; max-width: 820px;"
+-->
+```ascii
+
+              User Applications
++---------+---------+---------+
+| rclcpp  | rclpy   | rcljava | ...
++---------+---------+---------+-----------------------------+
+| rcl (C API) ROS client library interface                  |
+| Services, Parameters, Time, Names ...                     |
++-----------------------------------------------------------+
+| rmw (C API) ROS middleware interface                      |
+| Pub/Sub, Services, Discovery, ...                         |
++-----------+-----------+-------------+-----+---------------+
+| DDS       | DDS       | DDS         | ... | Intra-process |
+| Adapter 0 | Adapter 1 | Adapter 2   |     |      API      |
++-----------+-----------+-------------+     +---------------+
+| FastRTPS  | RTI       | PrismTech   | ...
+|           | Context   | OpenSplice  |
++-----------+-----------+-------------+                                        .
+```
+
+> **Merkkasten: Ebenen der ROS2-Architektur**
+>
+> - **User Applications**: Programme in Python, C++, Java etc., die ROS2 nutzen.
+> - **rcl/rclcpp/rclpy**: ROS2-Client-Libraries – bieten die ROS-API für verschiedene Sprachen.
+> - **rmw**: Abstraktes Middleware-Interface – trennt ROS2-Logik von der konkreten Kommunikations-Implementierung.
+> - **DDS-Adapter**: Bindeglied zu verschiedenen DDS-Implementierungen (z.B. FastRTPS, RTI, OpenSplice).
+> - **DDS**: Die eigentliche Middleware, die für Discovery, Nachrichtenübertragung und QoS sorgt.
+>
+> *Vorteil:* ROS2 kann flexibel mit verschiedenen Kommunikations-Backends betrieben werden und ist nicht an einen Anbieter gebunden.
+
+
+ROS2 hat als Default Lösung die Implementierung `rmw_fastrtps_cpp`, die von der Firma eProsima unter einer Appache 2.0 Lizenz verbreitet wird, integriert. Alternative Umsetzungen lassen sich anhand der unterstützten Hardware, des Overheads für den Nachrichtenaustausch bzw. anhand der Dauer für die Nachrichtenverbreitung abgrenzen. (vgl [A performance comparsion of OpenSplice and RTI implementations](https://www.researchgate.net/publication/271550363_Data_Distribution_Service_DDS_A_performance_comparison_of_OpenSplice_and_RTI_implementations)). Daher sieht ROS2 ein abstraktes Interface vor, dass ein Maximum an Austauschbarkeit gewährleisten soll.
+
+vgl. https://index.ros.org/doc/ros2/Concepts/DDS-and-ROS-middleware-implementations/
+
 ## Basiskonzepte
 
 **Pakete** - Pakete kapseln einzelne Algorithmen und realisieren deren Abhängigkeiten. Letztendlich wird damit die Wiederverwendbarkeit einer Implementierung gewährleistet.
@@ -349,57 +389,8 @@ string FOO="foo"
 Eigene Messagetypen umfassen üblicherweise eine Hierarchie von Messages und Sub-Messages. Untersuchen Sie zum Beispiel das Standard-Laserscanner Nachrichtenformat:
 
 ```
-> ros2 msg show sensor_msgs/msg/LaserScan
+> ros2 interface show sensor_msgs/msg/LaserScan
 ```
-
-Knoten, die einen Wert publizieren lassen sich neben den Programmen auch auf der
-Kommandozeile erzeugen. Damit besteht für Tests eigener Subscriber die Möglichkeit diese sehr einfach mit spezifischen Nachrichten zu triggern.
-                   
-|                     | ROS1 node                                                                                      |      ROS2 node        |
-|:--------------------|:-----------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------|
-| Zweck               | Ausführbares Programm im ROS1 Kontext, das in der Lage ist mit anderen Knoten zu kommunizieren | Ausführbares Programm im ROS1 Kontext, das in der Lage ist mit anderen Knoten zu kommunizieren |
-| Discovery           | Verteilte Discovery-Mechanismen (die nicht von einem einzelnen Knoten abhängen)                | ROS Master als zentrale Verwaltungsinstanz der Kommunikation                                   |
-| Client Bibliotheken | `rclcpp` = C++ client Library, `rclpy` = Python client library C++                             | `roscpp` = C++ client Library, `rospy` = Python client library                                 |
-
-## Architektur von ROS2 
-
-<!--
-style="width: 80%; min-width: 520px; max-width: 820px;"
--->
-```ascii
-
-              User Applications
-+---------+---------+---------+
-| rclcpp  | rclpy   | rcljava | ...
-+---------+---------+---------+-----------------------------+
-| rcl (C API) ROS client library interface                  |
-| Services, Parameters, Time, Names ...                     |
-+-----------------------------------------------------------+
-| rmw (C API) ROS middleware interface                      |
-| Pub/Sub, Services, Discovery, ...                         |
-+-----------+-----------+-------------+-----+---------------+
-| DDS       | DDS       | DDS         | ... | Intra-process |
-| Adapter 0 | Adapter 1 | Adapter 2   |     |      API      |
-+-----------+-----------+-------------+     +---------------+
-| FastRTPS  | RTI       | PrismTech   | ...
-|           | Context   | OpenSplice  |
-+-----------+-----------+-------------+                                        .
-```
-
-> **Merkkasten: Ebenen der ROS2-Architektur**
->
-> - **User Applications**: Programme in Python, C++, Java etc., die ROS2 nutzen.
-> - **rcl/rclcpp/rclpy**: ROS2-Client-Libraries – bieten die ROS-API für verschiedene Sprachen.
-> - **rmw**: Abstraktes Middleware-Interface – trennt ROS2-Logik von der konkreten Kommunikations-Implementierung.
-> - **DDS-Adapter**: Bindeglied zu verschiedenen DDS-Implementierungen (z.B. FastRTPS, RTI, OpenSplice).
-> - **DDS**: Die eigentliche Middleware, die für Discovery, Nachrichtenübertragung und QoS sorgt.
->
-> *Vorteil:* ROS2 kann flexibel mit verschiedenen Kommunikations-Backends betrieben werden und ist nicht an einen Anbieter gebunden.
-
-
-ROS2 hat als Default Lösung die Implementierung `rmw_fastrtps_cpp`, die von der Firma eProsima unter einer Appache 2.0 Lizenz verbreitet wird, integriert. Alternative Umsetzungen lassen sich anhand der unterstützten Hardware, des Overheads für den Nachrichtenaustausch bzw. anhand der Dauer für die Nachrichtenverbreitung abgrenzen. (vgl [A performance comparsion of OpenSplice and RTI implementations](https://www.researchgate.net/publication/271550363_Data_Distribution_Service_DDS_A_performance_comparison_of_OpenSplice_and_RTI_implementations)). Daher sieht ROS2 ein abstraktes Interface vor, dass ein Maximum an Austauschbarkeit gewährleisten soll.
-
-vgl. https://index.ros.org/doc/ros2/Concepts/DDS-and-ROS-middleware-implementations/
 
 ## Einführungsbeispiele
 
