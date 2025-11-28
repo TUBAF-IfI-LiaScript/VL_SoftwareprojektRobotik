@@ -1,8 +1,8 @@
 <!--
 
-author:   Sebastian Zug & Georg Jäger
+author:   Sebastian Zug & Georg Jäger & Claud.ai
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.0.3
+version:  0.0.4
 language: de
 narrator: Deutsch Female
 
@@ -13,22 +13,39 @@ import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_Softwareproje
   
 -->
 
-[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/04_ROS_Pakete_Tools/02_ROS_Pakete.md)
+[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/04_ROS_Pakete_Tools/04_ROS_Pakete.md)
 
 # ROS2 Pakete
+
+[Roboter] Kompakte autonome Roboter, die auf auf Fuß- und Gehwegen operieren, bieten für logistische Herausforderungen, Unterstützungsdienste für älterer Menschen oder Wartungs- und Monitoring Aufgaben, Lösungsansätze für gesamtgesellschaftliche Fragen. Dabei steht aktuell die Frage nach Konzepten und Ansätzen für die rechtliche Genehmigung der Roboter und Szenarien im Raum, die in jedem Fall eine Remote-Kontrolle für schwierige Situationen vorsehen wird. Eine entsprechende Absicherung der Kommunikation mit den Robotern ist also zwingend erfor
+
+
 
 | Parameter            | Kursinformationen                                                                                           |
 | -------------------- | ----------------------------------------------------------------------------------------------------------- |
 | **Veranstaltung:**   | @config.lecture                                                                                             |
 | **Semester**         | @config.semester                                                                                            |
 | **Hochschule:**      | `Technische Universität Freiberg`                                                                           |
-| **Inhalte:**         | `Umsetzung von ROS Paketen Kommunikationsprinzipien`                                                        |
-| **Link auf GitHub:** | https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/02_ROS_Pakete/02_ROS_Pakete.md |
+| **Inhalte:**         | `Umsetzung von ROS Paketen Kommunikationsprinzipien`    s                                                    |
+| **Link auf GitHub:** | https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/04_ROS_Pakete/04_ROS_Pakete.md |
 | **Autoren**          | @author                                                                                                     |
 
 ![](https://media.giphy.com/media/4VY76i2rbyg2ggLIGQ/giphy-downsized.gif)
 
 --------------------------------------------------------------------------------
+
+
+**Leitfragen zur heutigen Veranstaltung**
+
+- Wie ist ein ROS2-Paket aufgebaut und welche Dateien sind zwingend erforderlich?
+- Wie erstellt und strukturiert man eigene ROS2-Pakete für verschiedene Anwendungsfälle?
+- Wie funktioniert die Kommunikation zwischen mehreren ROS2-Nodes auf unterschiedlichen Rechnern?
+- Welche Rolle spielt die `ROS_DOMAIN_ID` beim Betrieb verteilter ROS2-Systeme?
+- Wie werden Nachrichten, Services und Aktionen in ROS2-Paketen definiert und genutzt?
+- Wie kann man eigene Nachrichten- und Servicetypen in einem ROS2-Paket anlegen?
+- Welche typischen Fehlerquellen gibt es beim Arbeiten mit ROS2-Paketen und verteilten Systemen?
+- Wie testet und debuggt man ROS2-Pakete im Netzwerkverbund praktisch?
+
 
 ## ROS2 auf mehreren Rechnern
 
@@ -156,6 +173,27 @@ Für ein ganzes Set von Paketen ist deutlich mehr Aufwand erforderlich:
 
 > **Merke:** ROS / ROS2 umfasst eine Fülle von Tools für die Organisation dieses Prozesses.
 
+
+
+## Build-Tools 
+
+In ROS 2 gibt es zwei zentrale Komponenten:
+
+- ament – das Buildsystem für einzelne Pakete
+- colcon – das Build-Orchestrierungswerkzeug für ganze Workspaces
+
+| **Aspekt**                     | **ament**                                                          | **colcon**                                                      |
+| ------------------------------ | ------------------------------------------------------------------ | --------------------------------------------------------------- |
+| **Ebene**                      | Paket-Buildsystem                                                  | Workspace-Build-Orchestrator                                    |
+| **Aufgabe**                    | Baut *ein einzelnes ROS-Paket* (Build, Install, Test)              | Baut *alle Pakete* eines Workspaces in korrekter Reihenfolge    |
+| **Rolle im ROS-Ökosystem**     | Definiert Buildregeln, Tests, Install-Skripte                      | Koordiniert Builds, löst Abhängigkeiten auf, steuert Logging    |
+| **Eingaben**                   | `package.xml`, `CMakeLists.txt` oder `setup.py`                    | Workspace mit mehreren Paketen (`src/`)                         |
+| **Ausgaben**                   | installierte Artefakte eines Pakets (Nodes, Libs, Header, Skripte) | kompletter Workspace: `build/`, `install/`, `log/`              |
+| **Buildsprache / Technologie** | CMake (ament_cmake), Python (ament_python)                         | Python-basiertes CLI-Tool, generisch erweiterbar                |
+| **Unterstützte Sprachen**      | C++, Python                                                        | alle Buildsysteme, u. a. ament, CMake, Python, Gradle           |
+
+> **Hinweis:** `colcon` ist nicht spezifisch für ROS 2 und kann verwendet werden, um beliebige Softwareprojekte zu bauen, die verschiedene Buildsysteme verwenden.
+
 ## Realisierung eines eigenen Paketes
 
 Wir wollen die Funktionalität der `minimal_subscriber`/`minimal_publisher` Beispiel erweitern und einen neuen Knoten implementieren, der den Zählwert nicht als Bestandteil eines strings kommuniziert sondern als separaten Zahlenwert.
@@ -203,9 +241,9 @@ find_package(rosidl_default_generators REQUIRED)
 Darüber hinaus müssen wir die Generierungsanweisung selbst integrieren:
 
 ```
-rosidl_generate_interfaces(new_msg
+rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/MyMsg.msg"
-  DEPENDENCIES builtin_interfaces
+  DEPENDENCIES std_msgs 
 )
 ```
 
@@ -237,7 +275,7 @@ das neu definierte Work-Package in die Liste der verfügbaren Pakete aufgenommen
 > source install/setup.bash
 > ros2 interface list | grep my
 my_msg_package/msg/MyMsg
-> ros2 topic pub /tralla my_msg_package/msg/MyMsg "{counter: '8'}"
+> ros2 topic pub /tralla my_msg_package/msg/MyMsg "{counter: 8}"
 ```
 
 ```
@@ -279,11 +317,8 @@ find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(my_msg_package REQUIRED)
 
-ament_target_dependencies(
-  data_generator
-  "rclcpp"
-  "my_msg_package"
-)
+add_executable(data_generator src/data_generator.cpp)
+ament_target_dependencies(data_generator rclcpp std_msgs my_msg_package)
 ```
 
 Analoge Ergänzungen sind für `package.xml` notwendig. Wiederum werden die Basispakete `rclcpp` und `std_msgs` referenziert. Dazu kommt unser Message-Paket. Mit der Vorgabe der Abhängigkeiten werden diese Einträge automatisch generiert.
@@ -384,6 +419,212 @@ Einen guten Überblick zur Behandlung von eigenen Datentypen im originären Pake
 
 https://index.ros.org/doc/ros2/Tutorials/Rosidl-Tutorial/
 
+**Schritt 3: Python-Paket mit Subscriber für eigenen Datentyp**
+
+Während das vorherige Beispiel einen C++-Publisher demonstriert, zeigen wir nun, wie man einen Subscriber in Python implementiert, der unseren eigenen Nachrichtentyp `MyMsg` empfängt.
+
+Zunächst erstellen wir ein Python-Paket mit dem `ament_python` Build-Type:
+
+```
+> ros2 pkg create my_python_subscriber --build-type ament_python --dependencies rclpy std_msgs my_msg_package
+going to create a new package
+package name: my_python_subscriber
+destination directory: /home/zug/Desktop/SoftwareprojektRobotik/examples/07_ROS_Pakete/src
+package format: 3
+version: 0.0.0
+description: TODO: Package description
+maintainer: ['zug <Sebastian.Zug@informatik.tu-freiberg.de>']
+licenses: ['TODO: License declaration']
+build type: ament_python
+dependencies: ['rclpy', 'std_msgs', 'my_msg_package']
+creating folder ./my_python_subscriber
+creating ./my_python_subscriber/package.xml
+creating source folder
+creating folder ./my_python_subscriber/my_python_subscriber
+creating ./my_python_subscriber/setup.py
+creating ./my_python_subscriber/setup.cfg
+creating ./my_python_subscriber/resource/my_python_subscriber
+creating ./my_python_subscriber/my_python_subscriber/__init__.py
+creating ./my_python_subscriber/test/test_copyright.py
+creating ./my_python_subscriber/test/test_flake8.py
+creating ./my_python_subscriber/test/test_pep257.py
+```
+
+Die Struktur eines Python-Pakets unterscheidet sich von einem C++-Paket:
+
+```
+my_python_subscriber/
+├── package.xml
+├── resource/
+│   └── my_python_subscriber
+├── setup.cfg
+├── setup.py
+├── my_python_subscriber/
+│   └── __init__.py
+└── test/
+    ├── test_copyright.py
+    ├── test_flake8.py
+    └── test_pep257.py
+```
+
+Anstelle einer `CMakeLists.txt` verwendet ein Python-Paket die Dateien `setup.py` und `setup.cfg` für die Build-Konfiguration.
+
+Nun erstellen wir unseren Subscriber-Node in der Datei `my_python_subscriber/data_receiver.py`:
+
+```python    data_receiver.py
+import rclpy
+from rclpy.node import Node
+from my_msg_package.msg import MyMsg
+
+class MinimalSubscriber(Node):
+
+    def __init__(self):
+        super().__init__('minimal_subscriber')
+        self.subscription = self.create_subscription(
+            MyMsg,
+            'topic',
+            self.listener_callback,
+            10)
+        self.subscription  # prevent unused variable warning
+        self.get_logger().info('Subscriber initialized and listening on topic: "topic"')
+
+    def listener_callback(self, msg):
+        self.get_logger().info('Received: counter=%d, comment="%s"' % (msg.counter, msg.comment))
+
+def main(args=None):
+    rclpy.init(args=args)
+    minimal_subscriber = MinimalSubscriber()
+
+    try:
+        rclpy.spin(minimal_subscriber)
+    except KeyboardInterrupt:
+        pass
+    finally:
+        minimal_subscriber.destroy_node()
+        rclpy.shutdown()
+
+if __name__ == '__main__':
+    main()
+```
+
+Als nächstes müssen wir die `setup.py` Datei bearbeiten, um unseren Node als ausführbare Datei zu registrieren:
+
+```python    setup.py
+from setuptools import setup
+
+package_name = 'my_python_subscriber'
+
+setup(
+    name=package_name,
+    version='0.0.0',
+    packages=[package_name],
+    data_files=[
+        ('share/ament_index/resource_index/packages',
+            ['resource/' + package_name]),
+        ('share/' + package_name, ['package.xml']),
+    ],
+    install_requires=['setuptools'],
+    zip_safe=True,
+    maintainer='zug',
+    maintainer_email='Sebastian.Zug@informatik.tu-freiberg.de',
+    description='Python subscriber for custom message type',
+    license='TODO: License declaration',
+    tests_require=['pytest'],
+    entry_points={
+        'console_scripts': [
+            'data_receiver = my_python_subscriber.data_receiver:main',
+        ],
+    },
+)
+```
+
+Der wichtige Teil ist der `entry_points` Abschnitt, der definiert, dass die Funktion `main` aus `data_receiver.py` als ausführbares Programm `data_receiver` verfügbar gemacht wird.
+
+Prüfen Sie die Abhängigkeiten in der `package.xml`:
+
+```xml    package.xml
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>my_python_subscriber</name>
+  <version>0.0.0</version>
+  <description>Python subscriber for custom message type</description>
+  <maintainer email="Sebastian.Zug@informatik.tu-freiberg.de">zug</maintainer>
+  <license>TODO: License declaration</license>
+
+  <depend>rclpy</depend>
+  <depend>std_msgs</depend>
+  <depend>my_msg_package</depend>
+
+  <test_depend>ament_copyright</test_depend>
+  <test_depend>ament_flake8</test_depend>
+  <test_depend>ament_pep257</test_depend>
+  <test_depend>python3-pytest</test_depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>
+```
+
+Wichtig: Python-Pakete verwenden `<depend>` statt der separaten `<build_depend>` und `<exec_depend>` Tags, die in C++-Paketen üblich sind. Die Abhängigkeit zu unserem `my_msg_package` ist essentiell, damit Python auf die generierten Message-Definitionen zugreifen kann.
+
+Nun können wir alle Pakete gemeinsam bauen:
+
+```
+> colcon build --symlink-install
+Starting >>> my_msg_package
+Starting >>> my_python_subscriber
+Finished <<< my_msg_package [0.59s]
+Finished <<< my_python_subscriber [0.82s]
+
+Summary: 2 packages finished [1.12s]
+```
+
+Die Option `--symlink-install` ist besonders nützlich bei Python-Paketen, da sie symbolische Links erstellt anstatt die Dateien zu kopieren. Das bedeutet, dass Änderungen am Python-Code sofort wirksam werden, ohne dass ein erneuter Build notwendig ist.
+
+Nach dem Sourcen der Umgebung können wir den Subscriber starten:
+
+```
+> source install/setup.bash
+> ros2 run my_python_subscriber data_receiver
+[INFO] [minimal_subscriber]: Subscriber initialized and listening on topic: "topic"
+```
+
+Testen Sie das Zusammenspiel von Publisher und Subscriber, indem Sie in separaten Terminals starten:
+
+**Terminal 1 (Publisher):**
+```
+> source install/setup.bash
+> ros2 run my_tutorial_package data_generator
+[INFO] [minimal_publisher]: Publishing: '0, Keine Evaluation des Wertes'
+[INFO] [minimal_publisher]: Publishing: '1, Keine Evaluation des Wertes'
+[INFO] [minimal_publisher]: Publishing: '2, Keine Evaluation des Wertes'
+```
+
+**Terminal 2 (Subscriber):**
+```
+> source install/setup.bash
+> ros2 run my_python_subscriber data_receiver
+[INFO] [minimal_subscriber]: Subscriber initialized and listening on topic: "topic"
+[INFO] [minimal_subscriber]: Received: counter=0, comment="Keine Evaluation des Wertes"
+[INFO] [minimal_subscriber]: Received: counter=1, comment="Keine Evaluation des Wertes"
+[INFO] [minimal_subscriber]: Received: counter=2, comment="Keine Evaluation des Wertes"
+```
+
+**Unterschiede zwischen C++ und Python Paketen:**
+
+| **Aspekt**              | **C++ (ament_cmake)**              | **Python (ament_python)**                |
+| ----------------------- | ---------------------------------- | ---------------------------------------- |
+| **Build-System**        | CMake                              | setuptools                               |
+| **Konfigurationsdatei** | CMakeLists.txt                     | setup.py, setup.cfg                      |
+| **Quellcode-Ordner**    | src/, include/                     | <package_name>/                          |
+| **Node-Registrierung**  | add_executable() in CMakeLists.txt | entry_points in setup.py                 |
+| **Abhängigkeiten**      | find_package() in CMakeLists.txt   | dependencies in setup.py                 |
+| **Import**              | #include <package/msg/Type.hpp>    | from package.msg import Type             |
+| **Build-Geschwindigkeit** | Langsamer (Kompilierung)         | Schneller (keine Kompilierung)           |
+| **symlink-install**     | Optional                           | Empfohlen (Änderungen sofort wirksam)    |
+
 
 ## Aufzeichnen des Prozesses
 
@@ -455,31 +696,6 @@ Unter anderem sollten zwei Fehlkonfigurationen vermieden werden:
 + Wenn zu viele Daten aggregiert wurden, wird die Performanz des Systems möglicherweise überstrapaziert. Die Bandbreite der Schreiboperationen auf dem Speichermedium muss die Datenrate entsprechend abdecken.
 
 Ein Lösungsansatz ist die zeitliche Filterung der Informationen, in dem zum Beispiel nur jede 10te Nachricht gespeichert wird. Dies wiederum kann dann aber einen Einfluss auf das Verhalten des Algorithmus haben!
-
-An dieser Stelle wird schon deutlich, wie der unter ROS1 erreichte
-Komfort noch nicht unter ROS2 realisiert ist. Das `rosbag` Tool unter ROS1 erreicht
-ein weit größeres Spektrum an Konfigurierbarkeit.
-
-!?[rosbagInfo](https://www.youtube.com/watch?time_continue=70&v=pwlbArh_neU&feature=emb_logo)<!-- height="500px" width="800px" -->
-
-Beispiel des Einsatzes eines Bagfiles anhand der Scan-Daten im deutschen Museum in München [Link](https://google-cartographer-ros.readthedocs.io/en/latest/demos.html).
-Laden Sie einen zugehörigen Datensatz mittels
-
-```
-wget -P ~/Downloads https://storage.googleapis.com/cartographer-public-data/bags/backpack_2d/b2-2016-04-05-14-44-52.bag
-```
-
-auf Ihren Rechner. Es handelt sich dabei um ein ROS1-bagfile!
-
-1. Visualisierung der Dateninhalte mittels `rqt_bag`. Zuvor sollten Sie die notwendigen `rqt_bag_plugins` installieren.
-2. Starten des Bagfiles unter `ros2` mittels eines Plugins für die Konvertierung
-
-```
-> source /opt/ros/noetic/setup.zsh
-> source /opt/ros/foxy/setup.zsh
-ROS_DISTRO was set to 'noetic' before. Please make sure that the environment does not mix paths from different distributions.
-> ros2 bag play -s rosbag_v2 b2-2016-04-05-14-44-52.bag
-```
 
 ## Steuerung des Startprozesses
 
@@ -560,6 +776,16 @@ def generate_launch_description():
             arguments = ['/topic:=/newtopic']
         )
     ])
+```
+
+Dann kann der Aufruf des Launch-Files wie folgt erfolgen:
+
+```bash
+# Mit Standardwert (z.B. "zug_")
+ros2 launch my_tutorial_package launchNodes.launch.py
+
+# Mit eigenem Wert
+ros2 launch my_tutorial_package launchNodes.launch.py node_prefix:=robot_
 ```
 
 Innerhalb eines C++ Paketes müssen launch-Files in der CMakeLists.txt spezifiziert werden, damit Sie in den Installationsprozess einfließen:
