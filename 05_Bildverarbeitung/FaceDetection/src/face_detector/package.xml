@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>face_detector</name>
+  <version>0.1.0</version>
+  <description>Face detection using OpenCV Haar Cascade for ROS2</description>
+  <maintainer email="sebastian.zug@informatik.tu-freiberg.de">Sebastian Zug</maintainer>
+  <license>MIT</license>
+
+  <!-- Dependencies -->
+  <depend>rclpy</depend>
+  <depend>sensor_msgs</depend>
+  <depend>std_msgs</depend>
+  <depend>cv_bridge</depend>
+
+  <!-- Execution dependencies -->
+  <exec_depend>v4l2_camera</exec_depend>
+  <exec_depend>rqt_image_view</exec_depend>
+
+  <!-- Test dependencies -->
+  <test_depend>ament_copyright</test_depend>
+  <test_depend>ament_flake8</test_depend>
+  <test_depend>ament_pep257</test_depend>
+  <test_depend>python3-pytest</test_depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>
