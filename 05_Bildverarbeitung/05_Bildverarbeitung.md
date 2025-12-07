@@ -202,7 +202,7 @@ ros2 run rqt_image_view rqt_image_view
    ║ Linsen ║          →      ├─┼─┼─┼─┼─┤
    ╚════════╝                 │ │ │ │ │ │
                               └─┴─┴─┴─┴─┘
-                              Photozellen                                               .
+                              Photozellen                                                                      .
 ```
 
 **Zwei fundamentale Schritte:**
@@ -229,13 +229,14 @@ Ein Bild ist eine 2D-Matrix von **Pixeln** (Picture Elements). Jeder Pixel hat:
 
 > Je größer die Auflösung, desto mehr Details können erfasst werden – aber auch desto mehr Daten müssen verarbeitet werden!
 
-| Auflösung | Pixel         | Graustufenbild | RGB-Bild    | Typische Anwendung         |
-| --------- | ------------- | -------------- | ----------- | -------------------------- |
-| QVGA      | 320 × 240     | ~75 KB         | ~225 KB     | Embedded Systems           |
-| VGA       | 640 × 480     | ~300 KB        | ~900 KB     | Webcams, einfache Roboter  |
-| HD (720p) | 1280 × 720    | ~900 KB        | ~2.7 MB     | Action-Kameras             |
-| Full HD   | 1920 × 1080   | ~2 MB          | ~6 MB       | Hochwertige Kameras        |
-| 4K        | 3840 × 2160   | ~8 MB          | ~24 MB      | High-End-Anwendungen       |
+<!-- data-type="none" -->
+| Auflösung | Pixel       | Graustufenbild | RGB-Bild  | Typische Anwendung        |
+| --------- | ----------- | -------------- | --------- | ------------------------- |
+| QVGA      | 320 × 240   | $~75$ KB       | $~225 KB  | Embedded Systems          |
+| VGA       | 640 × 480   | $~300$ KB      | $~900 KB  | Webcams, einfache Roboter |
+| HD (720p) | 1280 × 720  | $~900$ KB      | $~2.7$ MB | Action-Kameras            |
+| Full HD   | 1920 × 1080 | $~2$ MB        | $~6 MB    | Hochwertige Kameras       |
+| 4K        | 3840 × 2160 | $~8$ MB        | $~24 MB   | High-End-Anwendungen      |
 
 **Datenrate bei 30 fps (Full HD RGB):**
 
@@ -550,7 +551,7 @@ cv2.imwrite('gray_image_manual.png', gray_manual)
 ```
 @LIA.eval(`["loadImage.py", "main.py"]`, `none`, `python3 main.py`, `*`)
 
-s
+
 **Vorteile Graustufen:**
 
 + ⚡ 3× weniger Speicher
@@ -662,8 +663,6 @@ from loadImage import load_image_from_url
 
 image = load_image_from_url('https://r4r.informatik.tu-freiberg.de/content/images/size/w960/2022/08/karl_kegel_bau1.jpg')
 
-image = load_image_from_url('https://r4r.informatik.tu-freiberg.de/content/images/size/w960/2022/08/karl_kegel_bau1.jpg')
-
 # OpenCV Graustufenkonvertierung
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 cv2.imwrite('gray_image.png', gray)
@@ -735,7 +734,6 @@ else:
     output = 0
 ```
 
-
 ```python
 # Besser bei ungleichmäßiger Beleuchtung
 adaptive = cv2.adaptiveThreshold(
@@ -749,6 +747,48 @@ adaptive = cv2.adaptiveThreshold(
 ```
 
 **Anwendung**: Dokumentenscanning, QR-Code-Erkennung, Kontursegmentierung
+
+```python -loadImage.py 
+import cv2
+import numpy as np
+
+import urllib.request
+
+def load_image_from_url(url):
+    resp = urllib.request.urlopen(url)
+    image_data = resp.read()
+    image_array = np.asarray(bytearray(image_data), dtype=np.uint8)
+    image = cv2.imdecode(image_array, cv2.IMREAD_COLOR)
+    return image
+```
+```python pixelanpassung.py
+import cv2
+import numpy as np
+from matplotlib import pyplot as plt
+from loadImage import load_image_from_url
+
+image = load_image_from_url('https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/05_Bildverarbeitung/images/QR_example.png?raw=true')
+
+# OpenCV Graustufenkonvertierung
+gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+# Einfaches Thresholding
+ret, binary = cv2.threshold(gray, 128, 255, cv2.THRESH_BINARY)
+
+# Adaptives Thresholding
+adaptive = cv2.adaptiveThreshold(
+    gray, 
+    255,           
+    cv2.ADAPTIVE_THRESH_MEAN_C,
+    cv2.THRESH_BINARY,
+    blockSize=91,
+    C=3
+)
+cv2.imwrite('adaptive_image.png', adaptive)
+cv2.imwrite('binary_image.png', binary)
+```
+@LIA.eval(`["loadImage.py", "main.py"]`, `none`, `python3 main.py`, `*`)
+
 
 ### Morphologische Operationen
 
@@ -819,23 +859,96 @@ Reale Kamerabilder enthalten immer Rauschen – verursacht durch Sensorrauschen,
 
 ```ascii
 Original Bild          Gaußsches Rauschen       Salt-and-Pepper
-  100 100 100            105  98 102               100 100   0
-  100 100 100     -->     97 103  99       -->    100 255 100
-  100 100 100            101  96 104               100 100 100
+  100 100 100            105  98 102               105  98   0  <-
+  100 100 100     -->     97 103  99       -->      97 103  99
+  100 100 100            101  96 104               101 255 104
+                                                         ^
+                                                         |
 ```
+
+### Wiederholung Faltungsoperationen
+
+**Was ist Faltung?** Die Faltung (Convolution) ist eine mathematische Operation, die zwei Funktionen kombiniert, um eine dritte zu erzeugen. In der Bildverarbeitung verwenden wir sie, um Filter anzuwenden.
+
+**Intuitive Erklärung mit Würfeln:**
+
+Stellen Sie sich vor, Sie werfen zwei faire Würfel. Welche Augensummen sind wie wahrscheinlich?
+
+```ascii
+Würfel 1: Gleichverteilung          Würfel 2: Gleichverteilung
+Wahrscheinlichkeit                  Wahrscheinlichkeit
+        ^                               ^             
+     1/6|                            1/6|             
+        |█ █ █ █ █ █                    |█ █ █ █ █ █  
+      0 +────────────                 0 +──────────── 
+         1 2 3 4 5 6                     1 2 3 4 5 6   
+         Augenzahl                       Augenzahl                                                                       .
+```
+
+> Welche Verteilung ergibt sich für die **Summe** der beiden Würfel?
+
+Die 7 ist am wahrscheinlichsten (6/36 = 1/6)!
+Warum? Es gibt 6 Kombinationen: (1,6), (2,5), (3,4), (4,3), (5,2), (6,1)
+
+```ascii
+Wahrscheinlichkeit
+    6/36|        █
+    5/36|      █ █ █
+    4/36|    █ █ █ █ █
+    3/36|  █ █ █ █ █ █ █
+    2/36|█ █ █ █ █ █ █ █ █
+    1/36|█ █ █ █ █ █ █ █ █ █ █
+      0 +─────────────────────────
+        2 3 4 5 6 7 8 9 10 11 12
+        Augensumme                                                                                                       .
+```
+
+**Berechnung der Faltung (Beispiel für Summe = 7):**
+
+$$
+P(\text{Summe}=7) = \sum_{i=1}^{6} P(\text{Würfel}_1=i) \cdot P(\text{Würfel}_2=7-i)
+$$
+
+Verallgemeinert für zwei Verteilungen P bedeutet das
+
+$$
+P \ast P (n) = \sum_{k} P(k) \cdot P(n-k)
+$$
+
+$$
+\text{Beispiel: } P \ast P (7) = P(1)P(6) + P(2)P(5) + P(3)P(4) + P(4)P(3) + P(5)P(2) + P(6)P(1) = 6 \cdot \frac{1}{6} \cdot \frac{1}{6} = \frac{1}{6} \\
+\text{Beispiel: } P \ast P (3) = P(1)P(2) + P(2)P(1) = 2 \cdot \frac{1}{6} \cdot \frac{1}{6} = \frac{2}{36}
+$$
+
+wobei $\ast$ die Faltungsoperation ist.
+
+Wenn wir uns das ganze im kontinuierlichen Fall anschauen, erhalten wir das Integral über den Flächen der beiden Kurven.
+
+![](https://upload.wikimedia.org/wikipedia/commons/6/6a/Convolution_of_box_signal_with_itself2.gif "Von Convolution_of_box_signal_with_itself.gif: Brian Ambergderivative work: Tinos (talk) - Convolution_of_box_signal_with_itself.gif, CC BY-SA 3.0, https://commons.wikimedia.org/w/index.php?curid=11003835")
+
+**Analogie zur Bildverarbeitung:**
+
+| Würfelbeispiel          | Bildverarbeitung                |
+| ----------------------- | ------------------------------- |
+| Würfel 1 (Verteilung)   | Eingangsbild (Pixelwerte)       |
+| Würfel 2 (Verteilung)   | Filter-Kernel (Gewichte)        |
+| Summenverteilung        | Gefiltertes Bild                |
+| Aufsummieren aller Kombinationen | Pixel × Kernel aufsummieren |
+
+> **Kernaussage**: Faltung kombiniert zwei Signale/Verteilungen zu einem neuen. In der Bildverarbeitung kombinieren wir Pixelwerte mit Filter-Gewichten!
 
 ### Lineare Filter: Faltung (Convolution)
 
-**Konzept der Faltung**: Ein Filter-Kernel wird über das Bild geschoben
+**Konzept der Faltung bei der Bildverarbeitung**: Wir erweitern das Konzept auf 2D-Bilder.
 
 ```ascii
-Eingangsbild              Kernel (3×3)          Ausgangsbild
- 10 20 30 40 50          1/9 1/9 1/9
- 15 25 35 45 55   *      1/9 1/9 1/9      =     ...
- 20 30 40 50 60          1/9 1/9 1/9
- 25 35 45 55 65
+Eingangsbild             Kernel (3×3)           Ausgangsbild "$I_{out}$"
+ 10 20 30 40 50          1/9 1/9 1/9            0  0  0  0  0
+ 15 25 35 45 55   *      1/9 1/9 1/9      =     0 25 35 45 55
+ 20 30 40 50 60          1/9 1/9 1/9            0 30 40 50 60
+ 25 35 45 55 65                                "..."
 
-Für jeden Pixel: Ausgabe = Summe(Eingabe × Kernel)                                       .
+Für jeden Pixel: Ausgabe = Summe(Eingabe × Kernel)                                                                                .
 ```
 
 **Mathematisch:**
@@ -843,6 +956,20 @@ Für jeden Pixel: Ausgabe = Summe(Eingabe × Kernel)                            
 $$
 I_{\text{out}}(x,y) = \sum_{i=-k}^{k} \sum_{j=-k}^{k} I_{\text{in}}(x+i, y+j) \cdot K(i,j)
 $$
+
+Für die Zelle [1,1] im obigen Beispiel ergibt sich also mit einem Mittelwert-Filter 
+
++ $I_out(1,1) = (10+20+30+15+25+35+20+30+40) / 9 = 25$
++ $I_out(1,2) = (20+30+40+25+35+45+30+40+50) / 9 = 35$
++ usw.
+
+> Problematisch an den Rändern: Hier fehlen Nachbarpixel. Lösungen:
+>
+> 1. Ignorieren (kleineres Ausgangsbild)
+> 2. Auffüllen mit Nullen (schwarzer Rand)
+> 3. Spiegeln der Ränder
+
+> Was kann ich damit anfangen? Die Faltung als Grundkonzept ermöglicht sehr viele Basisanwendugnen wie Glättung, Kantenerkennung, Schärfung, etc.
 
 **Box-Filter (Durchschnittsfilter)** – Einfache Glättung
 
@@ -885,6 +1012,51 @@ gaussian = cv2.GaussianBlur(image, (5,5), sigmaX=1.0)
 strong_blur = cv2.GaussianBlur(image, (15,15), sigmaX=3.0)
 ```
 
+**Beispiel: Gauß-Filter zur Rauschreduktion**
+
+```python
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Erstelle künstliches Bild mit geometrischen Formen
+image = np.zeros((300, 300), dtype=np.uint8)
+cv2.rectangle(image, (50, 50), (150, 150), 200, -1)
+cv2.circle(image, (225, 225), 50, 180, -1)
+cv2.line(image, (50, 250), (150, 200), 220, 3)
+
+# Füge Gaußsches Rauschen hinzu (normalerweise passiert das in der Kamera)
+noise = np.random.normal(0, 25, image.shape).astype(np.int16)
+noisy_image = np.clip(image.astype(np.int16) + noise, 0, 255).astype(np.uint8)
+
+# Wende Gauß-Filter an
+gaussian_filtered = cv2.GaussianBlur(noisy_image, (5, 5), sigmaX=1.5)
+strong_filtered = cv2.GaussianBlur(noisy_image, (15, 15), sigmaX=3.0)
+
+# Visualisierung
+fig, axes = plt.subplots(2, 2, figsize=(10, 10))
+
+axes[0, 0].imshow(image, cmap='gray')
+axes[0, 0].set_title('Original (ohne Rauschen)')
+axes[0, 0].axis('off')
+
+axes[0, 1].imshow(noisy_image, cmap='gray')
+axes[0, 1].set_title('Mit Gaußschem Rauschen')
+axes[0, 1].axis('off')
+
+axes[1, 0].imshow(gaussian_filtered, cmap='gray')
+axes[1, 0].set_title('Gauß-Filter (5×5, σ=1.5)')
+axes[1, 0].axis('off')
+
+axes[1, 1].imshow(strong_filtered, cmap='gray')
+axes[1, 1].set_title('Starker Gauß-Filter (15×15, σ=3.0)')
+axes[1, 1].axis('off')
+
+plt.tight_layout()
+plt.savefig('gaussian_filter_example.png')
+```
+@LIA.python3
+
 **Anwendungen:**
 
 + Rauschreduktion vor Kantendetektion
@@ -892,7 +1064,6 @@ strong_blur = cv2.GaussianBlur(image, (15,15), sigmaX=3.0)
 + Vorbereitung für Feature-Detektion
 
 ### Median-Filter
-
 
 **Median-Filter** – Nicht-linearer Filter, ersetzt Pixel durch Median der Umgebung
 
@@ -928,40 +1099,97 @@ median = cv2.medianBlur(image, ksize=5)
 
 **Problem**: Gaußfilter verwischen auch Kanten!
 
-**Lösung**: Bilateraler Filter berücksichtigt sowohl räumliche als auch Helligkeitsunterschiede
+Wenn wir einen Gaußfilter anwenden, wird jeder Pixel mit seinen Nachbarn gemittelt – **unabhängig davon, ob es sich um eine Kante handelt**. Das führt dazu, dass scharfe Objektgrenzen verschwimmen.
 
-**Idee**:
+Der bilaterale Filter ist ein **intelligenter Filter**, der zwei Fragen stellt:
 
-+ Pixel mit ähnlicher Helligkeit werden gemittelt
-+ Pixel mit großem Helligkeitsunterschied (Kanten!) werden NICHT gemittelt
+1. **Wie nah ist der Nachbar?** (räumliche Distanz) – wie beim Gaußfilter
+2. **Wie ähnlich ist die Helligkeit?** (Helligkeitsdifferenz) – **NEU!**
+
+**Nur wenn BEIDE Bedingungen erfüllt sind, wird der Nachbarpixel zum Mittelwert beigetragen.**
+
+Jeder Nachbarpixel bekommt ein **Gewicht**, das von zwei Faktoren abhängt:
 
 $$
-I_{\text{out}}(x,y) = \frac{1}{W} \sum_{i,j} I(i,j) \cdot \underbrace{G_{\sigma_s}(||p-q||)}_{\text{räumlich}} \cdot \underbrace{G_{\sigma_r}(|I(p)-I(q)|)}_{\text{Helligkeit}}
+\text{Gewicht} = \underbrace{G_{\text{räumlich}}(\text{Abstand})}_{\text{Wie beim Gaußfilter}} \times \underbrace{G_{\text{Helligkeit}}(\text{Helligkeitsdiff.})}_{\text{NEU!}}
 $$
 
+Komplett:
 
-| Symbol                | Bedeutung                      | Erklärung                                                                                                     |
-| --------------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------- |
-| $I_{\text{out}}(x,y)$ | Ausgabepixel                   | Gefilterter Pixelwert an Position (x, y)                                                                      |
-| $I(i,j)$              | Eingabepixel                   | Ursprünglicher Pixelwert an Position (i, j) in der Umgebung                                                   |
-| $W$                   | Normalisierungsfaktor          | Summe aller Gewichte (damit Helligkeit erhalten bleibt)                                                       |
-| $p$                   | Aktueller Pixel                | Position des zu filternden Pixels (x, y)                                                                      |
-| $q$                   | Nachbarpixel                   | Position eines Nachbarpixels (i, j)                                                                           |
-| $\|\|p-q\|\|$         | Räumliche Distanz              | Euklidischer Abstand zwischen Pixeln: $\sqrt{(x-i)^2 + (y-j)^2}$                                              |
-| $G_{\sigma_s}$        | Gaußsche Funktion (räumlich)   | Gewichtet Pixel nach räumlicher Entfernung                                                                    |
-| $\sigma_s$            | Räumliche Standardabweichung   | Steuert, wie weit entfernte Pixel einbezogen werden (größer = größere Umgebung)                               |
-| $\|I(p)-I(q)\|$       | Helligkeitsdifferenz           | Absoluter Unterschied der Pixelwerte                                                                          |
-| $G_{\sigma_r}$        | Gaußsche Funktion (Helligkeit) | Gewichtet Pixel nach Helligkeitsähnlichkeit                                                                   |
-| $\sigma_r$            | Helligkeits-Standardabweichung | Steuert, wie stark unterschiedliche Helligkeiten gewichtet werden (größer = mehr Glättung über Kanten hinweg) |
+$$
+I_{\text{out}}(x,y) = \frac{1}{W} \sum_{i,j} I(i,j) \cdot \underbrace{G_{\sigma_s}(||p-q||)}_{\text{Differenz Abstand}} \cdot \underbrace{G_{\sigma_r}(|I(p)-I(q)|)}_{\text{Differenz Helligkeit}}
+$$
+
+**Parameter der zugehörigen Funktion:**
+
+| Parameter     | Bedeutung                          | Effekt                                                          |
+| ------------- | ---------------------------------- | --------------------------------------------------------------- |
+| `d`           | Durchmesser der Umgebung           | Wie groß ist die betrachtete Nachbarschaft? (z.B. 9 = 9×9)      |
+| `sigmaColor`  | Helligkeits-Toleranz               | Wie unterschiedlich dürfen Pixel sein, um noch gemittelt zu werden? |
+|               |                                    | **Kleiner Wert** (z.B. 10): Nur fast identische Pixel → Kanten bleiben sehr scharf |
+|               |                                    | **Großer Wert** (z.B. 150): Auch unterschiedliche Pixel → Kanten verschwimmen |
+| `sigmaSpace`  | Räumliche Toleranz                 | Wie stark werden entfernte Pixel gewichtet? |
+
+**Typische Werte:**
 
 ```python
-bilateral = cv2.bilateralFilter(
-    image,
-    d=9,              # Durchmesser der Pixel-Umgebung
-    sigmaColor=75,    # Helligkeitsunterschied-Schwellwert
-    sigmaSpace=75     # Räumliche Distanz
-)
+# Standard-Einstellung (gute Kantenerhaltung)
+bilateral = cv2.bilateralFilter(image, d=9, sigmaColor=75, sigmaSpace=75)
+
+# Starke Kantenerhaltung (z.B. für Cartoon-Effekt)
+bilateral = cv2.bilateralFilter(image, d=9, sigmaColor=20, sigmaSpace=20)
+
+# Mehr Glättung, weniger Kantenerhaltung
+bilateral = cv2.bilateralFilter(image, d=9, sigmaColor=150, sigmaSpace=150)
 ```
+
+**Beispiel: Vergleich Gauß-Filter vs. Bilateraler Filter**
+
+```python   GaussVsBilateral.py
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Erstelle künstliches Bild mit scharfen Kanten
+image = np.zeros((300, 300), dtype=np.uint8)
+cv2.rectangle(image, (30, 30), (130, 130), 200, -1)
+cv2.rectangle(image, (150, 150), (270, 270), 180, -1)
+cv2.circle(image, (80, 220), 40, 220, -1)
+
+# Füge Gaußsches Rauschen hinzu
+noise = np.random.normal(0, 20, image.shape).astype(np.int16)
+noisy_image = np.clip(image.astype(np.int16) + noise, 0, 255).astype(np.uint8)
+
+# Wende verschiedene Filter an
+gaussian = cv2.GaussianBlur(noisy_image, (9, 9), sigmaX=2.0)
+bilateral = cv2.bilateralFilter(noisy_image, d=9, sigmaColor=75, sigmaSpace=75)
+
+# Visualisierung
+fig, axes = plt.subplots(2, 2, figsize=(10, 10))
+
+axes[0, 0].imshow(image, cmap='gray')
+axes[0, 0].set_title('Original (ohne Rauschen)')
+axes[0, 0].axis('off')
+
+axes[0, 1].imshow(noisy_image, cmap='gray')
+axes[0, 1].set_title('Mit Rauschen')
+axes[0, 1].axis('off')
+
+axes[1, 0].imshow(gaussian, cmap='gray')
+axes[1, 0].set_title('Gauß-Filter (Kanten verwischt)')
+axes[1, 0].axis('off')
+
+axes[1, 1].imshow(bilateral, cmap='gray')
+axes[1, 1].set_title('Bilateraler Filter (Kanten erhalten)')
+axes[1, 1].axis('off')
+
+plt.tight_layout()
+plt.savefig('gaussian_filter_example.png')
+```
+@LIA.python3
+
+**Beobachtung**: Der bilaterale Filter reduziert das Rauschen in homogenen Bereichen, erhält aber die scharfen Kanten zwischen den Objekten, während der Gauß-Filter alle Kanten verwischt.
+
 
 **Anwendung**: Hautglättung in Portrait-Fotografie, Rauschunterdrückung bei Kantenerhalt
 
@@ -978,14 +1206,15 @@ Kanten sind Bereiche im Bild, wo sich die Helligkeit stark ändert. Sie markiere
 Helligkeitsprofil über eine Kante:
 
 Intensität
-  |
-255|           ┌───────────   (heller Bereich)
+   |
+255|           +───────────   (heller Bereich)
    |          /
-   |         /  ← Kante (steiler Gradient)
+   |         /  <- Kante (steiler Gradient)
    |        /
-  0|───────┘                  (dunkler Bereich)
+  0|───────+                  (dunkler Bereich)
    +─────────────────────────
-              Position
+     1 2 3 4 5 6 7 8 9 10 11 
+              Position                                                                                               .
 ```
 
 **Mathematisch**: Erste Ableitung des Bildes
@@ -1012,6 +1241,65 @@ Gx = [ -1  0  +1 ]
      [ -2  0  +2 ]
      [ -1  0  +1 ]
 ```
+
+> **Berechnungsbeispiel: Schritt für Schritt**
+> 
+> Gegeben sei ein kleiner Bildausschnitt (5×5 Pixel) mit einem vertikalen Helligkeitsübergang:
+> 
+> ```ascii
+> Eingangsbild (Grauwerte):
+>      ┌─────────────────────┐
+>      │ 100 100 100  50  50 │
+>      │ 100 100 100  50  50 │
+>      │ 100 100 100  50  50 │  ← Vertikale Kante zwischen Spalte 3 und 4
+>      │ 100 100 100  50  50 │
+>      │ 100 100 100  50  50 │
+>      └─────────────────────┘                                                                                            .
+> ```
+> 
+> **Schritt 1: Sobel-X-Filter anwenden (vertikale Kanten detektieren)**
+> 
+> Wir berechnen den Gradientenausschnitt für den Pixel in der Mitte (Position [1,1]):
+> 
+> ```ascii
+> Gx-Kernel:                  Bildausschnitt um [1,1]:
+>   -1   0  +1                  100  100  100
+>   -2   0  +2        *         100  100  100
+>   -1   0  +1                  100  100  100                                                                             .
+> ```
+> 
+> **Berechnung (elementweise Multiplikation und Summierung):**
+> 
+> $$
+> \begin{align}
+> G_x &= (-1 \cdot 100) + (0 \cdot 100) + (+1 \cdot 100) \\
+>     &+ (-2 \cdot 100) + (0 \cdot 100) + (+2 \cdot 100) \\
+>     &+ (-1 \cdot 100) + (0 \cdot 100) + (+1 \cdot 100) \\
+>     &= -100 + 0 + 100 - 200 + 0 + 200 - 100 + 0 + 100 \\
+>     &= 0
+> \end{align}
+> $$
+> 
+> **Für Position [2,3]** (direkt auf der Kante):
+> 
+> ```ascii
+> Gx-Kernel:                  Bildausschnitt um [1,3]:
+>   -1   0  +1                  100  100   50
+>   -2   0  +2        *         100  100   50
+>   -1   0  +1                  100  100   50                                                                                 .
+> ```
+> 
+> $$
+> \begin{align}
+> G_x &= (-1 \cdot 100) + (0 \cdot 100) + (+1 \cdot 50) \\
+>     &+ (-2 \cdot 100) + (0 \cdot 100) + (+2 \cdot 50) \\
+>     &+ (-1 \cdot 100) + (0 \cdot 100) + (+1 \cdot 50) \\
+>     &= -100 + 0 + 50 - 200 + 0 + 100 - 100 + 0 + 50 \\
+>     &= -200  \text{ (starke vertikale Kante!)}
+> \end{align}
+> $$
+
+Ok, wir können also mit dem Sobel-X-Kernel vertikale Kanten erkennen. Jetzt machen wir das gleiche für horizontale Kanten mit dem Sobel-Y-Kernel.
 
 **Sobel-Kernel für y-Richtung (horizontale Kanten):**
 
@@ -1048,14 +1336,6 @@ angle = np.arctan2(sobely, sobelx) * 180 / np.pi
 3. **Non-Maximum Suppression**: Dünne Kanten (1 Pixel breit)
 4. **Hysterese-Schwellwertbildung**: Zwei Schwellwerte (low, high)
 
-```ascii
-Schritt 1: Gaußfilter       Schritt 2: Gradienten      Schritt 3: NMS
-  Original                    Starke + schwache           Nur starke
-  ████████                       Kanten                    Kanten
-  ████████        -->         ║║║║║║║║        -->          ║
-  ████████                    ║║║║║║║║                     ║
-```
-
 **Hysterese-Schwellwert:**
 
 + Pixel > `high_threshold` → **starke Kante**
@@ -1077,6 +1357,42 @@ edges = cv2.Canny(
 + Kleines `threshold2` → viele Kanten (auch Rauschen)
 + Großes `threshold2` → nur starke Kanten
 + Verhältnis `threshold2 : threshold1` typisch 2:1 bis 3:1
+
+
+```python -loadImage.py 
+import cv2
+import numpy as np
+
+import urllib.request
+
+def load_image_from_url(url):
+    resp = urllib.request.urlopen(url)
+    image_data = resp.read()
+    image_array = np.asarray(bytearray(image_data), dtype=np.uint8)
+    image = cv2.imdecode(image_array, cv2.IMREAD_COLOR)
+    return image
+```
+```python grayscale.py
+import cv2
+import numpy as np
+from loadImage import load_image_from_url
+
+image = load_image_from_url('https://r4r.informatik.tu-freiberg.de/content/images/size/w960/2022/08/karl_kegel_bau1.jpg')
+
+# OpenCV Graustufenkonvertierung
+gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+edges = cv2.Canny(
+    gray,
+    threshold1=50,   # Lower threshold
+    threshold2=150,  # Upper threshold
+    apertureSize=3   # Sobel-Kernel-Größe
+)
+
+cv2.imwrite('edges.png', edges)
+```
+@LIA.eval(`["loadImage.py", "main.py"]`, `none`, `python3 main.py`, `*`)
+
 
 **Anwendungen:**
 
@@ -1256,21 +1572,16 @@ class CompressedImageProcessor(Node):
 
 **Vergleich:**
 
-| Format         | Größe (Full HD) | Latenz | Qualität | Anwendung              |
-| -------------- | --------------- | ------ | -------- | ---------------------- |
-| Unkomprimiert  | ~6 MB           | Niedrig| Perfekt  | LAN, kurze Distanzen   |
-| JPEG (komprimiert) | ~100-500 KB | Mittel | Gut      | WLAN, Remote-Steuerung |
+| Format             | Größe (Full HD) | Latenz  | Qualität | Anwendung              |
+| ------------------ | --------------- | ------- | -------- | ---------------------- |
+| Unkomprimiert      | ~6 MB           | Niedrig | Perfekt  | LAN, kurze Distanzen   |
+| JPEG (komprimiert) | ~100-500 KB     | Mittel  | Gut      | WLAN, Remote-Steuerung |
 
 
 ## Zusammenfassung und Ausblick
 
-    --{{0}}--
-Wir haben heute die Grundlagen der Bildverarbeitung behandelt – von der Pixel-Ebene über Filter bis hin zu Kantenerkennung und Kameramodellen. Diese Konzepte bilden das Fundament für fortgeschrittene Wahrnehmung in der Robotik.
-
-### Was wir gelernt haben
-
-                  {{0-1}}
-*******************************************************************************
+Was wir gelernt haben
+========================
 
 **1. Digitale Bilder**
 
@@ -1303,12 +1614,7 @@ Wir haben heute die Grundlagen der Bildverarbeitung behandelt – von der Pixel-
 + `cv_bridge` für OpenCV-Integration
 + Praktische Beispiele (Farbbasierte Objekterkennung)
 
-*******************************************************************************
-
 ### Nächste Schritte: VL 7 – Kamerakalibrierung & Stereo
-
-                  {{1-2}}
-*******************************************************************************
 
 **Was kommt als Nächstes?**
 
@@ -1324,32 +1630,3 @@ Wir haben heute die Grundlagen der Bildverarbeitung behandelt – von der Pixel-
 + Testen Sie `cv_bridge` mit einer Webcam
 + Experimentieren Sie mit den Beispielen aus dieser Vorlesung
 + Entwickeln Sie einen Knoten, der eine Kantenerkennung durchführt
-
-*******************************************************************************
-
-### Weiterführende Ressourcen
-
-                  {{3-4}}
-*******************************************************************************
-
-**Dokumentation:**
-
-+ [OpenCV Python Tutorial](https://docs.opencv.org/4.x/d6/d00/tutorial_py_root.html)
-+ [ROS 2 Vision Packages](https://github.com/ros-perception/vision_opencv)
-+ [cv_bridge Tutorial](https://github.com/ros-perception/vision_opencv/tree/rolling/cv_bridge)
-
-**Bücher:**
-
-+ *"Learning OpenCV"* – Bradski & Kaehler (umfassend)
-+ *"Computer Vision: Algorithms and Applications"* – Szeliski (theoretisch)
-
-**Online-Kurse:**
-
-+ [OpenCV Crash Course (freeCodeCamp)](https://www.youtube.com/watch?v=oXlwWbU8l2o)
-+ [ROS 2 Image Processing Tutorial](https://docs.ros.org/en/humble/Tutorials.html)
-
-**Praktische Übungen:**
-
-+ Implementiere einen Line-Following-Algorithmus
-+ Erkenne ArUco-Marker mit `cv2.aruco`
-+ Baue einen einfachen Farb-Tracker
