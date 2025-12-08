@@ -545,7 +545,7 @@ Fassen wir die wichtigsten Punkte zusammen:
 In den kommenden Vorlesungen werden wir weitere Sensoren kennenlernen: Kameras (VL 6-7), Lidar und 3D-Sensoren (VL 8). Außerdem lernen wir, wie man Sensordaten fusioniert (VL 9-10), um robuste Schätzungen zu erhalten.
 
       {{1}}
-> **Vorbereitung für VL 3:** Überlegen Sie sich, wie man verschiedene Sensoren räumlich zueinander in Beziehung setzen kann. Wenn ein Roboter eine Kamera vorne und einen Lidar hinten hat – wie beschreibt man deren Position zueinander?
+> **Vorbereitung für VL 3:** Überlegen Sie sich, wie man verschiedene Sensoren räumlich zueinander in Beziehung setzen kann. Wenn ein Roboter eine Kamera vorn und einen Lidar hinten hat – wie beschreibt man deren Position zueinander?
 
 ## Ausblick: VL 3 - Koordinatensysteme und Transformationen
 

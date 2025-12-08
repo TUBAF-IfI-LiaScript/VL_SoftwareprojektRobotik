@@ -867,7 +867,11 @@ Original Bild          Gaußsches Rauschen       Salt-and-Pepper
   100 100 100     -->     97 103  99       -->      97 103  99
   100 100 100            101  96 104               101 255 104
                                                          ^
+<<<<<<< HEAD
                                                          |                                           .
+=======
+                                                         |
+>>>>>>> e317a44b8ad346132fdba19b3df5ce59f0bdc182
 ```
 
 ### Wiederholung Faltungsoperationen

@@ -45,3 +45,8 @@
 /examples/08_ROS_Kommunikation/ws_service/log/*
 /examples/08_ROS_Kommunikation/ws_service/build/*
 /examples/08_ROS_Kommunikation/ws_service/install/*
+
+# ROS 2 workspace artifacts (generisch für alle ROS Pakete)
+**/build/
+**/install/
+**/log/
