@@ -219,7 +219,7 @@ tar -czf exercise_01_NACHNAME_VORNAME.tar.gz exercise_01_gnss_bags/
 2. Welches Topic hat die höchste Publikationsfrequenz (in Hz)? Messen Sie diese während das Bag abgespielt wird.
 3. Welches Topic verursacht das größte Datenvolumen? Berechnen Sie dies aus Nachrichtenanzahl und durchschnittlicher Message-Größe.
 4. Welche verschiedenen Message-Typen werden im Datensatz verwendet? Listen Sie mindestens 5 auf und beschreiben Sie kurz deren Verwendungszweck.
-5. Vergleichen Sie die Message-Typen von `/fixposition/gnss1` und `/fixposition/odometry_llh`. Was ist der Unterschied? Welche Datenquelle würden Sie als genauer/stabiler einschätzen und warum? Fragen Sie gern nach, wenn Sie mehr über den Kontext wissen möchten.
+5. Vergleichen Sie die Message-Typen von `/fixposition/gnss1` und `/fixposition/odometry_llh`. Was ist der Unterschied? Welche Datenquelle würden Sie als genauer/stabiler einschätzen und warum? Ihr Betreuer verweist Sie dabei auf die [Dokumentation des Sensors](https://docs.fixposition.com/__attachments/776306689/VRTK2_Datasheet_v1.1%201.pdf?inst-v=76318eed-3f39-428c-b1f9-d11cbb01e641)
 
 **Hilfreiche Kommandos**:
 
@@ -280,15 +280,11 @@ ros2 run tf2_ros tf2_echo <source_frame> <target_frame>
 ros2 topic echo /tf_static --once
 ```
 
-**Dokumentation**:
-- `results/task_0_1_tf_analysis.md` (Ihre Antworten)
-- `results/frames.pdf` (TF-Baum-Visualisierung)
-
----
-
 ### Aufgabe 0.2: Sensordaten visualisieren
 
 **Kontext**: Visualisierung hilft, die Daten zu verstehen und Probleme zu identifizieren. Sie nutzen RViz2.
+
+Starten Sie Rviz2 in einem separaten Terminal, während Sie das Bag abspielen.
 
 **Aufgaben**:
 
@@ -311,74 +307,24 @@ ros2 topic echo /tf_static --once
 ```bash
 # Terminal 1: Bag abspielen
 ros2 bag play data/dataset.mcap --rate 0.5 --loop
-
-# Terminal 2: RViz2 starten
-rviz2
-# Add -> By topic → /zed2i_front/zed_node_front/rgb/color/rect/image
-# Add → By topic → PointCloud2
-# Add → TF (um Frame-Hierarchie zu sehen)
 ```
 
-**Dokumentation**:
-- `results/task_0_2_camera_screenshot.png`
-- `results/task_0_2_pointcloud_screenshot.png`
-- `results/task_0_2_observations.md` (Ihre Beschreibungen und Beobachtungen)
+### Aufgabe 0.3: RViz2-Konfiguration speichern und ladn
 
----
+**Kontext**: Eine gute RViz2-Konfiguration spart Zeit bei wiederholten Analysen. Wir haben ein Konfiguration als `rviz_configs/PointCloud_laser_analysis.rviz` für Sie vorbreitet.
 
-### Aufgabe 0.3: GNSS-Trajektorie visualisieren
-
-**Kontext**: Eine erste visuelle Inspektion der Fahrtrajektorie gibt Ihnen einen Überblick über die Testfahrt und mögliche Problemzonen.
-
-**Aufgaben**:
-
-1. Visualisieren Sie die fusionierte GNSS-Trajektorie (`/fixposition/odometry_enu`) in RViz2 als Pfad (Path Display).
-2. Wie verläuft die Trajektorie? Beschreiben Sie die gefahrene Route (gerade Strecke, Kurven, Kehrtwendungen, etc.).
-3. Gibt es auffällige Sprünge oder Unstimmigkeiten im Pfad?
-4. Wie lang ist die gefahrene Strecke ungefähr? (grobe Schätzung aus der Visualisierung)
-
-**Hilfreiche Kommandos**:
-
-```bash
-# RViz2 mit Odometry-Display
-rviz2
-# Add → By display type → Odometry
-# Topic: /fixposition/odometry_enu
-# Covariance: zeigt Unsicherheit
-# Keep: 1000 (um den gesamten Pfad zu sehen)
-```
-
-**Dokumentation**:
-- `results/task_0_3_trajectory_screenshot.png`
-- `results/task_0_3_trajectory_description.md`
-
----
-
-### Aufgabe 0.4: RViz2-Konfiguration speichern
-
-**Kontext**: Eine gute RViz2-Konfiguration spart Zeit bei wiederholten Analysen.
-
-**Aufgabe**: Erstellen Sie eine RViz2-Konfiguration mit folgenden Displays:
-- PointCloud2 (`/zed2i_front/.../cloud_registered`)
-- Camera (`/zed2i_front/.../rgb/.../image`)
-- TF (Transformationsbaum)
-- Odometry (`/fixposition/odometry_enu`)
-
-Speichern Sie die Konfiguration als `rviz_configs/gnss_analysis.rviz` und testen Sie, ob sie beim erneuten Laden funktioniert.
+**Aufgabe**: 
+1. Starten Sie RViz2 mit der gespeicherten Konfiguration.
+2. Ersetzen Sie die Laserscanner Point Cloud durch eine Visualisierung eine Darstellung der ZED-Stereo Kameras.
+3. Passen Sie die Konfiguration so an, dass die RGB Bildaten über die Point-Cloud gelegt werden.
+4. Speichern Sie Ihre angepasste Konfiguration als `rviz_configs/PointCloud_zed_analysis.rviz`
 
 **Hilfreiche Kommandos**:
 
 ```bash
 # Starten mit gespeicherter Config
-rviz2 -d rviz_configs/gnss_analysis.rviz
-
-# In RViz2:
-# File → Save Config As... → rviz_configs/gnss_analysis.rviz
+rviz2 -d rviz_configs/PointCloud_laser_analysis.rviz
 ```
-
-**Dokumentation**: `rviz_configs/gnss_analysis.rviz`
-
----
 
 ## Teil B: Programmierung und Datenanalyse
 
@@ -408,14 +354,6 @@ timestamp,latitude,longitude,altitude,cov_lat,cov_lon,cov_alt
 ```
 
 **Hilfreiche Code-Snippets**: Siehe `templates/gnss_extractor_template.py`
-
-**Dokumentation**:
-- `solution/task_1_1_gnss_extractor.py`
-- `results/gnss1_data.csv`
-- `results/gnss2_data.csv`
-- `results/odometry_llh_data.csv`
-
----
 
 ### Aufgabe 1.2: Trajektorien vergleichen
 
@@ -454,13 +392,6 @@ def calculate_distance(x, y):
     return np.sum(distances)
 ```
 
-**Dokumentation**:
-- `solution/task_1_2_trajectory_plotter.py`
-- `results/task_1_2_trajectory_comparison.png`
-- `results/task_1_2_distances.txt` (Streckenlängen und Analyse)
-
----
-
 ### Aufgabe 1.3: Genauigkeit und Unsicherheit analysieren
 
 **Kontext**: GNSS-Systeme haben unterschiedliche Genauigkeiten abhängig von Umgebung und Satellitensicht. Die Position Covariance gibt Auskunft über die Messunsicherheit.
@@ -492,14 +423,6 @@ def calculate_distance(x, y):
    - Korreliert dies mit der Umgebung? (Vergleich mit Kamerabild)
    - Was bedeutet eine hohe Kovarianz für die Navigationssicherheit?
 
-**Dokumentation**:
-- `solution/task_1_3_uncertainty_analysis.py`
-- `results/task_1_3_sensor_deviation.png`
-- `results/task_1_3_position_covariance.png`
-- `results/task_1_3_statistics.md` (Statistische Auswertung und Interpretation)
-
----
-
 ### Aufgabe 1.4: Sensor-Fusion bewerten (Bonus)
 
 **Kontext**: Das fusionierte GNSS-System kombiniert mehrere Sensoren. Bringt dies einen Vorteil gegenüber den einzelnen Antennen?
@@ -522,13 +445,6 @@ def calculate_distance(x, y):
    - Wo ist die fusionierte Lösung stabiler?
    - Welche Vorteile bietet die Fusion?
    - Würden Sie der fusionierten Lösung für ein autonomes System vertrauen?
-
-**Dokumentation**:
-- `solution/task_1_4_fusion_analysis.py`
-- `results/task_1_4_fusion_comparison.png`
-- `results/task_1_4_analysis.md` 
-
----
 
 ## Hilfe und Ressourcen
 
