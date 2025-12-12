@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>cloud_processing</name>
+  <version>0.0.1</version>
+  <description>ROS2 package for pointcloud processing with ground detection and obstacle classification</description>
+  <maintainer email="dein.email@example.com">Dein Name</maintainer>
+  <license>Apache-2.0</license>
+
+  <!-- Buildtool -->
+  <buildtool_depend>ament_python</buildtool_depend>
+
+  <!-- Laufzeit- und Build-Abhängigkeiten -->
+  <depend>rclpy</depend>
+  <depend>sensor_msgs</depend>
+
+  <!-- Für externe Python-Pakete, die nicht ROS-Pakete sind (z.B. sklearn) -->
+  <exec_depend>python3-sklearn</exec_depend>
+
+  <!-- Test- und Entwicklungsabhängigkeiten (optional) -->
+  <test_depend>pytest</test_depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>
