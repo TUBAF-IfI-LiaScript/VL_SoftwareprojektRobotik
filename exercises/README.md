@@ -4,11 +4,11 @@ Dieses Verzeichnis enthält alle praktischen Übungsaufgaben zur Vorlesung "Soft
 
 ## Übersicht
 
-| Übung | Thema | Nach VL | Dauer | Schwerpunkt |
-|-------|-------|---------|-------|-------------|
-| **[Übung 1](exercise_01_gnss_bags/)** | GNSS-Datenanalyse & ROS 2-Bags | VL 5 | 180 min | ROS2-Tools, Bagfiles, GNSS-Trajektorie |
-| **[Übung 2](exercise_02_person_detection/)** | Personendetektion mit YOLOv8 | VL 8 | 180 min | Objekterkennung, QoS Parameter, Launch-Files |
-| **[Übung 3](exercise_03_path_tracking/)** | Pfadverfolgung & Regelgüte-Evaluation | VL 12 | 180 min | Navigation, Sensorfusion, Systemanalyse |
+| Übung                                        | Thema                                 | Nach VL | Dauer   | Schwerpunkt                                  |
+| -------------------------------------------- | ------------------------------------- | ------- | ------- | -------------------------------------------- |
+| **[Übung 1](exercise_01_gnss_bags/)**        | GNSS-Datenanalyse & ROS 2-Bags        | VL 5    | 180 min | ROS2-Tools, Bagfiles, GNSS-Trajektorie       |
+| **[Übung 2](exercise_02_person_detection/)** | Personendetektion mit YOLOv8          | VL 8    | 180 min | Objekterkennung, QoS Parameter, Launch-Files |
+| **[Übung 3](exercise_03_path_tracking/)**    | Pfadverfolgung & Regelgüte-Evaluation | VL 12   | 180 min | Navigation, Sensorfusion, Systemanalyse      |
 
 ## Datensatz
 
