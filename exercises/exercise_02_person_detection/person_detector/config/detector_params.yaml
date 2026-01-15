@@ -1,0 +1,18 @@
+# Parameter für den PersonDetector Node
+# YOLOv8 Personendetektion für Übung 2
+
+person_detector:
+  ros__parameters:
+    # YOLOv8 Modell
+    # Optionen: yolov8n.pt (schnell), yolov8s.pt (balanced), yolov8m.pt (genau)
+    model_name: "yolov8n.pt"
+
+    # Confidence-Threshold für YOLO-Detektionen
+    # Höhere Werte = weniger False Positives, aber mehr False Negatives
+    confidence_threshold: 0.5
+
+    # Ausgabedatei für YOLO-Ergebnisse
+    output_csv: "results/yolo_detections.csv"
+
+    # Debug-Bilder speichern wenn Personen erkannt werden
+    save_images: false
