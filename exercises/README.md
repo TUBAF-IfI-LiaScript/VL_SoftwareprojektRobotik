@@ -17,6 +17,7 @@ Alle Übungen basieren auf einem gemeinsamen ROS2-Bag-Datensatz:
 **Pfad**: `/media/sz/Data/20251126_ifi2/20251126_ifi2_0.mcap`
 
 **Details**:
+
 - Plattform: Clearpath Lynx (mobile Roboterplattform)
 - Dauer: ~117 Sekunden
 - Größe: 8.8 GB
@@ -24,6 +25,7 @@ Alle Übungen basieren auf einem gemeinsamen ROS2-Bag-Datensatz:
 - Format: MCAP
 
 **Verfügbare Sensoren**:
+
 - 🛰️ GNSS (Fixposition Fusion System): 3 Topics
 - 📷 Stereo-Kamera (ZED 2i): RGB, Depth, PointCloud, Objekterkennung
 - 📡 Lidar: SICK (vorne/hinten), Livox
