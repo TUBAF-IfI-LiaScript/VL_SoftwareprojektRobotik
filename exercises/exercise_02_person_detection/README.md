@@ -137,34 +137,19 @@ ros2 launch person_detector zed_extractor.launch.py
 
 ### Aufgabe 2.1: count_persons_yolo() implementieren
 
-Vervollständigen Sie die Funktion `count_persons_yolo()` (ab Zeile 182):
+Vervollständigen Sie die Funktion `count_persons_yolo()` (ab Zeile 182).
 
-```python
-def count_persons_yolo(self, image_msg: Image) -> tuple:
-    # TODO:
-    # 1. ROS-Image zu OpenCV konvertieren
-    #    cv_image = self.bridge.imgmsg_to_cv2(image_msg, 'bgr8')
-    #
-    # 2. YOLO-Inferenz durchführen
-    #    results = self.model(cv_image, verbose=False)
-    #
-    # 3. Personen zählen und Boxes sammeln (class_id == 0 in COCO)
-    #    person_count = 0
-    #    person_boxes = []
-    #    for box in results[0].boxes:
-    #        if int(box.cls[0]) == 0:  # Person
-    #            if float(box.conf[0]) > self.confidence_threshold:
-    #                person_count += 1
-    #                xyxy = box.xyxy[0].cpu().numpy()
-    #                person_boxes.append({'xyxy': xyxy, 'conf': float(box.conf[0])})
-    #
-    #    return person_count, person_boxes
-```
+**Schritte**:
+1. ROS-Image zu OpenCV konvertieren (Tipp: `self.bridge.imgmsg_to_cv2()`)
+2. YOLO-Inferenz durchführen (Tipp: `self.model()`)
+3. Personen zählen: Iteriere über `results[0].boxes` und filtere nach Klasse und Konfidenz
+4. Boxes sammeln: Speichere `xyxy`-Koordinaten und Konfidenz für jede erkannte Person
 
 **Hinweise**:
 - COCO class_id 0 = Person
 - `self.confidence_threshold` ist bereits als Parameter definiert (default: 0.5)
 - Die Funktion gibt ein Tuple zurück: `(anzahl, liste_der_boxes)`
+- Jede Box hat Attribute: `box.cls[0]` (Klasse), `box.conf[0]` (Konfidenz), `box.xyxy[0]` (Koordinaten)
 
 ### Aufgabe 2.2: QoS-Profile verstehen
 
@@ -183,19 +168,10 @@ Im Code finden Sie einen Kommentarblock zum QoS-Profile (Zeile 90-113).
 
 Erweitern Sie die `save_debug_image()` Funktion, um Bounding Boxes um erkannte Personen zu zeichnen.
 
-```python
-def save_debug_image(self, image_msg: Image, person_boxes: list):
-    # TODO: Für jede Box ein Rechteck zeichnen
-    for box in person_boxes:
-        x1, y1, x2, y2 = map(int, box['xyxy'])
-        conf = box['conf']
-        # Grünes Rechteck
-        cv2.rectangle(cv_image, (x1, y1), (x2, y2), (0, 255, 0), 2)
-        # Konfidenz als Text
-        label = f'Person {conf:.2f}'
-        cv2.putText(cv_image, label, (x1, y1 - 10),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-```
+**Schritte**:
+1. Für jede Box in `person_boxes`: Extrahiere die Koordinaten (`x1, y1, x2, y2`) aus `box['xyxy']`
+2. Zeichne ein Rechteck mit `cv2.rectangle()`
+3. Füge die Konfidenz als Text mit `cv2.putText()` hinzu
 
 **Testen**: Starten Sie den Detector mit `save_images:=true`:
 ```bash
@@ -241,23 +217,30 @@ Effective FPS: 6.7
 ### Aufgabe 3.1: CSV laden
 
 Vervollständigen Sie `load_csv()`:
-- Öffnen Sie die CSV mit `csv.DictReader`
-- Extrahieren Sie `timestamp` (float) und `count` (int)
-- Sortieren Sie nach Timestamp
+- Öffnen Sie die CSV-Datei und lesen Sie sie mit dem `csv`-Modul
+- Extrahieren Sie `timestamp` (float) und `count` (int) aus jeder Zeile
+- Geben Sie die Daten sortiert nach Timestamp zurück
+
+**Tipp**: Nutzen Sie `csv.DictReader` für einfachen Zugriff auf Spalten.
 
 ### Aufgabe 3.2: Timestamp-Matching
 
 Vervollständigen Sie `match_timestamps()`:
 - YOLO hat weniger Frames als ZED (wegen langsamer Inferenz)
-- Für jeden YOLO-Datenpunkt: Finde den nächsten ZED-Datenpunkt
-- Toleranz: 100ms (0.1 Sekunden)
+- Für jeden YOLO-Datenpunkt: Finde den ZED-Datenpunkt mit dem nächsten Timestamp
+- Toleranz: 100ms (0.1 Sekunden) - ignoriere Matches außerhalb dieser Toleranz
+
+**Tipp**: Berechne die absolute Zeitdifferenz und finde das Minimum.
 
 ### Aufgabe 3.3: Plot erstellen
 
 Vervollständigen Sie `create_plot()`:
-- Verwenden Sie `ax.step()` für Step-Plots
-- YOLO als blaue Linie, ZED als rote gestrichelte Linie
-- Achsenbeschriftung: Zeit [s], Anzahl Personen
+- Erstellen Sie einen Step-Plot für beide Datenreihen
+- YOLO: blaue durchgezogene Linie
+- ZED: rote gestrichelte Linie
+- Achsenbeschriftung, Legende und Titel nicht vergessen
+
+**Tipp**: `ax.step()` eignet sich gut für diskrete Zähldaten.
 
 ### Testen
 
