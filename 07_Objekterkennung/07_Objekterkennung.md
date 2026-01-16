@@ -907,7 +907,7 @@ Input               Backbone           Neck              Head
 640×640×3          (CSPDarknet)     (PAN-FPN)      (Detection Head)
 ┌─────┐             ┌─────┐          ┌─────┐          ┌─────┐
 │     │  ────────>  │ ▓▓▓ │ ──────>  │ ▓▓  │ ──────>  │BBox │
-│ 🚶  │  Feature     │ ▓▓▓ │  Multi-  │ ▓▓  │  Predict │Class│
+│ 🚶  │  Feature    │ ▓▓▓ │  Multi-  │ ▓▓  │  Predict │Class│
 │     │  Extraction │ ▓▓▓ │  Scale   │ ▓▓  │          │Conf │
 └─────┘             └─────┘          └─────┘          └─────┘
                     ca. 20 Mio        Fusion          Outputs  
@@ -916,6 +916,7 @@ Input               Backbone           Neck              Head
 
 **YOLOv8 Modell-Varianten:**
 
+<!-- data-type="none" -->
 | Modell  | Parameteranzahl | mAP  | Speed (ms) | Typische Verwendung            |
 | ------- | --------------- | ---- | ---------- | ------------------------------ |
 | YOLOv8n | 3.2 Mio         | 37.3 | 1.2        | Embedded, Edge-Devices         |
@@ -928,7 +929,7 @@ Input               Backbone           Neck              Head
 
 !?[](https://www.youtube.com/watch?v=svn9-xV7wjk)
 
-### YOLOv8 im Detail
+### YOLOv8 in der Anwendung
 
 YOLOv8 ist die aktuell empfohlene Version von Ultralytics. Sie bietet eine sehr einfache Python-API und ist optimal für ROS 2 Integration geeignet.
 
@@ -943,10 +944,8 @@ from ultralytics import YOLO
 
 # Vortrainiertes Modell laden (COCO-Dataset)
 model = YOLO('yolov8n.pt')  # nano model
-
 # Inferenz auf einem Bild
 results = model('image.jpg')
-
 # Oder auf Video/Webcam
 results = model('video.mp4', stream=True)
 ```
@@ -961,16 +960,12 @@ for result in results:
     for box in boxes:
         # Koordinaten
         x1, y1, x2, y2 = box.xyxy[0]  # [x_min, y_min, x_max, y_max]
-
         # Oder: Center + Width/Height
         x_center, y_center, w, h = box.xywh[0]
-
         # Confidence Score
         confidence = box.conf[0]
-
         # Klassen-ID (COCO)
         class_id = int(box.cls[0])
-
         # Klassen-Name
         class_name = model.names[class_id]
 
@@ -1142,7 +1137,7 @@ else:
     return None
 ```
 
-## Object Tracking
+## Objekt Tracking
 
     --{{0}}--
 Objekterkennung liefert uns Detektionen in einzelnen Bildern. Tracking verbindet diese über Zeit und ermöglicht uns, Bewegungen vorherzusagen und IDs zu erhalten.
@@ -1193,8 +1188,8 @@ Fenster um Feature-Punkt (z.B. 5×5 Pixel):
 Frame t:              Frame t+1:           Differenz (I_t):
 ┌─────────────┐       ┌─────────────┐      ┌─────────────┐
 │ 120 125 130 │       │ 118 123 128 │      │ -2  -2  -2  │
-│ 140 200 145 │  →    │ 142 202 147 │  =   │ +2  +2  +2  │
-│ 135 130 125 │       │ 137 132 127 │      │ +2  +2  +2  │
+│ 140 200 145 │  →    │ 142 202 147 │  =   │  2   2   2  │
+│ 135 130 125 │       │ 137 132 127 │      │  2   2   2  │
 └─────────────┘       └─────────────┘      └─────────────┘                                                  .
 ``` 
 
@@ -1261,28 +1256,31 @@ Kalman Filter Prediction    YOLO Detections
 
 **Komponenten:**
 
-**1. Detection (YOLO)**
-   - Liefert Bounding Boxes pro Frame
+**1. Detection (YOLO)** - Liefert Bounding Boxes pro Frame
 
 **2. Kalman Filter**
    - Prädiziert Position im nächsten Frame
    - State: $(x, y, a, h, \dot{x}, \dot{y}, \dot{a}, \dot{h})$
+
      - $(x, y)$ = Center
      - $a$ = Aspect Ratio
      - $h$ = Höhe
      - Ableitungen = Geschwindigkeiten
 
 **3. Appearance Descriptor**
+
    - CNN-Features für jede Detection
    - Hilft bei Re-Identification nach Okklusion
    - Typisch: 128-dim Feature Vector
 
 **4. Hungarian Algorithm**
+
    - Optimale Zuordnung: Detection → Track
    - Minimiert kombinierte Kostenfunktion:
      $$c_{i,j} = \lambda \cdot d_{\text{Mahalanobis}} + (1-\lambda) \cdot d_{\text{Cosine}}$$
 
 **5. Track Management**
+
    - **Confirmed**: Track existiert über $n$ Frames
    - **Tentative**: Neue Detection, noch unsicher
    - **Deleted**: Track verloren über $m$ Frames
@@ -1311,8 +1309,16 @@ Bisher haben wir 2D-Bilder betrachtet. Für mobile Roboter sind Punktwolken aus 
 
 ### RANSAC: Plane Segmentation
 
-    --{{0}}--
 RANSAC (Random Sample Consensus) ist ein robuster Algorithmus zum Fitten von Modellen in verrauschten Daten.
+
++ Ebenen-Fitting – z.B. Bodenerkennung in Punktwolken (wie im Beispiel)
++ Linien-Fitting – z.B. Fahrspurerkennung in Bildern
++ Homographie-Schätzung – Transformation zwischen zwei Bildebenen
++ Fundamental-/Essential-Matrix – Geometrische Beziehung zwischen Stereo-Bildern
++ 3D-Registrierung – Ausrichtung von Punktwolken
++ Kreis-/Zylinder-Fitting – Erkennung runder Objekte
+
+![](https://www.open3d.org/docs/0.19.0/_images/tutorial_pipelines_global_registration_15_1.png "Beispiel für die Anwendung von RANSAC zur Ebenen-Segmentierung in einer Punktwolke aus der Dokumentation von Open3D")
 
 **Problem**: Finde Boden-Ebene in Punktwolke
 
@@ -1367,37 +1373,9 @@ Oft wird das beste Modell noch durch eine Least-Squares-Optimierung auf den gefu
 + Wand-Detektion
 + Tisch-Oberflächen finden (für Grasping)
 
-### Euclidean Clustering
-
-    --{{0}}--
-Nach dem Entfernen des Bodens wollen wir einzelne Objekte separieren - das macht Euclidean Clustering.
-
-**Prinzip:**
-
-```ascii
-Punktwolke nach Boden-Entfernung:
-
-  ··  ··    ···         Cluster 1  Cluster 2  Cluster 3
-  ··  ··    ···    →      ██         ██         ███
- ────────────────       ════════════════════════════
-  (Boden entfernt)              (Boden)                                                                 .
-```
-
-**Algorithmus (DBSCAN-ähnlich):**
-
-```
-1. Erstelle KD-Tree für schnelle Nachbarsuche
-2. Für jeden Punkt p:
-   - Wenn p schon zugeordnet: Skip
-   - Erstelle neues Cluster
-   - Finde alle Nachbarn in Radius r
-   - Füge Nachbarn rekursiv hinzu
-3. Filtere Cluster nach Größe (min/max Punkte)
-```
 
 ### 3D Feature Descriptors: FPFH
 
-    --{{0}}--
 Um Objekte in 3D zu erkennen, brauchen wir Deskriptoren - ähnlich wie ORB in 2D.
 
 **FPFH (Fast Point Feature Histograms)**
@@ -1446,7 +1424,6 @@ Diese Winkelwerte werden nun in **drei separate Histogramme** einsortiert:
 
 ```ascii
 Histogramm für α:          Histogramm für φ:          Histogramm für θ:
-(Wertebereich z.B. -1..1)  (Wertebereich 0..1)        (Wertebereich 0..2π)
 
 Häufigkeit                 Häufigkeit                 Häufigkeit
     │   ▓                      │ ▓                        │     ▓
@@ -1592,8 +1569,6 @@ Input Points         Set Abstraction      Classification
     --{{0}}--
 Wir haben heute eine umfassende Einführung in Objekterkennung und Tracking erhalten - von klassischen Feature-basierten Methoden bis zu modernem Deep Learning, von 2D-Bildern bis zu 3D-Punktwolken.
 
-### Was haben wir gelernt?
-
 Die Vorlesung spannte einen Bogen von klassischen bis hin zu modernen Verfahren der Objekterkennung:
 
 **Klassische Feature-Methoden** bilden die Grundlage für geometrische Anwendungen wie SLAM und visuelle Odometrie. Mit Harris und Shi-Tomasi haben wir Corner-Detektoren kennengelernt, die mathematisch fundiert arbeiten und ohne Training auskommen. ORB kombiniert schnelle Detektion (FAST) mit kompakten binären Deskriptoren (rBRIEF).
@@ -1611,6 +1586,5 @@ Die Vorlesung spannte einen Bogen von klassischen bis hin zu modernen Verfahren 
 
 + Warum mehrere Sensoren kombinieren?
 + Diskrete Bayes-Filter
-+ Komplementärfilter (IMU-Fusion)
 + Fehlerfortpflanzung und Unsicherheiten
 + Vorbereitung auf Kalman-Filter
