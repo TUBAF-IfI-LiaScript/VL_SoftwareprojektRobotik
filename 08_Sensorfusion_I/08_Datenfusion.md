@@ -535,7 +535,7 @@ prior = ndimage.convolve(np.roll(belief, int(len(kernel) / 2)), kernel, mode='wr
 fig, ax = plt.subplots(figsize=(8,4))
 width = 0.35
 ax.bar(np.arange(len(belief)), belief, width)
-ax.bar(np.arange(len(prior)) + prior, prior, width)
+ax.bar(np.arange(len(prior)) + width, prior, width)
 plt.ylim(0, 1)
 #plt.show()  
 plt.savefig('foo.png') # notwendig für die Ausgabe in LiaScript
@@ -593,7 +593,7 @@ priori = posteriori * belief / sum(posteriori * belief )
 
 # SECOND LOOP - prediction
 posteriori = ndimage.convolve(np.roll(priori, int(len(kernel) / 2)), kernel, mode='wrap')
-# FIRST LOOP - update
+# SECOND LOOP - update
 priori = posteriori * belief / sum(posteriori * belief )
 
 fig, ax = plt.subplots(figsize=(8,4))
@@ -618,7 +618,22 @@ Welche Einschränkungen sehen Sie in dem Beispiel?
 
 + Die Modalität des Sensors wurde so gewählt, dass dessen Daten einfach zu integrieren sind. Wie würden Sie die Informationen des Beschleunigungssensors berücksichtigen?
 
-## Übertragung auf kontinuierliche Systeme 
+## Übertragung auf kontinuierliche Systeme
+
+Der diskrete Bayes-Filter und der Kalman-Filter folgen dem gleichen Grundprinzip: **Predict-Update-Zyklus**. Der wesentliche Unterschied liegt in der Repräsentation der Unsicherheit:
+
+<!-- data-type="none" -->
+| Aspekt | Diskreter Bayes-Filter | Kalman-Filter |
+|--------|------------------------|---------------|
+| **Zustandsraum** | Diskret (Gitterzellen) | Kontinuierlich |
+| **Wahrscheinlichkeit** | Histogramm über alle Zellen | Normalverteilung $\mathcal{N}(\mu, \sigma^2)$ |
+| **Speicherbedarf** | $O(n)$ für $n$ Zellen | $O(1)$ - nur $\mu$ und $\sigma^2$ |
+| **Predict** | Faltung mit Bewegungskernel | Addition der Varianzen |
+| **Update** | Elementweise Multiplikation | Gewichtete Mittelung |
+
+Die zentrale Erkenntnis: Wenn wir annehmen, dass alle Unsicherheiten **normalverteilt** sind, kollabiert die gesamte Wahrscheinlichkeitsverteilung auf nur zwei Parameter - Mittelwert $\mu$ und Varianz $\sigma^2$.
+
+### Warum Normalverteilungen?
 
 + Im Allgemeinen ist der Zustandsraum so groß, dass der Bayesscher Filter-Algorithmus nicht direkt implementiert werden kann.
 + Wahrscheinlichkeiten können durch Wahrscheinlichkeitsgitter approximiert werden (grid-Verfahren). Gitter können dann aber immer noch unpraktikabel groß werden.
@@ -627,6 +642,8 @@ Welche Einschränkungen sehen Sie in dem Beispiel?
 ![ImageMatching](./images/Normalverteilung.png)<!-- style="width: 70%;"-->
 
 > Merke: Alle Größen sind normalverteilt: Vorteil: Radikal vereinfachte Berechnung!
+
+Eine wichtige mathematische Eigenschaft macht dies möglich: Das Produkt zweier Normalverteilungen (Update-Schritt) und die Summe zweier Normalverteilungen (Predict-Schritt) ergeben wieder eine Normalverteilung. Diese Abgeschlossenheit ermöglicht die effiziente Berechnung.
 
 ### Kalman-Filter Grundlagen
 
@@ -685,6 +702,14 @@ _S. Maybeck, Stochastic models, estimation, and control, 1977_
 
 _Nahin, John L., Can Two Plus Two Equal Five? 1980_
 
-## Aufgaben
+## Zusammenfassung
 
-+ Variieren Sie die Parameter der Beispiele der Implementierung und evaluieren Sie den Einfluss unterschiedlicher Bewegungsmodelle
++ **Fusionsarten**: Sensordaten können konkurrierend (gleiche Daten → höhere Genauigkeit), komplementär (verschiedene Sichtbereiche → Vollständigkeit) oder kooperativ (kombinierte Daten → neue Information) fusioniert werden.
+
++ **Fusionsebenen**: Die Fusion kann auf Rohdaten-, Merkmals- oder Entscheidungsebene erfolgen (JDL-Modell).
+
++ **Diskreter Bayes-Filter**: Iterativer Predict-Update-Zyklus zur Zustandsschätzung basierend auf Wahrscheinlichkeitsverteilungen über diskrete Zustände.
+
++ **Kalman-Filter**: Effiziente Variante für kontinuierliche Systeme unter der Annahme normalverteilter Unsicherheiten – reduziert die Repräsentation auf Mittelwert $\mu$ und Varianz $\sigma^2$.
+
+
