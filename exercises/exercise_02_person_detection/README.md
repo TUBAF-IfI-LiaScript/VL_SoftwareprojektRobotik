@@ -151,16 +151,24 @@ Vervollständigen Sie die Funktion `count_persons_yolo()` (ab Zeile 182).
 - Die Funktion gibt ein Tuple zurück: `(anzahl, liste_der_boxes)`
 - Jede Box hat Attribute: `box.cls[0]` (Klasse), `box.conf[0]` (Konfidenz), `box.xyxy[0]` (Koordinaten)
 
+> Ein kleines Beispiel für die Anwendung wurde in der Vorlesung anhand von 
+> 
+> https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/07_Objekterkennung/yoloExample/detect_objects.py
+> 
+> besprochen.
+
 ### Aufgabe 2.2: QoS-Profile verstehen
 
 Im Code finden Sie einen Kommentarblock zum QoS-Profile (Zeile 90-113).
 
 **Fragen**:
+
 1. Was passiert, wenn YOLO langsamer ist als die Bildrate (30 FPS)?
 2. Was ist der Unterschied zwischen `depth=1` und `depth=10`?
 3. Welchen Effekt hat `depth=1` auf die Anzahl der verarbeiteten Frames?
 
 **Experiment**: Führen Sie den Detector mit beiden Einstellungen aus und vergleichen Sie:
+
 - Anzahl der verarbeiteten Frames
 - Laufzeit
 
