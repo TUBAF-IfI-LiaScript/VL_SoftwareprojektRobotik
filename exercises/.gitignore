@@ -1,2 +1,18 @@
 solution_01/
 solution_02/
+
+# ROS2 build artifacts
+build/
+install/
+log/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pt
+
+# Results and data (user-generated)
+results/
+data
