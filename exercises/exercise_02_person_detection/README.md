@@ -38,27 +38,35 @@ ln -s ../exercise_01_gnss_bags/data data
 ## Vorbereitung: Abhängigkeiten installieren
 
 ```bash
-# 1. ZED Message-Definitionen
-sudo apt install ros-jazzy-zed-msgs
+# 1. ROS 2 Pakete
+sudo apt install ros-jazzy-zed-msgs ros-jazzy-cv-bridge
 
-# 2. PyTorch CPU-only
-pip install --user torch torchvision --index-url https://download.pytorch.org/whl/cpu
+# 2. Virtual Environment mit Zugriff auf System-Pakete (inkl. ROS 2)
+python3 -m venv .venv --system-site-packages
+source .venv/bin/activate
 
-# 3. YOLOv8
-pip install --user ultralytics
+# 3. PyTorch CPU-only
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
 
-# 4. OpenCV-Bridge
-sudo apt install ros-jazzy-cv-bridge
+# 4. YOLOv8 und Matplotlib
+pip install ultralytics matplotlib
+```
 
-# 5. Matplotlib
-pip install --user matplotlib
+> **Hinweis**: Ab Ubuntu 24.04 ist `pip install --user` ohne Virtual Environment nicht mehr erlaubt (PEP 668). Die Option `--system-site-packages` ermöglicht den Zugriff auf ROS 2 Python-Pakete wie `rclpy` und `cv_bridge`.
+
+**Vor jedem Arbeiten** (in jedem neuen Terminal):
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source .venv/bin/activate
 ```
 
 **Installation prüfen**:
 
 ```bash
 ros2 interface show zed_msgs/msg/ObjectsStamped
-python3 -c "from ultralytics import YOLO; print('OK')"
+python3 -c "import rclpy; print('ROS 2 OK')"
+python3 -c "from ultralytics import YOLO; print('YOLO OK')"
 ```
 
 ---
@@ -105,6 +113,8 @@ Vervollständigen Sie die drei TODO-Bereiche im Launch-File:
 3. **TODO 3**: `LaunchDescription` mit beiden Elementen
 
 ### Testen
+
+> **Hinweis zur Workspace-Struktur**: In der Praxis würde man einen ROS 2 Workspace mit `src/`-Unterverzeichnis anlegen (`~/ros2_ws/src/`). Hier wurde die Struktur für die Übung vereinfacht, sodass `colcon build` direkt im Übungsverzeichnis ausgeführt wird.
 
 ```bash
 # Paket bauen
