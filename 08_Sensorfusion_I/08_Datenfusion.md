@@ -606,101 +606,456 @@ plt.savefig('foo.png') # notwendig für die Ausgabe in LiaScript
 ```
 @LIA.eval(`["main.py"]`, `none`, `python3 main.py`)
 
-Welche Einschränkungen sehen Sie in dem Beispiel?
+### Erweiterung auf 2D: Roboter-Lokalisierung im Grid
 
-+ Wir bilden nur eine Zustandsvariable ab. Bereits die Umsetzung eines 2D oder 3D Beispiels würde eine erhebliche Anpassung notwendig machen. Damit würde dann aber auch die Komplexität und die Berechnungsdauer entsprechend ansteigen.
+--{{0}}--
+Nach dem eindimensionalen Schwimmroboter-Beispiel wollen wir nun den diskreten Bayes-Filter auf ein realistischeres zweidimensionales Szenario übertragen. Dabei werden wir sehen, dass die gleichen Prinzipien gelten, aber die Komplexität deutlich zunimmt. Stellen Sie sich einen mobilen Roboter vor, der sich in einer Fabrikhalle oder einem Bürogebäude orientieren muss.
 
-  ![ImageMatching](./images/2DBayes.png)<!-- style="width: 70%;"-->
+Das 1D-Beispiel mit dem Schwimmroboter hat die Grundprinzipien verdeutlicht. Für realistische Anwendungen müssen wir den Filter jedoch auf zwei oder mehr Dimensionen erweitern. Betrachten wir einen mobilen Roboter, der sich in einer 2D-Umgebung bewegt und Landmarken erkennen kann.
 
-+ Diese Überlegung ist in starkem Maße mit der Frage nach der Auflösung unserer Diskretisierung verbunden. Ein 100x100m große Fabrikhallen, die mit einem 10cm Grid überzogen werden soll, bedeutet, dass wir jeweils 1 Million Kacheln evaluieren müssen.
+<!--
+style="width: 80%; min-width: 420px; max-width: 720px; display: block; margin-left: auto; margin-right: auto;"
+-->
+```ascii
+    Spalte  0   1   2   3   4   5   6   7   8   9
+          +---+---+---+---+---+---+---+---+---+---+
+Zeile 0   |   |   | L |   |   |   |   | L |   |   |
+          +---+---+---+---+---+---+---+---+---+---+
+      1   |   |   |   |   |   |   |   |   |   |   |
+          +---+---+---+---+---+---+---+---+---+---+
+      2   | L |   |   |   |   |   |   |   |   | L |
+          +---+---+---+---+---+---+---+---+---+---+
+      3   |   |   |   |   |   |   |   |   |   |   |
+          +---+---+---+---+---+---+---+---+---+---+
+      4   |   | L |   |   |   |   | L |   |   |   |
+          +---+---+---+---+---+---+---+---+---+---+
+      5   |   |   |   |   | R→|   |   |   |   |   |
+          +---+---+---+---+---+---+---+---+---+---+
 
-+ Die Abbildung der Sensorunsicherheit ist hier stark vereinfacht. Das Fehlermodell allein auf die Klassifikationsgüte abzubilden genügt in der Regel nicht. Die Ausgabe unseres Kamerasystems wird als statt einer konstanten Abbildungsfunktion der Messungen auf die Zustände eher ein variables Qualitätsattribut realisieren.
+    L = Landmarke (z.B. QR-Code, ArUco-Marker)
+    R = Roboter (wahre Position)
+```
 
-+ Die Modalität des Sensors wurde so gewählt, dass dessen Daten einfach zu integrieren sind. Wie würden Sie die Informationen des Beschleunigungssensors berücksichtigen?
+**Szenario**: Ein mobiler Roboter soll sich in einer bekannten Umgebung lokalisieren.
 
-## Übertragung auf kontinuierliche Systeme
+> **Was weiß der Roboter?**
+>
+> | Information | Bekannt? | Quelle |
+> |-------------|----------|--------|
+> | Karte der Umgebung (Landmarken-Positionen) | Ja | A-priori Wissen |
+> | Eigene Orientierung (Blickrichtung) | Ja | Kompass / Gyroskop |
+> | Bewegungskommandos ("fahre 1m nach Osten") | Ja | Odometrie |
+> | **Absolute Position** | **Nein** | *Das schätzen wir!* |
+> | Welche Landmarke erkannt wurde (ID) | Nein | Sensor liefert nur "Landmarke ja/nein" |
 
-Der diskrete Bayes-Filter und der Kalman-Filter folgen dem gleichen Grundprinzip: **Predict-Update-Zyklus**. Der wesentliche Unterschied liegt in der Repräsentation der Unsicherheit:
+Der Roboter verfügt über:
 
-<!-- data-type="none" -->
-| Aspekt | Diskreter Bayes-Filter | Kalman-Filter |
-|--------|------------------------|---------------|
-| **Zustandsraum** | Diskret (Gitterzellen) | Kontinuierlich |
-| **Wahrscheinlichkeit** | Histogramm über alle Zellen | Normalverteilung $\mathcal{N}(\mu, \sigma^2)$ |
-| **Speicherbedarf** | $O(n)$ für $n$ Zellen | $O(1)$ - nur $\mu$ und $\sigma^2$ |
-| **Predict** | Faltung mit Bewegungskernel | Addition der Varianzen |
-| **Update** | Elementweise Multiplikation | Gewichtete Mittelung |
+1. **Kamera**: Erkennt, *ob* eine Landmarke in Sichtweite ist, aber nicht *welche* (keine Unterscheidung der Marker)
+2. **Odometrie + Kompass**: Liefert Bewegungsrichtung und -distanz (mit Unsicherheit)
 
-Die zentrale Erkenntnis: Wenn wir annehmen, dass alle Unsicherheiten **normalverteilt** sind, kollabiert die gesamte Wahrscheinlichkeitsverteilung auf nur zwei Parameter - Mittelwert $\mu$ und Varianz $\sigma^2$.
+Diese Konstellation ist typisch für einfache Indoor-Roboter und verdeutlicht das Lokalisierungsproblem: Der Roboter muss aus mehrdeutigen Messungen (mehrere Landmarken sehen gleich aus) und unsicheren Bewegungen seine Position eingrenzen.
 
-### Warum Normalverteilungen?
+--{{0}}--
+Beachten Sie die wichtige Annahme: Der Roboter kennt seine Orientierung durch einen Kompass oder ein Gyroskop. Er weiß also, in welche Himmelsrichtung er schaut und fährt. Was er nicht weiß, ist seine absolute Position im Raum. Das ist genau das, was wir mit dem Bayes-Filter schätzen wollen. Die Landmarken sind dabei absichtlich nicht unterscheidbar - der Roboter sieht nur "da ist ein Marker", aber nicht welcher. Das macht das Problem interessant, denn eine einzelne Messung ist mehrdeutig.
 
-+ Im Allgemeinen ist der Zustandsraum so groß, dass der Bayesscher Filter-Algorithmus nicht direkt implementiert werden kann.
-+ Wahrscheinlichkeiten können durch Wahrscheinlichkeitsgitter approximiert werden (grid-Verfahren). Gitter können dann aber immer noch unpraktikabel groß werden.
-+ Falls Wahrscheinlichkeiten als Normalverteilungen angenommen werden, dann ergibt sich der Kalman-Filter.
+       {{0-1}}
+*******************************************************************************
 
-![ImageMatching](./images/Normalverteilung.png)<!-- style="width: 70%;"-->
+**Schritt 1: Weltmodell und initiale Belief**
 
-> Merke: Alle Größen sind normalverteilt: Vorteil: Radikal vereinfachte Berechnung!
+--{{0}}--
+Im ersten Schritt modellieren wir die Umgebung als diskretes Gitter. Jede Zelle repräsentiert einen möglichen Aufenthaltsort des Roboters. Die acht Landmarken sind an festen Positionen platziert, die dem Roboter aus einer Karte bekannt sind. Die initiale Belief-Verteilung ist uniform: Da wir zu Beginn keine Information über die Position haben, ist jede der 80 Zellen gleich wahrscheinlich mit einer Wahrscheinlichkeit von 1,25 Prozent.
 
-Eine wichtige mathematische Eigenschaft macht dies möglich: Das Produkt zweier Normalverteilungen (Update-Schritt) und die Summe zweier Normalverteilungen (Predict-Schritt) ergeben wieder eine Normalverteilung. Diese Abgeschlossenheit ermöglicht die effiziente Berechnung.
+Zunächst definieren wir unsere Welt und die Anfangsverteilung. Der Roboter weiß initial nicht, wo er sich befindet - alle Positionen sind gleich wahrscheinlich.
 
-### Kalman-Filter Grundlagen
+```python                          World2D.py
+import numpy as np
+import matplotlib.pyplot as plt
 
-Der Kalman-Filter basiert auf zwei grundsätzlichen Gleichungen, die das Systemverhalten beschreiben - der Systemgleichung und der Messgleichung.
+# Weltgröße
+ROWS, COLS = 8, 10
 
-$$
-\begin{align*}
-x_t &=a \cdot x_{t-1} + b\cdot u_t + \epsilon\\
-z_t &= c\cdot x_t + \delta 
-\end{align*}
-$$
+# Landmarken-Positionen (Zeile, Spalte)
+landmarks = [(0, 2), (0, 7), (2, 0), (2, 9), (4, 1), (4, 6), (6, 3), (6, 8)]
 
-Zustand $x_t$, Steuerbefehl $u_t$ und Sensorwert $z_t$ sind eindimensional.
+# Weltmodell erstellen
+world = np.zeros((ROWS, COLS))
+for (r, c) in landmarks:
+    world[r, c] = 1
 
-+ $a$ repräsentiert die Transformationsbedingung des Zustandes und $b$ die Eingabematrix
+# Initiale Belief: Gleichverteilung
+belief = np.ones((ROWS, COLS)) / (ROWS * COLS)
 
-+ $\epsilon$ und $\delta$ sind Weißes Gauß'sches Rauschen (d.h. normalverteilt mit Mittelwert 0)
+# Visualisierung
+fig, axes = plt.subplots(1, 2, figsize=(12, 5))
 
-### Kalman-Filter als Prozess
+# Weltmodell
+ax1 = axes[0]
+ax1.imshow(world, cmap='Greens', alpha=0.5)
+for (r, c) in landmarks:
+    ax1.plot(c, r, 'g^', markersize=15, markeredgecolor='darkgreen', markeredgewidth=2)
+ax1.set_title('Weltmodell mit Landmarken')
+ax1.set_xlabel('Spalte')
+ax1.set_ylabel('Zeile')
 
-1. Vorhersage-Schritt (prediction step):
-	Mit Hilfe eines Systemmodells (z.B. Bewegungsmodell) wird aus 	dem alten Zustand $x_{t-1}$ und einem Steuerbefehl $u_t$ der neue	Zustand $x_t$ geschätzt.
+# Initiale Belief
+ax2 = axes[1]
+im = ax2.imshow(belief, cmap='Blues', vmin=0, vmax=0.1)
+ax2.set_title(f'Initiale Belief (uniform: {belief[0,0]:.4f})')
+ax2.set_xlabel('Spalte')
+ax2.set_ylabel('Zeile')
+plt.colorbar(im, ax=ax2, label='P(Position)')
 
-![ImageMatching](./images/KalmanPrediktion.png)<!-- style="width: 60%;"-->
+plt.tight_layout()
+plt.savefig('foo.png')
+```
+@LIA.eval(`["main.py"]`, `none`, `python3 main.py`)
 
-$$
-\begin{align*}
-\overline{\mu_t}&= a \mu_{t-1} + b u_t  \\
-\overline{\sigma^2_t} &= a \sigma^2_{t-1} + {\sigma^2_\epsilon} 
-\end{align*}
-$$
+*******************************************************************************
 
-2. Korrektur-Schritt (correction step; measurement update):
-  Aus dem vorhergesagtem Zustand $μ_t$ und der Messgleichung lässt sich ein Messwert $c\mu_t$ schätzen. Aus der Differenz des tatsächlichen Messwertes $z_t$ und des geschätzten Messwerts lässt sich Zustand $\overline{\mu_t}$ korrigieren:
+       {{1-2}}
+*******************************************************************************
 
-![ImageMatching](./images/KalmanKorrektur.png)<!-- style="width: 60%;"-->
+**Schritt 2: Sensormodell - Measurement Update**
 
-$$
-\begin{align*}
-\mu_t&=\overline{\mu_t} + k_t(z_t-c\mu_t)\\
-k_t&=\frac{c^2\overline{\sigma^2_t}}{c^2\overline{\sigma^2_t} + \sigma^2_\delta}
-\end{align*}
-$$
+--{{1}}--
+Jetzt kommt der spannende Teil: Der Roboter macht seine erste Messung und erkennt eine Landmarke! Aber welche? Das weiß er nicht. Trotzdem können wir diese Information nutzen. Wir modellieren den Sensor mit zwei Wahrscheinlichkeiten: Die True-Positive-Rate von 85 Prozent sagt uns, wie zuverlässig der Sensor eine tatsächlich vorhandene Landmarke erkennt. Die False-Positive-Rate von 10 Prozent beschreibt, wie oft der Sensor fälschlicherweise eine Landmarke meldet, obwohl keine da ist. Mit dem Satz von Bayes können wir nun die Belief aktualisieren: An Positionen mit Landmarken steigt die Wahrscheinlichkeit deutlich an, während sie an allen anderen Positionen sinkt.
 
-Wenn wir den Ablauf auf ein n-dimensionales Problem anwenden, ergibt sich folgendes Standardschaubild zum Ablauf.
+Der Roboter erkennt eine Landmarke. Wie aktualisieren wir die Belief?
 
-![ImageMatching](./images/Kalman.png)<!-- style="width: 80%;"-->
++ $P(\text{Erkennung} | \text{Landmarke vorhanden}) = 0.85$ (True Positive)
++ $P(\text{Erkennung} | \text{keine Landmarke}) = 0.1$ (False Positive)
 
-_S. Maybeck, Stochastic models, estimation, and control, 1977_
+```python                          MeasurementUpdate2D.py
+import numpy as np
+import matplotlib.pyplot as plt
 
-## Ausblick
+ROWS, COLS = 8, 10
+landmarks = [(0, 2), (0, 7), (2, 0), (2, 9), (4, 1), (4, 6), (6, 3), (6, 8)]
 
-> Merke: Datenfusion generiert einen erheblichen Aufwand und erfordert Annahmen zur Umgebung des Systems. Gleichzeitig ist sie kein Garant für ein funktionsfähiges System!
+world = np.zeros((ROWS, COLS))
+for (r, c) in landmarks:
+    world[r, c] = 1
 
-![ImageMatching](./images/Nahin.png)<!-- style="width: 70%;"-->
+def measurement_update(belief, world, detected_landmark, p_hit=0.85, p_miss=0.1):
+    """Update der Belief nach Sensormessung"""
+    if detected_landmark:
+        # Likelihood: höher an Landmarken-Positionen
+        likelihood = np.where(world == 1, p_hit, p_miss)
+    else:
+        # Keine Landmarke erkannt
+        likelihood = np.where(world == 1, 1 - p_hit, 1 - p_miss)
 
-_Nahin, John L., Can Two Plus Two Equal Five? 1980_
+    # Bayes-Update
+    posterior = belief * likelihood
+    return posterior / np.sum(posterior)  # Normalisierung
+
+# Initiale Belief
+belief = np.ones((ROWS, COLS)) / (ROWS * COLS)
+
+# Roboter erkennt eine Landmarke!
+belief_after = measurement_update(belief, world, detected_landmark=True)
+
+# Visualisierung
+fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+
+ax1 = axes[0]
+im1 = ax1.imshow(belief, cmap='Blues', vmin=0, vmax=np.max(belief_after))
+for (r, c) in landmarks:
+    ax1.plot(c, r, 'g^', markersize=12)
+ax1.set_title('Vor der Messung')
+plt.colorbar(im1, ax=ax1)
+
+ax2 = axes[1]
+im2 = ax2.imshow(belief_after, cmap='Blues', vmin=0, vmax=np.max(belief_after))
+for (r, c) in landmarks:
+    ax2.plot(c, r, 'g^', markersize=12)
+ax2.set_title('Nach Messung: Landmarke erkannt!')
+plt.colorbar(im2, ax=ax2)
+
+plt.tight_layout()
+plt.savefig('foo.png')
+
+print(f"Max. Belief vorher:  {np.max(belief):.4f}")
+print(f"Max. Belief nachher: {np.max(belief_after):.4f}")
+print(f"Summe der Belief an Landmarken: {np.sum(belief_after[world==1]):.4f}")
+```
+@LIA.eval(`["main.py"]`, `none`, `python3 main.py`)
+
+--{{1}}--
+In der Visualisierung sehen Sie den Effekt: Die vorher gleichmäßig blaue Heatmap zeigt jetzt deutliche Spitzen an den acht Landmarken-Positionen. Die Summe der Belief an diesen Positionen beträgt nun fast 50 Prozent, obwohl sie nur 10 Prozent der Fläche ausmachen. Der Roboter hat also bereits nach einer einzigen Messung wertvolle Information gewonnen, auch wenn er noch nicht eindeutig lokalisiert ist.
+
+Die Wahrscheinlichkeit konzentriert sich nun auf die Landmarken-Positionen!
+
+*******************************************************************************
+
+       {{2-3}}
+*******************************************************************************
+
+**Schritt 3: Bewegungsmodell - Motion Update (Predict)**
+
+--{{2}}--
+Nun bewegt sich der Roboter. Er erhält den Befehl, eine Zelle nach Osten zu fahren. Aber Roboterbewegungen sind nie perfekt! Radschlupf, unebener Boden oder ungenaue Motoren führen dazu, dass die tatsächliche Bewegung von der gewünschten abweicht. Wir modellieren das mit einem Bewegungskernel: Mit 70 Prozent Wahrscheinlichkeit landet der Roboter dort, wo er hin wollte. Mit jeweils 10 Prozent driftet er nach Nordost oder Südost ab. Und mit 10 Prozent bleibt er stecken und bewegt sich gar nicht. Mathematisch realisieren wir das durch eine zweidimensionale Faltung der Belief-Verteilung mit diesem Kernel.
+
+Der Roboter bewegt sich nach Osten. Die Bewegung ist unsicher:
++ 70% Wahrscheinlichkeit für korrekte Bewegung
++ 10% für seitliche Abweichung (Nord/Süd)
++ 10% für Stehenbleiben
+
+Im 2D-Fall verwenden wir eine **2D-Faltung** mit einem entsprechenden Kernel.
+
+```python                          MotionUpdate2D.py
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.ndimage import convolve
+
+ROWS, COLS = 8, 10
+landmarks = [(0, 2), (0, 7), (2, 0), (2, 9), (4, 1), (4, 6), (6, 3), (6, 8)]
+
+world = np.zeros((ROWS, COLS))
+for (r, c) in landmarks:
+    world[r, c] = 1
+
+def create_motion_kernel(direction, p_correct=0.7, p_side=0.1, p_stay=0.1):
+    """Erstellt 3x3 Bewegungskernel"""
+    kernel = np.zeros((3, 3))
+    # Kernel-Layout: [[NW, N, NE], [W, Center, E], [SW, S, SE]]
+
+    if direction == 'east':
+        kernel[1, 2] = p_correct  # Osten (Hauptrichtung)
+        kernel[0, 2] = p_side     # Nordost (Abweichung)
+        kernel[2, 2] = p_side     # Südost (Abweichung)
+        kernel[1, 1] = p_stay     # Stehen bleiben
+    elif direction == 'north':
+        kernel[0, 1] = p_correct
+        kernel[0, 0] = p_side
+        kernel[0, 2] = p_side
+        kernel[1, 1] = p_stay
+
+    return kernel / np.sum(kernel)
+
+def motion_update(belief, direction):
+    """Predict-Schritt durch 2D-Faltung"""
+    kernel = create_motion_kernel(direction)
+    return convolve(belief, kernel, mode='wrap')
+
+# Starte mit konzentrierter Belief (Roboter "weiß" ungefähr wo er ist)
+belief = np.zeros((ROWS, COLS))
+belief[4, 3] = 0.6   # Hauptvermutung
+belief[4, 2] = 0.15  # Nebenposition
+belief[4, 4] = 0.15
+belief[3, 3] = 0.05
+belief[5, 3] = 0.05
+
+# Bewegung nach Osten
+belief_after = motion_update(belief, 'east')
+
+# Visualisierung
+fig, axes = plt.subplots(1, 3, figsize=(15, 4))
+
+ax1 = axes[0]
+im1 = ax1.imshow(belief, cmap='Blues')
+ax1.set_title('Vor Bewegung')
+ax1.plot(3, 4, 'ro', markersize=15)  # Wahre Position
+plt.colorbar(im1, ax=ax1)
+
+ax2 = axes[1]
+kernel = create_motion_kernel('east')
+im2 = ax2.imshow(kernel, cmap='Oranges')
+ax2.set_title('Bewegungskernel (Ost)')
+for i in range(3):
+    for j in range(3):
+        ax2.text(j, i, f'{kernel[i,j]:.2f}', ha='center', va='center')
+plt.colorbar(im2, ax=ax2)
+
+ax3 = axes[2]
+im3 = ax3.imshow(belief_after, cmap='Blues')
+ax3.set_title('Nach Bewegung (Ost)')
+ax3.plot(4, 4, 'ro', markersize=15)  # Neue wahre Position
+plt.colorbar(im3, ax=ax3)
+
+plt.tight_layout()
+plt.savefig('foo.png')
+
+print(f"Entropie vorher:  {-np.sum(belief[belief>0] * np.log(belief[belief>0])):.3f}")
+print(f"Entropie nachher: {-np.sum(belief_after[belief_after>0] * np.log(belief_after[belief_after>0])):.3f}")
+```
+@LIA.eval(`["main.py"]`, `none`, `python3 main.py`)
+
+--{{2}}--
+Das Ergebnis zeigt einen wichtigen Effekt: Die Entropie, also das Maß für die Unsicherheit, steigt durch die Bewegung an. Die vorher konzentrierte Verteilung "verschmiert" sich. Das ist intuitiv klar: Wenn wir nicht genau wissen, wo wir sind, und uns dann unsicher bewegen, wissen wir danach noch weniger genau, wo wir sind. Deshalb ist der Measurement-Update so wichtig - er ist der einzige Schritt, der Unsicherheit reduziert.
+
+Beachten Sie: Die Unsicherheit (Entropie) nimmt durch die Bewegung zu - die Verteilung "verschmiert".
+
+*******************************************************************************
+
+       {{3-4}}
+*******************************************************************************
+
+**Schritt 4: Komplette Simulation - Mehrere Iterationen**
+
+--{{3}}--
+Jetzt führen wir alles zusammen und simulieren einen kompletten Durchlauf. Der Roboter startet bei Position Zeile 4, Spalte 1 - direkt neben einer Landmarke. Er fährt dann fünf Schritte nach Osten und passiert dabei eine weitere Landmarke bei Spalte 6. Bei jedem Schritt führen wir erst das Measurement-Update durch, dann das Motion-Update. In der Visualisierung sehen Sie, wie sich die Belief-Verteilung über die Zeit entwickelt. Am Anfang ist alles gleichverteilt. Nach der ersten Messung an der Landmarke konzentriert sich die Wahrscheinlichkeit auf die acht möglichen Positionen. Mit jeder weiteren Bewegung und Messung verfeinert sich die Schätzung, bis der Filter am Ende die korrekte Position identifiziert hat.
+
+Jetzt kombinieren wir alles: Der Roboter bewegt sich durch die Welt und macht wiederholt Messungen.
+
+```python                          BayesFilter2D_Complete.py
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.ndimage import convolve
+
+# Konfiguration
+ROWS, COLS = 8, 10
+landmarks = [(0, 2), (0, 7), (2, 0), (2, 9), (4, 1), (4, 6), (6, 3), (6, 8)]
+P_HIT, P_MISS = 0.85, 0.1
+
+world = np.zeros((ROWS, COLS))
+for (r, c) in landmarks:
+    world[r, c] = 1
+
+def measurement_update(belief, detected):
+    if detected:
+        likelihood = np.where(world == 1, P_HIT, P_MISS)
+    else:
+        likelihood = np.where(world == 1, 1-P_HIT, 1-P_MISS)
+    posterior = belief * likelihood
+    return posterior / np.sum(posterior)
+
+def motion_update(belief, direction):
+    kernel = np.zeros((3, 3))
+    if direction == 'east':
+        kernel[1, 2], kernel[0, 2], kernel[2, 2], kernel[1, 1] = 0.7, 0.1, 0.1, 0.1
+    elif direction == 'north':
+        kernel[0, 1], kernel[0, 0], kernel[0, 2], kernel[1, 1] = 0.7, 0.1, 0.1, 0.1
+    elif direction == 'south':
+        kernel[2, 1], kernel[2, 0], kernel[2, 2], kernel[1, 1] = 0.7, 0.1, 0.1, 0.1
+    kernel = kernel / np.sum(kernel)
+    return convolve(belief, kernel, mode='wrap')
+
+# Wahrer Pfad des Roboters
+true_path = [(4, 1), (4, 2), (4, 3), (4, 4), (4, 5), (4, 6)]
+movements = ['east', 'east', 'east', 'east', 'east']
+
+# Simuliere Sensormessungen (mit Rauschen)
+np.random.seed(42)
+measurements = []
+for (r, c) in true_path:
+    has_lm = world[r, c] == 1
+    if has_lm:
+        measurements.append(np.random.random() < P_HIT)
+    else:
+        measurements.append(np.random.random() < P_MISS)
+
+# Filter ausführen
+belief = np.ones((ROWS, COLS)) / (ROWS * COLS)
+beliefs = [belief.copy()]
+
+for i in range(len(true_path)):
+    # Measurement Update
+    belief = measurement_update(belief, measurements[i])
+    beliefs.append(belief.copy())
+
+    # Motion Update (außer beim letzten Schritt)
+    if i < len(movements):
+        belief = motion_update(belief, movements[i])
+
+# Visualisierung
+fig, axes = plt.subplots(2, 3, figsize=(14, 9))
+steps_to_show = [0, 1, 2, 3, 4, 5]
+
+for idx, step in enumerate(steps_to_show):
+    ax = axes[idx // 3, idx % 3]
+    im = ax.imshow(beliefs[step], cmap='Blues', vmin=0, vmax=np.max(beliefs[-1]))
+
+    # Landmarken
+    for (r, c) in landmarks:
+        ax.plot(c, r, 'g^', markersize=10)
+
+    # Wahre Position
+    if step < len(true_path):
+        ax.plot(true_path[step][1], true_path[step][0], 'ro', markersize=12,
+                markeredgecolor='darkred', markeredgewidth=2)
+
+    # Geschätzte Position (Maximum)
+    est = np.unravel_index(np.argmax(beliefs[step]), beliefs[step].shape)
+    ax.plot(est[1], est[0], 'bx', markersize=12, markeredgewidth=2)
+
+    meas_str = "LM!" if step > 0 and measurements[step-1] else "---"
+    ax.set_title(f'Schritt {step} | Messung: {meas_str}')
+
+plt.suptitle('2D Bayes-Filter: Roboter-Lokalisierung\n(rot=wahr, blau=geschätzt, grün=Landmarken)', fontsize=12)
+plt.tight_layout()
+plt.savefig('foo.png')
+
+# Finale Auswertung
+est_final = np.unravel_index(np.argmax(beliefs[-1]), beliefs[-1].shape)
+print(f"Wahre Endposition:     {true_path[-1]}")
+print(f"Geschätzte Position:   {est_final}")
+print(f"Max. Belief:           {np.max(beliefs[-1]):.4f}")
+```
+@LIA.eval(`["main.py"]`, `none`, `python3 main.py`)
+
+*******************************************************************************
+
+       {{4-5}}
+*******************************************************************************
+
+**Diskussion: Einschränkungen des 2D Bayes-Filters**
+
+--{{4}}--
+Das zweidimensionale Beispiel hat gezeigt, dass der diskrete Bayes-Filter funktioniert. Aber es offenbart auch seine fundamentalen Grenzen. Unser kleines 8 mal 10 Gitter benötigt bereits 80 Wahrscheinlichkeitswerte. Stellen Sie sich nun eine realistische Anwendung vor: Eine Fabrikhalle mit 100 mal 100 Metern, diskretisiert in 10-Zentimeter-Zellen. Das ergibt eine Million Zellen! Und dabei haben wir die Orientierung des Roboters noch gar nicht berücksichtigt. Würden wir die Orientierung in 360 Ein-Grad-Schritten einbeziehen, hätten wir 360 Millionen Zellen. Das ist für Echtzeitanwendungen nicht mehr praktikabel.
+
+Das 2D-Beispiel zeigt die Leistungsfähigkeit, aber auch die Grenzen des diskreten Ansatzes:
+
++ **Speicherbedarf**: Unser 8×10 Grid benötigt 80 Werte. Eine realistische Fabrikhalle (100m × 100m) mit 10cm Auflösung erfordert bereits **1 Million Zellen**!
+
++ **Rechenaufwand**: Die 2D-Faltung skaliert mit $O(n \cdot k^2)$ wobei $n$ die Zellanzahl und $k$ die Kernelgröße ist.
+
++ **Diskretisierungsfehler**: Die wahre Position liegt selten exakt auf einem Gitterpunkt.
+
++ **Multimodalität**: Der Filter kann mehrere Hypothesen gleichzeitig verfolgen (vorteilhaft bei Kidnapped-Robot-Problem), aber dies erhöht auch die Unsicherheit.
+
+--{{4}}--
+Allerdings hat der diskrete Ansatz auch einen Vorteil, den wir nicht unterschätzen sollten: Er kann mehrere Hypothesen gleichzeitig verfolgen. Wenn der Roboter entführt und an einem unbekannten Ort abgesetzt wird - das sogenannte Kidnapped-Robot-Problem - kann der diskrete Filter mehrere mögliche Positionen parallel tracken, bis genug Evidenz für eine eindeutige Lokalisierung vorliegt. Diesen Vorteil verlieren wir, wenn wir zu unimodalen Verteilungen wie beim Kalman-Filter übergehen.
+
+![ImageMatching](./images/2DBayes.png)<!-- style="width: 70%;"-->
+
+> **Fazit**: Der diskrete Bayes-Filter eignet sich gut für kleine, strukturierte Umgebungen mit wenigen diskreten Zuständen. Für kontinuierliche Zustandsräume benötigen wir effizientere Repräsentationen → Kalman-Filter (nächste Vorlesung).
+
+*******************************************************************************
+
+## Ausblick: Vom diskreten zum kontinuierlichen Filter
+
+--{{5}}--
+Fassen wir zusammen, was wir aus dem diskreten Bayes-Filter gelernt haben, und schauen voraus auf die nächste Vorlesung. Die grundlegende Idee des Predict-Update-Zyklus bleibt erhalten. Was sich ändert, ist die Repräsentation der Unsicherheit. Anstatt für jede Gitterzelle eine Wahrscheinlichkeit zu speichern, nehmen wir an, dass unsere Unsicherheit normalverteilt ist. Eine Normalverteilung wird vollständig durch nur zwei Parameter beschrieben: den Mittelwert und die Varianz. Das reduziert den Speicherbedarf drastisch und ermöglicht geschlossene analytische Lösungen für den Predict- und Update-Schritt. Das Ergebnis ist der Kalman-Filter, den wir in der nächsten Vorlesung kennenlernen werden.
+
+Welche Einschränkungen sehen wir beim diskreten Bayes-Filter?
+
++ **Speicherbedarf**: Wir müssen für jede Gitterzelle eine Wahrscheinlichkeit speichern. Bei einem 2D-Grid mit 100×100 Zellen sind das bereits 10.000 Werte - bei 3D oder höherer Auflösung explodiert der Speicherbedarf.
+
++ **Rechenaufwand**: Die Faltungsoperation im Predict-Schritt skaliert mit der Anzahl der Zellen. Für Echtzeit-Anwendungen kann dies problematisch werden.
+
++ **Diskretisierungsfehler**: Die Auflösung des Gitters begrenzt die Genauigkeit unserer Schätzung. Feinere Gitter erhöhen wiederum Speicher- und Rechenbedarf.
+
+> **Kernfrage**: Können wir die Wahrscheinlichkeitsverteilung kompakter darstellen?
+
+Die Antwort liegt in einer Annahme: Wenn wir davon ausgehen, dass alle Unsicherheiten **normalverteilt** sind, kollabiert die gesamte Verteilung auf nur zwei Parameter - Mittelwert $\mu$ und Varianz $\sigma^2$.
+
+```ascii
+    Diskreter Bayes-Filter          Kalman-Filter
+
+    ┌─┬─┬─┬─┬─┬─┬─┬─┬─┬─┐
+    │ │▄│█│▄│ │ │ │ │ │ │    ───►      "$\mu, \sigma^2$"
+    └─┴─┴─┴─┴─┴─┴─┴─┴─┴─┘
+       10 Werte speichern           2 Werte speichern
+```
+
+In der **nächsten Vorlesung** werden wir den **Kalman-Filter** kennenlernen, der genau diesen Ansatz verfolgt:
+
++ Predict-Update-Zyklus bleibt erhalten
++ Zustandsschätzung wird durch Normalverteilung repräsentiert
++ Effiziente Berechnung durch geschlossene Formeln
++ Erweiterung auf nichtlineare Systeme (Extended Kalman Filter)
 
 ## Zusammenfassung
 
@@ -710,6 +1065,6 @@ _Nahin, John L., Can Two Plus Two Equal Five? 1980_
 
 + **Diskreter Bayes-Filter**: Iterativer Predict-Update-Zyklus zur Zustandsschätzung basierend auf Wahrscheinlichkeitsverteilungen über diskrete Zustände.
 
-+ **Kalman-Filter**: Effiziente Variante für kontinuierliche Systeme unter der Annahme normalverteilter Unsicherheiten – reduziert die Repräsentation auf Mittelwert $\mu$ und Varianz $\sigma^2$.
++ **Limitationen**: Hoher Speicher- und Rechenaufwand bei feiner Diskretisierung motiviert den Übergang zu parametrischen Filtern (Kalman-Filter).
 
 
