@@ -10,6 +10,8 @@ Die ZED2i-Stereokamera verfügt über eine integrierte Objekterkennung. Ihre Auf
 
 **Ziel**: Vergleichen Sie YOLO und ZED anhand der erkannten Personenanzahl pro Frame.
 
+![Vergleichsplot YOLO vs. ZED](results/comparison_plot.png)
+
 ## Lernziele
 
 - ROS 2 Launch-Files erstellen
@@ -45,11 +47,14 @@ sudo apt install ros-jazzy-zed-msgs ros-jazzy-cv-bridge
 python3 -m venv .venv --system-site-packages
 source .venv/bin/activate
 
-# 3. PyTorch CPU-only
-pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+# 3. PyTorch CPU-only (Version 2.9.1, kompatibel mit ultralytics)
+pip install "torch==2.9.1+cpu" "torchvision==0.24.1+cpu" --index-url https://download.pytorch.org/whl/cpu
 
 # 4. YOLOv8 und Matplotlib
 pip install ultralytics matplotlib
+
+# 5. numpy für System-matplotlib Kompatibilität
+pip install "numpy<2"
 ```
 
 > **Hinweis**: Ab Ubuntu 24.04 ist `pip install --user` ohne Virtual Environment nicht mehr erlaubt (PEP 668). Die Option `--system-site-packages` ermöglicht den Zugriff auf ROS 2 Python-Pakete wie `rclpy` und `cv_bridge`.
@@ -95,6 +100,8 @@ source install/setup.bash
 | `No module named 'rclpy'`       | venv ohne `--system-site-packages` | venv neu erstellen mit Flag               |
 | `No module named 'cv_bridge'`   | ROS nicht gesourced                | `source /opt/ros/jazzy/setup.bash` zuerst |
 | `No module named 'ultralytics'` | venv nicht aktiviert               | `source .venv/bin/activate`               |
+| `numpy.core.multiarray failed`  | numpy 2.x mit System-matplotlib    | `pip install "numpy<2"`                   |
+| `torch` ist CUDA statt CPU      | ultralytics hat torch überschrieben | torch mit expliziter Version neu installieren |
 
 ---
 
