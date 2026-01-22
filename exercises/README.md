@@ -14,7 +14,7 @@ Dieses Verzeichnis enthält alle praktischen Übungsaufgaben zur Vorlesung "Soft
 
 Alle Übungen basieren auf einem gemeinsamen ROS2-Bag-Datensatz:
 
-**Pfad**: `/media/sz/Data/20251126_ifi2/20251126_ifi2_0.mcap`
+https://ificloud.xsitepool.tu-freiberg.de/index.php/s/DQqrBKBZw3JBeBm
 
 **Details**:
 

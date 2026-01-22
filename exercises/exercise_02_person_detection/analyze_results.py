@@ -57,16 +57,6 @@ def load_csv(csv_path: str, count_field: str) -> list:
     #    - Extrahieren Sie den count (Spalte count_field)
     #    - Fügen Sie ein Dictionary zur Liste hinzu:
     #      {'timestamp': float(...), 'count': int(...)}
-    #
-    # Beispiel:
-    #   with open(csv_path, 'r') as f:
-    #       reader = csv.DictReader(f)
-    #       for row in reader:
-    #           results.append({
-    #               'timestamp': float(row['timestamp']),
-    #               'count': int(row[count_field])
-    #           })
-    #
     # 4. Sortieren Sie die Ergebnisse nach Timestamp:
     #    results.sort(key=lambda x: x['timestamp'])
     # =========================================================================
@@ -110,21 +100,6 @@ def match_timestamps(yolo_data: list, zed_data: list, tolerance: float = 0.1) ->
     #   2. Wenn Abstand <= tolerance: Match gefunden
     #   3. Sonst: zed = None
     #
-    # Einfache Variante (funktioniert, aber nicht optimal):
-    #   for yolo in yolo_data:
-    #       yolo_ts = yolo['timestamp']
-    #       best_match = None
-    #       best_diff = float('inf')
-    #
-    #       for zed in zed_data:
-    #           diff = abs(yolo_ts - zed['timestamp'])
-    #           if diff < best_diff:
-    #               best_diff = diff
-    #               best_match = zed
-    #
-    #       zed_count = best_match['count'] if best_match and best_diff <= tolerance else None
-    #       matched.append({'time': yolo_ts, 'yolo': yolo['count'], 'zed': zed_count})
-    #
     # Effizientere Variante (optional):
     # Da beide Listen zeitlich sortiert sind, kann man sich den
     # letzten Index merken und ab dort weitersuchen.
@@ -164,29 +139,12 @@ def create_plot(results: list, output_path: str):
     #    zed_counts = [r['zed'] for r in results]
     #
     # 2. Figure erstellen:
-    #    fig, ax = plt.subplots(1, 1, figsize=(12, 4))
-    #
     # 3. YOLO-Linie zeichnen (Step-Plot):
     #    ax.step(time_rel, yolo_counts, 'b-', label='YOLO',
     #            linewidth=1.5, alpha=0.8, where='post')
-    #
     # 4. ZED-Linie zeichnen (wenn Daten vorhanden):
-    #    if any(z is not None for z in zed_counts):
-    #        ax.step(time_rel, zed_counts, 'r--', label='ZED',
-    #                linewidth=1.5, alpha=0.8, where='post')
-    #
-    # 5. Achsenbeschriftung und Formatierung:
-    #    ax.set_xlabel('Zeit [s]')
-    #    ax.set_ylabel('Anzahl Personen')
-    #    ax.set_title('Personendetektion über Zeit: YOLO vs. ZED')
-    #    ax.legend(loc='upper right')
-    #    ax.grid(True, alpha=0.3)
-    #    ax.set_ylim(bottom=0)
-    #
+    # 5. Achsenbeschriftung und Formatierung
     # 6. Speichern und schließen:
-    #    plt.tight_layout()
-    #    plt.savefig(output_path, dpi=150, bbox_inches='tight')
-    #    plt.close()
     # =========================================================================
 
     print(f"Plot-Erstellung: TODO - bitte implementieren")

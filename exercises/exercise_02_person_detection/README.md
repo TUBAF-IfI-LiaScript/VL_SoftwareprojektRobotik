@@ -69,9 +69,36 @@ python3 -c "import rclpy; print('ROS 2 OK')"
 python3 -c "from ultralytics import YOLO; print('YOLO OK')"
 ```
 
+## Häufige Fehler bei der venv-Einrichtung
+
+**Wichtig: Reihenfolge beim Sourcen**
+
+In **jedem neuen Terminal** diese Reihenfolge einhalten:
+
+```bash
+# 1. ROS zuerst
+source /opt/ros/jazzy/setup.bash
+
+# 2. Dann venv
+source .venv/bin/activate
+
+# 3. Nach dem Build: Workspace
+source install/setup.bash
+```
+
+> **Achtung**: Bei falscher Reihenfolge kann `rclpy` oder `cv_bridge` nicht gefunden werden!
+
+**Typische Fehler:**
+
+| Fehler                          | Ursache                            | Lösung                                    |
+| ------------------------------- | ---------------------------------- | ----------------------------------------- |
+| `No module named 'rclpy'`       | venv ohne `--system-site-packages` | venv neu erstellen mit Flag               |
+| `No module named 'cv_bridge'`   | ROS nicht gesourced                | `source /opt/ros/jazzy/setup.bash` zuerst |
+| `No module named 'ultralytics'` | venv nicht aktiviert               | `source .venv/bin/activate`               |
+
 ---
 
-## Architektur
+## Architektur der Lösung 
 
 ```
 ┌─────────────────┐     ┌──────────────────────────┐
@@ -90,6 +117,25 @@ yolo_detections.csv ───►│    analyze_results.py    │──► compar
 zed_detections.csv  ───►│                          │
                         └──────────────────────────┘
 ```
+
+---
+
+## Tipp: Schnelle Tests mit reduzierter Bag-Dauer
+
+Um nicht bei jedem Test die gesamte Bag abspielen zu müssen, können Sie die Wiedergabe zeitlich begrenzen:
+
+```bash
+# Nur 20 Sekunden abspielen (ab Sekunde 30)
+ros2 bag play data/20251126_ifi2 --start-offset 30 --playback-duration 20
+```
+
+| Option | Beschreibung |
+|--------|--------------|
+| `--start-offset 30` | Überspringe die ersten 30 Sekunden |
+| `--playback-duration 20` | Spiele nur 20 Sekunden ab |
+| `--rate 0.5` | Halbe Geschwindigkeit (optional, für langsame Rechner) |
+
+> Dies reicht für erste Tests aus. Für die finale Auswertung sollte die vollständige Bag verwendet werden.
 
 ---
 
@@ -119,7 +165,7 @@ Vervollständigen Sie die drei TODO-Bereiche im Launch-File:
 ```bash
 # Paket bauen
 colcon build --packages-select person_detector
-source install/setup.bash
+source install/setup.bash    // oder andere Shells zsh, fish etc.
 
 # Terminal 1: Bag abspielen
 ros2 bag play data/20251126_ifi2
