@@ -172,7 +172,7 @@ Vervollständigen Sie die drei TODO-Bereiche im Launch-File:
 ```bash
 # Paket bauen
 colcon build --packages-select person_detector
-source install/setup.bash    // oder andere Shells zsh, fish etc.
+source install/setup.bash    # oder andere Shells zsh, fish etc.
 
 # Terminal 1: Bag abspielen
 ros2 bag play data/20251126_ifi2
