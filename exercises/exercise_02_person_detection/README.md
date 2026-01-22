@@ -146,6 +146,29 @@ ros2 bag play data/20251126_ifi2 --start-offset 30 --playback-duration 20
 
 ---
 
+## VSCode-Konfiguration für ROS 2
+
+Für eine optimale Entwicklungsumgebung sollten Sie VSCode so konfigurieren, dass die ROS 2 Python-Pakete erkannt werden.
+
+**Erstellen Sie die Datei** `.vscode/settings.json` im Workspace-Root mit folgendem Inhalt:
+
+```json
+{
+  "python.autoComplete.extraPaths": [
+    "/opt/ros/jazzy/lib/python3.12/site-packages/"
+  ],
+  "python.analysis.extraPaths": [
+    "/opt/ros/jazzy/lib/python3.12/site-packages/"
+  ]
+}
+```
+
+Dies aktiviert IntelliSense für ROS 2-Module wie `rclpy`, `cv_bridge` und `sensor_msgs`.
+
+> **Hinweis**: Passen Sie den Pfad an, falls Sie eine andere ROS 2-Distribution oder Python-Version verwenden.
+
+---
+
 ## Aufgabe 1: Launch-File für ZED-Extraktor (20 min)
 
 **Datei**: `person_detector/launch/zed_extractor.launch.py`
