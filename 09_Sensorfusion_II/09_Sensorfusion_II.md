@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  1.0.0
+version:  1.0.1
 language: de
 comment:  In dieser Vorlesung wird der Kalman-Filter als Methode zur Sensordatenfusion eingeführt.
 narrator: Deutsch Female
@@ -41,6 +41,62 @@ import:   https://github.com/liascript/CodeRunner
 
 --------------------------------------------------------------------------------
 
+## Einschub - Quality of Service (QoS) für Sensordaten
+
+--{{0}}--
+Ein wichtiger Aspekt bei der Sensorfusion in ROS 2 ist die Quality of Service Konfiguration. QoS bestimmt, wie zuverlässig und mit welcher Latenz Sensordaten übertragen werden. Für die Sensorfusion ist das entscheidend: Wollen wir lieber alle Daten garantiert erhalten, auch wenn das Verzögerungen bedeutet? Oder ist uns eine niedrige Latenz wichtiger, selbst wenn mal ein Paket verloren geht?
+
+ROS 2 bietet eine Vielzahl von Quality of Service (QoS)-Richtlinien, mit denen Sie die Kommunikation zwischen Knoten und die Datenhaltung optimieren können. Eine Reihe von QoS "Richtlinien" kombinieren sich zu einem QoS "Profil".
+
+**Wichtige QoS-Parameter:**
+
++ *Durability* ... legt fest, ob und wie lange Daten, die bereits ausgetauscht worden sind, "am Leben bleiben". `volatile` bedeutet, dass dahingehend kein Aufwand investiert wird, `transient` oder `persistent` gehen darüber hinaus.
++ *Reliability* ... definiert, ob alle geschriebenen Datensätze bei allen Readern angekommen sein müssen. `reliable` stellt Daten zuverlässig zu (mit Wiederholung bei Verlust), `best effort` liefert schnellstmöglich ohne Garantie.
++ *History* ... definiert, wie viele der letzten Daten gespeichert werden. `Keep last` speichert n Samples (definiert durch _Depth_), `Keep all` speichert alle Samples.
++ *Depth* ... erfasst die Größe der Queue für die History, wenn `Keep last` gewählt wurde.
+
+**Vordefinierte QoS-Profile in ROS 2:**
+
+| Profil                 | Durability | Reliability | History   | Depth  |
+| ---------------------- | ---------- | ----------- | --------- | ------ |
+| Publisher & Subscriber | volatile   | reliable    | keep last | -      |
+| Services               | volatile   | reliable    | keep last | -      |
+| Sensor data            | volatile   | best effort | keep last | small  |
+| Parameters             | volatile   | reliable    | keep last | larger |
+| Default                | volatile   | reliable    | keep last | small  |
+
+--{{1}}--
+Beachten Sie, dass Sensordaten standardmäßig mit "best effort" konfiguriert sind! Das bedeutet schnelle Übertragung, aber keine Garantie. Für die Sensorfusion mit robot_localization ist das meist in Ordnung, da der Filter mit fehlenden Messungen umgehen kann.
+
+**Kompatibilität zwischen Publisher und Subscriber:**
+
+| Publisher   | Subscriber  | Verbindung | Ergebnis    |
+| ----------- | ----------- | ---------- | ----------- |
+| best effort | best effort | ja         | best effort |
+| best effort | reliable    | nein       | -           |
+| reliable    | best effort | ja         | best effort |
+| reliable    | reliable    | ja         | reliable    |
+
+> **Wichtig**: Ein `reliable` Subscriber kann sich nicht mit einem `best effort` Publisher verbinden!
+
+**QoS-Einstellungen inspizieren:**
+
+```bash
+# QoS-Konfiguration eines Topics anzeigen
+ros2 topic info /imu/data --verbose
+
+# Beispiel für QoS-Einstellung in Python
+from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy
+
+sensor_qos = QoSProfile(
+    reliability=ReliabilityPolicy.BEST_EFFORT,
+    history=HistoryPolicy.KEEP_LAST,
+    depth=10
+)
+```
+
+Weitere Informationen: [ROS 2 QoS Documentation](https://docs.ros.org/en/rolling/Concepts/About-Quality-of-Service-Settings.html)
+
 ## Rekapitulation: Vom Bayes-Filter zum Kalman-Filter
 
 --{{0}}--
@@ -66,7 +122,7 @@ style="width: 80%; min-width: 420px; max-width: 720px; display: block; margin-le
     └─┴─┴─┴─┴─┴─┴─┴─┴─┴─┘
        n Werte speichern              2 Werte speichern
 
-    100×100 Grid = 10.000 Werte       Immer nur 2 Werte!
+    100×100 Grid = 10.000 Werte       Immer nur 2 Werte!                                              .
 ```
 
 --{{0}}--
@@ -167,6 +223,14 @@ $$
 
 → Die neue Varianz ist **kleiner** als beide Ausgangsvarianzen!
 
+**Grenzfälle zur Intuition:**
+
+| Fall | Ergebnis | Intuition |
+|------|----------|-----------|
+| $\sigma_1 = \sigma_2 = \sigma$ | $\sigma_{neu}^2 = \frac{\sigma^2}{2}$ | Zwei gleich gute Messungen halbieren die Varianz |
+| $\sigma_1 \to 0$ (perfekt) | $\sigma_{neu}^2 \to 0$ | Eine perfekte Messung dominiert |
+| $\sigma_1 \to \infty$ (nutzlos) | $\sigma_{neu}^2 \to \sigma_2^2$ | Eine nutzlose Messung ändert nichts |
+
 ```python                          ProduktNormalverteilungen.py
 import numpy as np
 import matplotlib.pyplot as plt
@@ -213,9 +277,6 @@ Beachten Sie das wichtige Ergebnis: Die Posterior-Varianz ist immer kleiner als 
 
 ## Der eindimensionale Kalman-Filter
 
-       {{0-1}}
-*******************************************************************************
-
 --{{0}}--
 Jetzt haben wir das mathematische Fundament gelegt und können den Kalman-Filter formal definieren. Er basiert auf zwei Gleichungen: der Systemgleichung, die beschreibt, wie sich der Zustand über die Zeit entwickelt, und der Messgleichung, die beschreibt, wie Sensormessungen mit dem wahren Zustand zusammenhängen. Beide Gleichungen enthalten Rauschterme, die die Unsicherheit modellieren.
 
@@ -242,14 +303,10 @@ Dabei sind:
 | $\epsilon_t$ | Prozessrauschen $\sim \mathcal{N}(0, \sigma_\epsilon^2)$ |
 | $\delta_t$ | Messrauschen $\sim \mathcal{N}(0, \sigma_\delta^2)$ |
 
-*******************************************************************************
-
-       {{1-2}}
-*******************************************************************************
 
 ### Predict-Schritt (Vorhersage)
 
---{{1}}--
+--{{0}}--
 Im Predict-Schritt wenden wir das Systemmodell an, um den nächsten Zustand vorherzusagen. Der neue Mittelwert ergibt sich aus dem alten Zustand transformiert durch die Systemdynamik plus dem Steuerbefehl. Die neue Varianz setzt sich zusammen aus der transformierten alten Varianz plus dem Prozessrauschen. Wichtig: Die Varianz kann nur wachsen, nie schrumpfen. Das spiegelt wider, dass Bewegung immer Unsicherheit hinzufügt.
 
 Mit Hilfe des Systemmodells wird aus dem alten Zustand und einem Steuerbefehl der neue Zustand geschätzt:
@@ -267,14 +324,9 @@ $$
 
 Die Unsicherheit wächst durch das Prozessrauschen $\sigma^2_\epsilon$!
 
-*******************************************************************************
-
-       {{2-3}}
-*******************************************************************************
-
 ### Update-Schritt (Korrektur)
 
---{{2}}--
+--{{0}}--
 Im Update-Schritt korrigieren wir unsere Vorhersage anhand der Messung. Der Schlüssel ist der Kalman-Gain K: Er bestimmt, wie stark wir der Messung vertrauen im Vergleich zur Vorhersage. Wenn die Messung sehr genau ist (kleines Messrauschen), ist K nahe bei 1, und wir vertrauen hauptsächlich der Messung. Wenn die Messung verrauscht ist, ist K klein, und wir bleiben eher bei unserer Vorhersage.
 
 Aus der Differenz zwischen vorhergesagtem und gemessenem Wert (Innovation) wird die Schätzung korrigiert:
@@ -294,21 +346,16 @@ $$
 | $K_t$ | **Kalman-Gain** - Gewichtung zwischen Vorhersage und Messung |
 | $z_t - c \cdot \bar{\mu}_t$ | **Innovation** - Differenz zwischen Messung und Erwartung |
 
---{{2}}--
+--{{1}}--
 Die Innovation ist besonders interessant: Sie zeigt uns, wie überraschend die Messung war. Wenn die Innovation null ist, bestätigt die Messung genau unsere Vorhersage, und nichts ändert sich. Je größer die Innovation, desto stärker korrigieren wir.
 
 > **Kalman-Gain interpretiert**:
 > - $K \approx 1$: Vertraue hauptsächlich der Messung
 > - $K \approx 0$: Vertraue hauptsächlich der Vorhersage
 
-*******************************************************************************
-
-       {{3-4}}
-*******************************************************************************
-
 ### Der Kalman-Gain im Detail
 
---{{3}}--
+--{{0}}--
 Lassen Sie uns den Kalman-Gain genauer verstehen. Er ist das Verhältnis der Vorhersage-Unsicherheit zur Gesamtunsicherheit. Wenn die Vorhersage sehr unsicher ist, aber die Messung genau, wird K groß - wir vertrauen der Messung mehr. Umgekehrt: Wenn die Vorhersage genau ist, aber die Messung verrauscht, wird K klein. Der Kalman-Filter findet automatisch die optimale Balance.
 
 Der Kalman-Gain ist das Herzstück des Filters:
@@ -347,12 +394,8 @@ plt.savefig('foo.png')
 ```
 @LIA.eval(`["main.py"]`, `none`, `python3 main.py`)
 
-*******************************************************************************
 
 ## Praktisches Beispiel: Positionsschätzung
-
-       {{0-1}}
-*******************************************************************************
 
 --{{0}}--
 Jetzt wird es praktisch! Wir implementieren einen Kalman-Filter für ein einfaches, aber realistisches Szenario: Ein Roboter fährt mit konstanter Geschwindigkeit und misst seine Position mit einem verrauschten GPS-Sensor. Das Bewegungsmodell ist simpel: neue Position gleich alte Position plus Geschwindigkeit mal Zeit. Die Messung gibt uns direkt die Position, aber mit Rauschen überlagert.
@@ -367,17 +410,17 @@ style="width: 80%; min-width: 420px; max-width: 720px; display: block; margin-le
 -->
 ```ascii
 
-     Bewegungsmodell                    Messmodell
-    ┌─────────────────┐              ┌─────────────────┐
-    │ x_t = x_{t-1}+v │              │   z_t = x_t     │
-    │    + ε (Drift)  │              │   + δ (GPS-Rauschen)
-    └─────────────────┘              └─────────────────┘
+     Bewegungsmodell               Messmodell
+    ┌─────────────────┐         ┌─────────────────────┐
+    │ x_t = x_{t-1}+v │         │   z_t = x_t         │ 
+    │    + ε (Drift)  │         │   + δ (GPS-Rauschen)│
+    └─────────────────┘         └─────────────────────┘
            │                                │
            v                                v
     ┌─────────────────────────────────────────────────┐
-    │              KALMAN FILTER                       │
+    │              KALMAN FILTER                      │
     │  Fusioniert Odometrie und GPS optimal!          │
-    └─────────────────────────────────────────────────┘
+    └─────────────────────────────────────────────────┘                                                           .
 ```
 
 **Parameter für unser Beispiel**:
@@ -388,14 +431,10 @@ style="width: 80%; min-width: 420px; max-width: 720px; display: block; margin-le
 - $\sigma_\epsilon = 0.5$ (Odometrie-Drift)
 - $\sigma_\delta = 2.0$ (GPS-Rauschen)
 
-*******************************************************************************
-
-       {{1-2}}
-*******************************************************************************
 
 ### Implementierung des 1D Kalman-Filters
 
---{{1}}--
+--{{0}}--
 Hier ist die vollständige Implementierung. Der Code ist überraschend kurz! Der Predict-Schritt besteht aus zwei Zeilen, der Update-Schritt aus drei. Wir simulieren einen Roboter, der sich mit Geschwindigkeit 1 bewegt. Die wahre Position kennen wir nur in der Simulation - in der Realität hätten wir diese nicht. Wir haben nur die verrauschten GPS-Messungen und die Odometrie. Der Filter kombiniert beide optimal.
 
 ```python                          KalmanFilter1D.py
@@ -486,14 +525,10 @@ print(f"Verbesserung:              {(1 - np.mean(estimation_error)/np.mean(measu
 --{{1}}--
 Schauen Sie sich die Ergebnisse an! Die roten Punkte sind die verrauschten GPS-Messungen, die stark um die wahre Position streuen. Die blaue Linie ist die Kalman-Schätzung - sie folgt der wahren Position viel glatter und genauer. Das hellblaue Band zeigt das 95%-Konfidenzintervall. Im unteren Plot sehen Sie, wie die Unsicherheit nach wenigen Schritten konvergiert. Der Kalman-Filter findet automatisch das optimale Gleichgewicht zwischen Prozess- und Messrauschen.
 
-*******************************************************************************
-
-       {{2-3}}
-*******************************************************************************
 
 ### Variation der Parameter
 
---{{2}}--
+--{{0}}--
 Um den Filter besser zu verstehen, experimentieren wir mit verschiedenen Parametern. Was passiert, wenn wir das Messrauschen verändern? Ein genauerer GPS-Sensor führt zu einem höheren Kalman-Gain und einer schnelleren Konvergenz. Ein ungenauerer Sensor bedeutet, dass der Filter mehr auf das Bewegungsmodell vertraut.
 
 Experimentieren Sie mit verschiedenen Rauschparametern:
@@ -556,15 +591,10 @@ plt.savefig('foo.png')
 ```
 @LIA.eval(`["main.py"]`, `none`, `python3 main.py`)
 
---{{2}}--
+--{{1}}--
 Im linken Plot haben wir gute Odometrie aber schlechtes GPS. Der Kalman-Gain ist klein, der Filter vertraut hauptsächlich dem Bewegungsmodell und glättet die verrauschten Messungen stark. Im mittleren Plot ist es umgekehrt: schlechte Odometrie, gutes GPS. Der Kalman-Gain ist groß, und der Filter folgt den Messungen eng. Im rechten Plot sind beide gleich gut, und der Filter balanciert zwischen beiden Quellen.
 
-*******************************************************************************
-
 ## Der mehrdimensionale Kalman-Filter
-
-       {{0-1}}
-*******************************************************************************
 
 --{{0}}--
 In der Praxis haben wir selten nur eine Zustandsvariable. Ein Roboter hat Position und Geschwindigkeit, vielleicht auch Beschleunigung und Orientierung. Der mehrdimensionale Kalman-Filter erweitert die Idee auf Vektoren und Matrizen. Die Prinzipien bleiben gleich, aber statt Skalaren arbeiten wir jetzt mit Matrizen.
@@ -594,14 +624,10 @@ $$
 | $\mathbf{R}$ | $k \times k$ | Messrausch-Kovarianz |
 | $\mathbf{P}$ | $n \times n$ | Schätz-Kovarianzmatrix |
 
-*******************************************************************************
-
-       {{1-2}}
-*******************************************************************************
 
 ### Kalman-Filter Gleichungen in Matrixform
 
---{{1}}--
+--{{0}}--
 Hier sind die vollständigen Kalman-Filter Gleichungen. Im Predict-Schritt transformieren wir den Zustand mit der Systemmatrix und addieren die Steuerung. Die Kovarianzmatrix wird transformiert und das Prozessrauschen addiert. Im Update-Schritt berechnen wir erst den Kalman-Gain als Matrix, dann die Innovation, und schließlich aktualisieren wir Zustand und Kovarianz.
 
 **Predict-Schritt:**
@@ -623,18 +649,12 @@ $$
 \end{align*}
 $$
 
-![Kalman-Filter Ablauf](./images/Kalman.png)<!-- style="width: 80%;"-->
+![Kalman-Filter Ablauf](./images/Kalman.png "_S. Maybeck, Stochastic models, estimation, and control, 1977_")<!-- style="width: 80%;"-->
 
-_S. Maybeck, Stochastic models, estimation, and control, 1977_
-
-*******************************************************************************
-
-       {{2-3}}
-*******************************************************************************
 
 ### Beispiel: Position und Geschwindigkeit schätzen
 
---{{2}}--
+--{{0}}--
 Ein praktisches Beispiel: Wir wollen Position und Geschwindigkeit eines Objekts gleichzeitig schätzen, obwohl unser Sensor nur die Position misst. Das klingt zunächst unmöglich - wie können wir die Geschwindigkeit schätzen, ohne sie zu messen? Der Trick liegt in der Systemdynamik: Wenn wir wissen, wie sich Position und Geschwindigkeit zueinander verhalten, können wir aus den Positionsänderungen auf die Geschwindigkeit schließen.
 
 ```python                          KalmanFilter2D.py
@@ -730,15 +750,12 @@ print("aber der Kalman-Filter kann sie aus den Positionsänderungen schätzen!")
 ```
 @LIA.eval(`["main.py"]`, `none`, `python3 main.py`)
 
---{{2}}--
+--{{1}}--
 Das Ergebnis ist beeindruckend: Obwohl wir nur die Position messen, kann der Kalman-Filter die Geschwindigkeit ziemlich gut schätzen! Er erkennt die Beschleunigungsphase, die Phase konstanter Geschwindigkeit und das Abbremsen. Das liegt daran, dass Positionsänderungen Information über die Geschwindigkeit enthalten. Der Filter nutzt diese implizite Information optimal aus.
 
 *******************************************************************************
 
 ## Extended Kalman Filter (EKF)
-
-       {{0-1}}
-*******************************************************************************
 
 --{{0}}--
 Der klassische Kalman-Filter hat eine wichtige Einschränkung: Er funktioniert nur für lineare Systeme. Aber in der Robotik sind die meisten Systeme nichtlinear! Wenn ein Roboter sich dreht, ist die Beziehung zwischen Steuerbefehl und neuer Position nichtlinear. Sensoren wie Lidar oder Kameras haben ebenfalls nichtlineare Messmodelle. Der Extended Kalman Filter löst dieses Problem durch Linearisierung.
@@ -760,15 +777,14 @@ $$
 
 Hier sind $g(\cdot)$ und $h(\cdot)$ **nichtlineare Funktionen**!
 
-*******************************************************************************
-
-       {{1-2}}
-*******************************************************************************
-
 ### Linearisierung durch Taylor-Entwicklung
 
---{{1}}--
+--{{0}}--
 Die Idee des EKF ist elegant: Wir linearisieren die nichtlinearen Funktionen lokal um den aktuellen Schätzwert. Das machen wir mit einer Taylor-Entwicklung erster Ordnung, also mit den Jacobi-Matrizen. Die Jacobi-Matrix enthält alle partiellen Ableitungen und beschreibt, wie sich kleine Änderungen im Eingang auf den Ausgang auswirken.
+
+
+       {{0-1}}
+*******************************************************************************
 
 Der EKF linearisiert die nichtlinearen Funktionen um den aktuellen Schätzwert:
 
@@ -784,29 +800,6 @@ $$
 \mathbf{H}_t = \frac{\partial h}{\partial \mathbf{x}}\bigg|_{\bar{\mathbf{x}}_t}
 $$
 
-<!--
-style="width: 80%; min-width: 420px; max-width: 720px; display: block; margin-left: auto; margin-right: auto;"
--->
-```ascii
-                    Nichtlineare Funktion
-                           │
-                           ▼
-    ┌──────────────────────────────────────────────┐
-    │                    ╱                          │
-    │                  ╱                            │
-    │                ╱←── Linearisierung            │
-    │              ╱      (Tangente)                │
-    │            •                                  │
-    │          ╱  ↑                                 │
-    │        ╱    └── Arbeitspunkt (μ)             │
-    │      ╱                                        │
-    └──────────────────────────────────────────────┘
-```
-
-*******************************************************************************
-
-       {{2-3}}
-*******************************************************************************
 
 ### EKF-Algorithmus
 
@@ -834,10 +827,6 @@ $$
 
 > **Wichtig**: Der EKF ist eine Approximation! Bei stark nichtlinearen Systemen kann er versagen.
 
-*******************************************************************************
-
-       {{3-4}}
-*******************************************************************************
 
 ### Beispiel: Roboter mit Winkel
 
@@ -952,17 +941,14 @@ print("obwohl GPS nur x und y misst!")
 --{{3}}--
 Das Ergebnis zeigt die Leistungsfähigkeit des EKF: Obwohl GPS nur x und y liefert, kann der Filter auch die Orientierung theta schätzen! Die blauen Pfeile zeigen die geschätzte Blickrichtung. Der EKF nutzt das Wissen über die Roboterkinematik, um aus den Positionsänderungen auf die Orientierung zu schließen.
 
-*******************************************************************************
 
 ## robot_localization in ROS 2
-
-       {{0-1}}
-*******************************************************************************
 
 --{{0}}--
 Jetzt kommen wir zur praktischen Anwendung in ROS 2. Das Paket robot_localization ist die Standard-Lösung für Sensorfusion in ROS. Es implementiert sowohl einen EKF als auch ein Unscented Kalman Filter und kann beliebig viele Sensoren fusionieren. Sie müssen den Filter nicht selbst implementieren - Sie konfigurieren nur, welche Sensoren welche Zustandsvariablen beeinflussen.
 
-Das ROS 2 Paket `robot_localization` bietet produktionsreife Implementierungen von:
+
+Das ROS 2 Paket `robot_localization` bietet Implementierungen von:
 
 - **Extended Kalman Filter (EKF)**: `ekf_node`
 - **Unscented Kalman Filter (UKF)**: `ukf_node`
@@ -980,11 +966,6 @@ Das ROS 2 Paket `robot_localization` bietet produktionsreife Implementierungen v
 # Installation
 sudo apt install ros-${ROS_DISTRO}-robot-localization
 ```
-
-*******************************************************************************
-
-       {{1-2}}
-*******************************************************************************
 
 ### Konfiguration des EKF-Nodes
 
@@ -1026,14 +1007,9 @@ ekf_filter_node:
 --{{1}}--
 In diesem Beispiel fusionieren wir Rad-Odometrie und IMU. Die Odometrie liefert x, y Position, yaw-Orientierung und die entsprechenden Geschwindigkeiten. Die IMU liefert die volle Orientierung, Winkelgeschwindigkeiten und Beschleunigungen. Der EKF kombiniert beide optimal.
 
-*******************************************************************************
-
-       {{2-3}}
-*******************************************************************************
-
 ### Launch-Datei und Integration
 
---{{2}}--
+--{{0}}--
 Die Integration in Ihr ROS 2 System erfolgt über eine Launch-Datei. Sie starten den EKF-Node mit Ihrer Konfiguration und remappen die Topics entsprechend Ihrer Sensor-Setup. Der Filter publiziert die gefilterte Odometrie und optional auch Transformationen für das tf2-System.
 
 ```python
@@ -1091,17 +1067,12 @@ style="width: 90%; min-width: 420px; max-width: 820px; display: block; margin-le
                 ┌─────────────────────┐
                 │  /odometry/filtered │
                 │     (gefiltert)     │
-                └─────────────────────┘
+                └─────────────────────┘                                                                 .
 ```
-
-*******************************************************************************
-
-       {{3-4}}
-*******************************************************************************
 
 ### Tipps für die Praxis
 
---{{3}}--
+--{{0}}--
 Zum Abschluss einige praktische Tipps. Die Kovarianz-Werte in den Sensor-Messages sind entscheidend - sie sagen dem Filter, wie sehr er jedem Sensor vertrauen soll. Beginnen Sie mit konservativen Werten und tunen Sie dann. Das Prozessrauschen bestimmt, wie stark der Filter auf neue Messungen reagiert. Zu wenig: träge Reaktion. Zu viel: verrauschte Ausgabe.
 
 > **Kovarianz-Werte sind entscheidend!**
@@ -1125,8 +1096,6 @@ Zum Abschluss einige praktische Tipps. Die Kovarianz-Werte in den Sensor-Message
    - Falsche Frame-IDs → tf-Tree überprüfen
    - Kovarianz = 0 → Sensor wird ignoriert!
 
-*******************************************************************************
-
 ## Zusammenfassung
 
 --{{0}}--
@@ -1145,6 +1114,8 @@ Fassen wir zusammen, was wir heute gelernt haben. Der Kalman-Filter ist ein opti
 + **Extended Kalman Filter**: Erweitert KF auf nichtlineare Systeme durch Linearisierung
 
 + **robot_localization**: Produktionsreife EKF/UKF-Implementierung für ROS 2
+
++ **Quality of Service**: QoS-Profile steuern Zuverlässigkeit und Latenz der Sensordaten-Kommunikation
 
 > **Nächste Vorlesung**: Kinematik, Dynamik und Regelungstechnik - Wie steuern wir den Roboter basierend auf unserer Zustandsschätzung?
 

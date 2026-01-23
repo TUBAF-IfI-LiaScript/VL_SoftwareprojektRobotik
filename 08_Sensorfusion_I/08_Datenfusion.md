@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  1.0.2
+version:  1.0.3
 language: de
 comment:  In dieser Vorlesungen werden die Grundkonzepte der Datenfusion adressiert.
 narrator: Deutsch Female
@@ -863,9 +863,16 @@ ax2 = axes[1]
 kernel = create_motion_kernel('east')
 im2 = ax2.imshow(kernel, cmap='Oranges')
 ax2.set_title('Bewegungskernel (Ost)')
+# Achsenbeschriftungen für relative Positionen
+ax2.set_xticks([0, 1, 2])
+ax2.set_yticks([0, 1, 2])
+ax2.set_xticklabels(['West', 'Keine Δx', 'Ost'])
+ax2.set_yticklabels(['Nord', 'Keine Δy', 'Süd'])
+# Werte in die Zellen schreiben
 for i in range(3):
     for j in range(3):
-        ax2.text(j, i, f'{kernel[i,j]:.2f}', ha='center', va='center')
+        ax2.text(j, i, f'{kernel[i,j]:.2f}', ha='center', va='center',
+                fontsize=12, fontweight='bold')
 plt.colorbar(im2, ax=ax2)
 
 ax3 = axes[2]
@@ -1015,8 +1022,27 @@ Das 2D-Beispiel zeigt die Leistungsfähigkeit, aber auch die Grenzen des diskret
 
 + **Multimodalität**: Der Filter kann mehrere Hypothesen gleichzeitig verfolgen (vorteilhaft bei Kidnapped-Robot-Problem), aber dies erhöht auch die Unsicherheit.
 
++ **Problem nicht-unterscheidbarer Landmarken**: In unserem Beispiel sind alle 8 Landmarken identisch - der Sensor meldet nur "Landmarke erkannt", nicht "welche". Das führt zu **Mehrdeutigkeit**: Nach der ersten Messung sind alle 8 Positionen gleich wahrscheinlich! Die Disambiguierung erfolgt erst durch mehrere Bewegungs- und Messzyklen.
+
+  **Lösung in der Praxis:**
+
+  ```ascii
+  Identische Marker (unser Beispiel)     Eindeutige Marker (ArUco, QR)
+
+     L   L   L   L                         L1  L2  L3  L4
+     ↓                                      ↓
+  "Marker!" → 4 Möglichkeiten           "Marker L3!" → 1 Position
+
+  Benötigt: Bewegung + mehrere           Benötigt: 1 Messung
+            Messungen für Lokalisierung              → sofortige Lokalisierung                                                                                    .
+  ```
+
+  - **Eindeutige IDs** (z.B. ArUco-Marker, AprilTags): Jeder Marker hat eine eindeutige ID → sofortige globale Lokalisierung mit einer Messung
+  - **Geometrische Anordnung**: Auch ohne IDs kann eine asymmetrische Verteilung der Marker die Disambiguierung beschleunigen
+  - **Feature-Kombinationen**: In SLAM-Systemen werden oft natürliche Features verwendet, deren Kombination eindeutig ist
+
 --{{4}}--
-Allerdings hat der diskrete Ansatz auch einen Vorteil, den wir nicht unterschätzen sollten: Er kann mehrere Hypothesen gleichzeitig verfolgen. Wenn der Roboter entführt und an einem unbekannten Ort abgesetzt wird - das sogenannte Kidnapped-Robot-Problem - kann der diskrete Filter mehrere mögliche Positionen parallel tracken, bis genug Evidenz für eine eindeutige Lokalisierung vorliegt. Diesen Vorteil verlieren wir, wenn wir zu unimodalen Verteilungen wie beim Kalman-Filter übergehen.
+Allerdings hat der diskrete Ansatz auch einen Vorteil, den wir nicht unterschätzen sollten: Er kann mehrere Hypothesen gleichzeitig verfolgen. Wenn der Roboter entführt und an einem unbekannten Ort abgesetzt wird - das sogenannte Kidnapped-Robot-Problem - kann der diskrete Filter mehrere mögliche Positionen parallel tracken, bis genug Evidenz für eine eindeutige Lokalisierung vorliegt. Diesen Vorteil verlieren wir, wenn wir zu unimodalen Verteilungen wie beim Kalman-Filter übergehen. Die Wahl zwischen identischen und eindeutigen Markern hängt von der Anwendung ab: Identische Marker sind kostengünstig und erlauben multimodale Tracking, während eindeutige Marker schnellere Lokalisierung ermöglichen.
 
 ![ImageMatching](./images/2DBayes.png)<!-- style="width: 70%;"-->
 
@@ -1026,7 +1052,7 @@ Allerdings hat der diskrete Ansatz auch einen Vorteil, den wir nicht unterschät
 
 ## Ausblick: Vom diskreten zum kontinuierlichen Filter
 
---{{5}}--
+--{{0}}--
 Fassen wir zusammen, was wir aus dem diskreten Bayes-Filter gelernt haben, und schauen voraus auf die nächste Vorlesung. Die grundlegende Idee des Predict-Update-Zyklus bleibt erhalten. Was sich ändert, ist die Repräsentation der Unsicherheit. Anstatt für jede Gitterzelle eine Wahrscheinlichkeit zu speichern, nehmen wir an, dass unsere Unsicherheit normalverteilt ist. Eine Normalverteilung wird vollständig durch nur zwei Parameter beschrieben: den Mittelwert und die Varianz. Das reduziert den Speicherbedarf drastisch und ermöglicht geschlossene analytische Lösungen für den Predict- und Update-Schritt. Das Ergebnis ist der Kalman-Filter, den wir in der nächsten Vorlesung kennenlernen werden.
 
 Welche Einschränkungen sehen wir beim diskreten Bayes-Filter?
@@ -1036,6 +1062,12 @@ Welche Einschränkungen sehen wir beim diskreten Bayes-Filter?
 + **Rechenaufwand**: Die Faltungsoperation im Predict-Schritt skaliert mit der Anzahl der Zellen. Für Echtzeit-Anwendungen kann dies problematisch werden.
 
 + **Diskretisierungsfehler**: Die Auflösung des Gitters begrenzt die Genauigkeit unserer Schätzung. Feinere Gitter erhöhen wiederum Speicher- und Rechenbedarf.
+
++ **Problem der MAP-Schätzung** (Maximum A Posteriori): Unsere aktuelle Positionsschätzung verwendet `np.argmax()` - wir wählen einfach die Zelle mit der höchsten Wahrscheinlichkeit. Das führt zu zwei Problemen:
+  1. **Diskrete Sprünge**: Die geschätzte Position "springt" von Zelle zu Zelle, selbst wenn sich die Verteilung nur leicht verschiebt
+  2. **Ignorieren von Information**: Eine Verteilung mit Peaks bei (4,5) mit p=0.45 und (4,6) mit p=0.42 würde die zweite Position komplett ignorieren
+
+  Alternative: Der **Erwartungswert** $E[x] = \sum x_i \cdot p(x_i)$ würde alle Wahrscheinlichkeiten berücksichtigen und zu einer kontinuierlicheren Schätzung führen. Der Kalman-Filter verwendet genau diesen Ansatz durch die Repräsentation als Normalverteilung mit Mittelwert $\mu$.
 
 > **Kernfrage**: Können wir die Wahrscheinlichkeitsverteilung kompakter darstellen?
 
@@ -1048,6 +1080,16 @@ Die Antwort liegt in einer Annahme: Wenn wir davon ausgehen, dass alle Unsicherh
     │ │▄│█│▄│ │ │ │ │ │ │    ───►      "$\mu, \sigma^2$"
     └─┴─┴─┴─┴─┴─┴─┴─┴─┴─┘
        10 Werte speichern           2 Werte speichern
+
+    Beispiel: Positionsschätzung
+    Zelle:    3    4    5    6    7
+    P(x):   0.1  0.3  0.4  0.2  0.0
+
+    MAP-Schätzung:     x = 5 (Maximum)
+    MMSE-Schätzung:    x = 4.7 (Erwartungswert)
+                            ↑
+                       genauer, da alle
+                       Informationen genutzt                                                                                         .
 ```
 
 In der **nächsten Vorlesung** werden wir den **Kalman-Filter** kennenlernen, der genau diesen Ansatz verfolgt:
