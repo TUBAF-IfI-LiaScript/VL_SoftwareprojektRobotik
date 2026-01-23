@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  1.0.1
+version:  1.0.2
 language: de
 comment:  In dieser Vorlesung wird der Kalman-Filter als Methode zur Sensordatenfusion eingeführt.
 narrator: Deutsch Female
@@ -13,7 +13,7 @@ import:   https://github.com/liascript/CodeRunner
 
 -->
 
-[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/09_Sensorfusion_II/09_Kalman_Filter.md)
+[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/09_Sensorfusion_II/09_Sensorfusion_II.md)
 
 # Sensordatenfusion II: Kalman-Filter
 
@@ -24,7 +24,7 @@ import:   https://github.com/liascript/CodeRunner
 | **Semester**         | @config.semester                                                                                              |
 | **Hochschule:**      | `Technische Universität Freiberg`                                                                             |
 | **Inhalte:**         | `Kalman-Filter, Extended Kalman Filter, robot_localization`                                                   |
-| **Link auf GitHub:** | https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/09_Sensorfusion_II/09_Kalman_Filter.md |
+| **Link auf GitHub:** | https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/09_Sensorfusion_II/09_Sensorfusion_II.md |
 | **Autoren**          | @author                                                                                                       |
 
 ![](https://media.giphy.com/media/3o7btPCcdNniyf0ArS/giphy.gif)
