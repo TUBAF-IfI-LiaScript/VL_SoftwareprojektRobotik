@@ -102,6 +102,16 @@ source install/setup.bash
 | `No module named 'ultralytics'` | venv nicht aktiviert               | `source .venv/bin/activate`               |
 | `numpy.core.multiarray failed`  | numpy 2.x mit System-matplotlib    | `pip install "numpy<2"`                   |
 | `torch` ist CUDA statt CPU      | ultralytics hat torch überschrieben | torch mit expliziter Version neu installieren |
+| YOLO erkennt keine Personen (immer 0) | `ros2 launch` ignoriert venv | Node direkt starten (siehe unten)         |
+
+> **Wichtig**: `ros2 launch` und `ros2 run` verwenden normalerweise den Python-Interpreter, der beim `colcon build` aktiv war – nicht das aktuell aktivierte venv!
+>
+> **Lösung**: In `person_detector/setup.cfg` ist folgender Eintrag gesetzt:
+> ```ini
+> [build_scripts]
+> executable = /usr/bin/env python3
+> ```
+> Dadurch wird `/usr/bin/env python3` als Shebang verwendet, was den Python aus dem aktuellen PATH nutzt. **Wichtig**: Nach Änderungen an `setup.cfg` muss das Paket neu gebaut werden (`colcon build`).
 
 ---
 
