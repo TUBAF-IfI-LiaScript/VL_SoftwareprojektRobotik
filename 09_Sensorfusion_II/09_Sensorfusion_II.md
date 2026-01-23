@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  1.0.2
+version:  1.0.3
 language: de
 comment:  In dieser Vorlesung wird der Kalman-Filter als Methode zur Sensordatenfusion eingeführt.
 narrator: Deutsch Female
@@ -288,7 +288,7 @@ $$x_t = a \cdot x_{t-1} + b \cdot u_t + \epsilon_t$$
 
 **2. Messgleichung** (beschreibt die Sensormessung):
 
-$$z_t = c \cdot x_t + \delta_t$$
+$$z_t = h \cdot x_t + \delta_t$$
 
 Dabei sind:
 
@@ -299,7 +299,7 @@ Dabei sind:
 | $z_t$ | Messwert |
 | $a$ | Systemdynamik (wie entwickelt sich der Zustand?) |
 | $b$ | Eingangsmatrix (wie wirkt die Steuerung?) |
-| $c$ | Messmatrix (wie hängt Messung vom Zustand ab?) |
+| $h$ | Messmatrix (wie hängt Messung vom Zustand ab?) |
 | $\epsilon_t$ | Prozessrauschen $\sim \mathcal{N}(0, \sigma_\epsilon^2)$ |
 | $\delta_t$ | Messrauschen $\sim \mathcal{N}(0, \sigma_\delta^2)$ |
 
@@ -335,9 +335,9 @@ Aus der Differenz zwischen vorhergesagtem und gemessenem Wert (Innovation) wird 
 
 $$
 \begin{align*}
-K_t &= \frac{c \cdot \bar{\sigma}^2_t}{c^2 \cdot \bar{\sigma}^2_t + \sigma^2_\delta} \\[1em]
-\mu_t &= \bar{\mu}_t + K_t \cdot (z_t - c \cdot \bar{\mu}_t) \\[0.5em]
-\sigma^2_t &= (1 - K_t \cdot c) \cdot \bar{\sigma}^2_t
+K_t &= \frac{h \cdot \bar{\sigma}^2_t}{h^2 \cdot \bar{\sigma}^2_t + \sigma^2_\delta} \\[1em]
+\mu_t &= \bar{\mu}_t + K_t \cdot (z_t - h \cdot \bar{\mu}_t) \\[0.5em]
+\sigma^2_t &= (1 - K_t \cdot h) \cdot \bar{\sigma}^2_t
 \end{align*}
 $$
 
@@ -370,7 +370,7 @@ import matplotlib.pyplot as plt
 sigma_pred = 2.0  # Vorhersage-Standardabweichung (fest)
 sigma_meas_values = np.linspace(0.1, 5, 100)
 
-# Kalman-Gain für c=1
+# Kalman-Gain für h=1
 K_values = sigma_pred**2 / (sigma_pred**2 + sigma_meas_values**2)
 
 plt.figure(figsize=(10, 5))
@@ -427,7 +427,7 @@ style="width: 80%; min-width: 420px; max-width: 720px; display: block; margin-le
 
 - $a = 1$ (Position bleibt erhalten)
 - $b = \Delta t = 1$ (Zeitschritt)
-- $c = 1$ (GPS misst Position direkt)
+- $h = 1$ (GPS misst Position direkt)
 - $\sigma_\epsilon = 0.5$ (Odometrie-Drift)
 - $\sigma_\delta = 2.0$ (GPS-Rauschen)
 
@@ -449,7 +449,7 @@ dt = 1.0
 # Systemparameter
 a = 1.0          # Zustandstransition
 b = dt           # Steuerungseinfluss
-c = 1.0          # Messmatrix
+h = 1.0          # Messmatrix
 velocity = 1.0   # Konstante Geschwindigkeit (Steuerbefehl u)
 
 # Rauschparameter
@@ -478,9 +478,9 @@ for t in range(1, n_steps):
     sigma_sq_pred = a**2 * sigma_sq[t-1] + sigma_process**2
 
     # === UPDATE ===
-    K = (c * sigma_sq_pred) / (c**2 * sigma_sq_pred + sigma_meas**2)
-    mu[t] = mu_pred + K * (measurements[t] - c * mu_pred)
-    sigma_sq[t] = (1 - K * c) * sigma_sq_pred
+    K = (h * sigma_sq_pred) / (h**2 * sigma_sq_pred + sigma_meas**2)
+    mu[t] = mu_pred + K * (measurements[t] - h * mu_pred)
+    sigma_sq[t] = (1 - K * h) * sigma_sq_pred
 
 # Visualisierung
 fig, axes = plt.subplots(2, 1, figsize=(12, 8), sharex=True)
@@ -610,7 +610,7 @@ Die Systemgleichungen werden zu Matrixgleichungen:
 $$
 \begin{align*}
 \mathbf{x}_t &= \mathbf{A} \cdot \mathbf{x}_{t-1} + \mathbf{B} \cdot \mathbf{u}_t + \boldsymbol{\epsilon}_t \\
-\mathbf{z}_t &= \mathbf{C} \cdot \mathbf{x}_t + \boldsymbol{\delta}_t
+\mathbf{z}_t &= \mathbf{H} \cdot \mathbf{x}_t + \boldsymbol{\delta}_t
 \end{align*}
 $$
 
@@ -619,7 +619,7 @@ $$
 | $\mathbf{x}$ | $n \times 1$ | Zustandsvektor |
 | $\mathbf{A}$ | $n \times n$ | Systemmatrix |
 | $\mathbf{B}$ | $n \times m$ | Steuermatrix |
-| $\mathbf{C}$ | $k \times n$ | Messmatrix |
+| $\mathbf{H}$ | $k \times n$ | Messmatrix |
 | $\mathbf{Q}$ | $n \times n$ | Prozessrausch-Kovarianz |
 | $\mathbf{R}$ | $k \times k$ | Messrausch-Kovarianz |
 | $\mathbf{P}$ | $n \times n$ | Schätz-Kovarianzmatrix |
@@ -643,9 +643,9 @@ $$
 
 $$
 \begin{align*}
-\mathbf{K}_t &= \bar{\mathbf{P}}_t \cdot \mathbf{C}^T \cdot (\mathbf{C} \cdot \bar{\mathbf{P}}_t \cdot \mathbf{C}^T + \mathbf{R})^{-1} \\
-\mathbf{x}_t &= \bar{\mathbf{x}}_t + \mathbf{K}_t \cdot (\mathbf{z}_t - \mathbf{C} \cdot \bar{\mathbf{x}}_t) \\
-\mathbf{P}_t &= (\mathbf{I} - \mathbf{K}_t \cdot \mathbf{C}) \cdot \bar{\mathbf{P}}_t
+\mathbf{K}_t &= \bar{\mathbf{P}}_t \cdot \mathbf{H}^T \cdot (\mathbf{H} \cdot \bar{\mathbf{P}}_t \cdot \mathbf{H}^T + \mathbf{R})^{-1} \\
+\mathbf{x}_t &= \bar{\mathbf{x}}_t + \mathbf{K}_t \cdot (\mathbf{z}_t - \mathbf{H} \cdot \bar{\mathbf{x}}_t) \\
+\mathbf{P}_t &= (\mathbf{I} - \mathbf{K}_t \cdot \mathbf{H}) \cdot \bar{\mathbf{P}}_t
 \end{align*}
 $$
 
@@ -672,7 +672,7 @@ A = np.array([[1, dt],    # x_new = x + v*dt
 B = np.array([[0.5*dt**2],  # Beschleunigungseinfluss auf Position
               [dt]])         # Beschleunigungseinfluss auf Geschwindigkeit
 
-C = np.array([[1, 0]])    # Wir messen nur die Position!
+H = np.array([[1, 0]])    # Wir messen nur die Position!
 
 # Rauschmatrizen
 Q = np.array([[0.1, 0],   # Prozessrauschen
@@ -711,12 +711,12 @@ for t in range(1, n_steps):
     P_pred = A @ P @ A.T + Q
 
     # Update
-    S = C @ P_pred @ C.T + R  # Innovation-Kovarianz
-    K = P_pred @ C.T @ np.linalg.inv(S)
+    S = H @ P_pred @ H.T + R  # Innovation-Kovarianz
+    K = P_pred @ H.T @ np.linalg.inv(S)
 
-    innovation = measurements[t] - C @ x_pred
+    innovation = measurements[t] - H @ x_pred
     x_est[t] = x_pred + K.flatten() * innovation
-    P = (np.eye(2) - K @ C) @ P_pred
+    P = (np.eye(2) - K @ H) @ P_pred
 
 # Visualisierung
 fig, axes = plt.subplots(2, 1, figsize=(12, 8), sharex=True)
