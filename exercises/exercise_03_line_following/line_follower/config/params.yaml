@@ -1,0 +1,40 @@
+# Parameter für Line Follower System
+# Passen Sie diese Werte an Ihre Umgebung an
+
+line_detector:
+  ros__parameters:
+    # Schwellwert für Weiß-Erkennung (0-255)
+    # Höher = nur sehr helle Pixel werden als Linie erkannt
+    threshold: 200
+
+    # Region of Interest: Ab welcher Bildhöhe suchen?
+    # 0.6 = obere 60% ignorieren, nur untere 40% nutzen
+    roi_top_ratio: 0.6
+
+    # Debug-Bild auf /line_detector/debug_image publizieren?
+    debug_image: true
+
+controller:
+  ros__parameters:
+    # PID-Parameter (siehe VL 10)
+    kp: 0.5      # Proportional-Verstärkung
+    ki: 0.0      # Integral-Verstärkung (erstmal 0)
+    kd: 0.1      # Differential-Verstärkung
+
+    # Geschwindigkeiten
+    linear_velocity: 0.1        # Vorwärtsgeschwindigkeit [m/s]
+    max_angular_velocity: 1.0   # Max. Drehrate [rad/s]
+
+obstacle_detector:
+  ros__parameters:
+    # Winkel des Prüfbereichs (beidseitig, in Grad)
+    # 30 = prüft von -30° bis +30° vor dem Roboter
+    detection_angle: 30.0
+
+    # Stopp-Distanz [m]
+    # Roboter stoppt wenn Objekt näher als dieser Wert
+    stop_distance: 0.35
+
+    # Minimale gültige Messung [m]
+    # Messungen darunter werden ignoriert (Sensorrauschen)
+    min_valid_range: 0.1

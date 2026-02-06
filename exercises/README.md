@@ -4,15 +4,19 @@ Dieses Verzeichnis enthält alle praktischen Übungsaufgaben zur Vorlesung "Soft
 
 ## Übersicht
 
-| Übung                                        | Thema                                 | Nach VL | Dauer   | Schwerpunkt                                  |
-| -------------------------------------------- | ------------------------------------- | ------- | ------- | -------------------------------------------- |
-| **[Übung 1](exercise_01_gnss_bags/)**        | GNSS-Datenanalyse & ROS 2-Bags        | VL 5    | 180 min | ROS2-Tools, Bagfiles, GNSS-Trajektorie       |
-| **[Übung 2](exercise_02_person_detection/)** | Personendetektion mit YOLOv8          | VL 8    | 180 min | Objekterkennung, QoS Parameter, Launch-Files |
-| **[Übung 3](exercise_03_path_tracking/)**    | Pfadverfolgung & Regelgüte-Evaluation | VL 12   | 180 min | Navigation, Sensorfusion, Systemanalyse      |
+| Übung                                         | Thema                                    | Nach VL | Dauer   | Schwerpunkt                                    |
+| --------------------------------------------- | ---------------------------------------- | ------- | ------- | ---------------------------------------------- |
+| **[Übung 1](exercise_01_gnss_bags/)**         | GNSS-Datenanalyse & ROS 2-Bags           | VL 5    | 180 min | ROS2-Tools, Bagfiles, GNSS-Trajektorie         |
+| **[Übung 2](exercise_02_person_detection/)**  | Personendetektion mit YOLOv8             | VL 8    | 180 min | Objekterkennung, QoS Parameter, Launch-Files   |
+| **[Übung 3](exercise_03_line_following/)** ⭐ | Linienverfolgung & Hinderniserkennung    | VL 10   | 180 min | PID-Regelung, OpenCV, LiDAR, **Gruppenarbeit** |
 
-## Datensatz
+## Datensatz & Hardware
 
-Alle Übungen basieren auf einem gemeinsamen ROS2-Bag-Datensatz:
+**Übung 1 & 2** basieren auf einem gemeinsamen ROS2-Bag-Datensatz:
+
+**Übung 3** verwendet echte TurtleBot 3 Burger Roboter (Gruppenarbeit, 2-3 Personen pro Roboter).
+
+### Bag-Datensatz (Übung 1 & 2)
 
 https://ificloud.xsitepool.tu-freiberg.de/index.php/s/DQqrBKBZw3JBeBm
 
