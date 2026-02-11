@@ -63,11 +63,11 @@ Nach Abschluss dieser Übung können Sie:
 
 | Komponente | Spezifikation |
 |------------|---------------|
-| LiDAR | LDS-01 (360°, 12m Reichweite) |
+| LiDAR | RPLIDAR C1 (360°, 12m Reichweite, 10Hz) |
 | Kamera | Raspberry Pi Camera v2 |
 | Antrieb | Differential Drive (DYNAMIXEL) |
 | Max. Geschwindigkeit | 0.22 m/s |
-| Computer | Raspberry Pi 4 |
+| Computer | Raspberry Pi 3 Model B Plus Rev 1.3 |
 
 **Parcours**: Weiße Linie (Klebeband) auf dunklem Untergrund
 
@@ -79,26 +79,26 @@ Nach Abschluss dieser Übung können Sie:
 ┌─────────────────────────────────────────────────────────────────────┐
 │                         Ihr Laptop                                  │
 │                                                                     │
-│  ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐ │
+│  ┌─────────────────┐    ┌─────────────────┐    ┌──────────────────┐ │
 │  │ line_detector   │    │ controller_node │    │ obstacle_detector│ │
-│  │                 │    │                 │    │                 │ │
-│  │ Kamerabild      │    │ PID-Regler      │    │ LiDAR-Scan      │ │
-│  │ → Linienpos.    │    │ → cmd_vel       │    │ → Hindernis?    │ │
-│  └────────┬────────┘    └────────┬────────┘    └────────┬────────┘ │
-│           │                      │                      │          │
-│           │ /line_position       │ /cmd_vel             │ /obstacle│
-│           │ (Float32)            │ (Twist)              │ (Bool)   │
-│           │                      │                      │          │
-└───────────┼──────────────────────┼──────────────────────┼──────────┘
+│  │                 │    │                 │    │                  │ │
+│  │ Kamerabild      │    │ PID-Regler      │    │ LiDAR-Scan       │ │
+│  │ → Linienpos.    │    │ → cmd_vel       │    │ → Hindernis?     │ │
+│  └─────────────────┘    └────────┬────────┘    └──────────────────┘ │
+│           ▲                      │                      ▲           │
+│           │ /line_position       │ /cmd_vel             │ /obstacle │
+│           │ (Float32)            │ (Twist)              │ (Bool)    │
+│           │                      │                      │           │
+└───────────┼──────────────────────┼──────────────────────┼───────────┘
             │                      │                      │
-            │         ROS2 Netzwerk (DDS)                 │
+            │             ROS2 Netzwerk (DDS)             │
             │                      │                      │
 ┌───────────┼──────────────────────┼──────────────────────┼──────────┐
 │           │                      ▼                      │          │
-│  ┌────────┴────────┐    ┌─────────────────┐    ┌───────┴────────┐ │
-│  │ /camera/        │    │ Motorsteuerung  │    │ /scan          │ │
-│  │ image_raw       │    │                 │    │ (LaserScan)    │ │
-│  └─────────────────┘    └─────────────────┘    └────────────────┘ │
+│  ┌────────┴────────┐    ┌─────────────────┐     ┌───────┴────────┐ │
+│  │ /camera/        │    │ Motorsteuerung  │     │ /scan          │ │
+│  │ image_raw       │    │                 │     │ (LaserScan)    │ │
+│  └─────────────────┘    └─────────────────┘     └────────────────┘ │
 │                                                                    │
 │                         TurtleBot 3 Burger                         │
 └────────────────────────────────────────────────────────────────────┘
@@ -116,9 +116,12 @@ source /opt/ros/jazzy/setup.bash
 ros2 pkg list | grep -E "cv_bridge|image_transport"
 
 # Falls nicht vorhanden:
+sudo apt update
 sudo apt install ros-jazzy-cv-bridge ros-jazzy-image-transport
 
 # OpenCV für Python
+python3 -m venv .venv --system-site-packages
+source .venv/bin/activate
 pip install opencv-python numpy
 ```
 
@@ -126,13 +129,12 @@ pip install opencv-python numpy
 
 Jede Gruppe erhält:
 - WLAN-Name und Passwort für ihr Roboter-Netzwerk
-- IP-Adresse des TurtleBots
-- ROS_DOMAIN_ID (eindeutig pro Gruppe)
+- ROS_DOMAIN_ID (eindeutig pro Gruppe, notiert auf Roboter)
 
 ```bash
 # 1. Mit dem Roboter-WLAN verbinden (siehe Zugangsdaten)
 
-# 2. ROS_DOMAIN_ID setzen (verhindert Interferenz zwischen Gruppen)
+# 2. In jedem Terminal ROS_DOMAIN_ID setzen (verhindert Interferenz zwischen Gruppen)
 export ROS_DOMAIN_ID=<IHRE_GRUPPEN_ID>
 
 # 3. Verbindung testen
@@ -144,6 +146,9 @@ ros2 topic list
 # /cmd_vel
 # /odom
 # ...
+# Wenn Verbindung fehlgeschlagen:
+# /parameter_events
+# /rosout
 ```
 
 ### Workspace einrichten
@@ -224,6 +229,9 @@ python3 templates/view_camera.py
 rviz2
 # Add → By topic → /scan → LaserScan
 # Fixed Frame: base_link oder base_scan
+
+# Falls keine Anzeige:
+ros2 run tf2_ros static_transform_publisher 0 0 0 0 0 0 base_scan laser
 ```
 
 **Fragen zur Dokumentation**:
@@ -237,7 +245,7 @@ rviz2
 Testen Sie die Teleop-Steuerung:
 
 ```bash
-ros2 run teleop_twist_keyboard teleop_twist_keyboard
+ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -p stamped:=true
 ```
 
 **Wichtig**:
