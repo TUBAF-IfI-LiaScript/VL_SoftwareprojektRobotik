@@ -35,7 +35,7 @@ class CameraViewer(Node):
 
         self.image_sub = self.create_subscription(
             Image,
-            '/camera/image_raw',
+            '/image_raw',
             self.image_callback,
             10
         )
