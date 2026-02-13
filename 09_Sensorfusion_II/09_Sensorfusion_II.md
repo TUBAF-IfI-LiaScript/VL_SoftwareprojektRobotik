@@ -753,8 +753,6 @@ print("aber der Kalman-Filter kann sie aus den Positionsänderungen schätzen!")
 --{{1}}--
 Das Ergebnis ist beeindruckend: Obwohl wir nur die Position messen, kann der Kalman-Filter die Geschwindigkeit ziemlich gut schätzen! Er erkennt die Beschleunigungsphase, die Phase konstanter Geschwindigkeit und das Abbremsen. Das liegt daran, dass Positionsänderungen Information über die Geschwindigkeit enthalten. Der Filter nutzt diese implizite Information optimal aus.
 
-*******************************************************************************
-
 ## Extended Kalman Filter (EKF)
 
 --{{0}}--
@@ -764,9 +762,13 @@ Der klassische Kalman-Filter setzt **lineare** System- und Messmodelle voraus. I
 
 **Beispiele für Nichtlinearitäten:**
 
-- Kinematik eines Differential-Drive-Roboters
-- Transformation zwischen Polarkoordinaten (Lidar) und kartesischen Koordinaten
-- Winkelmessungen (Kompass, IMU)
+- **Kinematik eines Differential-Drive-Roboters:** Das Bewegungsmodell enthält trigonometrische Funktionen des Orientierungswinkels $\theta$. Die $\sin$- und $\cos$-Terme ($v$ ist die Translationsgeschwindigkeit (linear, vorwärts) des Roboters $\omega$ ist die Rotationsgeschwindigkeit (Drehrate) des Roboters) machen das Systemmodell $g(\mathbf{x}, \mathbf{u})$ nichtlinear:
+
+$$
+\begin{pmatrix} x' \\ y' \\ \theta' \end{pmatrix} = \begin{pmatrix} x \\ y \\ \theta \end{pmatrix} + \begin{pmatrix} \cos(\theta) & 0 \\ \sin(\theta) & 0 \\ 0 & 1 \end{pmatrix} \begin{pmatrix} v \\ \omega \end{pmatrix} \Delta t
+$$
+
+- **Transformation zwischen Polarkoordinaten (Lidar) und kartesischen Koordinaten:** Lidar liefert Messwerte in Polarkoordinaten $(r, \varphi)$, der Zustandsraum ist aber kartesisch. Die Umrechnung $x = r \cdot \cos(\varphi)$, $y = r \cdot \sin(\varphi)$ bzw. umgekehrt $r = \sqrt{x^2 + y^2}$, $\varphi = \text{atan2}(y, x)$ ist nichtlinear (Wurzel, Arkustangens).
 
 $$
 \begin{align*}
@@ -775,16 +777,12 @@ $$
 \end{align*}
 $$
 
-Hier sind $g(\cdot)$ und $h(\cdot)$ **nichtlineare Funktionen**!
+In allen Fällen sind $g(\cdot)$ und $h(\cdot)$ **nichtlineare Funktionen**!
 
 ### Linearisierung durch Taylor-Entwicklung
 
 --{{0}}--
 Die Idee des EKF ist elegant: Wir linearisieren die nichtlinearen Funktionen lokal um den aktuellen Schätzwert. Das machen wir mit einer Taylor-Entwicklung erster Ordnung, also mit den Jacobi-Matrizen. Die Jacobi-Matrix enthält alle partiellen Ableitungen und beschreibt, wie sich kleine Änderungen im Eingang auf den Ausgang auswirken.
-
-
-       {{0-1}}
-*******************************************************************************
 
 Der EKF linearisiert die nichtlinearen Funktionen um den aktuellen Schätzwert:
 
@@ -803,7 +801,7 @@ $$
 
 ### EKF-Algorithmus
 
---{{2}}--
+--{{0}}--
 Der EKF-Algorithmus ist fast identisch zum Standard-Kalman-Filter. Der Unterschied: Im Predict-Schritt wenden wir die nichtlineare Funktion g direkt an für den Zustand, aber verwenden die Jacobi-Matrix G für die Kovarianz. Im Update-Schritt verwenden wir die nichtlineare Messfunktion h für die erwartete Messung, aber die Jacobi-Matrix H für die Kovarianz-Updates.
 
 **Predict-Schritt:**
@@ -825,13 +823,44 @@ $$
 \end{align*}
 $$
 
+
+> **Beachte**: Die nichtlinearen Funktionen $g(\cdot)$ und $h(\cdot)$ werden nur für die **Zustandsfortschreibung** direkt ausgewertet. Für die **Kovarianz-Propagation** werden stattdessen die Jacobi-Matrizen $\mathbf{G}_t$ und $\mathbf{H}_t$ benötigt, da die Kovarianz eine Matrixmultiplikation erfordert ($\mathbf{G} \mathbf{P} \mathbf{G}^T$) und nicht direkt durch eine nichtlineare Funktion transformiert werden kann. Die Jacobi-Matrizen beschreiben, wie sich kleine Abweichungen vom geschätzten Zustand durch die Nichtlinearität hindurch verzerren.
+
 > **Wichtig**: Der EKF ist eine Approximation! Bei stark nichtlinearen Systemen kann er versagen.
 
 
 ### Beispiel: Roboter mit Winkel
 
---{{3}}--
+--{{0}}--
 Ein typisches Robotik-Beispiel: Ein Roboter hat Position x, y und Orientierung theta. Die Kinematik ist nichtlinear, weil Sinus und Kosinus vorkommen. Wenn der Roboter vorwärts fährt, hängt die Änderung von x und y vom aktuellen Winkel ab. Für den EKF berechnen wir die Jacobi-Matrix, die beschreibt, wie kleine Änderungen in der Geschwindigkeit und Drehrate den Zustand beeinflussen.
+
+                {{0-2}}
+******************************************************
+
+**Zustandsvektor und Steuereingang:**
+
+$$
+\mathbf{x} = \begin{pmatrix} x \\ y \\ \theta \end{pmatrix}, \qquad \mathbf{u} = \begin{pmatrix} v \\ \omega \end{pmatrix}
+$$
+
+**Nichtlineares Bewegungsmodell** $g(\mathbf{x}, \mathbf{u})$:
+
+$$
+g(\mathbf{x}, \mathbf{u}) = \begin{pmatrix} x + \frac{v}{\omega} \left( \sin(\theta + \omega \Delta t) - \sin(\theta) \right) \\ y + \frac{v}{\omega} \left( -\cos(\theta + \omega \Delta t) + \cos(\theta) \right) \\ \theta + \omega \Delta t \end{pmatrix}
+$$
+
+**Jacobi-Matrix** $\mathbf{G}_t = \frac{\partial g}{\partial \mathbf{x}}$:
+
+$$
+\mathbf{G}_t = \begin{pmatrix} 1 & 0 & \frac{v}{\omega} \left( \cos(\theta + \omega \Delta t) - \cos(\theta) \right) \\ 0 & 1 & \frac{v}{\omega} \left( \sin(\theta + \omega \Delta t) - \sin(\theta) \right) \\ 0 & 0 & 1 \end{pmatrix}
+$$
+
+> **Hinweis:** Für Geradeausfahrt ($\omega \approx 0$) ist der Term $\frac{v}{\omega}$ numerisch instabil. In der Implementierung wird dieser Fall separat über den Grenzwert $\omega \to 0$ behandelt, bei dem das Modell zu $x' = x + v \Delta t \cos(\theta)$, $y' = y + v \Delta t \sin(\theta)$ vereinfacht.
+
+******************************************************
+
+                {{1-2}}
+******************************************************
 
 ```python                          EKF_Robot.py
 import numpy as np
@@ -892,8 +921,8 @@ x_est = np.zeros((n_steps, 3))
 x_est[0] = [measurements[0, 0], measurements[0, 1], 0]
 
 P = np.diag([1, 1, 0.1])
-Q = np.diag([0.01, 0.01, 0.01])
-R = np.diag([sigma_gps**2, sigma_gps**2])
+Q = np.diag([0.0001, 0.0001, 0.001])  # Prozessrauschen (Modellvertrauen)
+R = np.diag([sigma_gps**2, sigma_gps**2])  # Messrauschen (Sensorvertrauen)
 H = np.array([[1, 0, 0],
               [0, 1, 0]])
 
@@ -938,14 +967,29 @@ print("obwohl GPS nur x und y misst!")
 ```
 @LIA.eval(`["main.py"]`, `none`, `python3 main.py`)
 
---{{3}}--
+********************************************************
+
+--{{2}}--
 Das Ergebnis zeigt die Leistungsfähigkeit des EKF: Obwohl GPS nur x und y liefert, kann der Filter auch die Orientierung theta schätzen! Die blauen Pfeile zeigen die geschätzte Blickrichtung. Der EKF nutzt das Wissen über die Roboterkinematik, um aus den Positionsänderungen auf die Orientierung zu schließen.
 
+                    {{2-3}}
+*****************************************************
+
+> **Übung: Parameter-Tuning** — Verändern Sie die Kovarianzmatrizen $\mathbf{Q}$ und $\mathbf{R}$ im Code und beobachten Sie die Auswirkungen:
+>
+> | Parameter | Bedeutung | Auswirkung wenn zu groß | Auswirkung wenn zu klein |
+> |---|---|---|---|
+> | $\mathbf{Q}$ (Prozessrauschen) | Vertrauen ins Bewegungsmodell | Filter misstraut dem Modell → folgt verrauschten Messungen → Schätzung schwankt | Filter vertraut dem Modell blind → ignoriert Messungen → Schätzung driftet bei Modellfehlern |
+> | $\mathbf{R}$ (Messrauschen) | Vertrauen in die Sensoren | Filter ignoriert Messungen → verhält sich wie reine Vorhersage | Filter folgt Messungen zu stark → Rauschen schlägt durch |
+>
+> **Faustregel:** $\mathbf{Q}$ und $\mathbf{R}$ bestimmen das Verhältnis von Modell- zu Messvertrauen. Nicht die absoluten Werte zählen, sondern das **Verhältnis** $\mathbf{Q}$ zu $\mathbf{R}$. Versuchen Sie z.B. `Q = np.diag([0.01, 0.01, 0.01])` und vergleichen Sie das Ergebnis mit den aktuellen Werten.
+
+*****************************************************
 
 ## robot_localization in ROS 2
 
 --{{0}}--
-Jetzt kommen wir zur praktischen Anwendung in ROS 2. Das Paket robot_localization ist die Standard-Lösung für Sensorfusion in ROS. Es implementiert sowohl einen EKF als auch ein Unscented Kalman Filter und kann beliebig viele Sensoren fusionieren. Sie müssen den Filter nicht selbst implementieren - Sie konfigurieren nur, welche Sensoren welche Zustandsvariablen beeinflussen.
+Das Paket robot_localization ist die Standard-Lösung für Sensorfusion in ROS. Es implementiert sowohl einen EKF als auch ein Unscented Kalman Filter und kann beliebig viele Sensoren fusionieren. Sie müssen den Filter nicht selbst implementieren - Sie konfigurieren nur, welche Sensoren welche Zustandsvariablen beeinflussen.
 
 
 Das ROS 2 Paket `robot_localization` bietet Implementierungen von:
@@ -953,14 +997,22 @@ Das ROS 2 Paket `robot_localization` bietet Implementierungen von:
 - **Extended Kalman Filter (EKF)**: `ekf_node`
 - **Unscented Kalman Filter (UKF)**: `ukf_node`
 
+> **UKF vs. EKF:** Der Unscented Kalman Filter verfolgt einen anderen Ansatz als der EKF. Statt die nichtlineare Funktion durch eine Jacobi-Matrix zu linearisieren, wählt der UKF gezielt sogenannte **Sigma-Punkte** um den aktuellen Schätzwert aus und propagiert diese direkt durch die nichtlineare Funktion $g(\cdot)$ bzw. $h(\cdot)$. Aus den transformierten Punkten werden Mittelwert und Kovarianz rekonstruiert. Der Vorteil: Es müssen **keine Jacobi-Matrizen berechnet** werden, und die Approximation ist bei stark nichtlinearen Systemen oft genauer (bis zur 2. Ordnung statt nur 1. Ordnung beim EKF).
+
+https://docs.ros.org/en/melodic/api/robot_localization/html/index.html
+
+!?[](https://vimeo.com/142624091)
+
+
 **Unterstützte Sensoren:**
 
-| Sensor-Typ | ROS Message | Typische Quelle |
-|------------|-------------|-----------------|
-| Odometrie | `nav_msgs/Odometry` | Rad-Encoder, Visual Odometry |
-| IMU | `sensor_msgs/Imu` | Beschleunigung, Drehrate |
-| GPS | `sensor_msgs/NavSatFix` | GNSS-Empfänger |
-| Pose | `geometry_msgs/PoseWithCovarianceStamped` | AMCL, Marker-Tracking |
+<!-- data-type="none" -->
+| Sensor-Typ | ROS Message                               | Typische Quelle              |
+| ---------- | ----------------------------------------- | ---------------------------- |
+| Odometrie  | `nav_msgs/Odometry`                       | Rad-Encoder, Visual Odometry |
+| IMU        | `sensor_msgs/Imu`                         | Beschleunigung, Drehrate     |
+| GPS        | `sensor_msgs/NavSatFix`                   | GNSS-Empfänger               |
+| Pose       | `geometry_msgs/PoseWithCovarianceStamped` | AMCL, Marker-Tracking        |
 
 ```bash
 # Installation
@@ -969,7 +1021,7 @@ sudo apt install ros-${ROS_DISTRO}-robot-localization
 
 ### Konfiguration des EKF-Nodes
 
---{{1}}--
+--{{0}}--
 Die Konfiguration erfolgt über eine YAML-Datei. Der wichtigste Teil ist die Angabe, welche Komponenten jeder Sensor beiträgt. Der 15-dimensionale Zustandsvektor enthält Position, Orientierung, lineare und Winkelgeschwindigkeit sowie lineare Beschleunigung. Für jeden Sensor geben Sie eine 15-elementige Liste an, die angibt, ob dieser Sensor die jeweilige Komponente beeinflusst.
 
 ```yaml
@@ -1059,8 +1111,8 @@ style="width: 90%; min-width: 420px; max-width: 820px; display: block; margin-le
                            │
                            ▼
                 ┌─────────────────────┐
-                │   robot_localization │
-                │      (EKF Node)      │
+                │  robot_localization │
+                │     (EKF Node)      │
                 └──────────┬──────────┘
                            │
                            ▼
