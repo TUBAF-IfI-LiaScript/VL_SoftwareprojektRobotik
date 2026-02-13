@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger & Claude.ai
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.0.1
+version:  0.0.2
 language: de
 comment:  In dieser Vorlesung werden Kinematik mobiler Roboter und Regelungstechnik behandelt.
 narrator: Deutsch Female
@@ -827,6 +827,8 @@ Häufig wird $L_d$ (wie bei ROS2) die Prüfdistanz $L_d$ geschwindigkeitsabhäng
 $$
 L_d = k \cdot v + L_{d,min}
 $$
+
+> Eine sehr umfangreiche Analyse des Pure Pursuit Algorithmus findet sich [Basic Pure Pursuit](https://wiki.purduesigbots.com/software/control-algorithms/basic-pure-pursuit)
 
 ### Vergleich der Ansätze
 
