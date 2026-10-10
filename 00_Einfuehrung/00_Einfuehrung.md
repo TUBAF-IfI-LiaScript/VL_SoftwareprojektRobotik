@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger & Copilot
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.1.4
+version:  0.2.0
 language: de
 narrator: Deutsch Female
 
@@ -30,6 +30,7 @@ import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_Softwareproje
 
 **Zielstellung der heutigen Veranstaltung**
 
++ Ablauf der Veranstaltung (Vorlesung, Übung, Praktikum) und die Projektaufgabe kennen
 + Grundlegende Begriffe und Definitionen der Robotik verstehen
 + Klassifikation von Robotersystemen anhand verschiedener Kriterien
 + Herausforderungen bei der Entwicklung autonomer mobiler Roboter kennenlernen
@@ -37,6 +38,84 @@ import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_Softwareproje
 + Motivation für den Einsatz von ROS 2 nachvollziehen
 
 --------------------------------------------------------------------------------
+
+## Unser Ziel: Autonomes Fahren im Miniaturformat
+
+    --{{0}}--
+Bevor wir über Definitionen sprechen, schauen wir auf das Ziel dieser Veranstaltung. Am Ende des Sommersemesters soll Ihr TurtleBot selbstständig durch eine kleine Verkehrswelt fahren: Er folgt der Straße, hält an der roten Ampel, beachtet Verkehrszeichen, lässt Fußgänger passieren und parkt am Ende ein. Alles, was Sie in Vorlesung und Übung lernen, ist ein Baustein für dieses Gesamtsystem.
+
+!?[TurtleBot in der Verkehrswelt](https://github.com/user-attachments/assets/9ccb6e25-ef94-4707-b858-812347618593 "TurtleBot 3 im Praktikum: Fahrspur, Parkbuchten und Verkehrszeichen")
+
+**Die Projektaufgabe**
+
+Ein TurtleBot 3 Burger bewegt sich autonom in einer Miniatur-Verkehrswelt auf schwarzem Untergrund und muss dabei
+
++ **Straßen und Fahrspuren** erkennen und ihnen folgen,
++ **Ampelanlagen** und **Verkehrszeichen** erkennen und befolgen,
++ **Fußgängern** und Hindernissen ausweichen bzw. vor ihnen anhalten,
++ **einparken** und weitere Fahrmanöver ausführen.
+
+    --{{1}}--
+Diese Aufgabe lösen Sie nicht an einem Stück, sondern Block für Block. Jeder Block der Veranstaltung liefert eine Teilfähigkeit, die Sie im Praktikum direkt auf dem Roboter umsetzen.
+
+                   {{1}}
+*******************************************************************************
+
+<!-- data-type="none" -->
+| Block | Thema                              | Beitrag zur Projektaufgabe                          | Semester |
+| ----- | ---------------------------------- | --------------------------------------------------- | -------- |
+| 1     | ROS Einführung und Grundlagen      | Roboter ansteuern, Daten aufzeichnen und auswerten  | WiSe     |
+| 2     | Sensorgrundlagen                   | Kamerabild korrigieren, Straße/Fahrspur erkennen    | WiSe     |
+| 3     | Objekterkennung                    | Ampeln, Schilder, Fußgänger und Hindernisse erkennen | WiSe     |
+| 4     | Sensorfusion                       | Position und Umgebung robust schätzen               | SoSe     |
+| 5     | Regelung und Navigation            | Bahnfolge, Karte, Einparken                         | SoSe     |
+| 6     | Praktikum + X                      | Integration zum Gesamtsystem                        | SoSe     |
+
+*******************************************************************************
+
+## Wie läuft die Veranstaltung ab?
+
+    --{{0}}--
+Anders als in den vergangenen Jahren trennen wir Vorlesung und Projekt nicht mehr auf zwei Semester. Vorlesung, Übung und Praktikum greifen von Anfang an ineinander. Jeder Termin dauert 90 Minuten. In manchen Wochen findet keine Vorlesung statt; diese Zeit gehört dann ganz der Arbeit am Roboter.
+
+<!-- data-type="none" -->
+| Format             | Wo?                           | Was passiert?                                                        |
+| ------------------ | ----------------------------- | -------------------------------------------------------------------- |
+| **Vorlesung (VL)** | Hörsaal                       | Konzepte und Methoden, Beispiele aus realen Robotersystemen          |
+| **Übung (Ü)**      | eigener Rechner / Pool        | angeleitete Aufgaben, z. B. mit aufgezeichneten Sensordaten (Bags)   |
+| **Praktikum (P)**  | Labor, TurtleBot              | Gruppenarbeit (2–3 Personen pro Roboter) an der Projektaufgabe      |
+
+    --{{1}}--
+Für die Arbeit benötigen Sie ein Linux-System. Wir arbeiten mit Ubuntu 24.04 und ROS 2 Jazzy. Wie Sie das auf Ihrem Rechner einrichten, klären wir in den ersten Übungen.
+
+     {{1}}
+*******************************************************************************
+
+**Werkzeuge**
+
++ Ubuntu 24.04 (nativ, alternativ WSL2 unter Windows)
++ ROS 2 Jazzy
++ Python und C++
++ Git / GitHub für die Gruppenarbeit — ich möchte in dieser Veranstaltung eine intensive Nutzung der Versionsverwaltung sehen!
+
+*******************************************************************************
+
+**Wo stehen Sie?** Ihre Antworten helfen uns, die Übungen und die Gruppen passend zu planen.
+
+Wie sicher sind Sie im Umgang mit dem Linux-Terminal?
+
+[(sicher)] sehr sicher
+[(grundlagen)] grundlegende Erfahrung
+[(keine)] kaum / keine Erfahrung
+
+Mit welchen Themen haben Sie schon gearbeitet?
+
+[[python]] Python
+[[cpp]] C++
+[[git]] Git
+[[ros]] ROS / ROS 2
+[[opencv]] OpenCV / Bildverarbeitung
+[[embedded]] Mikrocontroller / Embedded
 
 ## Was ist ein Roboter?
 
@@ -87,6 +166,17 @@ Roboter lassen sich anhand verschiedener Kriterien klassifizieren. Diese Untersc
 
     --{{0}}--
 In dieser Veranstaltung konzentrieren wir uns primär auf autonome, mobile Roboter, die in komplexen Umgebungen agieren müssen. Diese Systeme stellen besondere Anforderungen an Sensorik, Datenverarbeitung und Entscheidungsfindung.
+
+**Selbsttest:** Ordnen Sie die Systeme zu. Welche Eigenschaften treffen zu?
+
+[ [autonom] [mobil] [komplexe Sensorik] ]
+[    [X]      [X]          [ ]       ] Mähroboter, der sich an einem Begrenzungsdraht orientiert
+[    [ ]      [ ]          [ ]       ] Schweißroboter an einer Fertigungsstraße mit festem Programm
+[    [ ]      [X]          [X]       ] ferngesteuerter Inspektionsroboter mit Kamera und LiDAR
+[    [X]      [X]          [X]       ] unser TurtleBot in der Verkehrswelt
+***
+Autonomie und Mobilität sind voneinander unabhängig: Der ferngesteuerte Inspektionsroboter ist mobil und reich an Sensoren, trifft aber keine eigenen Entscheidungen. Der Mähroboter entscheidet selbst, kommt aber mit sehr einfacher Sensorik aus. Unser TurtleBot muss alle drei Eigenschaften vereinen.
+***
 
 ## Relevanz und Bedeutung mobiler Roboter
 
@@ -261,6 +351,29 @@ Und genau hier stellt sich die entscheidende Frage: Wer soll das alles implement
 
 *************************************************
 
+### Sense-Think-Act am TurtleBot
+
+    --{{0}}--
+Übertragen wir das Schema auf unseren eigenen Roboter. Der TurtleBot 3 Burger ist klein, aber er bringt alle drei Ebenen mit: Sensoren zur Wahrnehmung, einen Rechner für die Entscheidungen und Motoren für die Bewegung.
+
+<!-- data-type="none" -->
+| Komponente           | Spezifikation                              |
+| -------------------- | ------------------------------------------ |
+| LiDAR                | RPLIDAR C1 (360°, 12 m Reichweite, 10 Hz)  |
+| Kamera               | Raspberry Pi Camera v2                     |
+| Antrieb              | Differentialantrieb (DYNAMIXEL)            |
+| Max. Geschwindigkeit | 0,22 m/s                                   |
+| Rechner              | Raspberry Pi 3 Model B+                    |
+
+**Selbsttest:** Auf welcher Ebene ist die jeweilige Aufgabe in unserer Verkehrswelt angesiedelt?
+
+[ [Sense] [Think] [Act] ]
+[  ( )     (X)     ( )  ] Entscheiden, ob bei Gelb noch gefahren wird
+[  (X)     ( )     ( )  ] Kamerabild der Fahrbahn erfassen
+[  ( )     ( )     (X)  ] Radgeschwindigkeiten über die Motoren einstellen
+[  (X)     ( )     ( )  ] Abstand zu einem Fußgänger mit dem LiDAR messen
+[  ( )     (X)     ( )  ] Einen Pfad in die Parklücke planen
+
 ## Warum ROS? Das "Rad nicht neu erfinden"
 
     --{{0}}--
@@ -289,19 +402,25 @@ ROS 2, die aktuelle Version, die wir in dieser Veranstaltung nutzen werden, biet
 ## Ausblick: Die nächsten Schritte
 
     --{{0}}--
-In der nächsten Vorlesung, die heute Nachmittag stattfindet, werden wir uns intensiv mit der Sensorik mobiler Roboter beschäftigen. Sie werden verstehen, wie Roboter ihre Umgebung wahrnehmen und welche Sensoren dafür zum Einsatz kommen.
+Bevor wir mit ROS 2 arbeiten können, brauchen wir ein solides Fundament: den sicheren Umgang mit dem Linux-Terminal. Genau darum geht es in der ersten Übung. Danach steigen wir in der Vorlesung in die Konzepte von ROS 2 ein und richten in der folgenden Übung ROS 2 auf Ihren Rechnern ein.
 
-**Was kommt als nächstes?**
+**Was kommt als Nächstes?**
 
-VL 2: Sensorik mobiler Roboter (heute Nachmittag!)
-==========================
+<!-- data-type="none" -->
+| Termin                                | Inhalt                                                                  |
+| ------------------------------------- | ----------------------------------------------------------------------- |
+| **Ü** OS + Linux Shell                | Terminal, Dateisystem, Rechte, Prozesse, Umgebungsvariablen             |
+| **VL** Grundlagen ROS 2               | Architektur, Knoten, Topics, Nachrichten                                |
+| **VL** ROS 2 Pakete                   | Pakete, Build-System, Launch-Files                                      |
+| **Ü** Installation / Grundlagen ROS 2 | ROS 2 Jazzy einrichten, erste Schritte mit der Kommandozeile            |
+| **VL** Koordinaten + QoS              | Transformationen, tf2, Quality of Service                               |
+| **P** Grundlagen ROS 2 + Bags         | erste Fahrt mit dem TurtleBot, Daten aufzeichnen und auswerten          |
 
-In der zweiten Vorlesung lernen Sie:
+    --{{1}}--
+Wenn Sie noch kein Linux-System haben, nutzen Sie die Zeit bis zur Übung. Unter Windows ist das Linux-Subsystem WSL2 eine gute Alternative zu einer nativen Installation.
 
-+ **Propriozeptive Sensoren**: Odometrie, IMU (Wie weiß der Roboter, wo er ist?)
-+ **Exterozeptive Sensoren**: GPS/GNSS, Lidar, Ultraschall (Wie nimmt er die Umgebung wahr?)
-+ **Kamerasysteme**: Mono, Stereo, RGB-D (Wie "sieht" ein Roboter?)
-+ **Fehlerquellen und Unsicherheiten**: Warum ist Sensorik nie perfekt?
+      {{1}}
+> **Bis zur Übung:** Stellen Sie sicher, dass Sie Zugriff auf ein Ubuntu-24.04-System haben — nativ, als WSL2 unter Windows oder im Rechnerpool.
 
 ## Zusammenfassung
 
@@ -310,6 +429,7 @@ Fassen wir die wichtigsten Punkte dieser Einführungsvorlesung zusammen:
 
 **Was haben wir gelernt?**
 
++ Ziel der Veranstaltung ist ein TurtleBot, der **autonom durch eine Miniatur-Verkehrswelt** fährt — aufgebaut Block für Block in VL, Ü und P
 + Roboter sind **computergesteuerte Maschinen**, die **komplexe Aktionen automatisch** ausführen
 + Robotersysteme lassen sich anhand **vieler Kriterien klassifizieren** (Autonomie, Mobilität, Sensorik, etc.)
 + Die Entwicklung mobiler Roboter bringt **technologische, wirtschaftliche und soziale Herausforderungen** mit sich
@@ -317,10 +437,10 @@ Fassen wir die wichtigsten Punkte dieser Einführungsvorlesung zusammen:
 + **ROS 2** ermöglicht es uns, **auf vorhandenen Lösungen aufzubauen** statt alles neu zu entwickeln
 
     --{{1}}--
-Damit sind Sie gut vorbereitet für die nächste Vorlesung zur Sensorik. Ich freue mich auf die gemeinsame Reise durch die faszinierende Welt der mobilen Robotik!
+Damit kennen Sie das Ziel und den Weg dorthin. In der nächsten Übung legen wir mit dem Linux-Terminal das Fundament. Ich freue mich auf die gemeinsame Reise durch die faszinierende Welt der mobilen Robotik!
 
       {{1}}
-> **Vorbereitung für VL 2:** Überlegen Sie sich, welche Sensoren Sie aus dem Alltag kennen (Smartphone, Auto, Haushaltsgeräte). Welche Prinzipien könnten diese nutzen?
+> **Zum Nachdenken:** Welche Fähigkeiten braucht ein menschlicher Fahrer, um durch unsere Verkehrswelt zu kommen — und welcher Sensor des TurtleBots könnte jeweils die Augen und Ohren ersetzen?
 
 ## Weiterführende Ressourcen
 
@@ -332,6 +452,7 @@ Für Interessierte hier noch einige Ressourcen zur Vertiefung:
 + [ROS 2 Documentation](https://docs.ros.org/) - Offizielle ROS 2 Dokumentation
 + [The Robotics Back-End](https://roboticsbackend.com/) - Tutorials und Praxisbeispiele
 + [RoboCup](https://robocup.de/) - RoboCup-Wettbewerbe und -Teams
++ [TurtleBot 3 e-Manual](https://emanual.robotis.com/docs/en/platform/turtlebot3/overview/) - Dokumentation des Herstellers ROBOTIS
 
 ## Forschung und Praxis
 

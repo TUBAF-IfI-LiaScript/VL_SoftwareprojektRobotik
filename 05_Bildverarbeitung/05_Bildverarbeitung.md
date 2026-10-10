@@ -160,7 +160,8 @@ sudo apt install v4l-utils
 v4l2-ctl --list-devices
 ```
 
-```ros2 run v4l2_camera v4l2_camera_node --ros-args -p video_device:=/dev/video0
+```
+ros2 run v4l2_camera v4l2_camera_node --ros-args -p video_device:=/dev/video0
 ```
 
 ```
