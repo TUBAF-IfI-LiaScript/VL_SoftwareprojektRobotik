@@ -1,6 +1,6 @@
 <!--
 
-author:   Sebastian Zug & Georg Jäger
+author:   Sebastian Zug & Georg Jäger & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
 version:  0.1.0
 language: de
@@ -498,8 +498,8 @@ Ein Skript setzt `export ROS_DOMAIN_ID=5`. Sie starten es mit `./skript.sh` und 
     --{{0}}--
 Mit diesen Grundlagen sind Sie für die nächsten Schritte gerüstet. In der Vorlesung geht es um die Konzepte von ROS 2, in der nächsten Übung installieren Sie ROS 2 Jazzy — und dabei begegnen Ihnen apt, sudo, source und die Datei bashrc wieder.
 
-+ **VL** Grundlagen ROS 2 — Architektur, Knoten, Topics, Nachrichten
-+ **Ü** Installation / Grundlagen ROS 2 — ROS 2 Jazzy einrichten, erste Schritte mit `ros2`
++ **VL 2** Grundlagen ROS 2 — Architektur, Knoten, Topics, Nachrichten
++ **Ü 2** Installation / Grundlagen ROS 2 — ROS 2 Jazzy einrichten, erste Schritte mit `ros2`
 
 **Weiterführende Ressourcen**
 

@@ -1,5 +1,7 @@
 # Kurslandkarte
 
+_Autoren: Sebastian Zug & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent_
+
 Interaktive Übersicht über Begriffe, Zusammenhänge und didaktische Fäden der Veranstaltung Robotik für Studierende — über Vorlesungen (VL), Übungen (Ü) und Praktika (P) in WiSe 2026/27 und SoSe 2027. Drei Ansichten: Termine (Liste, Standard auf dem Handy), Metrokarte und Zeitleiste. „Sie sind hier“ ergibt sich aus dem Datum. Veröffentlicht über GitHub Pages aus dem Ordner `docs/`.
 
 Die Ansicht stammt aus der Kurslandkarte der Vorlesung EAVD (Projekt invivis) und ist hier so verallgemeinert, dass Termintypen, Blöcke und Themengebiete aus den Daten kommen.
@@ -26,7 +28,7 @@ Begriffe verweisen in `erzeuge.py` auf den **Titel** ihres Abschnitts (ohne Back
 ## Datenmodell
 
 * **Kurs:** `basis` (LiaScript-Link-Präfix), `speicher` (Schlüssel für Einstellungen im Browser)
-* **Termin** (`vorlesungen`): `vl` (Position), `key`, `label` (z. B. „VL 03“, „Ü 1“, „P 2“), `datei` (oder `null`, solange kein Material existiert), `datum` (Montag der KW nach `Zeitplan.ods`, ISO), `kurz`, `status` (`ausgearbeitet` | `Bestand` | `geplant`), `block`, `abschnitte`
+* **Termin** (`vorlesungen`): `vl` (Position), `key`, `label` (z. B. „VL 2“, „Ü 1“, „P 2“; Vorlesungen werden in `erzeuge.py` automatisch laufend nach Zeitplan nummeriert — die Ordnernummern im Repo stammen aus der alten Reihenfolge), `datei` (oder `null`, solange kein Material existiert), `datum` (Montag der KW nach `Zeitplan.ods`, ISO), `kurz`, `status` (`ausgearbeitet` | `Bestand` | `geplant`), `block`, `abschnitte`
 * **Phase:** `von`, `bis` (Terminpositionen), `name` (Block), `farbe`
 * **Linie** (Themengebiet): `id`, `name`; die Farben stehen als `--l-{id}` in `vorlage.html`
 * **Begriff:** `id`, `name`, `linie`, `vl` (Terminposition), `abschnitt` (Foliennummer), `ebene` (1 = Kernbegriff, 2 = Detailbegriff), `code`, `erklaerung`, `fehlvorstellung`

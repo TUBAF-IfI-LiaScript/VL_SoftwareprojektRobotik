@@ -2,7 +2,8 @@
  "stand": "10.10.2026",
  "kurs": {
   "basis": "https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/",
-  "speicher": "robotik-map"
+  "speicher": "robotik-map",
+  "autoren": "Sebastian Zug & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent"
  },
  "linien": [
   {
@@ -76,7 +77,7 @@
   {
    "vl": 0,
    "key": "00",
-   "label": "VL 00",
+   "label": "VL 1",
    "datei": "00_Einfuehrung/00_Einfuehrung.md",
    "datum": "2026-10-19",
    "kurz": "Einführung",
@@ -134,25 +135,23 @@
   {
    "vl": 2,
    "key": "03",
-   "label": "VL 03",
+   "label": "VL 2",
    "datei": "03_ROS_Grundlagen_I/03_EinfuehrungROS.md",
    "datum": "2026-10-26",
    "kurz": "ROS 2 Grundlagen",
-   "status": "Bestand",
+   "status": "ausgearbeitet",
    "block": 1,
    "abschnitte": [
-    "Einführung in ROS2",
-    "Frameworks um Roboter zu programmieren?",
-    "Vergleich von Frameworks",
+    "Einführung in ROS 2",
+    "Warum ein Framework?",
     "ROS, was ist das?",
-    "ROS 1 vs. ROS 2",
-    "Wie kann man sich in ROS einarbeiten?",
-    "Architektur von ROS2",
+    "Was macht ROS 2 anders?",
+    "Architektur von ROS 2",
     "Basiskonzepte",
     "Einführungsbeispiele",
     "Hello-World Implementierung",
-    "Turtlebot",
-    "ros1_bridge",
+    "turtlesim: ROS 2 zum Anfassen",
+    "Vom turtlesim zum TurtleBot",
     "Installation",
     "Aufgabe der Woche"
    ]
@@ -160,23 +159,29 @@
   {
    "vl": 3,
    "key": "04",
-   "label": "VL 04",
+   "label": "VL 3",
    "datei": "04_ROS_Pakete_Tools/04_ROS_Pakete.md",
    "datum": "2026-11-02",
    "kurz": "ROS 2 Pakete",
-   "status": "Bestand",
+   "status": "ausgearbeitet",
    "block": 1,
    "abschnitte": [
-    "ROS2 Pakete",
-    "ROS2 auf mehreren Rechnern",
-    "Konzept",
-    "Compilieren eines Paketes  / mehrerer Paketen",
-    "Build-Tools",
-    "Realisierung eines eigenen Paketes",
-    "Aufzeichnen des Prozesses",
-    "Steuerung des Startprozesses",
+    "ROS 2 Pakete",
+    "Vom Beispiel zum eigenen Paket",
+    "Workspace und Paketstruktur",
+    "Bauen mit colcon",
+    "Ein eigenes Paket Schritt für Schritt",
+    "Schritt 1: Eigener Nachrichtentyp",
+    "Schritt 2: Publisher in C++",
+    "Schritt 3: Subscriber in Python",
+    "Systeme starten mit Launch-Dateien",
     "Logging",
-    "Erweiterung des Knotenkonzepts"
+    "ROS 2 auf mehreren Rechnern",
+    "Ausblick: Daten aufzeichnen",
+    "Knoten mit Lebenszyklus",
+    "Ausprobieren mit dem Demo",
+    "Ein eigener verwalteter Knoten",
+    "Aufgabe der Woche"
    ]
   },
   {
@@ -193,7 +198,7 @@
   {
    "vl": 5,
    "key": "02",
-   "label": "VL 02",
+   "label": "VL 4",
    "datei": "02_Koordinatensysteme/02_Koordinatentransformation.md",
    "datum": "2026-11-09",
    "kurz": "Koordinaten + QoS",
@@ -232,7 +237,7 @@
   {
    "vl": 7,
    "key": "01",
-   "label": "VL 01",
+   "label": "VL 5",
    "datei": "01_Sensorik/01_Sensorik.md",
    "datum": "2026-11-30",
    "kurz": "Sensorik",
@@ -262,7 +267,7 @@
   {
    "vl": 8,
    "key": "05",
-   "label": "VL 05",
+   "label": "VL 6",
    "datei": "05_Bildverarbeitung/05_Bildverarbeitung.md",
    "datum": "2026-12-07",
    "kurz": "Bildverarbeitung",
@@ -305,7 +310,7 @@
   {
    "vl": 9,
    "key": "06",
-   "label": "VL 06",
+   "label": "VL 7",
    "datei": "06_Kamera_Stereo/06_Kamera_Stereo.md",
    "datum": "2026-12-07",
    "kurz": "Kamera",
@@ -343,7 +348,7 @@
   {
    "vl": 10,
    "key": "lid",
-   "label": "VL neu",
+   "label": "VL 8",
    "datei": null,
    "datum": "2026-12-14",
    "kurz": "LiDAR",
@@ -398,7 +403,7 @@
   {
    "vl": 15,
    "key": "07",
-   "label": "VL 07",
+   "label": "VL 9",
    "datei": "07_Objekterkennung/07_Objekterkennung.md",
    "datum": "2027-01-25",
    "kurz": "Objekterkennung",
@@ -437,7 +442,7 @@
   {
    "vl": 16,
    "key": "pkw",
-   "label": "VL neu",
+   "label": "VL 10",
    "datei": null,
    "datum": "2027-01-25",
    "kurz": "… in Punktwolken",
@@ -481,7 +486,7 @@
   {
    "vl": 20,
    "key": "08",
-   "label": "VL 08",
+   "label": "VL 11",
    "datei": "08_Sensorfusion_I/08_Datenfusion.md",
    "datum": "2027-04-12",
    "kurz": "Sensorfusion I",
@@ -505,7 +510,7 @@
   {
    "vl": 21,
    "key": "09",
-   "label": "VL 09",
+   "label": "VL 12",
    "datei": "09_Sensorfusion_II/09_Sensorfusion_II.md",
    "datum": "2027-04-19",
    "kurz": "Sensorfusion II",
@@ -563,7 +568,7 @@
   {
    "vl": 24,
    "key": "10",
-   "label": "VL 10",
+   "label": "VL 13",
    "datei": "10_Kinematik_Regelung/10_Kinematik_Regelung.md",
    "datum": "2027-05-03",
    "kurz": "Kinematik",
@@ -609,7 +614,7 @@
   {
    "vl": 26,
    "key": "11",
-   "label": "VL 11",
+   "label": "VL 14",
    "datei": "11_Navigation/11_Navigation.md",
    "datum": "2027-05-10",
    "kurz": "Navigation",
@@ -644,7 +649,7 @@
   {
    "vl": 27,
    "key": "slm",
-   "label": "VL neu",
+   "label": "VL 15",
    "datei": null,
    "datum": "2027-05-17",
    "kurz": "SLAM",
@@ -1161,11 +1166,22 @@
    "fehlvorstellung": null
   },
   {
+   "id": "distro",
+   "name": "ROS-2-Distribution",
+   "linie": "ros",
+   "vl": 2,
+   "abschnitt": 3,
+   "ebene": 2,
+   "code": true,
+   "erklaerung": "Jährlich im Mai erscheint eine Distribution; wir nutzen die LTS-Version Jazzy Jalisco auf Ubuntu 24.04.",
+   "fehlvorstellung": "„Beispiele mit roscore oder catkin funktionieren auch unter ROS 2.“"
+  },
+  {
    "id": "middleware",
    "name": "ROS als Middleware",
    "linie": "ros",
    "vl": 2,
-   "abschnitt": 4,
+   "abschnitt": 3,
    "ebene": 1,
    "code": false,
    "erklaerung": "ROS bietet Hardwareabstraktion, Treiber, Nachrichtenaustausch und Paketverwaltung für verteilte Robotersoftware.",
@@ -1176,18 +1192,18 @@
    "name": "DDS / rmw-Schicht",
    "linie": "ros",
    "vl": 2,
-   "abschnitt": 7,
+   "abschnitt": 5,
    "ebene": 1,
    "code": false,
-   "erklaerung": "ROS 2 trennt Client-Libraries (rclcpp/rclpy) über die rmw-Schicht von austauschbaren DDS-Implementierungen.",
-   "fehlvorstellung": null
+   "erklaerung": "ROS 2 trennt Client-Libraries (rclcpp/rclpy) über die rmw-Schicht von der austauschbaren Middleware — Standard ist Fast DDS, Alternativen sind Cyclone DDS oder Zenoh.",
+   "fehlvorstellung": "„Knoten mit unterschiedlicher RMW_IMPLEMENTATION finden sich trotzdem zuverlässig.“"
   },
   {
    "id": "node",
    "name": "Knoten (Node)",
    "linie": "ros",
    "vl": 2,
-   "abschnitt": 8,
+   "abschnitt": 6,
    "ebene": 1,
    "code": false,
    "erklaerung": "Ein Knoten ist ein Teilnehmer im ROS-Graphen, der Topics veröffentlicht oder abonniert.",
@@ -1198,7 +1214,7 @@
    "name": "Topic",
    "linie": "ros",
    "vl": 2,
-   "abschnitt": 8,
+   "abschnitt": 6,
    "ebene": 1,
    "code": false,
    "erklaerung": "Topics sind benannte Kanäle, die Publisher und Subscriber entkoppeln (n:m-Kommunikation).",
@@ -1209,7 +1225,7 @@
    "name": "Nachricht (Message)",
    "linie": "ros",
    "vl": 2,
-   "abschnitt": 8,
+   "abschnitt": 6,
    "ebene": 1,
    "code": false,
    "erklaerung": "Eine Message legt Struktur und Datentypen der übertragenen Daten fest, z. B. sensor_msgs/msg/LaserScan.",
@@ -1217,32 +1233,54 @@
   },
   {
    "id": "msgdef",
-   "name": "Message-Definition (.msg)",
+   "name": "Aufbau einer Nachricht",
    "linie": "ros",
    "vl": 2,
-   "abschnitt": 8,
+   "abschnitt": 6,
    "ebene": 2,
    "code": true,
-   "erklaerung": "Eine .msg-Datei definiert Felder aus Basistypen, Arrays, Default-Werten und Konstanten.",
-   "fehlvorstellung": null
+   "erklaerung": "ros2 interface show zeigt die Felder eines Nachrichtentyps — z. B. Twist mit linear.x (vorwärts) und angular.z (drehen).",
+   "fehlvorstellung": "„Bei Twist ist linear.z die Vorwärtsgeschwindigkeit.“"
   },
   {
    "id": "discovery",
    "name": "Discovery",
    "linie": "ros",
    "vl": 2,
-   "abschnitt": 8,
+   "abschnitt": 6,
    "ebene": 2,
    "code": false,
    "erklaerung": "Knoten finden sich automatisch innerhalb derselben ROS_DOMAIN_ID, verbinden sich aber nur bei kompatiblen QoS-Einstellungen.",
    "fehlvorstellung": "„Zwei Knoten auf demselben Topic kommunizieren immer.“"
   },
   {
+   "id": "kommmuster",
+   "name": "Service, Parameter, Action",
+   "linie": "ros",
+   "vl": 2,
+   "abschnitt": 6,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Neben Topics: Services für Anfrage/Antwort, Parameter zur Konfiguration, Actions für lang laufende Aufträge mit Rückmeldung.",
+   "fehlvorstellung": "„Für jede Kommunikation nimmt man am besten ein Topic.“"
+  },
+  {
+   "id": "tbtopics",
+   "name": "Topics des TurtleBot",
+   "linie": "ros",
+   "vl": 2,
+   "abschnitt": 10,
+   "ebene": 1,
+   "code": true,
+   "erklaerung": "Der TurtleBot stellt Sensoren und Antrieb als Topics bereit: /scan, /odom, /imu, Kamerabild und /cmd_vel.",
+   "fehlvorstellung": "„Für den echten Roboter braucht man ganz andere Werkzeuge als für den turtlesim.“"
+  },
+  {
    "id": "ros2cli",
    "name": "ros2-Kommandozeile",
    "linie": "werkzeuge",
    "vl": 2,
-   "abschnitt": 9,
+   "abschnitt": 7,
    "ebene": 1,
    "code": true,
    "erklaerung": "ros2 untersucht und steuert das System über Unterbefehle wie node, topic, service, param, bag und launch.",
@@ -1253,7 +1291,7 @@
    "name": "Publisher/Subscriber-API",
    "linie": "ros",
    "vl": 2,
-   "abschnitt": 10,
+   "abschnitt": 8,
    "ebene": 2,
    "code": true,
    "erklaerung": "Knoten legen per create_publisher/create_subscription Kanäle an und laufen mit spin().",
@@ -1264,7 +1302,7 @@
    "name": "ros2 topic …",
    "linie": "werkzeuge",
    "vl": 2,
-   "abschnitt": 10,
+   "abschnitt": 8,
    "ebene": 2,
    "code": true,
    "erklaerung": "Mit ros2 topic list/info/hz/echo/pub lassen sich Topics inspizieren und von Hand Nachrichten senden.",
@@ -1275,10 +1313,10 @@
    "name": "Remapping",
    "linie": "ros",
    "vl": 2,
-   "abschnitt": 10,
+   "abschnitt": 8,
    "ebene": 2,
    "code": true,
-   "erklaerung": "Mit --ros-args --remap /topic:=/neu werden Topic-Namen beim Start umgelenkt, ohne den Code zu ändern.",
+   "erklaerung": "Mit --ros-args -r topic:=neu (oder __node:=name) werden Topic- und Knotennamen beim Start umgelenkt, ohne den Code zu ändern.",
    "fehlvorstellung": "„Der Topic-Name ist fest im Code verankert.“"
   },
   {
@@ -1286,7 +1324,7 @@
    "name": "rqt / rqt_graph",
    "linie": "werkzeuge",
    "vl": 2,
-   "abschnitt": 11,
+   "abschnitt": 9,
    "ebene": 2,
    "code": true,
    "erklaerung": "rqt bündelt die Inspektionsfunktionen der ros2-CLI grafisch, z. B. den Knoten-Topic-Graphen.",
@@ -1297,18 +1335,18 @@
    "name": "ROS_DOMAIN_ID",
    "linie": "ros",
    "vl": 3,
-   "abschnitt": 2,
+   "abschnitt": 11,
    "ebene": 2,
    "code": true,
-   "erklaerung": "Die Umgebungsvariable trennt ROS-2-Systeme im selben Netz — im Labor eine pro TurtleBot-Gruppe.",
-   "fehlvorstellung": null
+   "erklaerung": "Die Umgebungsvariable trennt ROS-2-Systeme im selben Netz — im Labor eine pro TurtleBot-Gruppe, gesetzt auf Laptop und Roboter.",
+   "fehlvorstellung": "„Die ROS_DOMAIN_ID muss nur auf dem Laptop gesetzt werden.“"
   },
   {
    "id": "paket",
    "name": "ROS-2-Paket",
    "linie": "ros",
    "vl": 3,
-   "abschnitt": 3,
+   "abschnitt": 2,
    "ebene": 1,
    "code": false,
    "erklaerung": "Ein Paket kapselt Code samt Abhängigkeiten, Build-Konfiguration, Nachrichten und Launch-Files.",
@@ -1330,7 +1368,7 @@
    "name": "ament_cmake/ament_python",
    "linie": "werkzeuge",
    "vl": 3,
-   "abschnitt": 5,
+   "abschnitt": 4,
    "ebene": 2,
    "code": false,
    "erklaerung": "ament ist das Buildsystem für ein einzelnes Paket, mit CMake (C++) oder setuptools (Python).",
@@ -1341,7 +1379,7 @@
    "name": "colcon build",
    "linie": "werkzeuge",
    "vl": 3,
-   "abschnitt": 5,
+   "abschnitt": 4,
    "ebene": 1,
    "code": true,
    "erklaerung": "colcon baut alle Pakete eines Workspaces in der richtigen Abhängigkeitsreihenfolge.",
@@ -1366,15 +1404,15 @@
    "abschnitt": 6,
    "ebene": 1,
    "code": false,
-   "erklaerung": "Eigene .msg-Dateien werden per rosidl_generate_interfaces in C++/Python-Code übersetzt.",
-   "fehlvorstellung": null
+   "erklaerung": "Eigene .msg-Dateien werden per rosidl_generate_interfaces in C++/Python-Code übersetzt — immer in einem CMake-Paket.",
+   "fehlvorstellung": "„Ein Python-Projekt kann seine Nachrichtentypen im Python-Paket definieren.“"
   },
   {
    "id": "setupbash",
    "name": "source install/setup.bash",
    "linie": "werkzeuge",
    "vl": 3,
-   "abschnitt": 6,
+   "abschnitt": 4,
    "ebene": 2,
    "code": true,
    "erklaerung": "Erst das Sourcen des Install-Overlays macht neu gebaute Pakete im Terminal sichtbar.",
@@ -1385,7 +1423,7 @@
    "name": "ros2 bag",
    "linie": "werkzeuge",
    "vl": 3,
-   "abschnitt": 7,
+   "abschnitt": 12,
    "ebene": 1,
    "code": true,
    "erklaerung": "ros2 bag record/play zeichnet Topics auf und spielt sie ab — reproduzierbare Tests ohne reale Sensoren.",
@@ -1396,21 +1434,32 @@
    "name": "Launch-Datei",
    "linie": "ros",
    "vl": 3,
-   "abschnitt": 8,
+   "abschnitt": 9,
    "ebene": 1,
    "code": false,
    "erklaerung": "Python-Launch-Files starten und parametrieren mehrere Knoten mit Argumenten, Remappings und Includes.",
-   "fehlvorstellung": null
+   "fehlvorstellung": "„Ein Remapping in der Launch-Datei gilt automatisch für alle Knoten.“"
+  },
+  {
+   "id": "entrypoint",
+   "name": "entry_points (Python)",
+   "linie": "werkzeuge",
+   "vl": 3,
+   "abschnitt": 8,
+   "ebene": 2,
+   "code": true,
+   "erklaerung": "Python-Knoten werden in setup.py unter console_scripts als ausführbare Programme angemeldet.",
+   "fehlvorstellung": "„Für Python-Knoten braucht man add_executable in der CMakeLists.txt.“"
   },
   {
    "id": "logging",
    "name": "Logging & Log-Level",
    "linie": "ros",
    "vl": 3,
-   "abschnitt": 9,
+   "abschnitt": 10,
    "ebene": 2,
    "code": true,
-   "erklaerung": "Logger-Makros wie RCLCPP_INFO und einstellbare Log-Level strukturieren Debug-Ausgaben.",
+   "erklaerung": "Logger-Makros wie RCLCPP_INFO und einstellbare Log-Level strukturieren Debug-Ausgaben; --log-level knoten:=debug wirkt gezielt.",
    "fehlvorstellung": null
   },
   {
@@ -1418,9 +1467,9 @@
    "name": "Lifecycle-Knoten",
    "linie": "ros",
    "vl": 3,
-   "abschnitt": 10,
-   "ebene": 2,
-   "code": false,
+   "abschnitt": 13,
+   "ebene": 1,
+   "code": true,
    "erklaerung": "Managed Nodes durchlaufen den Zustandsautomaten Unconfigured, Inactive, Active und Finalized.",
    "fehlvorstellung": null
   },
@@ -2299,6 +2348,26 @@
    "von": "roboter",
    "nach": "klassifikation",
    "text": "wird geordnet durch"
+  },
+  {
+   "von": "pkgcreate",
+   "nach": "entrypoint",
+   "text": "Python-Gerüst mit"
+  },
+  {
+   "von": "topic",
+   "nach": "kommmuster",
+   "text": "ergänzt durch"
+  },
+  {
+   "von": "topiccli",
+   "nach": "tbtopics",
+   "text": "untersucht"
+  },
+  {
+   "von": "tbtopics",
+   "nach": "twist",
+   "text": "Fahrbefehl als"
   },
   {
    "von": "sta",

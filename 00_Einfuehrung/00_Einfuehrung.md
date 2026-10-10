@@ -1,6 +1,6 @@
 <!--
 
-author:   Sebastian Zug & Georg Jäger & Copilot
+author:   Sebastian Zug & Georg Jäger & Copilot & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
 version:  0.2.0
 language: de
@@ -409,12 +409,12 @@ Bevor wir mit ROS 2 arbeiten können, brauchen wir ein solides Fundament: den si
 <!-- data-type="none" -->
 | Termin                                | Inhalt                                                                  |
 | ------------------------------------- | ----------------------------------------------------------------------- |
-| **Ü** OS + Linux Shell                | Terminal, Dateisystem, Rechte, Prozesse, Umgebungsvariablen             |
-| **VL** Grundlagen ROS 2               | Architektur, Knoten, Topics, Nachrichten                                |
-| **VL** ROS 2 Pakete                   | Pakete, Build-System, Launch-Files                                      |
-| **Ü** Installation / Grundlagen ROS 2 | ROS 2 Jazzy einrichten, erste Schritte mit der Kommandozeile            |
-| **VL** Koordinaten + QoS              | Transformationen, tf2, Quality of Service                               |
-| **P** Grundlagen ROS 2 + Bags         | erste Fahrt mit dem TurtleBot, Daten aufzeichnen und auswerten          |
+| **Ü 1** OS + Linux Shell              | Terminal, Dateisystem, Rechte, Prozesse, Umgebungsvariablen             |
+| **VL 2** Grundlagen ROS 2             | Architektur, Knoten, Topics, Nachrichten                                |
+| **VL 3** ROS 2 Pakete                 | Pakete, Build-System, Launch-Files                                      |
+| **Ü 2** Installation / Grundlagen ROS 2 | ROS 2 Jazzy einrichten, erste Schritte mit der Kommandozeile            |
+| **VL 4** Koordinaten + QoS            | Transformationen, tf2, Quality of Service                               |
+| **P 1** Grundlagen ROS 2 + Bags       | erste Fahrt mit dem TurtleBot, Daten aufzeichnen und auswerten          |
 
     --{{1}}--
 Wenn Sie noch kein Linux-System haben, nutzen Sie die Zeit bis zur Übung. Unter Windows ist das Linux-Subsystem WSL2 eine gute Alternative zu einer nativen Installation.

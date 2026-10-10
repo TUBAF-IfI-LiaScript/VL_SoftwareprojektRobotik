@@ -1,8 +1,8 @@
 <!--
 
-author:   Sebastian Zug & Claude.ai
+author:   Sebastian Zug & Claude.ai & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.0.2
+version:  0.0.3
 language: de
 narrator: Deutsch Female
 

@@ -8,6 +8,8 @@ Aufruf aus dem Repository-Wurzelverzeichnis:
     python3 kurslandkarte/erzeuge.py
 
 Schreibt docs/kurslandkarte/kurslandkarte.json und docs/kurslandkarte/index.html.
+
+Autoren: Sebastian Zug & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent
 """
 import datetime, json, re, os
 
@@ -19,40 +21,41 @@ STAND = datetime.date.today().strftime("%d.%m.%Y")
 KURS = {
     "basis": "https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/",
     "speicher": "robotik-map",
+    "autoren": "Sebastian Zug & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent",
 }
 
 # ---- Termine nach dem vorläufigen Zeitplan (Zeitplan.ods, Ansatz 1; Datum = Montag der KW)
 # key, Bezeichnung, Datum, Kurztitel, Datei (None = noch kein Material), Status, Block
 # Status: "ausgearbeitet" (neu für 2026/27), "Bestand" (Material aus 2025/26), "geplant"
 T = [
-    ("00",  "VL 00", "2026-10-19", "Einführung",          "00_Einfuehrung/00_Einfuehrung.md",                     "ausgearbeitet", 1),
+    ("00",  "VL",    "2026-10-19", "Einführung",          "00_Einfuehrung/00_Einfuehrung.md",                     "ausgearbeitet", 1),
     ("ue1", "Ü 1",   "2026-10-26", "Linux Shell",         "exercises/exercise_00_linux_shell/README.md",          "ausgearbeitet", 1),
-    ("03",  "VL 03", "2026-10-26", "ROS 2 Grundlagen",    "03_ROS_Grundlagen_I/03_EinfuehrungROS.md",             "Bestand", 1),
-    ("04",  "VL 04", "2026-11-02", "ROS 2 Pakete",        "04_ROS_Pakete_Tools/04_ROS_Pakete.md",                 "Bestand", 1),
+    ("03",  "VL",    "2026-10-26", "ROS 2 Grundlagen",    "03_ROS_Grundlagen_I/03_EinfuehrungROS.md",             "ausgearbeitet", 1),
+    ("04",  "VL",    "2026-11-02", "ROS 2 Pakete",        "04_ROS_Pakete_Tools/04_ROS_Pakete.md",                 "ausgearbeitet", 1),
     ("ue2", "Ü 2",   "2026-11-09", "Installation ROS 2",  None, "geplant", 1),
-    ("02",  "VL 02", "2026-11-09", "Koordinaten + QoS",   "02_Koordinatensysteme/02_Koordinatentransformation.md", "Bestand", 1),
+    ("02",  "VL",    "2026-11-09", "Koordinaten + QoS",   "02_Koordinatensysteme/02_Koordinatentransformation.md", "Bestand", 1),
     ("p1",  "P 1",   "2026-11-23", "ROS 2 + Bags",        None, "geplant", 1),
-    ("01",  "VL 01", "2026-11-30", "Sensorik",            "01_Sensorik/01_Sensorik.md",                           "Bestand", 2),
-    ("05",  "VL 05", "2026-12-07", "Bildverarbeitung",    "05_Bildverarbeitung/05_Bildverarbeitung.md",           "Bestand", 2),
-    ("06",  "VL 06", "2026-12-07", "Kamera",              "06_Kamera_Stereo/06_Kamera_Stereo.md",                 "Bestand", 2),
-    ("lid", "VL neu",  "2026-12-14", "LiDAR",               None, "geplant", 2),
+    ("01",  "VL",    "2026-11-30", "Sensorik",            "01_Sensorik/01_Sensorik.md",                           "Bestand", 2),
+    ("05",  "VL",    "2026-12-07", "Bildverarbeitung",    "05_Bildverarbeitung/05_Bildverarbeitung.md",           "Bestand", 2),
+    ("06",  "VL",    "2026-12-07", "Kamera",              "06_Kamera_Stereo/06_Kamera_Stereo.md",                 "Bestand", 2),
+    ("lid", "VL",    "2026-12-14", "LiDAR",               None, "geplant", 2),
     ("ue3", "Ü 3",   "2027-01-04", "Datenvisualisierung", None, "geplant", 2),
     ("ue4", "Ü 4",   "2027-01-11", "Kameradaten",         None, "geplant", 2),
     ("p2",  "P 2",   "2027-01-11", "Bildkorrektur",       None, "geplant", 2),
     ("p3",  "P 3",   "2027-01-18", "Spurerkennung",       None, "geplant", 2),
-    ("07",  "VL 07", "2027-01-25", "Objekterkennung",     "07_Objekterkennung/07_Objekterkennung.md",             "Bestand", 3),
-    ("pkw", "VL neu",  "2027-01-25", "… in Punktwolken",    None, "geplant", 3),
+    ("07",  "VL",    "2027-01-25", "Objekterkennung",     "07_Objekterkennung/07_Objekterkennung.md",             "Bestand", 3),
+    ("pkw", "VL",    "2027-01-25", "… in Punktwolken",    None, "geplant", 3),
     ("ue5", "Ü 5",   "2027-02-01", "Objekte im LiDAR",    None, "geplant", 3),
     ("p4",  "P 4",   "2027-02-08", "Hinderniserkennung",  None, "geplant", 3),
     ("ue6", "Ü 6",   "2027-04-05", "YOLO vs. klassisch",  None, "geplant", 3),
-    ("08",  "VL 08", "2027-04-12", "Sensorfusion I",      "08_Sensorfusion_I/08_Datenfusion.md",                  "Bestand", 4),
-    ("09",  "VL 09", "2027-04-19", "Sensorfusion II",     "09_Sensorfusion_II/09_Sensorfusion_II.md",             "Bestand", 4),
+    ("08",  "VL",    "2027-04-12", "Sensorfusion I",      "08_Sensorfusion_I/08_Datenfusion.md",                  "Bestand", 4),
+    ("09",  "VL",    "2027-04-19", "Sensorfusion II",     "09_Sensorfusion_II/09_Sensorfusion_II.md",             "Bestand", 4),
     ("ue7", "Ü 7",   "2027-04-19", "2D-EKF",              None, "geplant", 4),
     ("p5",  "P 5",   "2027-04-26", "Streckenverlauf",     None, "geplant", 4),
-    ("10",  "VL 10", "2027-05-03", "Kinematik",           "10_Kinematik_Regelung/10_Kinematik_Regelung.md",       "Bestand", 5),
+    ("10",  "VL",    "2027-05-03", "Kinematik",           "10_Kinematik_Regelung/10_Kinematik_Regelung.md",       "Bestand", 5),
     ("ue8", "Ü 8",   "2027-05-03", "Reglervergleich",     None, "geplant", 5),
-    ("11",  "VL 11", "2027-05-10", "Navigation",          "11_Navigation/11_Navigation.md",                       "Bestand", 5),
-    ("slm", "VL neu",  "2027-05-17", "SLAM",                None, "geplant", 5),
+    ("11",  "VL",    "2027-05-10", "Navigation",          "11_Navigation/11_Navigation.md",                       "Bestand", 5),
+    ("slm", "VL",    "2027-05-17", "SLAM",                None, "geplant", 5),
     ("ue9", "Ü 9",   "2027-05-17", "Kartenerstellung",    None, "geplant", 5),
     ("p6",  "P 6",   "2027-05-24", "Mapping + Bahnfolge", None, "geplant", 5),
     ("p7",  "P 7",   "2027-05-31", "Parken + Abbiegen",   None, "geplant", 6),
@@ -68,6 +71,13 @@ LINIEN = [
     ("bewegung", "Regelung & Navigation"), ("projekt", "Projektaufgabe"),
 ]
 assert [t[2] for t in T] == sorted(t[2] for t in T), "Termine nicht chronologisch"
+# Vorlesungen laufend nach Zeitplan nummerieren (VL 1, VL 2, …); die Ordnernummern
+# im Repo (03_…, 02_…) stammen aus der alten Reihenfolge und erscheinen nicht.
+_nr = 0
+for _i, _t in enumerate(T):
+    if _t[1] == "VL":
+        _nr += 1
+        T[_i] = (_t[0], f"VL {_nr}") + _t[2:]
 IDX = {t[0]: i for i, t in enumerate(T)}
 
 # ---- Abschnitte automatisch (LiaScript-Foliennummer = Position der Überschrift)
@@ -129,31 +139,35 @@ B = [
     ("tftree", "tf-Baum", "ros", "02", 'Beispiel 2 - Turtle', 2, 0, "Alle Frames bilden einen Baum; die Transformation zwischen zwei Frames ergibt sich über den Pfad im Baum.", None),
     ("urdf", "URDF", "ros", "02", 'Beispiel 3 - URDF für statische Relationen', 2, 1, "XML-Beschreibung von Links, Joints, Geometrie und Sensoren eines Roboters — und damit seiner statischen Frames.", None),
     # --- VL 03 ROS 2 Grundlagen
+    ("distro", "ROS-2-Distribution", "ros", "03", 'ROS, was ist das?', 2, 1, "Jährlich im Mai erscheint eine Distribution; wir nutzen die LTS-Version Jazzy Jalisco auf Ubuntu 24.04.", "„Beispiele mit roscore oder catkin funktionieren auch unter ROS 2.“"),
     ("middleware", "ROS als Middleware", "ros", "03", 'ROS, was ist das?', 1, 0, "ROS bietet Hardwareabstraktion, Treiber, Nachrichtenaustausch und Paketverwaltung für verteilte Robotersoftware.", None),
-    ("dds", "DDS / rmw-Schicht", "ros", "03", 'Architektur von ROS2', 1, 0, "ROS 2 trennt Client-Libraries (rclcpp/rclpy) über die rmw-Schicht von austauschbaren DDS-Implementierungen.", None),
+    ("dds", "DDS / rmw-Schicht", "ros", "03", 'Architektur von ROS 2', 1, 0, "ROS 2 trennt Client-Libraries (rclcpp/rclpy) über die rmw-Schicht von der austauschbaren Middleware — Standard ist Fast DDS, Alternativen sind Cyclone DDS oder Zenoh.", "„Knoten mit unterschiedlicher RMW_IMPLEMENTATION finden sich trotzdem zuverlässig.“"),
     ("node", "Knoten (Node)", "ros", "03", 'Basiskonzepte', 1, 0, "Ein Knoten ist ein Teilnehmer im ROS-Graphen, der Topics veröffentlicht oder abonniert.", None),
     ("topic", "Topic", "ros", "03", 'Basiskonzepte', 1, 0, "Topics sind benannte Kanäle, die Publisher und Subscriber entkoppeln (n:m-Kommunikation).", "„Publisher und Subscriber müssen einander kennen.“"),
     ("message", "Nachricht (Message)", "ros", "03", 'Basiskonzepte', 1, 0, "Eine Message legt Struktur und Datentypen der übertragenen Daten fest, z. B. sensor_msgs/msg/LaserScan.", None),
-    ("msgdef", "Message-Definition (.msg)", "ros", "03", 'Basiskonzepte', 2, 1, "Eine .msg-Datei definiert Felder aus Basistypen, Arrays, Default-Werten und Konstanten.", None),
+    ("msgdef", "Aufbau einer Nachricht", "ros", "03", 'Basiskonzepte', 2, 1, "ros2 interface show zeigt die Felder eines Nachrichtentyps — z. B. Twist mit linear.x (vorwärts) und angular.z (drehen).", "„Bei Twist ist linear.z die Vorwärtsgeschwindigkeit.“"),
     ("discovery", "Discovery", "ros", "03", 'Basiskonzepte', 2, 0, "Knoten finden sich automatisch innerhalb derselben ROS_DOMAIN_ID, verbinden sich aber nur bei kompatiblen QoS-Einstellungen.", "„Zwei Knoten auf demselben Topic kommunizieren immer.“"),
+    ("kommmuster", "Service, Parameter, Action", "ros", "03", 'Basiskonzepte', 2, 0, "Neben Topics: Services für Anfrage/Antwort, Parameter zur Konfiguration, Actions für lang laufende Aufträge mit Rückmeldung.", "„Für jede Kommunikation nimmt man am besten ein Topic.“"),
+    ("tbtopics", "Topics des TurtleBot", "ros", "03", 'Vom turtlesim zum TurtleBot', 1, 1, "Der TurtleBot stellt Sensoren und Antrieb als Topics bereit: /scan, /odom, /imu, Kamerabild und /cmd_vel.", "„Für den echten Roboter braucht man ganz andere Werkzeuge als für den turtlesim.“"),
     ("ros2cli", "ros2-Kommandozeile", "werkzeuge", "03", 'Einführungsbeispiele', 1, 1, "ros2 untersucht und steuert das System über Unterbefehle wie node, topic, service, param, bag und launch.", None),
     ("pubsub", "Publisher/Subscriber-API", "ros", "03", 'Hello-World Implementierung', 2, 1, "Knoten legen per create_publisher/create_subscription Kanäle an und laufen mit spin().", None),
     ("topiccli", "ros2 topic …", "werkzeuge", "03", 'Hello-World Implementierung', 2, 1, "Mit ros2 topic list/info/hz/echo/pub lassen sich Topics inspizieren und von Hand Nachrichten senden.", None),
-    ("remap", "Remapping", "ros", "03", 'Hello-World Implementierung', 2, 1, "Mit --ros-args --remap /topic:=/neu werden Topic-Namen beim Start umgelenkt, ohne den Code zu ändern.", "„Der Topic-Name ist fest im Code verankert.“"),
-    ("rqt", "rqt / rqt_graph", "werkzeuge", "03", 'Turtlebot', 2, 1, "rqt bündelt die Inspektionsfunktionen der ros2-CLI grafisch, z. B. den Knoten-Topic-Graphen.", None),
+    ("remap", "Remapping", "ros", "03", 'Hello-World Implementierung', 2, 1, "Mit --ros-args -r topic:=neu (oder __node:=name) werden Topic- und Knotennamen beim Start umgelenkt, ohne den Code zu ändern.", "„Der Topic-Name ist fest im Code verankert.“"),
+    ("rqt", "rqt / rqt_graph", "werkzeuge", "03", 'turtlesim: ROS 2 zum Anfassen', 2, 1, "rqt bündelt die Inspektionsfunktionen der ros2-CLI grafisch, z. B. den Knoten-Topic-Graphen.", None),
     # --- VL 04 ROS 2 Pakete
-    ("domainid", "ROS_DOMAIN_ID", "ros", "04", 'ROS2 auf mehreren Rechnern', 2, 1, "Die Umgebungsvariable trennt ROS-2-Systeme im selben Netz — im Labor eine pro TurtleBot-Gruppe.", None),
-    ("paket", "ROS-2-Paket", "ros", "04", 'Konzept', 1, 0, "Ein Paket kapselt Code samt Abhängigkeiten, Build-Konfiguration, Nachrichten und Launch-Files.", None),
-    ("workspace", "Workspace", "werkzeuge", "04", 'Konzept', 1, 0, "Pakete liegen in src/ eines Workspaces; colcon erzeugt daneben build/, install/ und log/.", None),
-    ("ament", "ament_cmake/ament_python", "werkzeuge", "04", 'Build-Tools', 2, 0, "ament ist das Buildsystem für ein einzelnes Paket, mit CMake (C++) oder setuptools (Python).", None),
-    ("colcon", "colcon build", "werkzeuge", "04", 'Build-Tools', 1, 1, "colcon baut alle Pakete eines Workspaces in der richtigen Abhängigkeitsreihenfolge.", "„colcon ist der Compiler.“"),
-    ("pkgcreate", "ros2 pkg create", "werkzeuge", "04", 'Realisierung eines eigenen Paketes', 2, 1, "Erzeugt ein Paketgerüst mit Build-Type, Abhängigkeiten und optional einem Knoten.", None),
-    ("custommsg", "Eigener Nachrichtentyp", "ros", "04", 'Realisierung eines eigenen Paketes', 1, 0, "Eigene .msg-Dateien werden per rosidl_generate_interfaces in C++/Python-Code übersetzt.", None),
-    ("setupbash", "source install/setup.bash", "werkzeuge", "04", 'Realisierung eines eigenen Paketes', 2, 1, "Erst das Sourcen des Install-Overlays macht neu gebaute Pakete im Terminal sichtbar.", "„Nach colcon build sind neue Pakete sofort in jedem Terminal verfügbar.“"),
-    ("rosbag", "ros2 bag", "werkzeuge", "04", 'Aufzeichnen des Prozesses', 1, 1, "ros2 bag record/play zeichnet Topics auf und spielt sie ab — reproduzierbare Tests ohne reale Sensoren.", "„Am besten zeichnet man einfach immer alle Topics auf.“"),
-    ("launch", "Launch-Datei", "ros", "04", 'Steuerung des Startprozesses', 1, 0, "Python-Launch-Files starten und parametrieren mehrere Knoten mit Argumenten, Remappings und Includes.", None),
-    ("logging", "Logging & Log-Level", "ros", "04", 'Logging', 2, 1, "Logger-Makros wie RCLCPP_INFO und einstellbare Log-Level strukturieren Debug-Ausgaben.", None),
-    ("lifecycle", "Lifecycle-Knoten", "ros", "04", 'Erweiterung des Knotenkonzepts', 2, 0, "Managed Nodes durchlaufen den Zustandsautomaten Unconfigured, Inactive, Active und Finalized.", None),
+    ("domainid", "ROS_DOMAIN_ID", "ros", "04", 'ROS 2 auf mehreren Rechnern', 2, 1, "Die Umgebungsvariable trennt ROS-2-Systeme im selben Netz — im Labor eine pro TurtleBot-Gruppe, gesetzt auf Laptop und Roboter.", "„Die ROS_DOMAIN_ID muss nur auf dem Laptop gesetzt werden.“"),
+    ("paket", "ROS-2-Paket", "ros", "04", 'Vom Beispiel zum eigenen Paket', 1, 0, "Ein Paket kapselt Code samt Abhängigkeiten, Build-Konfiguration, Nachrichten und Launch-Files.", None),
+    ("workspace", "Workspace", "werkzeuge", "04", 'Workspace und Paketstruktur', 1, 0, "Pakete liegen in src/ eines Workspaces; colcon erzeugt daneben build/, install/ und log/.", None),
+    ("ament", "ament_cmake/ament_python", "werkzeuge", "04", 'Bauen mit colcon', 2, 0, "ament ist das Buildsystem für ein einzelnes Paket, mit CMake (C++) oder setuptools (Python).", None),
+    ("colcon", "colcon build", "werkzeuge", "04", 'Bauen mit colcon', 1, 1, "colcon baut alle Pakete eines Workspaces in der richtigen Abhängigkeitsreihenfolge.", "„colcon ist der Compiler.“"),
+    ("pkgcreate", "ros2 pkg create", "werkzeuge", "04", 'Schritt 1: Eigener Nachrichtentyp', 2, 1, "Erzeugt ein Paketgerüst mit Build-Type, Abhängigkeiten und optional einem Knoten.", None),
+    ("custommsg", "Eigener Nachrichtentyp", "ros", "04", 'Schritt 1: Eigener Nachrichtentyp', 1, 0, "Eigene .msg-Dateien werden per rosidl_generate_interfaces in C++/Python-Code übersetzt — immer in einem CMake-Paket.", "„Ein Python-Projekt kann seine Nachrichtentypen im Python-Paket definieren.“"),
+    ("setupbash", "source install/setup.bash", "werkzeuge", "04", 'Bauen mit colcon', 2, 1, "Erst das Sourcen des Install-Overlays macht neu gebaute Pakete im Terminal sichtbar.", "„Nach colcon build sind neue Pakete sofort in jedem Terminal verfügbar.“"),
+    ("rosbag", "ros2 bag", "werkzeuge", "04", 'Ausblick: Daten aufzeichnen', 1, 1, "ros2 bag record/play zeichnet Topics auf und spielt sie ab — reproduzierbare Tests ohne reale Sensoren.", "„Am besten zeichnet man einfach immer alle Topics auf.“"),
+    ("launch", "Launch-Datei", "ros", "04", 'Systeme starten mit Launch-Dateien', 1, 0, "Python-Launch-Files starten und parametrieren mehrere Knoten mit Argumenten, Remappings und Includes.", "„Ein Remapping in der Launch-Datei gilt automatisch für alle Knoten.“"),
+    ("entrypoint", "entry_points (Python)", "werkzeuge", "04", 'Schritt 3: Subscriber in Python', 2, 1, "Python-Knoten werden in setup.py unter console_scripts als ausführbare Programme angemeldet.", "„Für Python-Knoten braucht man add_executable in der CMakeLists.txt.“"),
+    ("logging", "Logging & Log-Level", "ros", "04", 'Logging', 2, 1, "Logger-Makros wie RCLCPP_INFO und einstellbare Log-Level strukturieren Debug-Ausgaben; --log-level knoten:=debug wirkt gezielt.", None),
+    ("lifecycle", "Lifecycle-Knoten", "ros", "04", 'Knoten mit Lebenszyklus', 1, 1, "Managed Nodes durchlaufen den Zustandsautomaten Unconfigured, Inactive, Active und Finalized.", None),
     # --- VL 05 Bildverarbeitung
     ("image_msg", "sensor_msgs/Image", "ros", "05", 'Blick nach vorn - Bilder in ROS2', 2, 1, "Standardnachricht für unkomprimierte Kamerabilder mit Header, Größe, Encoding und flachem Byte-Array.", None),
     ("bildmatrix", "Bild als Pixelmatrix", "wahrnehmung", "05", 'Was ist ein Bild?', 1, 0, "Ein digitales Bild ist eine Matrix mit Ursprung oben links; der Zugriff erfolgt als image[Zeile, Spalte] = image[y, x].", "„image[x, y] liefert den Pixel an der Position (x, y).“"),
@@ -245,6 +259,10 @@ B = [
 # ---- Beziehungen: von, nach, Beschriftung („von … text … nach“)
 R = [
     ("roboter", "klassifikation", "wird geordnet durch"),
+    ("pkgcreate", "entrypoint", "Python-Gerüst mit"),
+    ("topic", "kommmuster", "ergänzt durch"),
+    ("topiccli", "tbtopics", "untersucht"),
+    ("tbtopics", "twist", "Fahrbefehl als"),
     ("sta", "turtlebot", "konkret am"),
     ("herausforderungen", "rosmotivation", "begründet"),
     ("verkehrswelt", "turtlebot", "gelöst mit"),
