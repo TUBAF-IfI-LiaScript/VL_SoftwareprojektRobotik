@@ -1,8 +1,8 @@
 <!--
 
-author:   Sebastian Zug & Georg Jäger
+author:   Sebastian Zug & Georg Jäger & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.0.8
+version:  0.1.0
 language: de
 narrator: Deutsch Female
 
@@ -13,225 +13,127 @@ import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_Softwareproje
 [![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/03_ROS_Grundlagen_I/03_EinfuehrungROS.md)
 
 
-# Einführung in ROS2
+# Einführung in ROS 2
 
 | Parameter            | Kursinformationen                                                                                                                                                                                   |
 |----------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Veranstaltung:**   | @config.lecture                                                                                               |
 | **Semester**         | @config.semester                                                                                              |
 | **Hochschule:**      | `Technische Universität Freiberg`                                                                                                                                                                   |
-| **Inhalte:**         | `Motivation für die Verwendung von ROS`                                                                                                                                                             |
+| **Inhalte:**         | `Motivation für ROS 2, Architektur, Knoten, Topics und Nachrichten, erste Schritte mit der Kommandozeile`                                                                                           |
 | **Link auf GitHub:** | https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/03_ROS_Grundlagen_I/03_EinfuehrungROS.md |
 | **Autoren**          | @author                                                                                                       |
 
-![](https://media.giphy.com/media/xT8qB2PQF93mUbGvle/giphy-downsized.gif)
+![Animation: ein kleiner Roboter, der sich bewegt](https://media.giphy.com/media/xT8qB2PQF93mUbGvle/giphy-downsized.gif)
 
 --------------------------------------------------------------------------------
 
 **Zielstellung der heutigen Veranstaltung**
 
-+ Spezifische Anforderungen an Frameworks für die Arbeit mit Robotern
-+ Basiskonzepte von ROS
-+ Unterschiede von ROS1 und ROS2
++ Verstehen, warum Robotersoftware ein Framework wie ROS 2 braucht — am Beispiel unseres TurtleBots in der Verkehrswelt
++ Architektur und Basiskonzepte von ROS 2: Knoten, Topics, Nachrichten
++ Ein laufendes ROS-2-System mit der Kommandozeile untersuchen — vom `turtlesim` zum TurtleBot
 
 --------------------------------------------------------------------------------
 
-## Frameworks um Roboter zu programmieren?
+## Warum ein Framework?
 
                                    {{0-1}}
 ********************************************************************************
 
 **Welche Herausforderungen stecken in der Programmierung eines Roboters?**
 
-![RoboterSystem](./images/RoboterNuernberg.jpg)<!-- width="100%" -->
+![Fußballroboter mit Kamera, Rechner, Antrieben und Akku — viele Komponenten, die zusammenarbeiten müssen](./images/RoboterNuernberg.jpg)<!-- width="100%" -->
 *Roboter des RoboCupTeams aus Nürnberg* [^1]
 
 [^1]: TDP des Teams AutonOhm, 2019
 
 ********************************************************************************
 
-
                                   {{1-2}}
 ********************************************************************************
 
-![RoboterSystem](./images/willow_p1_02s.640w.jpg)<!-- width="80%" -->
-Comic auf der Webseite der Firma Willow Garage, das die individuellen Frameworks
-für die Robotikentwicklung adressiert. [^2]
+![Comic: Jede Forschungsgruppe baut ihre eigene Robotersoftware von Grund auf neu](./images/willow_p1_02s.640w.jpg)<!-- width="80%" -->
+Comic der Firma Willow Garage: Jede Gruppe erfindet das Rad neu — Treiber, Kommunikation, Visualisierung. [^2]
 
 [^2]: Willow Garage, http://www.willowgarage.com/blog/2010/04/27/reinventing-wheel, 2010
 
 ********************************************************************************
 
-
-### Vergleich von Frameworks
-
-                                  {{0-1}}
+                                  {{2}}
 ********************************************************************************
 
-1. Hardwareunterstützung und Laufzeitumgebung
+Schon unser kleiner TurtleBot zeigt, was ein Framework leisten muss:
 
-+ **Betriebssystem** Eine Robotikentwicklungsumgebung sollte mehrere Betriebssysteme und dabei eine möglichst umfangreiche Abdeckung für häufig genutzte Bibliotheken, Komponenten oder Hardwaretreiber bieten.
+<!-- data-type="none" -->
+| Anforderung                  | Was heißt das in der Verkehrswelt?                                                                 |
+| :--------------------------- | :------------------------------------------------------------------------------------------------- |
+| **Treiber**                  | LiDAR, Kamera und Motoren sollen sofort Daten liefern, ohne dass wir Treiber selbst schreiben.     |
+| **Kommunikation**            | Spurerkennung, Ampelerkennung und Fahrverhalten laufen als getrennte Programme — teils auf dem Roboter, teils auf dem Laptop — und tauschen Daten aus. |
+| **Zeitverhalten**            | Ein Fahrbefehl, der eine halbe Sekunde zu spät kommt, lässt den Roboter über die Haltelinie fahren. |
+| **Wiederverwendung**         | Lokalisierung, Kartierung und Navigation gibt es fertig — wir wollen sie nutzen, nicht neu bauen.  |
+| **Werkzeuge**                | Daten anzeigen, aufzeichnen und im Simulator testen, ohne jedes Mal den Roboter aufzubauen.        |
+| **Sprachen**                 | C++ für schnelle Bildverarbeitung, Python für schnelle Experimente — beides im selben System.      |
 
-+ **Unterstützung ressourcenbeschränkter Systeme** Die Interaktion und Kooperation mit ressourcenbeschränkten Systemen ist u.a. in Bereichen gefragt, in denen z.B. die Effizienz und Kosten der eingesetzten Komponenten eine tragende Rolle spielen. Für ein breites Anwendungsspektrum des jeweiligen Frameworks ist eine entsprechende Unterstützung solcher Systeme wünschenswert.
-
-+ **Echtzeitfähigkeit** Robotikanwendungen umfassen häufig Anwendungselemente, die harte Echtzeitanforderungen an die Verarbeitung stellen. Regelschleifen zur Ansteuerung von Manipulatoren benötigen, um stabil zu laufen, ein deterministisches Zeitverhalten.
-
-+ **Treiberintegration** Ein Framework sollte nicht nur eine die Vielfalt an Sensoren und Aktoren, sondern auch konkrete Robotersysteme spezifischer Hersteller, die auf diesen Komponenten aufsetzen, unterstützen.
-
-********************************************************************************
-
-                                  {{1-2}}
-********************************************************************************
-
-2. Kommunikation
-
-+ **Kommunikationsmiddleware** Damit Anwendungen verteilt über mehrere Rechnerknoten laufen können und somit eine Ortsunabhängigkeit gewährleisten, sind entsprechende Mechanismen erforderlich.
-
-+ **Kommunikationsparadigmen** Im Kontext einer Anwendung ist die Abdeckung unterschiedlicher Formen für den Nachrichtenaustausch zwischen den Komponenten wünschenswert. Als Interaktionsmuster sind die *Client-Server-Beziehung* und das *Publish-Subscribe-Modell* denkbar.
-
-+ **Echtzeitfähigkeit** Anknüpfend an die Echtzeitfähigkeit der Laufzeitumgebung ist das deterministische Verhalten der Kommunikationsverbindungen Voraussetzung für die Entwicklung zeitkritischer Systeme.
-
-********************************************************************************
-
-                                  {{2-3}}
-********************************************************************************
-
-3. Programmierung
-
-+ **Unterstützte Programmiersprachen**  Bei der Anwendungsentwicklung sollte dem Entwickler möglichst die Wahl gelassen werden, in welcher Programmiersprache entwickelt wird. Eine domain-spezifische Frage zielt dabei auf die Möglichkeit der grafischen Programmierung.
-
-+ **Unterstützungsbibliotheken** Vordefinierte Komponenten z.B. für Pfadplanung, Verhaltensauswahl und Lokalisierung erleichtern den Entwicklungsprozess und fördern die Wiederverwendung von Software-Modulen, wobei gegebenenfalls entsprechende Anpassungen erforderlich sind.
-
-+ **Erweiterbarkeit** Erweiterbarkeit bedeutet hier die Unterstützung für das Hinzufügen neuer Software-Module und neuer Hardware-Komponenten in das bestehende Rahmenwerk.
-
-+ **Lizenzmodell** Der Typ der Lizenz der Frameworks bestimmt insbesondere im Fall der kommerziellen Nutzung über deren generelle Anwendbarkeit. Durch das gewählte Lizenzmodell wird die Breite der Entwicklungs-Community zumindest mitbestimmt. Eine aktive Community erleichtert die Entwicklungsarbeit und bieten in Wikis oder Foren eine Vielzahl von Antworten, Anregungen und Beispielcode.
-
-********************************************************************************
-
-                                  {{3-4}}
-********************************************************************************
-
-4. Test und Debugging
-
-+ **Monitoring** Die Überwachung der einzelnen Komponenten und deren Beziehungen zueinander muss in einem übergreifenden Ansatz möglich sein, um komfortabel Aussagen über den Status des Robotersystemes. Eine grafische Schnittstelle, die die Visualisierung einzelner Komponenten, des Gesamtsystems oder einzelner Parameter übernimmt, vereinfacht die Entwicklung erheblich.
-
-+ **Logging** Das Logging der Anwendungsoperation unterstützt einerseits das Debugging und ermöglicht andererseits eine Wiederholung dieser Anwendungsausführung im Sinne eines Wiederabspielens einer Aufzeichnung. Somit wird eine Offline-Analyse der implementierten Funktionalitäten möglich, sodass auch Aussagen über die Performance dieser bzw. des Gesamtsystems getroffen werden können.
-
-+ **Simulation** Die Simulation der realen Welt ermöglicht es den Entwicklern, ihre Anwendungen zu testen, ohne die entsprechende Hardware besitzen zu müssen, indem diese geeignet modelliert wird. Die Simulatoren können dabei in Form von „einfachen“ zweidimensionalen bis hin zu komplexen 3-D-Umsetzungen mit realistischen physikalischen Gegebenheiten vorliegen.
-
+Genau diese Aufgaben übernimmt ROS 2.
 
 ********************************************************************************
 
 ## ROS, was ist das?
 
-Robot Operating System (ROS) ist ein Framework für die Entwicklung von Robotern. Dabei ist ROS kein Betriebssystem sondern eine Middleware mit aufgesetzter Paketstruktur. 2020 listeten die Statistiken mehrere tausend Repositories und Pakete. ROS wird unter der BSD-Lizenz veröffentlicht und ist somit der Open-Source-Szene zuzuordnen.
+Das Robot Operating System (ROS) ist ein Open-Source-Framework für die Entwicklung von Robotern. Trotz des Namens ist ROS kein Betriebssystem, sondern eine **Middleware**: eine Softwareschicht zwischen Betriebssystem und Anwendung, die den Datenaustausch zwischen Programmen übernimmt — auch über Rechnergrenzen hinweg. Dazu kommen tausende Pakete mit Treibern, Algorithmen und Werkzeugen. ROS entstand 2007 in Stanford und wird heute von der gemeinnützigen Open Source Robotics Foundation koordiniert ([ros.org](https://www.ros.org/)).
 
-Die Entwicklung begann 2007 am Stanford Artificial Intelligence Laboratory im Rahmen des Stanford-AI-Robot-Projektes (STAIR) und wurde ab 2009 hauptsächlich am Robotikinstitut Willow Garage weiterentwickelt. Seit April 2012 wird ROS von der neu gegründeten, gemeinnützigen Organisation Open Source Robotics Foundation (OSRF) unterstützt und seit Beendigung der operativen Tätigkeit von Willow Garage 2013 von dieser koordiniert, gepflegt und weiterentwickelt.
+Seit 2017 gibt es mit ROS 2 eine grundlegend neu entworfene Generation. ROS 1 und ROS 2 sind nicht miteinander kompatibel. Die letzte ROS-1-Version _Noetic Ninjemys_ wird seit Mai 2025 nicht mehr gepflegt — **neue Projekte setzen ausschließlich auf ROS 2.** Wenn Sie im Netz auf Beispiele mit `roscore`, `rosrun` oder `catkin` stoßen, handelt es sich um ROS 1.
 
-Die Hauptbestandteile und -aufgaben von ROS sind:
+ROS 2 erscheint jedes Jahr im Mai in einer neuen _Distribution_. Die Namen folgen dem Alphabet und benennen jeweils eine Schildkröte. Versionen aus geraden Jahren werden fünf Jahre lang gepflegt (_Long Term Support_, LTS), die übrigen etwa anderthalb Jahre.
 
-+ Hardwareabstraktion
-+ Gerätetreiber
-+ oft wiederverwendete Funktionalität
-+ Nachrichtenaustausch zwischen Programmen bzw. Programmteilen
-+ Paketverwaltung
-+ Programmbibliotheken zum Verwalten und Betreiben der Software auf mehreren Computern
+<!-- data-type="none" -->
+| Distribution         | Erschienen | Gepflegt bis | Bemerkung                                       |
+| :------------------- | :--------- | :----------- | :---------------------------------------------- |
+| _Humble Hawksbill_   | Mai 2022   | Mai 2027     | LTS, Ubuntu 22.04                               |
+| **_Jazzy Jalisco_**  | Mai 2024   | Mai 2029     | LTS, Ubuntu 24.04 — **in dieser Veranstaltung** |
+| _Kilted Kaiju_       | Mai 2025   | Nov. 2026    | kurzer Support                                  |
+| _Lyrical Luth_       | Mai 2026   | Mai 2031     | LTS, aktuellste Version                         |
+| _Rolling Ridley_     | fortlaufend | —           | Entwicklungsstand, für Experimente              |
 
-Die Webseite von ROS findet sich unter [ROS](https://www.ros.org/).
-
-Seit 2013 beschäftigt sich das ROS Industrial Consortium mit der Förderung und Unterstützung von ROS für Anwendungen in der Industrierobotik. In Europa koordiniert das Fraunhofer IPA (Stuttgart) die Aktivitäten des ROS Industrial Consortium Europe.
-
-Seit Beginn der Entwicklung von ROS 2.0 wird zwischen ROS 1 und ROS 2 unterschieden. Die beiden Hauptversionen sind nicht miteinander kompatibel, jedoch interoperabel und können parallel ausgeführt werden.
-
-Die aktuellen Versionen sind
-
-+ ROS1 - _Noetic Ninjemys_ (Noetische Ninjemys Oweni) veröffentlicht im Mai 2020 und
-+ ROS2 - _Humble Hawksbill_ (bescheidene Echte Karettschildkröte) Veröffentlichung im Mai 2021 (LTS Version).
-+ ROS2 - _Jazzy Jalisco_ (eiserne Irwins Schildkröte) Veröffentlichung im Mai 2024.
-+ ROS2 - _Kilted Kaiju _ (Kilt-tragender Kaijū) Veröffentlichung im Mai 2025.
+Warum nicht die neueste Version? Für die TurtleBots, die Treiber und viele Pakete, die wir nutzen, ist Jazzy erprobt. Eine LTS-Version, die über beide Semester stabil bleibt, ist für ein Projekt wichtiger als die neuesten Funktionen.
 
 >  In der Fachwelt für das autonome Fahren werden auch gerne zumindest Teile von ROS eingesetzt. In der Robotik nutzen mittlerweile nahezu alle Forschungsgruppen zumindest teilweise ROS. Viele Forschungsgruppen besitzen gar kein eigenes Softwareframework mehr, sondern konzentrieren sich voll auf ROS. *golem.de [Beitrag - Für wen ist ROS?](https://www.golem.de/news/robot-operating-system-was-bratwurst-bot-und-autonome-autos-gemeinsam-haben-1612-124079-4.html)*
 
 Das erste Paper, in dem die Basiskonzepte beschrieben wurden, ist unter [Link](http://www.robotics.stanford.edu/~ang/papers/icraoss09-ROS.pdf) zu finden.
 
-###  ROS 1 vs. ROS 2
+**Kurze Kontrolle:** Sie finden im Netz eine Anleitung, die mit `roscore` beginnt und Pakete mit `catkin_make` baut. Was schließen Sie daraus?
 
-| Merkmal                     | ROS1                                                                                     | ROS2                                                                                                                                                                             |
-|:----------------------------|:-----------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Betriebssysteme             | Linux (Ubuntu, Gentoo, Debian), OS X                                                     | Linux  (Ubuntu), OS X, Windows 10                                                                                                                                                |
-| Programmiersprachen C       | C++03                                                                                    | C++11 (einzelne Konzepte von C++14)                                                                                                                                              |
-| Programmiersprachen Python  | Python 2                                                                                 | Python 3.5                                                                                                                                                                       |
-| Middleware                  | eigene Konzepte für den Datenaustausch                                                   | abstraktes Middlewarekonzept offen für spezifische Lösungen (aktuell DDS als Default-Implementierung), mit einem geeigneten Middleware-Ansatz sind Echtzeitanwendungen umsetzbar |
-| Build System                | [CMake](https://cmake.org/) Projekte mit [catkin](https://docs.ros.org/api/catkin/html/) | CMake Projekte (mit colcon), andere Systeme können integriert werden                                                                                                             |
-| Paketstruktur               | Integrierende Pakete möglich                                                             | aus Gründen der automatisierten Auflösung von Abhängigkeiten nur isolierte Pakete                                                                                                |
-| Message/Service Deklaration | Messageformatdefinitionen auf der Basis von Grundtypen,                                  | einheitliche Namen in Python und C++, default Werte, separate Namespaces für Services und Messages, einheitliche Zeittypen für die APIs                                          |
-| Systemkonfiguration         | XML Beschreibungen                                                                       | Python Code für den Systemstart mit komplexen Logiken                                                                                                                            |
-| Node vs. Nodelet            | unterschiedliche APIs für beide Konzepte                                                 | Implementierungen zielen auf eine Shared Library - es wird zur Laufzeit entschieden, ob diese als separater Prozess oder innerhalb eines Prozesses ausgeführt wird.              |
+[( )] Die Anleitung passt zu ROS 2 Jazzy, ich muss nur die Befehle in der richtigen Reihenfolge ausführen.
+[(X)] Die Anleitung stammt aus ROS 1 und lässt sich nicht direkt auf ROS 2 übertragen.
+[( )] Die Anleitung ist für Lyrical Luth geschrieben und funktioniert erst nach einem Update.
+***
+`roscore` (der zentrale Master) und `catkin` (das Build-System) gibt es nur in ROS 1. ROS 2 kommt ohne zentralen Master aus und baut mit `colcon`. Achten Sie bei jeder Anleitung zuerst auf die ROS-Version!
+***
 
-Einen Überblick zu den genannten Features gibt die Webseite [Link](http://design.ros2.org/articles/changes.html)
+### Was macht ROS 2 anders?
 
-                                           {{1-2}}
-*******************************************************************************
-**Ersetzt ROS2 als ROS1 vollständig?**
-
-Blick zurück ...
-
-> *The quick answer is: Yes but with drawbacks. So ROS2 Crystal has worked with the new Gazebo with ROS2 support, so you have access to creating your own simulations using only ROS2. You have access to the main ROS packages like tf, navigation, image_transport, rqt, and the big RVIZ. So it would seem that 90% of the current ROS users would be satisfied. ...*
-
-> *But the reality is that a huge amount of packages don’t come out of the box working for ROS2 or are installed through debians.* [^Ref]
-
-[^Ref]: The Construct, "ROS2 vs ROS1? Or more like ROS2 + ROS1?" https://www.theconstructsim.com/ros2-vs-ros1/, 2018
-
-> Akutell sollten neue Projekte immer auf ROS2 aufsetzen!
-
-Falls es Probleme bei der Umsetzung einzelner Pakete gibt, bietet das Paket `ros1_bridge` Hilfe, das die Kommunikation zwischen einem ROS1 und einen ROS2 Graphen
-sicherstellt.
-
-*******************************************************************************
-
-### Wie kann man sich in ROS einarbeiten?
-
-                                 {{0-4}}
-*******************************************************************************
-
-1. Das offizielle ROS-Tutorial-Website ist sehr umfangreich und in mehreren Sprachen verfügbar. Es enthält Details zur ROS-Installation, Dokumentation von ROS, etc. und ist völlig kostenlos.  Dabei lauern aber einige Fallstricke:
-
-   * Achten Sie immer, wenn Sie sich in ein Beispiel einlesen auf die zugehörige ROS-Versionsnummer!
-   * Prüfen Sie Abhängigkeiten und die Aktualität der Bibliotheken.
-   * Informieren Sie sich darüber in wie weit an dem Paket aktuell noch gearbeitet wird. Letzte Commits vor einigen Monaten sind immer ein schlechtes Zeichen :-)
-
-| ROS2                                                | ROS1                               | Hintergrund                  |
-|:----------------------------------------------------|:-----------------------------------|:-----------------------------|
-| https://index.ros.org/doc/ros2/                     | http://wiki.ros.org/               | Hauptseite des Projektes OSF |
-| https://discourse.ros.org/                          | https://answers.ros.org/questions/ | ROS Forum                    |
-| https://index.ros.org/doc/ros2/Tutorials/#tutorials | http://wiki.ros.org/ROS/Tutorials  | ROS Tutorials                |
-
-*******************************************************************************
-
-                                 {{1-4}}
-*******************************************************************************
-
-2. Es existiert eine Vielzahl von Tutorials in Form von Videos, die einen Überblick versprechen oder einzelne Themen individuell adressieren.
+ROS 2 wurde neu entworfen, weil ROS 1 für einzelne Forschungsroboter im Labor gedacht war. Für Flotten, eingebettete Systeme, unzuverlässige Funknetze und industrielle Anwendungen fehlten wesentliche Eigenschaften.
 
 <!-- data-type="none" -->
-| Titel                    | Inhalt                                                              | Link                                                                                        |
-|:-------------------------|:--------------------------------------------------------------------|:--------------------------------------------------------------------------------------------|
-| ...                      |                                                                     |                                 |
-| ROS2 Tutorials           | Tutorial des kommerziell orientierten Kursanbieters "The Construct" | [Link](https://www.youtube.com/playlist?list=PLK0b4e05LnzYNBzqXNm9vFD9YXWp6honJ)            |
+| Merkmal                    | ROS 2                                                                                                         |
+| :------------------------- | :------------------------------------------------------------------------------------------------------------ |
+| Kein zentraler Master      | Programme finden sich im Netz selbstständig (_Discovery_, „Entdecken“), kein zentraler Rechner kann ausfallen. |
+| Austauschbare Middleware   | Kommunikation über ein abstraktes Interface (`rmw`), standardmäßig DDS — mehr dazu im nächsten Abschnitt.     |
+| Quality of Service (QoS)   | Pro Verbindung wählbar, ob jede Nachricht ankommen muss oder ob nur die neueste zählt — Details in VL 4.      |
+| Plattformen und Sprachen   | Linux, Windows, macOS; aktuelles C++ (`rclcpp`) und Python 3 (`rclpy`) mit gleichem Konzept.                  |
+| Systemstart                | Launch-Dateien in Python, XML oder YAML, auch mit Bedingungen und Logik.                                      |
+| Lebenszyklus von Programmen | Programme können definierte Zustände durchlaufen (konfiguriert, aktiv …) und geordnet starten — Details in VL 3. |
+| Build-System               | `colcon` baut CMake- und Python-Pakete in einem Workspace.                                                    |
 
-*******************************************************************************
+Einen Überblick über die Entwurfsentscheidungen gibt die Seite [Changes between ROS 1 and ROS 2](http://design.ros2.org/articles/changes.html).
 
-                                 {{2-4}}
-*******************************************************************************
+## Architektur von ROS 2
 
-3. Verschiedene Hochschulen und Institutionen bieten Kurse und Summer Schools an. Achtung, diese sind teilweise kostenpflichtig! Trotzdem eine gute Gelegenheit Netzwerke zu entwicklen.
-
-*******************************************************************************
-
-## Architektur von ROS2 
+Wie schafft ROS 2 es, dass ein Python-Programm auf dem Laptop und ein C++-Programm auf dem Roboter miteinander reden? Durch Schichten: Ihr Programm spricht nur mit der obersten, alles darunter ist austauschbar.
 
 <!--
-style="width: 80%; min-width: 520px; max-width: 820px;"
+style="width: 100%; max-width: 820px;"
 -->
 ```ascii
 
@@ -245,205 +147,168 @@ style="width: 80%; min-width: 520px; max-width: 820px;"
 | rmw (C API) ROS middleware interface                      |
 | Pub/Sub, Services, Discovery, ...                         |
 +-----------+-----------+-------------+-----+---------------+
-| DDS       | DDS       | DDS         | ... | Intra-process |
-| Adapter 0 | Adapter 1 | Adapter 2   |     |      API      |
+| rmw_      | rmw_      | rmw_        | ... | Intra-process |
+| fastrtps  | cyclonedds| zenoh       |     |      API      |
 +-----------+-----------+-------------+     +---------------+
-| FastRTPS  | RTI       | PrismTech   | ...
-|           | Context   | OpenSplice  |
+| Fast DDS  | Cyclone   | Zenoh       | ...
+| eProsima  | DDS       | (kein DDS)  |
 +-----------+-----------+-------------+                                        .
 ```
 
-> **Merkkasten: Ebenen der ROS2-Architektur**
+> **Merkkasten: Ebenen der ROS-2-Architektur**
 >
-> - **User Applications**: Programme in Python, C++, Java etc., die ROS2 nutzen.
-> - **rcl/rclcpp/rclpy**: ROS2-Client-Libraries – bieten die ROS-API für verschiedene Sprachen.
-> - **rmw**: Abstraktes Middleware-Interface – trennt ROS2-Logik von der konkreten Kommunikations-Implementierung.
-> - **DDS-Adapter**: Bindeglied zu verschiedenen DDS-Implementierungen (z.B. FastRTPS, RTI, OpenSplice).
-> - **DDS**: Die eigentliche Middleware, die für Discovery, Nachrichtenübertragung und QoS sorgt.
+> - **User Applications**: Programme in Python, C++, Java etc., die ROS 2 nutzen.
+> - **rcl/rclcpp/rclpy**: ROS-2-Client-Libraries – bieten die ROS-API für verschiedene Sprachen.
+> - **rmw**: Abstraktes Middleware-Interface – trennt ROS-2-Logik von der konkreten Kommunikations-Implementierung.
+> - **rmw-Implementierungen**: Bindeglied zu einer konkreten Middleware, z.B. Fast DDS, Cyclone DDS oder Zenoh.
+> - **Middleware**: Die eigentliche Kommunikationsschicht, die für Discovery, Nachrichtenübertragung und QoS sorgt — meist DDS (_Data Distribution Service_).
 >
-> *Vorteil:* ROS2 kann flexibel mit verschiedenen Kommunikations-Backends betrieben werden und ist nicht an einen Anbieter gebunden.
+> *Vorteil:* ROS 2 kann flexibel mit verschiedenen Kommunikations-Backends betrieben werden und ist nicht an einen Anbieter gebunden.
+>
+> **Für Sie als Anwender zählt vor allem:** Sie programmieren gegen `rclcpp` oder `rclpy`. Was darunter passiert, merken Sie nur, wenn zwei Rechner sich nicht finden — dann lohnt der Blick auf die beiden Umgebungsvariablen unten.
 
 
-ROS2 hat als Default Lösung die Implementierung `rmw_fastrtps_cpp`, die von der Firma eProsima unter einer Appache 2.0 Lizenz verbreitet wird, integriert. Alternative Umsetzungen lassen sich anhand der unterstützten Hardware, des Overheads für den Nachrichtenaustausch bzw. anhand der Dauer für die Nachrichtenverbreitung abgrenzen. (vgl [A performance comparsion of OpenSplice and RTI implementations](https://www.researchgate.net/publication/271550363_Data_Distribution_Service_DDS_A_performance_comparison_of_OpenSplice_and_RTI_implementations)). Daher sieht ROS2 ein abstraktes Interface vor, dass ein Maximum an Austauschbarkeit gewährleisten soll.
+ROS 2 Jazzy nutzt standardmäßig `rmw_fastrtps_cpp`, also Fast DDS der Firma eProsima (Apache-2.0-Lizenz). Alternativen sind Cyclone DDS (Eclipse), RTI Connext und — als Paket auch für Jazzy verfügbar — `rmw_zenoh`, das ohne DDS auskommt und in WLAN-Netzen mit vielen Robotern oft robuster ist. Die Implementierungen unterscheiden sich in unterstützter Hardware, Overhead und Latenz. Welche verwendet wird, legt die Umgebungsvariable `RMW_IMPLEMENTATION` fest — der Code Ihrer Knoten bleibt derselbe.
 
-vgl. https://index.ros.org/doc/ros2/Concepts/DDS-and-ROS-middleware-implementations/
+```bash
+export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp   # gilt für alle Knoten, die aus dieser Shell gestartet werden
+```
+
+Wichtig für das Praktikum: Alle Knoten eines Systems müssen dieselbe Middleware und dieselbe `ROS_DOMAIN_ID` verwenden, sonst sehen sie sich nicht.
+
+vgl. [ROS 2 Jazzy: Different ROS 2 middleware vendors](https://docs.ros.org/en/jazzy/Concepts/Intermediate/About-Different-Middleware-Vendors.html)
 
 ## Basiskonzepte
 
 **Pakete** - Pakete kapseln einzelne Algorithmen und realisieren deren Abhängigkeiten. Letztendlich wird damit die Wiederverwendbarkeit einer Implementierung gewährleistet.
 
-https://fkromer.github.io/awesome-ros2/
+Eine kuratierte Übersicht über verfügbare Pakete bietet [awesome-ros2](https://fkromer.github.io/awesome-ros2/).
 
-**Node** - Ein Knoten ist Teilnehmer im ROS-Graphen. ROS-Knoten verwenden eine ROS-Clientbibliothek, um mit anderen Knoten zu kommunizieren. Knoten können ein *Subject* veröffentlichen oder abonnieren. *Nodes* können auch einen Dienst bereitstellen oder verwenden. Einem Knoten sind konfigurierbare Parameter zugeordnet. Verbindungen zwischen Knoten werden durch einen verteilten Erkennungsprozess hergestellt. Knoten können sich im selben Prozess, in unterschiedlichen Prozessen oder auf unterschiedlichen Rechnern befinden.
+**Node** - Ein Knoten ist Teilnehmer im ROS-Graphen. ROS-Knoten verwenden eine ROS-Clientbibliothek, um mit anderen Knoten zu kommunizieren. Knoten können Nachrichten zu einem *Topic* veröffentlichen oder abonnieren. *Nodes* können auch einen Dienst bereitstellen oder verwenden. Einem Knoten sind konfigurierbare Parameter zugeordnet. Verbindungen zwischen Knoten werden durch einen verteilten Erkennungsprozess hergestellt. Knoten können sich im selben Prozess, in unterschiedlichen Prozessen oder auf unterschiedlichen Rechnern befinden.
 
-**Messages** - To enable the communication of data packets between the nodes, their structure and content format must be specified. Which data formats are used, where is the sending sensor located, which units of measurement represent the information? ROS defines abstract message types for this purpose.
+![ROS-Graph: zwei Publisher-Knoten senden auf das Topic /topic, ein Subscriber-Knoten empfängt](images/rosgraph.png "Ausschnitt aus dem ROS-Graphen eines Systems (Werkzeug `rqt_graph`). Ellipsen sind Knoten, Rechtecke sind Topics, die Pfeile zeigen die Richtung des Datenflusses.")
 
-![RoboterSystem](images/rosgraph.png "Screenshot der Knoten eines umfangreicheren Projektes. Die Ellipsen repräsentieren die Knoten, die rechteckigen Boxen die Datenkanäle dazwischen.")
-
-**Discovery** - Die Erkennung von *Nodes* erfolgt automatisch über die zugrunde liegende Middleware von ROS2. Dafür sind folgende Punkte zu beachten
+**Discovery** - Wie finden sich die Knoten, ohne dass jemand eine Adressliste pflegt? Die Erkennung (_Discovery_) erledigt die Middleware automatisch:
 
 + Wenn ein Knoten gestartet wird, kündigt er seine Anwesenheit anderen Knoten im Netzwerk mit derselben ROS-Domäne an (festgelegt mit der Umgebungsvariablen `ROS_DOMAIN_ID`). Knoten antworten auf diese Ankündigung mit Informationen über sich selbst, so dass die entsprechenden Verbindungen hergestellt werden können und die Knoten kommunizieren können.
 
-+  Knoten informieren regelmäßig über ihre Anwesenheit, damit Verbindungen zu neu erscheinenden Entitäten hergestellt werden können, die während des eigenen Starts noch nicht aktiv waren.
++ Knoten melden sich regelmäßig, damit auch Knoten, die später gestartet werden, Verbindungen aufbauen können.
 
-+ Knoten stellen nur dann Verbindungen zu anderen Knoten her, wenn diese über kompatible Quality of Service-Einstellungen verfügen.
++ Knoten verbinden sich nur, wenn ihre Quality-of-Service-Einstellungen zueinander passen (VL 4).
 
-**Topics** - Topics repräsentieren den Inhalt einer Nachricht und erlauben damit die Entkopplung von Informationsquelle und Informationssenke. Die Knoten brauchen nicht zu wissen, mit wem sie kommunizieren, allein das "Label" oder "Thema" genügt.  *Topics* sind für die unidirektionale, streamende Kommunikation gedacht. *Nodes*, die *Remote Procedure Calls* durchführen müssen, d.h. eine Antwort auf eine Anfrage erhalten, sollten stattdessen *Services* verwenden.
-
-<!--
-style="width: 80%; max-width: 860px; display: block; margin-left: auto; margin-right: auto;"
--->
-```ascii
-
-Publisher "scans"                Subscriber "scans"
-                                 Publisher "speed"
-
-+-------------------+
-|Laserscanner Front | -----.
-+-------------------+      |
-                           |     +---------------------+
-                           +---> | Obstacle Detection  |----->
-                           |     +---------------------+
-+-------------------+      |
-| Laserscanner Back | -----+
-+-------------------+      |     +---------------------+
-                           +---> | Leg Detection       |
-                                 |                     |----->
-                           +---> |                     |
-+-------------------+      |     +---------------------+
-| Laserscanner Left | -----+
-+-------------------+
-
-Publisher "FrontCloud"           Publisher "human"
-
-```
-
-**Messages** - Um die Kommunikation von Datenpaketen zwischen den Knoten zu ermöglichen, muss deren Aufbau und inhaltliches Format spezifiziert werden. Welche Datenformate werden verwendet, wo befindet sich der versendende Sensor, welche Maßeinheiten bilden die Informationen ab? ROS definiert dafür abstrakte Message-Typen.
+**Topics** - Ein Topic ist ein benannter Kanal, vergleichbar mit einem Radiosender. Knoten, die Daten liefern, **veröffentlichen** (_publish_) auf diesem Kanal; Knoten, die Daten brauchen, **abonnieren** ihn (_subscribe_). Dieses Muster heißt _Publish-Subscribe_. Sender und Empfänger müssen sich nicht kennen, allein der Name des Topics verbindet sie. Topics sind für fortlaufende Datenströme in eine Richtung gedacht — wer eine Antwort auf eine Anfrage braucht, verwendet einen _Service_ (siehe unten).
 
 <!--
 style="width: 80%; max-width: 860px; display: block; margin-left: auto; margin-right: auto;"
 -->
 ```ascii
-
-Publisher "dist"                             Subscriber "dist"
-
-+------------+       .---------------.       +------------+
-| Node 1     | ----> | Message       | ----> | Node 2     |
-+------------+       |  Float32 data |       +------------+
-                     |  Int     type |
-                     .---------------.
- Distance sensor                             Speed control
++----------------+   /scan                                 +---------------+
+| LiDAR-Treiber  |---------------------------------------->|               |
++----------------+                                         |               |
+                                +----------------+  /lane  | Fahrverhalten |   /cmd_vel   +----------------+
++----------------+   /image  +->| Spurerkennung  |-------->|               |------------->| Motorsteuerung |
+| Kamera-Treiber |-----------+  +----------------+         |               |              +----------------+
++----------------+           |  +----------------+  /light |               |
+                             +->| Ampelerkennung |-------->|               |
+                                +----------------+         +---------------+
 ```
 
-Die ROS2 Message-Spezifikation integriert verschiedene Konfigurationsmöglichkeiten. Auf der obersten Ebene sind dies einfache Namens- und Typzuweisungen. Dabei wird zwischen sogenannten Built-in Typen und nutzerspezifischen Typen unterschieden. Feldnamen müssen klein geschriebene alphanumerische Zeichen mit Unterstrichen zur Trennung von Wörtern sein. Die Typdefinitionen der Basistypen erfolgen anhand "C++ naher" Bezeichner (`bool`, `char`, `float32` usw. )
+Das Beispiel zeigt einen Ausschnitt, wie er in unserem Projekt entstehen könnte. Jeder Pfeil ist ein Topic, jeder Kasten ein Knoten. Ein Topic kann mehrere Abonnenten haben: `/image` geht an die Spurerkennung und an die Ampelerkennung. Kein Sender weiß, wer seine Daten liest — deshalb lässt sich ein neuer Knoten wie die Ampelerkennung ergänzen, ohne die übrigen zu ändern.
 
-Komplexe Typen werden wie folgt spezifiziert
+**Services, Parameter und Actions** - Neben Topics kennt ROS 2 drei weitere Kommunikationsmuster:
 
 <!-- data-type="none" -->
-| Index | ROS2 msg Type           | C++                |
-|:------|:------------------------|:-------------------|
-| 0     | zB. `float32`           | `float`            |
-| 1     | `string`                | `std::string`      |
-| 2     | static array            | `std::array<T, N>` |
-| 3     | unbounded dynamic array | `std::vector<T>`   |
-| 4     | bounded dynamic array   | custom_class<T,N>  |
-| 5     | bounded string          | `std::string`      |
+| Muster        | Ablauf                                           | Beispiel am TurtleBot                                     |
+| :------------ | :----------------------------------------------- | :-------------------------------------------------------- |
+| **Topic**     | fortlaufender Datenstrom, 1:n, ohne Antwort      | LiDAR-Scans, Kamerabilder, Fahrbefehle                    |
+| **Service**   | Anfrage → eine Antwort, kurz                     | Karte speichern, Odometrie zurücksetzen                   |
+| **Parameter** | Konfigurationswert eines Knotens, zur Laufzeit änderbar | Schwellwert der Spurerkennung, maximale Geschwindigkeit |
+| **Action**    | lang laufender Auftrag mit Zwischenständen und Abbruch | „Fahre zur Parklücke“ mit Rückmeldung zum Fortschritt  |
 
+In dieser Vorlesung konzentrieren wir uns auf Topics. Services, Parameter und Actions probieren Sie in der Übung mit der Kommandozeile aus.
 
-Im folgenden sollen Beispiele die
+**Kurze Kontrolle:** Welches Kommunikationsmuster passt jeweils?
 
-```
-# Basic format: fieldtype1 fieldname1
-# Type 0, 1 examples:
-int32 my_int
-string my_string
+[ [Topic] [Service] [Action] ]
+[  (X)      ( )       ( )    ] Die Kamera liefert 30 Bilder pro Sekunde.
+[  ( )      (X)       ( )    ] Die Spurerkennung soll auf Anfrage einmal ihre Kalibrierung neu laden.
+[  ( )      ( )       (X)    ] Der Roboter soll in eine Parklücke fahren und dabei melden, wie weit er ist.
+[  (X)      ( )       ( )    ] Die Ampelerkennung meldet laufend den erkannten Zustand der Ampel.
 
-# Type 2
-int32[5] five_integers_array
-# Type 3
-int32[] unbounded_integer_array
-# Type 4
-int32[<=5] up_to_five_integers_array
+**Messages** - Damit Sender und Empfänger dieselbe Sprache sprechen, legt ein Nachrichtentyp (_Message_) fest, welche Felder mit welchen Datentypen übertragen werden. Für fast alle Sensoren und Aktoren gibt es Standardtypen. Schauen wir uns die zwei an, mit denen unser TurtleBot fährt und sieht:
 
-# Type 5
-string<=10 up_to_ten_characters_string
-string[<=5] up_to_five_unbounded_strings
-string<=10[] unbounded_array_of_string_up_to_ten_characters each
-string<=10[<=5] up_to_five_strings_up_to_ten_characters_each
-```
-
-Eine weitere Neuerung besteht in der Möglichkeit Default-Werte und Konstanten zu definieren.
-
-```
-# Field default values
-uint8 x 42
-int16 y -2000
-string full_name "John Doe"
-int32[] samples [-200, -100, 0, 100, 200]
-
-# Constant values with "="
-int32 X=123
-string FOO="foo"
+```text
+> ros2 interface show --no-comments geometry_msgs/msg/Twist
+Vector3  linear
+	float64 x
+	float64 y
+	float64 z
+Vector3  angular
+	float64 x
+	float64 y
+	float64 z
 ```
 
-Eigene Messagetypen umfassen üblicherweise eine Hierarchie von Messages und Sub-Messages. Untersuchen Sie zum Beispiel das Standard-Laserscanner Nachrichtenformat:
+`Twist` ist der Fahrbefehl auf `/cmd_vel`: eine Geschwindigkeit nach vorne (`linear.x`, in m/s) und eine Drehgeschwindigkeit (`angular.z`, in rad/s). Die übrigen Felder braucht ein Roboter, der fliegen oder seitwärts fahren kann. Nachrichten lassen sich also verschachteln: `Twist` besteht aus zwei `Vector3`.
 
+```text
+> ros2 interface show --no-comments sensor_msgs/msg/LaserScan
+std_msgs/Header header
+	builtin_interfaces/Time stamp
+		int32 sec
+		uint32 nanosec
+	string frame_id
+float32 angle_min
+float32 angle_max
+float32 angle_increment
+float32 time_increment
+float32 scan_time
+float32 range_min
+float32 range_max
+float32[] ranges
+float32[] intensities
 ```
-> ros2 interface show sensor_msgs/msg/LaserScan
-```
+
+Ein LiDAR-Scan enthält einen **Header** mit Zeitstempel und Bezugssystem (`frame_id`, dazu mehr in VL 4), die Winkelangaben des Scans und die eigentlichen Messwerte im Array `ranges` — eine Entfernung pro Winkelschritt.
+
+Die Basistypen heißen ähnlich wie in C++ (`bool`, `int32`, `float64`, `string`). Arrays werden mit `[]` (beliebige Länge) oder `[5]` (feste Länge) angegeben. Eigene Nachrichtentypen definieren Sie in VL 3.
+
+**Kurze Kontrolle:** Ihr Fahrverhalten soll den TurtleBot mit 0,1 m/s geradeaus fahren lassen. Welches Feld der `Twist`-Nachricht setzen Sie auf `0.1`?
+
+[( )] `angular.z`
+[(X)] `linear.x`
+[( )] `linear.z`
+***
+`linear.x` ist die Vorwärtsgeschwindigkeit in Fahrtrichtung des Roboters, `angular.z` die Drehung um die Hochachse. `linear.z` wäre eine Bewegung nach oben — für einen Bodenroboter bedeutungslos.
+***
 
 ## Einführungsbeispiele
 
 **Arbeit auf der Konsole**
 
-Die Exploration und Untersuchung eines ROS2 Systems erfolgt mittels des Tools "ros2". Mit diesem können die folgenden Konzepte adressiert werden. Dazu bietet das Tool folgendende API:
+Ein laufendes ROS-2-System untersuchen Sie mit dem Kommandozeilenwerkzeug `ros2`. Es ist nach dem Schema `ros2 <bereich> <befehl>` aufgebaut — die Bereiche entsprechen den Konzepten von eben:
 
-```
->ros2
-usage: ros2 [-h] Call `ros2 <command> -h` for more detailed usage. ...
+<!-- data-type="none" -->
+| Befehl                   | Wofür?                                                     |
+| :----------------------- | :--------------------------------------------------------- |
+| `ros2 run`               | einen Knoten aus einem Paket starten                       |
+| `ros2 node list / info`  | welche Knoten laufen, was veröffentlichen sie?             |
+| `ros2 topic list / echo / hz / pub` | Topics anzeigen, mitlesen, Takt messen, selbst senden |
+| `ros2 interface show`    | den Aufbau eines Nachrichtentyps anzeigen                  |
+| `ros2 service`, `ros2 param`, `ros2 action` | die übrigen Kommunikationsmuster (Ü 2)   |
+| `ros2 bag`               | Daten aufzeichnen und abspielen (P 1)                      |
+| `ros2 doctor`            | Installation und Netzwerk auf typische Probleme prüfen     |
 
-options:
-  -h, --help            show this help message and exit
-  --use-python-default-buffering
-                        Do not force line buffering in stdout and instead use
-                        the python default buffering, which might be affected
-                        by PYTHONUNBUFFERED/-u and depends on whatever stdout
-                        is interactive or not
-
-Commands:
-  action     Various action related sub-commands
-  bag        Various rosbag related sub-commands
-  component  Various component related sub-commands
-  daemon     Various daemon related sub-commands
-  doctor     Check ROS setup and other potential issues
-  interface  Show information about ROS interfaces
-  launch     Run a launch file
-  lifecycle  Various lifecycle related sub-commands
-  multicast  Various multicast related sub-commands
-  node       Various node related sub-commands
-  param      Various param related sub-commands
-  pkg        Various package related sub-commands
-  run        Run a package specific executable
-  security   Various security related sub-commands
-  service    Various service related sub-commands
-  topic      Various topic related sub-commands
-  wtf        Use `wtf` as alias to `doctor`
-
-  Call `ros2 <command> -h` for more detailed usage.
-```
-
+Jeder Befehl hat eine Hilfe: `ros2 topic -h`.
 
 ### Hello-World Implementierung
 
-Wir versuchen das "Hello World"-Beispiel der ROS Community nachzuvollziehen, dass
-zwei einfache Knoten - "minimal publisher" und "minimal subscriber" - definiert.
+Wir lesen das „Hello World“-Beispiel der ROS-Community: zwei einfache Knoten, `minimal_publisher` und `minimal_subscriber`. Ziel ist nicht, jede Zeile C++ selbst schreiben zu können, sondern die **Struktur** eines Knotens zu erkennen — Sie finden sie in jedem ROS-2-Programm wieder, auch in Ihrer späteren Spurerkennung.
 
 <!--
 style="width: 90%; max-width: 860px; display: block; margin-left: auto; margin-right: auto;"
 -->
 ```ascii
-
-Publisher "topic"                                   Subscriber "topic"
 
 +-------------------+       .---------------.       +--------------------+
 | minimal_publisher | ----> | Message       | ----> | minimal_subscriber |
@@ -451,7 +316,7 @@ Publisher "topic"                                   Subscriber "topic"
                             .---------------.
 ```
 
-Eine entsprechende Kommentierung eines ähnlichen Codes findet sich auf der ROS2 [Webseite](https://index.ros.org/doc/ros2/Tutorials/Writing-A-Simple-Cpp-Publisher-And-Subscriber/).
+Eine ausführliche Kommentierung eines ähnlichen Codes findet sich im Tutorial [Writing a simple publisher and subscriber (C++)](https://docs.ros.org/en/jazzy/Tutorials/Beginner-Client-Libraries/Writing-A-Simple-Cpp-Publisher-And-Subscriber.html) der ROS-2-Dokumentation.
 
 ```cpp    Publisher.cpp
 #include <chrono>
@@ -497,19 +362,39 @@ int main(int argc, char * argv[])
 
 | Zeile | Bedeutung                                                                                                                                                                                                                                                                                                                                                                    |
 |:------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 1-2   | Die `chrono`-Bibliothek ist eine Sammlung von flexiblen Typen, die das Benutzen von Zeiten, Zeiträumen und Zeitpunkten mit unterschiedlichen Präzisionsgraden ermöglicht ([Link](https://de.cppreference.com/w/cpp/chrono)). `memory` wird für die Verwendung von der Smart Pointer benötigt ([Link](https://en.cppreference.com/w/cpp/header/memory)).                      |
-| 4-5   | Integration der ROS2 spezifischen API-Definitionen für C++. Der Header `rclcpp.hpp` muss in jedem Fall eingebettet werden. Der avisierte Message Type `String` wird zudem inkludiert.                                                                                                                                                                                        |
+| 1-7   | `chrono` stellt Zeittypen bereit; zusammen mit `using namespace std::chrono_literals` (Zeile 7) dürfen wir Zeiten direkt als `500ms` schreiben. `memory` liefert Smart Pointer (siehe Zeile 36).                      |
+| 4-5   | Einbinden der ROS-2-Bibliothek für C++ (`rclcpp.hpp`, immer nötig) und des verwendeten Nachrichtentyps `String`.                                                                                                                                                                                        |
 | 9     | Definition einer individuellen Knotenklasse, die von der API-Basisklasse `rclcpp::Node` erbt.                                                                                                                                                                                                                                                                                |
-| 12    | Der zugehörige Konstruktor der Klasse `MinimalPublisher()` ruft den Konstruktor der Basisklasse `Node` auf und initialisiert die Member `node_name` und eine eigene Variable `count_`. Diese dient als variabler Dateninhalt unserer Kommunikation.                                                                                                                          |
-| 14    | Wir erzeugen einen Publisher, der über die Memebervariable `publisher_` referenziert wird, der Nachrichten vom Typ `std_msgs::msg::String` versendet (Templateparameter), das entsprechende Topic lautet "topic" (Konstruktorparameter).                                                                                                                                     |
-| 15    | Ein Timer-Objekt wird erzeugt und initialisiert. Zum einen spezifizieren wir die Periodendauer und zum anderen eine aufzurufende Funktion. In diesem Fall ist das unsere private Methode `timer_callback()` die als impliziten Parameter `this` übergeben bekommt.                                                                                                           |
-| 20    | In der Funktion `callback()` wird die eigentliche Funktionalität des Publishers, das versenden einer Nachricht,  realisiert. Dazu wird zunächst ein entsprechender                                String befüllt und mittels des Makros  `RCLCPP_INFO` auf der Konsole ausgegeben. Anschließend wird die Methode `publish()` mit unserer Nachricht als Parameter aufgerufen. |
-| 32    | `init` aktiviert die abstrakte Middelwareschnittstelle von ROS2 für einen Knoten. Dabei können unterschiedliche Parameter für die Konfiguration (zum Beispiel Logging-Levels, Kommunikationsparameter, usw.) übergeben werden.                                                                                                                                               |
-| 33    | Aktivierung des Knotens über den einmaligen Aufruf von `spin()`. Diese Funktion sollte der Knoten nur im Fehlerfall verlassen.                                                                                                                                                                                                                                               |
+| 12-13 | Der zugehörige Konstruktor der Klasse `MinimalPublisher()` ruft den Konstruktor der Basisklasse `Node` mit dem Knotennamen `minimal_publisher` auf und initialisiert die eigene Variable `count_`. Diese dient als variabler Dateninhalt unserer Kommunikation.                                                                                                                          |
+| 15    | Wir erzeugen einen Publisher für Nachrichten vom Typ `std_msgs::msg::String` (der Typ steht in spitzen Klammern, ein sogenannter Template-Parameter) auf dem Topic `"topic"`. Die `10` gibt die Größe des Nachrichtenpuffers an (Quality of Service, siehe VL 4).                                                                                                                                     |
+| 16-17 | Ein Timer soll alle 500 ms eine Methode aufrufen. Eine solche Funktion, die nicht wir selbst aufrufen, sondern ROS für uns, wenn ein Ereignis eintritt, heißt **Callback**. `std::bind(&MinimalPublisher::timer_callback, this)` bedeutet: „Rufe die Methode `timer_callback` dieses Objekts auf.“                                                                                                           |
+| 21-26 | Der Callback erledigt die eigentliche Arbeit: Nachricht anlegen und befüllen, mit `RCLCPP_INFO` eine Logzeile ausgeben (ein Makro, ähnlich `printf`), Nachricht mit `publish()` versenden. |
+| 28-30 | Die Membervariablen. `SharedPtr` ist ein _Smart Pointer_: ein Zeiger, der das Objekt automatisch freigibt, sobald ihn niemand mehr benutzt — kein `delete` nötig. |
+| 35    | `init` aktiviert die abstrakte Middlewareschnittstelle von ROS 2 für einen Knoten. Dabei können unterschiedliche Parameter für die Konfiguration (zum Beispiel Logging-Levels, Kommunikationsparameter, usw.) übergeben werden.                                                                                                                                               |
+| 36    | `std::make_shared<MinimalPublisher>()` erzeugt unseren Knoten (mit Smart Pointer). `spin()` übergibt die Kontrolle an ROS 2: Die Funktion wartet auf Ereignisse (hier den Timer) und ruft die passenden Callbacks auf. Sie kehrt erst zurück, wenn der Knoten beendet wird, z.B. mit `Ctrl+C`.                                                                                                                                                                                                                                               |
 
-> Den Subscriber Knoten haben wir in Python realisiert. Schlagen Sie jeweils die Umsetzung des Publishers in Python und die des Subscribers in C++ nach, um die Unterschiede der beiden Programmiersprachen zu erkennen.
+**Kurze Kontrolle:** Lesen Sie den Publisher-Code.
 
-```py    Subscriber.cpp
+Auf welchem Topic sendet der Knoten? [[topic]]
+[[?]] Suchen Sie den Aufruf `create_publisher`.
+Wie viele Nachrichten pro Sekunde sendet er? [[2]]
+[[?]] Der Timer wird in Zeile 16 mit einer Periodendauer angelegt.
+***
+`create_publisher<…>("topic", 10)` legt das Topic `topic` fest. Der Timer ruft den Callback alle 500 ms auf, also zweimal pro Sekunde — genau das misst später `ros2 topic hz`.
+***
+
+Was passiert, wenn Sie in `main()` die Zeile mit `rclcpp::spin(...)` weglassen?
+
+[( )] Der Knoten sendet weiter, nur ohne Logausgaben.
+[(X)] Das Programm endet sofort, der Timer-Callback wird nie aufgerufen.
+[( )] Der Compiler meldet einen Fehler.
+***
+Ohne `spin()` gibt niemand die Kontrolle an ROS ab: Kein Ereignis wird bearbeitet, `main()` läuft direkt zu `shutdown()` und beendet das Programm. Das Programm kompiliert aber problemlos — ein typischer Fehler, den erst die Laufzeit zeigt.
+***
+
+> Den Subscriber zeigen wir hier in Python. Schlagen Sie im Tutorial jeweils die Umsetzung des Publishers in Python und die des Subscribers in C++ nach, um die Unterschiede der beiden Client-Bibliotheken zu erkennen. Die Struktur — Knotenklasse, `create_…`, Callback, `spin()` — ist in beiden Sprachen dieselbe.
+
+```python    Subscriber.py
 import rclpy
 from rclpy.node import Node
 
@@ -528,7 +413,7 @@ class MinimalSubscriber(Node):
         self.subscription  # prevent unused variable warning
 
     def listener_callback(self, msg):
-        self.get_logger().info('I heard: "%s"' % msg.data)
+        self.get_logger().info(f'I heard: "{msg.data}"')
 
 
 def main(args=None):
@@ -549,182 +434,190 @@ if __name__ == '__main__':
     main()
 ```
 
-Ok, wie lassen sich diese beiden Knoten nun starten. In dieser Veranstaltung
-wollen wir uns allein auf die vorinstallierten Beispiele, in diesem Fall die Pakete `examples_rclcpp_minimal_subscriber` und `examples_rclcpp_minimal_publisher` konzentrieren. Dazu
-starten wir diese jeweils mit
+Wie lassen sich diese beiden Knoten nun starten? Wir nutzen die Beispiele, die mit ROS 2 bereits installiert werden: die Pakete `examples_rclcpp_minimal_publisher` und `examples_rclcpp_minimal_subscriber` (beide in C++). Jeder Knoten läuft in einem eigenen Terminal — und in jedem Terminal muss zuerst die ROS-2-Umgebung geladen werden (vgl. Ü 1).
 
-```
-#ros2 run <package_name> <node>
+```bash
+# Terminal 1
+source /opt/ros/jazzy/setup.bash
 ros2 run examples_rclcpp_minimal_subscriber subscriber_member_function
+
+# Terminal 2
+source /opt/ros/jazzy/setup.bash
 ros2 run examples_rclcpp_minimal_publisher publisher_member_function
 ```
 
-Lassen Sie uns diese Konfiguration systematisch untersuchen:
+Das Schema lautet `ros2 run <paket> <ausführbare_datei>`. Lassen Sie uns diese Konfiguration systematisch untersuchen:
 
-1. Welche Nachrichten werden in unserem bescheidenen ROS2 System ausgetauscht?
+**1. Welche Nachrichten werden in unserem bescheidenen ROS-2-System ausgetauscht?**
 
-```
->ros2 topic list
+```text
+> ros2 topic list
 /parameter_events
 /rosout
 /topic
->ros2 topic info /topic
-Topic: /topic
+> ros2 topic info /topic
+Type: std_msgs/msg/String
 Publisher count: 1
-Subscriber count: 1
->ros2 topic hz /topic
-average rate: 2.011
-   min: 0.489s max: 0.500s std dev: 0.00474s window: 4
-...
+Subscription count: 1
+> ros2 topic hz /topic
+average rate: 2.000
+   min: 0.500s max: 0.500s std dev: 0.00012s window: 4
+> ros2 topic echo /topic
+data: Hello, world! 42
+---
 ```
 
-2. Wie lassen sich mehrere Instanzen ein und des selben Knoten integrieren?
+`/parameter_events` und `/rosout` legt ROS 2 für jeden Knoten automatisch an (Parameteränderungen und Logausgaben).
 
-Es soll nochmals darauf hingewiesen werden, `topic` ist ein willkürlich gewählter Name für unseren Kanal. Um beim Testen von verschiedenen Nodes eine schnelle Umbennenung zu ermöglichen können wir mittels Remapping die Topic und Nodenamen anpassen.
+**2. Wie lassen sich mehrere Instanzen ein und desselben Knotens starten?**
 
-```
-> ros2 run examples_rclcpp_minimal_publisher publisher_member_function --ros-args --remap /topic:=/topic2
+Ein Knotenname muss im System eindeutig sein. Wollen wir einen zweiten Subscriber starten, benennen wir ihn beim Start per _Remapping_ um:
+
+```bash
+ros2 run examples_rclcpp_minimal_subscriber subscriber_member_function --ros-args -r __node:=zweiter_subscriber
 ```
 
-```
->ros2 topic info /topic
-Topic: /topic
+```text
+> ros2 topic info /topic
+Type: std_msgs/msg/String
 Publisher count: 1
-Subscriber count: 2
+Subscription count: 2
 ```
 
-![RoboterSystem](images/rosgraph.png "Screenshot des Tools `rgt_graph`")
+![ROS-Graph: minimal_publisher sendet auf /topic, minimal_subscriber und zweiter_subscriber empfangen](images/rosgraph_zwei_subscriber.png "Der ROS-Graph, wie ihn `rqt_graph` anzeigt: ein Publisher, zwei Subscriber auf demselben Topic")
 
+**3. Wie verbinde ich Knoten, deren Topic-Namen nicht zusammenpassen?**
 
-Natürlich können Sie auch den Topic-Namen aus der Kommandozeile anpassen. Damit entsteht ein neuer Kanal, der keine Subcriber hat.
+`topic` ist ein willkürlich gewählter Name für unseren Kanal. Auch Topic-Namen lassen sich beim Start umbenennen. Beenden Sie den Publisher mit `Ctrl+C` und starten Sie ihn mit einem anderen Topic-Namen neu — es entsteht ein neuer Kanal, der keinen Subscriber hat:
 
+```bash
+ros2 run examples_rclcpp_minimal_publisher publisher_member_function --ros-args -r topic:=topic2
 ```
-> ros2 run examples_rclcpp_minimal_publisher publisher_member_function --ros-args --remap /topic:=/topic2
-```
 
-![RoboterSystem](images/rosgraph2.png "Screenshot des Tools `rgt_graph`")
+![ROS-Graph: minimal_publisher sendet auf /topic2, minimal_subscriber wartet auf /topic — keine Verbindung](images/rosgraph_topic2.png "Der umgelenkte Publisher sendet auf `/topic2`, der Subscriber wartet weiter auf `/topic`.")
 
+Genau so passen Sie später fremde Pakete an Ihr System an, ohne deren Code zu ändern — etwa wenn ein Kameratreiber auf `/camera/image_raw` sendet, Ihre Spurerkennung aber `/image` erwartet.
 
-4. Kann ich auch einen Publisher in der Konsole erzeugen?
+**4. Kann ich auch einen Publisher in der Konsole erzeugen?**
 
 Natürlich, dies ist ein wichtiges Element des Debugging. Starten Sie also zum Beispiel den Subscriber mit den bereits bekannten Kommandos und führen Sie dann in einer anderen Konsole den nachfolgenden Befehl aus.
 
+```bash
+ros2 topic pub --rate 1 /topic std_msgs/msg/String "{data: 'Glück Auf'}"
 ```
-ros2 topic pub /topic std_msgs/String  "data: Glück Auf" -n TUBAF
-```
 
-Informieren Sie sich zudem über die weiteren Parameter von `ros2 topic pub`. Sie können die Taktrate und die Qualitätskritieren der Übertragung definieren.
+Informieren Sie sich mit `ros2 topic pub -h` über die weiteren Parameter. Sie können zum Beispiel nur eine einzige Nachricht senden (`--once`) und die Qualitätskriterien der Übertragung festlegen.
 
-### Turtlebot
+**Kurze Kontrolle:** Sie starten Publisher und Subscriber in zwei Terminals, aber der Subscriber empfängt nichts. `ros2 topic list` zeigt im Terminal des Publishers `/topic`, im Terminal des Subscribers nur `/parameter_events` und `/rosout`. Was ist eine plausible Ursache?
 
-Das "turtlebot" Beispiel soll die verschiedenen Mechanismen der Kommunikation unter ROS verdeutlichen. Dabei wird unter anderem eine Publish-Subscribe Kommunikation zwischen einem Node für die Nutzereingaben und einer grafischen Ausgabe realisiert.
+[[ ]] Der Subscriber ist in C++ geschrieben, der Publisher in Python.
+[[X]] Die beiden Terminals verwenden unterschiedliche Werte für `ROS_DOMAIN_ID`.
+[[X]] Die beiden Terminals verwenden unterschiedliche Middleware (`RMW_IMPLEMENTATION`).
+[[ ]] Ein Topic kann nur von Knoten auf demselben Rechner gelesen werden.
+***
+Knoten verschiedener Sprachen kommunizieren problemlos miteinander, auch über Rechnergrenzen hinweg. Sie müssen aber dieselbe Domäne (`ROS_DOMAIN_ID`) und dieselbe Middleware nutzen — sonst sehen sie sich nicht. Prüfen Sie in jedem Terminal mit `printenv | grep -E "ROS|RMW"`, was gesetzt ist. (Fehlt dagegen das `source`, gibt es gar keinen `ros2`-Befehl: `command not found`.)
+***
 
-```
-ros2 run turtlesim turtle_teleop_key
+### turtlesim: ROS 2 zum Anfassen
+
+Das Beispiel `turtlesim` ist der Klassiker für die ersten Schritte. Eine simulierte Schildkröte lässt sich per Tastatur steuern. Dabei arbeiten zwei Knoten über Topics zusammen: einer liest die Tastatur, der andere simuliert und zeichnet die Schildkröte.
+
+```bash
+# Terminal 1
+source /opt/ros/jazzy/setup.bash
 ros2 run turtlesim turtlesim_node
 ```
 
-![RoboterSystem](images/turtleSim.png)<!-- width="90%" -->
+```bash
+# Terminal 2 — die Pfeiltasten wirken nur, solange dieses Terminal den Fokus hat
+source /opt/ros/jazzy/setup.bash
+ros2 run turtlesim turtle_teleop_key
+```
+
+> **WSL2:** Fenster wie turtlesim oder `rqt` erscheinen unter Windows 11 automatisch (WSLg). Bleibt das Fenster aus, prüfen Sie mit `echo $DISPLAY`, ob eine Anzeige gesetzt ist, und aktualisieren Sie WSL mit `wsl --update` in der Windows-Eingabeaufforderung.
+
+![Fenster des turtlesim: eine Schildkröte auf blauem Hintergrund, die eine Spur zeichnet](images/turtleSim.png)<!-- width="90%" -->
 *Screenshot des TurtleSim-Knotens*
 
-Wir wollen wiederum das System inspizieren und nutzen dafür ein grafisches Inspektionssystem, das in ROS2 integriert ist. Hier werden die Methoden, die `ros2` auf der Kommandozeile bereithält in einer GUI abgebildet.
+Wir wollen wiederum das System inspizieren und nutzen dafür das grafische Werkzeug `rqt`. Es bildet die Funktionen, die `ros2` auf der Kommandozeile bereithält, in einer Oberfläche ab, z.B. den Graphen der Knoten (`rqt_graph`) oder den Verlauf von Nachrichten.
 
-```
+```bash
 rqt
 ```
 
-![RoboterSystem](images/TurtleSim_rqt.png)<!-- width="90%" -->
-*Screenshot des TurtleSim-Knotens*
+![Das Werkzeug rqt mit Ansichten auf Knoten und Topics des turtlesim](images/TurtleSim_rqt.png)<!-- width="90%" -->
+*Untersuchung des turtlesim-Systems mit `rqt`*
 
+Ein Blick in die Topics zeigt das Prinzip, das uns durch die ganze Veranstaltung begleitet:
 
-### ros1_bridge
-
-`ros1_bridge` ermöglicht die Kombination beider ROS Konzepte in übergreifenden Anwendungen. Dabei treffen die unterschiedlichen Kommunikationskonzepte aufeinander, so dass die in ROS2 etablierten Kommunikations-Qualitätskritieren nicht übergreifend realisiert werden können.
-
-Allerdings ist diese Möglichkeit nur unter Linux und MacOS gegeben. In wieweit eine Interaktion zwischen verteilten Systemen möglich ist, wurde nicht evaluiert.
-
-<!--
-style="width: 80%; max-width: 860px; display: block; margin-left: auto; margin-right: auto;"
--->
-```ascii
-
-                +-----------------+
-  ROS2 Nodes    | Robot-Control   |  ...
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
-|    ros1_bridge                                                  |
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
-  ROS1 Nodes    | Motion Planning |  | Sensor Interfaces  |   ...
-                +-----------------+  +--------------------+
-                         ^                      ^
-                         |                      |
-                         v                      v
-                +-------------------------------------------------+
-                | roscore                                         |
-                +-------------------------------------------------+
+```text
+> ros2 topic list
+/turtle1/cmd_vel        # Fahrbefehle:  geometry_msgs/msg/Twist
+/turtle1/pose           # Position:     turtlesim/msg/Pose
+...
 ```
 
-Eine gute Beschreibung findet sich unter [Projektordner ros1_bridge](https://github.com/ros2/ros1_bridge/blob/master/README.md#example-1a-ros-1-talker-and-ros-2-listener). Das nachfolgende Beispiel greift diese Idee auf und liest auf der ROS1 Seite Bilddaten einer Kamera ein, detektiert Gesichter und gibt ein entsprechend angereichertes Bild unter ROS2 in rqt aus.
+Die Schildkröte bewegt sich, sobald jemand Nachrichten auf `/turtle1/cmd_vel` veröffentlicht — egal ob das die Tastatur, die Kommandozeile oder später Ihr eigener Regler ist:
 
-Wichtig ist, dass Sie die verschiedenen `setup.x` Aufrufe korrekt ausführen.
-
-```bash    ConsoleA
-# ROS1_Shell mit roscore
-> . /opt/ros/noetic/setup.bash
-> roscore
+```bash
+ros2 topic pub --rate 1 /turtle1/cmd_vel geometry_msgs/msg/Twist "{linear: {x: 2.0}, angular: {z: 1.8}}"
 ```
 
-```bash    ConsoleB
-# ROS1_bridge
-> . /opt/ros/noetic/setup.bash
-> . /opt/ros/foxy/setup.bash
-> export ROS_MASTER_URI=http://localhost:11311
-> ros2 run ros1_bridge dynamic_bridge
+### Vom turtlesim zum TurtleBot
+
+Was beim turtlesim funktioniert, funktioniert beim echten Roboter genauso. Der TurtleBot 3 stellt seine Sensoren und Antriebe ebenfalls als Topics bereit. Sie untersuchen ihn mit denselben Werkzeugen:
+
+<!-- data-type="none" -->
+| Topic        | Inhalt                                           | Nachrichtentyp                |
+| :----------- | :----------------------------------------------- | :---------------------------- |
+| `/scan`      | Abstandsmessungen des LiDAR, eine Umdrehung      | `sensor_msgs/msg/LaserScan`   |
+| `/odom`      | geschätzte Position aus den Radumdrehungen       | `nav_msgs/msg/Odometry`       |
+| `/imu`       | Beschleunigungen und Drehraten                   | `sensor_msgs/msg/Imu`         |
+| `/cmd_vel`   | Fahrbefehl: Vorwärts- und Drehgeschwindigkeit    | je nach Konfiguration `Twist` oder `TwistStamped` |
+| Kamerabild   | je nach Treiber z.B. `/camera/image_raw`         | `sensor_msgs/msg/Image`       |
+
+Sobald Ihr Rechner mit dem Roboter verbunden ist (erstes Praktikum), funktionieren die bekannten Befehle:
+
+```bash
+ros2 topic echo /scan --once                       # eine einzelne LiDAR-Messung ansehen
+export TURTLEBOT3_MODEL=burger                     # die TurtleBot-Pakete müssen wissen, welches Modell fährt
+ros2 run turtlebot3_teleop teleop_keyboard         # den Roboter per Tastatur fahren
 ```
 
-Auf der ROS2 Seite nutzen wir nun das [image_tools](https://github.com/ros2/demos/tree/master/image_tools) Paket um unser Videosignal einzulesen.
+Ob `/cmd_vel` den Typ `Twist` oder `TwistStamped` (ein `Twist` mit Zeitstempel) erwartet, hängt von der Konfiguration des Roboters ab. `ros2 topic info /cmd_vel` verrät es Ihnen.
 
-```bash    ConsoleC
-# ROS2_Shell die ein Kamerasignal erfasst
-> . /opt/ros/foxy/setup.bash
-> ros2 run image_tools cam2image
-#ros2 run image_tools showimage   # zum testen
-```
+Damit sich die Roboter der verschiedenen Gruppen im selben WLAN nicht gegenseitig steuern, bekommt jede Gruppe eine eigene `ROS_DOMAIN_ID`. Wie Sie sich mit „Ihrem“ TurtleBot verbinden, üben wir im ersten Praktikum.
 
-Im folgenden wird ein Knoten aus dem Paket [opencv_app](http://wiki.ros.org/opencv_apps) aktiviert, dass für die Erkennung der Gesichter verantwortlich ist. Diese war für die verwendete Version `foxy` im November 2021 nicht für ROS2 verfügbar.
-
-```bash    ConsoleD
-# ROS1_Shell die ein Kamerasignal erfasst
-> . /opt/ros/noetic/setup.bash
-> rosrun opencv_apps face_detection image:=image
-```
-
-Nun können wir uns die Ausgabe auf der ROS1 Seite anschauen. Leider gibt es noch einen Fehler beim Zurückleiten des Bildes aus ROS1 nach ROS2, was das Bild komplett gemacht hätte. Der Typ des Bildes aus ROS1 war für ROS2 unbekannt. Damit verbleiben wir  hier für die Anzeige auf der Seite von ROS1.
-
-```bash    ConsoleE
-# ROS1_Shell die die Ausgabe koordiniert
-. /opt/ros/noetic/setup.bash
-> rostopic list
-/face_detection_1575145081472799322/face_image
-/face_detection_1575145081472799322/faces
-/face_detection_1575145081472799322/image
-/face_detection_1575145081472799322/parameter_descriptions
-/face_detection_1575145081472799322/parameter_updates
-> rosrun image_view image_view image:=/face_detection_1575145081472799322/image
-```
-
-![RoboterSystem](images/FaceRecognition.png)<!-- width="80%" -->
-*Beispielhafte Ausgabe der erkannten Gesichter*
+> **Merke:** Wer die Topics eines Systems kennt, kann es untersuchen, aufzeichnen und Teile davon ersetzen. Für unsere Verkehrswelt heißt das: Ihre Spurerkennung abonniert das Kamerabild, Ihr Fahrverhalten veröffentlicht auf `/cmd_vel`.
 
 ## Installation
 
-1. ... auf einem Linux System ... folgen Sie den Anweisungen der Dokumentation
-2. ... auf einem Windows 10 System nativ ... schwierig
-3. ... auf einem Windows 10 System mit einer WSL2 Ubuntu-Installation
+In der Übung Ü 2 installieren Sie ROS 2 Jazzy. Bereiten Sie dafür eine der folgenden Umgebungen vor:
+
+<!-- data-type="none" -->
+| Umgebung                         | Bewertung                                                                                       |
+| :------------------------------- | :---------------------------------------------------------------------------------------------- |
+| Ubuntu 24.04 nativ               | empfohlen: volle Leistung, direkter Zugriff auf Netzwerk und Hardware                            |
+| Windows 11 mit WSL2 (Ubuntu 24.04) | gut für die Vorlesungs- und Übungsbeispiele; Grafik läuft über WSLg, die Verbindung zum TurtleBot erfordert Netzwerkanpassungen |
+| Rechnerpool des Instituts        | ROS 2 Jazzy ist vorinstalliert                                                                  |
+| macOS / Windows nativ            | nicht empfohlen, viele Pakete fehlen                                                            |
+
+Die Installation folgt der Anleitung [Ubuntu (deb packages)](https://docs.ros.org/en/jazzy/Installation/Ubuntu-Install-Debs.html). Wählen Sie das Paket `ros-jazzy-desktop`, es enthält `rqt`, `turtlesim` und die Beispiele aus dieser Vorlesung.
 
 ## Aufgabe der Woche
 
-1. Beschäftigen Sie sich mit den Kommandozeilentools Ihres Betriebssystems. Machen Sie sich mit dem Anlegen, Löschen, Rechtemanagement usw. von Dateien und Ordnern vertraut.
+1. Stellen Sie sicher, dass Sie bis zur Übung Ü 2 Zugriff auf eine der oben genannten Umgebungen haben.
+2. Arbeiten Sie die Einsteiger-Tutorials zur Kommandozeile durch: [Beginner: CLI tools](https://docs.ros.org/en/jazzy/Tutorials/Beginner-CLI-Tools.html). Wie können Sie Topics anzeigen, selbst Nachrichten senden und die Taktrate messen?
+3. Überlegen Sie für die Verkehrswelt: Welche Knoten braucht ein TurtleBot, der einer Fahrspur folgt und an einer roten Ampel hält? Skizzieren Sie den ROS-Graphen mit Knoten und Topics wie in Abschnitt „Basiskonzepte“.
 
-!?[alt-text](https://www.youtube.com/watch?v=2PGnYjbYuUo)
+**Zum Weiterlesen**
 
-2. Machen Sie sich mit den Möglichkeiten des Kommandozeilen-Tools `ros2` vertraut. Wie können Sie Topics anzeigen, generieren, visualisieren? Eine Hilfe dazu kann zum Beispiel https://ubuntu.com/blog/ros-2-command-line-interface sein.
+<!-- data-type="none" -->
+| Angebot                                                                                  | Inhalt                                             |
+| :--------------------------------------------------------------------------------------- | :------------------------------------------------- |
+| [ROS 2 Jazzy Dokumentation](https://docs.ros.org/en/jazzy/)                              | Installation, Konzepte, How-to-Guides              |
+| [Tutorials für Einsteiger](https://docs.ros.org/en/jazzy/Tutorials.html)                 | Kommandozeile, erste Pakete, Publisher/Subscriber  |
+| [Robotics Stack Exchange](https://robotics.stackexchange.com/questions/tagged/ros2)      | Fragen und Antworten (Nachfolger von ROS Answers)  |
+| [TurtleBot 3 e-Manual](https://emanual.robotis.com/docs/en/platform/turtlebot3/overview/) | Hardware und ROS-2-Pakete unseres Roboters         |
+
+> **Achtung bei Tutorials und Chatbot-Antworten:** Prüfen Sie immer, für welche ROS-Version ein Beispiel geschrieben ist. In der Dokumentation steht die Distribution in der Adresse (`docs.ros.org/en/jazzy/…`).

@@ -8,12 +8,9 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
-find_package(std_msgs REQUIRED)
 find_package(my_msg_package REQUIRED)
 
 add_executable(data_generator src/data_generator.cpp)
-ament_target_dependencies(data_generator rclcpp std_msgs my_msg_package)
-
 target_include_directories(data_generator PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include/${PROJECT_NAME}>)
@@ -21,11 +18,14 @@ target_compile_features(data_generator PUBLIC c_std_99 cxx_std_17)  # Require C9
 ament_target_dependencies(
   data_generator
   "rclcpp"
-  "std_msgs"
+  "my_msg_package"
 )
 
 install(TARGETS data_generator
   DESTINATION lib/${PROJECT_NAME})
+
+install(DIRECTORY launch
+  DESTINATION share/${PROJECT_NAME})
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
