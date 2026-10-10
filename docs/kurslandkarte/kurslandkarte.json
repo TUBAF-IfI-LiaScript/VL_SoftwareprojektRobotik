@@ -1,0 +1,2746 @@
+{
+ "stand": "10.10.2026",
+ "kurs": {
+  "basis": "https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/",
+  "speicher": "robotik-map"
+ },
+ "linien": [
+  {
+   "id": "werkzeuge",
+   "name": "Linux & Werkzeuge"
+  },
+  {
+   "id": "ros",
+   "name": "ROS 2"
+  },
+  {
+   "id": "mathe",
+   "name": "Koordinaten & Modelle"
+  },
+  {
+   "id": "wahrnehmung",
+   "name": "Sensorik & Wahrnehmung"
+  },
+  {
+   "id": "schaetzung",
+   "name": "Fusion & Schätzung"
+  },
+  {
+   "id": "bewegung",
+   "name": "Regelung & Navigation"
+  },
+  {
+   "id": "projekt",
+   "name": "Projektaufgabe"
+  }
+ ],
+ "phasen": [
+  {
+   "von": 0,
+   "bis": 6,
+   "name": "Block 1 · ROS-Grundlagen",
+   "farbe": "--phase-einstieg"
+  },
+  {
+   "von": 7,
+   "bis": 14,
+   "name": "Block 2 · Sensorgrundlagen",
+   "farbe": "--phase-grundlagen"
+  },
+  {
+   "von": 15,
+   "bis": 19,
+   "name": "Block 3 · Objekterkennung",
+   "farbe": "--phase-analyse"
+  },
+  {
+   "von": 20,
+   "bis": 23,
+   "name": "Block 4 · Sensorfusion",
+   "farbe": "--phase-einstieg"
+  },
+  {
+   "von": 24,
+   "bis": 29,
+   "name": "Block 5 · Regelung & Navigation",
+   "farbe": "--phase-grundlagen"
+  },
+  {
+   "von": 30,
+   "bis": 31,
+   "name": "Block 6 · Praktikum + X",
+   "farbe": "--phase-zaesur"
+  }
+ ],
+ "vorlesungen": [
+  {
+   "vl": 0,
+   "key": "00",
+   "label": "VL 00",
+   "datei": "00_Einfuehrung/00_Einfuehrung.md",
+   "datum": "2026-10-19",
+   "kurz": "Einführung",
+   "status": "ausgearbeitet",
+   "block": 1,
+   "abschnitte": [
+    "Einführung",
+    "Unser Ziel: Autonomes Fahren im Miniaturformat",
+    "Wie läuft die Veranstaltung ab?",
+    "Was ist ein Roboter?",
+    "Klassifikation von Robotersystemen",
+    "Relevanz und Bedeutung mobiler Roboter",
+    "Herausforderungen bei der Entwicklung mobiler Roboter",
+    "Systemarchitektur: Das Sense-Think-Act-Paradigma",
+    "Sense-Think-Act am TurtleBot",
+    "Warum ROS? Das \"Rad nicht neu erfinden\"",
+    "Ausblick: Die nächsten Schritte",
+    "Zusammenfassung",
+    "Weiterführende Ressourcen",
+    "Forschung und Praxis"
+   ]
+  },
+  {
+   "vl": 1,
+   "key": "ue1",
+   "label": "Ü 1",
+   "datei": "exercises/exercise_00_linux_shell/README.md",
+   "datum": "2026-10-26",
+   "kurz": "Linux Shell",
+   "status": "ausgearbeitet",
+   "block": 1,
+   "abschnitte": [
+    "Übung: OS + Linux Shell",
+    "Warum Terminal?",
+    "Wie funktionieren die Beispiele in diesem Skript?",
+    "Dateisystem",
+    "Dateien ansehen, suchen und verknüpfen",
+    "Rechte und Benutzer",
+    "Prozesse",
+    "Umgebungsvariablen",
+    "export — wer sieht die Variable?",
+    "PATH — wo findet die Shell Programme?",
+    "source oder ausführen?",
+    "Pakete installieren und Fernzugriff",
+    "Freies Terminal im Browser",
+    "Aufgaben",
+    "Aufgabe 1: Workspace anlegen",
+    "Aufgabe 2: Fehlersuche im Log",
+    "Aufgabe 3: Ein eigenes Werkzeug",
+    "Aufgabe 4: Zwei Terminals, zwei Welten",
+    "Selbsttest",
+    "Ausblick"
+   ]
+  },
+  {
+   "vl": 2,
+   "key": "03",
+   "label": "VL 03",
+   "datei": "03_ROS_Grundlagen_I/03_EinfuehrungROS.md",
+   "datum": "2026-10-26",
+   "kurz": "ROS 2 Grundlagen",
+   "status": "Bestand",
+   "block": 1,
+   "abschnitte": [
+    "Einführung in ROS2",
+    "Frameworks um Roboter zu programmieren?",
+    "Vergleich von Frameworks",
+    "ROS, was ist das?",
+    "ROS 1 vs. ROS 2",
+    "Wie kann man sich in ROS einarbeiten?",
+    "Architektur von ROS2",
+    "Basiskonzepte",
+    "Einführungsbeispiele",
+    "Hello-World Implementierung",
+    "Turtlebot",
+    "ros1_bridge",
+    "Installation",
+    "Aufgabe der Woche"
+   ]
+  },
+  {
+   "vl": 3,
+   "key": "04",
+   "label": "VL 04",
+   "datei": "04_ROS_Pakete_Tools/04_ROS_Pakete.md",
+   "datum": "2026-11-02",
+   "kurz": "ROS 2 Pakete",
+   "status": "Bestand",
+   "block": 1,
+   "abschnitte": [
+    "ROS2 Pakete",
+    "ROS2 auf mehreren Rechnern",
+    "Konzept",
+    "Compilieren eines Paketes  / mehrerer Paketen",
+    "Build-Tools",
+    "Realisierung eines eigenen Paketes",
+    "Aufzeichnen des Prozesses",
+    "Steuerung des Startprozesses",
+    "Logging",
+    "Erweiterung des Knotenkonzepts"
+   ]
+  },
+  {
+   "vl": 4,
+   "key": "ue2",
+   "label": "Ü 2",
+   "datei": null,
+   "datum": "2026-11-09",
+   "kurz": "Installation ROS 2",
+   "status": "geplant",
+   "block": 1,
+   "abschnitte": []
+  },
+  {
+   "vl": 5,
+   "key": "02",
+   "label": "VL 02",
+   "datei": "02_Koordinatensysteme/02_Koordinatentransformation.md",
+   "datum": "2026-11-09",
+   "kurz": "Koordinaten + QoS",
+   "status": "Bestand",
+   "block": 1,
+   "abschnitte": [
+    "Koordinatentransformation",
+    "Motivation",
+    "Mathematische Grundlagen",
+    "Mathematische Beschreibung",
+    "Relevante Transformationen",
+    "Homogene Koordinaten",
+    "Inverse Transformation",
+    "Kombination von Transformationen",
+    "Beispiel Anwendungsfall 2D",
+    "3D Koordinaten",
+    "Homogene Koordinaten in 3D",
+    "Quaternionen",
+    "Umsetzung in ROS",
+    "Beispiel 1 Laserscanner",
+    "Beispiel 2 - Turtle",
+    "Beispiel 3 - URDF für statische Relationen"
+   ]
+  },
+  {
+   "vl": 6,
+   "key": "p1",
+   "label": "P 1",
+   "datei": null,
+   "datum": "2026-11-23",
+   "kurz": "ROS 2 + Bags",
+   "status": "geplant",
+   "block": 1,
+   "abschnitte": []
+  },
+  {
+   "vl": 7,
+   "key": "01",
+   "label": "VL 01",
+   "datei": "01_Sensorik/01_Sensorik.md",
+   "datum": "2026-11-30",
+   "kurz": "Sensorik",
+   "status": "Bestand",
+   "block": 2,
+   "abschnitte": [
+    "Sensorik mobiler Roboter",
+    "Einordnung: Sensoren in der Roboterarchitektur",
+    "Was ist ein Sensor?",
+    "Klassifikation von Sensoren",
+    "Integrationsebenen",
+    "Wichtige Sensorparameter",
+    "Propriozeptive Sensorik",
+    "Inertialsensorik (IMU)",
+    "Odometrie",
+    "Exterozeptive Sensoren (Distanzen und Positionen)",
+    "Laufzeitmessung (Ultraschall)",
+    "Phasenverschiebung",
+    "Triangulation",
+    "Positionsbestimmung: GNSS (GPS)",
+    "Mathematische Grundlagen der GNSS-Positionsbestimmung",
+    "Genauigkeit und Fehlerquellen bei GNSS",
+    "Zusammenfassung",
+    "Ausblick: VL 3 - Koordinatensysteme und Transformationen"
+   ]
+  },
+  {
+   "vl": 8,
+   "key": "05",
+   "label": "VL 05",
+   "datei": "05_Bildverarbeitung/05_Bildverarbeitung.md",
+   "datum": "2026-12-07",
+   "kurz": "Bildverarbeitung",
+   "status": "Bestand",
+   "block": 2,
+   "abschnitte": [
+    "Bildverarbeitung GrundlagenRos2",
+    "Motivation: Warum Bildverarbeitung in der Robotik?",
+    "Kameras als Sensoren in der Roboterarchitektur",
+    "Was macht Bildverarbeitung komplex?",
+    "Anwendungen in der mobilen Robotik",
+    "Blick nach vorn - Bilder in ROS2",
+    "Grundlagen digitaler Bilder",
+    "Was ist ein Bild?",
+    "Farbräume",
+    "Grundlegende Bildoperationen",
+    "Punktoperationen",
+    "Histogramme",
+    "Schwellwertoperationen (Thresholding)",
+    "Morphologische Operationen",
+    "Filterung und Rauschunterdrückung",
+    "Arten von Bildrauschen",
+    "Wiederholung Faltungsoperationen",
+    "Lineare Filter: Faltung (Convolution)",
+    "Gaußscher Filter",
+    "Median-Filter",
+    "Bilaterale Filterung",
+    "Kantenerkennung",
+    "Sobel-Operator",
+    "Canny-Kantendetektor",
+    "Vergleich Kantendetektor",
+    "Integration in ROS 2",
+    "cv_bridge – Die Brücke zwischen ROS und OpenCV",
+    "Praktisches Beispiel: Farbbasierte Objekterkennung",
+    "Komprimierte Bilder: sensor_msgs/CompressedImage",
+    "Zusammenfassung und Ausblick",
+    "Nächste Schritte: VL 7 – Kamerakalibrierung & Stereo"
+   ]
+  },
+  {
+   "vl": 9,
+   "key": "06",
+   "label": "VL 06",
+   "datei": "06_Kamera_Stereo/06_Kamera_Stereo.md",
+   "datum": "2026-12-07",
+   "kurz": "Kamera",
+   "status": "Bestand",
+   "block": 2,
+   "abschnitte": [
+    "Kameramodelle und Stereo-Vision",
+    "Motivation: Von 2D zu 3D",
+    "Das 2D Pinhole-Kameramodell",
+    "Abbildung eines 3D-Punkts auf die Bildebene",
+    "Homogene Koordinaten und Matrixform",
+    "Abweichungen realer Kameras vom Pinhole-Modell",
+    "Die Kamera-Matrix K",
+    "Verzerrungsparameter",
+    "Anwendung der intrinsischen Parameter",
+    "Kamerakalibrierung",
+    "Intrinsische Kalibrierung mit Schachbrettmuster",
+    "Extrinsische Parameter",
+    "Stereo-Vision",
+    "Prinzip der Stereo-Vision",
+    "Vorverarbeitung",
+    "ROS 2 Integration: PointCloud2",
+    "Das PointCloud2-Message-Format",
+    "Kameraparameter in ROS2",
+    "Herausforderungen bei der Arbeit mit Punktwolken",
+    "1. Datenmenge und Performance",
+    "2. Rauschen und Ausreißer",
+    "3. Fehlende Daten (Holes/Gaps)",
+    "4. Koordinatensystem-Transformation",
+    "5. Zeitstempel-Synchronisation",
+    "6. Bewegungsartefakte",
+    "Literatur und Ressourcen"
+   ]
+  },
+  {
+   "vl": 10,
+   "key": "lid",
+   "label": "VL neu",
+   "datei": null,
+   "datum": "2026-12-14",
+   "kurz": "LiDAR",
+   "status": "geplant",
+   "block": 2,
+   "abschnitte": []
+  },
+  {
+   "vl": 11,
+   "key": "ue3",
+   "label": "Ü 3",
+   "datei": null,
+   "datum": "2027-01-04",
+   "kurz": "Datenvisualisierung",
+   "status": "geplant",
+   "block": 2,
+   "abschnitte": []
+  },
+  {
+   "vl": 12,
+   "key": "ue4",
+   "label": "Ü 4",
+   "datei": null,
+   "datum": "2027-01-11",
+   "kurz": "Kameradaten",
+   "status": "geplant",
+   "block": 2,
+   "abschnitte": []
+  },
+  {
+   "vl": 13,
+   "key": "p2",
+   "label": "P 2",
+   "datei": null,
+   "datum": "2027-01-11",
+   "kurz": "Bildkorrektur",
+   "status": "geplant",
+   "block": 2,
+   "abschnitte": []
+  },
+  {
+   "vl": 14,
+   "key": "p3",
+   "label": "P 3",
+   "datei": null,
+   "datum": "2027-01-18",
+   "kurz": "Spurerkennung",
+   "status": "geplant",
+   "block": 2,
+   "abschnitte": []
+  },
+  {
+   "vl": 15,
+   "key": "07",
+   "label": "VL 07",
+   "datei": "07_Objekterkennung/07_Objekterkennung.md",
+   "datum": "2027-01-25",
+   "kurz": "Objekterkennung",
+   "status": "Bestand",
+   "block": 3,
+   "abschnitte": [
+    "Objekterkennung und Tracking",
+    "Motivation: Warum Objekterkennung?",
+    "Begriffsdefinitionen",
+    "Abgrenzung: Traditionelle vs. Deep Learning Methoden",
+    "Feature-basierte Objekterkennung (2D)",
+    "Corner Detection: Harris & Shi-Tomasi & FAST",
+    "Feature Descriptoren: Rotated BRIEF",
+    "Feature Matching",
+    "Haar Features und Gesichtserkennung",
+    "Deep Learning für Objekterkennung",
+    "DL Architekturen",
+    "CNN-Grundlagen (Kurzer Einstieg)",
+    "YOLO: You Only Look Once",
+    "YOLOv8 im Detail",
+    "YOLOv8 in der Anwendung",
+    "COCO-Dataset und Personendetektion",
+    "Von Bounding Box zu 3D-Position",
+    "Objekt Tracking",
+    "Optical Flow: Lucas-Kanade",
+    "DeepSORT: Deep Simple Online Realtime Tracking",
+    "3D-Objekterkennung in Punktwolken",
+    "RANSAC: Plane Segmentation",
+    "3D Feature Descriptors: FPFH",
+    "ICP: Iterative Closest Point",
+    "Deep Learning für 3D: PointNet++",
+    "Zusammenfassung & Ausblick",
+    "Ausblick: Nächste Vorlesung"
+   ]
+  },
+  {
+   "vl": 16,
+   "key": "pkw",
+   "label": "VL neu",
+   "datei": null,
+   "datum": "2027-01-25",
+   "kurz": "… in Punktwolken",
+   "status": "geplant",
+   "block": 3,
+   "abschnitte": []
+  },
+  {
+   "vl": 17,
+   "key": "ue5",
+   "label": "Ü 5",
+   "datei": null,
+   "datum": "2027-02-01",
+   "kurz": "Objekte im LiDAR",
+   "status": "geplant",
+   "block": 3,
+   "abschnitte": []
+  },
+  {
+   "vl": 18,
+   "key": "p4",
+   "label": "P 4",
+   "datei": null,
+   "datum": "2027-02-08",
+   "kurz": "Hinderniserkennung",
+   "status": "geplant",
+   "block": 3,
+   "abschnitte": []
+  },
+  {
+   "vl": 19,
+   "key": "ue6",
+   "label": "Ü 6",
+   "datei": null,
+   "datum": "2027-04-05",
+   "kurz": "YOLO vs. klassisch",
+   "status": "geplant",
+   "block": 3,
+   "abschnitte": []
+  },
+  {
+   "vl": 20,
+   "key": "08",
+   "label": "VL 08",
+   "datei": "08_Sensorfusion_I/08_Datenfusion.md",
+   "datum": "2027-04-12",
+   "kurz": "Sensorfusion I",
+   "status": "Bestand",
+   "block": 4,
+   "abschnitte": [
+    "Datenfusion",
+    "Wie weit waren wir gekommen?",
+    "Grundlagen und Konzepte",
+    "Einführung in den diskreten Bayes Filter",
+    "Sensoren",
+    "Bildsensor",
+    "Abbildung auf apriori Wissen",
+    "Bewegung",
+    "Und jetzt alles zusammen",
+    "Erweiterung auf 2D: Roboter-Lokalisierung im Grid",
+    "Ausblick: Vom diskreten zum kontinuierlichen Filter",
+    "Zusammenfassung"
+   ]
+  },
+  {
+   "vl": 21,
+   "key": "09",
+   "label": "VL 09",
+   "datei": "09_Sensorfusion_II/09_Sensorfusion_II.md",
+   "datum": "2027-04-19",
+   "kurz": "Sensorfusion II",
+   "status": "Bestand",
+   "block": 4,
+   "abschnitte": [
+    "Sensordatenfusion II: Kalman-Filter",
+    "Einschub - Quality of Service (QoS) für Sensordaten",
+    "Rekapitulation: Vom Bayes-Filter zum Kalman-Filter",
+    "Warum Normalverteilungen?",
+    "Der eindimensionale Kalman-Filter",
+    "Predict-Schritt (Vorhersage)",
+    "Update-Schritt (Korrektur)",
+    "Der Kalman-Gain im Detail",
+    "Praktisches Beispiel: Positionsschätzung",
+    "Implementierung des 1D Kalman-Filters",
+    "Variation der Parameter",
+    "Der mehrdimensionale Kalman-Filter",
+    "Kalman-Filter Gleichungen in Matrixform",
+    "Beispiel: Position und Geschwindigkeit schätzen",
+    "Extended Kalman Filter (EKF)",
+    "Linearisierung durch Taylor-Entwicklung",
+    "EKF-Algorithmus",
+    "Beispiel: Roboter mit Winkel",
+    "robot_localization in ROS 2",
+    "Konfiguration des EKF-Nodes",
+    "Launch-Datei und Integration",
+    "Tipps für die Praxis",
+    "Zusammenfassung",
+    "Literatur und Ressourcen"
+   ]
+  },
+  {
+   "vl": 22,
+   "key": "ue7",
+   "label": "Ü 7",
+   "datei": null,
+   "datum": "2027-04-19",
+   "kurz": "2D-EKF",
+   "status": "geplant",
+   "block": 4,
+   "abschnitte": []
+  },
+  {
+   "vl": 23,
+   "key": "p5",
+   "label": "P 5",
+   "datei": null,
+   "datum": "2027-04-26",
+   "kurz": "Streckenverlauf",
+   "status": "geplant",
+   "block": 4,
+   "abschnitte": []
+  },
+  {
+   "vl": 24,
+   "key": "10",
+   "label": "VL 10",
+   "datei": "10_Kinematik_Regelung/10_Kinematik_Regelung.md",
+   "datum": "2027-05-03",
+   "kurz": "Kinematik",
+   "status": "Bestand",
+   "block": 5,
+   "abschnitte": [
+    "Kinematik und Regelung",
+    "Einordnung",
+    "Kinematik mobiler Roboter",
+    "Differentialantrieb (Differential Drive)",
+    "Ackermann-Lenkung",
+    "Omnidirektionale Antriebe",
+    "Bewegung direkt messen - Odometrie",
+    "Regelungstechnik",
+    "Steuerung vs. Regelung",
+    "Folgeregler vs. Festwertregler",
+    "Streckenverhalten",
+    "Der PID-Regler",
+    "Reglerperformanz und Gütekriterien",
+    "Implementierungsbeispiel",
+    "Bahnfolgeregelung",
+    "Move-to-Pose Controller",
+    "Pure Pursuit Controller",
+    "Vergleich der Ansätze",
+    "ROS2 Integration",
+    "Twist-Messages",
+    "ros2_control",
+    "Nav2 Controller Server",
+    "Zusammenfassung"
+   ]
+  },
+  {
+   "vl": 25,
+   "key": "ue8",
+   "label": "Ü 8",
+   "datei": null,
+   "datum": "2027-05-03",
+   "kurz": "Reglervergleich",
+   "status": "geplant",
+   "block": 5,
+   "abschnitte": []
+  },
+  {
+   "vl": 26,
+   "key": "11",
+   "label": "VL 11",
+   "datei": "11_Navigation/11_Navigation.md",
+   "datum": "2027-05-10",
+   "kurz": "Navigation",
+   "status": "Bestand",
+   "block": 5,
+   "abschnitte": [
+    "Navigation und Pfadplanung",
+    "Einordnung",
+    "Definitionen",
+    "Reaktive Navigation",
+    "Braitenberg Vehicle",
+    "Bug-Algorithmen",
+    "Kartenformate",
+    "Rasterbasierte Karten (Occupancy Grids)",
+    "Adaptive Auflösung: Quadtrees",
+    "Costmaps -- Planungskarten in Nav2",
+    "Topologische Karten",
+    "Vergleich und Konseqzenen für die Pfadplanung",
+    "Pfadplanung",
+    "Breitensuche (Wavefront)",
+    "Dijkstra-Algorithmus",
+    "A*-Algorithmus",
+    "Vergleich der Algorithmen",
+    "Implementierungsbeispiel",
+    "ROS2 Navigation Stack (Nav2)",
+    "Planungsablauf",
+    "Konfigurationsbeispiel",
+    "Zusammenfassung",
+    "Was fehlte bisher?"
+   ]
+  },
+  {
+   "vl": 27,
+   "key": "slm",
+   "label": "VL neu",
+   "datei": null,
+   "datum": "2027-05-17",
+   "kurz": "SLAM",
+   "status": "geplant",
+   "block": 5,
+   "abschnitte": []
+  },
+  {
+   "vl": 28,
+   "key": "ue9",
+   "label": "Ü 9",
+   "datei": null,
+   "datum": "2027-05-17",
+   "kurz": "Kartenerstellung",
+   "status": "geplant",
+   "block": 5,
+   "abschnitte": []
+  },
+  {
+   "vl": 29,
+   "key": "p6",
+   "label": "P 6",
+   "datei": null,
+   "datum": "2027-05-24",
+   "kurz": "Mapping + Bahnfolge",
+   "status": "geplant",
+   "block": 5,
+   "abschnitte": []
+  },
+  {
+   "vl": 30,
+   "key": "p7",
+   "label": "P 7",
+   "datei": null,
+   "datum": "2027-05-31",
+   "kurz": "Parken + Abbiegen",
+   "status": "geplant",
+   "block": 6,
+   "abschnitte": []
+  },
+  {
+   "vl": 31,
+   "key": "p8",
+   "label": "P 8",
+   "datei": null,
+   "datum": "2027-06-07",
+   "kurz": "Praktikum + X",
+   "status": "geplant",
+   "block": 6,
+   "abschnitte": []
+  }
+ ],
+ "begriffe": [
+  {
+   "id": "verkehrswelt",
+   "name": "Projektaufgabe Verkehrswelt",
+   "linie": "projekt",
+   "vl": 0,
+   "abschnitt": 2,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Ein TurtleBot fährt autonom auf schwarzem Untergrund: Spur folgen, Ampeln und Schilder beachten, Fußgängern ausweichen, einparken.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "formate",
+   "name": "VL, Ü und P",
+   "linie": "projekt",
+   "vl": 0,
+   "abschnitt": 3,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Vorlesung führt Konzepte ein, Übung festigt sie am eigenen Rechner, Praktikum setzt sie am TurtleBot um — je 90 Minuten.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "roboter",
+   "name": "Roboter",
+   "linie": "wahrnehmung",
+   "vl": 0,
+   "abschnitt": 4,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Es gibt keine einheitliche Definition; VDI, RIA und JRA betonen Programmierbarkeit, Bewegung und Sensorik unterschiedlich.",
+   "fehlvorstellung": "„Ein Roboter ist eine Maschine mit Armen.“"
+  },
+  {
+   "id": "klassifikation",
+   "name": "Klassifikation",
+   "linie": "wahrnehmung",
+   "vl": 0,
+   "abschnitt": 5,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Autonomie, Mobilität und Komplexität der Sensorik sind unabhängige Kriterien.",
+   "fehlvorstellung": "„Mobil heißt autonom.“"
+  },
+  {
+   "id": "herausforderungen",
+   "name": "Herausforderungen",
+   "linie": "bewegung",
+   "vl": 0,
+   "abschnitt": 7,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Positionierung, Kartierung, Hinderniserkennung und Echtzeit — dazu wirtschaftliche und rechtliche Fragen.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "sta",
+   "name": "Sense-Think-Act",
+   "linie": "bewegung",
+   "vl": 0,
+   "abschnitt": 8,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Wahrnehmen, Entscheiden, Handeln — gegliedert in reaktive Überwachung, Ausführung und Handlungsplanung.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "turtlebot",
+   "name": "TurtleBot 3 Burger",
+   "linie": "projekt",
+   "vl": 0,
+   "abschnitt": 9,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Unsere Plattform: RPLIDAR C1, Pi-Kamera, Raspberry Pi 3 B+, Differentialantrieb, maximal 0,22 m/s.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "rosmotivation",
+   "name": "Warum ROS?",
+   "linie": "ros",
+   "vl": 0,
+   "abschnitt": 10,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "ROS 2 liefert Kommunikation, wiederverwendbare Pakete und Werkzeuge, damit nicht jedes Team alles neu baut.",
+   "fehlvorstellung": "„ROS ist ein Betriebssystem.“"
+  },
+  {
+   "id": "shell",
+   "name": "Terminal & Shell",
+   "linie": "werkzeuge",
+   "vl": 1,
+   "abschnitt": 2,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Das Terminal zeigt Text, die Shell (bash) interpretiert die Eingaben — der Weg zu ROS 2 und zum TurtleBot.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "pfade",
+   "name": "Absolute & relative Pfade",
+   "linie": "werkzeuge",
+   "vl": 1,
+   "abschnitt": 4,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Absolute Pfade beginnen bei /, relative beim aktuellen Verzeichnis; . und .. stehen für hier und darüber.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "pipes",
+   "name": "Pipes & Umleitung",
+   "linie": "werkzeuge",
+   "vl": 1,
+   "abschnitt": 5,
+   "ebene": 2,
+   "code": true,
+   "erklaerung": "| reicht die Ausgabe weiter, > und >> schreiben sie in eine Datei — z. B. grep ERROR ros.log | wc -l.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "rechte",
+   "name": "Dateirechte",
+   "linie": "werkzeuge",
+   "vl": 1,
+   "abschnitt": 6,
+   "ebene": 2,
+   "code": true,
+   "erklaerung": "rwx für Besitzer, Gruppe und andere; chmod +x macht ein Skript ausführbar, chmod 754 setzt Rechte als Zahl.",
+   "fehlvorstellung": "„Ein Skript, das ich geschrieben habe, darf ich ausführen.“"
+  },
+  {
+   "id": "prozess",
+   "name": "Prozess",
+   "linie": "werkzeuge",
+   "vl": 1,
+   "abschnitt": 7,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Jedes laufende Programm hat eine PID — jeder ROS-Knoten ist ein eigener Prozess.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "umgebung",
+   "name": "Umgebungsvariable",
+   "linie": "werkzeuge",
+   "vl": 1,
+   "abschnitt": 8,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Werte wie PATH oder ROS_DOMAIN_ID, die eine Shell an gestartete Programme weitergibt — nur mit export.",
+   "fehlvorstellung": "„Eine Variable gilt in allen Terminals.“"
+  },
+  {
+   "id": "path",
+   "name": "PATH",
+   "linie": "werkzeuge",
+   "vl": 1,
+   "abschnitt": 10,
+   "ebene": 2,
+   "code": true,
+   "erklaerung": "Die Shell sucht Befehle in den Verzeichnissen aus PATH; fehlt ROS 2 dort: command not found.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "source",
+   "name": "source",
+   "linie": "werkzeuge",
+   "vl": 1,
+   "abschnitt": 11,
+   "ebene": 1,
+   "code": true,
+   "erklaerung": "Führt ein Skript in der aktuellen Shell aus, damit gesetzte Variablen erhalten bleiben — source /opt/ros/jazzy/setup.bash.",
+   "fehlvorstellung": "„./setup.bash und source setup.bash sind dasselbe.“"
+  },
+  {
+   "id": "bashrc",
+   "name": "~/.bashrc",
+   "linie": "werkzeuge",
+   "vl": 1,
+   "abschnitt": 18,
+   "ebene": 2,
+   "code": true,
+   "erklaerung": "Wird beim Öffnen jedes Terminals ausgeführt — der Ort für source und ROS_DOMAIN_ID.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "ssh",
+   "name": "ssh",
+   "linie": "werkzeuge",
+   "vl": 1,
+   "abschnitt": 12,
+   "ebene": 2,
+   "code": true,
+   "erklaerung": "Anmelden auf einem entfernten Rechner, z. B. dem Raspberry Pi des TurtleBots.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "sensor",
+   "name": "Sensor",
+   "linie": "wahrnehmung",
+   "vl": 7,
+   "abschnitt": 3,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Ein Sensor wandelt physikalische, chemische oder biologische Messgrößen in elektrische Signale um.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "propextero",
+   "name": "Propriozeptiv/exterozeptiv",
+   "linie": "wahrnehmung",
+   "vl": 7,
+   "abschnitt": 4,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Propriozeptive Sensoren messen den Roboterzustand (Encoder, IMU), exterozeptive die Umgebung (Kamera, Lidar, Ultraschall).",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "sensorparam",
+   "name": "Sensorparameter",
+   "linie": "wahrnehmung",
+   "vl": 7,
+   "abschnitt": 6,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Messbereich, Auflösung, Linearität, Messfrequenz, Querempfindlichkeit und Öffnungswinkel charakterisieren einen Sensor.",
+   "fehlvorstellung": "„Eine hohe Auflösung bedeutet automatisch eine hohe Genauigkeit.“"
+  },
+  {
+   "id": "pose",
+   "name": "Pose (6 DoF)",
+   "linie": "mathe",
+   "vl": 7,
+   "abschnitt": 7,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Die Pose kombiniert Position (x, y, z) und Orientierung (Rotationsmatrix oder Quaternion) zu sechs Freiheitsgraden.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "imu",
+   "name": "IMU",
+   "linie": "wahrnehmung",
+   "vl": 7,
+   "abschnitt": 8,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Eine IMU kombiniert Beschleunigungssensoren, Gyroskope und Magnetometer und misst je drei Achsen.",
+   "fehlvorstellung": "„Das Magnetometer liefert auch in Innenräumen eine verlässliche Kursreferenz.“"
+  },
+  {
+   "id": "drift",
+   "name": "Drift durch Integration",
+   "linie": "schaetzung",
+   "vl": 7,
+   "abschnitt": 8,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Integriert man Beschleunigung oder Drehrate auf, summieren sich Fehler zu Drift — Abhilfe schafft Fusion mit absoluten Sensoren.",
+   "fehlvorstellung": "„Aus Beschleunigungsdaten lässt sich die Position dauerhaft genau aufintegrieren.“"
+  },
+  {
+   "id": "odometrie",
+   "name": "Odometrie",
+   "linie": "wahrnehmung",
+   "vl": 7,
+   "abschnitt": 9,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Odometrie bestimmt die Bewegung aus Radumdrehungen, die Encoder photoelektrisch, magnetisch oder induktiv erfassen.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "quadratur",
+   "name": "Zwei-Kanal-Encoder",
+   "linie": "wahrnehmung",
+   "vl": 7,
+   "abschnitt": 9,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Zwei um 90° phasenverschobene Kanäle ermöglichen Drehrichtungserkennung und eine höhere Auflösung.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "tof",
+   "name": "Laufzeitmessung",
+   "linie": "wahrnehmung",
+   "vl": 7,
+   "abschnitt": 11,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Die Entfernung folgt aus der Echolaufzeit, d = ½·c·t; Mehrfachechos und Öffnungswinkel begrenzen die Messung.",
+   "fehlvorstellung": "„Die Schallgeschwindigkeit ist konstant, Ultraschall misst daher temperaturunabhängig.“"
+  },
+  {
+   "id": "triangulation",
+   "name": "Triangulation",
+   "linie": "wahrnehmung",
+   "vl": 7,
+   "abschnitt": 13,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Aus einer bekannten Basislinie zwischen Sender und Empfänger wird der Abstand geometrisch bestimmt, z. B. bei IR-Sensoren.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "gnss",
+   "name": "GNSS-Positionsbestimmung",
+   "linie": "wahrnehmung",
+   "vl": 7,
+   "abschnitt": 15,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Pseudoranges zu mindestens vier Satelliten ergeben ein Gleichungssystem für Position und Empfänger-Uhrfehler.",
+   "fehlvorstellung": "„Für eine 3D-Position genügen drei Satelliten.“"
+  },
+  {
+   "id": "dop",
+   "name": "GNSS-Fehler & DOP",
+   "linie": "schaetzung",
+   "vl": 7,
+   "abschnitt": 16,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Atmosphäre, Mehrwegeffekte und Satellitengeometrie (DOP) begrenzen die Genauigkeit; DGPS und SAPOS korrigieren.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "frame",
+   "name": "Bezugskoordinatensystem",
+   "linie": "mathe",
+   "vl": 5,
+   "abschnitt": 4,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Koordinaten eines Punktes haben nur zusammen mit dem Bezugssystem eine Bedeutung, das als Index angegeben wird (p_A).",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "starrtrafo",
+   "name": "Translation und Rotation",
+   "linie": "mathe",
+   "vl": 5,
+   "abschnitt": 5,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Körpererhaltende Transformationen setzen sich aus Verschiebung (Vektoraddition) und Drehung (Rotationsmatrix) zusammen.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "homtrafo",
+   "name": "Homogene Koordinaten",
+   "linie": "mathe",
+   "vl": 5,
+   "abschnitt": 6,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Eine zusätzliche Koordinate macht auch die Translation zu einer Matrixmultiplikation.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "invtrafo",
+   "name": "Inverse Transformation",
+   "linie": "mathe",
+   "vl": 5,
+   "abschnitt": 7,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Die Umkehrung ist die entgegengesetzte Verschiebung bzw. Drehung um −φ (bei Rotation die Transponierte).",
+   "fehlvorstellung": "„Für die Rücktransformation muss man die Matrix immer numerisch invertieren.“"
+  },
+  {
+   "id": "verkettung",
+   "name": "Verkettung",
+   "linie": "mathe",
+   "vl": 5,
+   "abschnitt": 8,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Transformationen entlang einer Frame-Kette (world → base → camera) werden multipliziert; die Reihenfolge ist entscheidend.",
+   "fehlvorstellung": "„Ob man erst rotiert oder erst verschiebt, ist egal.“"
+  },
+  {
+   "id": "euler",
+   "name": "Euler-Winkel",
+   "linie": "mathe",
+   "vl": 5,
+   "abschnitt": 11,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Gieren, Nicken und Rollen beschreiben 3D-Rotationen anschaulich, leiden aber unter Gimbal Lock und Mehrdeutigkeit.",
+   "fehlvorstellung": "„Jede Orientierung hat genau ein Euler-Winkel-Tripel.“"
+  },
+  {
+   "id": "quaternion",
+   "name": "Quaternion",
+   "linie": "mathe",
+   "vl": 5,
+   "abschnitt": 12,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Vier Werte beschreiben eine Drehung um eine Achse ohne Singularitäten — der Standard für Rotationen in ROS.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "tf2",
+   "name": "tf2",
+   "linie": "ros",
+   "vl": 5,
+   "abschnitt": 13,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "tf2 verwaltet die zeitabhängigen Transformationen zwischen Frames und rechnet Daten zwischen Koordinatensystemen um.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "frameid",
+   "name": "Header & frame_id",
+   "linie": "ros",
+   "vl": 5,
+   "abschnitt": 13,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Jede Sensornachricht trägt einen Header mit Zeitstempel und frame_id, der sie einem Koordinatensystem zuordnet.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "statictf",
+   "name": "Statische Transformation",
+   "linie": "ros",
+   "vl": 5,
+   "abschnitt": 14,
+   "ebene": 2,
+   "code": true,
+   "erklaerung": "Konstante Relationen wie Sensor zu Roboter stellt z. B. static_transform_publisher bereit.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "tftree",
+   "name": "tf-Baum",
+   "linie": "ros",
+   "vl": 5,
+   "abschnitt": 15,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Alle Frames bilden einen Baum; die Transformation zwischen zwei Frames ergibt sich über den Pfad im Baum.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "urdf",
+   "name": "URDF",
+   "linie": "ros",
+   "vl": 5,
+   "abschnitt": 16,
+   "ebene": 2,
+   "code": true,
+   "erklaerung": "XML-Beschreibung von Links, Joints, Geometrie und Sensoren eines Roboters — und damit seiner statischen Frames.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "middleware",
+   "name": "ROS als Middleware",
+   "linie": "ros",
+   "vl": 2,
+   "abschnitt": 4,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "ROS bietet Hardwareabstraktion, Treiber, Nachrichtenaustausch und Paketverwaltung für verteilte Robotersoftware.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "dds",
+   "name": "DDS / rmw-Schicht",
+   "linie": "ros",
+   "vl": 2,
+   "abschnitt": 7,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "ROS 2 trennt Client-Libraries (rclcpp/rclpy) über die rmw-Schicht von austauschbaren DDS-Implementierungen.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "node",
+   "name": "Knoten (Node)",
+   "linie": "ros",
+   "vl": 2,
+   "abschnitt": 8,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Ein Knoten ist ein Teilnehmer im ROS-Graphen, der Topics veröffentlicht oder abonniert.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "topic",
+   "name": "Topic",
+   "linie": "ros",
+   "vl": 2,
+   "abschnitt": 8,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Topics sind benannte Kanäle, die Publisher und Subscriber entkoppeln (n:m-Kommunikation).",
+   "fehlvorstellung": "„Publisher und Subscriber müssen einander kennen.“"
+  },
+  {
+   "id": "message",
+   "name": "Nachricht (Message)",
+   "linie": "ros",
+   "vl": 2,
+   "abschnitt": 8,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Eine Message legt Struktur und Datentypen der übertragenen Daten fest, z. B. sensor_msgs/msg/LaserScan.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "msgdef",
+   "name": "Message-Definition (.msg)",
+   "linie": "ros",
+   "vl": 2,
+   "abschnitt": 8,
+   "ebene": 2,
+   "code": true,
+   "erklaerung": "Eine .msg-Datei definiert Felder aus Basistypen, Arrays, Default-Werten und Konstanten.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "discovery",
+   "name": "Discovery",
+   "linie": "ros",
+   "vl": 2,
+   "abschnitt": 8,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Knoten finden sich automatisch innerhalb derselben ROS_DOMAIN_ID, verbinden sich aber nur bei kompatiblen QoS-Einstellungen.",
+   "fehlvorstellung": "„Zwei Knoten auf demselben Topic kommunizieren immer.“"
+  },
+  {
+   "id": "ros2cli",
+   "name": "ros2-Kommandozeile",
+   "linie": "werkzeuge",
+   "vl": 2,
+   "abschnitt": 9,
+   "ebene": 1,
+   "code": true,
+   "erklaerung": "ros2 untersucht und steuert das System über Unterbefehle wie node, topic, service, param, bag und launch.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "pubsub",
+   "name": "Publisher/Subscriber-API",
+   "linie": "ros",
+   "vl": 2,
+   "abschnitt": 10,
+   "ebene": 2,
+   "code": true,
+   "erklaerung": "Knoten legen per create_publisher/create_subscription Kanäle an und laufen mit spin().",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "topiccli",
+   "name": "ros2 topic …",
+   "linie": "werkzeuge",
+   "vl": 2,
+   "abschnitt": 10,
+   "ebene": 2,
+   "code": true,
+   "erklaerung": "Mit ros2 topic list/info/hz/echo/pub lassen sich Topics inspizieren und von Hand Nachrichten senden.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "remap",
+   "name": "Remapping",
+   "linie": "ros",
+   "vl": 2,
+   "abschnitt": 10,
+   "ebene": 2,
+   "code": true,
+   "erklaerung": "Mit --ros-args --remap /topic:=/neu werden Topic-Namen beim Start umgelenkt, ohne den Code zu ändern.",
+   "fehlvorstellung": "„Der Topic-Name ist fest im Code verankert.“"
+  },
+  {
+   "id": "rqt",
+   "name": "rqt / rqt_graph",
+   "linie": "werkzeuge",
+   "vl": 2,
+   "abschnitt": 11,
+   "ebene": 2,
+   "code": true,
+   "erklaerung": "rqt bündelt die Inspektionsfunktionen der ros2-CLI grafisch, z. B. den Knoten-Topic-Graphen.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "domainid",
+   "name": "ROS_DOMAIN_ID",
+   "linie": "ros",
+   "vl": 3,
+   "abschnitt": 2,
+   "ebene": 2,
+   "code": true,
+   "erklaerung": "Die Umgebungsvariable trennt ROS-2-Systeme im selben Netz — im Labor eine pro TurtleBot-Gruppe.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "paket",
+   "name": "ROS-2-Paket",
+   "linie": "ros",
+   "vl": 3,
+   "abschnitt": 3,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Ein Paket kapselt Code samt Abhängigkeiten, Build-Konfiguration, Nachrichten und Launch-Files.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "workspace",
+   "name": "Workspace",
+   "linie": "werkzeuge",
+   "vl": 3,
+   "abschnitt": 3,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Pakete liegen in src/ eines Workspaces; colcon erzeugt daneben build/, install/ und log/.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "ament",
+   "name": "ament_cmake/ament_python",
+   "linie": "werkzeuge",
+   "vl": 3,
+   "abschnitt": 5,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "ament ist das Buildsystem für ein einzelnes Paket, mit CMake (C++) oder setuptools (Python).",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "colcon",
+   "name": "colcon build",
+   "linie": "werkzeuge",
+   "vl": 3,
+   "abschnitt": 5,
+   "ebene": 1,
+   "code": true,
+   "erklaerung": "colcon baut alle Pakete eines Workspaces in der richtigen Abhängigkeitsreihenfolge.",
+   "fehlvorstellung": "„colcon ist der Compiler.“"
+  },
+  {
+   "id": "pkgcreate",
+   "name": "ros2 pkg create",
+   "linie": "werkzeuge",
+   "vl": 3,
+   "abschnitt": 6,
+   "ebene": 2,
+   "code": true,
+   "erklaerung": "Erzeugt ein Paketgerüst mit Build-Type, Abhängigkeiten und optional einem Knoten.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "custommsg",
+   "name": "Eigener Nachrichtentyp",
+   "linie": "ros",
+   "vl": 3,
+   "abschnitt": 6,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Eigene .msg-Dateien werden per rosidl_generate_interfaces in C++/Python-Code übersetzt.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "setupbash",
+   "name": "source install/setup.bash",
+   "linie": "werkzeuge",
+   "vl": 3,
+   "abschnitt": 6,
+   "ebene": 2,
+   "code": true,
+   "erklaerung": "Erst das Sourcen des Install-Overlays macht neu gebaute Pakete im Terminal sichtbar.",
+   "fehlvorstellung": "„Nach colcon build sind neue Pakete sofort in jedem Terminal verfügbar.“"
+  },
+  {
+   "id": "rosbag",
+   "name": "ros2 bag",
+   "linie": "werkzeuge",
+   "vl": 3,
+   "abschnitt": 7,
+   "ebene": 1,
+   "code": true,
+   "erklaerung": "ros2 bag record/play zeichnet Topics auf und spielt sie ab — reproduzierbare Tests ohne reale Sensoren.",
+   "fehlvorstellung": "„Am besten zeichnet man einfach immer alle Topics auf.“"
+  },
+  {
+   "id": "launch",
+   "name": "Launch-Datei",
+   "linie": "ros",
+   "vl": 3,
+   "abschnitt": 8,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Python-Launch-Files starten und parametrieren mehrere Knoten mit Argumenten, Remappings und Includes.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "logging",
+   "name": "Logging & Log-Level",
+   "linie": "ros",
+   "vl": 3,
+   "abschnitt": 9,
+   "ebene": 2,
+   "code": true,
+   "erklaerung": "Logger-Makros wie RCLCPP_INFO und einstellbare Log-Level strukturieren Debug-Ausgaben.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "lifecycle",
+   "name": "Lifecycle-Knoten",
+   "linie": "ros",
+   "vl": 3,
+   "abschnitt": 10,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Managed Nodes durchlaufen den Zustandsautomaten Unconfigured, Inactive, Active und Finalized.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "image_msg",
+   "name": "sensor_msgs/Image",
+   "linie": "ros",
+   "vl": 8,
+   "abschnitt": 6,
+   "ebene": 2,
+   "code": true,
+   "erklaerung": "Standardnachricht für unkomprimierte Kamerabilder mit Header, Größe, Encoding und flachem Byte-Array.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "bildmatrix",
+   "name": "Bild als Pixelmatrix",
+   "linie": "wahrnehmung",
+   "vl": 8,
+   "abschnitt": 8,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Ein digitales Bild ist eine Matrix mit Ursprung oben links; der Zugriff erfolgt als image[Zeile, Spalte] = image[y, x].",
+   "fehlvorstellung": "„image[x, y] liefert den Pixel an der Position (x, y).“"
+  },
+  {
+   "id": "hsv",
+   "name": "HSV-Farbraum",
+   "linie": "wahrnehmung",
+   "vl": 8,
+   "abschnitt": 9,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "HSV trennt Farbton von Helligkeit und macht farbbasierte Segmentierung — etwa von Ampelfarben — robuster.",
+   "fehlvorstellung": "„Rot lässt sich mit einem einzigen Hue-Intervall erfassen.“"
+  },
+  {
+   "id": "thresholding",
+   "name": "Schwellwertoperation",
+   "linie": "wahrnehmung",
+   "vl": 8,
+   "abschnitt": 13,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Binärisierung per festem oder adaptivem Schwellwert, z. B. weiße Fahrbahnlinien auf schwarzem Grund.",
+   "fehlvorstellung": "„Ein fester Schwellwert funktioniert bei jeder Beleuchtung.“"
+  },
+  {
+   "id": "morphologie",
+   "name": "Morphologische Operationen",
+   "linie": "wahrnehmung",
+   "vl": 8,
+   "abschnitt": 14,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Erosion, Dilatation, Opening und Closing bereinigen Binärmasken von Störpixeln und schließen Lücken.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "faltung",
+   "name": "Faltung (Convolution)",
+   "linie": "wahrnehmung",
+   "vl": 8,
+   "abschnitt": 18,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Ein Kernel wird über das Bild geschoben und gewichtet die Nachbarschaft — Grundlage für Glättung, Kantenfilter und CNNs.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "gaussfilter",
+   "name": "Gaußfilter",
+   "linie": "wahrnehmung",
+   "vl": 8,
+   "abschnitt": 19,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Glättet Bildrauschen durch gaußförmig gewichtete Mittelung, verwischt dabei aber auch Kanten.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "medianfilter",
+   "name": "Median-Filter",
+   "linie": "wahrnehmung",
+   "vl": 8,
+   "abschnitt": 20,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Ersetzt jeden Pixel durch den Median seiner Umgebung und entfernt Salt-and-Pepper-Rauschen kantenschonend.",
+   "fehlvorstellung": "„Ein Gaußfilter entfernt Salt-and-Pepper-Rauschen genauso gut.“"
+  },
+  {
+   "id": "sobel",
+   "name": "Sobel-Operator",
+   "linie": "wahrnehmung",
+   "vl": 8,
+   "abschnitt": 23,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Approximiert die Bildgradienten in x- und y-Richtung; daraus ergeben sich Kantenstärke und -richtung.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "canny",
+   "name": "Canny-Kantendetektor",
+   "linie": "wahrnehmung",
+   "vl": 8,
+   "abschnitt": 24,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Gaußglättung, Sobel-Gradient, Non-Maximum-Suppression und Hysterese mit zwei Schwellwerten.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "cv_bridge",
+   "name": "cv_bridge",
+   "linie": "ros",
+   "vl": 8,
+   "abschnitt": 27,
+   "ebene": 1,
+   "code": true,
+   "erklaerung": "Konvertiert sensor_msgs/Image in OpenCV-Bilder und zurück (imgmsg_to_cv2, cv2_to_imgmsg).",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "compressed_image",
+   "name": "CompressedImage",
+   "linie": "ros",
+   "vl": 8,
+   "abschnitt": 29,
+   "ebene": 2,
+   "code": true,
+   "erklaerung": "JPEG-komprimierte Bildnachricht: weniger Last im WLAN, dafür CPU-Zeit und Qualitätsverlust.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "pinhole",
+   "name": "Lochkameramodell",
+   "linie": "mathe",
+   "vl": 9,
+   "abschnitt": 4,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Projiziert 3D-Punkte über ähnliche Dreiecke auf die Bildebene (u = f·X/Z) — die Tiefe geht verloren.",
+   "fehlvorstellung": "„Aus einem einzelnen Kamerabild lässt sich die Entfernung direkt ablesen.“"
+  },
+  {
+   "id": "homprojektion",
+   "name": "Projektion in Matrixform",
+   "linie": "mathe",
+   "vl": 9,
+   "abschnitt": 5,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Homogene Koordinaten machen die Projektion zu einer Matrixmultiplikation mit anschließender Normierung.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "kmatrix",
+   "name": "Kamera-Matrix K",
+   "linie": "mathe",
+   "vl": 9,
+   "abschnitt": 7,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Intrinsische 3×3-Matrix mit Brennweiten fx, fy und Hauptpunkt cx, cy.",
+   "fehlvorstellung": "„K beschreibt auch die Linsenverzerrung.“"
+  },
+  {
+   "id": "verzerrung",
+   "name": "Verzerrungsparameter",
+   "linie": "mathe",
+   "vl": 9,
+   "abschnitt": 8,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Radiale und tangentiale Koeffizienten modellieren Tonnen- und Kissenverzeichnung realer Linsen.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "entzerrung",
+   "name": "Entzerrung (undistort)",
+   "linie": "wahrnehmung",
+   "vl": 9,
+   "abschnitt": 9,
+   "ebene": 2,
+   "code": true,
+   "erklaerung": "cv2.undistort rechnet mit K und D ein verzerrtes Kamerabild in ein ideales Lochkamerabild um.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "kalibrierung",
+   "name": "Kamerakalibrierung",
+   "linie": "wahrnehmung",
+   "vl": 9,
+   "abschnitt": 11,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Aus vielen Schachbrettaufnahmen werden K und die Verzerrungskoeffizienten D bestimmt.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "extrinsik",
+   "name": "Extrinsische Parameter",
+   "linie": "mathe",
+   "vl": 9,
+   "abschnitt": 12,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Rotation R und Translation t beschreiben die Lage der Kamera relativ zu Welt oder Roboter.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "disparitaet",
+   "name": "Disparität & Tiefe",
+   "linie": "wahrnehmung",
+   "vl": 9,
+   "abschnitt": 14,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Zwei Kameras mit Basislinie b liefern über die Disparität d die Tiefe Z = f·b/d.",
+   "fehlvorstellung": "„Große Disparität bedeutet ein weit entferntes Objekt.“"
+  },
+  {
+   "id": "rektifizierung",
+   "name": "Stereo-Rektifizierung",
+   "linie": "wahrnehmung",
+   "vl": 9,
+   "abschnitt": 15,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Beide Bilder werden so gedreht, dass korrespondierende Punkte in derselben Zeile liegen.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "camerainfo",
+   "name": "CameraInfo",
+   "linie": "ros",
+   "vl": 9,
+   "abschnitt": 18,
+   "ebene": 2,
+   "code": true,
+   "erklaerung": "sensor_msgs/CameraInfo überträgt K, D, R und P einer kalibrierten Kamera.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "pointcloud2",
+   "name": "PointCloud2",
+   "linie": "ros",
+   "vl": 9,
+   "abschnitt": 17,
+   "ebene": 1,
+   "code": true,
+   "erklaerung": "ROS-2-Format für 3D-Punktwolken: ein Byte-Strom, dessen Aufbau PointField-Einträge beschreiben.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "pc_transform",
+   "name": "Punktwolke transformieren",
+   "linie": "ros",
+   "vl": 9,
+   "abschnitt": 23,
+   "ebene": 2,
+   "code": true,
+   "erklaerung": "Punktwolken liegen im Kamera-Frame vor und müssen per tf2 z. B. nach base_link überführt werden.",
+   "fehlvorstellung": "„Die Punktwolke liegt automatisch im Roboterkoordinatensystem vor.“"
+  },
+  {
+   "id": "detektion",
+   "name": "Detektion vs. Klassifikation",
+   "linie": "wahrnehmung",
+   "vl": 15,
+   "abschnitt": 3,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Detektion: wo? (Bounding Box). Klassifikation: was? Tracking: wie bewegt es sich?",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "ecken",
+   "name": "Eckendetektoren",
+   "linie": "wahrnehmung",
+   "vl": 15,
+   "abschnitt": 6,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Harris und Shi-Tomasi finden Ecken über die Strukturmatrix, FAST über einen schnellen Pixelkreistest.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "orb",
+   "name": "ORB-Deskriptor",
+   "linie": "wahrnehmung",
+   "vl": 15,
+   "abschnitt": 7,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "FAST-Keypoints mit orientierungskorrigiertem binärem Deskriptor — rotationsinvariant.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "matching",
+   "name": "Feature Matching",
+   "linie": "wahrnehmung",
+   "vl": 15,
+   "abschnitt": 8,
+   "ebene": 2,
+   "code": true,
+   "erklaerung": "Deskriptoren werden per Distanz zugeordnet (cv2.BFMatcher), Ausreißer per RANSAC entfernt.",
+   "fehlvorstellung": "„Ähnliche Deskriptoren bedeuten dasselbe Objekt.“"
+  },
+  {
+   "id": "cnn",
+   "name": "CNN",
+   "linie": "wahrnehmung",
+   "vl": 15,
+   "abschnitt": 12,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Faltungs-, Pooling- und Fully-Connected-Schichten lernen hierarchische Bildmerkmale aus Trainingsdaten.",
+   "fehlvorstellung": "„Die Filterkerne eines CNN werden von Hand vorgegeben.“"
+  },
+  {
+   "id": "yolo",
+   "name": "YOLO",
+   "linie": "wahrnehmung",
+   "vl": 15,
+   "abschnitt": 13,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Single-Shot-Detektor: Bounding Boxes, Konfidenzen und Klassen in einem Durchlauf; NMS entfernt Doppelte.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "ultralytics",
+   "name": "YOLO mit ultralytics",
+   "linie": "wahrnehmung",
+   "vl": 15,
+   "abschnitt": 15,
+   "ebene": 2,
+   "code": true,
+   "erklaerung": "Die ultralytics-API lädt ein vortrainiertes Modell und liefert Boxen mit Klassen.",
+   "fehlvorstellung": "„Ein auf COCO vortrainiertes Modell erkennt jedes Objekt ohne Nachtraining — auch Verkehrsschilder der Verkehrswelt.“"
+  },
+  {
+   "id": "bbox3d",
+   "name": "Bounding Box → 3D-Position",
+   "linie": "wahrnehmung",
+   "vl": 15,
+   "abschnitt": 17,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Box-Mittelpunkt, Tiefe und K ergeben die Position des Objekts in Kamerakoordinaten.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "optflow",
+   "name": "Optischer Fluss",
+   "linie": "wahrnehmung",
+   "vl": 15,
+   "abschnitt": 19,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Lucas-Kanade schätzt kleine Pixelverschiebungen aus räumlichen und zeitlichen Gradienten.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "deepsort",
+   "name": "DeepSORT-Tracking",
+   "linie": "schaetzung",
+   "vl": 15,
+   "abschnitt": 20,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Multi-Object-Tracking mit Kalman-Prädiktion, Appearance-Features und ungarischer Zuordnung.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "ransac",
+   "name": "RANSAC",
+   "linie": "wahrnehmung",
+   "vl": 15,
+   "abschnitt": 22,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Robuste Modellschätzung aus zufälligen Minimalstichproben — das Modell mit den meisten Inliern gewinnt.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "icp",
+   "name": "ICP-Registrierung",
+   "linie": "wahrnehmung",
+   "vl": 15,
+   "abschnitt": 24,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Richtet zwei Punktwolken iterativ über nächste Nachbarn und eine Starrkörpertransformation aus.",
+   "fehlvorstellung": "„ICP findet von jeder Startlage aus die richtige Ausrichtung.“"
+  },
+  {
+   "id": "sensorfusion",
+   "name": "Sensordatenfusion",
+   "linie": "schaetzung",
+   "vl": 20,
+   "abschnitt": 3,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Kombination mehrerer Quellen zu einer Schätzung, die genauer oder vollständiger ist als jede einzelne.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "fusionsarten",
+   "name": "Fusionsarten",
+   "linie": "schaetzung",
+   "vl": 20,
+   "abschnitt": 3,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Konkurrierend (genauer), komplementär (vollständiger) oder kooperativ (neue Information).",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "fusionsebenen",
+   "name": "Fusionsebenen",
+   "linie": "schaetzung",
+   "vl": 20,
+   "abschnitt": 3,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Fusion auf Rohdaten-, Merkmals- oder Entscheidungsebene; je später, desto stärker vorverarbeitet.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "bayesfilter",
+   "name": "Diskreter Bayes-Filter",
+   "linie": "schaetzung",
+   "vl": 20,
+   "abschnitt": 4,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Der Zustand als Wahrscheinlichkeitsverteilung über Zellen, zyklisch aktualisiert durch Bewegung und Messung.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "sensormodell",
+   "name": "Sensormodell",
+   "linie": "wahrnehmung",
+   "vl": 20,
+   "abschnitt": 6,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Wie wahrscheinlich ist eine Messung in jedem Zustand — einschließlich Falsch-Positiv und Falsch-Negativ?",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "apriori",
+   "name": "Prior, Likelihood, Posterior",
+   "linie": "mathe",
+   "vl": 20,
+   "abschnitt": 7,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Posterior = Likelihood × Prior, normiert: Eine Messung gewichtet das bisherige Wissen neu.",
+   "fehlvorstellung": "„Eine neue Messung ersetzt einfach die bisherige Schätzung.“"
+  },
+  {
+   "id": "bewegfaltung",
+   "name": "Bewegung als Faltung",
+   "linie": "schaetzung",
+   "vl": 20,
+   "abschnitt": 8,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Der Predict-Schritt verschiebt die Verteilung und verschmiert sie — die Unsicherheit wächst.",
+   "fehlvorstellung": "„Nach einer Bewegung weiß der Roboter genauer, wo er ist.“"
+  },
+  {
+   "id": "predictupdate",
+   "name": "Predict-Update-Zyklus",
+   "linie": "schaetzung",
+   "vl": 20,
+   "abschnitt": 9,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Vorhersage (Unsicherheit wächst) und Korrektur durch Messung (Unsicherheit sinkt) im Wechsel.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "gridlokalisierung",
+   "name": "Grid-Lokalisierung",
+   "linie": "schaetzung",
+   "vl": 20,
+   "abschnitt": 10,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Aus Karte, Landmarken und Bewegungsmodell konvergiert eine 2D-Verteilung zur Pose.",
+   "fehlvorstellung": "„Eine Landmarkenerkennung reicht für eine eindeutige Lokalisierung.“"
+  },
+  {
+   "id": "mapmmse",
+   "name": "MAP vs. Erwartungswert",
+   "linie": "mathe",
+   "vl": 20,
+   "abschnitt": 11,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "argmax liefert springende Schätzungen; der Erwartungswert nutzt die ganze Verteilung.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "qos",
+   "name": "Quality of Service",
+   "linie": "ros",
+   "vl": 21,
+   "abschnitt": 2,
+   "ebene": 2,
+   "code": true,
+   "erklaerung": "QoS-Profile (Reliability, Durability, History, Depth) steuern die Zustellung; Sensordaten meist best effort.",
+   "fehlvorstellung": "„Ein Subscriber empfängt jedes Topic, egal mit welchen QoS-Einstellungen.“"
+  },
+  {
+   "id": "normalverteilung",
+   "name": "Normalverteilung",
+   "linie": "mathe",
+   "vl": 21,
+   "abschnitt": 4,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Gaußverteilungen bleiben bei Predict und Update gaußförmig — μ und σ² genügen.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "kalman",
+   "name": "Kalman-Filter",
+   "linie": "schaetzung",
+   "vl": 21,
+   "abschnitt": 5,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Optimaler Schätzer für lineare Systeme mit Gaußrauschen — der Predict-Update-Zyklus in geschlossener Form.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "kalmangain",
+   "name": "Kalman-Gain",
+   "linie": "schaetzung",
+   "vl": 21,
+   "abschnitt": 8,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Gewichtet die Innovation nach dem Verhältnis von Vorhersage- zu Messunsicherheit.",
+   "fehlvorstellung": "„Der Kalman-Gain ist ein fester Parameter.“"
+  },
+  {
+   "id": "qr",
+   "name": "Prozess- vs. Messrauschen",
+   "linie": "schaetzung",
+   "vl": 21,
+   "abschnitt": 11,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Q und R legen fest, wie sehr der Filter dem Modell bzw. dem Sensor vertraut.",
+   "fehlvorstellung": "„Kleinere Rauschwerte machen den Filter immer genauer.“"
+  },
+  {
+   "id": "kfmatrix",
+   "name": "Mehrdimensionaler KF",
+   "linie": "schaetzung",
+   "vl": 21,
+   "abschnitt": 12,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Mit Zustandsvektor und Kovarianzmatrix lassen sich auch nicht gemessene Größen schätzen.",
+   "fehlvorstellung": "„Der Filter schätzt nur, was ein Sensor direkt misst.“"
+  },
+  {
+   "id": "ekf",
+   "name": "Extended Kalman Filter",
+   "linie": "schaetzung",
+   "vl": 21,
+   "abschnitt": 15,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Linearisiert nichtlineare Bewegungs- und Messmodelle um die aktuelle Schätzung.",
+   "fehlvorstellung": "„Der EKF ist auch für nichtlineare Systeme exakt optimal.“"
+  },
+  {
+   "id": "jacobi",
+   "name": "Jacobi-Matrix",
+   "linie": "mathe",
+   "vl": 21,
+   "abschnitt": 16,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Taylor-Entwicklung erster Ordnung; die Jacobi-Matrizen propagieren im EKF die Kovarianz.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "robotlocalization",
+   "name": "robot_localization",
+   "linie": "ros",
+   "vl": 21,
+   "abschnitt": 19,
+   "ebene": 1,
+   "code": true,
+   "erklaerung": "ROS-2-Paket, das Odometrie, IMU und GPS per EKF zu /odometry/filtered fusioniert.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "ekfconfig",
+   "name": "EKF-Konfiguration",
+   "linie": "ros",
+   "vl": 21,
+   "abschnitt": 20,
+   "ebene": 2,
+   "code": true,
+   "erklaerung": "In ekf.yaml legt pro Sensor eine Bool-Liste fest, zu welchen Zustandsgrößen er beiträgt.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "kovarianzpraxis",
+   "name": "Sensor-Kovarianzen",
+   "linie": "schaetzung",
+   "vl": 21,
+   "abschnitt": 22,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Realistische Kovarianzen steuern das Sensorvertrauen; falsche Frames oder Zeitstempel sabotieren die Fusion.",
+   "fehlvorstellung": "„Kovarianz 0 bedeutet einen perfekten Sensor.“"
+  },
+  {
+   "id": "diffdrive",
+   "name": "Differentialantrieb",
+   "linie": "mathe",
+   "vl": 24,
+   "abschnitt": 4,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Zwei unabhängig angetriebene Räder; die Kinematik verbindet Radgeschwindigkeiten mit v und ω.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "nichtholonom",
+   "name": "Nichtholonome Einschränkung",
+   "linie": "mathe",
+   "vl": 24,
+   "abschnitt": 4,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Ein Differentialantrieb kann nicht seitwärts fahren — wichtig beim Einparken.",
+   "fehlvorstellung": "„Wer auf der Stelle drehen kann, kann jede Pose direkt anfahren.“"
+  },
+  {
+   "id": "radodometrie",
+   "name": "Rad-Odometrie",
+   "linie": "schaetzung",
+   "vl": 24,
+   "abschnitt": 7,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Aus Encoder-Ticks und Kinematik aufintegrierte Pose; die Fehler summieren sich zur Drift.",
+   "fehlvorstellung": "„Rad-Odometrie liefert dauerhaft eine zuverlässige Position.“"
+  },
+  {
+   "id": "regelung",
+   "name": "Steuerung vs. Regelung",
+   "linie": "bewegung",
+   "vl": 24,
+   "abschnitt": 9,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Eine Regelung misst die Regelgröße laufend zurück und vergleicht sie mit dem Sollwert.",
+   "fehlvorstellung": "„Fahren mit fester Geschwindigkeit und Dauer ist schon eine Regelung.“"
+  },
+  {
+   "id": "strecke",
+   "name": "Streckenverhalten",
+   "linie": "bewegung",
+   "vl": 24,
+   "abschnitt": 11,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Regelstrecken werden als P-, I-, Totzeit-, PT1- oder PT2-Glied modelliert.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "pid",
+   "name": "PID-Regler",
+   "linie": "bewegung",
+   "vl": 24,
+   "abschnitt": 12,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Proportionaler, integrierender und differenzierender Anteil auf die Regelabweichung e = w − r.",
+   "fehlvorstellung": "„Ein höherer P-Anteil macht die Regelung immer besser.“"
+  },
+  {
+   "id": "guete",
+   "name": "Gütekriterien",
+   "linie": "bewegung",
+   "vl": 24,
+   "abschnitt": 13,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Stabilität, Störkompensation, Sollwertfolge und Robustheit bewerten einen Regelkreis.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "movetopose",
+   "name": "Move-to-Pose",
+   "linie": "bewegung",
+   "vl": 24,
+   "abschnitt": 16,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Regelt Abstand und Winkel zur Zielpose — für Punkt-zu-Punkt-Fahrten ohne Hindernisse.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "purepursuit",
+   "name": "Pure Pursuit",
+   "linie": "bewegung",
+   "vl": 24,
+   "abschnitt": 17,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Folgt einem Pfad über einen Kreisbogen zu einem Lookahead-Punkt auf der Bahn.",
+   "fehlvorstellung": "„Je kleiner die Lookahead-Distanz, desto besser.“"
+  },
+  {
+   "id": "twist",
+   "name": "Twist / cmd_vel",
+   "linie": "ros",
+   "vl": 24,
+   "abschnitt": 20,
+   "ebene": 1,
+   "code": true,
+   "erklaerung": "geometry_msgs/Twist auf cmd_vel ist die Schnittstelle für Fahrbefehle; beim TurtleBot zählen linear.x und angular.z.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "ros2control",
+   "name": "ros2_control",
+   "linie": "ros",
+   "vl": 24,
+   "abschnitt": 21,
+   "ebene": 2,
+   "code": true,
+   "erklaerung": "Framework zwischen Controllern und Hardware; der diff_drive_controller rechnet cmd_vel in Radgeschwindigkeiten um.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "navigation",
+   "name": "Navigation",
+   "linie": "bewegung",
+   "vl": 26,
+   "abschnitt": 3,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Selbstlokalisierung, bei Bedarf Kartenerstellung und Wegplanung zum Ziel.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "bug",
+   "name": "Bug-Algorithmen",
+   "linie": "bewegung",
+   "vl": 26,
+   "abschnitt": 6,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Reaktive Strategien ohne Karte aus Zielrichtung und Konturfolge.",
+   "fehlvorstellung": "„Direkt aufs Ziel zufahren und Hindernisse umfahren führt sicher ans Ziel.“"
+  },
+  {
+   "id": "occupancygrid",
+   "name": "Occupancy Grid",
+   "linie": "bewegung",
+   "vl": 26,
+   "abschnitt": 8,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Rasterkarte mit Belegungswahrscheinlichkeit je Zelle — in ROS nav_msgs/OccupancyGrid.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "quadtree",
+   "name": "Quadtree",
+   "linie": "bewegung",
+   "vl": 26,
+   "abschnitt": 9,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Teilt inhomogene Zellen rekursiv und spart Speicher in offenen Bereichen.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "costmap",
+   "name": "Costmap",
+   "linie": "ros",
+   "vl": 26,
+   "abschnitt": 10,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Nav2-Planungskarte mit Kosten von 0 bis 255 aus gestapelten Layern, global und lokal.",
+   "fehlvorstellung": "„Die Costmap ist einfach die gespeicherte Karte.“"
+  },
+  {
+   "id": "inflation",
+   "name": "Inflation Layer",
+   "linie": "ros",
+   "vl": 26,
+   "abschnitt": 10,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Bläst Hindernisse mit abfallenden Kosten auf — für Sicherheitsabstand zum Roboter-Footprint.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "topokarte",
+   "name": "Topologische Karte",
+   "linie": "bewegung",
+   "vl": 26,
+   "abschnitt": 11,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Graph aus Orten und Verbindungen: kompakt, aber ohne metrische Genauigkeit.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "bfs",
+   "name": "Breitensuche",
+   "linie": "bewegung",
+   "vl": 26,
+   "abschnitt": 14,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Breitet sich wellenförmig vom Start aus; vollständig, aber ohne Richtung zum Ziel.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "dijkstra",
+   "name": "Dijkstra",
+   "linie": "bewegung",
+   "vl": 26,
+   "abschnitt": 15,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Erweitert Knoten nach aufsummierten Kosten; optimal bei nicht-negativen Kantengewichten.",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "astar",
+   "name": "A*",
+   "linie": "bewegung",
+   "vl": 26,
+   "abschnitt": 16,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Sortiert nach f = g + h; mit zulässiger Heuristik optimal und meist schneller als Dijkstra.",
+   "fehlvorstellung": "„Eine großzügige Heuristik macht A* nur schneller, nicht schlechter.“"
+  },
+  {
+   "id": "nav2",
+   "name": "Nav2",
+   "linie": "ros",
+   "vl": 26,
+   "abschnitt": 19,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Navigationsframework aus Planner-, Controller- und Behavior-Servern, koordiniert durch Behavior Trees.",
+   "fehlvorstellung": null
+  }
+ ],
+ "beziehungen": [
+  {
+   "von": "roboter",
+   "nach": "klassifikation",
+   "text": "wird geordnet durch"
+  },
+  {
+   "von": "sta",
+   "nach": "turtlebot",
+   "text": "konkret am"
+  },
+  {
+   "von": "herausforderungen",
+   "nach": "rosmotivation",
+   "text": "begründet"
+  },
+  {
+   "von": "verkehrswelt",
+   "nach": "turtlebot",
+   "text": "gelöst mit"
+  },
+  {
+   "von": "shell",
+   "nach": "pfade",
+   "text": "navigiert über"
+  },
+  {
+   "von": "shell",
+   "nach": "pipes",
+   "text": "verknüpft mit"
+  },
+  {
+   "von": "rechte",
+   "nach": "path",
+   "text": "Voraussetzung für"
+  },
+  {
+   "von": "umgebung",
+   "nach": "path",
+   "text": "Beispiel"
+  },
+  {
+   "von": "umgebung",
+   "nach": "source",
+   "text": "bleibt erhalten mit"
+  },
+  {
+   "von": "source",
+   "nach": "bashrc",
+   "text": "dauerhaft in"
+  },
+  {
+   "von": "ssh",
+   "nach": "turtlebot",
+   "text": "Zugang zum"
+  },
+  {
+   "von": "prozess",
+   "nach": "umgebung",
+   "text": "erbt"
+  },
+  {
+   "von": "imu",
+   "nach": "drift",
+   "text": "leidet unter"
+  },
+  {
+   "von": "odometrie",
+   "nach": "pose",
+   "text": "schätzt"
+  },
+  {
+   "von": "homtrafo",
+   "nach": "verkettung",
+   "text": "ermöglicht"
+  },
+  {
+   "von": "quaternion",
+   "nach": "euler",
+   "text": "vermeidet Schwächen von"
+  },
+  {
+   "von": "verkettung",
+   "nach": "tftree",
+   "text": "realisiert im"
+  },
+  {
+   "von": "frameid",
+   "nach": "tf2",
+   "text": "genutzt von"
+  },
+  {
+   "von": "dds",
+   "nach": "discovery",
+   "text": "realisiert"
+  },
+  {
+   "von": "node",
+   "nach": "topic",
+   "text": "publiziert auf"
+  },
+  {
+   "von": "topic",
+   "nach": "message",
+   "text": "überträgt"
+  },
+  {
+   "von": "msgdef",
+   "nach": "custommsg",
+   "text": "Grundlage für"
+  },
+  {
+   "von": "colcon",
+   "nach": "ament",
+   "text": "orchestriert"
+  },
+  {
+   "von": "rosbag",
+   "nach": "topic",
+   "text": "zeichnet auf"
+  },
+  {
+   "von": "hsv",
+   "nach": "thresholding",
+   "text": "liefert Eingabe für"
+  },
+  {
+   "von": "thresholding",
+   "nach": "morphologie",
+   "text": "bereinigt durch"
+  },
+  {
+   "von": "gaussfilter",
+   "nach": "canny",
+   "text": "erster Schritt von"
+  },
+  {
+   "von": "faltung",
+   "nach": "cnn",
+   "text": "Grundlage für"
+  },
+  {
+   "von": "image_msg",
+   "nach": "cv_bridge",
+   "text": "konvertiert durch"
+  },
+  {
+   "von": "kalibrierung",
+   "nach": "kmatrix",
+   "text": "bestimmt"
+  },
+  {
+   "von": "kmatrix",
+   "nach": "camerainfo",
+   "text": "übertragen in"
+  },
+  {
+   "von": "disparitaet",
+   "nach": "pointcloud2",
+   "text": "liefert Tiefe für"
+  },
+  {
+   "von": "yolo",
+   "nach": "bbox3d",
+   "text": "liefert Box für"
+  },
+  {
+   "von": "disparitaet",
+   "nach": "bbox3d",
+   "text": "liefert Tiefe für"
+  },
+  {
+   "von": "yolo",
+   "nach": "deepsort",
+   "text": "liefert Detektionen für"
+  },
+  {
+   "von": "pointcloud2",
+   "nach": "pc_transform",
+   "text": "erfordert"
+  },
+  {
+   "von": "bayesfilter",
+   "nach": "predictupdate",
+   "text": "folgt dem"
+  },
+  {
+   "von": "normalverteilung",
+   "nach": "kalman",
+   "text": "ermöglicht"
+  },
+  {
+   "von": "bayesfilter",
+   "nach": "kalman",
+   "text": "Spezialfall"
+  },
+  {
+   "von": "ekf",
+   "nach": "jacobi",
+   "text": "linearisiert mit"
+  },
+  {
+   "von": "ekf",
+   "nach": "robotlocalization",
+   "text": "implementiert in"
+  },
+  {
+   "von": "radodometrie",
+   "nach": "robotlocalization",
+   "text": "Eingang für"
+  },
+  {
+   "von": "diffdrive",
+   "nach": "radodometrie",
+   "text": "Kinematik für"
+  },
+  {
+   "von": "regelung",
+   "nach": "pid",
+   "text": "realisiert durch"
+  },
+  {
+   "von": "purepursuit",
+   "nach": "twist",
+   "text": "erzeugt"
+  },
+  {
+   "von": "dijkstra",
+   "nach": "astar",
+   "text": "+ Heuristik"
+  },
+  {
+   "von": "costmap",
+   "nach": "astar",
+   "text": "Grundlage für"
+  },
+  {
+   "von": "purepursuit",
+   "nach": "nav2",
+   "text": "Controller in"
+  },
+  {
+   "von": "rosmotivation",
+   "nach": "middleware",
+   "text": "konkret als"
+  },
+  {
+   "von": "sta",
+   "nach": "sensor",
+   "text": "Sense-Ebene"
+  },
+  {
+   "von": "shell",
+   "nach": "ros2cli",
+   "text": "bedient"
+  },
+  {
+   "von": "source",
+   "nach": "setupbash",
+   "text": "angewandt auf"
+  },
+  {
+   "von": "umgebung",
+   "nach": "domainid",
+   "text": "Beispiel"
+  },
+  {
+   "von": "pfade",
+   "nach": "workspace",
+   "text": "Struktur des"
+  },
+  {
+   "von": "turtlebot",
+   "nach": "domainid",
+   "text": "eine pro Gruppe"
+  },
+  {
+   "von": "topic",
+   "nach": "rosbag",
+   "text": "aufgezeichnet von"
+  },
+  {
+   "von": "message",
+   "nach": "image_msg",
+   "text": "Beispiel"
+  },
+  {
+   "von": "discovery",
+   "nach": "qos",
+   "text": "nur bei passender"
+  },
+  {
+   "von": "frameid",
+   "nach": "pc_transform",
+   "text": "nötig für"
+  },
+  {
+   "von": "homtrafo",
+   "nach": "homprojektion",
+   "text": "angewandt in"
+  },
+  {
+   "von": "extrinsik",
+   "nach": "tf2",
+   "text": "veröffentlicht über"
+  },
+  {
+   "von": "faltung",
+   "nach": "bewegfaltung",
+   "text": "gleiche Operation"
+  },
+  {
+   "von": "odometrie",
+   "nach": "radodometrie",
+   "text": "berechnet als"
+  },
+  {
+   "von": "drift",
+   "nach": "sensorfusion",
+   "text": "motiviert"
+  },
+  {
+   "von": "pose",
+   "nach": "ekf",
+   "text": "geschätzt von"
+  },
+  {
+   "von": "imu",
+   "nach": "robotlocalization",
+   "text": "Eingang für"
+  },
+  {
+   "von": "tf2",
+   "nach": "robotlocalization",
+   "text": "Frames für"
+  },
+  {
+   "von": "ransac",
+   "nach": "matching",
+   "text": "säubert"
+  },
+  {
+   "von": "occupancygrid",
+   "nach": "costmap",
+   "text": "Grundlage für"
+  },
+  {
+   "von": "twist",
+   "nach": "turtlebot",
+   "text": "steuert"
+  }
+ ],
+ "faeden": [
+  {
+   "id": "f_projekt",
+   "name": "Projektaufgabe",
+   "beschreibung": "Vom Ziel in der ersten Vorlesung zum autonom fahrenden TurtleBot in der Verkehrswelt.",
+   "stationen": [
+    "verkehrswelt",
+    "turtlebot",
+    "domainid",
+    "rosbag",
+    "thresholding",
+    "kalibrierung",
+    "yolo",
+    "robotlocalization",
+    "purepursuit",
+    "costmap",
+    "nav2"
+   ]
+  },
+  {
+   "id": "f_umgebung",
+   "name": "Umgebung im Griff",
+   "beschreibung": "Von der Shell über Umgebungsvariablen zum lauffähigen ROS-2-Workspace.",
+   "stationen": [
+    "shell",
+    "umgebung",
+    "source",
+    "bashrc",
+    "ros2cli",
+    "setupbash",
+    "domainid"
+   ]
+  },
+  {
+   "id": "f_ros",
+   "name": "Vom Knoten zum System",
+   "beschreibung": "Wie aus einzelnen Knoten und Nachrichten ein vollständiges Robotersystem wird.",
+   "stationen": [
+    "rosmotivation",
+    "middleware",
+    "node",
+    "topic",
+    "message",
+    "paket",
+    "launch",
+    "tf2",
+    "nav2"
+   ]
+  },
+  {
+   "id": "f_koord",
+   "name": "Koordinaten überall",
+   "beschreibung": "Bezugssysteme und Transformationen ziehen sich vom Roboter bis zur Kamera und zum Fahrwerk.",
+   "stationen": [
+    "frame",
+    "homtrafo",
+    "verkettung",
+    "tf2",
+    "pose",
+    "kmatrix",
+    "pc_transform",
+    "bbox3d",
+    "diffdrive"
+   ]
+  },
+  {
+   "id": "f_bild",
+   "name": "Vom Pixel zum Objekt",
+   "beschreibung": "Von der Pixelmatrix bis zum erkannten Verkehrszeichen mit 3D-Position.",
+   "stationen": [
+    "bildmatrix",
+    "hsv",
+    "thresholding",
+    "canny",
+    "kalibrierung",
+    "disparitaet",
+    "cnn",
+    "yolo",
+    "bbox3d"
+   ]
+  },
+  {
+   "id": "f_unsicher",
+   "name": "Unsicherheit beherrschen",
+   "beschreibung": "Kein Sensor ist perfekt: von Sensorfehlern über Bayes zur fusionierten Pose.",
+   "stationen": [
+    "sensorparam",
+    "drift",
+    "sensorfusion",
+    "bayesfilter",
+    "predictupdate",
+    "kalman",
+    "ekf",
+    "robotlocalization"
+   ]
+  }
+ ]
+}
