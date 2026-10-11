@@ -54,9 +54,9 @@ Alles üben wir am `turtlesim` — dieselben Befehle verwenden Sie später am Tu
 | 15 min | Actions (A0, A1)                                                 |
 | 25 min | Daten aufzeichnen und abspielen (B1)                             |
 | 5 min  | Selbsttest, Ausblick                                             |
-| 5 min  | Puffer                                                           |
+| 5 min  | Skizzen aus VL 3 (Aufgabe 3) in der Gruppe vergleichen           |
 
-**Kür** für schnelle Gruppen oder zu Hause: Neustart mit Parameterdatei (P1, zweiter Teil), Zusatzaufgabe B2, Abschlussaufgabe.
+**Kür** für schnelle Gruppen oder zu Hause: Neustart mit Parameterdatei (P1, zweiter Teil), Zusatzaufgabe B2, Abschlussaufgabe, eigener Knoten (Kür K).
 
 --------------------------------------------------------------------------------
 
@@ -238,6 +238,12 @@ Eine solche Datei lässt sich auf zwei Wegen wieder verwenden — in einen laufe
 ```bash
 ros2 param load /turtlesim meine_turtle.yaml                              # in den laufenden Knoten
 ros2 run turtlesim turtlesim_node --ros-args --params-file meine_turtle.yaml   # beim Start
+```
+
+Einzelne Werte können Sie beim Start auch direkt angeben — mit `-p name:=wert`, so wie Sie mit `-r` umbenennen:
+
+```bash
+ros2 run turtlesim turtlesim_node --ros-args -p background_r:=0
 ```
 
 Die Datei wird im aktuellen Ordner des jeweiligen Terminals gesucht. Eine neue Datei legen Sie mit einem Editor an, z.B. `nano schwarz.yaml` (speichern mit `Ctrl+O`, beenden mit `Ctrl+X`) oder `code schwarz.yaml` in VS Code.
@@ -461,8 +467,19 @@ Weitere nützliche Optionen: `ros2 bag play fahrt --rate 2.0` spielt doppelt so 
 | Action    | `ros2 action list -t`       | `ros2 interface show <typ>`    | `ros2 action send_goal … --feedback`       |
 | Aufnahme  | `ros2 bag info <ordner>`    | —                              | `ros2 bag record -o <ordner> --topics <topics>` / `ros2 bag play <ordner>` |
 
-**Abschlussaufgabe** (Kür oder zu Hause, ca. 10 min): Erzeugen Sie `turtle2` bei (5, 5) mit grünem Stift, drehen Sie sie per Action nach Norden (`theta: 1.57`) und zeichnen Sie 10 Sekunden lang nur ihre Position auf. Notieren Sie Ihre Befehlsfolge.
+**Abschlussaufgabe** (Kür oder zu Hause, ca. 10 min): Erzeugen Sie `turtle2` bei (5, 5) mit grünem Stift, drehen Sie sie per Action nach Norden (`theta: 1.57`) und zeichnen Sie 10 Sekunden lang nur ihre Position auf, während Sie sie fahren. Notieren Sie Ihre Befehlsfolge. Tipp: Die Tastatursteuerung sendet an `turtle1` — lenken Sie sie per Remapping (VL 2) auf `turtle2` um.
 
 **Prüfkriterium:** `ros2 bag info` zeigt nur das Topic `/turtle2/pose`, und im Fenster ist eine grüne Linie zu sehen, sobald `turtle2` fährt.
+
+<details>
+<summary>Hinweis zur Tastatursteuerung anzeigen</summary>
+
+```bash
+ros2 run turtlesim turtle_teleop_key --ros-args -r turtle1/cmd_vel:=turtle2/cmd_vel
+```
+
+</details>
+
+**Kür K — ein eigener Knoten** (zu Hause, verbindet VL 3 mit heute): Legen Sie im Workspace aus VL 3 ein Python-Paket `turtle_watcher` an. Sein Knoten abonniert `/turtle1/pose` und gibt mit dem Logger eine Warnung aus, sobald die Schildkröte dem Rand näher als 1 kommt (das Fenster reicht von 0 bis etwa 11). Starten Sie Simulator und Knoten gemeinsam mit einer Launch-Datei, die den Simulator mit `schwarz.yaml` lädt (`parameters=['schwarz.yaml']`). **Prüfkriterium:** Fahren Sie an den Rand — im Terminal erscheint `[WARN]`.
 
 **Ausblick:** In VL 4 geht es um Koordinatensysteme — die Position `x`, `y`, `theta` der Schildkröte ist schon eine solche Angabe — und um Quality of Service. Im Praktikum P 1 wenden Sie alles Gelernte am echten TurtleBot an: verbinden, fahren und eine Fahrt mit LiDAR- und Kameradaten aufzeichnen.

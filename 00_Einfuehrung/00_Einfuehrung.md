@@ -428,7 +428,7 @@ graph LR
         M["Motortreiber"]
     end
     L -- "/scan" --> F
-    K -- "/image" --> F
+    K -- "/camera/image_raw" --> F
     F -- "/cmd_vel" --> M
 ```
 
@@ -445,7 +445,7 @@ Ihre Arbeit im Projekt ist der Kasten in der Mitte. Wie der Datenaustausch genau
 ## Ausblick: Die nächsten Schritte
 
     --{{0}}--
-Bevor wir mit ROS 2 arbeiten können, brauchen wir ein solides Fundament: den sicheren Umgang mit dem Linux-Terminal. Genau darum geht es in der ersten Übung. Danach steigen wir in der Vorlesung in die Konzepte von ROS 2 ein und richten in der folgenden Übung ROS 2 auf Ihren Rechnern ein.
+Bevor wir mit ROS 2 arbeiten können, brauchen wir ein solides Fundament: den sicheren Umgang mit dem Linux-Terminal. Genau darum geht es in der ersten Übung. Danach steigen wir in der Vorlesung in die Konzepte von ROS 2 ein. ROS 2 installieren Sie selbstständig nach einer Anleitung, bevor die zweite Übung beginnt.
 
 **Was kommt als Nächstes?**
 
@@ -457,7 +457,7 @@ Bevor wir mit ROS 2 arbeiten können, brauchen wir ein solides Fundament: den si
 | **VL 3** ROS 2 Pakete                 | Pakete, Build-System, Launch-Files                                      |
 | **Ü 2** Werkzeuge von ROS 2           | Services, Parameter, Actions, Daten aufzeichnen (Installation vorab)    |
 | **VL 4** Koordinaten + QoS            | Transformationen, tf2, Quality of Service                               |
-| **P 1** Grundlagen ROS 2 + Bags       | erste Fahrt mit dem TurtleBot, Daten aufzeichnen und auswerten          |
+| **P 1** TurtleBot in Betrieb nehmen   | erste Fahrt mit dem TurtleBot, Daten aufzeichnen und auswerten          |
 
     --{{1}}--
 Wenn Sie noch kein Linux-System haben, nutzen Sie die Zeit bis zur Übung. Unter Windows ist das Linux-Subsystem WSL2 eine gute Alternative zu einer nativen Installation.

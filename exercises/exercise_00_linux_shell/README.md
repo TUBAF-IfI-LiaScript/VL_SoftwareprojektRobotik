@@ -417,7 +417,7 @@ echo "Nach source setup.bash: ROS_DOMAIN_ID='$ROS_DOMAIN_ID'"
 ```bash
 # in jedem neuen Terminal nötig — oder einmalig in ~/.bashrc eintragen:
 source /opt/ros/jazzy/setup.bash
-export ROS_DOMAIN_ID=42          # Ihre Gruppennummer, trennt die TurtleBots im Labor
+export ROS_DOMAIN_ID=42          # trennt später die TurtleBots im Labor; Ihre echte ID gibt es in P 1
 ```
 
 ### Aufgabe 4: Ein eigenes Werkzeug
@@ -451,16 +451,16 @@ Unter Ubuntu wird `~/bin` beim Anmelden automatisch in den `PATH` aufgenommen, s
 ### Aufgabe 5: Zwei Terminals, zwei Welten
 
 1. Öffnen Sie zwei Terminals. Setzen Sie im ersten `export ROS_DOMAIN_ID=7` und prüfen Sie den Wert in beiden Terminals mit `rosinfo.sh`. Erklären Sie das Ergebnis.
-2. Sorgen Sie dafür, dass `ROS_DOMAIN_ID` in **jedem** neuen Terminal automatisch auf Ihre Gruppennummer gesetzt ist.
+2. Sorgen Sie dafür, dass `ROS_DOMAIN_ID` in **jedem** neuen Terminal automatisch auf `7` gesetzt ist. (Die echte ID Ihrer Gruppe erhalten Sie im ersten Praktikum — dann ersetzen Sie diese Zeile.)
 3. Warum reicht es nicht, die Zeile in eine Datei `setup.sh` zu schreiben und diese mit `./setup.sh` auszuführen?
 
-**Prüfkriterium:** Ein neues Terminal zeigt mit `echo $ROS_DOMAIN_ID` sofort Ihre Gruppennummer.
+**Prüfkriterium:** Ein neues Terminal zeigt mit `echo $ROS_DOMAIN_ID` sofort `7`.
 
 <details>
 <summary>**Lösungsvorschlag**</summary>
 
 1. Die Variable existiert nur in der Shell des ersten Terminals und in den daraus gestarteten Programmen. Das zweite Terminal ist eine eigene Shell mit eigener Umgebung.
-2. `echo 'export ROS_DOMAIN_ID=<Gruppennummer>' >> ~/.bashrc` — die `~/.bashrc` wird beim Öffnen jedes neuen Terminals ausgeführt.
+2. `echo 'export ROS_DOMAIN_ID=7' >> ~/.bashrc` — die `~/.bashrc` wird beim Öffnen jedes neuen Terminals ausgeführt.
 3. `./setup.sh` startet eine neue Shell als Kindprozess. Die Variable wird dort gesetzt und verschwindet mit dem Ende des Skripts. Nur `source setup.sh` führt die Befehle in der aktuellen Shell aus.
 
 </details>
@@ -533,7 +533,7 @@ sudo apt install tree htop tmux    # Pakete installieren
 apt search turtlebot3              # Pakete suchen
 ```
 
-**Fernzugriff auf den TurtleBot**
+**Fernzugriff auf einen anderen Rechner**
 
 ```bash
 ssh ubuntu@192.168.0.42            # anmelden (Adresse bekommen Sie im Praktikum)
@@ -541,7 +541,7 @@ scp mein_skript.py ubuntu@192.168.0.42:~/   # Datei kopieren
 exit                               # Verbindung beenden
 ```
 
-> Im Praktikum erhält jede Gruppe Adresse und Zugangsdaten ihres TurtleBots.
+> Im Praktikum arbeiten Sie meist direkt von Ihrem Laptop aus; `ssh` auf den TurtleBot brauchen Sie nur für Wartungsarbeiten.
 
 ## Zum Nachschlagen: Freies Terminal im Browser
 
@@ -558,6 +558,25 @@ Hier können Sie frei experimentieren. Das Linux läuft vollständig in Ihrem Br
 + `ls -l /bin | head` — wem gehören die Programme, welche Rechte haben sie?
 
 > Das Browser-Linux nutzt `ash` statt `bash`: Einträge in `~/.bashrc` (Aufgaben 4 und 5) wirken dort nicht, und nach dem Neuladen ist alles weg.
+
+## Zum Nachschlagen: Git in sechs Befehlen
+
+    --{{0}}--
+Im Praktikum arbeiten Sie in Gruppen an gemeinsamem Code. Dafür nutzen wir Git. Hier sind die sechs Befehle, die Sie für den Anfang brauchen.
+
+Im Praktikum arbeitet jede Gruppe in einem gemeinsamen **Git-Repository** — ein Ordner, dessen Änderungen Git aufzeichnet und mit einem Server abgleicht. Eine Person legt es auf dem Server an und lädt die anderen ein; dann:
+
+<!-- data-type="none" -->
+| Befehl                         | Bedeutung                                                     |
+| :----------------------------- | :------------------------------------------------------------ |
+| `git clone <adresse>`          | Repository einmalig auf den eigenen Rechner kopieren          |
+| `git status`                   | Was hat sich geändert, was ist vorgemerkt?                    |
+| `git add datei`                | Änderung für den nächsten Schnappschuss vormerken            |
+| `git commit -m "Nachricht"`    | Schnappschuss mit Beschreibung speichern                      |
+| `git push`                     | eigene Schnappschüsse auf den Server hochladen                |
+| `git pull`                     | Schnappschüsse der anderen herunterladen                      |
+
+Arbeitsablauf: zu Beginn `git pull`, am Ende `git add`, `git commit`, `git push`. Eine ausführliche Einführung bietet das [Git-Buch (deutsch)](https://git-scm.com/book/de/v2).
 
 ## Ausblick
 
@@ -580,6 +599,7 @@ Mit diesen Grundlagen sind Sie für die nächsten Schritte gerüstet. In der Vor
 **Bis zur nächsten Übung:** Installieren Sie ROS 2 Jazzy nach der [Installationsanleitung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/installation_ros2/README.md) — dabei begegnen Ihnen `sudo`, `apt`, `source` und `~/.bashrc` wieder.
 
 + **VL 2** Grundlagen ROS 2 — Architektur, Knoten, Topics, Nachrichten
++ **VL 3** ROS 2 Pakete — eigene Pakete bauen und starten
 + **Ü 2** Werkzeuge von ROS 2 — Services, Parameter, Actions, Daten aufzeichnen
 
 **Weiterführende Ressourcen**

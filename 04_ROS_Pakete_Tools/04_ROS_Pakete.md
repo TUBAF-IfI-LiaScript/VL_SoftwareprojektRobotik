@@ -529,7 +529,8 @@ def generate_launch_description():
 | `DeclareLaunchArgument`   | ein Argument, das beim Start überschrieben werden kann, hier mit Standardwert `counter`       |
 | `Node(...)`               | ein Knoten: Paket, Programm und Einstellungen                                                  |
 | `LaunchConfiguration('topic')` | Platzhalter für den Wert des Arguments `topic` — wird erst beim Start eingesetzt          |
-| `remappings`              | Umbenennung wie `--ros-args -r counter:=...` in VL 2                                           |
+| `remappings`              | Umbenennung wie `--ros-args -r topic:=topic2` in VL 2                                          |
+| `parameters=['datei.yaml']` | Parameter aus einer YAML-Datei laden — hier nicht verwendet, mehr zu Parametern in Ü 2      |
 | `output='screen'`         | Logausgaben des Knotens im Terminal anzeigen                                                   |
 
 Die Datei liegt im Ordner `launch` des Pakets `my_tutorial_package` (`mkdir ~/ros2_ws/src/my_tutorial_package/launch`). Eine Launch-Datei darf Knoten aus beliebigen Paketen starten — sie müssen nur gebaut und per `source` bekannt sein. In größeren Projekten legt man dafür oft ein eigenes Paket an, z.B. `verkehrswelt_bringup`.
@@ -585,6 +586,9 @@ ros2 run my_tutorial_package data_generator --ros-args --log-level data_generato
 
 > **Stolperfalle:** `--log-level debug` ohne Knotennamen schaltet auch die internen Debug-Meldungen von ROS selbst frei — das Terminal wird mit Hunderten Zeilen geflutet. Geben Sie deshalb den Namen des Loggers an, hier `data_generator`.
 
+<details>
+<summary>Vertiefung: Logmeldungen filtern (zum Nachlesen)</summary>
+
 Für C++ stellt `rclcpp` Varianten der Makros bereit, die Ausgaben filtern ([Doku: Logging](https://docs.ros.org/en/jazzy/Concepts/Intermediate/About-Logging.html)). `x` steht für den Schweregrad, z.B. `RCLCPP_WARN_ONCE`:
 
 <!-- data-type="none" -->
@@ -605,7 +609,9 @@ RCLCPP_DEBUG_EXPRESSION(this->get_logger(), (count_ % 2) == 0, "Zählwert %d ist
 RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 2000, "Kein Bild empfangen");
 ```
 
-Gerade die letzte Variante ist im Projekt wichtig: Ein Knoten, der 30-mal pro Sekunde „Keine Spur erkannt“ meldet, macht das Terminal unlesbar.
+</details>
+
+Gerade die Variante `RCLCPP_x_THROTTLE` (höchstens einmal pro Zeitspanne) ist im Projekt wichtig: Ein Knoten, der 30-mal pro Sekunde „Keine Spur erkannt“ meldet, macht das Terminal unlesbar.
 
 > **Aufgabe:** Ändern Sie den `data_generator` so, dass die Logmeldung nur noch alle 10 Sekunden erscheint, die Nachrichten aber weiter zweimal pro Sekunde gesendet werden.
 
@@ -637,7 +643,7 @@ ros2 topic list              # zeigt jetzt /scan, /odom, /cmd_vel ... des eigene
 
 Zu Hause wollen Sie dagegen niemanden im WLAN stören: Mit `export ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST` sucht ROS 2 nur auf dem eigenen Rechner nach Knoten.
 
-> **WSL2:** WSL2 hat standardmäßig ein eigenes, internes Netz, aus dem heraus der TurtleBot nicht sichtbar ist. Die Umstellung auf den gespiegelten Netzwerkmodus richten wir gemeinsam im ersten Praktikum ein. Für alle Übungen auf dem eigenen Rechner ist nichts zu tun.
+> **WSL2:** WSL2 hat standardmäßig ein eigenes, internes Netz, aus dem heraus der TurtleBot nicht sichtbar ist. Die Umstellung auf den gespiegelten Netzwerkmodus erledigen Sie vor dem ersten Praktikum zu Hause — die Anleitung steht in P 1 unter „Vorbereitung“. Für alle Übungen auf dem eigenen Rechner ist nichts zu tun.
 
 ## Zusammenfassung und Ausblick
 
@@ -681,7 +687,7 @@ Ohne Knotennamen schaltet `--log-level debug` auch die internen Meldungen von RO
 
 **Zurück zur Einstiegsfrage:** Der TurtleBot startet mit einem Befehl, weil seine Knoten in Paketen liegen, mit `colcon` gebaut sind und eine Launch-Datei sie gemeinsam startet. Genau so werden Sie Ihr Verkehrswelt-System aufbauen.
 
-**Ausblick:** In **Ü 2** probieren Sie Services, Parameter und Actions am turtlesim aus und zeichnen Daten mit `ros2 bag` auf. Bringen Sie Ihre Skizze aus Aufgabe 3 mit — wir vergleichen sie zu Beginn.
+**Ausblick:** In **Ü 2** probieren Sie Services, Parameter und Actions am turtlesim aus und zeichnen Daten mit `ros2 bag` auf. Bringen Sie Ihre Skizze aus der Aufgabe der Woche (Nr. 3) mit — wir vergleichen sie zu Beginn.
 
 ## Aufgabe der Woche
 
@@ -691,7 +697,7 @@ Bauen Sie die drei Pakete selbst nach — erst dann merken Sie, wo es hakt. Und 
 1. Legen Sie in Ihrer ROS-2-Umgebung (siehe [Installationsanleitung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/installation_ros2/README.md)) einen Workspace `~/ros2_ws` an und bauen Sie die drei Pakete dieser Vorlesung nach. Prüfen Sie jeden Schritt mit `ros2 interface show`, `ros2 pkg executables` und `ros2 topic echo`.
    **Erwartetes Ergebnis:** `ros2 pkg executables my_tutorial_package` zeigt `my_tutorial_package data_generator`, und `ros2 launch my_tutorial_package counter.launch.py` liefert abwechselnd `Publishing:` und `Received:`.
 2. Ergänzen Sie `MyMsg.msg` um ein Feld `float32 temperature` und senden Sie einen Zufallswert. Was müssen Sie neu bauen?
-3. Überlegen Sie für die Verkehrswelt: Welche Pakete würden Sie für Spurerkennung, Ampelerkennung und Fahrverhalten anlegen? Wohin gehört ein eigener Nachrichtentyp „Ampelzustand“? Skizzieren Sie Pakete, Knoten und Topics. Wir vergleichen die Skizzen zu Beginn von Ü 2.
+3. Erweitern Sie Ihre Graph-Skizze aus VL 2 (Aufgabe 3): Welche Pakete würden Sie für Spurerkennung, Ampelerkennung und Fahrverhalten anlegen? Wohin gehört ein eigener Nachrichtentyp „Ampelzustand“? Ordnen Sie Knoten und Topics den Paketen zu. Wir vergleichen die Skizzen zu Beginn von Ü 2.
 
 <details>
 <summary>Lösungshinweise zu Aufgabe 2 und 3 anzeigen</summary>

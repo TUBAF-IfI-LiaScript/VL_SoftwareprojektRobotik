@@ -199,7 +199,7 @@ export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp   # wie in Ü 1: gilt nur für dies
 
 </details>
 
-Wichtig für das Praktikum: Alle Knoten eines Systems müssen dieselbe Middleware und dieselbe `ROS_DOMAIN_ID` verwenden, sonst sehen sie sich nicht.
+Wichtig für das Praktikum: Alle Knoten eines Systems müssen dieselbe Middleware verwenden, sonst sehen sie sich nicht.
 
 vgl. [ROS 2 Jazzy: Different ROS 2 middleware vendors](https://docs.ros.org/en/jazzy/Concepts/Intermediate/About-Different-Middleware-Vendors.html)
 
@@ -225,14 +225,14 @@ Jetzt kommen die drei Begriffe, die Sie heute mitnehmen müssen: Knoten, Topics 
 ```mermaid @mermaid
 graph LR
     L["LiDAR-Treiber"] -- "/scan" --> F["Fahrverhalten"]
-    K["Kamera-Treiber"] -- "/image" --> S["Spurerkennung"]
-    K -- "/image" --> A["Ampelerkennung"]
+    K["Kamera-Treiber"] -- "/camera/image_raw" --> S["Spurerkennung"]
+    K -- "/camera/image_raw" --> A["Ampelerkennung"]
     S -- "/lane" --> F
-    A -- "/light" --> F
+    A -- "/traffic_light" --> F
     F -- "/cmd_vel" --> M["Motorsteuerung"]
 ```
 
-Das Beispiel zeigt einen Ausschnitt, wie er in unserem Projekt entstehen könnte. Jeder Pfeil ist ein Topic, jeder Kasten ein Knoten. Ein Topic kann mehrere Abonnenten haben: `/image` geht an die Spurerkennung und an die Ampelerkennung. Kein Sender weiß, wer seine Daten liest — deshalb lässt sich ein neuer Knoten wie die Ampelerkennung ergänzen, ohne die übrigen zu ändern.
+Das Beispiel zeigt einen Ausschnitt, wie er in unserem Projekt entstehen könnte. Jeder Pfeil ist ein Topic, jeder Kasten ein Knoten. Ein Topic kann mehrere Abonnenten haben: `/camera/image_raw` geht an die Spurerkennung und an die Ampelerkennung. Kein Sender weiß, wer seine Daten liest — deshalb lässt sich ein neuer Knoten wie die Ampelerkennung ergänzen, ohne die übrigen zu ändern.
 
 **Services, Parameter und Actions** - Neben Topics kennt ROS 2 drei weitere Kommunikationsmuster:
 
@@ -622,13 +622,12 @@ Sobald Ihr Rechner mit dem Roboter verbunden ist (erstes Praktikum), funktionier
 
 ```bash
 ros2 topic echo /scan --once                       # eine einzelne LiDAR-Messung ansehen
-export TURTLEBOT3_MODEL=burger                     # die TurtleBot-Pakete müssen wissen, welches Modell fährt
-ros2 run turtlebot3_teleop teleop_keyboard         # den Roboter per Tastatur fahren
+ros2 run teleop_twist_keyboard teleop_twist_keyboard   # den Roboter per Tastatur fahren — wie turtle_teleop_key
 ```
 
 Ob `/cmd_vel` den Typ `Twist` oder `TwistStamped` (ein `Twist` mit Zeitstempel) erwartet, hängt von der Konfiguration des Roboters ab. `ros2 topic info /cmd_vel` verrät es Ihnen.
 
-Damit sich die Roboter der verschiedenen Gruppen im selben WLAN nicht gegenseitig steuern, bekommt jede Gruppe eine eigene `ROS_DOMAIN_ID`. Wie Sie sich mit „Ihrem“ TurtleBot verbinden, üben wir im ersten Praktikum.
+Wie Sie sich mit „Ihrem“ TurtleBot verbinden, lernen Sie in VL 3 und wenden es im ersten Praktikum an.
 
 > **Merke:** Wer die Topics eines Systems kennt, kann es untersuchen, aufzeichnen und Teile davon ersetzen. Für unsere Verkehrswelt heißt das: Ihre Spurerkennung abonniert das Kamerabild, Ihr Fahrverhalten veröffentlicht auf `/cmd_vel`.
 
@@ -672,13 +671,7 @@ Bis zur Übung Ü 2 installieren Sie ROS 2 Jazzy selbstständig. Die Anleitung f
 
 Bis zur Übung Ü 2 installieren Sie ROS 2 Jazzy selbstständig — Schritt für Schritt nach unserer [Installationsanleitung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/installation_ros2/README.md). Die Übung selbst gehört dann ganz der Arbeit mit ROS 2. Mögliche Umgebungen:
 
-<!-- data-type="none" -->
-| Umgebung                         | Bewertung                                                                                       |
-| :------------------------------- | :---------------------------------------------------------------------------------------------- |
-| Ubuntu 24.04 nativ               | empfohlen: volle Leistung, direkter Zugriff auf Netzwerk und Hardware                            |
-| Windows 11 mit WSL2 (Ubuntu 24.04) | gut für die Vorlesungs- und Übungsbeispiele; Grafik läuft über WSLg, die Verbindung zum TurtleBot erfordert Netzwerkanpassungen |
-| Rechnerpool des Instituts        | ROS 2 Jazzy ist vorinstalliert                                                                  |
-| macOS / Windows nativ            | nicht empfohlen, viele Pakete fehlen                                                            |
+Welche Umgebung Sie nutzen können (Ubuntu nativ, WSL2, Rechnerpool), steht am Anfang der Anleitung.
 
 Unsere Anleitung folgt der offiziellen Anleitung [Ubuntu (deb packages)](https://docs.ros.org/en/jazzy/Installation/Ubuntu-Install-Debs.html) und installiert das Paket `ros-jazzy-desktop` — es enthält `rqt`, `turtlesim` und die Beispiele aus dieser Vorlesung. Am Ende steht ein Selbsttest; bringen Sie Probleme in die Übung mit.
 
@@ -688,8 +681,8 @@ Unsere Anleitung folgt der offiziellen Anleitung [Ubuntu (deb packages)](https:/
 Die wichtigste Aufgabe dieser Woche ist die Installation. Die dritte Aufgabe, den ROS-Graphen für Spurfolgen und Ampelhalt zu skizzieren, ist der beste Test, ob Sie die heutige Vorlesung verstanden haben.
 
 1. Installieren Sie ROS 2 Jazzy nach der [Installationsanleitung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/installation_ros2/README.md) und führen Sie den Selbsttest aus — spätestens bis zur Übung Ü 2.
-2. Arbeiten Sie die Einsteiger-Tutorials zur Kommandozeile durch: [Beginner: CLI tools](https://docs.ros.org/en/jazzy/Tutorials/Beginner-CLI-Tools.html). Wie können Sie Topics anzeigen, selbst Nachrichten senden und die Taktrate messen?
-3. Überlegen Sie für die Verkehrswelt: Welche Knoten braucht ein TurtleBot, der einer Fahrspur folgt und an einer roten Ampel hält? Skizzieren Sie den ROS-Graphen mit Knoten und Topics wie in Abschnitt „Basiskonzepte“.
+2. Arbeiten Sie zwei Tutorials der ROS-2-Dokumentation durch: [Understanding nodes](https://docs.ros.org/en/jazzy/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Nodes/Understanding-ROS2-Nodes.html) und [Understanding topics](https://docs.ros.org/en/jazzy/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Topics/Understanding-ROS2-Topics.html). Services, Parameter und Actions folgen in Ü 2 — die übrigen Tutorials dürfen Sie bis dahin auslassen.
+3. Überlegen Sie für die Verkehrswelt: Welche Knoten braucht ein TurtleBot, der einer Fahrspur folgt und an einer roten Ampel hält? Skizzieren Sie den ROS-Graphen mit Knoten und Topics wie in Abschnitt „Basiskonzepte“. Bewahren Sie die Skizze auf — in VL 3 ergänzen Sie sie um Pakete.
 
 **Zum Weiterlesen**
 

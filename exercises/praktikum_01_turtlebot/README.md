@@ -113,7 +113,7 @@ Auf dem TurtleBot läuft bereits ROS 2 Jazzy. Nach dem Einschalten starten die T
 **A.1 Netz und Domäne**
 
 1. Verbinden Sie Ihren Laptop mit dem WLAN Ihres TurtleBots (Zugangsdaten von den Betreuern).
-2. Die `ROS_DOMAIN_ID` Ihrer Gruppe steht auf dem Roboter. Tragen Sie sie dauerhaft ein (Ü 1, Aufgabe 5):
+2. Die `ROS_DOMAIN_ID` Ihrer Gruppe steht auf dem Roboter. Ersetzen Sie in `~/.bashrc` den Übungswert `7` aus Ü 1 (Aufgabe 5) durch diese ID, z.B. mit `nano ~/.bashrc`. Kein Eintrag vorhanden? Dann ergänzen Sie ihn:
 
    ```bash
    echo "export ROS_DOMAIN_ID=<Ihre ID>" >> ~/.bashrc
@@ -310,7 +310,7 @@ Erst **nach der Abnahme**: Trennen Sie Ihren Laptop vom Roboter-WLAN und spielen
 ros2 bag play fahrt_spur --loop
 ```
 
-Starten Sie RViz und `rqt_image_view` erneut. 📝 Sehen Sie Scan und Kamerabild wie bei der echten Fahrt?
+Starten Sie RViz und `rqt` (Image View) erneut. 📝 Sehen Sie Scan und Kamerabild wie bei der echten Fahrt?
 
 > **Bewahren Sie die Aufnahme auf!** Sie brauchen sie in Ü 3 und P 2. Große Dateien gehören nicht ins Git-Repository — legen Sie sie auf einem gemeinsamen Speicher Ihrer Gruppe ab und notieren Sie im Protokoll, wo.
 

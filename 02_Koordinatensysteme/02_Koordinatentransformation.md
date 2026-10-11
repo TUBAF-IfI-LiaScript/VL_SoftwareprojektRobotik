@@ -252,6 +252,8 @@ $$
     --{{0}}--
 Die naheliegende Idee: Wir zerlegen jede Drehung in drei Drehungen um die Achsen. Das ist anschaulich, hat aber zwei Haken, die in der Praxis zu schwer findbaren Fehlern führen. Für unseren TurtleBot ist nur einer der drei Winkel wichtig: das Gieren.
 
+_Dieser Abschnitt ist zum Nachlesen — für den TurtleBot brauchen Sie nur das Gieren._
+
 Eine Drehung im Raum lässt sich in drei Drehungen um die Koordinatenachsen zerlegen: **Gieren** (_yaw_, um $z$), **Nicken** (_pitch_, um $y$) und **Rollen** (_roll_, um $x$). Der Winkel $\varphi$ aus der Ebene ist genau der Gierwinkel — beim TurtleBot der einzige, der sich ändert.
 
 Euler-Winkel sind anschaulich, haben aber Nachteile:
@@ -594,6 +596,8 @@ Mit welchem Befehl prüfen Sie im Labor, ob tf2 die Lage des LiDAR kennt?
     --{{0}}--
 Die Aufgaben dieser Woche bereiten Sie direkt auf das erste Praktikum vor. Wenn Sie die Aufgaben 3 bis 5 lösen, wissen Sie im Labor sofort, wo Sie suchen müssen, falls RViz leer bleibt.
 
+**Optional (Rechnen üben):**
+
 1. **Zwei Roboter:** Ein zweiter Roboter $B$ steht bei $(5;\ 4)$ in $O$ und ist um 180° gedreht. Wo liegt das Hindernis aus seiner Sicht? Ergänzen Sie den Code um `T_OB` und berechnen Sie $\textbf{p}_B = \textbf{T}_{OB}^{-1} \cdot \textbf{p}_O$.
    
    <details>
@@ -609,6 +613,8 @@ Die Aufgaben dieser Woche bereiten Sie direkt auf das erste Praktikum vor. Wenn 
    
    </details>
 2. Rechnen Sie mit dem Python-Beispiel nach: Ein LiDAR-Punkt liegt bei $(0{,}5;\ 0;\ 0)$ in `base_scan`. Wo liegt er in `base_footprint`? (Werte aus der Tabelle zum tf-Baum.)
+**Pflicht als Vorbereitung auf P 1:**
+
 3. Starten Sie in drei Terminals: `static_transform_publisher` für `base_link` → `camera_link` wie oben, `tf2_echo base_link camera_link` und `view_frames`. Ändern Sie den Winkel auf 180° und vergleichen Sie Quaternion und Matrix. `view_frames` legt eine PDF-Datei im aktuellen Ordner ab; unter WSL2 öffnen Sie den Ordner mit `explorer.exe .` im Windows-Explorer.
 4. **Den TurtleBot ohne Roboter:** Installieren Sie das Modell (`sudo apt install ros-jazzy-turtlebot3-description`) und starten Sie es ohne Hardware:
 
@@ -616,7 +622,7 @@ Die Aufgaben dieser Woche bereiten Sie direkt auf das erste Praktikum vor. Wenn 
    ros2 run robot_state_publisher robot_state_publisher --ros-args -p robot_description:="$(sed 's/${namespace}//g' /opt/ros/jazzy/share/turtlebot3_description/urdf/turtlebot3_burger.urdf)"
    ```
 
-   Prüfen Sie dann `tf2_echo base_footprint base_scan` und `ros2 topic info -v /tf_static`. (Der `sed`-Befehl entfernt einen Platzhalter, den sonst die Launch-Datei des TurtleBot ersetzt.)
+   Prüfen Sie dann `tf2_echo base_footprint base_scan` und `ros2 topic info -v /tf_static`. (Der `sed`-Befehl entfernt einen Platzhalter, den sonst die Launch-Datei des TurtleBot ersetzt.) Starten Sie anschließend `rviz2`: Fixed Frame `base_footprint`, dann _Add → TF_ und _Add → RobotModel_ (Topic `/robot_description`) — Sie sehen den TurtleBot mit seinen Koordinatensystemen.
 5. Starten Sie einen Publisher mit `--qos-reliability best_effort` und einen Empfänger mit `--qos-reliability reliable`. Lesen Sie die Warnung und beheben Sie das Problem auf der Empfängerseite.
 
 <details>
