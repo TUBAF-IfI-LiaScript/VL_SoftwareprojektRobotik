@@ -7,6 +7,7 @@ language: de
 narrator: Deutsch Female
 
 import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/config.md
+          https://raw.githubusercontent.com/liaTemplates/mermaid_template/master/README.md
 
 -->
 
@@ -59,6 +60,40 @@ Alles üben wir am `turtlesim` — dieselben Befehle verwenden Sie später am Tu
 **Kür** für schnelle Gruppen oder zu Hause: Neustart mit Parameterdatei (P1, zweiter Teil), Zusatzaufgabe B2, Abschlussaufgabe, eigener Knoten (Kür K).
 
 --------------------------------------------------------------------------------
+
+<!-- kurslandkarte:wo-start -->
+
+## Wo stehen wir?
+
+**Block 1 · ROS-Grundlagen** · Termin 5 von 32 · Ü 2 in der Woche ab 9.11.2026
+
+**Ziel im Projekt:** Sie untersuchen, konfigurieren und zeichnen ein laufendes ROS-2-System auf – genau das tun Sie in P 1 am Roboter.
+
+- **Sie brauchen:** [Service, Parameter, Action](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=kommmuster) (VL 2) · [Topic](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=topic) (VL 2) · [ROS\_DOMAIN\_ID](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=domainid) (VL 3)
+- **Heute neu:** [Parameter und Parameterdatei](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=paramfile) · [ros2 bag](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=rosbag)
+- **Danach:** VL 4 · Koordinaten + QoS – Der TurtleBot weiß, wo seine Sensoren sitzen, und seine Daten kommen beim Empfänger an – sonst bleibt RViz leer.
+
+**Roter Faden „Projektaufgabe“** – Vom Ziel in der ersten Vorlesung zum autonom fahrenden TurtleBot in der Verkehrswelt.
+
+```mermaid @mermaid
+flowchart LR
+  s0["ROS_DOMAIN_ID<br/><small>VL 3</small>"]
+  s1["ros2 bag<br/><small>Ü 2</small>"]
+  s2["Schwellwertoperation<br/><small>VL 6</small>"]
+  s3["Kamerakalibrierung<br/><small>VL 7</small>"]
+  s0 --> s1 --> s2 --> s3
+  class s0 war
+  class s1 jetzt
+  class s2 kommt
+  class s3 kommt
+  classDef war fill:#e8e8e8,stroke:#999,color:#555
+  classDef jetzt fill:#ffd27f,stroke:#b36b00,stroke-width:3px,color:#000
+  classDef kommt fill:#fff,stroke:#999,stroke-dasharray:4 3,color:#555
+```
+
+[🗺️ Ganze Kurslandkarte öffnen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=ue2) – dort finden Sie jeden Begriff mit Erklärung, typischer Stolperfalle und Link auf die passende Folie.
+
+<!-- kurslandkarte:wo-ende -->
 
 ## Start: Läuft alles?
 
@@ -483,3 +518,11 @@ ros2 run turtlesim turtle_teleop_key --ros-args -r turtle1/cmd_vel:=turtle2/cmd_
 **Kür K — ein eigener Knoten** (zu Hause, verbindet VL 3 mit heute): Legen Sie im Workspace aus VL 3 ein Python-Paket `turtle_watcher` an. Sein Knoten abonniert `/turtle1/pose` und gibt mit dem Logger eine Warnung aus, sobald die Schildkröte dem Rand näher als 1 kommt (das Fenster reicht von 0 bis etwa 11). Starten Sie Simulator und Knoten gemeinsam mit einer Launch-Datei, die den Simulator mit `schwarz.yaml` lädt (`parameters=['schwarz.yaml']`). **Prüfkriterium:** Fahren Sie an den Rand — im Terminal erscheint `[WARN]`.
 
 **Ausblick:** In VL 4 geht es um Koordinatensysteme — die Position `x`, `y`, `theta` der Schildkröte ist schon eine solche Angabe — und um Quality of Service. Im Praktikum P 1 wenden Sie alles Gelernte am echten TurtleBot an: verbinden, fahren und eine Fahrt mit LiDAR- und Kameradaten aufzeichnen.
+
+<!-- kurslandkarte:ausblick-start -->
+
+--------------------------------------------------------------------------------
+
+**🗺️ Nächster Halt:** VL 4 · Koordinaten + QoS (Woche ab 9.11.2026) – Der TurtleBot weiß, wo seine Sensoren sitzen, und seine Daten kommen beim Empfänger an – sonst bleibt RViz leer. [Auf der Kurslandkarte ansehen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=02)
+
+<!-- kurslandkarte:ausblick-ende -->

@@ -41,6 +41,43 @@ Nach dieser Vorlesung können Sie
 
 --------------------------------------------------------------------------------
 
+<!-- kurslandkarte:wo-start -->
+
+## Wo stehen wir?
+
+    --{{0}}--
+Kurz zur Orientierung. Wir sind in Block 1, Termin 1 von 32. Sie lernen die Projektaufgabe kennen: Ein TurtleBot soll autonom durch die Verkehrswelt fahren. Neu sind heute: Projektaufgabe Verkehrswelt, Roboter, Sense-Think-Act, TurtleBot 3 Burger, Warum ROS?.
+
+**Block 1 · ROS-Grundlagen** · Termin 1 von 32 · VL 1 in der Woche ab 19.10.2026
+
+**Ziel im Projekt:** Sie lernen die Projektaufgabe kennen: Ein TurtleBot soll autonom durch die Verkehrswelt fahren.
+
+- **Sie brauchen:** nichts – wir fangen an
+- **Heute neu:** [Projektaufgabe Verkehrswelt](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=verkehrswelt) · [Roboter](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=roboter) · [Sense-Think-Act](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=sta) · [TurtleBot 3 Burger](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=turtlebot) · [Warum ROS?](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=rosmotivation)
+- **Danach:** Ü 1 · Linux Shell – Ihr Rechner wird zur Werkbank: Ohne sicheren Umgang mit der Shell erreichen Sie weder ROS 2 noch den TurtleBot.
+
+**Roter Faden „Projektaufgabe“** – Vom Ziel in der ersten Vorlesung zum autonom fahrenden TurtleBot in der Verkehrswelt.
+
+```mermaid @mermaid
+flowchart LR
+  s0["Projektaufgabe Verkehrswelt<br/><small>VL 1</small>"]
+  s1["TurtleBot 3 Burger<br/><small>VL 1</small>"]
+  s2["ROS_DOMAIN_ID<br/><small>VL 3</small>"]
+  s3["ros2 bag<br/><small>Ü 2</small>"]
+  s0 --> s1 --> s2 --> s3
+  class s0 jetzt
+  class s1 jetzt
+  class s2 kommt
+  class s3 kommt
+  classDef war fill:#e8e8e8,stroke:#999,color:#555
+  classDef jetzt fill:#ffd27f,stroke:#b36b00,stroke-width:3px,color:#000
+  classDef kommt fill:#fff,stroke:#999,stroke-dasharray:4 3,color:#555
+```
+
+[🗺️ Ganze Kurslandkarte öffnen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=00) – dort finden Sie jeden Begriff mit Erklärung, typischer Stolperfalle und Link auf die passende Folie.
+
+<!-- kurslandkarte:wo-ende -->
+
 ## Unser Ziel: Autonomes Fahren im Miniaturformat
 
     --{{0}}--
@@ -512,3 +549,11 @@ Für Interessierte hier noch einige Ressourcen zur Vertiefung:
 + [The Robotics Back-End](https://roboticsbackend.com/) - Tutorials und Praxisbeispiele
 + [RoboCup](https://robocup.de/) - RoboCup-Wettbewerbe und -Teams
 + [TurtleBot 3 e-Manual](https://emanual.robotis.com/docs/en/platform/turtlebot3/overview/) - Dokumentation des Herstellers ROBOTIS
+
+<!-- kurslandkarte:ausblick-start -->
+
+--------------------------------------------------------------------------------
+
+**🗺️ Nächster Halt:** Ü 1 · Linux Shell (Woche ab 26.10.2026) – Ihr Rechner wird zur Werkbank: Ohne sicheren Umgang mit der Shell erreichen Sie weder ROS 2 noch den TurtleBot. [Auf der Kurslandkarte ansehen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=ue1)
+
+<!-- kurslandkarte:ausblick-ende -->

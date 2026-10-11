@@ -7,7 +7,10 @@ Aufruf aus dem Repository-Wurzelverzeichnis:
 
     python3 kurslandkarte/erzeuge.py
 
-Schreibt docs/kurslandkarte/kurslandkarte.json und docs/kurslandkarte/index.html.
+Schreibt docs/kurslandkarte/kurslandkarte.json und docs/kurslandkarte/index.html und
+erneuert in jedem ausgearbeiteten Material die Abschnitte zwischen den Markierungen
+<!-- kurslandkarte:wo-start/-ende --> (Folie „Wo stehen wir?“) und
+<!-- kurslandkarte:ausblick-start/-ende --> (nächster Halt am Ende).
 
 Autoren: Sebastian Zug & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent
 """
@@ -385,6 +388,191 @@ def abschnitt_nr(key, titel):
         raise SystemExit(f"Abschnitt nicht gefunden: {key} »{titel}« — vorhanden: {heads}")
     return heads.index(titel) + 1
 
+# ---- Terminkarte „Wo stehen wir?“ in den ausgearbeiteten Materialien
+# Ziel im Projekt je Termin (Entwurf, vom Dozenten durchzusehen)
+PROJEKTZIEL = {
+    "00":  "Sie lernen die Projektaufgabe kennen: Ein TurtleBot soll autonom durch die Verkehrswelt fahren.",
+    "ue1": "Ihr Rechner wird zur Werkbank: Ohne sicheren Umgang mit der Shell erreichen Sie weder ROS 2 noch den TurtleBot.",
+    "03":  "Sie verstehen, wie die Software des TurtleBots aus Knoten und Topics zusammengesetzt ist.",
+    "04":  "Sie bauen eigene Knoten und starten sie gemeinsam mit einer Launch-Datei – das Gerüst für jede spätere Projektfunktion.",
+    "ue2": "Sie untersuchen, konfigurieren und zeichnen ein laufendes ROS-2-System auf – genau das tun Sie in P 1 am Roboter.",
+    "02":  "Der TurtleBot weiß, wo seine Sensoren sitzen, und seine Daten kommen beim Empfänger an – sonst bleibt RViz leer.",
+    "p1":  "Ihr TurtleBot ist verbunden, fährt sicher, und Sie haben eine Testfahrt aufgezeichnet – das Rohmaterial für Block 2.",
+    "01":  "Sie wissen, was die Sensoren des TurtleBots messen und wo ihre Grenzen liegen.",
+    "05":  "Sie heben Fahrbahnmarkierungen und Ampelfarben im Kamerabild hervor – der erste Schritt zur Spurerkennung.",
+    "06":  "Sie schließen von einem Pixel auf eine Richtung in der Welt – dafür muss die Kamera kalibriert sein.",
+    "lid": "Sie werten die Abstandsmessungen des LiDAR aus und erkennen, was vor dem Roboter liegt.",
+    "ue3": "Sie stellen Sensordaten so dar, dass Fehler darin sichtbar werden.",
+    "ue4": "Sie verarbeiten aufgezeichnete Kamerabilder des TurtleBots selbst.",
+    "p2":  "Das Kamerabild Ihres TurtleBots ist entzerrt und für die Spurerkennung vorbereitet.",
+    "p3":  "Ihr TurtleBot erkennt die Fahrspur im Kamerabild.",
+    "07":  "Sie erkennen Schilder, Ampeln und Fußgängerfiguren im Kamerabild.",
+    "pkw": "Sie finden Objekte in den Messpunkten des LiDAR.",
+    "ue5": "Sie trennen Hindernisse im LiDAR-Scan vom Hintergrund.",
+    "p4":  "Ihr TurtleBot erkennt Hindernisse auf seiner Fahrbahn.",
+    "ue6": "Sie vergleichen gelernte und klassische Objekterkennung und wissen, wann welche taugt.",
+    "08":  "Sie verstehen, warum ein einzelner Sensor nicht reicht und wie man Messungen kombiniert.",
+    "09":  "Sie schätzen die Pose des TurtleBots aus Odometrie, IMU und weiteren Messungen mit einem Kalman-Filter.",
+    "ue7": "Sie implementieren einen Filter, der die Position eines Roboters in der Ebene schätzt.",
+    "p5":  "Ihr TurtleBot schätzt den Streckenverlauf vor sich aus mehreren Sensoren.",
+    "10":  "Sie verstehen, wie aus einem Fahrbefehl eine Radbewegung wird und wie ein Regler den TurtleBot auf Kurs hält.",
+    "ue8": "Sie vergleichen Regler und sehen, welcher den Roboter am ruhigsten auf der Spur hält.",
+    "11":  "Ihr TurtleBot plant einen Weg durch die Verkehrswelt und folgt ihm.",
+    "slm": "Der TurtleBot erstellt selbst eine Karte der Verkehrswelt und weiß, wo er darin steht.",
+    "ue9": "Sie erstellen aus aufgezeichneten Daten eine Karte.",
+    "p6":  "Ihr TurtleBot kartiert die Verkehrswelt und folgt einer geplanten Bahn.",
+    "p7":  "Ihr TurtleBot parkt ein und biegt an Kreuzungen ab.",
+    "p8":  "Ihr TurtleBot fährt autonom durch die Verkehrswelt – Abschluss der Projektaufgabe.",
+}
+assert set(PROJEKTZIEL) == set(IDX), set(IDX) ^ set(PROJEKTZIEL)
+# Praktika führen keine Begriffe ein, sie wenden an: welche Begriffe aus früheren Terminen?
+ANWENDUNG = {
+    "p1": ["domainid", "tbtopics", "topiccli", "qoscompat", "tf2", "tftree", "rosbag"],
+}
+# Vorwissen und Faden werden aus Beziehungen und Fäden abgeleitet; wo das nicht trifft, hier festlegen
+BRAUCHEN = {
+    "02": ["message", "topiccli", "discovery"],
+    "04": ["source", "ros2cli", "message", "msgdef"],
+}
+FADEN = {"04": "f_ros"}
+for k, ids_ in list(ANWENDUNG.items()) + list(BRAUCHEN.items()):
+    for x in ids_:
+        assert x in term_of and term_of[x] < IDX[k], (k, x)
+
+KARTE_URL = "https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/"
+MARKE = {"wo": ("<!-- kurslandkarte:wo-start -->", "<!-- kurslandkarte:wo-ende -->"),
+         "aus": ("<!-- kurslandkarte:ausblick-start -->", "<!-- kurslandkarte:ausblick-ende -->")}
+name_of = {b[0]: b[1] for b in B}
+
+def datum(iso):
+    y, m, d = iso.split("-")
+    return f"{int(d)}.{int(m)}.{y}"
+
+def begriff_link(i, mit_termin=True):
+    t = T[term_of[i]]
+    zusatz = f" ({t[1]})" if mit_termin else ""
+    return f"[{name_of[i].replace('_', chr(92) + '_')}]({KARTE_URL}#begriff={i}){zusatz}"
+
+def mm(text):
+    return text.replace('"', "#quot;")
+
+def faden_diagramm(stationen, jetzt):
+    """Mermaid-Kette; jetzt = Menge der Stationen, die heute dran sind."""
+    zeilen = ["```mermaid @mermaid", "flowchart LR"]
+    for n, (sid, label, termin) in enumerate(stationen):
+        zeilen.append(f'  s{n}["{mm(label)}<br/><small>{termin}</small>"]')
+    zeilen.append("  " + " --> ".join(f"s{n}" for n in range(len(stationen))))
+    phase = "war"
+    for n, (sid, _, _) in enumerate(stationen):
+        if sid in jetzt:
+            phase = "jetzt"
+        elif phase == "jetzt":
+            phase = "kommt"
+        zeilen.append(f"  class s{n} {phase}")
+    zeilen += ["  classDef war fill:#e8e8e8,stroke:#999,color:#555",
+               "  classDef jetzt fill:#ffd27f,stroke:#b36b00,stroke-width:3px,color:#000",
+               "  classDef kommt fill:#fff,stroke:#999,stroke-dasharray:4 3,color:#555",
+               "```"]
+    return zeilen
+
+def wo_stehen_wir(key):
+    i = IDX[key]
+    t = T[i]
+    praktikum = t[1].startswith("P")
+    heute = [b[0] for b in B if b[3] == key and b[5] == 1]
+    if praktikum or key in BRAUCHEN:
+        brauchen = sorted((ANWENDUNG if praktikum else BRAUCHEN).get(key, []), key=lambda x: term_of[x])
+    else:
+        eigene = {b[0] for b in B if b[3] == key}
+        brauchen = []
+        for a, b_, _ in R:
+            if b_ in eigene and term_of[a] < i and a not in brauchen:
+                brauchen.append(a)
+        for _, _, _, st in F:
+            for u, v in zip(st, st[1:]):
+                if v in eigene and term_of[u] < i and u not in brauchen:
+                    brauchen.append(u)
+        brauchen = sorted(brauchen, key=lambda x: -term_of[x])[:5]
+        brauchen.sort(key=lambda x: term_of[x])
+    nach = T[i + 1] if i + 1 < len(T) else None
+
+    z = [MARKE["wo"][0], "", "## Wo stehen wir?", ""]
+    if t[1].startswith("VL"):
+        sprech = f"Kurz zur Orientierung. Wir sind in {BLOECKE[t[6]].split(' · ')[0]}, Termin {i + 1} von {len(T)}. {PROJEKTZIEL[key]}"
+        if heute:
+            sprech += " Neu sind heute: " + ", ".join(name_of[x] for x in heute) + "."
+        z += ["    --{{0}}--", sprech, ""]
+    z += [f"**{BLOECKE[t[6]]}** · Termin {i + 1} von {len(T)} · {t[1]} in der Woche ab {datum(t[2])}", "",
+          f"**Ziel im Projekt:** {PROJEKTZIEL[key]}", ""]
+    if brauchen:
+        z.append("- **Sie brauchen:** " + " · ".join(begriff_link(x) for x in brauchen))
+    elif i == 0:
+        z.append("- **Sie brauchen:** nichts – wir fangen an")
+    if praktikum:
+        z.append("- **Heute:** anwenden, nichts Neues – Ihre Arbeit hier ist die Prüfungsleistung")
+    elif heute:
+        z.append("- **Heute neu:** " + " · ".join(begriff_link(x, False) for x in heute))
+    if nach:
+        z.append(f"- **Danach:** {nach[1]} · {nach[3]} – {PROJEKTZIEL[nach[0]]}")
+    z.append("")
+    if praktikum:
+        kette = [(x[0], f"{x[1]} · {x[3]}", datum(x[2])) for x in T if x[1].startswith("P")]
+        n = [x[0] for x in kette].index(key)
+        fenster = kette[max(0, n - 1): n + 3]
+        if n + 3 < len(kette):
+            fenster.append(("mehr", "…", ""))
+        z += ["**Der Weg zum autonomen TurtleBot** – die Praktika bauen aufeinander auf:", ""]
+        z += faden_diagramm(fenster + [("ziel", "autonome Fahrt", "Ende SoSe")], {key})
+    else:
+        eigene = {b[0] for b in B if b[3] == key}
+        kandidaten = [f for f in F if eigene & set(f[3]) and FADEN.get(key, f[0]) == f[0]]
+        if kandidaten:
+            fid, fname, fbeschr, st = max(kandidaten, key=lambda f: len(eigene & set(f[3])))
+            pos = [n for n, x in enumerate(st) if x in eigene]
+            fenster = st[max(0, pos[0] - 1): pos[-1] + 3]
+            z += [f"**Roter Faden „{fname}“** – {fbeschr}", ""]
+            z += faden_diagramm([(x, name_of[x], T[term_of[x]][1]) for x in fenster], eigene)
+    z += ["", f"[🗺️ Ganze Kurslandkarte öffnen]({KARTE_URL}#termin={key}) – dort finden Sie jeden Begriff mit Erklärung, typischer Stolperfalle und Link auf die passende Folie.",
+          "", MARKE["wo"][1]]
+    return "\n".join(z)
+
+def ausblick(key):
+    i = IDX[key]
+    z = [MARKE["aus"][0], "", "--------------------------------------------------------------------------------", ""]
+    if i + 1 < len(T):
+        n = T[i + 1]
+        z.append(f"**🗺️ Nächster Halt:** {n[1]} · {n[3]} (Woche ab {datum(n[2])}) – {PROJEKTZIEL[n[0]]} [Auf der Kurslandkarte ansehen]({KARTE_URL}#termin={n[0]})")
+    z += ["", MARKE["aus"][1]]
+    return "\n".join(z)
+
+def einbetten(datei, wo, aus):
+    pfad = os.path.join(REPO, datei)
+    s = open(pfad, encoding="utf-8").read()
+    for art, block in (("wo", wo), ("aus", aus)):
+        a, e = MARKE[art]
+        if a in s:
+            s = s[:s.index(a)] + block + s[s.index(e) + len(e):]
+        elif art == "wo":
+            # vor die erste Überschrift zweiter Ebene außerhalb von Codeblöcken
+            kopf = s.index("-->") + 3
+            zeilen, pos, zaun = s[kopf:].split("\n"), kopf, False
+            for zl in zeilen:
+                if zl.lstrip().startswith("```"):
+                    zaun = not zaun
+                if not zaun and zl.startswith("## "):
+                    break
+                pos += len(zl) + 1
+            s = s[:pos] + block + "\n\n" + s[pos:]
+        else:
+            s = s.rstrip("\n") + "\n\n" + block + "\n"
+    open(pfad, "w", encoding="utf-8").write(s)
+
+for t in T:
+    if t[5] == "ausgearbeitet":
+        einbetten(t[4], wo_stehen_wir(t[0]), ausblick(t[0]))
+# Folien haben sich verschoben: Abschnitte neu lesen
+sections = {t[0]: abschnitte(t[4]) if t[4] else [] for t in T}
+
 phasen, start = [], 0
 for i in range(1, len(T) + 1):
     if i == len(T) or T[i][6] != T[start][6]:
@@ -416,5 +604,6 @@ open(os.path.join(ZIEL, "kurslandkarte.json"), "w", encoding="utf-8").write(text
 seite = open(os.path.join(HIER, "vorlage.html"), encoding="utf-8").read()
 seite = seite.replace("%%DATEN%%", text.replace("</", "<\\/")).replace("%%STAND%%", STAND)
 open(os.path.join(ZIEL, "index.html"), "w", encoding="utf-8").write(seite)
+
 e1 = sum(1 for b in B if b[5] == 1)
 print(f"{len(T)} Termine, {len(B)} Begriffe ({e1} Kern, {len(B)-e1} Detail), {len(R)} Beziehungen, {len(F)} Fäden")

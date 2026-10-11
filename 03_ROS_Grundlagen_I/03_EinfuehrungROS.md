@@ -57,6 +57,49 @@ Jedes Terminal hat seine eigene Umgebung. Das wird uns heute wiederbegegnen: Zwe
 
 --------------------------------------------------------------------------------
 
+<!-- kurslandkarte:wo-start -->
+
+## Wo stehen wir?
+
+    --{{0}}--
+Kurz zur Orientierung. Wir sind in Block 1, Termin 3 von 32. Sie verstehen, wie die Software des TurtleBots aus Knoten und Topics zusammengesetzt ist. Neu sind heute: ROS als Middleware, DDS / rmw-Schicht, Knoten (Node), Topic, Nachricht (Message), Topics des TurtleBot, ros2-Kommandozeile.
+
+**Block 1 · ROS-Grundlagen** · Termin 3 von 32 · VL 2 in der Woche ab 26.10.2026
+
+**Ziel im Projekt:** Sie verstehen, wie die Software des TurtleBots aus Knoten und Topics zusammengesetzt ist.
+
+- **Sie brauchen:** [Warum ROS?](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=rosmotivation) (VL 1) · [Terminal & Shell](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=shell) (Ü 1) · [~/.bashrc](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=bashrc) (Ü 1)
+- **Heute neu:** [ROS als Middleware](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=middleware) · [DDS / rmw-Schicht](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=dds) · [Knoten (Node)](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=node) · [Topic](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=topic) · [Nachricht (Message)](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=message) · [Topics des TurtleBot](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=tbtopics) · [ros2-Kommandozeile](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=ros2cli)
+- **Danach:** VL 3 · ROS 2 Pakete – Sie bauen eigene Knoten und starten sie gemeinsam mit einer Launch-Datei – das Gerüst für jede spätere Projektfunktion.
+
+**Roter Faden „Vom Knoten zum System“** – Wie aus einzelnen Knoten und Nachrichten ein vollständiges Robotersystem wird.
+
+```mermaid @mermaid
+flowchart LR
+  s0["Warum ROS?<br/><small>VL 1</small>"]
+  s1["ROS als Middleware<br/><small>VL 2</small>"]
+  s2["Knoten (Node)<br/><small>VL 2</small>"]
+  s3["Topic<br/><small>VL 2</small>"]
+  s4["Nachricht (Message)<br/><small>VL 2</small>"]
+  s5["ROS-2-Paket<br/><small>VL 3</small>"]
+  s6["Launch-Datei<br/><small>VL 3</small>"]
+  s0 --> s1 --> s2 --> s3 --> s4 --> s5 --> s6
+  class s0 war
+  class s1 jetzt
+  class s2 jetzt
+  class s3 jetzt
+  class s4 jetzt
+  class s5 kommt
+  class s6 kommt
+  classDef war fill:#e8e8e8,stroke:#999,color:#555
+  classDef jetzt fill:#ffd27f,stroke:#b36b00,stroke-width:3px,color:#000
+  classDef kommt fill:#fff,stroke:#999,stroke-dasharray:4 3,color:#555
+```
+
+[🗺️ Ganze Kurslandkarte öffnen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=03) – dort finden Sie jeden Begriff mit Erklärung, typischer Stolperfalle und Link auf die passende Folie.
+
+<!-- kurslandkarte:wo-ende -->
+
 ## Warum ein Framework?
 
     --{{0}}--
@@ -695,3 +738,11 @@ Die wichtigste Aufgabe dieser Woche ist die Installation. Die dritte Aufgabe, de
 | [TurtleBot 3 e-Manual](https://emanual.robotis.com/docs/en/platform/turtlebot3/overview/) | Hardware und ROS-2-Pakete unseres Roboters         |
 
 > **Achtung bei Tutorials und Chatbot-Antworten:** Prüfen Sie immer, für welche ROS-Version ein Beispiel geschrieben ist. In der Dokumentation steht die Distribution in der Adresse (`docs.ros.org/en/jazzy/…`).
+
+<!-- kurslandkarte:ausblick-start -->
+
+--------------------------------------------------------------------------------
+
+**🗺️ Nächster Halt:** VL 3 · ROS 2 Pakete (Woche ab 2.11.2026) – Sie bauen eigene Knoten und starten sie gemeinsam mit einer Launch-Datei – das Gerüst für jede spätere Projektfunktion. [Auf der Kurslandkarte ansehen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=04)
+
+<!-- kurslandkarte:ausblick-ende -->

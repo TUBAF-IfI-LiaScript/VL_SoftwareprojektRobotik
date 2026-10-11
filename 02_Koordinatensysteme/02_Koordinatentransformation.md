@@ -38,6 +38,47 @@ import:  https://github.com/liascript/CodeRunner
 
 --------------------------------------------------------------------------------
 
+<!-- kurslandkarte:wo-start -->
+
+## Wo stehen wir?
+
+    --{{0}}--
+Kurz zur Orientierung. Wir sind in Block 1, Termin 6 von 32. Der TurtleBot weiß, wo seine Sensoren sitzen, und seine Daten kommen beim Empfänger an – sonst bleibt RViz leer. Neu sind heute: Bezugskoordinatensystem, Translation und Rotation, Homogene Koordinaten, Verkettung, Quaternion, tf2, Quality of Service.
+
+**Block 1 · ROS-Grundlagen** · Termin 6 von 32 · VL 4 in der Woche ab 9.11.2026
+
+**Ziel im Projekt:** Der TurtleBot weiß, wo seine Sensoren sitzen, und seine Daten kommen beim Empfänger an – sonst bleibt RViz leer.
+
+- **Sie brauchen:** [Nachricht (Message)](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=message) (VL 2) · [ros2 topic …](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=topiccli) (VL 2) · [Discovery](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=discovery) (VL 2)
+- **Heute neu:** [Bezugskoordinatensystem](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=frame) · [Translation und Rotation](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=starrtrafo) · [Homogene Koordinaten](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=homtrafo) · [Verkettung](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=verkettung) · [Quaternion](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=quaternion) · [tf2](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=tf2) · [Quality of Service](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=qos)
+- **Danach:** P 1 · TurtleBot + Bags – Ihr TurtleBot ist verbunden, fährt sicher, und Sie haben eine Testfahrt aufgezeichnet – das Rohmaterial für Block 2.
+
+**Roter Faden „Koordinaten überall“** – Bezugssysteme und Transformationen ziehen sich vom Roboter bis zur Kamera und zum Fahrwerk.
+
+```mermaid @mermaid
+flowchart LR
+  s0["Bezugskoordinatensystem<br/><small>VL 4</small>"]
+  s1["Homogene Koordinaten<br/><small>VL 4</small>"]
+  s2["Verkettung<br/><small>VL 4</small>"]
+  s3["tf2<br/><small>VL 4</small>"]
+  s4["Pose (6 DoF)<br/><small>VL 5</small>"]
+  s5["Kamera-Matrix K<br/><small>VL 7</small>"]
+  s0 --> s1 --> s2 --> s3 --> s4 --> s5
+  class s0 jetzt
+  class s1 jetzt
+  class s2 jetzt
+  class s3 jetzt
+  class s4 kommt
+  class s5 kommt
+  classDef war fill:#e8e8e8,stroke:#999,color:#555
+  classDef jetzt fill:#ffd27f,stroke:#b36b00,stroke-width:3px,color:#000
+  classDef kommt fill:#fff,stroke:#999,stroke-dasharray:4 3,color:#555
+```
+
+[🗺️ Ganze Kurslandkarte öffnen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=02) – dort finden Sie jeden Begriff mit Erklärung, typischer Stolperfalle und Link auf die passende Folie.
+
+<!-- kurslandkarte:wo-ende -->
+
 ## Leitfrage: Warum zeigt RViz den Scan nicht?
 
     --{{0}}--
@@ -641,3 +682,11 @@ Die Aufgaben dieser Woche bereiten Sie direkt auf das erste Praktikum vor. Wenn 
 + [ROS 2 Jazzy: tf2 Tutorials](https://docs.ros.org/en/jazzy/Tutorials/Intermediate/Tf2/Tf2-Main.html)
 + [ROS 2 Jazzy: Quality of Service settings](https://docs.ros.org/en/jazzy/Concepts/Intermediate/About-Quality-of-Service-Settings.html)
 + [REP 105: Koordinatensysteme mobiler Roboter](https://www.ros.org/reps/rep-0105.html) — warum `map`, `odom` und `base_link`
+
+<!-- kurslandkarte:ausblick-start -->
+
+--------------------------------------------------------------------------------
+
+**🗺️ Nächster Halt:** P 1 · TurtleBot + Bags (Woche ab 23.11.2026) – Ihr TurtleBot ist verbunden, fährt sicher, und Sie haben eine Testfahrt aufgezeichnet – das Rohmaterial für Block 2. [Auf der Kurslandkarte ansehen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=p1)
+
+<!-- kurslandkarte:ausblick-ende -->

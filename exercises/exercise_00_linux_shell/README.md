@@ -56,9 +56,45 @@ Die Abschnitte „Zum Nachschlagen“ am Ende gehören nicht zum Zeitplan — Si
 
 --------------------------------------------------------------------------------
 
+<!-- kurslandkarte:wo-start -->
+
+## Wo stehen wir?
+
+**Block 1 · ROS-Grundlagen** · Termin 2 von 32 · Ü 1 in der Woche ab 26.10.2026
+
+**Ziel im Projekt:** Ihr Rechner wird zur Werkbank: Ohne sicheren Umgang mit der Shell erreichen Sie weder ROS 2 noch den TurtleBot.
+
+- **Heute neu:** [Terminal & Shell](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=shell) · [Absolute & relative Pfade](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=pfade) · [Umgebungsvariable](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=umgebung) · [source](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=source)
+- **Danach:** VL 2 · ROS 2 Grundlagen – Sie verstehen, wie die Software des TurtleBots aus Knoten und Topics zusammengesetzt ist.
+
+**Roter Faden „Umgebung im Griff“** – Von der Shell über Umgebungsvariablen zum lauffähigen ROS-2-Workspace.
+
+```mermaid @mermaid
+flowchart LR
+  s0["Terminal & Shell<br/><small>Ü 1</small>"]
+  s1["Umgebungsvariable<br/><small>Ü 1</small>"]
+  s2["source<br/><small>Ü 1</small>"]
+  s3["~/.bashrc<br/><small>Ü 1</small>"]
+  s4["ros2-Kommandozeile<br/><small>VL 2</small>"]
+  s5["source install/setup.bash<br/><small>VL 3</small>"]
+  s0 --> s1 --> s2 --> s3 --> s4 --> s5
+  class s0 jetzt
+  class s1 jetzt
+  class s2 jetzt
+  class s3 jetzt
+  class s4 kommt
+  class s5 kommt
+  classDef war fill:#e8e8e8,stroke:#999,color:#555
+  classDef jetzt fill:#ffd27f,stroke:#b36b00,stroke-width:3px,color:#000
+  classDef kommt fill:#fff,stroke:#999,stroke-dasharray:4 3,color:#555
+```
+
+[🗺️ Ganze Kurslandkarte öffnen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=ue1) – dort finden Sie jeden Begriff mit Erklärung, typischer Stolperfalle und Link auf die passende Folie.
+
+<!-- kurslandkarte:wo-ende -->
+
 ## Warum Terminal?
 
-    --{{0}}--
 In der Robotik kommen Sie am Terminal nicht vorbei. Der TurtleBot hat keinen Bildschirm, Sie erreichen ihn über das Netzwerk mit `ssh`. ROS 2 wird über Kommandozeilenwerkzeuge gestartet, konfiguriert und untersucht. Und viele Fehler, die Ihnen in den nächsten Wochen begegnen, sind in Wahrheit keine ROS-Fehler, sondern Fehler in der Shell-Umgebung: eine vergessene Umgebungsvariable, ein falscher Pfad, fehlende Rechte.
 
 Erinnern Sie sich an VL 1: Sense, Think und Act sind beim TurtleBot getrennte Programme — Kameratreiber, Spurerkennung, Motorsteuerung. Unter Linux ist jedes davon ein **Prozess**, den Sie aus einem Terminal starten, beobachten und beenden. Und jedes liest seine Einstellungen aus der **Umgebung** dieses Terminals. Genau darum geht es heute.
@@ -85,9 +121,6 @@ graph LR
 
 ### Wie funktionieren die Beispiele in diesem Skript?
 
-    --{{0}}--
-In diesem Skript gibt es zwei Arten, Befehle auszuprobieren. Die Codeblöcke können Sie bearbeiten und mit dem Ausführen-Knopf auf einem Server starten. Manche Blöcke öffnen danach eine interaktive Shell, in der Sie weitertippen können. Zusätzlich finden Sie unten ein vollständiges Linux, das direkt in Ihrem Browser läuft.
-
 + **Codeblock mit Ausführen-Knopf:** Der Code läuft auf einem Server mit Ubuntu und `bash`. Sie können ihn verändern und neu starten.
 + **Interaktive Blöcke:** Nach dem Skript erscheint ein Prompt — tippen Sie weitere Befehle ein, `exit` beendet die Shell.
 + **Browser-Linux:** ein kleines Alpine-Linux (JSLinux), das komplett in Ihrem Browser läuft. Es nutzt die Shell `ash` statt `bash`; die Grundbefehle sind identisch.
@@ -104,7 +137,6 @@ echo "Ich bin gerade in: $(pwd)"
 
 ## Dateisystem
 
-    --{{0}}--
 Linux kennt keine Laufwerksbuchstaben. Alles hängt in einem einzigen Baum, der bei der Wurzel `/` beginnt. Ihr persönliches Verzeichnis liegt unter `/home/benutzername` und hat die Abkürzung `~`. ROS 2 selbst wird später unter `/opt/ros/jazzy` installiert.
 
 ```text
@@ -150,8 +182,7 @@ ls ../..
 ```
 @bash
 
-    --{{1}}--
-Verändern Sie das Beispiel: Legen Sie zusätzlich ein Verzeichnis `build` an und löschen Sie es wieder. Was passiert, wenn Sie `mkdir` ohne die Option `-p` verwenden?
+**Variante:** Legen Sie zusätzlich ein Verzeichnis `build` an und löschen Sie es wieder. Was passiert, wenn Sie `mkdir` ohne die Option `-p` verwenden?
 
 ### Aufgabe 1: Workspace anlegen
 
@@ -187,7 +218,6 @@ find ~/ros2_ws
 
 ## Dateien ansehen, suchen und verknüpfen
 
-    --{{0}}--
 Die eigentliche Stärke der Shell liegt im Kombinieren kleiner Werkzeuge. Jedes Programm liest Text und gibt Text aus. Mit dem senkrechten Strich, der Pipe, leiten Sie die Ausgabe eines Programms als Eingabe an das nächste weiter. Mit dem Größerzeichen schreiben Sie eine Ausgabe in eine Datei.
 
 <!-- data-type="none" -->
@@ -265,7 +295,6 @@ Die letzte Pipe zählt die Fehler je Knoten und sortiert absteigend: Der `line_d
 
 ## Rechte und Benutzer
 
-    --{{0}}--
 Jede Datei gehört einem Benutzer und einer Gruppe. Für den Besitzer, die Gruppe und alle anderen ist jeweils festgelegt, ob gelesen, geschrieben oder ausgeführt werden darf. Das sehen Sie mit `ls -l`. Ein Skript, das Sie selbst geschrieben haben, dürfen Sie zunächst nicht ausführen — dafür müssen Sie das Ausführungsrecht setzen.
 
 ```text
@@ -299,7 +328,6 @@ ls -l hello.sh
 
 ## Prozesse
 
-    --{{0}}--
 Jedes laufende Programm ist ein Prozess mit einer eigenen Nummer, der PID. In ROS 2 ist jeder Knoten ein Prozess — Sie werden also oft mehrere Programme parallel laufen lassen, jedes in seinem eigenen Terminal. Ein Programm im Vordergrund beenden Sie mit `Strg+C`.
 
 <!-- data-type="none" -->
@@ -349,7 +377,6 @@ pkill sleep          # beendet alle Prozesse namens sleep
 
 ## Umgebungsvariablen
 
-    --{{0}}--
 Jetzt kommen wir zum wichtigsten Abschnitt für ROS 2. Jede Shell hat eine Umgebung: eine Sammlung von Variablen wie PATH, HOME oder später ROS_DOMAIN_ID. Programme lesen diese Variablen, um zu wissen, wo sie Dateien finden oder mit wem sie kommunizieren sollen. Entscheidend ist: Die Umgebung gilt nur für die aktuelle Shell und die Programme, die aus ihr heraus gestartet werden. Ein neues Terminal beginnt wieder von vorn.
 
 <!-- data-type="none" -->
@@ -372,12 +399,10 @@ bash -c 'echo "Im Kindprozess: LOKAL=$LOKAL, GLOBAL=$GLOBAL"'
 ```
 @bash
 
-    --{{0}}--
 Der Kindprozess, hier eine zweite bash, sieht nur die exportierte Variable. Genau so verhält es sich mit einem ROS-Knoten, den Sie aus der Shell starten: Er sieht nur, was exportiert wurde.
 
 ### `PATH` — wo findet die Shell Programme?
 
-    --{{0}}--
 Wenn Sie einen Befehl wie ros2 eintippen, durchsucht die Shell der Reihe nach alle Verzeichnisse, die in der Variablen PATH stehen. Ist ein Programm dort nicht zu finden, erhalten Sie die Meldung command not found. Genau das passiert, wenn Sie vergessen, ROS 2 zu sourcen.
 
 ```bash  main.sh
@@ -394,7 +419,6 @@ which mytool
 
 ### `source` oder ausführen?
 
-    --{{0}}--
 Ein Skript, das Sie mit Punkt-Schrägstrich ausführen, läuft in einer neuen Shell. Alle Variablen, die es setzt, verschwinden mit dieser Shell. Mit source dagegen werden die Befehle in Ihrer aktuellen Shell ausgeführt, und die Variablen bleiben erhalten. Deshalb heißt es bei ROS 2 immer source /opt/ros/jazzy/setup.bash und nicht einfach ausführen.
 
 ```bash  main.sh
@@ -522,7 +546,6 @@ Ein ROS-Knoten läuft im Vordergrund und reagiert nicht mehr. Wie beenden Sie ih
 
 ## Zum Nachschlagen: Pakete und Fernzugriff
 
-    --{{0}}--
 Diese beiden Werkzeuge begegnen Ihnen bei der Installation und im ersten Praktikum — hier zum Nachschlagen: die Paketverwaltung apt, mit der Sie Software installieren, und ssh, mit dem Sie sich auf dem TurtleBot anmelden.
 
 **Paketverwaltung**
@@ -545,7 +568,6 @@ exit                               # Verbindung beenden
 
 ## Zum Nachschlagen: Freies Terminal im Browser
 
-    --{{0}}--
 Hier können Sie frei experimentieren. Das Linux läuft vollständig in Ihrem Browser, Sie können nichts kaputt machen. Nach dem Neuladen der Seite ist alles wieder im Ausgangszustand.
 
 ??[JSLinux: Alpine Linux im Browser](https://bellard.org/jslinux/vm.html?url=alpine-x86.cfg&mem=192 "JSLinux von Fabrice Bellard — Alpine Linux mit der Shell ash")
@@ -560,9 +582,6 @@ Hier können Sie frei experimentieren. Das Linux läuft vollständig in Ihrem Br
 > Das Browser-Linux nutzt `ash` statt `bash`: Einträge in `~/.bashrc` (Aufgaben 4 und 5) wirken dort nicht, und nach dem Neuladen ist alles weg.
 
 ## Zum Nachschlagen: Git in sechs Befehlen
-
-    --{{0}}--
-Im Praktikum arbeiten Sie in Gruppen an gemeinsamem Code. Dafür nutzen wir Git. Hier sind die sechs Befehle, die Sie für den Anfang brauchen.
 
 Im Praktikum arbeitet jede Gruppe in einem gemeinsamen **Git-Repository** — ein Ordner, dessen Änderungen Git aufzeichnet und mit einem Server abgleicht. Eine Person legt es auf dem Server an und lädt die anderen ein; dann:
 
@@ -580,7 +599,6 @@ Arbeitsablauf: zu Beginn `git pull`, am Ende `git add`, `git commit`, `git push`
 
 ## Ausblick
 
-    --{{0}}--
 Mit diesen Grundlagen sind Sie für die nächsten Schritte gerüstet. In der Vorlesung geht es um die Konzepte von ROS 2. Vor der nächsten Übung installieren Sie ROS 2 Jazzy selbstständig — und dabei begegnen Ihnen apt, sudo, source und die Datei bashrc wieder.
 
 **Das Wichtigste in 5 Zeilen**
@@ -609,3 +627,11 @@ Mit diesen Grundlagen sind Sie für die nächsten Schritte gerüstet. In der Vor
 + [explainshell.com](https://explainshell.com/) — zerlegt beliebige Shell-Befehle in ihre Bestandteile
 
 !?[Linux Command Line Full Course](https://www.youtube.com/watch?v=2PGnYjbYuUo "Geek's Lesson: Linux Command Line Full course – Beginners to Experts (englisch)")
+
+<!-- kurslandkarte:ausblick-start -->
+
+--------------------------------------------------------------------------------
+
+**🗺️ Nächster Halt:** VL 2 · ROS 2 Grundlagen (Woche ab 26.10.2026) – Sie verstehen, wie die Software des TurtleBots aus Knoten und Topics zusammengesetzt ist. [Auf der Kurslandkarte ansehen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=03)
+
+<!-- kurslandkarte:ausblick-ende -->

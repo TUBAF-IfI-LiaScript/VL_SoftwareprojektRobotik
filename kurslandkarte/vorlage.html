@@ -938,7 +938,12 @@ $("#eAlle").addEventListener("click", () => { state.detail = true; save(); rende
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", render);
 new MutationObserver(render).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
+// Direktlink aus den Materialien: #termin=<key> setzt „Sie sind hier“, #begriff=<id> wählt einen Begriff
+const LINK = new URLSearchParams(location.hash.slice(1));
+const KEYS = DATA.vorlesungen.map(v => v.key);
+if (KEYS.includes(LINK.get("termin"))) state.here = KEYS.indexOf(LINK.get("termin"));
 if (!(state.mode === "liste" && narrow())) state.sel = defaultSel();
+if (byId[LINK.get("begriff")]) { state.sel = LINK.get("begriff"); if (byId[state.sel].level > 1) state.detail = true; }
 let lastW = innerWidth;  // nur auf Breitenänderung reagieren (mobile Adressleiste ändert die Höhe)
 addEventListener("resize", () => { if (innerWidth === lastW) return; lastW = innerWidth; clearTimeout(window._rs); window._rs = setTimeout(render, 150); });
 render();

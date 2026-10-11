@@ -7,6 +7,7 @@ language: de
 narrator: Deutsch Female
 
 import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/config.md
+          https://raw.githubusercontent.com/liaTemplates/mermaid_template/master/README.md
 
 -->
 
@@ -44,6 +45,45 @@ In VL 2 haben wir fertige Knoten gestartet und untersucht. Heute schreiben wir e
 + Log-Ausgaben gezielt einsetzen und ROS 2 über mehrere Rechner betreiben
 
 --------------------------------------------------------------------------------
+
+<!-- kurslandkarte:wo-start -->
+
+## Wo stehen wir?
+
+    --{{0}}--
+Kurz zur Orientierung. Wir sind in Block 1, Termin 4 von 32. Sie bauen eigene Knoten und starten sie gemeinsam mit einer Launch-Datei – das Gerüst für jede spätere Projektfunktion. Neu sind heute: ROS-2-Paket, Workspace, colcon build, Eigener Nachrichtentyp, Launch-Datei.
+
+**Block 1 · ROS-Grundlagen** · Termin 4 von 32 · VL 3 in der Woche ab 2.11.2026
+
+**Ziel im Projekt:** Sie bauen eigene Knoten und starten sie gemeinsam mit einer Launch-Datei – das Gerüst für jede spätere Projektfunktion.
+
+- **Sie brauchen:** [source](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=source) (Ü 1) · [ros2-Kommandozeile](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=ros2cli) (VL 2) · [Nachricht (Message)](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=message) (VL 2) · [Aufbau einer Nachricht](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=msgdef) (VL 2)
+- **Heute neu:** [ROS-2-Paket](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=paket) · [Workspace](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=workspace) · [colcon build](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=colcon) · [Eigener Nachrichtentyp](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=custommsg) · [Launch-Datei](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=launch)
+- **Danach:** Ü 2 · ROS 2 Werkzeuge – Sie untersuchen, konfigurieren und zeichnen ein laufendes ROS-2-System auf – genau das tun Sie in P 1 am Roboter.
+
+**Roter Faden „Vom Knoten zum System“** – Wie aus einzelnen Knoten und Nachrichten ein vollständiges Robotersystem wird.
+
+```mermaid @mermaid
+flowchart LR
+  s0["Nachricht (Message)<br/><small>VL 2</small>"]
+  s1["ROS-2-Paket<br/><small>VL 3</small>"]
+  s2["Launch-Datei<br/><small>VL 3</small>"]
+  s3["tf2<br/><small>VL 4</small>"]
+  s4["Nav2<br/><small>VL 14</small>"]
+  s0 --> s1 --> s2 --> s3 --> s4
+  class s0 war
+  class s1 jetzt
+  class s2 jetzt
+  class s3 kommt
+  class s4 kommt
+  classDef war fill:#e8e8e8,stroke:#999,color:#555
+  classDef jetzt fill:#ffd27f,stroke:#b36b00,stroke-width:3px,color:#000
+  classDef kommt fill:#fff,stroke:#999,stroke-dasharray:4 3,color:#555
+```
+
+[🗺️ Ganze Kurslandkarte öffnen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=04) – dort finden Sie jeden Begriff mit Erklärung, typischer Stolperfalle und Link auf die passende Folie.
+
+<!-- kurslandkarte:wo-ende -->
 
 ## Vom Beispiel zum eigenen Paket
 
@@ -722,3 +762,11 @@ Der Nachrichtentyp liegt in einem eigenen Paket, damit Ampelerkennung und Fahrve
 
 + [ROS 2 Jazzy: Creating a workspace](https://docs.ros.org/en/jazzy/Tutorials/Beginner-Client-Libraries/Creating-A-Workspace/Creating-A-Workspace.html) und [Creating a package](https://docs.ros.org/en/jazzy/Tutorials/Beginner-Client-Libraries/Creating-Your-First-ROS2-Package.html)
 + [colcon Dokumentation](https://colcon.readthedocs.io/en/released/user/quick-start.html)
+
+<!-- kurslandkarte:ausblick-start -->
+
+--------------------------------------------------------------------------------
+
+**🗺️ Nächster Halt:** Ü 2 · ROS 2 Werkzeuge (Woche ab 9.11.2026) – Sie untersuchen, konfigurieren und zeichnen ein laufendes ROS-2-System auf – genau das tun Sie in P 1 am Roboter. [Auf der Kurslandkarte ansehen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=ue2)
+
+<!-- kurslandkarte:ausblick-ende -->

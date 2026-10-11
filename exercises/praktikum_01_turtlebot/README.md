@@ -7,6 +7,7 @@ language: de
 narrator: Deutsch Female
 
 import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/config.md
+          https://raw.githubusercontent.com/liaTemplates/mermaid_template/master/README.md
 
 -->
 
@@ -50,14 +51,45 @@ import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_Softwareproje
 
 **Vor dem Termin zu Hause erledigen** (spart im Labor die meiste Zeit): Paket aus der Vorbereitung installieren, bei WSL2 den Netzwerkmodus umstellen und den Selbsttest machen.
 
-**Wo P 1 im Projekt steht:** P 1 Daten aufnehmen → P 2 Kamerabild korrigieren → P 3 Fahrspur erkennen → P 4 Hindernisse erkennen → … → Block 6: Ihr TurtleBot fährt autonom durch die Verkehrswelt.
-
 --------------------------------------------------------------------------------
 
-## Vorbereitung und Sicherheit
+<!-- kurslandkarte:wo-start -->
 
-    --{{0}}--
-Bevor der Roboter fährt, klären wir drei Dinge: wer in der Gruppe welche Aufgabe übernimmt, wie Sie sicher mit dem Roboter umgehen, und wie Ihr Laptop ins Netz des Roboters kommt.
+## Wo stehen wir?
+
+**Block 1 · ROS-Grundlagen** · Termin 7 von 32 · P 1 in der Woche ab 23.11.2026
+
+**Ziel im Projekt:** Ihr TurtleBot ist verbunden, fährt sicher, und Sie haben eine Testfahrt aufgezeichnet – das Rohmaterial für Block 2.
+
+- **Sie brauchen:** [Topics des TurtleBot](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=tbtopics) (VL 2) · [ros2 topic …](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=topiccli) (VL 2) · [ROS\_DOMAIN\_ID](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=domainid) (VL 3) · [ros2 bag](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=rosbag) (Ü 2) · [QoS-Verträglichkeit](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=qoscompat) (VL 4) · [tf2](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=tf2) (VL 4) · [tf-Baum](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=tftree) (VL 4)
+- **Heute:** anwenden, nichts Neues – Ihre Arbeit hier ist die Prüfungsleistung
+- **Danach:** VL 5 · Sensorik – Sie wissen, was die Sensoren des TurtleBots messen und wo ihre Grenzen liegen.
+
+**Der Weg zum autonomen TurtleBot** – die Praktika bauen aufeinander auf:
+
+```mermaid @mermaid
+flowchart LR
+  s0["P 1 · TurtleBot + Bags<br/><small>23.11.2026</small>"]
+  s1["P 2 · Bildkorrektur<br/><small>11.1.2027</small>"]
+  s2["P 3 · Spurerkennung<br/><small>18.1.2027</small>"]
+  s3["…<br/><small></small>"]
+  s4["autonome Fahrt<br/><small>Ende SoSe</small>"]
+  s0 --> s1 --> s2 --> s3 --> s4
+  class s0 jetzt
+  class s1 kommt
+  class s2 kommt
+  class s3 kommt
+  class s4 kommt
+  classDef war fill:#e8e8e8,stroke:#999,color:#555
+  classDef jetzt fill:#ffd27f,stroke:#b36b00,stroke-width:3px,color:#000
+  classDef kommt fill:#fff,stroke:#999,stroke-dasharray:4 3,color:#555
+```
+
+[🗺️ Ganze Kurslandkarte öffnen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=p1) – dort finden Sie jeden Begriff mit Erklärung, typischer Stolperfalle und Link auf die passende Folie.
+
+<!-- kurslandkarte:wo-ende -->
+
+## Vorbereitung und Sicherheit
 
 **Mitbringen:** Laptop mit ROS 2 Jazzy (Selbsttest der [Installationsanleitung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/installation_ros2/README.md) bestanden). Installieren Sie zusätzlich:
 
@@ -102,9 +134,6 @@ In Zweiergruppen übernimmt die Person am Nachschlagen auch das Protokoll.
 5. Ist der Roboter im Praktikum trotzdem nicht sichtbar, blockiert meist die Windows-Firewall. Die Betreuer helfen — arbeiten Sie bis dahin am Laptop eines Gruppenmitglieds weiter.
 
 ## A: Verbinden
-
-    --{{0}}--
-Der Roboter läuft bereits: Auf seinem Raspberry Pi startet beim Einschalten ein ROS-2-Jazzy-System mit den Treibern für LiDAR, Kamera und Motoren. Sie müssen Ihren Laptop nur ins richtige Netz und in die richtige Domäne bringen.
 
 **Ein funktionierender Laptop pro Gruppe genügt für den Start.** Die anderen verbinden sich parallel.
 
@@ -157,9 +186,6 @@ ros2 topic hz /camera/image_raw
 
 ## B: Den Roboter untersuchen
 
-    --{{0}}--
-Bevor Sie Code für einen Roboter schreiben, müssen Sie seine Schnittstellen kennen. In diesem Teil ermitteln Sie selbst, was in keiner Anleitung zuverlässig steht: welche Typen, welche QoS und welche Koordinatensysteme Ihr Roboter verwendet.
-
 Ein Datenblatt kann veralten — Ihr Roboter selbst nicht. Ermitteln Sie mit den Werkzeugen aus Block 1, wie er tatsächlich konfiguriert ist.
 
 **B.1 Nachrichtentypen** (VL 2)
@@ -207,9 +233,6 @@ Prüfen Sie danach erneut mit `tf2_echo`.
 > **Zwischenabnahme** (noch mit Verbindung zum Roboter): Zeigen Sie den Betreuern `ros2 topic list` und `tf2_echo` mit der Lage des LiDAR (Abnahme Nr. 1 und 3).
 
 ## C: Fahren und Sensordaten ansehen
-
-    --{{0}}--
-Jetzt darf der Roboter fahren. Halten Sie sich an die Höchstgeschwindigkeit, und testen Sie zuerst den Stoppbefehl, bevor Sie mit der Tastatur fahren.
 
 **C.1 Stoppbefehl vorbereiten** — **bevor** Sie fahren. Verwenden Sie den Typ aus B.1 (VL 2):
 
@@ -268,9 +291,6 @@ python3 view_camera.py --ros-args -r /image_raw:=/camera/image_raw
 
 ## D: Eine Fahrt aufzeichnen
 
-    --{{0}}--
-Zum Schluss sammeln Sie Daten für Block 2. Sie fahren eine Runde durch die Verkehrswelt und zeichnen dabei Kamera, LiDAR und Odometrie auf. Bevor Sie aufnehmen, schätzen Sie ab, wie groß die Aufnahme wird.
-
 Ab Block 2 entwickeln Sie Ihre Spurerkennung am Schreibtisch — mit Daten, die Sie heute aufnehmen. (Ü 2)
 
 **D.1 Abschätzen, bevor Sie aufnehmen**
@@ -316,10 +336,7 @@ Starten Sie RViz und `rqt` (Image View) erneut. 📝 Sehen Sie Scan und Kamerabi
 
 ## Abnahme
 
-    --{{0}}--
-Die Praktika sind Ihre Prüfungsleistung. Zum Ende zeigen Sie den Betreuern, dass Ihre Gruppe die folgenden Punkte erreicht hat.
-
-Zeigen Sie den Betreuern am Ende:
+Die Praktika sind Ihre Prüfungsleistung. Zeigen Sie den Betreuern am Ende, dass Ihre Gruppe die folgenden Punkte erreicht hat:
 
 <!-- data-type="none" -->
 | Nr. | Nachweis                                                                                     | Aus Teil |
@@ -341,3 +358,11 @@ Das Abspielen ohne Roboter (D.3) und das Hochladen des Protokolls erledigen Sie 
 - [ ] Aufnahme auf den Gruppenspeicher kopieren
 
 **Ausblick:** In Block 2 lernen Sie die Sensoren genauer kennen — und in **P 2** korrigieren Sie das Kamerabild Ihrer Aufnahme, bevor Sie in **P 3** die Fahrspur darin erkennen.
+
+<!-- kurslandkarte:ausblick-start -->
+
+--------------------------------------------------------------------------------
+
+**🗺️ Nächster Halt:** VL 5 · Sensorik (Woche ab 30.11.2026) – Sie wissen, was die Sensoren des TurtleBots messen und wo ihre Grenzen liegen. [Auf der Kurslandkarte ansehen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=01)
+
+<!-- kurslandkarte:ausblick-ende -->
