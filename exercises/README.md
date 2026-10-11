@@ -4,11 +4,21 @@ Dieses Verzeichnis enthält alle praktischen Übungsaufgaben zur Vorlesung "Soft
 
 ## Übersicht
 
-| Übung                                         | Thema                                    | Nach VL | Dauer   | Schwerpunkt                                    |
-| --------------------------------------------- | ---------------------------------------- | ------- | ------- | ---------------------------------------------- |
-| **[Übung 1](exercise_01_gnss_bags/)**         | GNSS-Datenanalyse & ROS 2-Bags           | VL 5    | 180 min | ROS2-Tools, Bagfiles, GNSS-Trajektorie         |
-| **[Übung 2](exercise_02_person_detection/)**  | Personendetektion mit YOLOv8             | VL 8    | 180 min | Objekterkennung, QoS Parameter, Launch-Files   |
-| **[Übung 3](exercise_03_line_following/)** ⭐ | Linienverfolgung & Hinderniserkennung    | VL 10   | 180 min | PID-Regelung, OpenCV, LiDAR, **Gruppenarbeit** |
+_Stand WiSe 2026/27 — Termine nach dem neuen Format (VL, Ü und P à 90 min). Autoren der neuen Übungen: Sebastian Zug & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent._
+
+| Termin   | Material                                                       | Thema                                                   | Status          |
+| -------- | -------------------------------------------------------------- | ------------------------------------------------------- | --------------- |
+| **Ü 1**  | [exercise_00_linux_shell](exercise_00_linux_shell/)             | OS + Linux Shell                                        | neu 2026/27     |
+| vorab    | [installation_ros2](installation_ros2/)                         | ROS 2 Jazzy selbstständig installieren (vor Ü 2)        | neu 2026/27     |
+| **Ü 2**  | [exercise_00b_ros2_werkzeuge](exercise_00b_ros2_werkzeuge/)     | Services, Parameter, Actions, `ros2 bag` mit turtlesim  | neu 2026/27     |
+
+**Bestand 2025/26** (180-min-Blockübungen, werden auf die neuen Ü- und P-Termine verteilt):
+
+| Übung (alt)                                  | Thema                                 | Geplante Verwendung 2026/27                         |
+| -------------------------------------------- | ------------------------------------- | --------------------------------------------------- |
+| [exercise_01_gnss_bags](exercise_01_gnss_bags/)       | GNSS-Datenanalyse & ROS 2-Bags        | Kandidat für Ü 3 Datenvisualisierung (offen)        |
+| [exercise_02_person_detection](exercise_02_person_detection/) | Personendetektion mit YOLOv8          | Block 3 Objekterkennung (offen)                     |
+| [exercise_03_line_following](exercise_03_line_following/) ⭐ | Linienverfolgung & Hinderniserkennung | Praktika am TurtleBot (Teil A in P 1)               |
 
 ## Datensatz & Hardware
 
@@ -42,8 +52,9 @@ https://ificloud.xsitepool.tu-freiberg.de/index.php/s/DQqrBKBZw3JBeBm
 ### ROS2-Installation prüfen
 
 ```bash
-# ROS2-Version prüfen
-ros2 --version
+# ROS-2-Umgebung prüfen
+printenv ROS_DISTRO
+ros2 doctor
 
 # Wichtige Pakete installieren (falls nicht vorhanden)
 sudo apt install ros-jazzy-rqt-image-view \

@@ -1,5 +1,5 @@
 {
- "stand": "10.10.2026",
+ "stand": "11.10.2026",
  "kurs": {
   "basis": "https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/",
   "speicher": "robotik-map",
@@ -96,8 +96,7 @@
     "Warum ROS? Das \"Rad nicht neu erfinden\"",
     "Ausblick: Die nächsten Schritte",
     "Zusammenfassung",
-    "Weiterführende Ressourcen",
-    "Forschung und Praxis"
+    "Weiterführende Ressourcen"
    ]
   },
   {
@@ -114,21 +113,21 @@
     "Warum Terminal?",
     "Wie funktionieren die Beispiele in diesem Skript?",
     "Dateisystem",
+    "Aufgabe 1: Workspace anlegen",
     "Dateien ansehen, suchen und verknüpfen",
+    "Aufgabe 2: Fehlersuche im Log",
     "Rechte und Benutzer",
     "Prozesse",
+    "Aufgabe 3: Prozesse im Griff",
     "Umgebungsvariablen",
     "export — wer sieht die Variable?",
     "PATH — wo findet die Shell Programme?",
     "source oder ausführen?",
-    "Pakete installieren und Fernzugriff",
-    "Freies Terminal im Browser",
-    "Aufgaben",
-    "Aufgabe 1: Workspace anlegen",
-    "Aufgabe 2: Fehlersuche im Log",
-    "Aufgabe 3: Ein eigenes Werkzeug",
-    "Aufgabe 4: Zwei Terminals, zwei Welten",
+    "Aufgabe 4: Ein eigenes Werkzeug",
+    "Aufgabe 5: Zwei Terminals, zwei Welten",
     "Selbsttest",
+    "Zum Nachschlagen: Pakete und Fernzugriff",
+    "Zum Nachschlagen: Freies Terminal im Browser",
     "Ausblick"
    ]
   },
@@ -152,6 +151,7 @@
     "Hello-World Implementierung",
     "turtlesim: ROS 2 zum Anfassen",
     "Vom turtlesim zum TurtleBot",
+    "Zusammenfassung und Ausblick",
     "Installation",
     "Aufgabe der Woche"
    ]
@@ -177,10 +177,7 @@
     "Systeme starten mit Launch-Dateien",
     "Logging",
     "ROS 2 auf mehreren Rechnern",
-    "Ausblick: Daten aufzeichnen",
-    "Knoten mit Lebenszyklus",
-    "Ausprobieren mit dem Demo",
-    "Ein eigener verwalteter Knoten",
+    "Zusammenfassung und Ausblick",
     "Aufgabe der Woche"
    ]
   },
@@ -188,12 +185,21 @@
    "vl": 4,
    "key": "ue2",
    "label": "Ü 2",
-   "datei": null,
+   "datei": "exercises/exercise_00b_ros2_werkzeuge/README.md",
    "datum": "2026-11-09",
-   "kurz": "Installation ROS 2",
-   "status": "geplant",
+   "kurz": "ROS 2 Werkzeuge",
+   "status": "ausgearbeitet",
    "block": 1,
-   "abschnitte": []
+   "abschnitte": [
+    "Übung: Werkzeuge von ROS 2",
+    "Start: Läuft alles?",
+    "Was bietet ein Knoten an?",
+    "Services",
+    "Parameter",
+    "Actions",
+    "Daten aufzeichnen und abspielen",
+    "Selbsttest und Ausblick"
+   ]
   },
   {
    "vl": 5,
@@ -641,6 +647,9 @@
     "Implementierungsbeispiel",
     "ROS2 Navigation Stack (Nav2)",
     "Planungsablauf",
+    "Wie Nav2 startet: Knoten mit Lebenszyklus",
+    "Ausprobieren mit dem Demo",
+    "Ein eigener verwalteter Knoten",
     "Konfigurationsbeispiel",
     "Zusammenfassung",
     "Was fehlte bisher?"
@@ -733,7 +742,7 @@
    "abschnitt": 4,
    "ebene": 1,
    "code": false,
-   "erklaerung": "Es gibt keine einheitliche Definition; VDI, RIA und JRA betonen Programmierbarkeit, Bewegung und Sensorik unterschiedlich.",
+   "erklaerung": "Keine einheitliche Definition (VDI, RIA, JRA); unsere Arbeitsdefinition: Eine Maschine, die wahrnimmt, entscheidet und handelt — wiederholt und ohne dass ein Mensch jeden Schritt vorgibt.",
    "fehlvorstellung": "„Ein Roboter ist eine Maschine mit Armen.“"
   },
   {
@@ -766,8 +775,8 @@
    "abschnitt": 8,
    "ebene": 1,
    "code": false,
-   "erklaerung": "Wahrnehmen, Entscheiden, Handeln — gegliedert in reaktive Überwachung, Ausführung und Handlungsplanung.",
-   "fehlvorstellung": null
+   "erklaerung": "Kreislauf aus Wahrnehmen, Entscheiden und Handeln; der Schritt Think gliedert sich in Handlungsplanung, Ausführung und reaktive Überwachung.",
+   "fehlvorstellung": "„Sense, Think und Act sind drei übereinanderliegende Ebenen.“"
   },
   {
    "id": "turtlebot",
@@ -818,7 +827,7 @@
    "name": "Pipes & Umleitung",
    "linie": "werkzeuge",
    "vl": 1,
-   "abschnitt": 5,
+   "abschnitt": 6,
    "ebene": 2,
    "code": true,
    "erklaerung": "| reicht die Ausgabe weiter, > und >> schreiben sie in eine Datei — z. B. grep ERROR ros.log | wc -l.",
@@ -829,7 +838,7 @@
    "name": "Dateirechte",
    "linie": "werkzeuge",
    "vl": 1,
-   "abschnitt": 6,
+   "abschnitt": 8,
    "ebene": 2,
    "code": true,
    "erklaerung": "rwx für Besitzer, Gruppe und andere; chmod +x macht ein Skript ausführbar, chmod 754 setzt Rechte als Zahl.",
@@ -840,7 +849,7 @@
    "name": "Prozess",
    "linie": "werkzeuge",
    "vl": 1,
-   "abschnitt": 7,
+   "abschnitt": 9,
    "ebene": 2,
    "code": false,
    "erklaerung": "Jedes laufende Programm hat eine PID — jeder ROS-Knoten ist ein eigener Prozess.",
@@ -851,7 +860,7 @@
    "name": "Umgebungsvariable",
    "linie": "werkzeuge",
    "vl": 1,
-   "abschnitt": 8,
+   "abschnitt": 11,
    "ebene": 1,
    "code": false,
    "erklaerung": "Werte wie PATH oder ROS_DOMAIN_ID, die eine Shell an gestartete Programme weitergibt — nur mit export.",
@@ -862,7 +871,7 @@
    "name": "PATH",
    "linie": "werkzeuge",
    "vl": 1,
-   "abschnitt": 10,
+   "abschnitt": 13,
    "ebene": 2,
    "code": true,
    "erklaerung": "Die Shell sucht Befehle in den Verzeichnissen aus PATH; fehlt ROS 2 dort: command not found.",
@@ -873,7 +882,7 @@
    "name": "source",
    "linie": "werkzeuge",
    "vl": 1,
-   "abschnitt": 11,
+   "abschnitt": 14,
    "ebene": 1,
    "code": true,
    "erklaerung": "Führt ein Skript in der aktuellen Shell aus, damit gesetzte Variablen erhalten bleiben — source /opt/ros/jazzy/setup.bash.",
@@ -884,7 +893,7 @@
    "name": "~/.bashrc",
    "linie": "werkzeuge",
    "vl": 1,
-   "abschnitt": 18,
+   "abschnitt": 16,
    "ebene": 2,
    "code": true,
    "erklaerung": "Wird beim Öffnen jedes Terminals ausgeführt — der Ort für source und ROS_DOMAIN_ID.",
@@ -895,7 +904,7 @@
    "name": "ssh",
    "linie": "werkzeuge",
    "vl": 1,
-   "abschnitt": 12,
+   "abschnitt": 18,
    "ebene": 2,
    "code": true,
    "erklaerung": "Anmelden auf einem entfernten Rechner, z. B. dem Raspberry Pi des TurtleBots.",
@@ -1419,17 +1428,6 @@
    "fehlvorstellung": "„Nach colcon build sind neue Pakete sofort in jedem Terminal verfügbar.“"
   },
   {
-   "id": "rosbag",
-   "name": "ros2 bag",
-   "linie": "werkzeuge",
-   "vl": 3,
-   "abschnitt": 12,
-   "ebene": 1,
-   "code": true,
-   "erklaerung": "ros2 bag record/play zeichnet Topics auf und spielt sie ab — reproduzierbare Tests ohne reale Sensoren.",
-   "fehlvorstellung": "„Am besten zeichnet man einfach immer alle Topics auf.“"
-  },
-  {
    "id": "launch",
    "name": "Launch-Datei",
    "linie": "ros",
@@ -1466,12 +1464,67 @@
    "id": "lifecycle",
    "name": "Lifecycle-Knoten",
    "linie": "ros",
-   "vl": 3,
-   "abschnitt": 13,
+   "vl": 26,
+   "abschnitt": 21,
    "ebene": 1,
    "code": true,
    "erklaerung": "Managed Nodes durchlaufen den Zustandsautomaten Unconfigured, Inactive, Active und Finalized.",
    "fehlvorstellung": null
+  },
+  {
+   "id": "srvcall",
+   "name": "ros2 service call",
+   "linie": "werkzeuge",
+   "vl": 4,
+   "abschnitt": 4,
+   "ebene": 2,
+   "code": true,
+   "erklaerung": "Ruft einen Service mit einer Anfrage im YAML-Format auf und zeigt die Antwort; den Aufbau verrät ros2 interface show.",
+   "fehlvorstellung": "„Ein Service liefert fortlaufend Daten wie ein Topic.“"
+  },
+  {
+   "id": "paramfile",
+   "name": "Parameter und Parameterdatei",
+   "linie": "werkzeuge",
+   "vl": 4,
+   "abschnitt": 5,
+   "ebene": 1,
+   "code": true,
+   "erklaerung": "ros2 param get/set ändert Einstellungen zur Laufzeit; dump/load und --params-file speichern und laden sie als YAML.",
+   "fehlvorstellung": "„Um einen Schwellwert zu ändern, muss man den Knoten neu kompilieren.“"
+  },
+  {
+   "id": "actioncli",
+   "name": "Action: Ziel, Feedback, Ergebnis",
+   "linie": "ros",
+   "vl": 4,
+   "abschnitt": 6,
+   "ebene": 2,
+   "code": true,
+   "erklaerung": "send_goal --feedback startet einen Auftrag mit Rückmeldungen; der Auftraggeber kann abbrechen (cancel), der Server verwerfen (abort).",
+   "fehlvorstellung": null
+  },
+  {
+   "id": "rosbag",
+   "name": "ros2 bag",
+   "linie": "werkzeuge",
+   "vl": 4,
+   "abschnitt": 7,
+   "ebene": 1,
+   "code": true,
+   "erklaerung": "ros2 bag record/play zeichnet Topics auf und spielt sie ab — reproduzierbare Tests ohne reale Sensoren.",
+   "fehlvorstellung": "„Am besten zeichnet man einfach immer alle Topics auf.“"
+  },
+  {
+   "id": "openloop",
+   "name": "Steuerung ohne Rückkopplung",
+   "linie": "bewegung",
+   "vl": 4,
+   "abschnitt": 7,
+   "ebene": 2,
+   "code": false,
+   "erklaerung": "Abgespielte Fahrbefehle führen nicht exakt zum selben Ziel — ohne Messung und Nachregeln summieren sich Abweichungen.",
+   "fehlvorstellung": "„Wer die Befehle einer gelungenen Fahrt abspielt, fährt sie exakt nach.“"
   },
   {
    "id": "image_msg",
@@ -2358,6 +2411,26 @@
    "von": "topic",
    "nach": "kommmuster",
    "text": "ergänzt durch"
+  },
+  {
+   "von": "kommmuster",
+   "nach": "srvcall",
+   "text": "erprobt mit"
+  },
+  {
+   "von": "kommmuster",
+   "nach": "actioncli",
+   "text": "erprobt mit"
+  },
+  {
+   "von": "paramfile",
+   "nach": "launch",
+   "text": "geladen in"
+  },
+  {
+   "von": "openloop",
+   "nach": "regelung",
+   "text": "motiviert"
   },
   {
    "von": "topiccli",
