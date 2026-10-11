@@ -1,0 +1,17 @@
+# Homographie der synthetischen Testkamera – NUR für die Testaufnahme fahrt_test
+image_corrector:
+  ros__parameters:
+    homographie:
+    - 0.6049230145142681
+    - 1.0811620735891
+    - -52.459877192885685
+    - -0.00046089569504255396
+    - 2.1104860880433365
+    - -119.91791651864816
+    - -2.4088541347270425e-06
+    - 0.007722997241661495
+    - 1.0
+    px_pro_m: 400.0
+    x_min: 0.12
+    x_max: 0.62
+    y_max: 0.35

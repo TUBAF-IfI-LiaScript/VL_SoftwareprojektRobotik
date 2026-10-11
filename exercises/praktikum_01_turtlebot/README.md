@@ -39,7 +39,7 @@ import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_Softwareproje
 **Ablauf (90 min)**
 
 <!-- data-type="none" -->
-| Zeit   | Teil                                     | Wiederholt aus           |
+| Zeit   | Teil                                     | Wendet an                |
 | ------ | ---------------------------------------- | ------------------------ |
 | 5 min  | Sicherheit, Rollen                       | —                        |
 | 15 min | A: Verbinden                             | Ü 1, VL 2, VL 3          |
@@ -306,7 +306,7 @@ ros2 topic bw /scan
 
 **D.2 Aufnehmen**
 
-Prüfen Sie zuerst mit `ros2 topic list`, ob Ihr Roboter auch `/camera/camera_info` sendet — darin steht die Kalibrierung der Kamera, die Sie in P 2 brauchen. Fahren Sie dann langsam (≤ 0,1 m/s) eine Runde entlang der Fahrspur und nehmen Sie auf:
+Prüfen Sie zuerst mit `ros2 topic list`, ob Ihr Roboter auch `/camera/camera_info` sendet — falls ja, nehmen Sie es mit auf. (Die Kamera kalibrieren Sie in P 2 selbst.) Fahren Sie dann langsam (≤ 0,1 m/s) eine Runde entlang der Fahrspur und nehmen Sie auf:
 
 ```bash
 ros2 bag record -o fahrt_spur --topics /camera/image_raw /camera/camera_info /scan /odom /tf /tf_static

@@ -12,6 +12,8 @@ _Stand WiSe 2026/27 — Termine nach dem neuen Format (VL, Ü und P à 90 min). 
 | vorab    | [installation_ros2](installation_ros2/)                         | ROS 2 Jazzy selbstständig installieren (vor Ü 2)        | neu 2026/27     |
 | **Ü 2**  | [exercise_00b_ros2_werkzeuge](exercise_00b_ros2_werkzeuge/)     | Services, Parameter, Actions, `ros2 bag` mit turtlesim  | neu 2026/27     |
 | **P 1**  | [praktikum_01_turtlebot](praktikum_01_turtlebot/)               | TurtleBot verbinden, untersuchen, fahren, aufzeichnen   | neu 2026/27     |
+| **P 2**  | [praktikum_02_bildkorrektur](praktikum_02_bildkorrektur/)       | Kamera kalibrieren, entzerren, Vogelperspektive; Projektpaket `verkehrswelt` | neu 2026/27 |
+| **P 3**  | [praktikum_03_spurerkennung](praktikum_03_spurerkennung/)       | Fahrspur erkennen, Abweichung `/lane/offset`            | neu 2026/27     |
 
 **Bestand 2025/26** (180-min-Blockübungen, werden auf die neuen Ü- und P-Termine verteilt):
 
@@ -19,7 +21,7 @@ _Stand WiSe 2026/27 — Termine nach dem neuen Format (VL, Ü und P à 90 min). 
 | -------------------------------------------- | ------------------------------------- | --------------------------------------------------- |
 | [exercise_01_gnss_bags](exercise_01_gnss_bags/)       | GNSS-Datenanalyse & ROS 2-Bags        | Kandidat für Ü 3 Datenvisualisierung (offen)        |
 | [exercise_02_person_detection](exercise_02_person_detection/) | Personendetektion mit YOLOv8          | Block 3 Objekterkennung (offen)                     |
-| [exercise_03_line_following](exercise_03_line_following/) ⭐ | Linienverfolgung & Hinderniserkennung | Praktika am TurtleBot (Teil A in P 1)               |
+| [exercise_03_line_following](exercise_03_line_following/) ⭐ | Linienverfolgung & Hinderniserkennung | Praktika am TurtleBot (Teil A in P 1; Idee der Linienerkennung in P 3) |
 
 ## Datensatz & Hardware
 

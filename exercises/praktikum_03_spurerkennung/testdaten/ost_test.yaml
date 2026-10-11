@@ -1,0 +1,27 @@
+# Kalibrierung der synthetischen Testkamera – NUR für die Testaufnahme fahrt_test
+image_width: 640
+image_height: 480
+camera_name: narrow_stereo
+camera_matrix:
+  rows: 3
+  cols: 3
+  data: [528.86685,   0.     , 317.56985,
+           0.     , 528.85335, 243.48537,
+           0.     ,   0.     ,   1.     ]
+distortion_model: plumb_bob
+distortion_coefficients:
+  rows: 1
+  cols: 5
+  data: [-0.278735, 0.086704, 0.000708, -0.000346, 0.000000]
+rectification_matrix:
+  rows: 3
+  cols: 3
+  data: [1., 0., 0.,
+         0., 1., 0.,
+         0., 0., 1.]
+projection_matrix:
+  rows: 3
+  cols: 4
+  data: [469.72955,   0.     , 316.12417,   0.     ,
+           0.     , 495.87881, 243.74087,   0.     ,
+           0.     ,   0.     ,   1.     ,   0.     ]

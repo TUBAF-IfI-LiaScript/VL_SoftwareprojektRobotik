@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>verkehrswelt</name>
+  <version>0.2.0</version>
+  <description>Projektpaket der Gruppe: TurtleBot in der Verkehrswelt (P 2: Bildkorrektur, P 3: Spurerkennung)</description>
+  <maintainer email="gruppe@example.org">Gruppe</maintainer>
+  <license>MIT</license>
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>cv_bridge</exec_depend>
+  <exec_depend>python3-opencv</exec_depend>
+  <exec_depend>python3-yaml</exec_depend>
+  <export><build_type>ament_python</build_type></export>
+</package>

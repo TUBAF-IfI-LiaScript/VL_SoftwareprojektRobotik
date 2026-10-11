@@ -1,0 +1,4 @@
+# Platzhalter: wird von "ros2 run verkehrswelt boden_kalibrieren" überschrieben (Teil C)
+image_corrector:
+  ros__parameters:
+    homographie: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]

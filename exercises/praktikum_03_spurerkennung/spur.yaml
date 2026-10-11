@@ -1,0 +1,10 @@
+# Parameter der Spurerkennung – nach verkehrswelt/config/ kopieren und an Ihre Strecke anpassen.
+# Kommazahlen immer mit Dezimalpunkt schreiben (0.22, 1.0), auch bei "ros2 param set".
+lane_detector:
+  ros__parameters:
+    schwelle: 110              # Grauwert, ab dem ein Pixel als weiße Linie gilt
+    min_flaeche: 40            # kleinere Flecken (Pixel) ignorieren
+    strich_min_laenge: 0.05    # m – kürzere Stücke (z.B. am Bildrand abgeschnitten) ignorieren
+    strich_max_laenge: 0.16    # m – längere Stücke gelten als Randlinie
+    spurbreite: 0.22           # m – auf IHRER Strecke messen, Linienmitte bis Linienmitte (P 2, C.3)
+    vorausschau: 0.30          # m vor base_footprint – fest, Teil der Schnittstelle: NICHT ändern

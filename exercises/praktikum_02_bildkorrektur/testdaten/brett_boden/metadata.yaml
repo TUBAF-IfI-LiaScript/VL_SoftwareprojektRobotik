@@ -1,0 +1,30 @@
+rosbag2_bagfile_information:
+  version: 9
+  storage_identifier: mcap
+  duration:
+    nanoseconds: 4900000000
+  starting_time:
+    nanoseconds_since_epoch: 1768000000000000000
+  message_count: 50
+  topics_with_message_count:
+    - topic_metadata:
+        name: /camera/image_raw/compressed
+        type: sensor_msgs/msg/CompressedImage
+        serialization_format: cdr
+        offered_qos_profiles:
+          []
+        type_description_hash: ""
+      message_count: 50
+  compression_format: ""
+  compression_mode: ""
+  relative_file_paths:
+    - brett_boden_0.mcap
+  files:
+    - path: brett_boden_0.mcap
+      starting_time:
+        nanoseconds_since_epoch: 1768000000000000000
+      duration:
+        nanoseconds: 4900000000
+      message_count: 50
+  custom_data: ~
+  ros_distro: jazzy

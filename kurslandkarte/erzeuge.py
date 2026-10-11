@@ -44,8 +44,8 @@ T = [
     ("lid", "VL",    "2026-12-14", "LiDAR",               None, "geplant", 2),
     ("ue3", "Ü 3",   "2027-01-04", "Datenvisualisierung", None, "geplant", 2),
     ("ue4", "Ü 4",   "2027-01-11", "Kameradaten",         None, "geplant", 2),
-    ("p2",  "P 2",   "2027-01-11", "Bildkorrektur",       None, "geplant", 2),
-    ("p3",  "P 3",   "2027-01-18", "Spurerkennung",       None, "geplant", 2),
+    ("p2",  "P 2",   "2027-01-11", "Bildkorrektur",       "exercises/praktikum_02_bildkorrektur/README.md",       "ausgearbeitet", 2),
+    ("p3",  "P 3",   "2027-01-18", "Spurerkennung",       "exercises/praktikum_03_spurerkennung/README.md",       "ausgearbeitet", 2),
     ("07",  "VL",    "2027-01-25", "Objekterkennung",     "07_Objekterkennung/07_Objekterkennung.md",             "Bestand", 3),
     ("pkw", "VL",    "2027-01-25", "… in Punktwolken",    None, "geplant", 3),
     ("ue5", "Ü 5",   "2027-02-01", "Objekte im LiDAR",    None, "geplant", 3),
@@ -404,7 +404,7 @@ PROJEKTZIEL = {
     "lid": "Sie werten die Abstandsmessungen des LiDAR aus und erkennen, was vor dem Roboter liegt.",
     "ue3": "Sie stellen Sensordaten so dar, dass Fehler darin sichtbar werden.",
     "ue4": "Sie verarbeiten aufgezeichnete Kamerabilder des TurtleBots selbst.",
-    "p2":  "Das Kamerabild Ihres TurtleBots ist entzerrt und für die Spurerkennung vorbereitet.",
+    "p2":  "Ihr TurtleBot liefert eine entzerrte, maßstäbliche Draufsicht auf die Fahrbahn – die Grundlage der Spurerkennung.",
     "p3":  "Ihr TurtleBot erkennt die Fahrspur im Kamerabild.",
     "07":  "Sie erkennen Schilder, Ampeln und Fußgängerfiguren im Kamerabild.",
     "pkw": "Sie finden Objekte in den Messpunkten des LiDAR.",
@@ -428,6 +428,8 @@ assert set(PROJEKTZIEL) == set(IDX), set(IDX) ^ set(PROJEKTZIEL)
 # Praktika führen keine Begriffe ein, sie wenden an: welche Begriffe aus früheren Terminen?
 ANWENDUNG = {
     "p1": ["domainid", "tbtopics", "topiccli", "qoscompat", "tf2", "tftree", "rosbag"],
+    "p2": ["launch", "qoscompat", "cv_bridge", "compressed_image", "kalibrierung", "entzerrung"],
+    "p3": ["paramfile", "frame", "thresholding", "morphologie", "launch"],
 }
 # Vorwissen und Faden werden aus Beziehungen und Fäden abgeleitet; wo das nicht trifft, hier festlegen
 BRAUCHEN = {

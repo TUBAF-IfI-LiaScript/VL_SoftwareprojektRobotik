@@ -371,7 +371,7 @@ Hier ist der Baum unseres Roboters. Lesen Sie ihn von oben nach unten: Die Karte
 So sieht der Baum unseres Roboters aus. Die Frames unterhalb von `base_footprint` stammen aus seinem Modell (URDF, siehe unten), die oberen kommen beim Fahren dazu. Zwei Frames sind neu:
 
 + `odom` — der Punkt, an dem der Roboter losgefahren ist. Die Odometrie zählt die Radumdrehungen und schätzt daraus die Lage des Roboters relativ zu diesem Punkt; mit der Zeit driftet diese Schätzung.
-+ `base_footprint` — die Mitte des Roboters, projiziert auf den Boden. `base_link` liegt 1 cm darüber im Roboter.
++ `base_footprint` — der Punkt auf dem Boden genau unter der Mitte der Radachse; um ihn dreht sich der Roboter. `base_link` liegt 1 cm darüber im Roboter.
 
 ```mermaid @mermaid
 graph TD
