@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.1.0
+version:  0.2.0
 language: de
 narrator: Deutsch Female
 
@@ -31,13 +31,13 @@ import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_Softwareproje
 
 --------------------------------------------------------------------------------
 
-**Zielstellung der heutigen Übung**
+**Zielstellung der heutigen Übung** — nach der Übung können Sie
 
-+ Sich im Linux-Dateisystem mit absoluten und relativen Pfaden bewegen
-+ Dateien anlegen, kopieren, durchsuchen und Ausgaben mit Pipes verknüpfen
-+ Dateirechte lesen und setzen, eigene Skripte ausführbar machen
-+ Prozesse starten, beobachten und beenden
-+ Umgebungsvariablen verstehen — und erklären, warum `source /opt/ros/jazzy/setup.bash` nötig ist
++ sich im Linux-Dateisystem mit absoluten und relativen Pfaden bewegen,
++ Dateien anlegen, durchsuchen und Ausgaben mit Pipes verknüpfen,
++ Dateirechte lesen und eigene Skripte ausführbar machen,
++ Prozesse starten, finden und beenden,
++ erklären, warum `source /opt/ros/jazzy/setup.bash` in jedem Terminal nötig ist.
 
 **Ablauf (90 min)**
 
@@ -45,9 +45,13 @@ import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_Softwareproje
 | Zeit      | Inhalt                                                     |
 | --------- | ---------------------------------------------------------- |
 | 10 min    | Warum Terminal? Arbeitsumgebung                            |
-| 30 min    | Grundlagen mit interaktiven Beispielen                     |
-| 40 min    | Aufgaben 1–4 am eigenen Ubuntu-System                      |
-| 10 min    | Selbsttest und Ausblick auf die ROS-2-Installation         |
+| 15 min    | Dateisystem + Aufgabe 1                                    |
+| 15 min    | Dateien und Pipes + Aufgabe 2                              |
+| 10 min    | Rechte, Prozesse + Aufgabe 3                               |
+| 30 min    | Umgebungsvariablen + Aufgaben 4 und 5                      |
+| 10 min    | Selbsttest und Ausblick                                    |
+
+Die Abschnitte „Zum Nachschlagen“ am Ende gehören nicht zum Zeitplan — Sie brauchen sie bei der Installation von ROS 2 und im ersten Praktikum.
 
 --------------------------------------------------------------------------------
 
@@ -55,6 +59,8 @@ import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_Softwareproje
 
     --{{0}}--
 In der Robotik kommen Sie am Terminal nicht vorbei. Der TurtleBot hat keinen Bildschirm, Sie erreichen ihn über das Netzwerk mit `ssh`. ROS 2 wird über Kommandozeilenwerkzeuge gestartet, konfiguriert und untersucht. Und viele Fehler, die Ihnen in den nächsten Wochen begegnen, sind in Wahrheit keine ROS-Fehler, sondern Fehler in der Shell-Umgebung: eine vergessene Umgebungsvariable, ein falscher Pfad, fehlende Rechte.
+
+Erinnern Sie sich an VL 1: Sense, Think und Act sind beim TurtleBot getrennte Programme — Kameratreiber, Spurerkennung, Motorsteuerung. Unter Linux ist jedes davon ein **Prozess**, den Sie aus einem Terminal starten, beobachten und beenden. Und jedes liest seine Einstellungen aus der **Umgebung** dieses Terminals. Genau darum geht es heute.
 
 ```ascii
   +-------------------+          ssh / ROS 2 (DDS)          +---------------------+
@@ -78,7 +84,7 @@ In der Robotik kommen Sie am Terminal nicht vorbei. Der TurtleBot hat keinen Bil
 | ------------------------- | ------------------------------------------------------------------------------------------ |
 | Ubuntu 24.04 nativ        | empfohlen — alle Werkzeuge der Veranstaltung laufen direkt                                  |
 | WSL2 unter Windows        | gute Alternative, `wsl --install -d Ubuntu-24.04`                                           |
-| Rechnerpool               | für den Einstieg, aber ohne eigene Installation von ROS 2                                   |
+| Rechnerpool               | Ausweichlösung für alle Aufgaben, falls Ihr eigenes System noch nicht läuft                  |
 
 ### Wie funktionieren die Beispiele in diesem Skript?
 
@@ -150,6 +156,38 @@ ls ../..
     --{{1}}--
 Verändern Sie das Beispiel: Legen Sie zusätzlich ein Verzeichnis `build` an und löschen Sie es wieder. Was passiert, wenn Sie `mkdir` ohne die Option `-p` verwenden?
 
+### Aufgabe 1: Workspace anlegen
+
+Die Aufgaben lösen Sie auf Ihrem eigenen Ubuntu-System, in WSL2 oder am Pool-Rechner — nicht in den Server-Beispielen, denn dort gibt es kein eigenes Home-Verzeichnis.
+
+
+Legen Sie in Ihrem Home-Verzeichnis folgende Struktur an — mit möglichst wenigen Befehlen:
+
+```text
+~/ros2_ws/
+├── src/
+│   ├── turtle_tools/
+│   │   └── README.md
+│   └── line_follower/
+└── notes.txt
+```
+
+Kopieren Sie anschließend `notes.txt` nach `src/line_follower/` und benennen Sie die Kopie in `todo.txt` um.
+
+**Prüfkriterium:** `find ~/ros2_ws` listet genau die Dateien und Verzeichnisse oben plus `src/line_follower/todo.txt`.
+
+<details>
+<summary>**Lösungsvorschlag**</summary>
+
+```bash
+mkdir -p ~/ros2_ws/src/turtle_tools ~/ros2_ws/src/line_follower
+touch ~/ros2_ws/src/turtle_tools/README.md ~/ros2_ws/notes.txt
+cp ~/ros2_ws/notes.txt ~/ros2_ws/src/line_follower/todo.txt
+find ~/ros2_ws
+```
+
+</details>
+
 ## Dateien ansehen, suchen und verknüpfen
 
     --{{0}}--
@@ -193,6 +231,40 @@ echo "--- errors.txt hat $(wc -l < errors.txt) Zeilen"
 [1728550005.01] [INFO] [controller_node]: Emergency stop
 ```
 @bashLog
+
+### Aufgabe 2: Fehlersuche im Log
+
+Laden Sie das Log aus dem Abschnitt „Dateien ansehen, suchen und verknüpfen“ als `ros.log` in Ihren Workspace (oder kopieren Sie es per Copy & Paste mit `cat > ros.log`).
+
+1. Wie viele Zeilen enthalten `INFO`, `WARN` und `ERROR`?
+2. Schreiben Sie alle Meldungen des `lidar_node` in die Datei `lidar.txt`.
+3. Welcher Knoten meldet die meisten Fehler?
+
+**Prüfkriterium:** `INFO` 4, `WARN` 2, `ERROR` 3 Zeilen; `wc -l lidar.txt` ergibt 3.
+
+Wie viele `ERROR`-Zeilen enthält das Log?
+
+[[3]]
+[[?]] `grep -c "ERROR" ros.log`
+***
+`grep -c` zählt die passenden Zeilen.
+***
+
+<details>
+<summary>**Lösungsvorschlag**</summary>
+
+```bash
+grep -c "INFO" ros.log            # 4
+grep -c "WARN" ros.log            # 2
+grep -c "ERROR" ros.log           # 3
+grep "lidar_node" ros.log > lidar.txt
+wc -l lidar.txt                   # 3 lidar.txt
+grep "ERROR" ros.log | cut -d' ' -f3 | sort | uniq -c | sort -rn
+```
+
+Die letzte Pipe zählt die Fehler je Knoten und sortiert absteigend: Der `line_detector` meldet zwei Fehler — in der Verkehrswelt hieße das: Die Kamera liefert Bilder, aber die Spurerkennung findet keine Linie.
+
+</details>
 
 ## Rechte und Benutzer
 
@@ -241,7 +313,7 @@ Jedes laufende Programm ist ein Prozess mit einer eigenen Nummer, der PID. In RO
 | `ps aux`, `pgrep`    | Prozesse anzeigen / suchen                             |
 | `top`, `htop`        | Prozesse und Auslastung live anzeigen (`q` beendet)    |
 | `kill PID`           | Prozess beenden                                        |
-| `tmux`               | mehrere Terminals in einem Fenster — praktisch per `ssh` |
+| `pkill name`         | alle Prozesse mit diesem Namen beenden                 |
 
 ```bash  main.sh
 sleep 30 &
@@ -253,6 +325,30 @@ sleep 0.5
 ps -p $PID > /dev/null || echo "Prozess $PID wurde beendet"
 ```
 @bash
+
+### Aufgabe 3: Prozesse im Griff
+
+Im Projekt laufen viele Knoten gleichzeitig — und manchmal bleibt einer hängen.
+
+1. Starten Sie zweimal `sleep 600 &`.
+2. Finden Sie beide Prozessnummern mit `pgrep sleep`.
+3. Beenden Sie einen der beiden Prozesse mit `kill`.
+
+**Prüfkriterium:** `pgrep sleep` liefert danach genau eine Nummer. Räumen Sie zum Schluss mit `pkill sleep` auf.
+
+<details>
+<summary>**Lösungsvorschlag**</summary>
+
+```bash
+sleep 600 &
+sleep 600 &
+pgrep sleep          # z. B. 4711 und 4712
+kill 4711
+pgrep sleep          # nur noch 4712
+pkill sleep          # beendet alle Prozesse namens sleep
+```
+
+</details>
 
 ## Umgebungsvariablen
 
@@ -327,94 +423,7 @@ source /opt/ros/jazzy/setup.bash
 export ROS_DOMAIN_ID=42          # Ihre Gruppennummer, trennt die TurtleBots im Labor
 ```
 
-## Pakete installieren und Fernzugriff
-
-    --{{0}}--
-Zwei Werkzeuge brauchen Sie in den nächsten Wochen ständig: die Paketverwaltung apt, mit der Sie Software installieren, und ssh, mit dem Sie sich auf dem TurtleBot anmelden.
-
-**Paketverwaltung**
-
-```bash
-sudo apt update                    # Paketlisten aktualisieren
-sudo apt install tree htop tmux    # Pakete installieren
-apt search turtlebot3              # Pakete suchen
-```
-
-**Fernzugriff auf den TurtleBot**
-
-```bash
-ssh ubuntu@192.168.0.42            # anmelden (Adresse bekommen Sie im Praktikum)
-scp mein_skript.py ubuntu@192.168.0.42:~/   # Datei kopieren
-exit                               # Verbindung beenden
-```
-
-> Im Praktikum erhält jede Gruppe Adresse und Zugangsdaten ihres TurtleBots.
-
-## Freies Terminal im Browser
-
-    --{{0}}--
-Hier können Sie frei experimentieren. Das Linux läuft vollständig in Ihrem Browser, Sie können nichts kaputt machen. Nach dem Neuladen der Seite ist alles wieder im Ausgangszustand.
-
-??[JSLinux: Alpine Linux im Browser](https://bellard.org/jslinux/vm.html?url=alpine-x86.cfg&mem=192 "JSLinux von Fabrice Bellard — Alpine Linux mit der Shell ash")
-
-**Vorschläge zum Ausprobieren**
-
-+ `cd /` und `ls` — wie sieht der Verzeichnisbaum aus?
-+ `cat /etc/os-release` — welches System läuft hier?
-+ `echo $PATH` und `env`
-+ `ls -l /bin | head` — wem gehören die Programme, welche Rechte haben sie?
-
-## Aufgaben
-
-    --{{0}}--
-Die folgenden Aufgaben lösen Sie auf Ihrem eigenen Ubuntu-System oder in WSL2. Genau diese Umgebung brauchen Sie in der nächsten Übung für die Installation von ROS 2.
-
-### Aufgabe 1: Workspace anlegen
-
-Legen Sie in Ihrem Home-Verzeichnis folgende Struktur an — mit möglichst wenigen Befehlen:
-
-```text
-~/ros2_ws/
-├── src/
-│   ├── turtle_tools/
-│   │   └── README.md
-│   └── line_follower/
-└── notes.txt
-```
-
-Kopieren Sie anschließend `notes.txt` nach `src/line_follower/` und benennen Sie die Kopie in `todo.txt` um.
-
-**Prüfkriterium:** `find ~/ros2_ws` listet genau die Dateien und Verzeichnisse oben plus `src/line_follower/todo.txt`.
-
-<details>
-<summary>**Lösungsvorschlag**</summary>
-
-```bash
-mkdir -p ~/ros2_ws/src/turtle_tools ~/ros2_ws/src/line_follower
-touch ~/ros2_ws/src/turtle_tools/README.md ~/ros2_ws/notes.txt
-cp ~/ros2_ws/notes.txt ~/ros2_ws/src/line_follower/todo.txt
-find ~/ros2_ws
-```
-
-</details>
-
-### Aufgabe 2: Fehlersuche im Log
-
-Laden Sie das Log aus dem Abschnitt „Dateien ansehen, suchen und verknüpfen“ als `ros.log` in Ihren Workspace (oder kopieren Sie es per Copy & Paste mit `cat > ros.log`).
-
-1. Wie viele Zeilen enthalten `INFO`, `WARN` und `ERROR`?
-2. Schreiben Sie alle Meldungen des `lidar_node` in die Datei `lidar.txt`.
-3. Welcher Knoten meldet die meisten Fehler?
-
-Wie viele `ERROR`-Zeilen enthält das Log?
-
-[[3]]
-[[?]] `grep -c "ERROR" ros.log`
-***
-`grep -c` zählt die passenden Zeilen. Für Aufgabe 3: `grep "ERROR" ros.log | cut -d' ' -f3 | sort | uniq -c | sort -rn` — der `line_detector` meldet zwei Fehler.
-***
-
-### Aufgabe 3: Ein eigenes Werkzeug
+### Aufgabe 4: Ein eigenes Werkzeug
 
 1. Schreiben Sie ein Skript `~/bin/rosinfo.sh`, das das aktuelle Datum, den Rechnernamen (`hostname`) und den Wert von `ROS_DOMAIN_ID` ausgibt.
 2. Machen Sie es ausführbar.
@@ -442,7 +451,7 @@ Unter Ubuntu wird `~/bin` beim Anmelden automatisch in den `PATH` aufgenommen, s
 
 </details>
 
-### Aufgabe 4: Zwei Terminals, zwei Welten
+### Aufgabe 5: Zwei Terminals, zwei Welten
 
 1. Öffnen Sie zwei Terminals. Setzen Sie im ersten `export ROS_DOMAIN_ID=7` und prüfen Sie den Wert in beiden Terminals mit `rosinfo.sh`. Erklären Sie das Ergebnis.
 2. Sorgen Sie dafür, dass `ROS_DOMAIN_ID` in **jedem** neuen Terminal automatisch auf Ihre Gruppennummer gesetzt ist.
@@ -454,7 +463,7 @@ Unter Ubuntu wird `~/bin` beim Anmelden automatisch in den `PATH` aufgenommen, s
 <summary>**Lösungsvorschlag**</summary>
 
 1. Die Variable existiert nur in der Shell des ersten Terminals und in den daraus gestarteten Programmen. Das zweite Terminal ist eine eigene Shell mit eigener Umgebung.
-2. `echo 'export ROS_DOMAIN_ID=7' >> ~/.bashrc` — die `~/.bashrc` wird beim Öffnen jedes neuen Terminals ausgeführt.
+2. `echo 'export ROS_DOMAIN_ID=<Gruppennummer>' >> ~/.bashrc` — die `~/.bashrc` wird beim Öffnen jedes neuen Terminals ausgeführt.
 3. `./setup.sh` startet eine neue Shell als Kindprozess. Die Variable wird dort gesetzt und verschwindet mit dem Ende des Skripts. Nur `source setup.sh` führt die Befehle in der aktuellen Shell aus.
 
 </details>
@@ -478,6 +487,9 @@ Sie befinden sich in `/home/student/ros2_ws/src`. Welcher Befehl führt nach `/h
 [[X]] `cd ~/ros2_ws/install`
 [[ ]] `cd /install`
 [[ ]] `cd ./install`
+***
+`..` führt eine Ebene nach oben, `~` steht für das Home-Verzeichnis. `/install` sucht direkt unter der Wurzel, `./install` im aktuellen Ordner `src` — beides falsch.
+***
 
 In einem neuen Terminal meldet `ros2 topic list` die Fehlermeldung `ros2: command not found`. Was ist die wahrscheinlichste Ursache?
 
@@ -492,14 +504,86 @@ Nach der Installation liegen die ROS-2-Programme unter `/opt/ros/jazzy`. Dieses 
 Ein Skript setzt `export ROS_DOMAIN_ID=5`. Sie starten es mit `./skript.sh` und geben danach `echo $ROS_DOMAIN_ID` ein. Was sehen Sie?
 
 [[ (den vorherigen Wert bzw. eine leere Zeile) | 5 | eine Fehlermeldung ]]
+***
+`./skript.sh` läuft in einer eigenen Shell (Kindprozess). Deren Variablen verschwinden mit ihr — erst `source skript.sh` setzt den Wert in Ihrer Shell.
+***
+
+Welcher Befehl zählt die Warnungen im Log? `grep` [[ (-c "WARN" ros.log) | "WARN" > ros.log | -v "WARN" ros.log ]]
+***
+`-c` zählt die passenden Zeilen. Vorsicht bei der zweiten Variante: `>` würde `ros.log` mit der leeren Ausgabe überschreiben!
+***
+
+Ein ROS-Knoten läuft im Vordergrund und reagiert nicht mehr. Wie beenden Sie ihn?
+
+[[X]] `Strg+C` im Terminal des Knotens
+[[X]] in einem anderen Terminal die PID mit `pgrep` suchen und `kill PID` ausführen
+[[ ]] das Terminal-Fenster mit `cd ..` verlassen
+[[ ]] `rm` auf die Programmdatei anwenden
+***
+`Strg+C` sendet dem Vordergrundprozess das Signal zum Beenden; `kill` tut dasselbe von außen. `rm` löscht nur die Datei — der laufende Prozess bleibt davon unberührt.
+***
+
+## Zum Nachschlagen: Pakete und Fernzugriff
+
+    --{{0}}--
+Diese beiden Werkzeuge begegnen Ihnen bei der Installation und im ersten Praktikum — hier zum Nachschlagen: die Paketverwaltung apt, mit der Sie Software installieren, und ssh, mit dem Sie sich auf dem TurtleBot anmelden.
+
+**Paketverwaltung**
+
+```bash
+sudo apt update                    # Paketlisten aktualisieren
+sudo apt install tree htop tmux    # Pakete installieren
+apt search turtlebot3              # Pakete suchen
+```
+
+**Fernzugriff auf den TurtleBot**
+
+```bash
+ssh ubuntu@192.168.0.42            # anmelden (Adresse bekommen Sie im Praktikum)
+scp mein_skript.py ubuntu@192.168.0.42:~/   # Datei kopieren
+exit                               # Verbindung beenden
+```
+
+> Im Praktikum erhält jede Gruppe Adresse und Zugangsdaten ihres TurtleBots.
+
+## Zum Nachschlagen: Freies Terminal im Browser
+
+    --{{0}}--
+Hier können Sie frei experimentieren. Das Linux läuft vollständig in Ihrem Browser, Sie können nichts kaputt machen. Nach dem Neuladen der Seite ist alles wieder im Ausgangszustand.
+
+??[JSLinux: Alpine Linux im Browser](https://bellard.org/jslinux/vm.html?url=alpine-x86.cfg&mem=192 "JSLinux von Fabrice Bellard — Alpine Linux mit der Shell ash")
+
+**Vorschläge zum Ausprobieren**
+
++ `cd /` und `ls` — wie sieht der Verzeichnisbaum aus?
++ `cat /etc/os-release` — welches System läuft hier?
++ `echo $PATH` und `env`
++ `ls -l /bin | head` — wem gehören die Programme, welche Rechte haben sie?
+
+> Das Browser-Linux nutzt `ash` statt `bash`: Einträge in `~/.bashrc` (Aufgaben 4 und 5) wirken dort nicht, und nach dem Neuladen ist alles weg.
 
 ## Ausblick
 
     --{{0}}--
-Mit diesen Grundlagen sind Sie für die nächsten Schritte gerüstet. In der Vorlesung geht es um die Konzepte von ROS 2, in der nächsten Übung installieren Sie ROS 2 Jazzy — und dabei begegnen Ihnen apt, sudo, source und die Datei bashrc wieder.
+Mit diesen Grundlagen sind Sie für die nächsten Schritte gerüstet. In der Vorlesung geht es um die Konzepte von ROS 2. Vor der nächsten Übung installieren Sie ROS 2 Jazzy selbstständig — und dabei begegnen Ihnen apt, sudo, source und die Datei bashrc wieder.
+
+**Das Wichtigste in 5 Zeilen**
+
+<!-- data-type="none" -->
+| Thema               | Merksatz                                                                       |
+| ------------------- | ------------------------------------------------------------------------------ |
+| Pfade               | absolut beginnt bei `/`, relativ beim aktuellen Ordner; `~` ist Ihr Home       |
+| Pipes               | `a \| b` verkettet Werkzeuge, `>` überschreibt, `>>` hängt an                    |
+| Rechte              | eigene Skripte brauchen `chmod +x` und eine Shebang-Zeile                      |
+| Prozesse            | jeder ROS-Knoten ist ein Prozess: `Strg+C`, `pgrep`, `kill`                    |
+| Umgebung            | gilt pro Terminal; `source` lädt in die aktuelle Shell, `~/.bashrc` in jede neue |
+
+**Transferfrage:** Ihre Spurerkennung startet auf dem TurtleBot nicht, die Meldung lautet `ros2: command not found`. Auf dem Laptop lief alles. Woran liegt es, und wie stellen Sie es dauerhaft ab? (Tipp: Aufgaben 4 und 5.)
+
+**Bis zur nächsten Übung:** Installieren Sie ROS 2 Jazzy nach der [Installationsanleitung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/installation_ros2/README.md) — dabei begegnen Ihnen `sudo`, `apt`, `source` und `~/.bashrc` wieder.
 
 + **VL 2** Grundlagen ROS 2 — Architektur, Knoten, Topics, Nachrichten
-+ **Ü 2** Installation / Grundlagen ROS 2 — ROS 2 Jazzy einrichten, erste Schritte mit `ros2`
++ **Ü 2** Werkzeuge von ROS 2 — Services, Parameter, Actions, Daten aufzeichnen
 
 **Weiterführende Ressourcen**
 

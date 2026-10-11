@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger & Copilot & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.2.0
+version:  0.3.0
 language: de
 narrator: Deutsch Female
 
@@ -30,12 +30,13 @@ import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_Softwareproje
 
 **Zielstellung der heutigen Veranstaltung**
 
-+ Ablauf der Veranstaltung (Vorlesung, Übung, Praktikum) und die Projektaufgabe kennen
-+ Grundlegende Begriffe und Definitionen der Robotik verstehen
-+ Klassifikation von Robotersystemen anhand verschiedener Kriterien
-+ Herausforderungen bei der Entwicklung autonomer mobiler Roboter kennenlernen
-+ Systemarchitektur eines Roboters (Sense-Think-Act-Paradigma) verstehen
-+ Motivation für den Einsatz von ROS 2 nachvollziehen
+Nach dieser Vorlesung können Sie
+
++ die Projektaufgabe und den Ablauf der Veranstaltung (VL, Ü, P, Prüfungsleistung) beschreiben,
++ entscheiden, ob ein System nach unserer Arbeitsdefinition ein Roboter ist, und es nach Autonomie, Mobilität und Sensorik einordnen,
++ für ein Einsatzszenario die wichtigsten Herausforderungen benennen,
++ Aufgaben des TurtleBots den Schritten Sense, Think und Act zuordnen,
++ begründen, warum wir ein Framework wie ROS 2 einsetzen.
 
 --------------------------------------------------------------------------------
 
@@ -100,6 +101,19 @@ Für die Arbeit benötigen Sie ein Linux-System. Wir arbeiten mit Ubuntu 24.04 u
 
 *******************************************************************************
 
+**Organisatorisches**
+
+<!-- data-type="none" -->
+| Thema                 | Regelung                                                                                                  |
+| --------------------- | --------------------------------------------------------------------------------------------------------- |
+| **Prüfungsleistung**  | Ihre Arbeit in den **Praktika**: Dort wenden Sie das Gelernte am TurtleBot an und bauen Schritt für Schritt die Projektaufgabe auf. |
+| **Vorlesung, Übung**  | vermitteln und üben, was Sie im Praktikum brauchen — die Selbsttests zeigen Ihnen, ob Sie bereit sind     |
+| **Gruppen**           | 2–3 Personen pro TurtleBot, gebildet bis zum ersten Praktikum P 1                                        |
+| **Versionsverwaltung**| jede Gruppe arbeitet in einem eigenen Git-Repository                                                      |
+
+    --{{2}}--
+Wichtig für Ihre Planung: Die Prüfungsleistung erbringen Sie in den Praktika. Vorlesung und Übung bereiten Sie darauf vor — wer die Übungen auslässt, steht im Praktikum vor dem Roboter und weiß nicht weiter.
+
 **Wo stehen Sie?** Ihre Antworten helfen uns, die Übungen und die Gruppen passend zu planen.
 
 Wie sicher sind Sie im Umgang mit dem Linux-Terminal?
@@ -120,35 +134,57 @@ Mit welchen Themen haben Sie schon gearbeitet?
 ## Was ist ein Roboter?
 
     --{{0}}--
-Die Geschichte der Robotik ist faszinierend und reicht weit zurück. Bereits 1921, also vor über 100 Jahren, wurden in Filmen wie "The Mechanical Man" mechanische Wesen dargestellt, die autonom handeln können. Diese frühen Visionen haben die Entwicklung der modernen Robotik maßgeblich beeinflusst.
+Bevor wir Definitionen lesen: Was halten Sie selbst für einen Roboter? Stimmen Sie ab — Sie werden sehen, dass wir uns im Saal nicht einig sind. Genau so geht es auch den Fachverbänden.
 
-Das Wort wurde 1920 vom Schriftsteller Karel Čapek geprägt. Seine Bedeutung hat sich aber im Laufe der Zeit gewandelt und ist gleichzeitig vielschichtig.
+**Roboter oder nicht?** Wählen Sie alle Systeme, die Sie als Roboter bezeichnen würden.
 
-![Mecanical Man](https://upload.wikimedia.org/wikipedia/commons/3/3c/L%27uomo_meccanico_1.png "Screenshot aus dem Film [Mechanical Man](https://en.wikipedia.org/wiki/The_Mechanical_Man) von 1921")
+[[saug]] Saugroboter
+[[spuel]] Geschirrspüler
+[[auto]] Auto mit Spurhalteassistent
+[[drohne]] ferngesteuerte Drohne
+[[arm]] Schweißroboter in der Autofabrik
+[[turtle]] TurtleBot in der Verkehrswelt
 
-Es gibt keine einheitliche Definition des Begriffes Roboter. Die offiziellen Definitionen gehen weit auseinander. 
+    --{{1}}--
+Das Wort wurde 1920 vom Schriftsteller Karel Čapek geprägt. Seine Bedeutung hat sich seitdem gewandelt — und die offiziellen Definitionen gehen bis heute weit auseinander.
+
+         {{1}}
+*******************************************************************************
+
+![Szene aus dem Stummfilm The Mechanical Man von 1921 mit einem menschenähnlichen mechanischen Wesen](https://upload.wikimedia.org/wikipedia/commons/3/3c/L%27uomo_meccanico_1.png "Screenshot aus dem Film [Mechanical Man](https://en.wikipedia.org/wiki/The_Mechanical_Man) von 1921")<!-- width="60%" -->
 
 > **Definition nach VDI-Richtlinie 2860**: „Industrieroboter sind universell einsetzbare Bewegungsautomaten mit mehreren Achsen, deren Bewegungen hinsichtlich Bewegungsfolge und Wegen bzw. Winkeln frei (d. h. ohne mechanischen bzw. menschlichen Eingriff) programmierbar und gegebenenfalls sensorgeführt sind. Sie sind mit Greifern, Werkzeugen oder anderen Fertigungsmitteln ausrüstbar und können Handhabungs- und/oder Fertigungsaufgaben ausführen.“
 
 > **Definition nach Robotic Industries Association (RIA)**: „A robot is a reprogrammable, multifunctional manipulator designed to move material, parts, tools or specialized devices through variable programmed motions for the performance of a variety of tasks“
 
-> **Japan Robot Association (JRA)**
+<details>
+<summary>Klassifikation der Japan Robot Association (JRA) anzeigen</summary>
+
+- Manual Manipulator: Handhabungsgerät, das kein Programm hat, sondern direkt vom Bediener geführt wird,
+- Fixed Sequence Robot: Handhabungsgerät, das wiederholt nach einem konstanten Bewegungsmuster arbeitet,
+- Variable Sequence Robot: wie vorher, jedoch mit der Möglichkeit, den Bewegungsablauf schnell zu ändern,
+- Playback Robot: Der Bewegungsablauf wird einmal vorgeführt, gespeichert und beliebig wiederholt,
+- Numerical Control Robot: arbeitet ähnlich wie eine NC-gesteuerte Maschine,
+- Intelligent Robot: verfügt über Sensoren und passt den Programmablauf selbsttätig an Veränderungen der Umwelt an.
+
+</details>
+
+Beide Definitionen stammen aus der Industrie und beschreiben Roboterarme. Für mobile Roboter wie den TurtleBot passen sie schlecht.
+
+*******************************************************************************
+
+    --{{2}}--
+Für diese Veranstaltung arbeiten wir deshalb mit einer einfachen, funktionalen Definition. Sie hat den Vorteil, dass sie direkt zum Aufbau eines Roboters führt — darum geht es gleich.
+
+         {{2}}
+> **Arbeitsdefinition:** Ein Roboter ist eine Maschine, die ihre Umgebung über **Sensoren wahrnimmt**, daraus **Entscheidungen ableitet** und über **Aktoren auf die Umgebung einwirkt** — und das wiederholt, ohne dass ein Mensch jeden Schritt vorgibt.
 >
-> - Manual Manipulator: Handhabungsgerät, das kein Programm hat, sondern direkt vom Bediener geführt wird,
-> - Fixed Sequence Robot: Handhabungsgerät, das wiederholt nach einem konstanten Bewegungsmuster arbeitet. Das Ändern des Bewegungsmusters ist relativ aufwendig,
-> - Variable Sequence Robot: Handhabungsgerät, wie vorher beschrieben, jedoch mit der Möglichkeit, den Bewegungsablauf schnell und problemlos zu ändern,
-> - Playback Robot: Der Bewegungsablauf wird diesem Gerät einmal durch den Bediener vorgeführt und dabei im Programmspeicher gespeichert. Mit der im Speicher enthaltenen Information kann der Bewegungsablauf beliebig wiederholt werden,
-> - Numerical Control Robot: Dieses Handhabungsgerät arbeitet ähnlich wie eine NC-gesteuerte Maschine. Die Information über den Bewegungsablauf wird dem Gerät über Taster, Schalter oder Datenträger zahlenmäßig eingegeben,
-> - Intelligent Robot: Diese höchste Roboterklasse ist für Geräte gedacht, die über verschiedene Sensoren verfügen und damit in der Lage sind, den Programmablauf selbsttätig den Veränderungen des Werkstücks und der Umwelt anzupassen.
-
-
+> Prüfen Sie Ihre Abstimmung: Der Geschirrspüler misst zwar Wassertemperatur, entscheidet aber nichts über seine Umgebung; die ferngesteuerte Drohne nimmt wahr und handelt, aber ein Mensch entscheidet. Saugroboter, Spurhalteassistent und TurtleBot erfüllen die Definition.
 
 ## Klassifikation von Robotersystemen
 
     --{{0}}--
 Roboter lassen sich anhand verschiedener Kriterien klassifizieren. Diese Unterscheidungsmerkmale helfen uns, die Vielfalt der Robotersysteme zu verstehen und ihre spezifischen Anforderungen zu erkennen. In dieser Veranstaltung konzentrieren wir uns vor allem auf autonome, mobile Roboter mit komplexer Sensorik.
-
-**Welche Robotersysteme kennen Sie aus Ihrer Praxis?**
 
 <!-- data-type="none" -->
 | **Kriterium**                | **Optionen**                                                  |
@@ -181,11 +217,9 @@ Autonomie und Mobilität sind voneinander unabhängig: Der ferngesteuerte Inspek
 ## Relevanz und Bedeutung mobiler Roboter
 
     --{{0}}--
-Die Bedeutung mobiler Roboter hat in den letzten Jahrzehnten massiv zugenommen. Dies lässt sich anhand der Häufigkeit von Begriffen in wissenschaftlichen Publikationen nachvollziehen. Die folgenden Grafiken zeigen die Entwicklung der Begriffe "Autonomous Vehicle" und "Autonomous Robot" sowie verwandter KI-Themen. 
+Die Bedeutung mobiler Roboter hat in den letzten Jahrzehnten massiv zugenommen. Dies lässt sich anhand der Häufigkeit von Begriffen in wissenschaftlichen Publikationen nachvollziehen. Die folgende Grafik zeigt die Entwicklung der Begriffe "Autonomous Vehicle" und "Autonomous Robot". 
 
 ??[IFrame](https://books.google.com/ngrams/graph?content=Autonomous+Vehicle%2CAutonomous+Robot&year_start=1900&year_end=2022&corpus=en&smoothing=3 "Ngram Analyse der Begriffe Autonomous Vehicle und Autonomous Robot")
-
-??[IFrame](https://books.google.com/ngrams/graph?content=artificial+intelligence%2Crobot%2CMachine+Learning%2C+deep+learning&year_start=1900&year_end=2022&corpus=en&smoothing=3 "Ngram Analyse der Begriffe Artificial Intelligence, Robot, Machine Learning und Deep Learning")
 
     --{{0}}--
 Besonders auffällig ist der exponentielle Anstieg ab den 2010er Jahren, der mit Fortschritten im Machine Learning und Deep Learning zusammenfällt. Diese Technologien sind heute unverzichtbare Werkzeuge für autonome Robotersysteme.
@@ -257,46 +291,71 @@ Betrachten wir zwei konkrete Beispiele aus der Praxis: einen Lieferroboter für 
 > 1. **Lieferroboter** in einer Fußgängerzone
 > 2. **Aquatischer Roboter** zur Gewässerüberwachung 
 
-![Husky](images/Roboter_Engstelle2.png "Autonomer Roboter des Ready for Robots Projektes")
-![Schwimmroboter](images/Schwimmroboter.png "TUBAF Schwimmroboter mit Windmessungsaufsatz")
+![Autonomer Lieferroboter in einer Engstelle zwischen Passanten](images/Roboter_Engstelle2.png "Autonomer Roboter des Ready for Robots Projektes")
+![Schwimmroboter der TU Freiberg auf einem See](images/Schwimmroboter.png "TUBAF Schwimmroboter mit Windmessungsaufsatz")
+
+Diskutieren Sie 3 Minuten mit Ihrem Nachbarn und notieren Sie für jedes Szenario die zwei wichtigsten Herausforderungen.
+
+<details>
+<summary>Mögliche Antworten anzeigen</summary>
+
++ **Lieferroboter:** Personen als bewegte Hindernisse, Sicherheit von Passanten, ungenaue Positionierung zwischen Häusern (GNSS-Abschattung), gesellschaftliche Akzeptanz und rechtliche Zulassung im öffentlichen Raum.
++ **Schwimmroboter:** Positionierung auf offenem Wasser ohne Landmarken, Energieversorgung für lange Einsätze, Kommunikationsabriss bei großer Entfernung, Wellen und Strömung als Störgrößen.
+
+</details>
 
 *******************************************************************************
 
 ## Systemarchitektur: Das Sense-Think-Act-Paradigma
 
     --{{0}}--
-Wie ist nun ein autonomer Roboter aufgebaut? Die klassische Architektur folgt dem Sense-Think-Act-Paradigma, das sich in drei hierarchische Ebenen gliedert. Auf der untersten Ebene finden wir die reaktive Überwachung, die in Echtzeit auf Sensordaten reagiert. Darüber liegt die Ausführungsebene, die taktische Entscheidungen trifft. An der Spitze steht die Handlungsplanung, die strategische Ziele verfolgt. 
-Diese Darstellung zeigt die grundlegende Dreischichten-Architektur. Sensoren erfassen Daten aus der Umgebung, die reaktive Überwachung verarbeitet diese in Echtzeit und generiert direkte Steuerbefehle an die Aktoren. Diese Ebene arbeitet mit sehr kurzen Reaktionszeiten.
-
-
-                   {{0-1}}
-*************************************************
+Unsere Arbeitsdefinition beschreibt bereits den Aufbau jedes Roboters: wahrnehmen, entscheiden, handeln. Diesen Kreislauf nennt man das Sense-Think-Act-Paradigma. Er läuft ständig: Jede Handlung verändert die Umgebung, und die Sensoren nehmen die Veränderung im nächsten Durchlauf wieder wahr.
 
 ```ascii
-                    Statusmeldungen 
-     Nutzereingaben  ^                                       
+            +--------------+      +-----------------+      +-------------+
+            |   "Sense"    |      |    "Think"      |      |    "Act"    |
+  .-------->|  Sensoren    |----->|  Verarbeitung,  |----->|   Aktoren   |------.
+  |         | wahrnehmen   |      |  Entscheidung   |      |   handeln   |      |
+  |         +--------------+      +-----------------+      +-------------+      |
+  |                                                                             v
+  |                             .-----------------------.                       |
+  '-----------------------------|       Umgebung        |<----------------------'
+                                .-----------------------.
+```
+
+    --{{1}}--
+Der Schritt Think ist bei einem autonomen Roboter selbst wieder komplex. Er zerfällt in drei Schichten mit unterschiedlichen Zeithorizonten: Ganz unten reagiert die reaktive Überwachung in Millisekunden auf Sensordaten, etwa mit einem Notstopp. Darüber setzt die Ausführung Pläne in Fahrbewegungen um. Ganz oben plant die Handlungsplanung, welches Ziel als Nächstes angesteuert wird. Diese Drei-Schichten-Architektur ist also keine Alternative zu Sense-Think-Act, sondern eine Verfeinerung des Think-Kastens.
+
+                   {{1-2}}
+*************************************************
+
+**„Think“ genauer: die Drei-Schichten-Architektur**
+
+```ascii
+                    Statusmeldungen
+     Nutzereingaben  ^
                  |   |
 Befehle          v   |
             +-----------------------+
-            | Handlungsplanung      |  "$Strategie   $"
+            | Handlungsplanung      |  "$Strategie$ (Sekunden bis Minuten)"
             +-----------------------+
-                 |   ^      | | |       Folge von Aktionen     
+                 |   ^      | | |       Folge von Aktionen
                  v   |      v v v
-            +-----------------------+
-            | Ausführung            |  "$Taktik$    "           
+            +-----------------------+                                   "Think"
+            | Ausführung            |  "$Taktik$ (Zehntelsekunden)"
             +-----------------------+
                      ^      | | |       Geplante Trajektorie,
 Status               |      v v v       Verhalten
             +-----------------------+
-            | Reaktive Überwachung  |  "$Ausführung$        "
+            | Reaktive Überwachung  |  "$Reaktion$ (Millisekunden)"
             +-----------------------+
-Sensordaten-    ^ ^ ^       | | |       Steuerbefehle an den 
-erfassung       | | |       v v v       Aktuator 
+Sensordaten-    ^ ^ ^       | | |       Steuerbefehle an die
+erfassung       | | |       v v v       Aktoren
             +----------+ +----------+
-            | Sensoren | | Aktoren  |                               
+            | Sensoren | | Aktoren  |   "Sense" / "Act"
             +----------+ +----------+
                   ^           |
-                  |           v      
+                  |           v
             .-----------------------.
             | Umgebung              |
             .-----------------------.                                                                                .
@@ -304,49 +363,24 @@ erfassung       | | |       v v v       Aktuator
 
 *************************************************
 
-    --{{1}}--
-In der erweiterten Darstellung sehen wir, welche konkreten Aufgaben auf den einzelnen Ebenen anfallen. Die reaktive Überwachung kümmert sich um Regelung und Energiemanagement. Die Ausführungsebene verwaltet das Weltmodell und erkennt Kontexte. Die Handlungsplanung entwickelt Verhaltensmodelle und kommuniziert mit dem Nutzer.
-Auf der rechten Seite sehen Sie die konkreten Implementierungsaspekte: Hardwaretreiber, Regelungsalgorithmen, Weltmodelle und Verhaltensplanung. Diese Komplexität macht deutlich: Ein vollständiges Robotersystem zu entwickeln ist eine enorme Aufgabe!
+    --{{2}}--
+In der erweiterten Darstellung sehen Sie, welche Aufgaben auf den einzelnen Schichten anfallen — von Hardwaretreibern über Regelung und Weltmodell bis zur Verhaltensplanung. Und genau hier stellt sich die entscheidende Frage: Wer soll das alles implementieren?
 
-                   {{1-3}}
+                   {{2}}
 *************************************************
 
 ```ascii
-                    Statusmeldungen 
-     Nutzereingaben  ^                                                           
-                 |   |                                                   Kommunikation, Nutzerschnittstellen
-Befehle          v   |                                                                     
-            +-----------------------+                                                                 
-            | Handlungsplanung      |  "$Strategie   $"                  Verhaltensmodell                        
-            +-----------------------+                                                                 
-                 |   ^      | | |       Folge von Aktionen                                                      
-                 v   |      v v v                                                                 
-            +-----------------------+                                                                 
-            | Ausführung            |  "$Taktik$    "                    Weltmodell, Handungsmuster Kontexterkennung
-            +-----------------------+                                                                 
-                     ^      | | |       Geplante Trajektorie,                                                        
-Status               |      v v v       Verhalten                                                                 
-            +-----------------------+                                                                 
-            | Reaktive Überwachung  |  "$Ausführung$        "            Regelung, Energiemanagement                  
-            +-----------------------+                                    Notaus-Erkennung                             
-Sensordaten-    ^ ^ ^       | | |       Steuerbefehle an den                                             
-erfassung       | | |       v v v       Aktuator                                                                  
-            +----------+ +----------+                                                                 
-            | Sensoren | | Aktoren  |                                    Hardwaretreiber                          
-            +----------+ +----------+                                                                 
-                  |           |                                                                 
-                  v           v                                                                       
-            .-----------------------.                                                                 
-            | Umgebung              |                                                                 
-            .-----------------------.                                                                                .
+            +-----------------------+
+            | Handlungsplanung      |      Verhaltensmodell, Kommunikation, Nutzerschnittstellen
+            +-----------------------+
+            | Ausführung            |      Weltmodell, Handlungsmuster, Kontexterkennung
+            +-----------------------+
+            | Reaktive Überwachung  |      Regelung, Energiemanagement, Notaus-Erkennung
+            +-----------------------+
+            | Sensoren | Aktoren    |      Hardwaretreiber
+            +-----------------------+                                                                                .
 ```
 
-![RoboterSystem](images/RoboterNuernberg.jpg "Roboter des RoboCupTeams aus Nürnberg - TDP des Teams AutonOhm, 2019")
-
-    --{{2}}--
-Und genau hier stellt sich die entscheidende Frage: Wer soll das alles implementieren? Muss jedes Forschungsteam, jedes Unternehmen, jeder Entwickler wirklich das Rad neu erfinden?
-
-      {{2}}
 > **Zentrale Frage:** Wer soll das denn alles implementieren?
 
 *************************************************
@@ -354,7 +388,7 @@ Und genau hier stellt sich die entscheidende Frage: Wer soll das alles implement
 ### Sense-Think-Act am TurtleBot
 
     --{{0}}--
-Übertragen wir das Schema auf unseren eigenen Roboter. Der TurtleBot 3 Burger ist klein, aber er bringt alle drei Ebenen mit: Sensoren zur Wahrnehmung, einen Rechner für die Entscheidungen und Motoren für die Bewegung.
+Übertragen wir das Schema auf unseren eigenen Roboter. Der TurtleBot 3 Burger ist klein, aber er bringt alle drei Schritte mit: Sensoren zur Wahrnehmung, einen Rechner für die Entscheidungen und Motoren für die Bewegung.
 
 <!-- data-type="none" -->
 | Komponente           | Spezifikation                              |
@@ -365,7 +399,7 @@ Und genau hier stellt sich die entscheidende Frage: Wer soll das alles implement
 | Max. Geschwindigkeit | 0,22 m/s                                   |
 | Rechner              | Raspberry Pi 3 Model B+                    |
 
-**Selbsttest:** Auf welcher Ebene ist die jeweilige Aufgabe in unserer Verkehrswelt angesiedelt?
+**Selbsttest 1:** Zu welchem Schritt des Kreislaufs gehört die jeweilige Aufgabe in unserer Verkehrswelt?
 
 [ [Sense] [Think] [Act] ]
 [  ( )     (X)     ( )  ] Entscheiden, ob bei Gelb noch gefahren wird
@@ -373,6 +407,19 @@ Und genau hier stellt sich die entscheidende Frage: Wer soll das alles implement
 [  ( )     ( )     (X)  ] Radgeschwindigkeiten über die Motoren einstellen
 [  (X)     ( )     ( )  ] Abstand zu einem Fußgänger mit dem LiDAR messen
 [  ( )     (X)     ( )  ] Einen Pfad in die Parklücke planen
+***
+Sense liefert Messwerte (Kamerabild, Abstand), Think wertet sie aus und entscheidet (Gelb: fahren oder halten? Welcher Pfad?), Act setzt die Entscheidung in Bewegung um. Beachten Sie: Das Kamerabild allein sagt noch nichts über die Fahrbahn — die Spur darin zu *erkennen* gehört bereits zu Think.
+***
+
+**Selbsttest 2:** Welche Schicht innerhalb von Think ist zuständig?
+
+[ [Handlungsplanung] [Ausführung] [Reaktive Überwachung] ]
+[        (X)              ( )              ( )            ] Entscheiden, als Nächstes die Parklücke anzusteuern
+[        ( )              (X)              ( )            ] Der geplanten Spur durch eine Kurve folgen
+[        ( )              ( )              (X)            ] Sofort stoppen, wenn der LiDAR einen Fußgänger direkt vor dem Roboter misst
+***
+Die Schichten unterscheiden sich vor allem in ihrer Reaktionszeit: Der Notstopp darf nicht warten, bis ein Plan neu berechnet ist — er gehört deshalb in die unterste, schnellste Schicht.
+***
 
 ## Warum ROS? Das "Rad nicht neu erfinden"
 
@@ -384,18 +431,35 @@ Dieser Comic von Willow Garage, dem ursprünglichen Entwickler von ROS, bringt d
 
 
     --{{1}}--
-ROS 2, die aktuelle Version, die wir in dieser Veranstaltung nutzen werden, bietet eine moderne, produktionsreife Plattform mit Echtzeit-Fähigkeiten, verbesserter Sicherheit und Unterstützung für verschiedene Betriebssysteme.
+Übertragen auf unseren TurtleBot heißt das: Die Treiber für LiDAR, Kamera und Motoren bekommen Sie fertig. Ihre Arbeit im Projekt ist der Teil in der Mitte — die Entscheidungen.
 
-                        {{1-2}}
+                        {{1}}
 ******************************************************
 
-**ROS 2 bietet:**
+So sieht Sense-Think-Act am TurtleBot mit ROS 2 aus. Jeder Kasten ist ein eigenständiges Programm, die Pfeile sind Datenkanäle mit festem Namen:
 
-+ **Standardisierte Kommunikation** zwischen Komponenten (Topics, Services, Actions)
-+ **Wiederverwendbare Pakete** für Sensoren, Navigation, Bildverarbeitung, etc.
-+ **Werkzeuge** zur Visualisierung, Datenaufzeichnung und Analyse
-+ **Community-Support** mit tausenden von Entwicklern weltweit
-+ **Echtzeit-Fähigkeiten** und **Sicherheit** (im Gegensatz zu ROS 1)
+```ascii
+  Sense                          Think                           Act
+
+                    /scan                    
++----------------+                                     /cmd_vel
+| LiDAR-Treiber  |----------.   +-------------------+            +----------------+
++----------------+          +-->|   Ihre Fahrlogik  |----------->| Motortreiber   |
+                            +-->|  Spur und Ampel   |            +----------------+
++----------------+          |   +-------------------+
+| Kamera-Treiber |----------'
++----------------+  /image
+
+  fertig in ROS 2                 Ihre Aufgabe                   fertig in ROS 2
+```
+
+**ROS 2 liefert:**
+
++ fertige **Treiber** für Sensoren und Motoren — die Kästen links und rechts,
++ einen **einheitlichen Datenaustausch** zwischen allen Programmen,
++ **Werkzeuge**, um Daten anzuzeigen, aufzuzeichnen und abzuspielen.
+
+Ihre Arbeit im Projekt ist der Kasten in der Mitte. Wie der Datenaustausch genau funktioniert, ist Thema von VL 2.
 
 ******************************************************
 
@@ -412,7 +476,7 @@ Bevor wir mit ROS 2 arbeiten können, brauchen wir ein solides Fundament: den si
 | **Ü 1** OS + Linux Shell              | Terminal, Dateisystem, Rechte, Prozesse, Umgebungsvariablen             |
 | **VL 2** Grundlagen ROS 2             | Architektur, Knoten, Topics, Nachrichten                                |
 | **VL 3** ROS 2 Pakete                 | Pakete, Build-System, Launch-Files                                      |
-| **Ü 2** Installation / Grundlagen ROS 2 | ROS 2 Jazzy einrichten, erste Schritte mit der Kommandozeile            |
+| **Ü 2** Werkzeuge von ROS 2           | Services, Parameter, Actions, Daten aufzeichnen (Installation vorab)    |
 | **VL 4** Koordinaten + QoS            | Transformationen, tf2, Quality of Service                               |
 | **P 1** Grundlagen ROS 2 + Bags       | erste Fahrt mit dem TurtleBot, Daten aufzeichnen und auswerten          |
 
@@ -430,17 +494,33 @@ Fassen wir die wichtigsten Punkte dieser Einführungsvorlesung zusammen:
 **Was haben wir gelernt?**
 
 + Ziel der Veranstaltung ist ein TurtleBot, der **autonom durch eine Miniatur-Verkehrswelt** fährt — aufgebaut Block für Block in VL, Ü und P
-+ Roboter sind **computergesteuerte Maschinen**, die **komplexe Aktionen automatisch** ausführen
++ Ein Roboter **nimmt wahr, entscheidet und handelt** — wiederholt und ohne dass ein Mensch jeden Schritt vorgibt (unsere Arbeitsdefinition)
 + Robotersysteme lassen sich anhand **vieler Kriterien klassifizieren** (Autonomie, Mobilität, Sensorik, etc.)
 + Die Entwicklung mobiler Roboter bringt **technologische, wirtschaftliche und soziale Herausforderungen** mit sich
-+ Die **Systemarchitektur** folgt dem **Sense-Think-Act-Paradigma** mit drei Ebenen
++ Die **Systemarchitektur** folgt dem **Sense-Think-Act-Kreislauf**; der Schritt Think gliedert sich in **drei Schichten** (Planung, Ausführung, reaktive Überwachung)
 + **ROS 2** ermöglicht es uns, **auf vorhandenen Lösungen aufzubauen** statt alles neu zu entwickeln
 
     --{{1}}--
 Damit kennen Sie das Ziel und den Weg dorthin. In der nächsten Übung legen wir mit dem Linux-Terminal das Fundament. Ich freue mich auf die gemeinsame Reise durch die faszinierende Welt der mobilen Robotik!
 
       {{1}}
-> **Zum Nachdenken:** Welche Fähigkeiten braucht ein menschlicher Fahrer, um durch unsere Verkehrswelt zu kommen — und welcher Sensor des TurtleBots könnte jeweils die Augen und Ohren ersetzen?
+> **Zum Nachdenken:** Welche Fähigkeiten braucht ein menschlicher Fahrer, um durch unsere Verkehrswelt zu kommen — und welcher Sensor des TurtleBots könnte jeweils die Augen und Ohren ersetzen? Notieren Sie Ihre Antwort: Wir greifen sie zu Beginn von Block 2 (Sensorgrundlagen) wieder auf.
+
+**Abschluss-Check**
+
+Ein Rasenmäher fährt ein fest programmiertes Muster ab, ohne Sensoren. Ist er nach unserer Arbeitsdefinition ein Roboter?
+
+[( )] Ja, weil er sich selbstständig bewegt.
+[(X)] Nein, weil er seine Umgebung nicht wahrnimmt und nichts entscheidet.
+***
+Ohne Sensoren fehlt der Schritt Sense — und damit die Grundlage für Entscheidungen. Er ist ein Automat, kein Roboter im Sinne unserer Definition.
+***
+
+Der TurtleBot misst mit dem LiDAR ein Hindernis und bremst sofort ab. Welche Schicht von Think ist beteiligt? [[ Handlungsplanung | Ausführung | (reaktive Überwachung) ]]
+
+Welche Herausforderung ist für den TurtleBot in **unserer** Verkehrswelt am wenigsten relevant? [[ Hindernisidentifikation | Positionierung | (Kommunikationsabriss über große Entfernungen) ]]
+
+Was übernimmt ROS 2 für Sie im Projekt? [[ Die Fahrlogik für Spur und Ampel | (Treiber und Datenaustausch zwischen den Programmen) | Die Bewertung im Praktikum ]]
 
 ## Weiterführende Ressourcen
 
@@ -453,10 +533,3 @@ Für Interessierte hier noch einige Ressourcen zur Vertiefung:
 + [The Robotics Back-End](https://roboticsbackend.com/) - Tutorials und Praxisbeispiele
 + [RoboCup](https://robocup.de/) - RoboCup-Wettbewerbe und -Teams
 + [TurtleBot 3 e-Manual](https://emanual.robotis.com/docs/en/platform/turtlebot3/overview/) - Dokumentation des Herstellers ROBOTIS
-
-## Forschung und Praxis
-
-    --{{0}}--
-Abschließend noch ein Hinweis: Die Vorlesung vermittelt Grundlagen, aber die eigentliche Forschungs- und Entwicklungsarbeit beginnt erst danach. Im verlinkten Dokument finden Sie Beispiele aktueller Forschungsprojekte.
-
-https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/00_Einfuehrung/images/ROSE2024_Chemnitz.pdf

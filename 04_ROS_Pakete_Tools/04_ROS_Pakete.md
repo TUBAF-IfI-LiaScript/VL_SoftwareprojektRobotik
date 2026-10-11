@@ -2,12 +2,11 @@
 
 author:   Sebastian Zug & Georg Jäger & Claude.ai & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.1.0
+version:  0.2.0
 language: de
 narrator: Deutsch Female
 
 import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/config.md
-          https://raw.githubusercontent.com/liaTemplates/mermaid_template/master/README.md
 
 -->
 
@@ -24,7 +23,13 @@ import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_Softwareproje
 | **Link auf GitHub:** | https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/04_ROS_Pakete_Tools/04_ROS_Pakete.md     |
 | **Autoren**          | @author                                                                                                                |
 
-![Animation: ein Roboter, der Pakete sortiert](https://media.giphy.com/media/4VY76i2rbyg2ggLIGQ/giphy-downsized.gif)
+**Zum Einstieg:** Wenn Sie im Praktikum den TurtleBot hochfahren, tippen Sie genau einen Befehl:
+
+```bash
+ros2 launch turtlebot3_bringup robot.launch.py
+```
+
+Dieser eine Befehl startet den LiDAR-Treiber, die Motorsteuerung und einen Knoten, der die Geometrie des Roboters veröffentlicht — verteilt auf drei Launch-Dateien in zwei Paketen. In VL 2 brauchten wir für zwei Knoten noch zwei Terminals. **Wie kommen wir von dort zu einem Befehl für ein ganzes System?** Das ist die Frage dieser Vorlesung.
 
 --------------------------------------------------------------------------------
 
@@ -37,11 +42,13 @@ In VL 2 haben wir fertige Knoten gestartet und untersucht. Heute schreiben wir e
 + Einen eigenen Nachrichtentyp definieren und in beiden Sprachen verwenden
 + Mehrere Knoten mit einer Launch-Datei gemeinsam starten und konfigurieren
 + Log-Ausgaben gezielt einsetzen und ROS 2 über mehrere Rechner betreiben
-+ Verwaltete Knoten mit Lebenszyklus verstehen und steuern
 
 --------------------------------------------------------------------------------
 
 ## Vom Beispiel zum eigenen Paket
+
+    --{{0}}--
+Ab heute schreiben Sie eigenen Code für ROS 2. Damit ROS ihn finden, bauen und starten kann, muss er in einem Paket liegen. Ein Paket ist nichts Magisches — ein Ordner mit Code und einer Beschreibung, die ROS lesen kann.
 
 Bisher haben wir mit `ros2 run` Programme gestartet, die mit ROS 2 installiert wurden. Für das Projekt brauchen Sie eigene Knoten — eine Spurerkennung, eine Ampelerkennung, ein Fahrverhalten. Damit ROS diese finden, bauen und starten kann, müssen sie in **Paketen** organisiert sein.
 
@@ -59,6 +66,9 @@ Welche Pakete installiert sind, verrät `ros2 pkg list`. Wie fein sollte man ein
 + Was in einem anderen Projekt wiederverwendbar sein soll (z.B. eigene Nachrichtentypen), kommt in ein eigenes Paket.
 
 ### Workspace und Paketstruktur
+
+    --{{0}}--
+Alle Ihre Pakete liegen in einem Arbeitsordner, dem Workspace. Merken Sie sich die vier Ordner: src schreiben Sie selbst, build, install und log erzeugt das Bauwerkzeug.
 
 Pakete liegen in einem **Workspace**, einem Arbeitsordner mit dem Unterordner `src`. Angelegt ist er mit einem Befehl:
 
@@ -102,6 +112,9 @@ Beim Bauen legt `colcon` neben `src` drei weitere Ordner an:
 > Diese drei Ordner gehören nicht in Git. Sie lassen sich jederzeit neu erzeugen.
 
 ## Bauen mit colcon
+
+    --{{0}}--
+Warum brauchen wir ein eigenes Bauwerkzeug? Weil Pakete voneinander abhängen. colcon findet die richtige Reihenfolge und legt alles so ab, dass ROS es findet. Der häufigste Fehler danach ist das vergessene source.
 
 Warum reicht nicht einfach `g++ main.cpp`? Bei einem einzelnen Programm würde das genügen. In einem Workspace hängen Pakete aber voneinander ab: Der Knoten in `my_tutorial_package` braucht den Nachrichtentyp aus `my_msg_package`, der vorher in C++- und Python-Code übersetzt werden muss. Ein Build-Werkzeug muss also
 
@@ -149,6 +162,9 @@ Zwei nützliche Optionen:
 
 ## Ein eigenes Paket Schritt für Schritt
 
+    --{{0}}--
+Wir bauen jetzt in drei Schritten ein kleines System: einen eigenen Nachrichtentyp, einen Publisher in C++ und einen Subscriber in Python. Achten Sie darauf, was in jedem Schritt gleich bleibt — das ist das Muster für Ihre eigenen Pakete.
+
 Wir erweitern das Publisher/Subscriber-Beispiel aus VL 2. Statt eines Textes soll der Zählwert als Zahl übertragen werden, zusammen mit einem Kommentar. Dazu brauchen wir
 
 1. einen eigenen Nachrichtentyp (Paket `my_msg_package`),
@@ -158,6 +174,9 @@ Wir erweitern das Publisher/Subscriber-Beispiel aus VL 2. Statt eines Textes sol
 Den vollständigen, unter Jazzy getesteten Code finden Sie im Repository unter [04_ROS_Pakete_Tools/example](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/tree/master/04_ROS_Pakete_Tools/example/pkg_example).
 
 ### Schritt 1: Eigener Nachrichtentyp
+
+    --{{0}}--
+Für die Verkehrswelt brauchen Sie später eigene Nachrichten, etwa für den Zustand einer Ampel. Wie das geht, zeige ich an einem einfachen Zähler. Wichtig: Wir testen den neuen Typ zuerst nur mit der Kommandozeile, noch ohne eigenen Code.
 
 Neue Pakete legt `ros2 pkg create` an. Wir starten im Ordner `src` des Workspace:
 
@@ -237,6 +256,9 @@ Das Feld `comment` haben wir beim Senden nicht angegeben — es enthält trotzde
 Eine ausführliche Anleitung, auch zu eigenen Service-Typen, bietet das Tutorial [Creating custom msg and srv files](https://docs.ros.org/en/jazzy/Tutorials/Beginner-Client-Libraries/Custom-ROS2-Interfaces.html).
 
 ### Schritt 2: Publisher in C++
+
+    --{{0}}--
+Der Publisher ist fast der aus VL 2. Neu sind nur zwei Dinge: der eigene Nachrichtentyp und die Einträge in package.xml und CMakeLists.txt, mit denen das Paket seine Abhängigkeit erklärt.
 
 Das Paket für den Knoten legen wir gleich mit seinen Abhängigkeiten und einem Programmgerüst an:
 
@@ -325,7 +347,19 @@ int main(int argc, char * argv[])
 
 Beachten Sie den Zusammenhang der Namen: Aus der Datei `MyMsg.msg` im Paket `my_msg_package` wird der Header `my_msg_package/msg/my_msg.hpp` und der C++-Typ `my_msg_package::msg::MyMsg`. Die Felder `counter` und `comment` sind ganz normale Membervariablen.
 
+**Vorhersage, bevor wir weitermachen:** Der Subscriber soll in Python geschrieben werden. Was erwarten Sie — welche Datei übernimmt dort die Rolle von `add_executable` in der `CMakeLists.txt`?
+
+[( )] ebenfalls eine `CMakeLists.txt`
+[(X)] eine Python-Datei, die das Paket beschreibt (`setup.py`)
+[( )] keine — Python-Dateien sind direkt ausführbar, ROS findet sie selbst
+***
+Auch ein Python-Programm muss ROS bekannt gemacht werden, sonst findet `ros2 run` es nicht. Das übernimmt der Eintrag `entry_points` in `setup.py` — gleich im nächsten Schritt.
+***
+
 ### Schritt 3: Subscriber in Python
+
+    --{{0}}--
+Jetzt die Gegenseite in Python. Die Struktur des Knotens kennen Sie schon. Neu ist, wie ein Python-Programm angemeldet wird. Am Ende sprechen ein C++-Knoten und ein Python-Knoten miteinander.
 
 Python-Pakete werden mit `--build-type ament_python` angelegt:
 
@@ -463,6 +497,9 @@ Python-Pakete haben keine `CMakeLists.txt`; ausführbare Programme werden über 
 
 ## Systeme starten mit Launch-Dateien
 
+    --{{0}}--
+Zurück zur Einstiegsfrage: Für zwei Knoten brauchen wir schon zwei Terminals. Eine Launch-Datei beschreibt, welche Knoten mit welchen Einstellungen starten. Ein Befehl genügt dann für das ganze System.
+
 Sie haben gesehen: Für zwei Knoten brauchen wir zwei Terminals, jeweils mit zwei `source`-Befehlen. Unser TurtleBot-System wird aus Kameratreiber, Spurerkennung, Ampelerkennung und Fahrverhalten bestehen — dazu Parameter und Umbenennungen. Das von Hand zu starten ist fehleranfällig.
 
 Eine **Launch-Datei** beschreibt, welche Knoten mit welchen Einstellungen gestartet werden. ROS 2 akzeptiert Launch-Dateien in Python, XML oder YAML; wir verwenden Python. Unsere Datei startet Publisher und Subscriber gemeinsam und erlaubt, den Topic-Namen beim Start festzulegen:
@@ -532,6 +569,9 @@ Launch-Dateien können noch mehr: andere Launch-Dateien einbinden (`IncludeLaunc
 
 ## Logging
 
+    --{{0}}--
+Statt print nutzen Sie den Logger. Er sagt Ihnen, wann und von welchem Knoten eine Meldung kommt, und Sie können die Menge der Meldungen beim Start einstellen, ohne den Code zu ändern.
+
 Statt `printf` oder `print` nutzen ROS-Knoten den eingebauten Logger, der den Namen des Knotens trägt: `RCLCPP_INFO(...)` in C++, `self.get_logger().info(...)` in Python. Das hat Vorteile: Jede Meldung trägt Zeitstempel und Knotennamen, sie landet zusätzlich in Logdateien und auf dem Topic `/rosout`, und sie hat einen **Schweregrad**:
 
 `DEBUG` < `INFO` < `WARN` < `ERROR` < `FATAL`
@@ -583,6 +623,9 @@ Nach der Änderung muss das C++-Paket neu gebaut werden (`colcon build --package
 
 ## ROS 2 auf mehreren Rechnern
 
+    --{{0}}--
+Im Praktikum läuft Ihr System verteilt: die Treiber auf dem Roboter, Ihre Knoten auf dem Laptop. Programmieren müssen Sie dafür nichts. Entscheidend ist eine einzige Umgebungsvariable.
+
 Im Praktikum läuft Ihr System verteilt: Auf dem Raspberry Pi des TurtleBot laufen die Treiber für LiDAR, Kamera und Motoren, auf Ihrem Laptop Ihre eigenen Knoten und die Visualisierung. Programmieren müssen Sie dafür nichts — dank Discovery (VL 2) finden sich die Knoten im Netz von selbst, wenn beide Rechner im selben Netz sind und **dieselbe `ROS_DOMAIN_ID`** verwenden.
 
 Jede Gruppe bekommt eine eigene ID (0 bis 101), damit Ihr Laptop nicht die Fahrbefehle für den Roboter der Nachbargruppe sendet:
@@ -596,236 +639,78 @@ Zu Hause wollen Sie dagegen niemanden im WLAN stören: Mit `export ROS_AUTOMATIC
 
 > **WSL2:** WSL2 hat standardmäßig ein eigenes, internes Netz, aus dem heraus der TurtleBot nicht sichtbar ist. Die Umstellung auf den gespiegelten Netzwerkmodus richten wir gemeinsam im ersten Praktikum ein. Für alle Übungen auf dem eigenen Rechner ist nichts zu tun.
 
-## Ausblick: Daten aufzeichnen
+## Zusammenfassung und Ausblick
 
-Mit `ros2 bag` zeichnen Sie Nachrichten auf und spielen sie später wieder ab. So können Sie Ihre Spurerkennung am Schreibtisch mit immer denselben Kamerabildern testen, ohne den Roboter aufzubauen. Ein Beispiel mit unserem Zähler:
+    --{{0}}--
+Halten wir den Weg vom Code zum laufenden System fest. Er ist für jedes Paket gleich und wird Ihnen in jedem Praktikum begegnen.
 
-```text
-> ros2 bag record -o zaehler_bag /counter
-...
-> ros2 bag info zaehler_bag
-Files:             zaehler_bag_0.mcap
-Bag size:          5.3 KiB
-Storage id:        mcap
-ROS Distro:        jazzy
-Duration:          3.999984206s
-Messages:          9
-Topic information: Topic: /counter | Type: my_msg_package/msg/MyMsg | Count: 9 | Serialization Format: cdr
-> ros2 bag play zaehler_bag
-```
-
-Wählen Sie die aufgezeichneten Topics bewusst aus: Eine RGB-D-Kamera erzeugte in einem früheren Durchgang dieser Veranstaltung in **12 Sekunden** über **1 GB** Daten. Wie Sie für den TurtleBot sinnvoll aufzeichnen und die Daten auswerten, üben wir im Praktikum P 1.
-
-## Knoten mit Lebenszyklus
-
-Unsere bisherigen Knoten legen los, sobald sie gestartet sind. Bei einem echten Roboter ist das problematisch: Das Fahrverhalten sollte erst Befehle senden, wenn Kamera, Spurerkennung und Lokalisierung bereit sind. Und wenn die Kamera ausfällt, soll die Spurerkennung pausieren — nicht abstürzen und neu gestartet werden müssen.
-
-ROS 2 bietet dafür **verwaltete Knoten** (_managed_ oder _lifecycle nodes_). Sie durchlaufen einen festen Zustandsautomaten und wechseln den Zustand nur auf Anweisung von außen:
-
-```mermaid @mermaid
-stateDiagram-v2
-    direction LR
-    [*] --> Unconfigured
-    Unconfigured --> Inactive: configure
-    Inactive --> Unconfigured: cleanup
-    Inactive --> Active: activate
-    Active --> Inactive: deactivate
-    Unconfigured --> Finalized: shutdown
-    Inactive --> Finalized: shutdown
-    Active --> Finalized: shutdown
-    Finalized --> [*]
-```
-
-Vereinfachte Darstellung nach dem [Design-Dokument](https://design.ros2.org/articles/node_lifecycle.html) von Geoffrey Biggs und Tully Foote
+**Vom Code zum laufenden System**
 
 <!-- data-type="none" -->
-| Zustand        | Bedeutung                                                         | Beispiel Spurerkennung                       |
-| :------------- | :---------------------------------------------------------------- | :------------------------------------------- |
-| `Unconfigured` | Knoten existiert, hat aber noch nichts vorbereitet                | gerade gestartet                             |
-| `Inactive`     | konfiguriert, Ressourcen angelegt, verarbeitet aber nichts        | Parameter geladen, Publisher angelegt        |
-| `Active`       | arbeitet normal                                                   | wertet Bilder aus, sendet Ergebnisse         |
-| `Finalized`    | beendet, kann nur noch zerstört werden                            | Programmende                                 |
+| Schritt              | Befehl / Datei                                                        |
+| :------------------- | :-------------------------------------------------------------------- |
+| 1. Paket anlegen     | `ros2 pkg create <name> --build-type ament_cmake` bzw. `ament_python` |
+| 2. Beschreiben       | `package.xml` (Abhängigkeiten), `CMakeLists.txt` bzw. `setup.py` (Programme) |
+| 3. Bauen             | `cd ~/ros2_ws && colcon build --symlink-install`                      |
+| 4. Bekannt machen    | `source ~/ros2_ws/install/setup.bash` — in jedem neuen Terminal       |
+| 5. Starten           | `ros2 run <paket> <programm>` oder `ros2 launch <paket> <datei>`      |
 
-Die Übergänge heißen `configure`, `activate`, `deactivate`, `cleanup` und `shutdown`. Bei jedem Übergang ruft ROS eine Methode des Knotens auf — `on_configure()`, `on_activate()` usw. —, in der Sie festlegen, was passieren soll. Während diese Methode läuft, befindet sich der Knoten kurz in einem **Übergangszustand** wie `configuring` oder `activating`; das vollständige Diagramm unten zeigt auch diese Zwischenzustände und die Fehlerbehandlung.
+**Abschluss-Check**
 
-<details>
-<summary>Vollständiger Zustandsautomat mit Übergangszuständen anzeigen (zum Nachlesen, nicht zum Auswendiglernen)</summary>
+Ordnen Sie die Dateien ihrem Zweck zu.
 
-```mermaid @mermaid
-stateDiagram-v2
-    classDef primary fill:#dbeafe,stroke:#1e3a8a
-    classDef transition fill:#fef9c3,stroke:#a16207
-    classDef error fill:#fee2e2,stroke:#b91c1c
-
-    [*] --> Unconfigured: create
-    Unconfigured --> Configuring: configure
-    Configuring --> Inactive: SUCCESS
-    Configuring --> Unconfigured: FAILURE
-    Inactive --> CleaningUp: cleanup
-    CleaningUp --> Unconfigured: SUCCESS
-    Inactive --> Activating: activate
-    Activating --> Active: SUCCESS
-    Activating --> Inactive: FAILURE
-    Active --> Deactivating: deactivate
-    Deactivating --> Inactive: SUCCESS
-    Unconfigured --> ShuttingDown: shutdown
-    Inactive --> ShuttingDown: shutdown
-    Active --> ShuttingDown: shutdown
-    ShuttingDown --> Finalized: SUCCESS
-    Configuring --> ErrorProcessing: ERROR
-    CleaningUp --> ErrorProcessing: ERROR
-    Activating --> ErrorProcessing: ERROR
-    Deactivating --> ErrorProcessing: ERROR
-    ShuttingDown --> ErrorProcessing: ERROR
-    ErrorProcessing --> Unconfigured: SUCCESS
-    ErrorProcessing --> Finalized: FAILURE
-    Finalized --> [*]: destroy
-
-    class Unconfigured,Inactive,Active,Finalized primary
-    class Configuring,CleaningUp,Activating,Deactivating,ShuttingDown transition
-    class ErrorProcessing error
-```
-
-Blau: Hauptzustände, gelb: Übergangszustände, in denen die `on_…`-Methode läuft, rot: Fehlerbehandlung. `SUCCESS`, `FAILURE` und `ERROR` sind die Rückgabewerte der `on_…`-Methode. Nach dem [Design-Dokument](https://design.ros2.org/articles/node_lifecycle.html) von Geoffrey Biggs und Tully Foote.
-
-</details>
-
-### Ausprobieren mit dem Demo
-
-ROS 2 bringt ein Beispiel mit: einen verwalteten Publisher `lc_talker` und einen Subscriber `lc_listener`, der die Zustandswechsel mitprotokolliert. Starten Sie beide in zwei Terminals:
-
-```bash
-ros2 run lifecycle lifecycle_talker      # Terminal 1
-ros2 run lifecycle lifecycle_listener    # Terminal 2
-```
-
-Im dritten Terminal steuern Sie den Talker:
-
-```text
-> ros2 lifecycle get /lc_talker
-unconfigured [1]
-> ros2 lifecycle list /lc_talker
-- configure [1]
-	Start: unconfigured
-	Goal: configuring
-- shutdown [5]
-	Start: unconfigured
-	Goal: shuttingdown
-> ros2 lifecycle set /lc_talker configure
-Transitioning successful
-> ros2 lifecycle set /lc_talker activate
-Transitioning successful
-> ros2 lifecycle get /lc_talker
-active [3]
-```
-
-`ros2 lifecycle list` zeigt, welche Übergänge im aktuellen Zustand erlaubt sind und in welchen Übergangszustand sie führen (`Goal`). Die Zahlen in eckigen Klammern sind die internen IDs der Zustände bzw. Übergänge — Sie können sie ignorieren.
-
-Beobachten Sie dabei die Terminals 1 und 2:
-
-+ Nach `configure` existiert das Topic bereits (`ros2 topic list` zeigt `/lifecycle_chatter`), aber der Talker meldet `Messages are not published`.
-+ Erst nach `activate` kommen beim Listener Nachrichten an: `data_callback: Lifecycle HelloWorld #5`.
-+ Mit `ros2 lifecycle set /lc_talker deactivate` pausiert der Talker wieder — der Prozess läuft weiter, `ros2 lifecycle get /lc_talker` meldet `inactive [2]`.
-
-### Ein eigener verwalteter Knoten
-
-So sieht das Prinzip in Python aus — eine Spurerkennung, die vorerst nur einen Text sendet. Der Knoten erbt von `LifecycleNode` statt von `Node` und legt seine Ressourcen erst in `on_configure()` an. Ein _Lifecycle-Publisher_ sendet nur im Zustand `Active`:
-
-```python  lane_detector.py
-import rclpy
-from rclpy.executors import ExternalShutdownException
-from rclpy.lifecycle import LifecycleNode, TransitionCallbackReturn
-from std_msgs.msg import String
-
-
-class LaneDetector(LifecycleNode):
-
-    def __init__(self):
-        super().__init__('lane_detector')
-
-    def on_configure(self, state):
-        # Ressourcen anlegen: Publisher, Parameter lesen, Kamera öffnen ...
-        self.pub = self.create_lifecycle_publisher(String, 'lane', 10)
-        self.timer = self.create_timer(1.0, self.detect)
-        self.get_logger().info('konfiguriert')
-        return TransitionCallbackReturn.SUCCESS
-
-    def on_activate(self, state):
-        self.get_logger().info('aktiv — sende Ergebnisse')
-        return super().on_activate(state)      # aktiviert den Lifecycle-Publisher
-
-    def on_deactivate(self, state):
-        self.get_logger().info('inaktiv — pausiert')
-        return super().on_deactivate(state)
-
-    def on_cleanup(self, state):
-        self.destroy_timer(self.timer)
-        self.destroy_lifecycle_publisher(self.pub)
-        return TransitionCallbackReturn.SUCCESS
-
-    def detect(self):
-        if self.pub.is_activated:
-            self.pub.publish(String(data='Spur erkannt'))
-
-
-def main():
-    rclpy.init()
-    node = LaneDetector()
-    try:
-        rclpy.spin(node)
-    except (KeyboardInterrupt, ExternalShutdownException):
-        pass
-    finally:
-        node.destroy_node()
-        rclpy.try_shutdown()
-
-
-if __name__ == '__main__':
-    main()
-```
-
-Was im Code neu ist:
-
-+ Jede `on_…`-Methode meldet mit `TransitionCallbackReturn.SUCCESS`, dass der Übergang geklappt hat. Mit `FAILURE` lehnt der Knoten ab und bleibt im alten Zustand — etwa wenn in `on_configure()` die Kamera nicht gefunden wird. `ERROR` signalisiert einen schweren Fehler.
-+ `on_activate()` und `on_deactivate()` rufen zusätzlich die Methode der Basisklasse auf (`super()`): Sie schaltet alle Lifecycle-Publisher des Knotens ein bzw. aus. In `on_configure()` hat die Basisklasse nichts zu tun.
-+ `on_cleanup()` gibt zurück, was `on_configure()` angelegt hat. So lässt sich der Knoten neu konfigurieren, z.B. mit anderen Parametern, ohne ihn neu zu starten.
-+ Der Parameter `state` enthält den Zustand vor dem Übergang; wir brauchen ihn hier nicht.
-+ Die Abfrage `is_activated` in `detect()` ist streng genommen nicht nötig — ein inaktiver Lifecycle-Publisher verwirft Nachrichten ohnehin. Er schreibt dann aber bei jedem Aufruf eine Warnung ins Terminal; die Abfrage vermeidet das.
-+ In `main()` fangen wir zusätzlich `ExternalShutdownException` ab. Sie tritt auf, wenn der Knoten von außen beendet wird, etwa per `shutdown`-Übergang oder durch `ros2 launch`.
-
-Ausprobieren in zwei Terminals:
-
-```bash
-python3 lane_detector.py      # Terminal 1 — ein einzelnes Skript lässt sich auch ohne Paket starten
-```
-
-```text
-# Terminal 2
-> ros2 lifecycle set /lane_detector configure
-Transitioning successful
-> ros2 lifecycle set /lane_detector activate
-Transitioning successful
-> ros2 topic echo --once /lane
-data: Spur erkannt
----
-```
-
-**Kurze Kontrolle:** Der Knoten `lane_detector` wurde konfiguriert, aber noch nicht aktiviert. Was zeigt `ros2 topic echo /lane`?
-
-[( )] Jede Sekunde „Spur erkannt“ — der Timer läuft ja bereits.
-[(X)] Nichts — der Lifecycle-Publisher sendet erst im Zustand `Active`.
-[( )] Eine Fehlermeldung, weil das Topic noch nicht existiert.
+[ [package.xml] [CMakeLists.txt] [setup.py] [Launch-Datei] ]
+[     (X)            ( )           ( )           ( )      ] Das Paket braucht `my_msg_package`.
+[     ( )            (X)           ( )           ( )      ] Aus `data_generator.cpp` soll ein Programm entstehen.
+[     ( )            ( )           (X)           ( )      ] Die Python-Funktion `main` soll als `data_receiver` startbar sein.
+[     ( )            ( )           ( )           (X)      ] Publisher und Subscriber sollen gemeinsam mit einem Topic-Namen starten.
 ***
-Der Timer läuft nach `configure` tatsächlich, aber `detect()` prüft `self.pub.is_activated`, und ein Lifecycle-Publisher verwirft Nachrichten im Zustand `Inactive`. Das Topic existiert bereits — deshalb gibt es keine Fehlermeldung, sondern einfach keine Daten.
+`package.xml` beschreibt, **was** ein Paket braucht; `CMakeLists.txt` und `setup.py` beschreiben, **wie** es gebaut wird und welche Programme entstehen; die Launch-Datei beschreibt, **wie das System gestartet** wird.
 ***
 
-Wer gibt im echten System die Befehle? Niemand tippt `ros2 lifecycle set` von Hand. Ein **Lifecycle-Manager** übernimmt das und bringt alle Knoten in der richtigen Reihenfolge nach `Active`. Genau so arbeitet der Navigations-Stack **Nav2**, den Sie in Block 5 einsetzen: Kartenserver, Lokalisierung, Planer und Regler sind verwaltete Knoten, die der `lifecycle_manager` gemeinsam hochfährt. Wenn dort ein Knoten in `Inactive` hängen bleibt, wissen Sie jetzt, wo Sie suchen müssen.
+Ihr C++-Knoten gibt plötzlich nur noch Warnungen aus, Sie wollen aber die Debug-Meldungen **dieses einen** Knotens sehen. Welche Option hängen Sie an `ros2 run` an?
+
+[( )] `--ros-args --log-level debug`
+[(X)] `--ros-args --log-level data_generator:=debug`
+[( )] `--log debug`
+***
+Ohne Knotennamen schaltet `--log-level debug` auch die internen Meldungen von ROS frei — das Terminal wird geflutet.
+***
+
+**Ausblick auf Block 5:** Große Systeme wie der Navigations-Stack Nav2 starten ihre Knoten nicht einfach gleichzeitig, sondern geordnet über einen _Lebenszyklus_ (konfigurieren, aktivieren, deaktivieren). Das lernen Sie in der Vorlesung zur Navigation kennen.
+
+**Zurück zur Einstiegsfrage:** Der TurtleBot startet mit einem Befehl, weil seine Knoten in Paketen liegen, mit `colcon` gebaut sind und eine Launch-Datei sie gemeinsam startet. Genau so werden Sie Ihr Verkehrswelt-System aufbauen.
+
+**Ausblick:** In **Ü 2** probieren Sie Services, Parameter und Actions am turtlesim aus und zeichnen Daten mit `ros2 bag` auf. Bringen Sie Ihre Skizze aus Aufgabe 3 mit — wir vergleichen sie zu Beginn.
 
 ## Aufgabe der Woche
 
-1. Legen Sie in Ihrer ROS-2-Umgebung (Ü 2) einen Workspace `~/ros2_ws` an und bauen Sie die drei Pakete dieser Vorlesung nach. Prüfen Sie jeden Schritt mit `ros2 interface show`, `ros2 pkg executables` und `ros2 topic echo`.
+    --{{0}}--
+Bauen Sie die drei Pakete selbst nach — erst dann merken Sie, wo es hakt. Und bringen Sie Ihre Skizze für die Verkehrswelt zur Übung mit.
+
+1. Legen Sie in Ihrer ROS-2-Umgebung (siehe [Installationsanleitung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/installation_ros2/README.md)) einen Workspace `~/ros2_ws` an und bauen Sie die drei Pakete dieser Vorlesung nach. Prüfen Sie jeden Schritt mit `ros2 interface show`, `ros2 pkg executables` und `ros2 topic echo`.
+   **Erwartetes Ergebnis:** `ros2 pkg executables my_tutorial_package` zeigt `my_tutorial_package data_generator`, und `ros2 launch my_tutorial_package counter.launch.py` liefert abwechselnd `Publishing:` und `Received:`.
 2. Ergänzen Sie `MyMsg.msg` um ein Feld `float32 temperature` und senden Sie einen Zufallswert. Was müssen Sie neu bauen?
-3. Überlegen Sie für die Verkehrswelt: Welche Pakete würden Sie für Spurerkennung, Ampelerkennung und Fahrverhalten anlegen? Wohin gehört ein eigener Nachrichtentyp „Ampelzustand“? Skizzieren Sie Pakete, Knoten und Topics.
+3. Überlegen Sie für die Verkehrswelt: Welche Pakete würden Sie für Spurerkennung, Ampelerkennung und Fahrverhalten anlegen? Wohin gehört ein eigener Nachrichtentyp „Ampelzustand“? Skizzieren Sie Pakete, Knoten und Topics. Wir vergleichen die Skizzen zu Beginn von Ü 2.
+
+<details>
+<summary>Lösungshinweise zu Aufgabe 2 und 3 anzeigen</summary>
+
+**Aufgabe 2:** `my_msg_package` muss neu gebaut werden, damit der Code für das neue Feld entsteht, und `my_tutorial_package`, weil der C++-Knoten gegen den geänderten Header kompiliert wird. Am einfachsten bauen Sie mit `colcon build` alle Pakete; `colcon` hält die Reihenfolge ein. Danach zeigt `ros2 topic echo /counter` das Feld `temperature`.
+
+**Aufgabe 3 — eine mögliche Lösung:**
+
+```text
+verkehrswelt_msgs/        TrafficLight.msg   (eigener Nachrichtentyp, CMake-Paket)
+lane_detection/           Knoten lane_detector     /camera/image_raw → /lane
+traffic_light_detection/  Knoten light_detector    /camera/image_raw → /traffic_light (TrafficLight)
+driving/                  Knoten driver            /lane, /traffic_light, /scan → /cmd_vel
+verkehrswelt_bringup/     Launch-Datei, die alles zusammen mit dem TurtleBot startet
+```
+
+Der Nachrichtentyp liegt in einem eigenen Paket, damit Ampelerkennung und Fahrverhalten ihn beide verwenden können, ohne voneinander abzuhängen.
+
+</details>
 
 **Zum Weiterlesen**
 

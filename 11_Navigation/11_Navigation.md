@@ -1,8 +1,8 @@
 <!--
 
-author:   Sebastian Zug & Georg Jäger & Claude.ai
+author:   Sebastian Zug & Georg Jäger & Claude.ai & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.0.1
+version:  0.0.2
 language: de
 comment:  Diese Vorlesung behandelt Kartenformate, Pfadplanungsalgorithmen und den ROS2 Navigation Stack.
 narrator: Deutsch Female
@@ -10,6 +10,7 @@ attribute: thx
 
 import:   https://github.com/liascript/CodeRunner
           https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/config.md
+          https://raw.githubusercontent.com/liaTemplates/mermaid_template/master/README.md
 
 -->
 
@@ -669,6 +670,220 @@ Ein typischer Navigationsaufruf durchläuft folgende Schritte:
        Ja: Erfolg
 ```
 
+### Wie Nav2 startet: Knoten mit Lebenszyklus
+
+    --{{0}}--
+Nav2 besteht aus vielen Servern, die voneinander abhängen: Der Planer braucht die Karte, der Regler braucht den Planer. Würden alle Knoten gleichzeitig loslegen, könnte der Roboter mit halb geladener Karte losfahren. Nav2 startet deshalb alle Komponenten als verwaltete Knoten mit festem Lebenszyklus.
+
+Die Knoten aus VL 3 legen los, sobald sie gestartet sind. Für Nav2 wäre das problematisch: Der Regler darf erst Fahrbefehle senden, wenn Karte, Lokalisierung und Planer bereit sind. Und wenn die Kamera ausfällt, soll die Spurerkennung pausieren — nicht abstürzen und neu gestartet werden müssen.
+
+ROS 2 bietet dafür **verwaltete Knoten** (_managed_ oder _lifecycle nodes_). Sie durchlaufen einen festen Zustandsautomaten und wechseln den Zustand nur auf Anweisung von außen:
+
+```mermaid @mermaid
+stateDiagram-v2
+    direction LR
+    [*] --> Unconfigured
+    Unconfigured --> Inactive: configure
+    Inactive --> Unconfigured: cleanup
+    Inactive --> Active: activate
+    Active --> Inactive: deactivate
+    Unconfigured --> Finalized: shutdown
+    Inactive --> Finalized: shutdown
+    Active --> Finalized: shutdown
+    Finalized --> [*]
+```
+
+Vereinfachte Darstellung nach dem [Design-Dokument](https://design.ros2.org/articles/node_lifecycle.html) von Geoffrey Biggs und Tully Foote
+
+<!-- data-type="none" -->
+| Zustand        | Bedeutung                                                         | Beispiel Spurerkennung                       |
+| :------------- | :---------------------------------------------------------------- | :------------------------------------------- |
+| `Unconfigured` | Knoten existiert, hat aber noch nichts vorbereitet                | gerade gestartet                             |
+| `Inactive`     | konfiguriert, Ressourcen angelegt, verarbeitet aber nichts        | Parameter geladen, Publisher angelegt        |
+| `Active`       | arbeitet normal                                                   | wertet Bilder aus, sendet Ergebnisse         |
+| `Finalized`    | beendet, kann nur noch zerstört werden                            | Programmende                                 |
+
+Die Übergänge heißen `configure`, `activate`, `deactivate`, `cleanup` und `shutdown`. Bei jedem Übergang ruft ROS eine Methode des Knotens auf — `on_configure()`, `on_activate()` usw. —, in der Sie festlegen, was passieren soll. Während diese Methode läuft, befindet sich der Knoten kurz in einem **Übergangszustand** wie `configuring` oder `activating`; das vollständige Diagramm unten zeigt auch diese Zwischenzustände und die Fehlerbehandlung.
+
+<details>
+<summary>Vollständiger Zustandsautomat mit Übergangszuständen anzeigen (zum Nachlesen, nicht zum Auswendiglernen)</summary>
+
+```mermaid @mermaid
+stateDiagram-v2
+    classDef primary fill:#dbeafe,stroke:#1e3a8a
+    classDef transition fill:#fef9c3,stroke:#a16207
+    classDef error fill:#fee2e2,stroke:#b91c1c
+
+    [*] --> Unconfigured: create
+    Unconfigured --> Configuring: configure
+    Configuring --> Inactive: SUCCESS
+    Configuring --> Unconfigured: FAILURE
+    Inactive --> CleaningUp: cleanup
+    CleaningUp --> Unconfigured: SUCCESS
+    Inactive --> Activating: activate
+    Activating --> Active: SUCCESS
+    Activating --> Inactive: FAILURE
+    Active --> Deactivating: deactivate
+    Deactivating --> Inactive: SUCCESS
+    Unconfigured --> ShuttingDown: shutdown
+    Inactive --> ShuttingDown: shutdown
+    Active --> ShuttingDown: shutdown
+    ShuttingDown --> Finalized: SUCCESS
+    Configuring --> ErrorProcessing: ERROR
+    CleaningUp --> ErrorProcessing: ERROR
+    Activating --> ErrorProcessing: ERROR
+    Deactivating --> ErrorProcessing: ERROR
+    ShuttingDown --> ErrorProcessing: ERROR
+    ErrorProcessing --> Unconfigured: SUCCESS
+    ErrorProcessing --> Finalized: FAILURE
+    Finalized --> [*]: destroy
+
+    class Unconfigured,Inactive,Active,Finalized primary
+    class Configuring,CleaningUp,Activating,Deactivating,ShuttingDown transition
+    class ErrorProcessing error
+```
+
+Blau: Hauptzustände, gelb: Übergangszustände, in denen die `on_…`-Methode läuft, rot: Fehlerbehandlung. `SUCCESS`, `FAILURE` und `ERROR` sind die Rückgabewerte der `on_…`-Methode. Nach dem [Design-Dokument](https://design.ros2.org/articles/node_lifecycle.html) von Geoffrey Biggs und Tully Foote.
+
+</details>
+
+#### Ausprobieren mit dem Demo
+
+    --{{0}}--
+ROS 2 bringt ein Beispiel mit, an dem wir die Zustandswechsel live beobachten können. Achten Sie darauf, wann beim Listener Nachrichten ankommen.
+
+ROS 2 bringt ein Beispiel mit: einen verwalteten Publisher `lc_talker` und einen Subscriber `lc_listener`, der die Zustandswechsel mitprotokolliert. Starten Sie beide in zwei Terminals:
+
+```bash
+ros2 run lifecycle lifecycle_talker      # Terminal 1
+ros2 run lifecycle lifecycle_listener    # Terminal 2
+```
+
+Im dritten Terminal steuern Sie den Talker:
+
+```text
+> ros2 lifecycle get /lc_talker
+unconfigured [1]
+> ros2 lifecycle list /lc_talker
+- configure [1]
+	Start: unconfigured
+	Goal: configuring
+- shutdown [5]
+	Start: unconfigured
+	Goal: shuttingdown
+> ros2 lifecycle set /lc_talker configure
+Transitioning successful
+> ros2 lifecycle set /lc_talker activate
+Transitioning successful
+> ros2 lifecycle get /lc_talker
+active [3]
+```
+
+`ros2 lifecycle list` zeigt, welche Übergänge im aktuellen Zustand erlaubt sind und in welchen Übergangszustand sie führen (`Goal`). Die Zahlen in eckigen Klammern sind die internen IDs der Zustände bzw. Übergänge — Sie können sie ignorieren.
+
+Beobachten Sie dabei die Terminals 1 und 2:
+
++ Nach `configure` existiert das Topic bereits (`ros2 topic list` zeigt `/lifecycle_chatter`), aber der Talker meldet `Messages are not published`.
++ Erst nach `activate` kommen beim Listener Nachrichten an: `data_callback: Lifecycle HelloWorld #5`.
++ Mit `ros2 lifecycle set /lc_talker deactivate` pausiert der Talker wieder — der Prozess läuft weiter, `ros2 lifecycle get /lc_talker` meldet `inactive [2]`.
+
+#### Ein eigener verwalteter Knoten
+
+    --{{0}}--
+So sieht das Prinzip im eigenen Code aus — als Spurerkennung, die vorerst nur einen Text sendet. Der Unterschied zum normalen Knoten: Ressourcen entstehen erst beim Konfigurieren, gesendet wird nur im Zustand Active.
+
+So sieht das Prinzip in Python aus — eine Spurerkennung, die vorerst nur einen Text sendet. Der Knoten erbt von `LifecycleNode` statt von `Node` und legt seine Ressourcen erst in `on_configure()` an. Ein _Lifecycle-Publisher_ sendet nur im Zustand `Active`:
+
+```python  lane_detector.py
+import rclpy
+from rclpy.executors import ExternalShutdownException
+from rclpy.lifecycle import LifecycleNode, TransitionCallbackReturn
+from std_msgs.msg import String
+
+
+class LaneDetector(LifecycleNode):
+
+    def __init__(self):
+        super().__init__('lane_detector')
+
+    def on_configure(self, state):
+        # Ressourcen anlegen: Publisher, Parameter lesen, Kamera öffnen ...
+        self.pub = self.create_lifecycle_publisher(String, 'lane', 10)
+        self.timer = self.create_timer(1.0, self.detect)
+        self.get_logger().info('konfiguriert')
+        return TransitionCallbackReturn.SUCCESS
+
+    def on_activate(self, state):
+        self.get_logger().info('aktiv — sende Ergebnisse')
+        return super().on_activate(state)      # aktiviert den Lifecycle-Publisher
+
+    def on_deactivate(self, state):
+        self.get_logger().info('inaktiv — pausiert')
+        return super().on_deactivate(state)
+
+    def on_cleanup(self, state):
+        self.destroy_timer(self.timer)
+        self.destroy_lifecycle_publisher(self.pub)
+        return TransitionCallbackReturn.SUCCESS
+
+    def detect(self):
+        if self.pub.is_activated:
+            self.pub.publish(String(data='Spur erkannt'))
+
+
+def main():
+    rclpy.init()
+    node = LaneDetector()
+    try:
+        rclpy.spin(node)
+    except (KeyboardInterrupt, ExternalShutdownException):
+        pass
+    finally:
+        node.destroy_node()
+        rclpy.try_shutdown()
+
+
+if __name__ == '__main__':
+    main()
+```
+
+Was im Code neu ist:
+
++ Jede `on_…`-Methode meldet mit `TransitionCallbackReturn.SUCCESS`, dass der Übergang geklappt hat. Mit `FAILURE` lehnt der Knoten ab und bleibt im alten Zustand — etwa wenn in `on_configure()` die Kamera nicht gefunden wird. `ERROR` signalisiert einen schweren Fehler.
++ `on_activate()` und `on_deactivate()` rufen zusätzlich die Methode der Basisklasse auf (`super()`): Sie schaltet alle Lifecycle-Publisher des Knotens ein bzw. aus. In `on_configure()` hat die Basisklasse nichts zu tun.
++ `on_cleanup()` gibt zurück, was `on_configure()` angelegt hat. So lässt sich der Knoten neu konfigurieren, z.B. mit anderen Parametern, ohne ihn neu zu starten.
++ Der Parameter `state` enthält den Zustand vor dem Übergang; wir brauchen ihn hier nicht.
++ Die Abfrage `is_activated` in `detect()` ist streng genommen nicht nötig — ein inaktiver Lifecycle-Publisher verwirft Nachrichten ohnehin. Er schreibt dann aber bei jedem Aufruf eine Warnung ins Terminal; die Abfrage vermeidet das.
++ In `main()` fangen wir zusätzlich `ExternalShutdownException` ab. Sie tritt auf, wenn der Knoten von außen beendet wird, etwa per `shutdown`-Übergang oder durch `ros2 launch`.
+
+Ausprobieren in zwei Terminals:
+
+```bash
+python3 lane_detector.py      # Terminal 1 — ein einzelnes Skript lässt sich auch ohne Paket starten
+```
+
+```text
+# Terminal 2
+> ros2 lifecycle set /lane_detector configure
+Transitioning successful
+> ros2 lifecycle set /lane_detector activate
+Transitioning successful
+> ros2 topic echo --once /lane
+data: Spur erkannt
+---
+```
+
+**Kurze Kontrolle:** Der Knoten `lane_detector` wurde konfiguriert, aber noch nicht aktiviert. Was zeigt `ros2 topic echo /lane`?
+
+[( )] Jede Sekunde „Spur erkannt“ — der Timer läuft ja bereits.
+[(X)] Nichts — der Lifecycle-Publisher sendet erst im Zustand `Active`.
+[( )] Eine Fehlermeldung, weil das Topic noch nicht existiert.
+***
+Der Timer läuft nach `configure` tatsächlich, aber `detect()` prüft `self.pub.is_activated`, und ein Lifecycle-Publisher verwirft Nachrichten im Zustand `Inactive`. Das Topic existiert bereits — deshalb gibt es keine Fehlermeldung, sondern einfach keine Daten.
+***
+
+Wer gibt im echten System die Befehle? Niemand tippt `ros2 lifecycle set` von Hand. Ein **Lifecycle-Manager** übernimmt das und bringt alle Knoten in der richtigen Reihenfolge nach `Active`. Genau so arbeitet **Nav2**: Kartenserver, Lokalisierung, Planer und Regler sind verwaltete Knoten, die der `lifecycle_manager` in der richtigen Reihenfolge hochfährt. Wenn dort ein Knoten in `Inactive` hängen bleibt, wissen Sie jetzt, wo Sie suchen müssen.
+
 ### Konfigurationsbeispiel
 
 Die folgende YAML-Konfiguration zeigt die drei zentralen Komponenten eines Nav2-Systems: den **Planner** für die globale Pfadberechnung, die **Costmap** als Planungsgrundlage und den **Controller** für die lokale Pfadverfolgung.
@@ -791,9 +1006,7 @@ Die Vorlesung spannt den Bogen von der Sensorik bis zur Navigation -- aber einig
 
 5. **Softwareengineering-Praktiken für Robotik** -- Im Vorlesungsplan als Ziel genannt, aber kaum vertieft: Testing von ROS2-Nodes, CI/CD für Robotik-Projekte, Reproduzierbarkeit (Docker, rosdep) und Debugging verteilter Systeme.
 
-6. **ROS2 Actions und Lifecycle Nodes** -- Topics und Services wurden behandelt, aber Actions -- der zentrale Kommunikationsmechanismus für Nav2-Goals und länger laufende Aufgaben -- kamen zu kurz. Ebenso Lifecycle Nodes für das geordnete Starten und Stoppen von Knoten.
-
-7. **Sicherheit und Echtzeitaspekte** -- Keine Behandlung von funktionaler Sicherheit, Watchdogs oder den Echtzeit-Eigenschaften von ROS2 (DDS-Konfiguration, Real-time Executor). Für den Betrieb am realen Roboter werden diese Aspekte relevant.
+6. **Sicherheit und Echtzeitaspekte** -- Keine Behandlung von funktionaler Sicherheit, Watchdogs oder den Echtzeit-Eigenschaften von ROS2 (DDS-Konfiguration, Real-time Executor). Für den Betrieb am realen Roboter werden diese Aspekte relevant.
 
 ---
 

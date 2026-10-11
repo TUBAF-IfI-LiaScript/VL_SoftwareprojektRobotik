@@ -21,14 +21,3 @@ ros2 launch my_tutorial_package counter.launch.py            # Publisher und Sub
 ros2 launch my_tutorial_package counter.launch.py topic:=zaehler
 ```
 
-## Lifecycle-Beispiel
-
-`../lifecycle_example/lane_detector.py` ist ein verwalteter Knoten (`LifecycleNode`) ohne eigenes Paket:
-
-```bash
-source /opt/ros/jazzy/setup.bash
-python3 lane_detector.py                          # Terminal 1
-ros2 lifecycle set /lane_detector configure       # Terminal 2
-ros2 lifecycle set /lane_detector activate
-ros2 topic echo /lane
-```
