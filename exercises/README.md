@@ -11,6 +11,7 @@ _Stand WiSe 2026/27 — Termine nach dem neuen Format (VL, Ü und P à 90 min). 
 | **Ü 1**  | [exercise_00_linux_shell](exercise_00_linux_shell/)             | OS + Linux Shell                                        | neu 2026/27     |
 | vorab    | [installation_ros2](installation_ros2/)                         | ROS 2 Jazzy selbstständig installieren (vor Ü 2)        | neu 2026/27     |
 | **Ü 2**  | [exercise_00b_ros2_werkzeuge](exercise_00b_ros2_werkzeuge/)     | Services, Parameter, Actions, `ros2 bag` mit turtlesim  | neu 2026/27     |
+| **P 1**  | [praktikum_01_turtlebot](praktikum_01_turtlebot/)               | TurtleBot verbinden, untersuchen, fahren, aufzeichnen   | neu 2026/27     |
 
 **Bestand 2025/26** (180-min-Blockübungen, werden auf die neuen Ü- und P-Termine verteilt):
 

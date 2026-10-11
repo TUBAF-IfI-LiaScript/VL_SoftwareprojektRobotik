@@ -394,6 +394,12 @@ Erkennen Sie das Quaternion für 90° wieder? Winkel werden im **Bogenmaß** ang
 
 > **Live-Demo:** Beide Befehle führe ich jetzt im Terminal vor — ändern Sie in Gedanken den Winkel auf 180°: Was zeigt `tf2_echo`? (Antwort in der Aufgabe der Woche.)
 
+**RViz in drei Schritten** — so stellen Sie im Praktikum einen Scan dar:
+
+1. `rviz2` starten und links oben unter _Global Options_ den **Fixed Frame** wählen, z.B. `base_footprint` — in diesem Frame wird alles gezeichnet.
+2. _Add → By topic → /scan → LaserScan_ — eine Anzeige für das Topic hinzufügen.
+3. Bleibt die Anzeige leer: Statusmeldung im _Displays_-Panel lesen (fehlende Transformation?) und unter _Topic → Reliability Policy_ die QoS prüfen.
+
 ![RViz mit Laserscan und eingeblendeten Koordinatenachsen der Frames](./images/LaserScannerWithCoordinateTransformation.png "Sobald tf2 die Lage des Sensors kennt, zeigt RViz die Messpunkte am richtigen Ort.")<!-- style="width:70%;" -->
 
 ### URDF: der Roboter als Modell

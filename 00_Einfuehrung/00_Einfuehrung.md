@@ -7,6 +7,7 @@ language: de
 narrator: Deutsch Female
 
 import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/config.md
+          https://raw.githubusercontent.com/liaTemplates/mermaid_template/master/README.md
   
 -->
 
@@ -311,16 +312,12 @@ Diskutieren Sie 3 Minuten mit Ihrem Nachbarn und notieren Sie für jedes Szenari
     --{{0}}--
 Unsere Arbeitsdefinition beschreibt bereits den Aufbau jedes Roboters: wahrnehmen, entscheiden, handeln. Diesen Kreislauf nennt man das Sense-Think-Act-Paradigma. Er läuft ständig: Jede Handlung verändert die Umgebung, und die Sensoren nehmen die Veränderung im nächsten Durchlauf wieder wahr.
 
-```ascii
-            +--------------+      +-----------------+      +-------------+
-            |   "Sense"    |      |    "Think"      |      |    "Act"    |
-  .-------->|  Sensoren    |----->|  Verarbeitung,  |----->|   Aktoren   |------.
-  |         | wahrnehmen   |      |  Entscheidung   |      |   handeln   |      |
-  |         +--------------+      +-----------------+      +-------------+      |
-  |                                                                             v
-  |                             .-----------------------.                       |
-  '-----------------------------|       Umgebung        |<----------------------'
-                                .-----------------------.
+```mermaid @mermaid
+graph LR
+    S["Sense<br/>Sensoren nehmen wahr"] --> T["Think<br/>Verarbeitung, Entscheidung"]
+    T --> A["Act<br/>Aktoren handeln"]
+    A --> U(["Umgebung"])
+    U --> S
 ```
 
     --{{1}}--
@@ -331,34 +328,18 @@ Der Schritt Think ist bei einem autonomen Roboter selbst wieder komplex. Er zerf
 
 **„Think“ genauer: die Drei-Schichten-Architektur**
 
-```ascii
-                    Statusmeldungen
-     Nutzereingaben  ^
-                 |   |
-Befehle          v   |
-            +-----------------------+
-            | Handlungsplanung      |  "$Strategie$ (Sekunden bis Minuten)"
-            +-----------------------+
-                 |   ^      | | |       Folge von Aktionen
-                 v   |      v v v
-            +-----------------------+                                   "Think"
-            | Ausführung            |  "$Taktik$ (Zehntelsekunden)"
-            +-----------------------+
-                     ^      | | |       Geplante Trajektorie,
-Status               |      v v v       Verhalten
-            +-----------------------+
-            | Reaktive Überwachung  |  "$Reaktion$ (Millisekunden)"
-            +-----------------------+
-Sensordaten-    ^ ^ ^       | | |       Steuerbefehle an die
-erfassung       | | |       v v v       Aktoren
-            +----------+ +----------+
-            | Sensoren | | Aktoren  |   "Sense" / "Act"
-            +----------+ +----------+
-                  ^           |
-                  |           v
-            .-----------------------.
-            | Umgebung              |
-            .-----------------------.                                                                                .
+```mermaid @mermaid
+graph TD
+    N(["Nutzer"]) -- "Befehle" --> HP
+    subgraph think ["Think"]
+        HP["Handlungsplanung<br/>Strategie · Sekunden bis Minuten"] -- "Folge von Aktionen" --> AU["Ausführung<br/>Taktik · Zehntelsekunden"]
+        AU -- "geplante Trajektorie, Verhalten" --> RU["Reaktive Überwachung<br/>Reaktion · Millisekunden"]
+    end
+    SE["Sense: Sensoren"] -- "Sensordaten" --> RU
+    RU -- "Steuerbefehle" --> AC["Act: Aktoren"]
+    AC --> UM(["Umgebung"])
+    UM --> SE
+    HP -. "Statusmeldungen" .-> N
 ```
 
 *************************************************
@@ -369,17 +350,13 @@ In der erweiterten Darstellung sehen Sie, welche Aufgaben auf den einzelnen Schi
                    {{2}}
 *************************************************
 
-```ascii
-            +-----------------------+
-            | Handlungsplanung      |      Verhaltensmodell, Kommunikation, Nutzerschnittstellen
-            +-----------------------+
-            | Ausführung            |      Weltmodell, Handlungsmuster, Kontexterkennung
-            +-----------------------+
-            | Reaktive Überwachung  |      Regelung, Energiemanagement, Notaus-Erkennung
-            +-----------------------+
-            | Sensoren | Aktoren    |      Hardwaretreiber
-            +-----------------------+                                                                                .
-```
+<!-- data-type="none" -->
+| Schicht                | Typische Aufgaben                                   |
+| :--------------------- | :-------------------------------------------------- |
+| Handlungsplanung       | Verhaltensmodell, Kommunikation, Nutzerschnittstellen |
+| Ausführung             | Weltmodell, Handlungsmuster, Kontexterkennung       |
+| Reaktive Überwachung   | Regelung, Energiemanagement, Notaus-Erkennung       |
+| Sensoren und Aktoren   | Hardwaretreiber                                     |
 
 > **Zentrale Frage:** Wer soll das denn alles implementieren?
 
@@ -438,19 +415,21 @@ Dieser Comic von Willow Garage, dem ursprünglichen Entwickler von ROS, bringt d
 
 So sieht Sense-Think-Act am TurtleBot mit ROS 2 aus. Jeder Kasten ist ein eigenständiges Programm, die Pfeile sind Datenkanäle mit festem Namen:
 
-```ascii
-  Sense                          Think                           Act
-
-                    /scan                    
-+----------------+                                     /cmd_vel
-| LiDAR-Treiber  |----------.   +-------------------+            +----------------+
-+----------------+          +-->|   Ihre Fahrlogik  |----------->| Motortreiber   |
-                            +-->|  Spur und Ampel   |            +----------------+
-+----------------+          |   +-------------------+
-| Kamera-Treiber |----------'
-+----------------+  /image
-
-  fertig in ROS 2                 Ihre Aufgabe                   fertig in ROS 2
+```mermaid @mermaid
+graph LR
+    subgraph sense ["Sense · fertig in ROS 2"]
+        L["LiDAR-Treiber"]
+        K["Kamera-Treiber"]
+    end
+    subgraph think ["Think · Ihre Aufgabe"]
+        F["Ihre Fahrlogik<br/>Spur und Ampel"]
+    end
+    subgraph act ["Act · fertig in ROS 2"]
+        M["Motortreiber"]
+    end
+    L -- "/scan" --> F
+    K -- "/image" --> F
+    F -- "/cmd_vel" --> M
 ```
 
 **ROS 2 liefert:**

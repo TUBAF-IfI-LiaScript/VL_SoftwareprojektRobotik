@@ -238,12 +238,20 @@
    "vl": 6,
    "key": "p1",
    "label": "P 1",
-   "datei": null,
+   "datei": "exercises/praktikum_01_turtlebot/README.md",
    "datum": "2026-11-23",
-   "kurz": "ROS 2 + Bags",
-   "status": "geplant",
+   "kurz": "TurtleBot + Bags",
+   "status": "ausgearbeitet",
    "block": 1,
-   "abschnitte": []
+   "abschnitte": [
+    "Praktikum 1: TurtleBot in Betrieb nehmen",
+    "Vorbereitung und Sicherheit",
+    "A: Verbinden",
+    "B: Den Roboter untersuchen",
+    "C: Fahren und Sensordaten ansehen",
+    "D: Eine Fahrt aufzeichnen",
+    "Abnahme"
+   ]
   },
   {
    "vl": 7,

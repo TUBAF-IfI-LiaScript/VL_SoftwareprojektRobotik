@@ -7,6 +7,7 @@ language: de
 narrator: Deutsch Female
 
 import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/config.md
+          https://raw.githubusercontent.com/liaTemplates/mermaid_template/master/README.md
           https://github.com/liascript/CodeRunner
 
 @bash:      @LIA.eval(`["main.sh"]`, `none`, `bash main.sh`)
@@ -62,13 +63,9 @@ In der Robotik kommen Sie am Terminal nicht vorbei. Der TurtleBot hat keinen Bil
 
 Erinnern Sie sich an VL 1: Sense, Think und Act sind beim TurtleBot getrennte Programme — Kameratreiber, Spurerkennung, Motorsteuerung. Unter Linux ist jedes davon ein **Prozess**, den Sie aus einem Terminal starten, beobachten und beenden. Und jedes liest seine Einstellungen aus der **Umgebung** dieses Terminals. Genau darum geht es heute.
 
-```ascii
-  +-------------------+          ssh / ROS 2 (DDS)          +---------------------+
-  | Ihr Laptop        |  <------------------------------->  | TurtleBot 3         |
-  | Terminal 1: rviz2 |                                     | Raspberry Pi        |
-  | Terminal 2: Ihr   |                                     | kein Bildschirm,    |
-  |   ROS-Knoten      |                                     | nur Terminal        |
-  +-------------------+                                     +---------------------+
+```mermaid @mermaid
+graph LR
+    L["Ihr Laptop<br/>Terminal 1: rviz2<br/>Terminal 2: Ihr ROS-Knoten"] <-- "ssh / ROS 2" --> T["TurtleBot 3<br/>Raspberry Pi<br/>kein Bildschirm, nur Terminal"]
 ```
 
 **Begriffe**

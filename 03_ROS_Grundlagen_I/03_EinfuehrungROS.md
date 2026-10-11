@@ -7,6 +7,7 @@ language: de
 narrator: Deutsch Female
 
 import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/config.md
+          https://raw.githubusercontent.com/liaTemplates/mermaid_template/master/README.md
   
 -->
 
@@ -162,27 +163,16 @@ Sie programmieren nur gegen die oberste Schicht, rclcpp oder rclpy. Was darunter
 
 Wie schafft ROS 2 es, dass ein Python-Programm auf dem Laptop und ein C++-Programm auf dem Roboter miteinander reden? Durch Schichten: Ihr Programm spricht nur mit der obersten, alles darunter ist austauschbar.
 
-<!--
-style="width: 100%; max-width: 820px;"
--->
-```ascii
-
-              User Applications
-+---------+---------+---------+
-| rclcpp  | rclpy   | rcljava | ...
-+---------+---------+---------+-----------------------------+
-| rcl (C API) ROS client library interface                  |
-| Services, Parameters, Time, Names ...                     |
-+-----------------------------------------------------------+
-| rmw (C API) ROS middleware interface                      |
-| Pub/Sub, Services, Discovery, ...                         |
-+-----------+-----------+-------------+-----+---------------+
-| rmw_      | rmw_      | rmw_        | ... | Intra-process |
-| fastrtps  | cyclonedds| zenoh       |     |      API      |
-+-----------+-----------+-------------+     +---------------+
-| Fast DDS  | Cyclone   | Zenoh       | ...
-| eProsima  | DDS       | (kein DDS)  |
-+-----------+-----------+-------------+                                        .
+```mermaid @mermaid
+graph TD
+    APP["Ihre Programme (User Applications)"] --> CPP["rclcpp (C++)"]
+    APP --> PY["rclpy (Python)"]
+    CPP --> RCL["rcl: gemeinsame Schnittstelle<br/>Services, Parameter, Zeit, Namen"]
+    PY --> RCL
+    RCL --> RMW["rmw: Middleware-Schnittstelle<br/>Pub/Sub, Services, Discovery"]
+    RMW --> F1["rmw_fastrtps<br/>Fast DDS (Standard)"]
+    RMW --> F2["rmw_cyclonedds<br/>Cyclone DDS"]
+    RMW --> F3["rmw_zenoh<br/>Zenoh"]
 ```
 
 > **Merkkasten: Ebenen der ROS-2-Architektur**
@@ -232,19 +222,14 @@ Jetzt kommen die drei Begriffe, die Sie heute mitnehmen müssen: Knoten, Topics 
 
 **Topics** - Ein Topic ist ein benannter Kanal, vergleichbar mit einem Radiosender. Knoten, die Daten liefern, **veröffentlichen** (_publish_) auf diesem Kanal; Knoten, die Daten brauchen, **abonnieren** ihn (_subscribe_). Dieses Muster heißt _Publish-Subscribe_. Sender und Empfänger müssen sich nicht kennen, allein der Name des Topics verbindet sie. Topics sind für fortlaufende Datenströme in eine Richtung gedacht — wer eine Antwort auf eine Anfrage braucht, verwendet einen _Service_ (siehe unten).
 
-<!--
-style="width: 80%; max-width: 860px; display: block; margin-left: auto; margin-right: auto;"
--->
-```ascii
-+----------------+   /scan                                 +---------------+
-| LiDAR-Treiber  |---------------------------------------->|               |
-+----------------+                                         |               |
-                                +----------------+  /lane  | Fahrverhalten |   /cmd_vel   +----------------+
-+----------------+   /image  +->| Spurerkennung  |-------->|               |------------->| Motorsteuerung |
-| Kamera-Treiber |-----------+  +----------------+         |               |              +----------------+
-+----------------+           |  +----------------+  /light |               |
-                             +->| Ampelerkennung |-------->|               |
-                                +----------------+         +---------------+
+```mermaid @mermaid
+graph LR
+    L["LiDAR-Treiber"] -- "/scan" --> F["Fahrverhalten"]
+    K["Kamera-Treiber"] -- "/image" --> S["Spurerkennung"]
+    K -- "/image" --> A["Ampelerkennung"]
+    S -- "/lane" --> F
+    A -- "/light" --> F
+    F -- "/cmd_vel" --> M["Motorsteuerung"]
 ```
 
 Das Beispiel zeigt einen Ausschnitt, wie er in unserem Projekt entstehen könnte. Jeder Pfeil ist ein Topic, jeder Kasten ein Knoten. Ein Topic kann mehrere Abonnenten haben: `/image` geht an die Spurerkennung und an die Ampelerkennung. Kein Sender weiß, wer seine Daten liest — deshalb lässt sich ein neuer Knoten wie die Ampelerkennung ergänzen, ohne die übrigen zu ändern.
@@ -348,15 +333,9 @@ Wir lesen jetzt Code. Ziel ist nicht, jede Zeile C++ selbst schreiben zu können
 
 Wir lesen das „Hello World“-Beispiel der ROS-Community: zwei einfache Knoten, `minimal_publisher` und `minimal_subscriber`. Ziel ist nicht, jede Zeile C++ selbst schreiben zu können, sondern die **Struktur** eines Knotens zu erkennen — Sie finden sie in jedem ROS-2-Programm wieder, auch in Ihrer späteren Spurerkennung.
 
-<!--
-style="width: 90%; max-width: 860px; display: block; margin-left: auto; margin-right: auto;"
--->
-```ascii
-
-+-------------------+       .---------------.       +--------------------+
-| minimal_publisher | ----> | Message       | ----> | minimal_subscriber |
-+-------------------+       |  string  data |       +--------------------+
-                            .---------------.
+```mermaid @mermaid
+graph LR
+    P["minimal_publisher"] -- "/topic · std_msgs/msg/String" --> S["minimal_subscriber"]
 ```
 
 Eine ausführliche Kommentierung eines ähnlichen Codes findet sich im Tutorial [Writing a simple publisher and subscriber (C++)](https://docs.ros.org/en/jazzy/Tutorials/Beginner-Client-Libraries/Writing-A-Simple-Cpp-Publisher-And-Subscriber.html) der ROS-2-Dokumentation.

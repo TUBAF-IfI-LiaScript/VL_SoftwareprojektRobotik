@@ -434,6 +434,8 @@ Nützlich ist das, wenn der Simulator **nicht** läuft: Dann liefert die Aufnahm
 
 </details>
 
+Wie viele Daten ein Topic pro Sekunde erzeugt, misst `ros2 topic bw /turtle1/pose` — so schätzen Sie vor einer Aufnahme ab, wie groß sie wird.
+
 Weitere nützliche Optionen: `ros2 bag play fahrt --rate 2.0` spielt doppelt so schnell ab, `--loop` wiederholt die Aufnahme, und `ros2 bag record -a` nimmt **alle** Topics auf — beim Roboter mit Kamera ist das selten eine gute Idee.
 
 ## Selbsttest und Ausblick

@@ -34,7 +34,7 @@ T = [
     ("04",  "VL",    "2026-11-02", "ROS 2 Pakete",        "04_ROS_Pakete_Tools/04_ROS_Pakete.md",                 "ausgearbeitet", 1),
     ("ue2", "Ü 2",   "2026-11-09", "ROS 2 Werkzeuge",     "exercises/exercise_00b_ros2_werkzeuge/README.md",     "ausgearbeitet", 1),
     ("02",  "VL",    "2026-11-09", "Koordinaten + QoS",   "02_Koordinatensysteme/02_Koordinatentransformation.md", "ausgearbeitet", 1),
-    ("p1",  "P 1",   "2026-11-23", "ROS 2 + Bags",        None, "geplant", 1),
+    ("p1",  "P 1",   "2026-11-23", "TurtleBot + Bags",    "exercises/praktikum_01_turtlebot/README.md",          "ausgearbeitet", 1),
     ("01",  "VL",    "2026-11-30", "Sensorik",            "01_Sensorik/01_Sensorik.md",                           "Bestand", 2),
     ("05",  "VL",    "2026-12-07", "Bildverarbeitung",    "05_Bildverarbeitung/05_Bildverarbeitung.md",           "Bestand", 2),
     ("06",  "VL",    "2026-12-07", "Kamera",              "06_Kamera_Stereo/06_Kamera_Stereo.md",                 "Bestand", 2),
