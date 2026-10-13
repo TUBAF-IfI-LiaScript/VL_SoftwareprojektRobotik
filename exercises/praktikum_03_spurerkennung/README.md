@@ -82,7 +82,7 @@ Warum 30 cm voraus und nicht an der Radachse? Ein Fahrer schaut auch nach vorn, 
 
 **Ziel im Projekt:** Ihr TurtleBot erkennt die Fahrspur im Kamerabild.
 
-**Block 2 · Sensorgrundlagen** – Termin 15 von 32, heute markiert mit ▶
+**Block 2 · Sensorgrundlagen** – Termin 15 von 32, heute farbig markiert
 
 <!-- data-type="none" -->
 | Woche ab | Vorlesung | Übung | Praktikum |
@@ -92,7 +92,7 @@ Warum 30 cm voraus und nicht an der Radachse? Ein Fahrer schaut auch nach vorn, 
 | 14.12.2026 | VL 8 LiDAR |  |  |
 | 4.1.2027 |  | Ü 3 Datenvisualisierung |  |
 | 11.1.2027 |  | Ü 4 Kameradaten | [P 2 Bildkorrektur](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_02_bildkorrektur/README.md) |
-| **18.1.2027** |  |  | **▶ [P 3 Spurerkennung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_03_spurerkennung/README.md)** |
+| **18.1.2027**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> |  |  | **[P 3 Spurerkennung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_03_spurerkennung/README.md)**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> |
 
 - **Sie brauchen:** [Parameter und Parameterdatei](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=paramfile) (Ü 2) · [Schwellwertoperation](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=thresholding) (VL 6) · [Morphologische Operationen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=morphologie) (VL 6) · [Draufsicht (Vogelperspektive)](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=draufsicht) (VL 7) · [Vorausschau](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=vorausschau) (VL 7)
 - **Heute:** anwenden, nichts Neues – Ihre Arbeit hier ist die Prüfungsleistung

@@ -467,6 +467,9 @@ def begriff_link(i, mit_termin=True):
     zusatz = f" ({t[1]})" if mit_termin else ""
     return f"[{name_of[i].replace('_', chr(92) + '_')}]({KARTE_URL}#begriff={i}){zusatz}"
 
+# Markierung des heutigen Termins: fett und farbig hinterlegt (LiaScript-Stilkommentar; GitHub zeigt nur fett)
+HEUTE = '<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" -->'
+
 def blocktabelle(key):
     """Wochenraster des aktuellen Blocks: Zeilen = Wochen, Spalten = Vorlesung/Übung/Praktikum."""
     blk = T[IDX[key]][6]
@@ -475,11 +478,11 @@ def blocktabelle(key):
         text = f"{t[1]} {t[3]}"
         if t[4]:
             text = f"[{text}]({KURS['basis']}{t[4]})"
-        return f"**▶ {text}**" if t[0] == key else text
+        return f"**{text}**{HEUTE}" if t[0] == key else text
     z = ["<!-- data-type=\"none\" -->", "| Woche ab | Vorlesung | Übung | Praktikum |", "| :-- | :-- | :-- | :-- |"]
     for w in wochen:
         spalten = [[zelle(t) for t in T if t[2] == w and t[6] == blk and t[1].startswith(art)] for art in ("VL", "Ü", "P")]
-        tag = f"**{datum(w)}**" if w == T[IDX[key]][2] else datum(w)
+        tag = f"**{datum(w)}**{HEUTE}" if w == T[IDX[key]][2] else datum(w)
         z.append(f"| {tag} | " + " | ".join("<br>".join(c) for c in spalten) + " |")
     return z
 
@@ -510,7 +513,7 @@ def wo_stehen_wir(key):
             sprech += " Neu sind heute: " + ", ".join(name_of[x] for x in heute) + "."
         z += ["    --{{0}}--", sprech, ""]
     z += [f"**Ziel im Projekt:** {PROJEKTZIEL[key]}", "",
-          f"**{BLOECKE[t[6]]}** – Termin {i + 1} von {len(T)}, heute markiert mit ▶", ""]
+          f"**{BLOECKE[t[6]]}** – Termin {i + 1} von {len(T)}, heute farbig markiert", ""]
     z += blocktabelle(key) + [""]
     if brauchen:
         z.append("- **Sie brauchen:** " + " · ".join(begriff_link(x) for x in brauchen))
