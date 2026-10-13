@@ -520,7 +520,8 @@ def wo_stehen_wir(key):
         z.append("- **Heute:** anwenden, nichts Neues – Ihre Arbeit hier ist die Prüfungsleistung")
     elif heute:
         z.append("- **Heute neu:** " + " · ".join(begriff_link(x, False) for x in heute))
-    z += ["", f"[🗺️ Ganze Kurslandkarte öffnen]({KARTE_URL}#termin={key}) – dort finden Sie jeden Begriff mit Erklärung, typischer Stolperfalle, Link auf die passende Folie und die roten Fäden durch die Veranstaltung.",
+    z += ["", "> [!TIP]",
+          f"> **Tipp – Kurslandkarte:** [Ganze Kurslandkarte öffnen]({KARTE_URL}#termin={key}) – dort finden Sie jeden Begriff mit Erklärung, typischer Stolperfalle, Link auf die passende Folie und die roten Fäden durch die Veranstaltung.",
           "", MARKE["wo"][1]]
     return "\n".join(z)
 
