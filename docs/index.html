@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Sebastian Zug & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent">
+<title>Robotik: Kursübersicht</title>
+<style>
+:root { --bg: #f6f7f5; --fg: #1d2427; --muted: #5b6669; --line: #d5dad6; --accent: #0f6e6e; --neu: #1f7a3a; }
+@media (prefers-color-scheme: dark) { :root { --bg: #141a1b; --fg: #e4eae8; --muted: #9aa7a6; --line: #2d3a3b; --accent: #5cc2c2; --neu: #6fcf8a; } }
+body { margin: 0; padding: 24px 16px 48px; background: var(--bg); color: var(--fg); font: 16px/1.5 system-ui, "Segoe UI", sans-serif; }
+main { max-width: 860px; margin: 0 auto; }
+h1 { margin: 0 0 4px; font-size: 1.8rem; }
+h2 { margin: 32px 0 8px; font-size: 1.15rem; }
+a { color: var(--accent); }
+.karte { display: inline-block; margin: 16px 0 8px; padding: 10px 16px; border: 1px solid var(--accent); border-radius: 8px; text-decoration: none; font-weight: 600; }
+table { width: 100%; border-collapse: collapse; font-size: .95rem; table-layout: fixed; }
+th:nth-child(1) { width: 12%; } th:nth-child(2) { width: 16%; } th:nth-child(3) { width: 40%; }
+th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { color: var(--muted); font-weight: 600; }
+td.ausgearbeitet { color: var(--neu); }
+td.Bestand, td.geplant { color: var(--muted); }
+.fuss { margin-top: 32px; color: var(--muted); font-size: .85rem; }
+@media (max-width: 600px) { th:nth-child(2), td:nth-child(2) { display: none; } th:nth-child(1) { width: 18%; } th:nth-child(3) { width: 45%; } }
+</style>
+</head>
+<body>
+<main>
+<h1>Robotik – Vorlesung, Übung und Praktikum</h1>
+<p>TU Bergakademie Freiberg · WiSe 2026/27 und SoSe 2027 · Projektaufgabe: Ein TurtleBot fährt autonom durch eine Miniatur-Verkehrswelt.</p>
+<a class="karte" href="kurslandkarte/">🗺️ Kurslandkarte: Begriffe, Zusammenhänge und „Sie sind hier“</a>
+<p>Die Materialien öffnen sich in <a href="https://liascript.github.io">LiaScript</a>. Termine nach dem vorläufigen Zeitplan.</p>
+<h2>Block 1 · ROS-Grundlagen</h2>
+<table>
+<tr><th>Termin</th><th>Woche ab</th><th>Thema</th><th>Stand</th></tr>
+<tr><td>VL 1</td><td>19.10.2026</td><td><a href="https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/00_Einfuehrung/00_Einfuehrung.md">Einführung</a></td><td class="ausgearbeitet">neu 2026/27</td></tr>
+<tr><td>Ü 1</td><td>26.10.2026</td><td><a href="https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/exercise_00_linux_shell/README.md">Linux Shell</a></td><td class="ausgearbeitet">neu 2026/27</td></tr>
+<tr><td>VL 2</td><td>26.10.2026</td><td><a href="https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/03_ROS_Grundlagen_I/03_EinfuehrungROS.md">ROS 2 Grundlagen</a></td><td class="ausgearbeitet">neu 2026/27</td></tr>
+<tr><td>VL 3</td><td>2.11.2026</td><td><a href="https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/04_ROS_Pakete_Tools/04_ROS_Pakete.md">ROS 2 Pakete</a></td><td class="ausgearbeitet">neu 2026/27</td></tr>
+<tr><td>Ü 2</td><td>9.11.2026</td><td><a href="https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/exercise_00b_ros2_werkzeuge/README.md">ROS 2 Werkzeuge</a></td><td class="ausgearbeitet">neu 2026/27</td></tr>
+<tr><td>VL 4</td><td>9.11.2026</td><td><a href="https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/02_Koordinatensysteme/02_Koordinatentransformation.md">Koordinaten + QoS</a></td><td class="ausgearbeitet">neu 2026/27</td></tr>
+<tr><td>P 1</td><td>23.11.2026</td><td><a href="https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_01_turtlebot/README.md">TurtleBot + Bags</a></td><td class="ausgearbeitet">neu 2026/27</td></tr>
+</table>
+<h2>Block 2 · Sensorgrundlagen</h2>
+<table>
+<tr><th>Termin</th><th>Woche ab</th><th>Thema</th><th>Stand</th></tr>
+<tr><td>VL 5</td><td>30.11.2026</td><td><a href="https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/01_Sensorik/01_Sensorik.md">Sensorik</a></td><td class="Bestand">Bestand 2025/26, wird überarbeitet</td></tr>
+<tr><td>VL 6</td><td>7.12.2026</td><td><a href="https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/05_Bildverarbeitung/05_Bildverarbeitung.md">Bildverarbeitung</a></td><td class="Bestand">Bestand 2025/26, wird überarbeitet</td></tr>
+<tr><td>VL 7</td><td>7.12.2026</td><td><a href="https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/06_Kamera_Stereo/06_Kamera_Stereo.md">Kamera + Draufsicht</a></td><td class="ausgearbeitet">neu 2026/27</td></tr>
+<tr><td>VL 8</td><td>14.12.2026</td><td>LiDAR</td><td class="geplant">in Planung</td></tr>
+<tr><td>Ü 3</td><td>4.1.2027</td><td>Datenvisualisierung</td><td class="geplant">in Planung</td></tr>
+<tr><td>Ü 4</td><td>11.1.2027</td><td>Kameradaten</td><td class="geplant">in Planung</td></tr>
+<tr><td>P 2</td><td>11.1.2027</td><td><a href="https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_02_bildkorrektur/README.md">Bildkorrektur</a></td><td class="ausgearbeitet">neu 2026/27</td></tr>
+<tr><td>P 3</td><td>18.1.2027</td><td><a href="https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_03_spurerkennung/README.md">Spurerkennung</a></td><td class="ausgearbeitet">neu 2026/27</td></tr>
+</table>
+<h2>Block 3 · Objekterkennung</h2>
+<table>
+<tr><th>Termin</th><th>Woche ab</th><th>Thema</th><th>Stand</th></tr>
+<tr><td>VL 9</td><td>25.1.2027</td><td><a href="https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/07_Objekterkennung/07_Objekterkennung.md">Objekterkennung</a></td><td class="Bestand">Bestand 2025/26, wird überarbeitet</td></tr>
+<tr><td>VL 10</td><td>25.1.2027</td><td>… in Punktwolken</td><td class="geplant">in Planung</td></tr>
+<tr><td>Ü 5</td><td>1.2.2027</td><td>Objekte im LiDAR</td><td class="geplant">in Planung</td></tr>
+<tr><td>P 4</td><td>8.2.2027</td><td>Hinderniserkennung</td><td class="geplant">in Planung</td></tr>
+<tr><td>Ü 6</td><td>5.4.2027</td><td>YOLO vs. klassisch</td><td class="geplant">in Planung</td></tr>
+</table>
+<h2>Block 4 · Sensorfusion</h2>
+<table>
+<tr><th>Termin</th><th>Woche ab</th><th>Thema</th><th>Stand</th></tr>
+<tr><td>VL 11</td><td>12.4.2027</td><td><a href="https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/08_Sensorfusion_I/08_Datenfusion.md">Sensorfusion I</a></td><td class="Bestand">Bestand 2025/26, wird überarbeitet</td></tr>
+<tr><td>VL 12</td><td>19.4.2027</td><td><a href="https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/09_Sensorfusion_II/09_Sensorfusion_II.md">Sensorfusion II</a></td><td class="Bestand">Bestand 2025/26, wird überarbeitet</td></tr>
+<tr><td>Ü 7</td><td>19.4.2027</td><td>2D-EKF</td><td class="geplant">in Planung</td></tr>
+<tr><td>P 5</td><td>26.4.2027</td><td>Streckenverlauf</td><td class="geplant">in Planung</td></tr>
+</table>
+<h2>Block 5 · Regelung &amp; Navigation</h2>
+<table>
+<tr><th>Termin</th><th>Woche ab</th><th>Thema</th><th>Stand</th></tr>
+<tr><td>VL 13</td><td>3.5.2027</td><td><a href="https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/10_Kinematik_Regelung/10_Kinematik_Regelung.md">Kinematik</a></td><td class="Bestand">Bestand 2025/26, wird überarbeitet</td></tr>
+<tr><td>Ü 8</td><td>3.5.2027</td><td>Reglervergleich</td><td class="geplant">in Planung</td></tr>
+<tr><td>VL 14</td><td>10.5.2027</td><td><a href="https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/11_Navigation/11_Navigation.md">Navigation</a></td><td class="Bestand">Bestand 2025/26, wird überarbeitet</td></tr>
+<tr><td>VL 15</td><td>17.5.2027</td><td>SLAM</td><td class="geplant">in Planung</td></tr>
+<tr><td>Ü 9</td><td>17.5.2027</td><td>Kartenerstellung</td><td class="geplant">in Planung</td></tr>
+<tr><td>P 6</td><td>24.5.2027</td><td>Mapping + Bahnfolge</td><td class="geplant">in Planung</td></tr>
+</table>
+<h2>Block 6 · Praktikum + X</h2>
+<table>
+<tr><th>Termin</th><th>Woche ab</th><th>Thema</th><th>Stand</th></tr>
+<tr><td>P 7</td><td>31.5.2027</td><td>Parken + Abbiegen</td><td class="geplant">in Planung</td></tr>
+<tr><td>P 8</td><td>7.6.2027</td><td>Praktikum + X</td><td class="geplant">in Planung</td></tr>
+</table>
+<p class="fuss">Stand 12.10.2026 · Autoren: Sebastian Zug & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent · Quelle: <a href="https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik">GitHub</a></p>
+</main>
+</body>
+</html>
