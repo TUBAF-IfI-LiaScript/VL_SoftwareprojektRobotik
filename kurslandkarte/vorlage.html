@@ -412,39 +412,7 @@ aside.panel {
 .hint { font-size: 13px; color: var(--muted); }
 footer { font-size: 13px; color: var(--muted); max-width: 70ch; }
 footer p { margin: 0 0 6px; }
-/* ---------- Liste ---------- */
 .today { font: inherit; font-size: 12px; padding: 2px 8px; border: 1px solid var(--faint); border-radius: 4px; background: var(--surface); color: var(--ink); cursor: pointer; }
-.liste { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; min-width: 0; }
-.liste > li.vl {
-  background: var(--surface);
-  border: 1px solid var(--faint);
-  border-radius: 6px;
-  padding: 10px 14px 12px;
-  display: grid;
-  gap: 8px;
-}
-.liste > li.vl.now { border-color: var(--here); box-shadow: inset 4px 0 0 var(--here); }
-.liste > li.vl.future .chips { opacity: .6; }
-.vlhead { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; }
-.vlhead b { font-family: "Barlow Condensed", "Arial Narrow", sans-serif; font-size: 20px; }
-.vlhead .d { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 12px; color: var(--muted); }
-.vlhead .s { font-size: 15px; }
-.vlhead .tag { font-family: "Barlow Condensed", "Arial Narrow", sans-serif; font-weight: 700; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--here); }
-.vlhead .tag.muted { color: var(--muted); }
-.vlhead a { margin-left: auto; font-size: 13px; color: var(--muted); }
-.chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.chips button {
-  font: inherit; font-size: 14px;
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 3px 10px; border-radius: 14px;
-  border: 1px solid var(--faint); background: var(--surface); color: var(--ink); cursor: pointer;
-}
-.chips button i { width: 9px; height: 9px; border-radius: 50%; flex: none; }
-.chips button.detail { font-size: 13px; padding: 2px 8px; color: var(--muted); }
-.chips button.code .n { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 13px; }
-.chips button[aria-pressed="true"] { border-color: var(--ink); box-shadow: 0 0 0 1px var(--ink); font-weight: 700; }
-.chips button:focus-visible { outline: 2px solid var(--here); outline-offset: 2px; }
-.liste .panel { margin-top: 2px; }
 @media (min-width: 981px) {
   aside.panel { position: sticky; top: 12px; max-height: calc(100vh - 24px); overflow-y: auto; }
 }
@@ -463,13 +431,12 @@ footer p { margin: 0 0 6px; }
       <span class="eyebrow">Robotik · Vorlesung, Übung und Praktikum · WiSe 2026/27 und SoSe 2027</span>
       <h1>Kurslandkarte</h1>
       <span class="sample">Stand %%STAND%% · <span id="count"></span></span>
-      <a class="feedback" href="https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/issues/new?title=Kurslandkarte%3A%20&amp;labels=kurslandkarte" target="_blank" rel="noopener">Fehler oder Wunsch melden (GitHub) ↗</a>
+      <a class="feedback" href="../">← Alle Termine auf einen Blick</a> · <a class="feedback" href="https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/issues/new?title=Kurslandkarte%3A%20&amp;labels=kurslandkarte" target="_blank" rel="noopener">Fehler oder Wunsch melden (GitHub) ↗</a>
     </div>
     <div class="controls">
       <div class="control">
         <span class="lbl" id="modeLbl">Variante</span>
         <div class="seg" role="group" aria-labelledby="modeLbl">
-          <button id="mListe" aria-pressed="false">Termine</button>
           <button id="mMetro" aria-pressed="true">Metrokarte</button>
           <button id="mZeit" aria-pressed="false">Zeitleiste</button>
         </div>
@@ -508,13 +475,12 @@ footer p { margin: 0 0 6px; }
         <svg id="map" role="img" aria-labelledby="mapTitle"><title id="mapTitle">Kurslandkarte: Begriffe der Veranstaltung über alle Termine</title></svg>
       </div>
     </div>
-    <ol class="liste" id="liste" hidden></ol>
     <aside class="panel" id="panel" aria-live="polite"></aside>
   </div>
 
   <footer>
     <p><strong>Wozu die Karte?</strong> Sie zeigt, welche Begriffe in welchem Termin — Vorlesung (VL), Übung (Ü) oder Praktikum (P) — neu dazukommen und worauf sie aufbauen. Ein Klick auf einen Begriff erklärt ihn in einem Satz, nennt die typische Stolperfalle und führt direkt zur passenden Folie. Begriffe aus kommenden Terminen erscheinen blass. Die Termine folgen dem vorläufigen Zeitplan. „Sie sind hier“ richtet sich nach dem heutigen Datum, mit dem Schieberegler können Sie vor- und zurückblättern.</p>
-    <p><strong>Termine:</strong> alle Termine untereinander, mit ihren Begriffen. <strong>Metrokarte:</strong> Jede Linie ist ein roter Faden durch die Veranstaltung, jede Station baut auf der vorigen auf. Weiße Stationen mit dunklem Rand liegen auf mehreren Fäden. <strong>Zeitleiste:</strong> alle Begriffe nach Themengebiet, mit ihren Verbindungen. Große Punkte sind Kernbegriffe, kleine Detailbegriffe.</p>
+    <p><strong>Metrokarte:</strong> Jede Linie ist ein roter Faden durch die Veranstaltung, jede Station baut auf der vorigen auf. Weiße Stationen mit dunklem Rand liegen auf mehreren Fäden. <strong>Zeitleiste:</strong> alle Begriffe nach Themengebiet, mit ihren Verbindungen. Große Punkte sind Kernbegriffe, kleine Detailbegriffe.</p>
     <p><strong>Autoren:</strong> Sebastian Zug &amp; Claude Code (Opus 5.5) mit <a href="https://github.com/LiaScript/teaching-agent" target="_blank" rel="noopener">LiaScript Teaching-Agent</a>. Begriffe, Erklärungen und Fäden wurden KI-gestützt aus den Materialien erstellt und werden redaktionell geprüft.</p>
   </footer>
 </div>
@@ -527,7 +493,7 @@ const DATA = JSON.parse(document.getElementById("kartendaten").textContent);
 const BASE = DATA.kurs.basis;
 const LECTURES = DATA.vorlesungen.map(v => {
   const [y, m, d] = v.datum.split("-");
-  return { nr: String(v.vl).padStart(2, "0"), label: v.label, iso: v.datum, date: `${d}.${m}.${String(y).slice(2)}`, short: v.kurz, file: v.datei, status: v.status, sections: v.abschnitte };
+  return { nr: String(v.vl).padStart(2, "0"), label: v.label, iso: v.datum, date: `${d}.${m}.${String(y).slice(2)}`, short: v.kurz, file: v.datei, status: v.status, sections: v.abschnitte, block: v.block };
 });
 // Aktueller Termin: der letzte, dessen Datum erreicht ist (vor Semesterbeginn: der erste)
 const TODAY = new Date().toISOString().slice(0, 10);
@@ -555,11 +521,11 @@ const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v
 const reduce = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 const narrow = () => matchMedia("(max-width: 980px)").matches;
-const state = { mode: narrow() ? "liste" : "metro", here: HERE_TODAY, view: "nb", detail: false, sel: null, thread: null, hidden: new Set() };
+const state = { mode: "metro", here: HERE_TODAY, view: "nb", detail: false, sel: null, thread: null, hidden: new Set() };
 try {
   const saved = JSON.parse(localStorage.getItem(DATA.kurs.speicher) || "{}");
   if (typeof saved.detail === "boolean") state.detail = saved.detail;
-  if (["liste", "metro", "zeit"].includes(saved.mode)) state.mode = saved.mode;
+  if (["metro", "zeit"].includes(saved.mode)) state.mode = saved.mode;
 } catch (e) {}
 // „Sie sind hier“ wird bewusst nicht gespeichert: Es folgt immer dem Datum.
 function save() { try { localStorage.setItem(DATA.kurs.speicher, JSON.stringify({ detail: state.detail, mode: state.mode })); } catch (e) {} }
@@ -772,39 +738,6 @@ function drawMetro() {
 }
 
 
-/* ---------- Liste ---------- */
-function drawListe() {
-  const ol = $("#liste");
-  ol.innerHTML = "";
-  LECTURES.forEach((lec, v) => {
-    const items = ALL.filter(n => n.vl === v && !state.hidden.has(n.line) && (state.detail || n.level === 1 || n.id === state.sel))
-      .sort((a, b) => a.level - b.level || a.sec - b.sec);
-    const li = document.createElement("li");
-    li.className = "vl" + (v === state.here ? " now" : v > state.here ? " future" : "");
-    li.dataset.vl = v;
-    const tag = v === state.here
-      ? (BEFORE_START && v === HERE_TODAY ? `<span class="tag">Start am ${lec.date}</span>` : `<span class="tag">Sie sind hier</span>`)
-      : lec.status === "Bestand" ? `<span class="tag muted">Bestand 25/26</span>` : lec.status !== "ausgearbeitet" ? `<span class="tag muted">in Vorbereitung</span>` : "";
-    li.innerHTML = `<div class="vlhead"><b>${lec.label}</b><span class="d">${lec.date}</span><span class="s">${lec.short}</span>${tag}
-      ${lec.file ? `<a href="${BASE + lec.file}" target="_blank" rel="noopener">Material ↗</a>` : ""}</div>
-      <div class="chips">${items.map(n => `<button data-id="${n.id}" class="${n.level === 2 ? "detail" : ""}${n.code ? " code" : ""}" aria-pressed="${n.id === state.sel}"><i style="background:${css(lineById[n.line].v)}"></i><span class="n">${n.name}</span></button>`).join("") || '<span class="hint">keine Begriffe in den gewählten Gebieten</span>'}</div>`;
-    li.querySelectorAll(".chips button").forEach(b => b.addEventListener("click", () => {
-      if (state.sel === b.dataset.id && narrow()) { state.sel = null; render(); return; }
-      select(b.dataset.id);
-      if (narrow()) $("#panel").scrollIntoView({ block: "nearest", behavior: reduce() ? "auto" : "smooth" });
-    }));
-    ol.appendChild(li);
-  });
-}
-function placePanel() {
-  const panel = $("#panel"), stage = $(".stage");
-  const inline = state.mode === "liste" && narrow() && state.sel;
-  if (inline) {
-    const li = $(`#liste li.vl[data-vl="${byId[state.sel].vl}"]`);
-    if (panel.parentNode !== li) li.appendChild(panel);
-  } else if (panel.parentNode !== stage) stage.appendChild(panel);
-  panel.hidden = state.mode === "liste" && narrow() && !state.sel;
-}
 function defaultSel() {
   const cand = ALL.filter(n => n.level === 1 && n.vl === state.here && (state.mode !== "metro" || threadsOf[n.id]));
   return cand.length ? cand[0].id : null;
@@ -854,8 +787,8 @@ function renderPanel() {
     ${back.length ? `<h3>Baut auf</h3><ul class="rels">${back.map(r => relItem(r, "←")).join("")}</ul>` : ""}
     ${fwd.length ? `<h3>Führt weiter zu</h3><ul class="rels">${fwd.map(r => relItem(r, "→")).join("")}</ul>` : ""}
     <div class="goto">
-      <span class="hint">Eingeführt in Abschnitt ${n.sec}: ${lec.sections[n.sec - 1] || ""}${lec.status === "Bestand" ? " — Material aus 2025/26, wird überarbeitet" : lec.status !== "ausgearbeitet" ? " — in Vorbereitung" : ""}</span>
-      <a class="golink" href="${BASE + lec.file}#${n.sec}" target="_blank" rel="noopener">Zu ${lec.label}, Abschnitt ${n.sec} ↗</a>
+      ${lec.file && n.sec ? `<span class="hint">Eingeführt in Abschnitt ${n.sec}: ${lec.sections[n.sec - 1] || ""}${lec.status === "Bestand" ? " — Material aus 2025/26, wird überarbeitet" : lec.status !== "ausgearbeitet" ? " — in Vorbereitung" : ""}</span>
+      <a class="golink" href="${BASE + lec.file}#${n.sec}" target="_blank" rel="noopener">Zu ${lec.label}, Abschnitt ${n.sec} ↗</a>` : `<span class="hint">Kommt in ${lec.label} — Material folgt.</span>`}
     </div>`;
   p.querySelectorAll(".rels button, .hop button").forEach(b => b.addEventListener("click", () => select(b.dataset.id, true)));
 }
@@ -896,38 +829,30 @@ function render() {
   $("#hereVal").textContent = `${lec.label} · ${lec.date}`;
   $("#here").value = state.here;
   $("#today").hidden = state.here === HERE_TODAY;
-  const pressed = [["mListe", state.mode === "liste"], ["mMetro", state.mode === "metro"], ["mZeit", state.mode === "zeit"], ["vNb", state.view === "nb"], ["vAll", state.view === "all"], ["eKern", !state.detail], ["eAlle", state.detail]];
+  const pressed = [["mMetro", state.mode === "metro"], ["mZeit", state.mode === "zeit"], ["vNb", state.view === "nb"], ["vAll", state.view === "all"], ["eKern", !state.detail], ["eAlle", state.detail]];
   for (const [id, on] of pressed) $("#" + id).setAttribute("aria-pressed", String(on));
   $("#ctlLevel").hidden = state.mode === "metro";
   $("#ctlEdges").hidden = state.mode !== "zeit";
-  $("#mapwrap").hidden = state.mode === "liste";
-  $("#liste").hidden = state.mode !== "liste";
   const nStations = new Set(THREADS.flatMap(t => t.st)).size;
   $("#count").textContent = state.mode === "metro"
     ? `${THREADS.length} Fäden · ${nStations} Stationen`
     : state.detail ? `${ALL.length} Begriffe · ${EDGES.length} Beziehungen` : `${ALL.filter(n => n.level === 1).length} Kernbegriffe von ${ALL.length}`;
-  if (state.mode === "liste") drawListe();
-  else {
-    if (state.mode === "metro") layoutMetro(); else layoutZeit();
-    setSize();
-    drawBackground();
-    if (state.mode === "metro") drawMetro(); else drawZeit();
-  }
-  placePanel(); renderPanel(); renderLegend();
+  if (state.mode === "metro") layoutMetro(); else layoutZeit();
+  setSize();
+  drawBackground();
+  if (state.mode === "metro") drawMetro(); else drawZeit();
+  renderPanel(); renderLegend();
 }
 
 $("#here").addEventListener("input", (e) => {
   state.here = +e.target.value; render();
-  if (state.mode === "liste") return;
   const box = $("#mapbox"), hx = COL * state.here;
   if (hx < box.scrollLeft || hx + COL > box.scrollLeft + box.clientWidth) box.scrollLeft = hx - box.clientWidth / 2;
 });
 function scrollToHere() {
-  if (state.mode === "liste") { const now = $(`#liste li.vl[data-vl="${state.here}"]`); if (now && state.here > 0) now.scrollIntoView({ block: "start" }); return; }
   const box = $("#mapbox"), hx = COL * state.here;
   box.scrollLeft = hx + COL > box.clientWidth ? hx - box.clientWidth / 2 : 0;
 }
-$("#mListe").addEventListener("click", () => { state.mode = "liste"; state.thread = null; save(); render(); });
 $("#mMetro").addEventListener("click", () => { state.mode = "metro"; if (!state.sel || !threadsOf[state.sel]) state.sel = defaultSel(); save(); render(); scrollToHere(); });
 $("#mZeit").addEventListener("click", () => { state.mode = "zeit"; state.thread = null; if (!state.sel) state.sel = defaultSel(); save(); render(); scrollToHere(); });
 $("#today").addEventListener("click", () => { state.here = HERE_TODAY; render(); scrollToHere(); });
@@ -942,7 +867,7 @@ new MutationObserver(render).observe(document.documentElement, { attributes: tru
 const LINK = new URLSearchParams(location.hash.slice(1));
 const KEYS = DATA.vorlesungen.map(v => v.key);
 if (KEYS.includes(LINK.get("termin"))) state.here = KEYS.indexOf(LINK.get("termin"));
-if (!(state.mode === "liste" && narrow())) state.sel = defaultSel();
+state.sel = defaultSel();
 if (byId[LINK.get("begriff")]) { state.sel = LINK.get("begriff"); if (byId[state.sel].level > 1) state.detail = true; }
 let lastW = innerWidth;  // nur auf Breitenänderung reagieren (mobile Adressleiste ändert die Höhe)
 addEventListener("resize", () => { if (innerWidth === lastW) return; lastW = innerWidth; clearTimeout(window._rs); window._rs = setTimeout(render, 150); });

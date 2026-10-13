@@ -412,39 +412,7 @@ aside.panel {
 .hint { font-size: 13px; color: var(--muted); }
 footer { font-size: 13px; color: var(--muted); max-width: 70ch; }
 footer p { margin: 0 0 6px; }
-/* ---------- Liste ---------- */
 .today { font: inherit; font-size: 12px; padding: 2px 8px; border: 1px solid var(--faint); border-radius: 4px; background: var(--surface); color: var(--ink); cursor: pointer; }
-.liste { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; min-width: 0; }
-.liste > li.vl {
-  background: var(--surface);
-  border: 1px solid var(--faint);
-  border-radius: 6px;
-  padding: 10px 14px 12px;
-  display: grid;
-  gap: 8px;
-}
-.liste > li.vl.now { border-color: var(--here); box-shadow: inset 4px 0 0 var(--here); }
-.liste > li.vl.future .chips { opacity: .6; }
-.vlhead { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; }
-.vlhead b { font-family: "Barlow Condensed", "Arial Narrow", sans-serif; font-size: 20px; }
-.vlhead .d { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 12px; color: var(--muted); }
-.vlhead .s { font-size: 15px; }
-.vlhead .tag { font-family: "Barlow Condensed", "Arial Narrow", sans-serif; font-weight: 700; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--here); }
-.vlhead .tag.muted { color: var(--muted); }
-.vlhead a { margin-left: auto; font-size: 13px; color: var(--muted); }
-.chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.chips button {
-  font: inherit; font-size: 14px;
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 3px 10px; border-radius: 14px;
-  border: 1px solid var(--faint); background: var(--surface); color: var(--ink); cursor: pointer;
-}
-.chips button i { width: 9px; height: 9px; border-radius: 50%; flex: none; }
-.chips button.detail { font-size: 13px; padding: 2px 8px; color: var(--muted); }
-.chips button.code .n { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 13px; }
-.chips button[aria-pressed="true"] { border-color: var(--ink); box-shadow: 0 0 0 1px var(--ink); font-weight: 700; }
-.chips button:focus-visible { outline: 2px solid var(--here); outline-offset: 2px; }
-.liste .panel { margin-top: 2px; }
 @media (min-width: 981px) {
   aside.panel { position: sticky; top: 12px; max-height: calc(100vh - 24px); overflow-y: auto; }
 }
@@ -462,14 +430,13 @@ footer p { margin: 0 0 6px; }
     <div class="titleblock">
       <span class="eyebrow">Robotik · Vorlesung, Übung und Praktikum · WiSe 2026/27 und SoSe 2027</span>
       <h1>Kurslandkarte</h1>
-      <span class="sample">Stand 11.10.2026 · <span id="count"></span></span>
-      <a class="feedback" href="https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/issues/new?title=Kurslandkarte%3A%20&amp;labels=kurslandkarte" target="_blank" rel="noopener">Fehler oder Wunsch melden (GitHub) ↗</a>
+      <span class="sample">Stand 13.10.2026 · <span id="count"></span></span>
+      <a class="feedback" href="../">← Alle Termine auf einen Blick</a> · <a class="feedback" href="https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/issues/new?title=Kurslandkarte%3A%20&amp;labels=kurslandkarte" target="_blank" rel="noopener">Fehler oder Wunsch melden (GitHub) ↗</a>
     </div>
     <div class="controls">
       <div class="control">
         <span class="lbl" id="modeLbl">Variante</span>
         <div class="seg" role="group" aria-labelledby="modeLbl">
-          <button id="mListe" aria-pressed="false">Termine</button>
           <button id="mMetro" aria-pressed="true">Metrokarte</button>
           <button id="mZeit" aria-pressed="false">Zeitleiste</button>
         </div>
@@ -508,20 +475,19 @@ footer p { margin: 0 0 6px; }
         <svg id="map" role="img" aria-labelledby="mapTitle"><title id="mapTitle">Kurslandkarte: Begriffe der Veranstaltung über alle Termine</title></svg>
       </div>
     </div>
-    <ol class="liste" id="liste" hidden></ol>
     <aside class="panel" id="panel" aria-live="polite"></aside>
   </div>
 
   <footer>
     <p><strong>Wozu die Karte?</strong> Sie zeigt, welche Begriffe in welchem Termin — Vorlesung (VL), Übung (Ü) oder Praktikum (P) — neu dazukommen und worauf sie aufbauen. Ein Klick auf einen Begriff erklärt ihn in einem Satz, nennt die typische Stolperfalle und führt direkt zur passenden Folie. Begriffe aus kommenden Terminen erscheinen blass. Die Termine folgen dem vorläufigen Zeitplan. „Sie sind hier“ richtet sich nach dem heutigen Datum, mit dem Schieberegler können Sie vor- und zurückblättern.</p>
-    <p><strong>Termine:</strong> alle Termine untereinander, mit ihren Begriffen. <strong>Metrokarte:</strong> Jede Linie ist ein roter Faden durch die Veranstaltung, jede Station baut auf der vorigen auf. Weiße Stationen mit dunklem Rand liegen auf mehreren Fäden. <strong>Zeitleiste:</strong> alle Begriffe nach Themengebiet, mit ihren Verbindungen. Große Punkte sind Kernbegriffe, kleine Detailbegriffe.</p>
+    <p><strong>Metrokarte:</strong> Jede Linie ist ein roter Faden durch die Veranstaltung, jede Station baut auf der vorigen auf. Weiße Stationen mit dunklem Rand liegen auf mehreren Fäden. <strong>Zeitleiste:</strong> alle Begriffe nach Themengebiet, mit ihren Verbindungen. Große Punkte sind Kernbegriffe, kleine Detailbegriffe.</p>
     <p><strong>Autoren:</strong> Sebastian Zug &amp; Claude Code (Opus 5.5) mit <a href="https://github.com/LiaScript/teaching-agent" target="_blank" rel="noopener">LiaScript Teaching-Agent</a>. Begriffe, Erklärungen und Fäden wurden KI-gestützt aus den Materialien erstellt und werden redaktionell geprüft.</p>
   </footer>
 </div>
 
 <script id="kartendaten" type="application/json">
 {
- "stand": "11.10.2026",
+ "stand": "13.10.2026",
  "kurs": {
   "basis": "https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/",
   "speicher": "robotik-map",
@@ -608,6 +574,7 @@ footer p { margin: 0 0 6px; }
    "abschnitte": [
     "Einführung",
     "Wo stehen wir?",
+    "Roter Faden: Projektaufgabe",
     "Unser Ziel: Autonomes Fahren im Miniaturformat",
     "Wie läuft die Veranstaltung ab?",
     "Was ist ein Roboter?",
@@ -634,6 +601,7 @@ footer p { margin: 0 0 6px; }
    "abschnitte": [
     "Übung: OS + Linux Shell",
     "Wo stehen wir?",
+    "Roter Faden: Umgebung im Griff",
     "Warum Terminal?",
     "Wie funktionieren die Beispiele in diesem Skript?",
     "Dateisystem",
@@ -668,6 +636,7 @@ footer p { margin: 0 0 6px; }
    "abschnitte": [
     "Einführung in ROS 2",
     "Wo stehen wir?",
+    "Roter Faden: Vom Knoten zum System",
     "Warum ein Framework?",
     "ROS, was ist das?",
     "Was macht ROS 2 anders?",
@@ -694,6 +663,7 @@ footer p { margin: 0 0 6px; }
    "abschnitte": [
     "ROS 2 Pakete",
     "Wo stehen wir?",
+    "Roter Faden: Vom Knoten zum System",
     "Vom Beispiel zum eigenen Paket",
     "Workspace und Paketstruktur",
     "Bauen mit colcon",
@@ -720,6 +690,7 @@ footer p { margin: 0 0 6px; }
    "abschnitte": [
     "Übung: Werkzeuge von ROS 2",
     "Wo stehen wir?",
+    "Roter Faden: Projektaufgabe",
     "Start: Läuft alles?",
     "Was bietet ein Knoten an?",
     "Services",
@@ -741,6 +712,7 @@ footer p { margin: 0 0 6px; }
    "abschnitte": [
     "Koordinaten und Kommunikationsqualität",
     "Wo stehen wir?",
+    "Roter Faden: Koordinaten überall",
     "Leitfrage: Warum zeigt RViz den Scan nicht?",
     "Bezugssysteme",
     "Pose eines Koordinatensystems in 2D",
@@ -775,6 +747,7 @@ footer p { margin: 0 0 6px; }
    "abschnitte": [
     "Praktikum 1: TurtleBot in Betrieb nehmen",
     "Wo stehen wir?",
+    "Der Weg zum autonomen TurtleBot",
     "Vorbereitung und Sicherheit",
     "A: Verbinden",
     "B: Den Roboter untersuchen",
@@ -862,36 +835,31 @@ footer p { margin: 0 0 6px; }
    "label": "VL 7",
    "datei": "06_Kamera_Stereo/06_Kamera_Stereo.md",
    "datum": "2026-12-07",
-   "kurz": "Kamera",
-   "status": "Bestand",
+   "kurz": "Kamera + Draufsicht",
+   "status": "ausgearbeitet",
    "block": 2,
    "abschnitte": [
-    "Kameramodelle und Stereo-Vision",
-    "Motivation: Von 2D zu 3D",
-    "Das 2D Pinhole-Kameramodell",
-    "Abbildung eines 3D-Punkts auf die Bildebene",
-    "Homogene Koordinaten und Matrixform",
-    "Abweichungen realer Kameras vom Pinhole-Modell",
+    "Kamera: Modell, Kalibrierung, Draufsicht",
+    "Wo stehen wir?",
+    "Roter Faden: Koordinaten überall",
+    "Leitfrage: Wo steht der Roboter auf der Fahrbahn?",
+    "Das Lochkameramodell",
+    "Vom 3D-Punkt zum Pixel",
     "Die Kamera-Matrix K",
-    "Verzerrungsparameter",
-    "Anwendung der intrinsischen Parameter",
+    "Reale Linsen: Verzeichnung",
     "Kamerakalibrierung",
-    "Intrinsische Kalibrierung mit Schachbrettmuster",
-    "Extrinsische Parameter",
-    "Stereo-Vision",
-    "Prinzip der Stereo-Vision",
-    "Vorverarbeitung",
-    "ROS 2 Integration: PointCloud2",
-    "Das PointCloud2-Message-Format",
-    "Kameraparameter in ROS2",
-    "Herausforderungen bei der Arbeit mit Punktwolken",
-    "1. Datenmenge und Performance",
-    "2. Rauschen und Ausreißer",
-    "3. Fehlende Daten (Holes/Gaps)",
-    "4. Koordinatensystem-Transformation",
-    "5. Zeitstempel-Synchronisation",
-    "6. Bewegungsartefakte",
-    "Literatur und Ressourcen"
+    "Ablauf mit dem Schachbrett",
+    "Das Ergebnis lesen: ost.yaml",
+    "Bilder entzerren",
+    "Homographie: vom Bild auf den Boden",
+    "Vier Punktpaare genügen",
+    "Die Draufsicht auf die Fahrbahn",
+    "Welche Richtung rechnet der Code?",
+    "Die Ecken des Bretts: Reihenfolge und Bodenlage",
+    "Grenzen der Draufsicht",
+    "Brücke zu P 3: Abweichung mit Vorausschau",
+    "Zusammenfassung",
+    "Aufgabe der Woche"
    ]
   },
   {
@@ -939,6 +907,7 @@ footer p { margin: 0 0 6px; }
    "abschnitte": [
     "Praktikum 2: Kamerabild korrigieren",
     "Wo stehen wir?",
+    "Der Weg zum autonomen TurtleBot",
     "Vorbereitung zu Hause",
     "Sicherheit, Rollen, Verbinden",
     "A: Kamera kalibrieren",
@@ -960,6 +929,7 @@ footer p { margin: 0 0 6px; }
    "abschnitte": [
     "Praktikum 3: Fahrspur erkennen",
     "Wo stehen wir?",
+    "Der Weg zum autonomen TurtleBot",
     "Vorbereitung zu Hause",
     "Sicherheit, Rollen, Verbinden, Kalibrierung prüfen",
     "A: Kette live starten",
@@ -1280,7 +1250,7 @@ footer p { margin: 0 0 6px; }
    "name": "Projektaufgabe Verkehrswelt",
    "linie": "projekt",
    "vl": 0,
-   "abschnitt": 3,
+   "abschnitt": 4,
    "ebene": 1,
    "code": false,
    "erklaerung": "Ein TurtleBot fährt autonom auf schwarzem Untergrund: Spur folgen, Ampeln und Schilder beachten, Fußgängern ausweichen, einparken.",
@@ -1291,7 +1261,7 @@ footer p { margin: 0 0 6px; }
    "name": "VL, Ü und P",
    "linie": "projekt",
    "vl": 0,
-   "abschnitt": 4,
+   "abschnitt": 5,
    "ebene": 2,
    "code": false,
    "erklaerung": "Vorlesung führt Konzepte ein, Übung festigt sie am eigenen Rechner, Praktikum setzt sie am TurtleBot um — je 90 Minuten.",
@@ -1302,7 +1272,7 @@ footer p { margin: 0 0 6px; }
    "name": "Roboter",
    "linie": "wahrnehmung",
    "vl": 0,
-   "abschnitt": 5,
+   "abschnitt": 6,
    "ebene": 1,
    "code": false,
    "erklaerung": "Keine einheitliche Definition (VDI, RIA, JRA); unsere Arbeitsdefinition: Eine Maschine, die wahrnimmt, entscheidet und handelt — wiederholt und ohne dass ein Mensch jeden Schritt vorgibt.",
@@ -1313,7 +1283,7 @@ footer p { margin: 0 0 6px; }
    "name": "Klassifikation",
    "linie": "wahrnehmung",
    "vl": 0,
-   "abschnitt": 6,
+   "abschnitt": 7,
    "ebene": 2,
    "code": false,
    "erklaerung": "Autonomie, Mobilität und Komplexität der Sensorik sind unabhängige Kriterien.",
@@ -1324,7 +1294,7 @@ footer p { margin: 0 0 6px; }
    "name": "Herausforderungen",
    "linie": "bewegung",
    "vl": 0,
-   "abschnitt": 8,
+   "abschnitt": 9,
    "ebene": 2,
    "code": false,
    "erklaerung": "Positionierung, Kartierung, Hinderniserkennung und Echtzeit — dazu wirtschaftliche und rechtliche Fragen.",
@@ -1335,7 +1305,7 @@ footer p { margin: 0 0 6px; }
    "name": "Sense-Think-Act",
    "linie": "bewegung",
    "vl": 0,
-   "abschnitt": 9,
+   "abschnitt": 10,
    "ebene": 1,
    "code": false,
    "erklaerung": "Kreislauf aus Wahrnehmen, Entscheiden und Handeln; der Schritt Think gliedert sich in Handlungsplanung, Ausführung und reaktive Überwachung.",
@@ -1346,7 +1316,7 @@ footer p { margin: 0 0 6px; }
    "name": "TurtleBot 3 Burger",
    "linie": "projekt",
    "vl": 0,
-   "abschnitt": 10,
+   "abschnitt": 11,
    "ebene": 1,
    "code": false,
    "erklaerung": "Unsere Plattform: RPLIDAR C1, Pi-Kamera, Raspberry Pi 3 B+, Differentialantrieb, maximal 0,22 m/s.",
@@ -1357,7 +1327,7 @@ footer p { margin: 0 0 6px; }
    "name": "Warum ROS?",
    "linie": "ros",
    "vl": 0,
-   "abschnitt": 11,
+   "abschnitt": 12,
    "ebene": 1,
    "code": false,
    "erklaerung": "ROS 2 liefert Kommunikation, wiederverwendbare Pakete und Werkzeuge, damit nicht jedes Team alles neu baut.",
@@ -1368,7 +1338,7 @@ footer p { margin: 0 0 6px; }
    "name": "Terminal & Shell",
    "linie": "werkzeuge",
    "vl": 1,
-   "abschnitt": 3,
+   "abschnitt": 4,
    "ebene": 1,
    "code": false,
    "erklaerung": "Das Terminal zeigt Text, die Shell (bash) interpretiert die Eingaben — der Weg zu ROS 2 und zum TurtleBot.",
@@ -1379,7 +1349,7 @@ footer p { margin: 0 0 6px; }
    "name": "Absolute & relative Pfade",
    "linie": "werkzeuge",
    "vl": 1,
-   "abschnitt": 5,
+   "abschnitt": 6,
    "ebene": 1,
    "code": false,
    "erklaerung": "Absolute Pfade beginnen bei /, relative beim aktuellen Verzeichnis; . und .. stehen für hier und darüber.",
@@ -1390,7 +1360,7 @@ footer p { margin: 0 0 6px; }
    "name": "Pipes & Umleitung",
    "linie": "werkzeuge",
    "vl": 1,
-   "abschnitt": 7,
+   "abschnitt": 8,
    "ebene": 2,
    "code": true,
    "erklaerung": "| reicht die Ausgabe weiter, > und >> schreiben sie in eine Datei — z. B. grep ERROR ros.log | wc -l.",
@@ -1401,7 +1371,7 @@ footer p { margin: 0 0 6px; }
    "name": "Dateirechte",
    "linie": "werkzeuge",
    "vl": 1,
-   "abschnitt": 9,
+   "abschnitt": 10,
    "ebene": 2,
    "code": true,
    "erklaerung": "rwx für Besitzer, Gruppe und andere; chmod +x macht ein Skript ausführbar, chmod 754 setzt Rechte als Zahl.",
@@ -1412,7 +1382,7 @@ footer p { margin: 0 0 6px; }
    "name": "Prozess",
    "linie": "werkzeuge",
    "vl": 1,
-   "abschnitt": 10,
+   "abschnitt": 11,
    "ebene": 2,
    "code": false,
    "erklaerung": "Jedes laufende Programm hat eine PID — jeder ROS-Knoten ist ein eigener Prozess.",
@@ -1423,7 +1393,7 @@ footer p { margin: 0 0 6px; }
    "name": "Umgebungsvariable",
    "linie": "werkzeuge",
    "vl": 1,
-   "abschnitt": 12,
+   "abschnitt": 13,
    "ebene": 1,
    "code": false,
    "erklaerung": "Werte wie PATH oder ROS_DOMAIN_ID, die eine Shell an gestartete Programme weitergibt — nur mit export.",
@@ -1434,7 +1404,7 @@ footer p { margin: 0 0 6px; }
    "name": "PATH",
    "linie": "werkzeuge",
    "vl": 1,
-   "abschnitt": 14,
+   "abschnitt": 15,
    "ebene": 2,
    "code": true,
    "erklaerung": "Die Shell sucht Befehle in den Verzeichnissen aus PATH; fehlt ROS 2 dort: command not found.",
@@ -1445,7 +1415,7 @@ footer p { margin: 0 0 6px; }
    "name": "source",
    "linie": "werkzeuge",
    "vl": 1,
-   "abschnitt": 15,
+   "abschnitt": 16,
    "ebene": 1,
    "code": true,
    "erklaerung": "Führt ein Skript in der aktuellen Shell aus, damit gesetzte Variablen erhalten bleiben — source /opt/ros/jazzy/setup.bash.",
@@ -1456,7 +1426,7 @@ footer p { margin: 0 0 6px; }
    "name": "~/.bashrc",
    "linie": "werkzeuge",
    "vl": 1,
-   "abschnitt": 17,
+   "abschnitt": 18,
    "ebene": 2,
    "code": true,
    "erklaerung": "Wird beim Öffnen jedes Terminals ausgeführt — der Ort für source und ROS_DOMAIN_ID.",
@@ -1467,7 +1437,7 @@ footer p { margin: 0 0 6px; }
    "name": "ssh",
    "linie": "werkzeuge",
    "vl": 1,
-   "abschnitt": 19,
+   "abschnitt": 20,
    "ebene": 2,
    "code": true,
    "erklaerung": "Anmelden auf einem entfernten Rechner, z. B. dem Raspberry Pi des TurtleBots.",
@@ -1610,7 +1580,7 @@ footer p { margin: 0 0 6px; }
    "name": "Bezugskoordinatensystem",
    "linie": "mathe",
    "vl": 5,
-   "abschnitt": 4,
+   "abschnitt": 5,
    "ebene": 1,
    "code": false,
    "erklaerung": "Koordinaten eines Punktes haben nur zusammen mit dem Bezugssystem eine Bedeutung, das als Index angegeben wird (p_A).",
@@ -1621,7 +1591,7 @@ footer p { margin: 0 0 6px; }
    "name": "Translation und Rotation",
    "linie": "mathe",
    "vl": 5,
-   "abschnitt": 5,
+   "abschnitt": 6,
    "ebene": 1,
    "code": false,
    "erklaerung": "Die Pose (Position t, Winkel φ) eines Systems A in O rechnet Punkte um: p_O = R(φ)·p_A + t.",
@@ -1632,7 +1602,7 @@ footer p { margin: 0 0 6px; }
    "name": "Homogene Koordinaten",
    "linie": "mathe",
    "vl": 5,
-   "abschnitt": 6,
+   "abschnitt": 7,
    "ebene": 1,
    "code": false,
    "erklaerung": "Eine zusätzliche Koordinate macht auch die Translation zu einer Matrixmultiplikation.",
@@ -1643,7 +1613,7 @@ footer p { margin: 0 0 6px; }
    "name": "Inverse Transformation",
    "linie": "mathe",
    "vl": 5,
-   "abschnitt": 7,
+   "abschnitt": 8,
    "ebene": 2,
    "code": false,
    "erklaerung": "Die Gegenrichtung braucht keine allgemeine Inversion: T⁻¹ hat Rᵀ als Drehung und −Rᵀt als Verschiebung.",
@@ -1654,7 +1624,7 @@ footer p { margin: 0 0 6px; }
    "name": "Verkettung",
    "linie": "mathe",
    "vl": 5,
-   "abschnitt": 8,
+   "abschnitt": 9,
    "ebene": 1,
    "code": false,
    "erklaerung": "Transformationen entlang einer Frame-Kette (world → base → camera) werden multipliziert; die Reihenfolge ist entscheidend.",
@@ -1665,7 +1635,7 @@ footer p { margin: 0 0 6px; }
    "name": "Euler-Winkel",
    "linie": "mathe",
    "vl": 5,
-   "abschnitt": 11,
+   "abschnitt": 12,
    "ebene": 2,
    "code": false,
    "erklaerung": "Gieren, Nicken und Rollen beschreiben 3D-Rotationen anschaulich, leiden aber unter Gimbal Lock und Mehrdeutigkeit.",
@@ -1676,7 +1646,7 @@ footer p { margin: 0 0 6px; }
    "name": "Quaternion",
    "linie": "mathe",
    "vl": 5,
-   "abschnitt": 12,
+   "abschnitt": 13,
    "ebene": 1,
    "code": false,
    "erklaerung": "Vier Werte (x, y, z, w) beschreiben eine Drehung ohne Gimbal Lock; um die Hochachse gilt q = (0, 0, sin ψ/2, cos ψ/2).",
@@ -1687,7 +1657,7 @@ footer p { margin: 0 0 6px; }
    "name": "tf2",
    "linie": "ros",
    "vl": 5,
-   "abschnitt": 13,
+   "abschnitt": 14,
    "ebene": 1,
    "code": false,
    "erklaerung": "tf2 verwaltet die zeitabhängigen Transformationen zwischen Frames und rechnet Daten zwischen Koordinatensystemen um.",
@@ -1698,7 +1668,7 @@ footer p { margin: 0 0 6px; }
    "name": "Header & frame_id",
    "linie": "ros",
    "vl": 5,
-   "abschnitt": 13,
+   "abschnitt": 14,
    "ebene": 2,
    "code": false,
    "erklaerung": "Jede Sensornachricht trägt einen Header mit Zeitstempel und frame_id, der sie einem Koordinatensystem zuordnet.",
@@ -1709,7 +1679,7 @@ footer p { margin: 0 0 6px; }
    "name": "Statische Transformation",
    "linie": "ros",
    "vl": 5,
-   "abschnitt": 15,
+   "abschnitt": 16,
    "ebene": 2,
    "code": true,
    "erklaerung": "tf2_echo fragt Transformationen ab; feste Relationen wie Sensor zu Roboter veröffentlicht static_transform_publisher (--x … --frame-id …).",
@@ -1720,7 +1690,7 @@ footer p { margin: 0 0 6px; }
    "name": "tf-Baum",
    "linie": "ros",
    "vl": 5,
-   "abschnitt": 14,
+   "abschnitt": 15,
    "ebene": 2,
    "code": false,
    "erklaerung": "Alle Frames bilden einen Baum (map → odom → base_footprint → base_link → base_scan …); tf2 multipliziert entlang des Pfades.",
@@ -1731,7 +1701,7 @@ footer p { margin: 0 0 6px; }
    "name": "URDF",
    "linie": "ros",
    "vl": 5,
-   "abschnitt": 16,
+   "abschnitt": 17,
    "ebene": 2,
    "code": true,
    "erklaerung": "XML-Beschreibung von Links, Joints, Geometrie und Sensoren eines Roboters — und damit seiner statischen Frames.",
@@ -1742,7 +1712,7 @@ footer p { margin: 0 0 6px; }
    "name": "ROS-2-Distribution",
    "linie": "ros",
    "vl": 2,
-   "abschnitt": 4,
+   "abschnitt": 5,
    "ebene": 2,
    "code": true,
    "erklaerung": "Jährlich im Mai erscheint eine Distribution; wir nutzen die LTS-Version Jazzy Jalisco auf Ubuntu 24.04.",
@@ -1753,7 +1723,7 @@ footer p { margin: 0 0 6px; }
    "name": "ROS als Middleware",
    "linie": "ros",
    "vl": 2,
-   "abschnitt": 4,
+   "abschnitt": 5,
    "ebene": 1,
    "code": false,
    "erklaerung": "ROS bietet Hardwareabstraktion, Treiber, Nachrichtenaustausch und Paketverwaltung für verteilte Robotersoftware.",
@@ -1764,7 +1734,7 @@ footer p { margin: 0 0 6px; }
    "name": "DDS / rmw-Schicht",
    "linie": "ros",
    "vl": 2,
-   "abschnitt": 6,
+   "abschnitt": 7,
    "ebene": 1,
    "code": false,
    "erklaerung": "ROS 2 trennt Client-Libraries (rclcpp/rclpy) über die rmw-Schicht von der austauschbaren Middleware — Standard ist Fast DDS, Alternativen sind Cyclone DDS oder Zenoh.",
@@ -1775,7 +1745,7 @@ footer p { margin: 0 0 6px; }
    "name": "Knoten (Node)",
    "linie": "ros",
    "vl": 2,
-   "abschnitt": 7,
+   "abschnitt": 8,
    "ebene": 1,
    "code": false,
    "erklaerung": "Ein Knoten ist ein Teilnehmer im ROS-Graphen, der Topics veröffentlicht oder abonniert.",
@@ -1786,7 +1756,7 @@ footer p { margin: 0 0 6px; }
    "name": "Topic",
    "linie": "ros",
    "vl": 2,
-   "abschnitt": 7,
+   "abschnitt": 8,
    "ebene": 1,
    "code": false,
    "erklaerung": "Topics sind benannte Kanäle, die Publisher und Subscriber entkoppeln (n:m-Kommunikation).",
@@ -1797,7 +1767,7 @@ footer p { margin: 0 0 6px; }
    "name": "Nachricht (Message)",
    "linie": "ros",
    "vl": 2,
-   "abschnitt": 7,
+   "abschnitt": 8,
    "ebene": 1,
    "code": false,
    "erklaerung": "Eine Message legt Struktur und Datentypen der übertragenen Daten fest, z. B. sensor_msgs/msg/LaserScan.",
@@ -1808,7 +1778,7 @@ footer p { margin: 0 0 6px; }
    "name": "Aufbau einer Nachricht",
    "linie": "ros",
    "vl": 2,
-   "abschnitt": 7,
+   "abschnitt": 8,
    "ebene": 2,
    "code": true,
    "erklaerung": "ros2 interface show zeigt die Felder eines Nachrichtentyps — z. B. Twist mit linear.x (vorwärts) und angular.z (drehen).",
@@ -1819,7 +1789,7 @@ footer p { margin: 0 0 6px; }
    "name": "Discovery",
    "linie": "ros",
    "vl": 2,
-   "abschnitt": 7,
+   "abschnitt": 8,
    "ebene": 2,
    "code": false,
    "erklaerung": "Knoten finden sich automatisch innerhalb derselben ROS_DOMAIN_ID, verbinden sich aber nur bei kompatiblen QoS-Einstellungen.",
@@ -1830,7 +1800,7 @@ footer p { margin: 0 0 6px; }
    "name": "Service, Parameter, Action",
    "linie": "ros",
    "vl": 2,
-   "abschnitt": 7,
+   "abschnitt": 8,
    "ebene": 2,
    "code": false,
    "erklaerung": "Neben Topics: Services für Anfrage/Antwort, Parameter zur Konfiguration, Actions für lang laufende Aufträge mit Rückmeldung.",
@@ -1841,7 +1811,7 @@ footer p { margin: 0 0 6px; }
    "name": "Topics des TurtleBot",
    "linie": "ros",
    "vl": 2,
-   "abschnitt": 11,
+   "abschnitt": 12,
    "ebene": 1,
    "code": true,
    "erklaerung": "Der TurtleBot stellt Sensoren und Antrieb als Topics bereit: /scan, /odom, /imu, Kamerabild und /cmd_vel.",
@@ -1852,7 +1822,7 @@ footer p { margin: 0 0 6px; }
    "name": "ros2-Kommandozeile",
    "linie": "werkzeuge",
    "vl": 2,
-   "abschnitt": 8,
+   "abschnitt": 9,
    "ebene": 1,
    "code": true,
    "erklaerung": "ros2 untersucht und steuert das System über Unterbefehle wie node, topic, service, param, bag und launch.",
@@ -1863,7 +1833,7 @@ footer p { margin: 0 0 6px; }
    "name": "Publisher/Subscriber-API",
    "linie": "ros",
    "vl": 2,
-   "abschnitt": 9,
+   "abschnitt": 10,
    "ebene": 2,
    "code": true,
    "erklaerung": "Knoten legen per create_publisher/create_subscription Kanäle an und laufen mit spin().",
@@ -1874,7 +1844,7 @@ footer p { margin: 0 0 6px; }
    "name": "ros2 topic …",
    "linie": "werkzeuge",
    "vl": 2,
-   "abschnitt": 9,
+   "abschnitt": 10,
    "ebene": 2,
    "code": true,
    "erklaerung": "Mit ros2 topic list/info/hz/echo/pub lassen sich Topics inspizieren und von Hand Nachrichten senden.",
@@ -1885,7 +1855,7 @@ footer p { margin: 0 0 6px; }
    "name": "Remapping",
    "linie": "ros",
    "vl": 2,
-   "abschnitt": 9,
+   "abschnitt": 10,
    "ebene": 2,
    "code": true,
    "erklaerung": "Mit --ros-args -r topic:=neu (oder __node:=name) werden Topic- und Knotennamen beim Start umgelenkt, ohne den Code zu ändern.",
@@ -1896,7 +1866,7 @@ footer p { margin: 0 0 6px; }
    "name": "rqt / rqt_graph",
    "linie": "werkzeuge",
    "vl": 2,
-   "abschnitt": 10,
+   "abschnitt": 11,
    "ebene": 2,
    "code": true,
    "erklaerung": "rqt bündelt die Inspektionsfunktionen der ros2-CLI grafisch, z. B. den Knoten-Topic-Graphen.",
@@ -1907,7 +1877,7 @@ footer p { margin: 0 0 6px; }
    "name": "ROS_DOMAIN_ID",
    "linie": "ros",
    "vl": 3,
-   "abschnitt": 12,
+   "abschnitt": 13,
    "ebene": 2,
    "code": true,
    "erklaerung": "Die Umgebungsvariable trennt ROS-2-Systeme im selben Netz — im Labor eine pro TurtleBot-Gruppe, gesetzt auf Laptop und Roboter.",
@@ -1918,7 +1888,7 @@ footer p { margin: 0 0 6px; }
    "name": "ROS-2-Paket",
    "linie": "ros",
    "vl": 3,
-   "abschnitt": 3,
+   "abschnitt": 4,
    "ebene": 1,
    "code": false,
    "erklaerung": "Ein Paket kapselt Code samt Abhängigkeiten, Build-Konfiguration, Nachrichten und Launch-Files.",
@@ -1929,7 +1899,7 @@ footer p { margin: 0 0 6px; }
    "name": "Workspace",
    "linie": "werkzeuge",
    "vl": 3,
-   "abschnitt": 4,
+   "abschnitt": 5,
    "ebene": 1,
    "code": false,
    "erklaerung": "Pakete liegen in src/ eines Workspaces; colcon erzeugt daneben build/, install/ und log/.",
@@ -1940,7 +1910,7 @@ footer p { margin: 0 0 6px; }
    "name": "ament_cmake/ament_python",
    "linie": "werkzeuge",
    "vl": 3,
-   "abschnitt": 5,
+   "abschnitt": 6,
    "ebene": 2,
    "code": false,
    "erklaerung": "ament ist das Buildsystem für ein einzelnes Paket, mit CMake (C++) oder setuptools (Python).",
@@ -1951,7 +1921,7 @@ footer p { margin: 0 0 6px; }
    "name": "colcon build",
    "linie": "werkzeuge",
    "vl": 3,
-   "abschnitt": 5,
+   "abschnitt": 6,
    "ebene": 1,
    "code": true,
    "erklaerung": "colcon baut alle Pakete eines Workspaces in der richtigen Abhängigkeitsreihenfolge.",
@@ -1962,7 +1932,7 @@ footer p { margin: 0 0 6px; }
    "name": "ros2 pkg create",
    "linie": "werkzeuge",
    "vl": 3,
-   "abschnitt": 7,
+   "abschnitt": 8,
    "ebene": 2,
    "code": true,
    "erklaerung": "Erzeugt ein Paketgerüst mit Build-Type, Abhängigkeiten und optional einem Knoten.",
@@ -1973,7 +1943,7 @@ footer p { margin: 0 0 6px; }
    "name": "Eigener Nachrichtentyp",
    "linie": "ros",
    "vl": 3,
-   "abschnitt": 7,
+   "abschnitt": 8,
    "ebene": 1,
    "code": false,
    "erklaerung": "Eigene .msg-Dateien werden per rosidl_generate_interfaces in C++/Python-Code übersetzt — immer in einem CMake-Paket.",
@@ -1984,7 +1954,7 @@ footer p { margin: 0 0 6px; }
    "name": "source install/setup.bash",
    "linie": "werkzeuge",
    "vl": 3,
-   "abschnitt": 5,
+   "abschnitt": 6,
    "ebene": 2,
    "code": true,
    "erklaerung": "Erst das Sourcen des Install-Overlays macht neu gebaute Pakete im Terminal sichtbar.",
@@ -1995,7 +1965,7 @@ footer p { margin: 0 0 6px; }
    "name": "Launch-Datei",
    "linie": "ros",
    "vl": 3,
-   "abschnitt": 10,
+   "abschnitt": 11,
    "ebene": 1,
    "code": false,
    "erklaerung": "Python-Launch-Files starten und parametrieren mehrere Knoten mit Argumenten, Remappings und Includes.",
@@ -2006,7 +1976,7 @@ footer p { margin: 0 0 6px; }
    "name": "entry_points (Python)",
    "linie": "werkzeuge",
    "vl": 3,
-   "abschnitt": 9,
+   "abschnitt": 10,
    "ebene": 2,
    "code": true,
    "erklaerung": "Python-Knoten werden in setup.py unter console_scripts als ausführbare Programme angemeldet.",
@@ -2017,7 +1987,7 @@ footer p { margin: 0 0 6px; }
    "name": "Logging & Log-Level",
    "linie": "ros",
    "vl": 3,
-   "abschnitt": 11,
+   "abschnitt": 12,
    "ebene": 2,
    "code": true,
    "erklaerung": "Logger-Makros wie RCLCPP_INFO und einstellbare Log-Level strukturieren Debug-Ausgaben; --log-level knoten:=debug wirkt gezielt.",
@@ -2039,7 +2009,7 @@ footer p { margin: 0 0 6px; }
    "name": "ros2 service call",
    "linie": "werkzeuge",
    "vl": 4,
-   "abschnitt": 5,
+   "abschnitt": 6,
    "ebene": 2,
    "code": true,
    "erklaerung": "Ruft einen Service mit einer Anfrage im YAML-Format auf und zeigt die Antwort; den Aufbau verrät ros2 interface show.",
@@ -2050,7 +2020,7 @@ footer p { margin: 0 0 6px; }
    "name": "Parameter und Parameterdatei",
    "linie": "werkzeuge",
    "vl": 4,
-   "abschnitt": 6,
+   "abschnitt": 7,
    "ebene": 1,
    "code": true,
    "erklaerung": "ros2 param get/set ändert Einstellungen zur Laufzeit; dump/load und --params-file speichern und laden sie als YAML.",
@@ -2061,7 +2031,7 @@ footer p { margin: 0 0 6px; }
    "name": "Action: Ziel, Feedback, Ergebnis",
    "linie": "ros",
    "vl": 4,
-   "abschnitt": 7,
+   "abschnitt": 8,
    "ebene": 2,
    "code": true,
    "erklaerung": "send_goal --feedback startet einen Auftrag mit Rückmeldungen; der Auftraggeber kann abbrechen (cancel), der Server verwerfen (abort).",
@@ -2072,7 +2042,7 @@ footer p { margin: 0 0 6px; }
    "name": "ros2 bag",
    "linie": "werkzeuge",
    "vl": 4,
-   "abschnitt": 8,
+   "abschnitt": 9,
    "ebene": 1,
    "code": true,
    "erklaerung": "ros2 bag record/play zeichnet Topics auf und spielt sie ab — reproduzierbare Tests ohne reale Sensoren.",
@@ -2083,7 +2053,7 @@ footer p { margin: 0 0 6px; }
    "name": "Steuerung ohne Rückkopplung",
    "linie": "bewegung",
    "vl": 4,
-   "abschnitt": 8,
+   "abschnitt": 9,
    "ebene": 2,
    "code": false,
    "erklaerung": "Abgespielte Fahrbefehle führen nicht exakt zum selben Ziel — ohne Messung und Nachregeln summieren sich Abweichungen.",
@@ -2226,10 +2196,10 @@ footer p { margin: 0 0 6px; }
    "name": "Lochkameramodell",
    "linie": "mathe",
    "vl": 9,
-   "abschnitt": 4,
+   "abschnitt": 6,
    "ebene": 1,
    "code": false,
-   "erklaerung": "Projiziert 3D-Punkte über ähnliche Dreiecke auf die Bildebene (u = f·X/Z) — die Tiefe geht verloren.",
+   "erklaerung": "Projiziert 3D-Punkte über ähnliche Dreiecke auf die Bildebene (u = fx·X/Z + cx) – alle Punkte eines Sehstrahls landen auf demselben Pixel, die Tiefe geht verloren.",
    "fehlvorstellung": "„Aus einem einzelnen Kamerabild lässt sich die Entfernung direkt ablesen.“"
   },
   {
@@ -2237,10 +2207,10 @@ footer p { margin: 0 0 6px; }
    "name": "Projektion in Matrixform",
    "linie": "mathe",
    "vl": 9,
-   "abschnitt": 5,
+   "abschnitt": 7,
    "ebene": 2,
    "code": false,
-   "erklaerung": "Homogene Koordinaten machen die Projektion zu einer Matrixmultiplikation mit anschließender Normierung.",
+   "erklaerung": "Homogene Koordinaten machen die Projektion zu einer Matrixmultiplikation λ·(u, v, 1) = K·(X, Y, Z) mit anschließender Division durch die Tiefe.",
    "fehlvorstellung": null
   },
   {
@@ -2256,87 +2226,120 @@ footer p { margin: 0 0 6px; }
   },
   {
    "id": "verzerrung",
-   "name": "Verzerrungsparameter",
+   "name": "Verzeichnung",
    "linie": "mathe",
    "vl": 9,
    "abschnitt": 8,
-   "ebene": 2,
+   "ebene": 1,
    "code": false,
-   "erklaerung": "Radiale und tangentiale Koeffizienten modellieren Tonnen- und Kissenverzeichnung realer Linsen.",
-   "fehlvorstellung": null
+   "erklaerung": "Die Linse verschiebt Punkte abhängig vom Abstand r zur Bildmitte (k1·r² + k2·r⁴ + …); k1 < 0 ist tonnenförmig. Am Bildrand ist der Effekt am größten.",
+   "fehlvorstellung": "„Eine Entzerrung prüft man am besten in der Bildmitte.“"
   },
   {
    "id": "entzerrung",
-   "name": "Entzerrung (undistort)",
+   "name": "Entzerren mit Tabellen",
    "linie": "wahrnehmung",
    "vl": 9,
-   "abschnitt": 9,
-   "ebene": 2,
+   "abschnitt": 12,
+   "ebene": 1,
    "code": true,
-   "erklaerung": "cv2.undistort rechnet mit K und D ein verzerrtes Kamerabild in ein ideales Lochkamerabild um.",
-   "fehlvorstellung": null
+   "erklaerung": "Für jedes Zielpixel einmal berechnen, woher es im Rohbild stammt (initUndistortRectifyMap), dann jedes Bild nur nachschlagen (remap) – etwa 1 ms je Bild.",
+   "fehlvorstellung": "„Man kehrt die Verzeichnungsformel für jedes Pixel des Rohbilds um.“"
   },
   {
    "id": "kalibrierung",
    "name": "Kamerakalibrierung",
    "linie": "wahrnehmung",
    "vl": 9,
-   "abschnitt": 11,
+   "abschnitt": 10,
    "ebene": 1,
    "code": false,
-   "erklaerung": "Aus vielen Schachbrettaufnahmen werden K und die Verzerrungskoeffizienten D bestimmt.",
-   "fehlvorstellung": null
+   "erklaerung": "Aus vielen Lagen eines Schachbretts werden K und D einer bestimmten Kamera geschätzt; das Ergebnis steht in ost.yaml.",
+   "fehlvorstellung": "„Baugleiche Kameras haben dieselbe Kalibrierung.“"
   },
   {
    "id": "extrinsik",
-   "name": "Extrinsische Parameter",
+   "name": "Lage der Kamera (R, t)",
    "linie": "mathe",
    "vl": 9,
-   "abschnitt": 12,
+   "abschnitt": 13,
    "ebene": 2,
    "code": false,
-   "erklaerung": "Rotation R und Translation t beschreiben die Lage der Kamera relativ zu Welt oder Roboter.",
-   "fehlvorstellung": null
+   "erklaerung": "Rotation R und Translation t beschreiben die Lage der Kamera zum Boden bzw. zum Roboter – sie stecken in der Homographie und ändern sich, wenn die Kamera verstellt wird.",
+   "fehlvorstellung": "„Nach einem Stoß muss man K und D neu kalibrieren.“"
   },
   {
    "id": "disparitaet",
    "name": "Disparität & Tiefe",
    "linie": "wahrnehmung",
-   "vl": 9,
-   "abschnitt": 14,
-   "ebene": 1,
+   "vl": 10,
+   "abschnitt": 0,
+   "ebene": 2,
    "code": false,
    "erklaerung": "Zwei Kameras mit Basislinie b liefern über die Disparität d die Tiefe Z = f·b/d.",
    "fehlvorstellung": "„Große Disparität bedeutet ein weit entferntes Objekt.“"
   },
   {
-   "id": "rektifizierung",
-   "name": "Stereo-Rektifizierung",
+   "id": "camerainfo",
+   "name": "ost.yaml und CameraInfo",
+   "linie": "ros",
+   "vl": 9,
+   "abschnitt": 11,
+   "ebene": 2,
+   "code": true,
+   "erklaerung": "Die Kalibrierdatei ost.yaml und die Nachricht sensor_msgs/CameraInfo enthalten K (camera_matrix), D (distortion_coefficients) und P; zum Entzerren braucht man K und D.",
+   "fehlvorstellung": "„Die projection_matrix ist die Kamera-Matrix.“"
+  },
+  {
+   "id": "reprojektion",
+   "name": "Reprojektionsfehler",
    "linie": "wahrnehmung",
    "vl": 9,
-   "abschnitt": 15,
+   "abschnitt": 10,
    "ebene": 2,
-   "code": false,
-   "erklaerung": "Beide Bilder werden so gedreht, dass korrespondierende Punkte in derselben Zeile liegen.",
+   "code": true,
+   "erklaerung": "Mittlerer Abstand zwischen erkannten und mit K, D zurückgerechneten Schachbrettecken – einige Zehntel Pixel bei guter Kalibrierung.",
    "fehlvorstellung": null
   },
   {
-   "id": "camerainfo",
-   "name": "CameraInfo",
-   "linie": "ros",
+   "id": "homographie",
+   "name": "Homographie",
+   "linie": "mathe",
    "vl": 9,
-   "abschnitt": 18,
-   "ebene": 2,
+   "abschnitt": 13,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "3×3-Matrix H = K·[r1 r2 t], die Punkte einer Ebene (Boden) auf das Bild abbildet und zurück; 8 Freiheitsgrade, also genügen 4 Punktpaare (findHomography).",
+   "fehlvorstellung": "„Mit einer Homographie lässt sich jeder Bildpunkt auf den Boden umrechnen, auch ein Verkehrsschild.“"
+  },
+  {
+   "id": "draufsicht",
+   "name": "Draufsicht (Vogelperspektive)",
+   "linie": "wahrnehmung",
+   "vl": 9,
+   "abschnitt": 15,
+   "ebene": 1,
    "code": true,
-   "erklaerung": "sensor_msgs/CameraInfo überträgt K, D, R und P einer kalibrierten Kamera.",
-   "fehlvorstellung": null
+   "erklaerung": "warpPerspective erzeugt mit H eine maßstäbliche Ansicht von oben (bei uns 400 px/m), in der Fahrbahnlinien parallel sind und man in Metern messen kann.",
+   "fehlvorstellung": "„Die Draufsicht bleibt gültig, auch wenn die Kamera verdreht wurde.“"
+  },
+  {
+   "id": "vorausschau",
+   "name": "Vorausschau",
+   "linie": "bewegung",
+   "vl": 9,
+   "abschnitt": 19,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Die Abweichung von der Spurmitte wird 0,30 m vor dem Roboter gemessen und enthält seitlichen Versatz plus Blickrichtung (≈ 0,30 m · sin ψ).",
+   "fehlvorstellung": "„Die Abweichung vorn ist dasselbe wie der seitliche Versatz des Roboters.“"
   },
   {
    "id": "pointcloud2",
    "name": "PointCloud2",
    "linie": "ros",
-   "vl": 9,
-   "abschnitt": 17,
+   "vl": 10,
+   "abschnitt": 0,
    "ebene": 1,
    "code": true,
    "erklaerung": "ROS-2-Format für 3D-Punktwolken: ein Byte-Strom, dessen Aufbau PointField-Einträge beschreiben.",
@@ -2346,8 +2349,8 @@ footer p { margin: 0 0 6px; }
    "id": "pc_transform",
    "name": "Punktwolke transformieren",
    "linie": "ros",
-   "vl": 9,
-   "abschnitt": 23,
+   "vl": 10,
+   "abschnitt": 0,
    "ebene": 2,
    "code": true,
    "erklaerung": "Punktwolken liegen im Kamera-Frame vor und müssen per tf2 z. B. nach base_link überführt werden.",
@@ -2600,7 +2603,7 @@ footer p { margin: 0 0 6px; }
    "name": "Quality of Service",
    "linie": "ros",
    "vl": 5,
-   "abschnitt": 17,
+   "abschnitt": 18,
    "ebene": 1,
    "code": false,
    "erklaerung": "Reliability, Durability und History/Depth regeln pro Verbindung den Umgang mit Verlusten und spät gestarteten Empfängern; sensor_data ist best effort.",
@@ -2611,7 +2614,7 @@ footer p { margin: 0 0 6px; }
    "name": "QoS-Verträglichkeit",
    "linie": "ros",
    "vl": 5,
-   "abschnitt": 18,
+   "abschnitt": 19,
    "ebene": 2,
    "code": true,
    "erklaerung": "Der Empfänger darf nicht mehr verlangen, als der Sender bietet: best_effort-Sender und reliable-Empfänger verbinden sich nicht.",
@@ -2622,7 +2625,7 @@ footer p { margin: 0 0 6px; }
    "name": "Durability / transient_local",
    "linie": "ros",
    "vl": 5,
-   "abschnitt": 19,
+   "abschnitt": 20,
    "ebene": 2,
    "code": false,
    "erklaerung": "Mit transient_local erhalten spät gestartete Empfänger die letzten Nachrichten — deshalb nutzen /tf_static und Karten diese Einstellung.",
@@ -3338,6 +3341,41 @@ footer p { margin: 0 0 6px; }
    "text": "angewandt in"
   },
   {
+   "von": "homtrafo",
+   "nach": "homographie",
+   "text": "Spezialfall für eine Ebene"
+  },
+  {
+   "von": "kmatrix",
+   "nach": "homographie",
+   "text": "steckt in"
+  },
+  {
+   "von": "extrinsik",
+   "nach": "homographie",
+   "text": "steckt in"
+  },
+  {
+   "von": "entzerrung",
+   "nach": "draufsicht",
+   "text": "Voraussetzung für"
+  },
+  {
+   "von": "homographie",
+   "nach": "draufsicht",
+   "text": "erzeugt"
+  },
+  {
+   "von": "draufsicht",
+   "nach": "vorausschau",
+   "text": "gemessen in"
+  },
+  {
+   "von": "kalibrierung",
+   "nach": "reprojektion",
+   "text": "geprüft mit"
+  },
+  {
    "von": "extrinsik",
    "nach": "tf2",
    "text": "veröffentlicht über"
@@ -3448,6 +3486,7 @@ footer p { margin: 0 0 6px; }
     "tf2",
     "pose",
     "kmatrix",
+    "homographie",
     "pc_transform",
     "bbox3d",
     "diffdrive"
@@ -3492,7 +3531,7 @@ const DATA = JSON.parse(document.getElementById("kartendaten").textContent);
 const BASE = DATA.kurs.basis;
 const LECTURES = DATA.vorlesungen.map(v => {
   const [y, m, d] = v.datum.split("-");
-  return { nr: String(v.vl).padStart(2, "0"), label: v.label, iso: v.datum, date: `${d}.${m}.${String(y).slice(2)}`, short: v.kurz, file: v.datei, status: v.status, sections: v.abschnitte };
+  return { nr: String(v.vl).padStart(2, "0"), label: v.label, iso: v.datum, date: `${d}.${m}.${String(y).slice(2)}`, short: v.kurz, file: v.datei, status: v.status, sections: v.abschnitte, block: v.block };
 });
 // Aktueller Termin: der letzte, dessen Datum erreicht ist (vor Semesterbeginn: der erste)
 const TODAY = new Date().toISOString().slice(0, 10);
@@ -3520,11 +3559,11 @@ const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v
 const reduce = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 const narrow = () => matchMedia("(max-width: 980px)").matches;
-const state = { mode: narrow() ? "liste" : "metro", here: HERE_TODAY, view: "nb", detail: false, sel: null, thread: null, hidden: new Set() };
+const state = { mode: "metro", here: HERE_TODAY, view: "nb", detail: false, sel: null, thread: null, hidden: new Set() };
 try {
   const saved = JSON.parse(localStorage.getItem(DATA.kurs.speicher) || "{}");
   if (typeof saved.detail === "boolean") state.detail = saved.detail;
-  if (["liste", "metro", "zeit"].includes(saved.mode)) state.mode = saved.mode;
+  if (["metro", "zeit"].includes(saved.mode)) state.mode = saved.mode;
 } catch (e) {}
 // „Sie sind hier“ wird bewusst nicht gespeichert: Es folgt immer dem Datum.
 function save() { try { localStorage.setItem(DATA.kurs.speicher, JSON.stringify({ detail: state.detail, mode: state.mode })); } catch (e) {} }
@@ -3737,39 +3776,6 @@ function drawMetro() {
 }
 
 
-/* ---------- Liste ---------- */
-function drawListe() {
-  const ol = $("#liste");
-  ol.innerHTML = "";
-  LECTURES.forEach((lec, v) => {
-    const items = ALL.filter(n => n.vl === v && !state.hidden.has(n.line) && (state.detail || n.level === 1 || n.id === state.sel))
-      .sort((a, b) => a.level - b.level || a.sec - b.sec);
-    const li = document.createElement("li");
-    li.className = "vl" + (v === state.here ? " now" : v > state.here ? " future" : "");
-    li.dataset.vl = v;
-    const tag = v === state.here
-      ? (BEFORE_START && v === HERE_TODAY ? `<span class="tag">Start am ${lec.date}</span>` : `<span class="tag">Sie sind hier</span>`)
-      : lec.status === "Bestand" ? `<span class="tag muted">Bestand 25/26</span>` : lec.status !== "ausgearbeitet" ? `<span class="tag muted">in Vorbereitung</span>` : "";
-    li.innerHTML = `<div class="vlhead"><b>${lec.label}</b><span class="d">${lec.date}</span><span class="s">${lec.short}</span>${tag}
-      ${lec.file ? `<a href="${BASE + lec.file}" target="_blank" rel="noopener">Material ↗</a>` : ""}</div>
-      <div class="chips">${items.map(n => `<button data-id="${n.id}" class="${n.level === 2 ? "detail" : ""}${n.code ? " code" : ""}" aria-pressed="${n.id === state.sel}"><i style="background:${css(lineById[n.line].v)}"></i><span class="n">${n.name}</span></button>`).join("") || '<span class="hint">keine Begriffe in den gewählten Gebieten</span>'}</div>`;
-    li.querySelectorAll(".chips button").forEach(b => b.addEventListener("click", () => {
-      if (state.sel === b.dataset.id && narrow()) { state.sel = null; render(); return; }
-      select(b.dataset.id);
-      if (narrow()) $("#panel").scrollIntoView({ block: "nearest", behavior: reduce() ? "auto" : "smooth" });
-    }));
-    ol.appendChild(li);
-  });
-}
-function placePanel() {
-  const panel = $("#panel"), stage = $(".stage");
-  const inline = state.mode === "liste" && narrow() && state.sel;
-  if (inline) {
-    const li = $(`#liste li.vl[data-vl="${byId[state.sel].vl}"]`);
-    if (panel.parentNode !== li) li.appendChild(panel);
-  } else if (panel.parentNode !== stage) stage.appendChild(panel);
-  panel.hidden = state.mode === "liste" && narrow() && !state.sel;
-}
 function defaultSel() {
   const cand = ALL.filter(n => n.level === 1 && n.vl === state.here && (state.mode !== "metro" || threadsOf[n.id]));
   return cand.length ? cand[0].id : null;
@@ -3819,8 +3825,8 @@ function renderPanel() {
     ${back.length ? `<h3>Baut auf</h3><ul class="rels">${back.map(r => relItem(r, "←")).join("")}</ul>` : ""}
     ${fwd.length ? `<h3>Führt weiter zu</h3><ul class="rels">${fwd.map(r => relItem(r, "→")).join("")}</ul>` : ""}
     <div class="goto">
-      <span class="hint">Eingeführt in Abschnitt ${n.sec}: ${lec.sections[n.sec - 1] || ""}${lec.status === "Bestand" ? " — Material aus 2025/26, wird überarbeitet" : lec.status !== "ausgearbeitet" ? " — in Vorbereitung" : ""}</span>
-      <a class="golink" href="${BASE + lec.file}#${n.sec}" target="_blank" rel="noopener">Zu ${lec.label}, Abschnitt ${n.sec} ↗</a>
+      ${lec.file && n.sec ? `<span class="hint">Eingeführt in Abschnitt ${n.sec}: ${lec.sections[n.sec - 1] || ""}${lec.status === "Bestand" ? " — Material aus 2025/26, wird überarbeitet" : lec.status !== "ausgearbeitet" ? " — in Vorbereitung" : ""}</span>
+      <a class="golink" href="${BASE + lec.file}#${n.sec}" target="_blank" rel="noopener">Zu ${lec.label}, Abschnitt ${n.sec} ↗</a>` : `<span class="hint">Kommt in ${lec.label} — Material folgt.</span>`}
     </div>`;
   p.querySelectorAll(".rels button, .hop button").forEach(b => b.addEventListener("click", () => select(b.dataset.id, true)));
 }
@@ -3861,38 +3867,30 @@ function render() {
   $("#hereVal").textContent = `${lec.label} · ${lec.date}`;
   $("#here").value = state.here;
   $("#today").hidden = state.here === HERE_TODAY;
-  const pressed = [["mListe", state.mode === "liste"], ["mMetro", state.mode === "metro"], ["mZeit", state.mode === "zeit"], ["vNb", state.view === "nb"], ["vAll", state.view === "all"], ["eKern", !state.detail], ["eAlle", state.detail]];
+  const pressed = [["mMetro", state.mode === "metro"], ["mZeit", state.mode === "zeit"], ["vNb", state.view === "nb"], ["vAll", state.view === "all"], ["eKern", !state.detail], ["eAlle", state.detail]];
   for (const [id, on] of pressed) $("#" + id).setAttribute("aria-pressed", String(on));
   $("#ctlLevel").hidden = state.mode === "metro";
   $("#ctlEdges").hidden = state.mode !== "zeit";
-  $("#mapwrap").hidden = state.mode === "liste";
-  $("#liste").hidden = state.mode !== "liste";
   const nStations = new Set(THREADS.flatMap(t => t.st)).size;
   $("#count").textContent = state.mode === "metro"
     ? `${THREADS.length} Fäden · ${nStations} Stationen`
     : state.detail ? `${ALL.length} Begriffe · ${EDGES.length} Beziehungen` : `${ALL.filter(n => n.level === 1).length} Kernbegriffe von ${ALL.length}`;
-  if (state.mode === "liste") drawListe();
-  else {
-    if (state.mode === "metro") layoutMetro(); else layoutZeit();
-    setSize();
-    drawBackground();
-    if (state.mode === "metro") drawMetro(); else drawZeit();
-  }
-  placePanel(); renderPanel(); renderLegend();
+  if (state.mode === "metro") layoutMetro(); else layoutZeit();
+  setSize();
+  drawBackground();
+  if (state.mode === "metro") drawMetro(); else drawZeit();
+  renderPanel(); renderLegend();
 }
 
 $("#here").addEventListener("input", (e) => {
   state.here = +e.target.value; render();
-  if (state.mode === "liste") return;
   const box = $("#mapbox"), hx = COL * state.here;
   if (hx < box.scrollLeft || hx + COL > box.scrollLeft + box.clientWidth) box.scrollLeft = hx - box.clientWidth / 2;
 });
 function scrollToHere() {
-  if (state.mode === "liste") { const now = $(`#liste li.vl[data-vl="${state.here}"]`); if (now && state.here > 0) now.scrollIntoView({ block: "start" }); return; }
   const box = $("#mapbox"), hx = COL * state.here;
   box.scrollLeft = hx + COL > box.clientWidth ? hx - box.clientWidth / 2 : 0;
 }
-$("#mListe").addEventListener("click", () => { state.mode = "liste"; state.thread = null; save(); render(); });
 $("#mMetro").addEventListener("click", () => { state.mode = "metro"; if (!state.sel || !threadsOf[state.sel]) state.sel = defaultSel(); save(); render(); scrollToHere(); });
 $("#mZeit").addEventListener("click", () => { state.mode = "zeit"; state.thread = null; if (!state.sel) state.sel = defaultSel(); save(); render(); scrollToHere(); });
 $("#today").addEventListener("click", () => { state.here = HERE_TODAY; render(); scrollToHere(); });
@@ -3907,7 +3905,7 @@ new MutationObserver(render).observe(document.documentElement, { attributes: tru
 const LINK = new URLSearchParams(location.hash.slice(1));
 const KEYS = DATA.vorlesungen.map(v => v.key);
 if (KEYS.includes(LINK.get("termin"))) state.here = KEYS.indexOf(LINK.get("termin"));
-if (!(state.mode === "liste" && narrow())) state.sel = defaultSel();
+state.sel = defaultSel();
 if (byId[LINK.get("begriff")]) { state.sel = LINK.get("begriff"); if (byId[state.sel].level > 1) state.detail = true; }
 let lastW = innerWidth;  // nur auf Breitenänderung reagieren (mobile Adressleiste ändert die Höhe)
 addEventListener("resize", () => { if (innerWidth === lastW) return; lastW = innerWidth; clearTimeout(window._rs); window._rs = setTimeout(render, 150); });

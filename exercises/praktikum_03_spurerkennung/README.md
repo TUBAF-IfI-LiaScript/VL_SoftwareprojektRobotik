@@ -80,15 +80,28 @@ Warum 30 cm voraus und nicht an der Radachse? Ein Fahrer schaut auch nach vorn, 
 
 ## Wo stehen wir?
 
-**Block 2 · Sensorgrundlagen** · Termin 15 von 32 · P 3 in der Woche ab 18.1.2027
-
 **Ziel im Projekt:** Ihr TurtleBot erkennt die Fahrspur im Kamerabild.
 
-- **Sie brauchen:** [Launch-Datei](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=launch) (VL 3) · [Parameter und Parameterdatei](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=paramfile) (Ü 2) · [Bezugskoordinatensystem](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=frame) (VL 4) · [Schwellwertoperation](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=thresholding) (VL 6) · [Morphologische Operationen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=morphologie) (VL 6)
-- **Heute:** anwenden, nichts Neues – Ihre Arbeit hier ist die Prüfungsleistung
-- **Danach:** VL 9 · Objekterkennung – Sie erkennen Schilder, Ampeln und Fußgängerfiguren im Kamerabild.
+**Block 2 · Sensorgrundlagen** – Termin 15 von 32, heute markiert mit ▶
 
-**Der Weg zum autonomen TurtleBot** – die Praktika bauen aufeinander auf:
+<!-- data-type="none" -->
+| Woche ab | Vorlesung | Übung | Praktikum |
+| :-- | :-- | :-- | :-- |
+| 30.11.2026 | [VL 5 Sensorik](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/01_Sensorik/01_Sensorik.md) |  |  |
+| 7.12.2026 | [VL 6 Bildverarbeitung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/05_Bildverarbeitung/05_Bildverarbeitung.md)<br>[VL 7 Kamera + Draufsicht](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/06_Kamera_Stereo/06_Kamera_Stereo.md) |  |  |
+| 14.12.2026 | VL 8 LiDAR |  |  |
+| 4.1.2027 |  | Ü 3 Datenvisualisierung |  |
+| 11.1.2027 |  | Ü 4 Kameradaten | [P 2 Bildkorrektur](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_02_bildkorrektur/README.md) |
+| **18.1.2027** |  |  | **▶ [P 3 Spurerkennung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_03_spurerkennung/README.md)** |
+
+- **Sie brauchen:** [Parameter und Parameterdatei](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=paramfile) (Ü 2) · [Schwellwertoperation](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=thresholding) (VL 6) · [Morphologische Operationen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=morphologie) (VL 6) · [Draufsicht (Vogelperspektive)](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=draufsicht) (VL 7) · [Vorausschau](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=vorausschau) (VL 7)
+- **Heute:** anwenden, nichts Neues – Ihre Arbeit hier ist die Prüfungsleistung
+
+[🗺️ Ganze Kurslandkarte öffnen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=p3) – dort finden Sie jeden Begriff mit Erklärung, typischer Stolperfalle und Link auf die passende Folie.
+
+### Der Weg zum autonomen TurtleBot
+
+Die Praktika bauen aufeinander auf:
 
 ```mermaid @mermaid
 flowchart LR
@@ -109,8 +122,6 @@ flowchart LR
   classDef jetzt fill:#ffd27f,stroke:#b36b00,stroke-width:3px,color:#000
   classDef kommt fill:#fff,stroke:#999,stroke-dasharray:4 3,color:#555
 ```
-
-[🗺️ Ganze Kurslandkarte öffnen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=p3) – dort finden Sie jeden Begriff mit Erklärung, typischer Stolperfalle und Link auf die passende Folie.
 
 <!-- kurslandkarte:wo-ende -->
 

@@ -1,1067 +1,706 @@
 <!--
 
-author:   Sebastian Zug & Claude.ai
+author:   Sebastian Zug & Claude.ai & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.0.1
+version:  0.2.1
 language: de
 narrator: Deutsch Female
 
-import: https://github.com/liascript/CodeRunner
-        https://raw.githubusercontent.com/liascript-templates/plantUML/master/README.md
-        https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/config.md
+import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/config.md
+          https://raw.githubusercontent.com/liaTemplates/mermaid_template/master/README.md
+          https://raw.githubusercontent.com/LiaTemplates/Wikimedia/0.0.2/README.md
 
 -->
 
 [![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/06_Kamera_Stereo/06_Kamera_Stereo.md)
 
-# Kameramodelle und Stereo-Vision
+# Kamera: Modell, Kalibrierung, Draufsicht
 
 | Parameter            | Kursinformationen                                                                                                     |
 | -------------------- | --------------------------------------------------------------------------------------------------------------------- |
 | **Veranstaltung:**   | @config.lecture                                                                                                       |
 | **Semester**         | @config.semester                                                                                                      |
 | **Hochschule:**      | `Technische Universität Freiberg`                                                                                     |
-| **Inhalte:**         | `Kameramodelle, Kalibrierung und Stereo-Vision`                                                                       |
+| **Inhalte:**         | `Lochkameramodell, Verzeichnung, Kalibrierung, Entzerren, Homographie und Vogelperspektive`                           |
 | **Link auf GitHub:** | https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/06_Kamera_Stereo/06_Kamera_Stereo.md |
 | **Autoren**          | @author                                                                                                               |
 
-![](https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExN2NrbThydjk3bmRjb3ZpbzZ4NTY3d2ZpNTUwMzU1M2NmMmE3aGswdSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/2RZCJlQmolMru/giphy.gif)
+--------------------------------------------------------------------------------
+
+**Zielstellung der heutigen Veranstaltung** — nach dieser Vorlesung können Sie
+
++ mit der Kamera-Matrix $K$ berechnen, auf welchem Pixel ein Punkt vor der Kamera landet, und erklären, warum dabei die Tiefe verloren geht,
++ die Verzeichnung einer Linse an ihren Koeffizienten erkennen und erklären, warum sie am Bildrand am größten ist,
++ den Ablauf einer Kalibrierung mit dem Schachbrett beschreiben und ihr Ergebnis (`ost.yaml`) auf Plausibilität prüfen,
++ ein Bild mit vorab berechneten Tabellen entzerren und begründen, warum man die Tabellen nur einmal berechnet,
++ mit einer Homographie aus Punktpaaren eine maßstäbliche Draufsicht auf den Boden erzeugen, ihre Grenzen benennen und darin die Abweichung von der Spurmitte mit Vorausschau ablesen.
 
 --------------------------------------------------------------------------------
 
-**Zielstellung der heutigen Veranstaltung**
+<!-- kurslandkarte:wo-start -->
 
-+ Verständnis des Pinhole-Kameramodells
-+ Intrinsische und extrinsische Kameraparameter
-+ Kamerakalibrierung mit OpenCV
-+ Verzerrungskorrektur
-+ Prinzipien der Stereo-Vision
-+ Disparitätsberechnung und Tiefenschätzung
-+ PointCloud2-Messages in ROS 2
-+ Praktische Anwendungen in der mobilen Robotik
-
---------------------------------------------------------------------------------
-
-## Motivation: Von 2D zu 3D
+## Wo stehen wir?
 
     --{{0}}--
-Willkommen zur siebten Vorlesung! In der letzten Veranstaltung haben wir grundlegende Bildverarbeitungstechniken kennengelernt. Heute machen wir den nächsten Schritt: Wir lernen, wie Roboter mit Kameras die dreidimensionale Struktur ihrer Umgebung erfassen können.
+Kurz zur Orientierung. Wir sind in Block 2, Termin 10 von 32. Sie schließen von einem Pixel auf eine Richtung in der Welt – dafür muss die Kamera kalibriert sein. Neu sind heute: Lochkameramodell, Kamera-Matrix K, Verzeichnung, Entzerren mit Tabellen, Kamerakalibrierung, Homographie, Draufsicht (Vogelperspektive), Vorausschau.
 
-Eine Kamera bildet die dreidimensionale Welt auf eine zweidimensionale Bildebene ab. Dabei gehen Informationen verloren!
+**Ziel im Projekt:** Sie schließen von einem Pixel auf eine Richtung in der Welt – dafür muss die Kamera kalibriert sein.
 
-```ascii
-3D-Welt                    Kamera                  2D-Bild
-                          ┌─────┐
-   •  A (groß, nah)       │     │                    • a
-                          │  ●──┼──────────────────► (klein)
-   •  B (klein, fern)     │     │
-                          └─────┘
+**Block 2 · Sensorgrundlagen** – Termin 10 von 32, heute markiert mit ▶
 
-Problem: A und B können auf denselben Bildpunkt abgebildet werden!
-         → Tiefeninformation geht verloren                                                                      .
+<!-- data-type="none" -->
+| Woche ab | Vorlesung | Übung | Praktikum |
+| :-- | :-- | :-- | :-- |
+| 30.11.2026 | [VL 5 Sensorik](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/01_Sensorik/01_Sensorik.md) |  |  |
+| **7.12.2026** | [VL 6 Bildverarbeitung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/05_Bildverarbeitung/05_Bildverarbeitung.md)<br>**▶ [VL 7 Kamera + Draufsicht](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/06_Kamera_Stereo/06_Kamera_Stereo.md)** |  |  |
+| 14.12.2026 | VL 8 LiDAR |  |  |
+| 4.1.2027 |  | Ü 3 Datenvisualisierung |  |
+| 11.1.2027 |  | Ü 4 Kameradaten | [P 2 Bildkorrektur](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_02_bildkorrektur/README.md) |
+| 18.1.2027 |  |  | [P 3 Spurerkennung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_03_spurerkennung/README.md) |
+
+- **Sie brauchen:** [Bezugskoordinatensystem](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=frame) (VL 4) · [Homogene Koordinaten](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=homtrafo) (VL 4) · [Verkettung](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=verkettung) (VL 4) · [Bild als Pixelmatrix](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=bildmatrix) (VL 6)
+- **Heute neu:** [Lochkameramodell](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=pinhole) · [Kamera-Matrix K](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=kmatrix) · [Verzeichnung](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=verzerrung) · [Entzerren mit Tabellen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=entzerrung) · [Kamerakalibrierung](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=kalibrierung) · [Homographie](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=homographie) · [Draufsicht (Vogelperspektive)](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=draufsicht) · [Vorausschau](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=vorausschau)
+
+[🗺️ Ganze Kurslandkarte öffnen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=06) – dort finden Sie jeden Begriff mit Erklärung, typischer Stolperfalle und Link auf die passende Folie.
+
+### Roter Faden: Koordinaten überall
+
+Bezugssysteme und Transformationen ziehen sich vom Roboter bis zur Kamera und zum Fahrwerk.
+
+```mermaid @mermaid
+flowchart LR
+  s0["Pose (6 DoF)<br/><small>VL 5</small>"]
+  s1["Kamera-Matrix K<br/><small>VL 7</small>"]
+  s2["Homographie<br/><small>VL 7</small>"]
+  s3["Punktwolke transformieren<br/><small>VL 8</small>"]
+  s4["Bounding Box → 3D-Position<br/><small>VL 9</small>"]
+  s0 --> s1 --> s2 --> s3 --> s4
+  class s0 war
+  class s1 jetzt
+  class s2 jetzt
+  class s3 kommt
+  class s4 kommt
+  classDef war fill:#e8e8e8,stroke:#999,color:#555
+  classDef jetzt fill:#ffd27f,stroke:#b36b00,stroke-width:3px,color:#000
+  classDef kommt fill:#fff,stroke:#999,stroke-dasharray:4 3,color:#555
 ```
 
-**Herausforderungen:**
+<!-- kurslandkarte:wo-ende -->
 
-+ **Größen-Distanz-Ambiguität**: Ein großes, entferntes Objekt kann genauso erscheinen wie ein kleines, nahes Objekt
-+ **Verlust der Tiefe**: Aus einem einzelnen Bild können wir nicht direkt auf Entfernungen schließen
-+ **Perspektivische Verzerrung**: Parallele Linien scheinen sich in der Ferne zu treffen
-
-
-| Anwendung                     | Technologie              | Beispiel                                   |
-| ----------------------------- | ------------------------ | ------------------------------------------ |
-| **Hinderniserkennung**        | Stereo-Vision            | Autonome Fahrzeuge erkennen Fußgänger      |
-| **Greifplanung**              | 3D-Rekonstruktion        | Roboterarm greift Objekte                  |
-| **Navigation**                | Visual Odometry          | Drohnen navigieren in GPS-freien Umgebungen|
-| **3D-Kartierung**             | SLAM mit Tiefenkameras   | Mobile Roboter erstellen 3D-Karten         |
-| **Vermessung**                | Photogrammetrie          | Inspektion von Bauwerken                   |
-
-> **Beispiel**: Autonome Fahrzeuge müssen präzise Entfernungen zu Objekten messen, um sicher zu bremsen!
-
-## Das 2D Pinhole-Kameramodell
+## Leitfrage: Wo steht der Roboter auf der Fahrbahn?
 
     --{{0}}--
-Das Pinhole- oder Lochkameramodell ist das grundlegende mathematische Modell, das beschreibt, wie eine Kamera 3D-Punkte auf die 2D-Bildebene projiziert.
+In P 3 soll Ihr TurtleBot eine einzige Zahl liefern: wie weit er neben der Mitte seiner Fahrspur steht. Im Kamerabild sehen Sie die Spur. Aber messen Sie dort einmal die Spurbreite in Pixeln: unten im Bild sind es fast sechshundert, oben nur gut hundertfünfzig. Und die rechte Randlinie ist gebogen, obwohl die Straße hier schnurgerade ist. Heute lernen Sie, wie man aus diesem Bild eine Ansicht von oben macht, in der man in Zentimetern messen kann.
 
-**Konzept**: Licht fällt durch eine kleine Öffnung (Pinhole) und erzeugt ein umgekehrtes Bild auf der Bildebene
+Das ist das Kamerabild Ihres TurtleBots in der Verkehrswelt, auf einem **geraden** Straßenstück:
 
-![Pinhole-Kamera Prinzip](https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Pinhole-camera.svg/800px-Pinhole-camera.svg.png "Prinzip einer Lochkamera - Von Pbroks13 - Eigenes Werk, CC BY 3.0, https://commons.wikimedia.org/w/index.php?curid=3217146")<!-- style="width: 40%;" -->
+![Kamerabild einer geraden Fahrbahn mit weißer Randlinie rechts und gestrichelter Mittellinie, perspektivisch verjüngt; die Randlinie ist zum Bildrand hin gekrümmt](./images/fahrbahn_roh.png "Rohbild der Kamera — berechnet mit derselben Kamera wie in den Testdaten von P 2 und P 3. Die Straße ist gerade.")<!-- style="width: 50%;" -->
 
+**Vorhersage:** Wie breit ist die Fahrspur in diesem Bild — und warum lässt sich das in Pixeln nicht beantworten?
 
-**Koordinatensystem:**
+    --{{1}}--
+Zwei Effekte stehen im Weg. Die Perspektive lässt die Spur nach oben schmaler werden, und die Linse krümmt gerade Linien zum Rand hin. Schauen Sie auf das mittlere Bild der Kette: Nach dem Entzerren ist die Randlinie gerade. Rechts sehen Sie das Ziel der heutigen Vorlesung, die Draufsicht. Dort ist die Spur überall gleich breit, und ein Kästchen des Rasters sind zehn Zentimeter.
 
-+ Kamerazentrum (optisches Zentrum) = Ursprung
-+ Z-Achse = optische Achse (in Blickrichtung)
-+ Bildebene im Abstand f (Brennweite) vor dem Zentrum
-+ X-Achse zeigt nach rechts, Y-Achse nach unten (Bildkoordinaten-Konvention)
+{{1}}
+****
 
-> Achtung: In der realen Kamera befindet sich die Bildebene hinter dem Pinhole, was zu einem umgekehrten Bild führt. Für die mathematische Modellierung platzieren wir die Bildebene jedoch vor dem Pinhole, um die Gleichungen zu vereinfachen.
+Zwei Effekte stehen dem Messen im Weg:
 
-> Achtung: Das Pinhole-Modell ist eine Idealisierung. Reale Kameras haben Linsen, die Verzerrungen verursachen können! Siehe den Abschnitt zur Kalibrierung ...
+<!-- data-type="none" -->
+| Effekt                    | Was man sieht                                           | Heute                                  |
+| :------------------------ | :------------------------------------------------------ | :------------------------------------- |
+| **Perspektive**           | Spurbreite nimmt nach oben ab, Linien laufen zusammen   | Lochkameramodell, Homographie          |
+| **Verzeichnung der Linse** | Gerade Linien am Bildrand sind gekrümmt                 | Verzeichnung, Kalibrierung, Entzerren  |
 
-### Abbildung eines 3D-Punkts auf die Bildebene
+Am Ende der Vorlesung steht diese Kette — genau die bauen Sie in P 2 als ROS-2-Knoten:
 
-![Pinhole-Kamera-Modell](https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Pinhole.svg/2560px-Pinhole.svg.png "Pinhole-Kamera-Modell mit virtueller Bildebene - en:User:KYNen:User:N3bulous - en:File:Pinhole.svg, Public Domain, https://en.wikipedia.org/wiki/Pinhole_camera_model#/media/File:Pinhole.svg")<!-- style="width: 50%;" -->
+![Drei Bilder nebeneinander: Rohbild mit gekrümmter Randlinie, entzerrtes Bild mit gerader Randlinie, Draufsicht mit 10-cm-Raster und paralleler Fahrspur](./images/fahrbahn_kette.png "Rohbild → entzerrt → Draufsicht. Nach dem Entzerren ist die Randlinie gerade, in der Draufsicht sind die Linien parallel. Das Raster hat 10 cm Abstand, die rote Linie ist die Mittelachse des Roboters.")
 
-**Mathematische Herleitung anhand der Abbildung:**
+****
 
-Wie in der Abbildung zu sehen, verwenden wir eine **virtuelle Bildebene** vor dem Pinhole (nicht dahinter). Dies vermeidet das umgekehrte Bild und vereinfacht die Mathematik erheblich.
+## Das Lochkameramodell
 
-**Koordinatensystem und Bezeichnungen (gemäß Abbildung):**
+    --{{0}}--
+Beginnen wir mit der einfachsten Kamera, die es gibt: einer Kiste mit einem Loch. Jeder Lichtstrahl von einem Punkt der Welt geht durch dieses Loch und trifft hinten auf die Bildebene. Mehr Mathematik als ähnliche Dreiecke brauchen wir dafür nicht.
 
-+ **Pinhole** (optisches Zentrum) = Koordinatenursprung C
-+ **Objektebene**: Punkte werden mit $X_1, X_2, X_3$ bezeichnet (3D-Koordinaten)
-+ **Bildebene**: Punkte werden mit $Y_1, Y_2$ bezeichnet (2D-Koordinaten)
-+ **Brennweite f**: Abstand zwischen Pinhole und virtueller Bildebene
+<div style="max-width: 420px; margin: auto;">
 
-**Von 3D (Objektebene) zu 2D (Bildebene)**
+@Wikimedia.embed(File:Pinhole-camera.svg)
 
-Gegeben: 3D-Punkt auf der Objektebene mit Koordinaten $(X_1, X_2, X_3)$
+</div>
 
-Gesucht: 2D-Bildpunkt auf der Bildebene mit Koordinaten $(Y_1, Y_2)$
+Für die Rechnung legen wir die Bildebene gedanklich **vor** das Loch, im Abstand $f$ (Brennweite). Dann steht das Bild nicht auf dem Kopf, und die Gleichungen werden einfacher.
 
-**Aus ähnlichen Dreiecken (siehe Abbildung):**
+**Koordinatensystem der Kamera** (so verwenden es OpenCV und ROS im *optical frame*, VL 4):
 
-Die gestrichelten Linien in der Abbildung zeigen die Projektionsstrahlen vom 3D-Punkt durch das Pinhole zur Bildebene. Durch ähnliche Dreiecke ergibt sich:
++ Ursprung im optischen Zentrum (dem „Loch“),
++ $Z$ zeigt in Blickrichtung,
++ $X$ nach rechts, $Y$ nach **unten** — wie die Zeilen und Spalten eines Bildes.
 
-$$
-\frac{Y_1}{f} = \frac{X_1}{X_3} \quad \text{und} \quad \frac{Y_2}{f} = \frac{X_2}{X_3}
-$$
+> Achtung: Das ist ein anderes Achsensystem als `base_link` und `base_footprint` des Roboters ($x$ vorn, $y$ links, $z$ oben). In ROS trägt es einen eigenen Frame-Namen mit `_optical_frame` am Ende; die Umrechnung übernimmt tf2 (VL 4).
 
-**Projektionsgleichung:**
+### Vom 3D-Punkt zum Pixel
 
-$$
-Y_1 = f \cdot \frac{X_1}{X_3}, \quad Y_2 = f \cdot \frac{X_2}{X_3}
-$$
+    --{{0}}--
+Ein Punkt im Abstand Z vor der Kamera, X nach rechts versetzt. Sein Strahl geht durch das Zentrum und trifft die Bildebene. Die beiden Dreiecke sind ähnlich, also verhält sich x zu f wie X zu Z. Daraus folgt sofort: Je weiter weg, desto näher an der Bildmitte.
 
-> **Wichtig**: Je größer $X_3$ (Tiefe), desto kleiner erscheint der Punkt im Bild!
+<div style="max-width: 520px; margin: auto;">
 
-### Homogene Koordinaten und Matrixform
+@Wikimedia.embed(File:Pinhole.svg)
 
-**Problem**: Die Projektionsgleichungen sind nicht-linear (Division durch $X_3$) → schlecht für Matrixoperationen und Koordinatentransformationen
+</div>
 
-**Lösung**: Homogene Koordinaten ermöglichen eine **einheitliche Matrixdarstellung**
-
-In homogenen Koordinaten wird ein 2D-Punkt $(Y_1, Y_2)$ als 3D-Vektor $[Y_1, Y_2, 1]^T$ dargestellt.
-
-**Projektionsmatrix (vereinfacht):**
+Ein Punkt $(X, Y, Z)$ vor der Kamera landet nach den ähnlichen Dreiecken auf der Bildebene bei
 
 $$
-\begin{bmatrix} Y_1 \\ Y_2 \\ 1 \end{bmatrix}
-\sim
-\begin{bmatrix}
-f & 0 & 0 & 0 \\
-0 & f & 0 & 0 \\
-0 & 0 & 1 & 0
-\end{bmatrix}
-\begin{bmatrix} X_1 \\ X_2 \\ X_3 \\ 1 \end{bmatrix}
-=
-\begin{bmatrix} f X_1 \\ f X_2 \\ X_3 \end{bmatrix}
+x = f \cdot \frac{X}{Z}, \qquad y = f \cdot \frac{Y}{Z}
 $$
 
-Nach **Normalisierung** (Division durch $X_3$):
+Lässt man $f$ weg, bleiben die **normierten Koordinaten** $x_n = X/Z$, $y_n = Y/Z$ — die Lage auf einer gedachten Bildebene im Abstand 1. Sie brauchen wir gleich bei der Verzeichnung.
 
-$$
-\begin{bmatrix} Y_1 \\ Y_2 \\ 1 \end{bmatrix}
-=
-\begin{bmatrix} f X_1/X_3 \\ f X_2/X_3 \\ 1 \end{bmatrix}
-$$
+**Die Tiefe geht verloren:** Alle Punkte auf demselben Strahl — $(X, Y, Z)$, $(2X, 2Y, 2Z)$, … — landen auf demselben Bildpunkt. Ein einzelnes Bild verrät nicht, ob ein Objekt klein und nah oder groß und fern ist.
 
-> **Vorteil**: Diese Matrixform ist die Grundlage für Kamera-Matrix K und Koordinatentransformationen (siehe folgende Abschnitte)
+    --{{1}}--
+Das hat für uns eine wichtige Folge, die wir gleich nutzen: Wenn wir zusätzlich wissen, dass ein Punkt auf dem Boden liegt, ist er wieder eindeutig. Der Strahl trifft den Boden nur an einer Stelle.
 
-## Abweichungen realer Kameras vom Pinhole-Modell
-
-![](https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Optische_Abbildungsgeometrie_einer_Kamera.svg/1024px-Optische_Abbildungsgeometrie_einer_Kamera.svg.png "Optische Abbildungsgeometrie einer Kamera - Von Olaf Peters (OlafTheScientist) - Eigenes Werk, CC BY-SA 4.0, https://commons.wikimedia.org/w/index.php?curid=91718699")<!-- style="width: 50%;" -->
-
-| **Aspekt** | **Pinhole-Modell (Ideal)** | **Reale Kamera** | **Auswirkung** |
-|------------|----------------------------|-------------------|----------------|
-| **Öffnung** | Unendlich kleine Punktöffnung | Blende mit endlicher Größe | Tiefenschärfe-Effekte |
-| **Optik** | Keine Linsen | Komplexes Linsensystem | Verzerrungen, Aberrationen |
-| **Projektionszentrum** | Ein einziges Zentrum $O$ | Objektseitiges $(O)$ und bildseitiges $(O')$ Projektionszentrum | Verschiedene Brennweiten |
-| **Hauptpunkt** | Bildmitte (ideal) | Hauptpunkt $H$ (senkrechte Projektion von $O'$) | Verschiebung des optischen Zentrums |
-| **Optische Achse** | Exakt senkrecht zur Bildebene | Oft nicht senkrecht | Symmetriepunkt der Verzeichnung $S \neq H$ |
-| **Winkelbeziehung** | $\tau = \tau'$ (winkeltreu) | $\tau \neq \tau'$ | Verzeichnung (barrel/pincushion) |
-| **Strahlenverlauf** | Ein Strahl pro Objektpunkt | Strahlenkegel durch Blende | Unschärfe, Beugungseffekte |
-| **Kamerakonstante** | Brennweite $f$ | Kamerakonstante $c$ (Abstand $O'$ zur Bildebene) | Unterschiedliche Kalibrierwerte |
-
-**Wichtige Parameter realer Kameras:**
-
-+ **Eintrittspupille (EP)**: Objektseitiges Bild der Blende
-+ **Austrittspupille (AP)**: Bildseitiges Bild der Blende  
-+ **Hauptstrahl**: Repräsentativer Strahl durch Projektionszentrum $O$
-+ **Strahlenkegel**: Alle Strahlen eines Objektpunkts durch die Blende
-
-> Diese Abweichungen führen zu den **Verzerrungsparametern**, die bei der Kamerakalibrierung bestimmt werden müssen.
-
-| Komponente                     | Zweck                    | Parameter                 | Modelliert                |
-| ------------------------------ | ------------------------ | ------------------------- | ------------------------- |
-| **Kamera-Matrix K**            | Lineare Projektion       | $f_x, f_y, c_x, c_y, s$   | Ideale Pinhole-Projektion |
-| **Verzerrungskoeffizienten D** | Nichtlineare Korrekturen | $k_1, k_2, k_3, p_1, p_2$ | Linsenverzerrungen        |
+{{1}}
+> **Merken Sie sich:** Aus *einem* Bild allein bekommt man keine Tiefe. Mit einer *Zusatzannahme* — „der Punkt liegt auf dem Boden“ — schon. Darauf baut die Draufsicht auf.
 
 ### Die Kamera-Matrix K
 
-**Die K-Matrix** modelliert nur die **ideale geometrische Projektion**:
+    --{{0}}--
+Im Bild rechnen wir nicht in Millimetern, sondern in Pixeln, und der Ursprung liegt oben links, nicht in der Mitte. Beides fasst die Kamera-Matrix K zusammen: Brennweite in Pixeln und die Lage des Hauptpunkts. Mit homogenen Koordinaten aus VL 4 wird daraus eine einzige Matrixmultiplikation.
+
+**Aus VL 4:** In homogenen Koordinaten bekommt ein Punkt eine zusätzliche Komponente. Welcher Bildpunkt $(x, y)$ gehört zum homogenen Vektor $(6,\ 4,\ 2)$?
+
+[( )] $(6, 4)$
+[(X)] $(3, 2)$
+[( )] $(12, 8)$
+***
+Man teilt durch die letzte Komponente: $(6/2,\ 4/2) = (3, 2)$. Genau dieses Teilen steckt gleich in der Kamera-Matrix — dort ist die letzte Komponente die Tiefe $Z$.
+***
+
+Zwei Schritte machen aus $(x, y)$ Pixelkoordinaten $(u, v)$: in Pixel umrechnen (Brennweite in Pixeln $f_x, f_y$) und den Ursprung von der Bildmitte nach oben links schieben (Hauptpunkt $c_x, c_y$). In homogenen Koordinaten (VL 4) ist das eine Matrixmultiplikation:
 
 $$
-K = \begin{bmatrix}
-f_x & s & c_x \\
-0 & f_y & c_y \\
-0 & 0 & 1
-\end{bmatrix}
+\lambda \begin{bmatrix} u \\ v \\ 1 \end{bmatrix}
+= K \begin{bmatrix} X \\ Y \\ Z \end{bmatrix},
+\qquad
+K = \begin{bmatrix} f_x & 0 & c_x \\ 0 & f_y & c_y \\ 0 & 0 & 1 \end{bmatrix}
 $$
 
-**Parameter:**
+Der Faktor $\lambda$ ist die Tiefe $Z$ — man teilt am Ende durch die dritte Komponente: $u = f_x \frac{X}{Z} + c_x$, $v = f_y \frac{Y}{Z} + c_y$.
 
 <!-- data-type="none" -->
-| Parameter  | Bedeutung                          | Typischer Wert | Einheit |
-| ---------- | ---------------------------------- | -------------- | ------- |
-| $f_x, f_y$ | Brennweite in Pixel (x/y-Richtung) | 500-1500       | Pixel   |
-| $c_x, c_y$ | Hauptpunkt (Principal Point)       | Bildmitte      | Pixel   |
-| $s$        | Skew (Scherung), meist 0           | 0              | Pixel   |
+| Parameter  | Bedeutung                                          | Plausibel, wenn …                                    |
+| ---------- | -------------------------------------------------- | ---------------------------------------------------- |
+| $f_x, f_y$ | Brennweite in Pixeln                               | fast gleich groß (quadratische Pixel)                 |
+| $c_x, c_y$ | Hauptpunkt: wo die optische Achse das Bild trifft  | nahe der Bildmitte, aber selten genau dort            |
 
-**Erklärung:**
+**Brennweite in Pixeln — ein Beispiel:** Die Raspberry-Pi-Kamera v2 hat $f = 3{,}04$ mm. Liest man sie mit 640 × 480 aus, ist ein Pixel etwa $5{,}7\ \mu\text{m}$ breit. Also $f_x \approx 3{,}04\ \text{mm} / 0{,}0057\ \text{mm} \approx 530$ Pixel.
 
-+ **Brennweite in Pixel**: $f_x = f \cdot m_x$, wobei $f$ die physische Brennweite (mm) und $m_x$ die Pixeldichte (Pixel/mm) ist
-+ **Hauptpunkt**: Schnittpunkt der optischen Achse mit der Bildebene (idealerweise Bildmitte)
-+ **Skew**: Beschreibt nicht-rechtwinklige Pixel (bei modernen Kameras meist 0)
+**Rechnen Sie selbst:** Die Kamera unseres TurtleBots hat (in der Testwelt) $f_x = f_y = 530$, $c_x = 318$, $c_y = 243$. Ein Punkt liegt bei $X = 0{,}1$ m, $Y = 0{,}05$ m, $Z = 0{,}5$ m vor der Kamera. Auf welcher Spalte $u$ landet er?
 
-**Vollständige Projektion:**
+[[424]]
+[[?]] $u = f_x \cdot X / Z + c_x$
+***
+$u = 530 \cdot 0{,}1 / 0{,}5 + 318 = 106 + 318 = 424$. Für die Zeile gilt entsprechend $v = 530 \cdot 0{,}05 / 0{,}5 + 243 = 296$.
+***
 
-$$
-K \begin{bmatrix} X \\ Y \\ Z \end{bmatrix}
-=
-\begin{bmatrix}
-f_x & s & c_x \\
-0 & f_y & c_y \\
-0 & 0 & 1
-\end{bmatrix}
-\begin{bmatrix} X \\ Y \\ Z \end{bmatrix}
-$$
+Und wenn der Punkt doppelt so weit weg ist ($X = 0{,}2$, $Y = 0{,}1$, $Z = 1{,}0$)?
 
-wobei $(u, v)$ die **Pixelkoordinaten** im Bild sind.
+[( )] $u = 530$, weil alles doppelt so groß ist
+[(X)] wieder $u = 424$
+[( )] $u = 371$, halb so weit vom Hauptpunkt
+***
+Der Punkt liegt auf demselben Sehstrahl — $X/Z$ ist unverändert, also auch $u$. Genau das meint „die Tiefe geht verloren“.
+***
 
-**Die Kamera-Matrix K erfasst nur einen Teil der realen Kamera-Abweichungen:**
+## Reale Linsen: Verzeichnung
 
-| **Parameter aus Tabelle** | **In K enthalten?** | **K-Parameter** | **Erklärung** |
-|---------------------------|---------------------|-----------------|---------------|
-| **Hauptpunkt H** | ✅ **Ja** | $(c_x, c_y)$ | Verschiebung des optischen Zentrums |
-| **Kamerakonstante c** | ✅ **Ja** | $(f_x, f_y)$ | Brennweite in Pixelkoordinaten |
-| **Skew/Scherung** | ✅ **Ja** | $s$ | Nicht-rechtwinklige Pixel |
-| **Verschiedene Brennweiten** | ✅ **Ja** | $f_x \neq f_y$ | Unterschiedliche Skalierung in x/y |
-| **Projektionszentren O, O'** | ❌ **Nein** | - | Vereinfacht zu einem Zentrum |
-| **Verzeichnung ($\tau \neq \tau'$)** | ❌ **Nein** | - | **Separate Verzerrungsparameter nötig** |
-| **Symmetriepunkt S ≠ H** | ❌ **Nein** | - | **Separate Verzerrungsparameter nötig** |
-| **Strahlenkegel-Effekte** | ❌ **Nein** | - | Tiefenschärfe, optische Effekte |
+    --{{0}}--
+Echte Kameras haben kein Loch, sondern eine Linse. Sie sammelt mehr Licht, verbiegt dafür aber die Strahlen, besonders weit außen. Links sehen Sie ein Schachbrett, wie es die Kamera aufnimmt: Die Linien sind tonnenförmig nach außen gewölbt. Rechts dasselbe Bild nach der Entzerrung.
 
-> **Wichtig**: Die Kamera-Matrix K modelliert die **lineare Projektion**, aber **nicht** die **Verzerrungen**!
+![Links ein Schachbrett mit nach außen gewölbten Linien, rechts dasselbe Schachbrett mit geraden Linien](./images/verzeichnung.png "Tonnenförmige Verzeichnung ($k_1 < 0$) und ihre Korrektur")
 
-**Deshalb brauchen wir zusätzlich:**
-
-+ **Verzerrungskoeffizienten** $(k_1, k_2, k_3, p_1, p_2)$ für radiale und tangentiale Verzeichnung
-+ **Separate Kalibrierung** zur Bestimmung von K und Verzerrungsparametern
-
-### Verzerrungsparameter
-
-**Die Verzerrungskoeffizienten** sind der **zweite Teil** der intrinsischen Parameter:
-
-Reale Linsen verursachen **geometrische Verzerrungen**:
-
-**1. Radiale Verzerrung** – abhängig vom Abstand zum Bildmittelpunkt
-
-![Linsenverzerrung](https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Lens_distorsion.svg/1280px-Lens_distorsion.svg.png "Stellung der Blende verursacht kissenförmige Verzeichnung (oben), tonnenförmige Verzeichnung (Mitte), keine Verzeichnung (unten) - Von Nicoguaro - Eigenes Werk, CC BY-SA 3.0, https://commons.wikimedia.org/w/index.php?curid=17027248")<!-- style="width: 50%;" -->
-
-+ **Tonnenverzerrung** (barrel distortion): $k_1 < 0$ – häufig bei Weitwinkelobjektiven
-+ **Kissenverzerzung** (pincushion distortion): $k_1 > 0$ – häufig bei Teleobjektiven
-
-**Modell:**
+Die **radiale Verzeichnung** verschiebt jeden Punkt abhängig von seinem Abstand $r$ zur Bildmitte (in normierten Koordinaten $x_n, y_n$, $r^2 = x_n^2 + y_n^2$):
 
 $$
-\begin{align}
-x_{\text{verzerrt}} &= x (1 + k_1 r^2 + k_2 r^4 + k_3 r^6) \\
-y_{\text{verzerrt}} &= y (1 + k_1 r^2 + k_2 r^4 + k_3 r^6)
-\end{align}
+x_\text{n,verzerrt} = x_n \,(1 + k_1 r^2 + k_2 r^4 + k_3 r^6)
 $$
 
-wobei $r^2 = x^2 + y^2$ (Abstand vom Hauptpunkt, normalisiert)
+und entsprechend für $y_n$. **Zahlenbeispiel** mit der Testkamera ($k_1 = -0{,}28$, $k_2 = 0{,}09$): In der Bildecke ist $r^2 \approx 0{,}57$, der Faktor also $1 - 0{,}28 \cdot 0{,}57 + 0{,}09 \cdot 0{,}57^2 \approx 0{,}87$ — dort wird das Bild um 13 % zur Mitte gestaucht. In der Bildmitte ist der Faktor 1.
 
-**2. Tangentiale Verzerrung** – durch nicht-parallele Linsenebenen
-
-$$
-\begin{align}
-x_{\text{verzerrt}} &= x + [2p_1 xy + p_2(r^2 + 2x^2)] \\
-y_{\text{verzerrt}} &= y + [p_1(r^2 + 2y^2) + 2p_2 xy]
-\end{align}
-$$
-
-**Verzerrungskoeffizienten:**
+Dazu kommt eine kleine **tangentiale** Verzeichnung ($p_1, p_2$), wenn Linse und Sensor nicht genau parallel sitzen. OpenCV und ROS fassen alles im Modell `plumb_bob` zusammen — so heißt dieses Polynom-Modell in der Kalibrierdatei:
 
 $$
-D = (k_1, k_2, p_1, p_2, k_3)
+D = (k_1,\ k_2,\ p_1,\ p_2,\ k_3)
 $$
 
-> Bei Weitwinkel- und Fischaugenobjektiven ist die Verzerrung besonders stark!
+<!-- data-type="none" -->
+| Vorzeichen von $k_1$ | Verzeichnung                     | Typisch für                     |
+| :------------------- | :------------------------------- | :------------------------------ |
+| $k_1 < 0$            | **tonnenförmig** — Rand wird gestaucht | Weitwinkel, z.B. die Kamera unserer Testdaten |
+| $k_1 > 0$            | **kissenförmig** — Rand wird gedehnt   | Teleobjektive                  |
 
-### Anwendung der intrinsischen Parameter
+<div style="max-width: 420px; margin: auto;">
 
-> Wie werden K-Matrix und Verzerrungskoeffizienten verwendet, um ein verzerrtes Kamerabild zu entzerren?**
+@Wikimedia.embed(File:Lens_distorsion.svg)
 
-**Schritt 1: Vom verzerrten Bild zu normalisierten Koordinaten**
+</div>
 
-```ascii
-Verzerrtes Kamerabild        K⁻¹ (inverse K-Matrix)      Normalisierte Koordinaten
-     [u_verzerrt]                                              [x_verzerrt]
-     [v_verzerrt]        →        K⁻¹ × [u v 1]ᵀ        =      [y_verzerrt]
-     [    1     ]                                              [    1     ]
-```
+Warum ist die Verzeichnung am Bildrand am stärksten?
 
-**Mathematisch:**
-
-$$
-\begin{bmatrix} x_{\text{verzerrt}} \\ y_{\text{verzerrt}} \\ 1 \end{bmatrix} = K^{-1} \begin{bmatrix} u \\ v \\ 1 \end{bmatrix}
-$$
-
-**Schritt 2: Verzerrung rückgängig machen**
-
-Die **verzerrten Koordinaten** $(x_{\text{verzerrt}}, y_{\text{verzerrt}})$ werden zu **idealisierten Koordinaten** $(x_{\text{ideal}}, y_{\text{ideal}})$ korrigiert:
-
-```ascii
-Verzerrte Koordinaten    Umkehr-Verzerrungsmodell    Idealisierte Koordinaten
-   (x_verzerrt, y_verzerrt)                              (x_ideal, y_ideal)
-           |                                                     ^
-           |        Iterative Lösung von:                        |
-           |   x_verzerrt = x_ideal(1 + k₁r² + k₂r⁴)             |
-           |             + [2p₁x_ideal·y_ideal + p₂(r² + 2x²)]   |
-           └─────────────────────────────────────────────────────┘
-```
-
-**Achtung**: Diese Umkehrung ist **nicht analytisch lösbar** → iterative Methoden oder Lookup-Tabellen!
-
-**Schritt 3: Zurück zu entzerrten Pixelkoordinaten**
-
-Die idealisierten Koordinaten werden in **entzerrte Pixelkoordinaten** umgewandelt:
-
-$$
-\begin{align}
-u_{\text{entzerrt}} &= f_x \cdot x_{\text{ideal}} + c_x \\
-v_{\text{entzerrt}} &= f_y \cdot y_{\text{ideal}} + c_y
-\end{align}
-$$
-
-
-```python
-import cv2
-import numpy as np
-
-def undistort_image(distorted_img, K, dist_coeffs):
-
-    
-    return undistorted_img
-
-# Beispiel-Verwendung
-K = np.array([[533.3, 0, 320.5],
-              [0, 533.3, 240.5],  
-              [0, 0, 1]], dtype=np.float32)
-
-dist_coeffs = np.array([-0.28, 0.11, 0.001, 0.0005, -0.04], dtype=np.float32)
-
-# Lade verzerrtes Bild
-distorted = cv2.imread('raw_camera_image.jpg')
-
-# Wende Entzerrung an - Entzerrt ein Kamerabild mit intrinsischen Parametern
-# 
-# Args:
-#     distorted_img: Verzerrtes Eingangsbild
-#     K: 3x3 Kamera-Matrix
-#     dist_coeffs: [k1, k2, p1, p2, k3] Verzerrungskoeffizienten
-# 
-# Returns:
-#     undistorted_img: Entzerrtes Ausgangsbild
-undistorted_img = cv2.undistort(distorted_img, K, dist_coeffs)
-
-# Speichere Ergebnis
-cv2.imwrite('corrected_camera_image.jpg', undistorted)
-```
+[( )] Weil dort das Licht schräger einfällt und schwächer ist
+[(X)] Weil die Korrektur mit $r^2$, $r^4$, $r^6$ wächst — in der Bildmitte ist $r \approx 0$
+[( )] Weil der Sensor am Rand gröber auflöst
+***
+Der Faktor $1 + k_1 r^2 + \dots$ ist in der Mitte fast 1. Deshalb prüfen Sie eine Entzerrung immer mit einer geraden Kante **nahe am Bildrand** (P 2, Teil B).
+***
 
 ## Kamerakalibrierung
 
-Kalibrierung ist der Prozess, bei dem wir 
+    --{{0}}--
+Woher kommen K und D? Nicht aus dem Datenblatt. Jede Kamera ist ein wenig anders geschliffen und montiert, deshalb misst man sie aus: mit einem Muster, dessen Geometrie man genau kennt. Das Schachbrett ist dafür ideal, weil seine Ecken scharf sind und automatisch gefunden werden.
 
-+ die intrinsischen Parameter K und die Verzerrungskoeffizienten D einer Kamera bestimmen und / oder
-+ ggf. die extrinsischen Parameter (Rotation R und Translation t) relativ zu einer Weltkoordinate schätzen.
+Kalibrieren heißt: $K$ und $D$ **einer bestimmten Kamera** messen. Zwei baugleiche Kameras unterscheiden sich durch Fertigung und Montage — deshalb kalibriert in P 2 jede Gruppe ihre eigene.
 
-**Ohne Kalibrierung:**
+### Ablauf mit dem Schachbrett
 
-+ ❌ Verzerrte Bilder
-+ ❌ Falsche Entfernungsmessungen
-+ ❌ Ungenaue 3D-Rekonstruktion
+    --{{0}}--
+Das Schachbrett wird in vielen Lagen vor die Kamera gehalten. In jedem Bild findet OpenCV die inneren Ecken. Von diesen Ecken kennen wir die echte Lage auf dem Brett. Gesucht sind die K und D, mit denen sich alle Ecken in allen Bildern am besten vorhersagen lassen.
 
-### Intrinsische Kalibrierung mit Schachbrettmuster
+![Schachbrett schräg vor der Kamera, alle 48 inneren Ecken farbig markiert](./images/kalibrierbild_ecken.png "Ein Kalibrierbild: OpenCV hat alle inneren Ecken gefunden.")<!-- style="width: 45%;" -->
 
-**Idee**: Fotografiere ein bekanntes Muster aus verschiedenen Perspektiven
+**Innere Ecken** sind die Punkte, an denen sich vier Felder berühren. Ein Brett mit $9 \times 7$ Feldern hat $8 \times 6$ innere Ecken — diese Zahl verlangen alle Werkzeuge.
 
-![](https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Multiple_chessboard_views.png/960px-Multiple_chessboard_views.png "Verschiedene Ansichten eines Schachbretts zur Kamerakalibrierung - Von Brian moore81 - Eigenes Werk, CC BY-SA 4.0, https://commons.wikimedia.org/w/index.php?curid=37007184")
+```mermaid @mermaid
+flowchart LR
+    A["Brett in 20–40 Lagen<br/>nah/fern, links/rechts,<br/>gekippt"] --> B["Ecken finden<br/>findChessboardCorners<br/>+ cornerSubPix"]
+    B --> C["K, D so wählen, dass<br/>alle Ecken möglichst<br/>genau getroffen werden"]
+    C --> D["Reprojektionsfehler<br/>prüfen (≲ 0,5 px)"]
+    D --> E["ost.yaml"]
+```
 
-**Ablauf:**
+`findChessboardCorners` findet die Ecken auf etwa ein Pixel genau. `cornerSubPix` verfeinert jede Ecke danach in einem kleinen Fenster um sie herum auf Bruchteile eines Pixels — dort, wo sich die Helligkeitskanten der vier Felder schneiden.
 
-1. Vorbereitung eines verwindungssteifen Schachbrettmuster bekannter Größe 
-2. Nimm 10-20 Bilder aus verschiedenen Winkeln und Entfernungen auf
-3. Erkenne automatisch die Schachbrett-Ecken in jedem Bild
-4. Berechne K und D durch Optimierung
+**Reprojektionsfehler:** Mit dem gefundenen $K$ und $D$ rechnet man die Ecken zurück ins Bild und misst, wie weit sie von den erkannten Ecken entfernt liegen. OpenCV meldet den quadratischen Mittelwert (RMS) — bei guter Kalibrierung einige Zehntel Pixel. Ein großer Wert heißt: unscharfe Bilder, verbogenes Brett oder zu wenige verschiedene Lagen.
 
-**OpenCV-Implementierung:**
+    --{{1}}--
+Den Code müssen Sie heute nicht Zeile für Zeile verstehen, das machen Sie in Ü 4. Achten Sie auf drei Stellen. Erstens: Die Lage der Ecken auf dem Brett schreiben wir selbst auf, das Brett ist die Ebene Z gleich null, und die Zeile mit mgrid erzeugt einfach alle Gitterpunkte im Abstand einer Feldbreite. Zweitens: Für jedes Bild suchen wir die Ecken und verfeinern sie mit cornerSubPix. Drittens: calibrateCamera bekommt beide Listen und liefert den Reprojektionsfehler, K und D.
+
+{{1}}
+****
+
+So sieht die Kalibrierung in OpenCV aus — in Ü 4 führen Sie sie an vorgegebenen Bildern selbst aus:
+
+```python
+import glob
+import cv2
+import numpy as np
+
+ECKEN = (8, 6)        # innere Ecken (quer, längs)
+FELD = 0.025          # Kantenlänge eines Feldes in m
+
+# Lage der Ecken auf dem Brett: (0,0,0), (0.025,0,0), … – das Brett ist die Ebene Z = 0
+brett = np.zeros((ECKEN[0] * ECKEN[1], 3), np.float32)
+brett[:, :2] = np.mgrid[0:ECKEN[0], 0:ECKEN[1]].T.reshape(-1, 2) * FELD
+
+punkte_brett, punkte_bild = [], []
+for datei in sorted(glob.glob('kalibrierbilder/*.png')):
+    grau = cv2.imread(datei, cv2.IMREAD_GRAYSCALE)
+    ok, ecken = cv2.findChessboardCorners(grau, ECKEN)
+    if ok:
+        ecken = cv2.cornerSubPix(grau, ecken, (5, 5), (-1, -1),
+                                 (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.01))
+        punkte_brett.append(brett)
+        punkte_bild.append(ecken)
+
+fehler, K, D, _, _ = cv2.calibrateCamera(punkte_brett, punkte_bild, grau.shape[::-1], None, None)
+print(f'Reprojektionsfehler: {fehler:.2f} px')
+print('K =\n', K.round(1))
+print('D =', D.ravel().round(3))
+```
+
+Ausgabe mit den 30 Kalibrierbildern der Testkamera (wahre Werte: $f_x = f_y = 530$, $c_x = 318$, $c_y = 243$, $k_1 = -0{,}28$, $k_2 = 0{,}09$):
+
+```text
+Reprojektionsfehler: 0.31 px
+K =
+ [[528.7   0.  317. ]
+ [  0.  528.6 242.8]
+ [  0.    0.    1. ]]
+D = [-0.281  0.097  0.001 -0.    -0.012]
+```
+
+****
+
+Am Roboter nimmt Ihnen das Werkzeug `cameracalibrator` aus dem Paket `camera_calibration` die Schleife ab: Es zeigt das Kamerabild live, sammelt selbst geeignete Lagen (Balken `X`, `Y`, `Size`, `Skew`) und speichert das Ergebnis nach **CALIBRATE** und **SAVE**. Wie Sie es bedienen, üben Sie in Ü 4.
+
+### Das Ergebnis lesen: ost.yaml
+
+    --{{0}}--
+Das Ergebnis landet in einer kleinen Textdatei. Zwei Einträge brauchen Sie: die Kamera-Matrix und die Verzerrungskoeffizienten. Daneben steht eine Projektionsmatrix P, die oft verwirrt. Sie gehört zu einem entzerrten Bild, das zusätzlich beschnitten und neu skaliert wurde. Das ROS-Paket image_proc entzerrt mit dieser Matrix. Wir entzerren dagegen in P 2 selbst und behalten K, deshalb lassen wir P liegen.
+
+`cameracalibrator` schreibt diese Datei. Sie stammt aus einem **eigenen Lauf** mit anderen Bildern derselben Testkamera — deshalb weichen die Werte in der zweiten Nachkommastelle von der Ausgabe oben ab (gekürzt):
+
+```yaml
+image_width: 640
+image_height: 480
+camera_matrix:            # K
+  rows: 3
+  cols: 3
+  data: [528.87, 0.0, 317.57, 0.0, 528.85, 243.49, 0.0, 0.0, 1.0]
+distortion_model: plumb_bob
+distortion_coefficients:  # D = k1, k2, p1, p2, k3
+  rows: 1
+  cols: 5
+  data: [-0.2787, 0.0867, 0.0007, -0.0003, 0.0]   # k3 = 0: cameracalibrator schätzt nur k1, k2
+projection_matrix:        # P – für image_proc; in unserem Kurs NICHT verwenden
+  rows: 3
+  cols: 4
+  data: [469.73, 0.0, 316.12, 0.0, 0.0, 495.88, 243.74, 0.0, 0.0, 0.0, 1.0, 0.0]
+```
+
+Zwei Unterschiede zur OpenCV-Ausgabe oben: `cameracalibrator` hält $k_3$ standardmäßig bei 0 fest (für normale Objektive genügen $k_1$, $k_2$), und es schreibt zusätzlich $P$. Diese Matrix beschreibt das entzerrte Bild, nachdem es so beschnitten und skaliert wurde, dass keine schwarzen Ränder bleiben — deshalb weichen $f_x, f_y$ darin deutlich von $K$ ab. Das ROS-Paket `image_proc` entzerrt mit $P$; wir entzerren in P 2 selbst und behalten $K$. Wer beides mischt, bekommt einen anderen Maßstab.
+
+In ROS 2 überträgt die Nachricht `sensor_msgs/msg/CameraInfo` genau diese Werte (Felder `k`, `d`, `p`), wenn der Kameratreiber eine Kalibrierung kennt.
+
+Prüfen Sie diese Kalibrierung: Welche Aussagen stimmen?
+
+[[X]] $f_x$ und $f_y$ sind fast gleich — die Pixel sind quadratisch.
+[[X]] Der Hauptpunkt liegt nahe der Bildmitte $(320, 240)$.
+[[ ]] Die Verzeichnung ist kissenförmig.
+[[X]] Für das Entzerren werden `camera_matrix` und `distortion_coefficients` gebraucht.
+***
+$k_1 = -0{,}28 < 0$: tonnenförmig, typisch für Weitwinkel-Objektive. Die `projection_matrix` beschreibt ein anderes, beschnittenes Zielbild; in unserem Knoten bleibt $K$ auch nach dem Entzerren die Kamera-Matrix.
+***
+
+## Bilder entzerren
+
+    --{{0}}--
+Jetzt wollen wir mit K und D ein ganzes Bild gerade rücken. Der Trick ist, rückwärts zu denken: Für jedes Pixel des geraden Zielbilds fragen wir, wo es im verzerrten Rohbild liegt, und holen den Grauwert von dort. Diese Frage hängt nur von K und D ab, nicht vom Bildinhalt. Also berechnen wir die Antwort einmal und schlagen sie dann für jedes Bild nur noch nach.
+
+**Rückwärts denken:** Für jedes Pixel $(u, v)$ des entzerrten Zielbilds berechnet man, an welcher Stelle $(u', v')$ es im verzerrten Rohbild liegt, und übernimmt den Grauwert von dort (mit Interpolation).
+
+```mermaid @mermaid
+flowchart LR
+    Z["Pixel (u, v)<br/>im Zielbild"] -->|"K⁻¹"| N["normierte<br/>Koordinaten (x, y)"]
+    N -->|"Verzeichnung mit D<br/>anwenden"| NV["verzerrte<br/>Koordinaten"]
+    NV -->|"K"| Q["Stelle (u′, v′)<br/>im Rohbild"]
+```
+
+Diese Zuordnung hängt **nur von $K$ und $D$** ab, nicht vom Bildinhalt. Deshalb berechnet man sie einmal als Nachschlagetabelle und wendet sie auf jedes Bild an:
 
 ```python
 import cv2
-import numpy as np
-import glob
 
-# 1. Schachbrett-Spezifikation
-CHECKERBOARD = (6, 9)  # Innere Ecken (Höhe, Breite)
-square_size = 0.025    # 25mm in Metern
+# einmal beim Start: zwei Tabellen, welche Rohbild-Stelle zu welchem Zielpixel gehört
+tab1, tab2 = cv2.initUndistortRectifyMap(K, D, None, K, (640, 480), cv2.CV_16SC2)
 
-# 3D-Punkte des Schachbretts (in Weltkoordinaten)
-objp = np.zeros((CHECKERBOARD[0] * CHECKERBOARD[1], 3), np.float32)
-objp[:, :2] = np.mgrid[0:CHECKERBOARD[0], 0:CHECKERBOARD[1]].T.reshape(-1, 2)
-objp *= square_size
-
-# Listen für 3D-Punkte und 2D-Bildpunkte
-objpoints = []  # 3D-Punkte in der realen Welt
-imgpoints = []  # 2D-Punkte im Bild
-
-# 2. Lade Kalibrierbilder
-images = glob.glob('calibration_images/*.jpg')
-
-for fname in images:
-    img = cv2.imread(fname)
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
-    # 3. Finde Schachbrett-Ecken
-    ret, corners = cv2.findChessboardCorners(gray, CHECKERBOARD, None)
-
-    if ret:
-        objpoints.append(objp)
-
-        # Verfeinere Ecken-Positionen (sub-pixel)
-        corners_refined = cv2.cornerSubPix(
-            gray, corners, (11, 11), (-1, -1),
-            criteria=(cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
-        )
-        imgpoints.append(corners_refined)
-
-        # Zeichne Ecken (zur Kontrolle)
-        cv2.drawChessboardCorners(img, CHECKERBOARD, corners_refined, ret)
-        cv2.imshow('Corners', img)
-        cv2.waitKey(500)
-
-cv2.destroyAllWindows()
-
-# 4. Kalibrierung durchführen
-ret, K, dist, rvecs, tvecs = cv2.calibrateCamera(
-    objpoints, imgpoints, gray.shape[::-1], None, None
-)
-
-print("Kamera-Matrix K:")
-print(K)
-print("\nVerzerrungskoeffizienten:")
-print(dist)
-
-# Speichern
-np.savez('camera_calibration.npz', K=K, dist=dist)
+# für jedes Kamerabild: nur noch nachschlagen und interpolieren
+entzerrt = cv2.remap(rohbild, tab1, tab2, cv2.INTER_LINEAR)
 ```
 
-**Ausgabe-Beispiel:**
+<!-- data-type="none" -->
+| Weg                                    | Rechenzeit je Bild (640 × 480, ein Kern eines Laborrechners) | Wann?                    |
+| :------------------------------------- | :------------------------------------------------------------ | :----------------------- |
+| `cv2.undistort(rohbild, K, D)`         | etwa 2,5 ms — berechnet die Zuordnung jedes Mal neu           | ein einzelnes Foto       |
+| `initUndistortRectifyMap` + `remap`    | etwa 1,3 ms — die Tabellen (1,2 ms) nur einmal beim Start     | Videostrom im ROS-Knoten — **P 2** |
 
-```
-Kamera-Matrix K:
-[[532.8  0.0  342.5]
- [  0.0 532.8 233.1]
- [  0.0   0.0   1.0]]
+Auf dem Laborrechner ist das nur ein Faktor zwei. Auf dem kleinen Rechner eines Roboters, der nebenbei noch LiDAR, Odometrie und Regler bedient, zählt jede gesparte Millisekunde — und 30 Bilder pro Sekunde lassen nur 33 ms je Bild für die ganze Kette.
 
-Verzerrungskoeffizienten:
-[[-0.28  0.11  0.001  0.0005  -0.04]]
- k1     k2     p1      p2       k3
-```
+    --{{1}}--
+Warum ist das rückwärts so viel einfacher als vorwärts? Vorwärts müssten wir die Verzeichnung umkehren, und dafür gibt es keine Formel, nur eine iterative Näherung. Rückwärts wenden wir die Verzeichnung einfach an, genau in der Richtung, in der die Formel geschrieben ist.
 
-### Extrinsische Parameter
+{{1}}
+> **Warum rückwärts?** Vorwärts (Rohbild → Zielbild) müsste man die Verzeichnungsformel *umkehren* — das geht nur iterativ, und manche Zielpixel blieben leer. Rückwärts wendet man die Formel einfach an, und jedes Zielpixel bekommt genau einen Wert.
 
-Während intrinsische Parameter die Kamera selbst beschreiben, beschreiben extrinsische Parameter die Position und Orientierung der Kamera in der Welt.
-
-**Extrinsische Parameter:**
-
-+ **Rotation R** (3×3-Matrix): Orientierung der Kamera
-+ **Translation t** (3×1-Vektor): Position der Kamera
-
-> Auch extrinsische Parameter werden bei der Kalibrierung bestimmt! Dazu kann wiederum unser Schachbrettmuster verwendet werden.
-
-## Stereo-Vision
+## Homographie: vom Bild auf den Boden
 
     --{{0}}--
-Mit einer einzelnen Kamera können wir keine Tiefe messen. Die Lösung: Zwei Kameras, die wie unsere Augen funktionieren!
+Jetzt kommt der wichtigste Schritt für unser Projekt. Wir wissen: Ein einzelnes Bild verrät keine Tiefe. Aber die Fahrbahnlinien liegen alle auf dem Boden, also auf einer Ebene. Und zwischen einer Ebene in der Welt und dem Kamerabild gibt es eine besonders einfache Abbildung, die Homographie.
 
-### Prinzip der Stereo-Vision
+Für einen Punkt, der auf dem **Boden** liegt, braucht man keine Tiefe: Der Sehstrahl trifft den Boden nur an einer Stelle. Als Boden-Koordinatensystem nehmen wir `base_footprint` (VL 4): Der Boden ist dort die Ebene $z = 0$, ein Bodenpunkt hat die Koordinaten $(x, y)$.
 
-**Konzept**: Zwei Kameras mit bekanntem Abstand (Baseline) betrachten dieselbe Szene
-
-![](https://upload.wikimedia.org/wikipedia/commons/b/b9/Stereoscopic_images%2C_depth_to_displacement_relationship_assuming_flat_co-planar_images..png "Beziehung zwischen Tiefe und Disparität in der Stereo-Vision - By Thepigdog - Own work, CC BY-SA 3.0, https://commons.wikimedia.org/w/index.php?curid=32757926")<!-- style="width: 30%;" -->
-
-> Betrachten Sie die zwei ähnlichen Dreiecke in der Abbildung oben. Durch die bekannte Baseline und die gemessene Disparität können wir die Tiefe berechnen.
+Um einen Bodenpunkt ins Bild zu bringen, drückt man ihn zuerst im Kamera-System aus — mit Drehung $R = [\,r_1\ r_2\ r_3\,]$ und Verschiebung $t$ von $\textbf{T}_{\text{cam},\text{base}}$. Das ist die Umkehrung dessen, was tf2 für die montierte Kamera liefert: $\textbf{T}_{\text{cam},\text{base}} = \textbf{T}_{\text{base},\text{cam}}^{-1}$, einschließlich der Drehung ins *optical frame*. Danach wirkt $K$:
 
 $$
-\begin{align}
-\frac{BC + CD}{AC} &= \frac{EF}{BF} + \frac{GH}{DG} \\
-\frac{BC + CD}{AC} &= \frac{EF}{BF} + \frac{GH}{BF} \\
-\frac{BC + CD}{AC} &= \frac{1}{BF}(EF + GH) \\
-AC &= \frac{BF (BC + CD)}{EF + GH} \\
-z &= \frac{f \cdot b}{d} \\
-\end{align}
+\lambda \begin{bmatrix} u \\ v \\ 1 \end{bmatrix}
+= K \begin{bmatrix} r_1 & r_2 & r_3 & t \end{bmatrix} \begin{bmatrix} x \\ y \\ 0 \\ 1 \end{bmatrix}
+= \underbrace{K \begin{bmatrix} r_1 & r_2 & t \end{bmatrix}}_{H} \begin{bmatrix} x \\ y \\ 1 \end{bmatrix}
 $$
 
-wobei:
-- $BC + CD = BD = b$ (Baseline)
-- $EF + GH = d$ (Disparität) 
-- $BF = f$ (Brennweite)
-- $AC = z$ (gesuchte Distanz)
+Die dritte Spalte $r_3$ fällt weg, weil $z = 0$ ist. Übrig bleibt eine $3 \times 3$-Matrix $H$, die **Homographie**: Sie bildet Punkte einer Ebene auf Punkte einer anderen Ebene ab — hier Boden → Bild, und mit $H^{-1}$ zurück.
 
-**Menschliche Analogie**: Unsere Augen haben einen Abstand von ~6-7 cm
+> Diese Rechnung müssen Sie in P 2 **nicht** von Hand ausführen. Sie zeigt nur, *warum* eine $3 \times 3$-Matrix genügt. Die Matrix selbst misst `findHomography` aus Punktpaaren — dann muss niemand $R$, $t$ und die Kamerahöhe genau kennen.
 
-> Welche Auswirkungen hat die Baseline auf die Tiefenmessung?
+### Vier Punktpaare genügen
 
-+ **Große Disparität** ($d \uparrow$) → **kleine Distanz** ($z \downarrow$) → **nahes Objekt**
-+ **Kleine Disparität** ($d \downarrow$) → **große Distanz** ($z \uparrow$) → **fernes Objekt**  
-+ **Größere Baseline** ($b \uparrow$) → **bessere Tiefenauflösung**
-+ **Größere Brennweite** ($f \uparrow$) → **bessere Tiefengenauigkeit**
+    --{{0}}--
+Bevor Sie weiterlesen: Überlegen Sie kurz, wie viele Punktpaare man braucht. Der Trick ist, dass man bei homogenen Koordinaten am Ende durch die dritte Komponente teilt. Eine Matrix, die man mit zwei multipliziert, liefert also dieselben Punkte.
 
-### Vorverarbeitung
+**Vorhersage:** Wie viele Punktpaare „Bodenpunkt ↔ Bildpunkt“ braucht man mindestens, um $H$ zu bestimmen?
 
-Stereo-Rektifizierung
-========================
+[( )] 3
+[(X)] 4
+[( )] 9
+***
+$H$ hat 9 Einträge, aber die gemeinsame Skalierung ist beliebig — es bleiben **8 Unbekannte**. Jedes Punktpaar liefert 2 Gleichungen (eine für $u$, eine für $v$). Also genügen **4 Punktpaare**, von denen keine drei auf einer Geraden liegen.
+***
 
-**Problem**: Kameras sind nie perfekt ausgerichtet
+Woher bekommt man Punktpaare mit bekannter Bodenlage? Vom **Schachbrett, flach auf dem Boden**: Seine Ecken findet OpenCV im Bild, und ihre Lage auf dem Boden kennt man aus Feldgröße und gemessenem Abstand. Mit 48 Ecken statt 4 mittelt `findHomography` Messfehler heraus.
 
-**Lösung**: **Rektifizierung** – virtuelle Rotation der Bilder, sodass:
+### Die Draufsicht auf die Fahrbahn
 
-1. Bildzeilen parallel sind
-2. Korrespondierende Punkte auf derselben Zeile liegen
+    --{{0}}--
+Damit wir in der Draufsicht in Metern messen können, legen wir fest, wie Pixel und Boden zusammenhängen. Bei uns sind es vierhundert Pixel pro Meter, also ein Pixel pro zweieinhalb Millimeter. Oben im Bild liegt der Boden weit vor dem Roboter, links liegt das, was links vom Roboter ist.
 
-```ascii
-Vor Rektifizierung:             Nach Rektifizierung:
+Die Draufsicht ist ein neues Bild, in dem jedes Pixel ein Stück Boden ist. Wir legen fest:
 
-Linkes Bild   Rechtes Bild      Linkes Bild   Rechtes Bild
-  ●  .                             ──●────────────●──  ← Epipolarlinie
-     ●.                              ─────●────●─────
-       .●
-                                   Punkte liegen auf
-Punkt liegt auf                    derselben Zeile!
-schräger Epipolarlinie                                                                                      .
+<!-- data-type="none" -->
+| Festlegung   | Wert in P 2 und P 3                        | Folgt daraus                               |
+| :----------- | :----------------------------------------- | :----------------------------------------- |
+| Maßstab      | 400 Pixel pro Meter (1 px = 2,5 mm)        |                                            |
+| vorn/hinten  | $x$ von 0,12 m bis $x_\text{max} = 0{,}62$ m | Höhe $(0{,}62 - 0{,}12) \cdot 400 = 200$ px |
+| links/rechts | $y$ von −0,35 m bis $y_\text{max} = 0{,}35$ m | Breite $2 \cdot 0{,}35 \cdot 400 = 280$ px |
+
+Ein Bodenpunkt $(x, y)$ in `base_footprint` ($x$ vorn, $y$ links) landet auf
+
+$$
+\text{Spalte} = (y_\text{max} - y) \cdot 400, \qquad \text{Zeile} = (x_\text{max} - x) \cdot 400
+$$
+
+Oben im Bild liegt also der Boden **weit vor** dem Roboter, links liegt, was **links** vom Roboter ist. Unter 0,12 m sieht die Kamera den Boden nicht — sie schaut über die eigene Radachse hinweg.
+
+![Links ein Schachbrett flach auf dem Boden im entzerrten Bild, rechts dasselbe Brett in der Draufsicht als Rechteck mit quadratischen Feldern auf einem 10-cm-Raster](./images/brett_boden_draufsicht.png "Das Schachbrett auf dem Boden: im entzerrten Bild perspektivisch verzerrt, in der Draufsicht maßstäblich. Rote Linie: Mittelachse des Roboters. Aus den 48 Ecken bestimmt P 2 die Homographie.")
+
+Ein Punkt liegt 0,30 m vor dem Roboter und 0,10 m **rechts** von ihm. In welcher Spalte der Draufsicht landet er?
+
+[[180]]
+[[?]] Rechts heißt $y = -0{,}10$ m.
+***
+$\text{Spalte} = (0{,}35 - (-0{,}10)) \cdot 400 = 0{,}45 \cdot 400 = 180$ — rechts von der Mittelachse, die bei Spalte $0{,}35 \cdot 400 = 140$ liegt.
+***
+
+Und in welcher Zeile?
+
+[[128]]
+***
+$\text{Zeile} = (0{,}62 - 0{,}30) \cdot 400 = 128$. In dieser Zeile misst P 3 die Lage der Spur — merken Sie sich die Zahl.
+***
+
+### Welche Richtung rechnet der Code?
+
+    --{{0}}--
+Achtung, hier stolpern viele. Die Herleitung ging vom Boden in Metern zum Bild. Im Programm wollen wir aber das Umgekehrte: Wir haben ein Bild und wollen die Draufsicht in Pixeln. Wir geben findHomography deshalb gleich die richtigen Paare, nämlich Bildpixel und Draufsicht-Pixel. Dann rechnet die Matrix alles in einem Schritt.
+
+Die Herleitung oben bildet **Boden (in m) → Bild** ab. Im Programm brauchen wir die Gegenrichtung, und zwar gleich bis in die Pixel der Draufsicht:
+
+```mermaid @mermaid
+flowchart LR
+    B["entzerrtes Bild<br/>(u, v)"] -->|"H⁻¹"| M["Boden in m<br/>(x, y)"]
+    M -->|"Maßstab S<br/>(Spalte, Zeile)"| D["Draufsicht<br/>(Spalte, Zeile)"]
+    B ==>|"H_code = S · H⁻¹<br/>findHomography"| D
 ```
 
-**Vorteile der Rektifizierung:**
+Wir rechnen die Bodenpunkte der Brettecken deshalb *vorher* mit der Formel für Spalte und Zeile in Draufsicht-Pixel um und übergeben `findHomography` die Paare **Bildpixel → Draufsicht-Pixel**. Die gefundene Matrix enthält dann $S \cdot H^{-1}$ in einem — und `warpPerspective` kann damit direkt das Bild erzeugen.
 
-+ ✅ Vereinfachte Suche nach Korrespondenzen (nur entlang einer Zeile)
-+ ✅ Schnellere Stereo-Matching-Algorithmen
-+ ✅ Geringerer Rechenaufwand
-
-
-Stereo-Matching
-========================
-
-**Ziel**: Für jeden Pixel im linken Bild, finde den korrespondierenden Pixel im rechten Bild
-
-![](https://docs.opencv.org/4.x/matcher_result1.jpg "" "Beispiel für Stereo-Matching - Von OpenCV Documentation - https://docs.opencv.org/4.x/dc/dc3/tutorial_py_matcher.html")<!-- style="width: 50%;" -->
-
-Als Beispielhafte Umsetzung sei hier der ORB (Oriented FAST and Rotated BRIEF) Ansatz erwähnt, er verwendet den FAST-Algorithmus (Features from Accelerated Segment Test), um interessante Punkte im Bild zu identifizieren. FAST sucht nach Pixeln, die sich deutlich von ihren umliegenden Pixeln unterscheiden (z.B. Ecken).
-
-| Problem | Ursache | Lösung |
-|---------|---------|--------|
-| **Texturlose Bereiche** | Keine eindeutigen Features | Multi-View, ML-Methoden |
-| **Okklusionen** | Objekt nur in einem Bild sichtbar | Left-Right Consistency Check |
-| **Reflexionen** | Spiegelnde Oberflächen | Strukturiertes Licht |
-| **Rechenaufwand** | Viele Pixel zu vergleichen | GPU-Beschleunigung, ROI |
-
-
-## ROS 2 Integration: PointCloud2
-
-
-Nachdem wir nun verstehen, wie Stereo-Vision funktioniert, schauen wir uns an, wie die resultierenden 3D-Daten in ROS 2 repräsentiert werden.
-
-### Das PointCloud2-Message-Format
-
-**PointCloud2** ist das Standard-ROS-2-Format für 3D-Punktwolken
-
-**Message-Definition:**
-
-```bash
-# sensor_msgs/msg/PointCloud2
-
-std_msgs/Header header
-  uint32 height      # Höhe der Punktwolke (bei organisierten Wolken)
-  uint32 width       # Breite der Punktwolke
-
-PointField[] fields  # Beschreibt die Datenfelder (x, y, z, rgb, etc.)
-
-bool    is_bigendian # Byte-Reihenfolge
-uint32  point_step   # Länge eines Punkts in Bytes
-uint32  row_step     # Länge einer Zeile in Bytes
-uint8[] data         # Rohdaten (alle Punkte serialisiert)
-bool    is_dense     # true = keine ungültigen Punkte (inf/NaN)
-```
-
-**PointField-Struktur:**
-
-```bash
-# sensor_msgs/msg/PointField
-
-string name      # Feldname (z.B. "x", "y", "z", "rgb")
-uint32 offset    # Byte-Offset vom Start des Punkts
-uint8  datatype  # Datentyp (INT8=1, UINT8=2, FLOAT32=7, etc.)
-uint32 count     # Array-Größe (meist 1)
-```
-
-**Das Problem**: Das `data[]`-Array ist nur ein **flacher Byte-Strom** ohne Struktur!
-
-`data[] = [0x42, 0x48, 0x00, 0x00, 0x43, 0x96, 0x00, 0x00, ...]`
-         
-**PointField als "Decoder-Anleitung":**
+> **Falle:** OpenCV schreibt Bildpunkte immer als $(x, y) = (\text{Spalte}, \text{Zeile})$ — also *erst* die Spalte. NumPy-Bilder indiziert man dagegen mit `bild[zeile, spalte]`. Und `warpPerspective` will die Größe als (Breite, Höhe).
 
 ```python
-# Beispiel: XYZ + RGB PointCloud
-fields = [
-    PointField(name="x",   offset=0,  datatype=7, count=1),  # FLOAT32 
-    PointField(name="y",   offset=4,  datatype=7, count=1),  # FLOAT32
-    PointField(name="z",   offset=8,  datatype=7, count=1),  # FLOAT32  
-    PointField(name="rgb", offset=12, datatype=6, count=1)   # UINT32
-]
+import cv2
 
-# point_step = 16 (4+4+4+4 Bytes pro Punkt)
+# ecken_bild: (N, 2) Pixel im ENTZERRTEN Bild, ecken_ziel: (N, 2) zugehörige (Spalte, Zeile) der Draufsicht
+H, _ = cv2.findHomography(ecken_bild, ecken_ziel)
+
+# einen einzelnen Punkt umrechnen …
+punkt_ziel = cv2.perspectiveTransform(punkt_bild.reshape(-1, 1, 2), H)
+
+# … oder ein ganzes Bild: Größe als (Breite, Höhe) = (280, 200)
+draufsicht = cv2.warpPerspective(entzerrt, H, (280, 200))
 ```
 
-**Interpretation des data[]-Arrays:**
+### Die Ecken des Bretts: Reihenfolge und Bodenlage
 
-```ascii
-Punkt 0 (Bytes 0-15):           Punkt 1 (Bytes 16-31):
-┌─────┬─────┬─────┬─────┐      ┌─────┬─────┬─────┬─────┐
-│ x   │ y   │ z   │ rgb │      │ x   │ y   │ z   │ rgb │
-│ 0-3 │ 4-7 │8-11 │12-15│      │16-19│20-23│24-27│28-31│
-│float│float│float│uint │      │float│float│float│uint │
-└─────┴─────┴─────┴─────┘      └─────┴─────┴─────┴─────┘                                                     .
+    --{{0}}--
+Die Punktpaare müssen zusammenpassen: die erste Ecke im Bild zur ersten Ecke auf dem Boden. findChessboardCorners nummeriert aber nicht so, wie wir denken. Links sehen Sie, wo OpenCV hier anfängt: oben links, also fern und links. Gibt man dazu Bodenpunkte in einer anderen Reihenfolge an, ist die Draufsicht gespiegelt oder um hundertachtzig Grad gedreht.
+
+`findChessboardCorners` beginnt an **irgendeiner** Außenecke des Bretts — welche, hängt von der Lage im Bild ab. Die Bodenkoordinaten müssen aber in **derselben Reihenfolge** stehen wie die Bildpunkte, sonst passt Ecke Nr. 0 im Bild zu einer ganz anderen Ecke auf dem Boden.
+
+![Links das Brett auf dem Boden mit der Nummerierung, wie OpenCV sie liefert: Nr. 0 oben links, Nr. 47 unten rechts. Rechts dieselben Ecken umsortiert: i=0, j=0 unten rechts, i=7, j=5 oben links](./images/ecken_reihenfolge.png "Links: So liefert OpenCV die Ecken in diesem Bild. Rechts: umsortiert, Reihe j = 0 am Roboter, darin von rechts nach links.")
+
+Deshalb legen wir die Reihenfolge an der **Lage im Bild** fest: Reihe $j = 0$ ist die dem Roboter nächste Reihe (unten im Bild), darin läuft $i$ von rechts nach links (so wächst $y$). In P 2 übernimmt das Sortieren schon die Vorlage; Sie stellen die Bodenpunkte in dieser Reihenfolge auf.
+
+**Durchgerechnetes Beispiel** — so wie in den Testdaten von P 2: Brett mit $8 \times 6$ inneren Ecken, Feldgröße 2,5 cm, mittig vor dem Roboter, die nächste Eckenreihe liegt 0,185 m vor der Radachse.
+
+<!-- data-type="none" -->
+Die Brettmitte liegt auf $y = 0$. Die rechte Ecke der ersten Reihe liegt deshalb $\frac{8 - 1}{2} = 3{,}5$ Feldbreiten rechts davon, bei $y = -3{,}5 \cdot 0{,}025 = -0{,}0875$ m (rechts ist $y$ negativ). Mit der Formel für Spalte und Zeile:
+
+<!-- data-type="none" -->
+| Ecke       | Bodenpunkt $(x;\ y)$ in m | Spalte                              | Zeile                              |
+| :--------- | :------------------------ | :---------------------------------- | :--------------------------------- |
+| $i=0, j=0$ | $(0{,}185;\ -0{,}0875)$   | $(0{,}35 + 0{,}0875) \cdot 400 = 175$ | $(0{,}62 - 0{,}185) \cdot 400 = 174$ |
+| $i=1, j=0$ | $(0{,}185;\ -0{,}0625)$   | 165                                 | 174                                |
+| $i=0, j=1$ | $(0{,}210;\ -0{,}0875)$   | 175                                 | 164                                |
+
+`ecken_ziel` beginnt also mit `[[175, 174], [165, 174], …]` — erst die Spalte, dann die Zeile.
+
+In welcher **Spalte** der Draufsicht liegt die Ecke $i = 7$, $j = 5$ (fern, links)?
+
+[[105]]
+[[?]] $y = +3{,}5 \cdot 0{,}025$ m — links ist positiv.
+***
+$y = +0{,}0875$ m, also $\text{Spalte} = (0{,}35 - 0{,}0875) \cdot 400 = 105$. Die Zeile wäre $(0{,}62 - (0{,}185 + 5 \cdot 0{,}025)) \cdot 400 = 124$.
+***
+
+### Grenzen der Draufsicht
+
+    --{{0}}--
+Die Draufsicht ist nur so gut wie die Annahme dahinter: Alles liegt auf einer Ebene. Für Fahrbahnlinien stimmt das. Für eine Ampel, ein Schild oder einen Fußgänger nicht. Die werden in der Draufsicht lang nach hinten gezogen. Und die Homographie gehört zu genau einer Kamerastellung. Wird die Kamera verdreht, stimmt sie nicht mehr.
+
+<!-- data-type="none" -->
+| Annahme                                       | Was passiert, wenn sie nicht stimmt                                        |
+| :-------------------------------------------- | :------------------------------------------------------------------------- |
+| Der Punkt liegt **auf dem Boden**             | Erhabene Objekte (Ampel, Schild, Fußgänger) werden lang nach hinten gezogen |
+| Die Kamera sitzt **genau wie bei der Messung** | Nach Stoß oder Verdrehen ist die ganze Draufsicht verschoben → Homographie neu bestimmen |
+| Der Boden ist **eben**                        | Rampen und Wellen verfälschen die Abstände                                  |
+| Nur im **gemessenen Bereich** genau           | Weit außerhalb des Bretts wachsen kleine Fehler an (Extrapolation)          |
+
+Warum erscheint ein Verkehrsschild in der Draufsicht verzerrt, die Fahrbahnlinie daneben aber nicht?
+
+[( )] Weil das Schild farbig ist und die Linie weiß
+[(X)] Weil die Homographie annimmt, dass jeder Bildpunkt auf dem Boden liegt — das Schild ragt aus der Ebene heraus
+[( )] Weil das Schild weiter vom Roboter entfernt ist
+***
+Für jeden Bildpunkt sucht die Homographie den Schnitt seines Sehstrahls mit dem **Boden**. Der Mast eines Schilds wird deshalb auf eine lange Spur am Boden abgebildet. Hindernisse erkennen Sie in Block 3 deshalb anders — mit dem LiDAR.
+***
+
+## Brücke zu P 3: Abweichung mit Vorausschau
+
+    --{{0}}--
+In der Draufsicht können wir jetzt messen. Aber wo? An der Radachse sieht die Kamera gar nichts, die Draufsicht beginnt erst zwölf Zentimeter davor. Wir messen deshalb dreißig Zentimeter voraus. Das ist kein Nachteil, im Gegenteil: Auch ein Fahrer schaut nach vorn.
+
+In P 3 bestimmt Ihr Knoten in der Draufsicht die seitliche Lage der Spurmitte — und zwar an einer festen Stelle **0,30 m vor dem Roboter**, der *Vorausschau*. Dort sieht die Kamera die Fahrbahn gut, an der Radachse sieht sie gar nichts.
+
+Die Abweichung, die dort gemessen wird, setzt sich auf einer geraden Straße aus zwei Anteilen zusammen. Dabei ist $\Delta y > 0$, wenn der Roboter **links** der Spurmitte steht, und $\psi > 0$, wenn er nach **links** gedreht ist (mathematisch positiv, VL 4):
+
+$$
+\text{Abweichung} \approx \underbrace{\Delta y}_{\text{seitlicher Versatz}} + \underbrace{0{,}30\ \text{m} \cdot \sin\psi}_{\text{Blickrichtung}}
+$$
+
+Das „≈“ gilt für kleine Winkel, wie sie beim Spurfolgen vorkommen. In einer **Kurve** kommt ein dritter Anteil hinzu: Die Spur biegt bis 0,30 m voraus schon ab, deshalb schlägt der Wert dort aus, auch wenn der Roboter gerade richtig steht.
+
+```mermaid @mermaid
+flowchart LR
+    V["Roboter steht 3 cm<br/>links der Spurmitte"] --> A["+0,03 m"]
+    W["Roboter steht mittig,<br/>schaut 10° nach links"] --> B["0,30 · sin 10° ≈ +0,05 m"]
+    A --> S["/lane/offset<br/>(P 3)"]
+    B --> S
+    S --> R["Regler in Block 5:<br/>lenkt gegen"]
 ```
 
-**Praktisches Beispiel: Daten extrahieren**
-
-```python
-import struct
-from sensor_msgs.msg import PointCloud2, PointField
-
-def extract_point(data, point_index, fields, point_step):
-    """
-    Extrahiere einen Punkt aus dem data-Array
-    """
-    # Startposition für diesen Punkt
-    start_byte = point_index * point_step
-    point_data = {}
-    
-    for field in fields:
-        # Byte-Position für dieses Feld
-        field_start = start_byte + field.offset
-        field_end = field_start + 4  # Annahme: 4 Bytes pro Feld
-        
-        # Bytes extrahieren
-        field_bytes = data[field_start:field_end]
-        
-        # Je nach Datentyp interpretieren
-        if field.datatype == 7:  # FLOAT32
-            value = struct.unpack('f', field_bytes)[0]
-        elif field.datatype == 6:  # UINT32  
-            value = struct.unpack('I', field_bytes)[0]
-        # ... weitere Datentypen
-        
-        point_data[field.name] = value
-    
-    return point_data
-
-# Verwendung:
-point_0 = extract_point(msg.data, 0, msg.fields, msg.point_step)
-print(f"Punkt 0: x={point_0['x']}, y={point_0['y']}, z={point_0['z']}")
-```
-
-**Warum ist PointField so wichtig?**
-
-1. **Flexibilität**: Verschiedene Punktformate (XYZ, XYZRGB, XYZI, etc.)
-2. **Interoperabilität**: Verschiedene Software kann denselben Datenstream verstehen  
-3. **Effizienz**: Kompakte Speicherung ohne Overhead
-4. **Erweiterbarkeit**: Neue Felder können einfach hinzugefügt werden
-
-**Praktische RGB-Kodierung:**
-
-```python
-# RGB-Wert erstellen
-def pack_rgb(r, g, b, a=255):
-    """
-    Packt RGB(A)-Werte in uint32
-    
-    Args:
-        r, g, b: Rot, Grün, Blau (0-255)
-        a: Alpha/Transparenz (0-255, Standard: 255=undurchsichtig)
-    
-    Returns:
-        uint32: Gepackter RGB-Wert
-    """
-    return (a << 24) | (r << 16) | (g << 8) | b
-
-# RGB-Wert extrahieren  
-def unpack_rgb(rgb_uint32):
-    """
-    Extrahiert RGB(A) aus uint32
-    
-    Returns:
-        tuple: (r, g, b, a)
-    """
-    a = (rgb_uint32 >> 24) & 0xFF
-    r = (rgb_uint32 >> 16) & 0xFF  
-    g = (rgb_uint32 >> 8) & 0xFF
-    b = rgb_uint32 & 0xFF
-    return r, g, b, a
-
-# Beispiele:
-rot = pack_rgb(255, 0, 0)      # 0xFF0000FF
-gruen = pack_rgb(0, 255, 0)    # 0xFF00FF00  
-blau = pack_rgb(0, 0, 255)     # 0xFFFF0000
-schwarz = pack_rgb(0, 0, 0)    # 0xFF000000
-```
-
-### Kameraparameter in ROS2
-
-**Kameraparameter** werden in ROS 2 typischerweise über das `sensor_msgs/CameraInfo`-Message übertragen.
-
-```bash
-# sensor_msgs/msg/CameraInfo
-std_msgs/Header header
-uint32 height            # Bildhöhe         
-uint32 width             # Bildbreite
-string distortion_model  # Verzerrungsmodell (z.B. "plumb_bob")
-float64[] D              # Verzerrungskoeffizienten
-float64[9] K             # Kamera-Matrix
-float64[9] R             # Rotationsmatrix      
-float64[12] P            # Projektionsmatrix
-```
-`sensor_msgs/CameraInfo` enthält alle notwendigen intrinsischen Parameter für die Bildentzerrung und 3D-Rekonstruktion.
-
-> Die Parameter einer Kamera können als Konfigurationsdatei (YAML) gespeichert und beim Start des ROS 2 Knotens geladen werden.
+Ein Roboter steht genau auf der Spurmitte, ist aber um 10° nach links gedreht. Was meldet die Abweichung bei 0,30 m Vorausschau (positiv = Roboter links der Spurmitte)? Gerundet in ganzen **Zentimetern**:
 
-## Herausforderungen bei der Arbeit mit Punktwolken
+[[5]]
+[[?]] $0{,}30 \cdot \sin 10° = 0{,}30 \cdot 0{,}174$
+***
+$0{,}30 \cdot 0{,}174 \approx 0{,}05$ m. Genau das will der Regler wissen: Der Roboter wird gleich links von der Spur sein — also früh gegenlenken.
+***
 
-Bei der praktischen Arbeit mit Punktwolken in der Robotik stoßen wir auf verschiedene Herausforderungen. Diese zu kennen hilft uns, robustere Systeme zu entwickeln und Probleme frühzeitig zu erkennen.
+## Zusammenfassung
 
-### 1. Datenmenge und Performance
+    --{{0}}--
+Fassen wir zusammen. Die Kamera bildet die Welt nach dem Lochkameramodell ab, dabei geht die Tiefe verloren. Die Linse verbiegt das Bild zusätzlich, besonders am Rand. Mit der Kalibrierung messen wir K und D, mit Nachschlagetabellen entzerren wir jedes Bild in einer Millisekunde. Und weil die Fahrbahn eben ist, holt die Homographie die verlorene Information für alle Punkte auf dem Boden zurück.
 
-**Problem**: Punktwolken können sehr groß werden
+<!-- data-type="none" -->
+| Begriff              | In einem Satz                                                              | Brauchen Sie in |
+| :------------------- | :------------------------------------------------------------------------- | :-------------- |
+| Lochkameramodell     | $u = f_x X/Z + c_x$ — Punkte auf einem Sehstrahl landen auf demselben Pixel | P 2            |
+| Kamera-Matrix $K$    | Brennweite in Pixeln und Hauptpunkt                                         | Ü 4, P 2       |
+| Verzeichnung $D$     | Linse verbiegt mit $r^2$, $r^4$, …; $k_1 < 0$ tonnenförmig                  | Ü 4, P 2       |
+| Kalibrierung         | $K$ und $D$ aus vielen Schachbrettlagen; Reprojektionsfehler prüfen         | Ü 4, P 2       |
+| Entzerren            | Tabellen einmal berechnen (`initUndistortRectifyMap`), dann `remap`         | P 2            |
+| Homographie $H$      | $3 \times 3$, bildet eine Ebene ab; 4 Punktpaare, `findHomography`          | P 2            |
+| Draufsicht           | gilt nur für Punkte auf dem Boden und eine feste Kamerastellung             | P 2, P 3       |
+| Vorausschau          | Abweichung 0,30 m voraus = Versatz + Blickrichtung                          | P 3, Block 5   |
 
-```ascii
-Full HD Stereo (1920×1080):
-    Maximale Punktzahl = 1920 × 1080 = 2.073.600 Punkte
-    Pro Punkt: 16 Bytes (x, y, z, rgb als float32/uint32)
-    Gesamtgröße ≈ 33 MB pro Frame!
+**Zurück zur Leitfrage:** *Wo steht der Roboter auf der Fahrbahn?* Im Rohbild war die Spur unten fast 600 Pixel breit, oben gut 150. In der Draufsicht ist sie überall $0{,}22 \cdot 400 = 88$ Pixel breit — und die Lage der Spurmitte in Zeile 128 sagt in Zentimetern, wie weit der Roboter 0,30 m voraus neben ihr steht. Genau diese Zahl veröffentlicht Ihr Knoten in P 3.
 
-    Bei 30 fps: ~1 GB/s Datenrate                                                                                 .
-```
+**Abschluss-Check**
 
-**Auswirkungen:**
+Ordnen Sie zu: Was brauchen Sie für welchen Schritt?
 
-+ ⚠️ Hohe CPU/GPU-Last
-+ ⚠️ Speicherbedarf
-+ ⚠️ Netzwerk-Überlastung (bei ROS 2 über WLAN)
-+ ⚠️ Verzögerte Verarbeitung
+[ [$K$ und $D$] [Homographie $H$] [nur den Maßstab 400 px/m] ]
+[ [X] [ ] [ ] ] Rohbild entzerren
+[ [ ] [X] [ ] ] entzerrtes Bild in die Draufsicht umrechnen
+[ [X] [ ] [ ] ] prüfen, ob die Kalibrierung plausibel ist
+[ [ ] [X] [ ] ] einen Bodenpunkt aus einem Pixel des entzerrten Bilds bestimmen
+[ [ ] [ ] [X] ] aus Pixeln der Draufsicht Meter auf dem Boden berechnen
 
-**Lösungsansätze:**
+Warum berechnet der Knoten in P 2 die Entzerrungstabellen nur einmal beim Start?
 
-| Ansatz            | Beschreibung                              | Vor-/Nachteile                          |
-| ----------------- | ----------------------------------------- | --------------------------------------- |
-| **Downsampling**  | Reduziere Auflösung                       | ✅ Schnell, ❌ Verlust an Details       |
-| **Voxel-Filter**  | Rastere in 3D-Gitter                      | ✅ Gleichmäßig, ✅ Weniger Rauschen     |
-| **ROI-Filterung** | Nur relevanter Bereich                    | ✅ Sehr effektiv, ❌ Benötigt Vorwissen |
-| **Kompression**   | Verlustfreie/verlustbehaftete Kompression | ✅ Für Netzwerk, ❌ CPU-Overhead        |
+[( )] Weil sich das Kamerabild nicht ändert
+[(X)] Weil die Zuordnung Zielpixel → Rohbild-Stelle nur von $K$ und $D$ abhängt, nicht vom Bildinhalt
+[( )] Weil `remap` die Tabellen sonst überschreibt
+***
+$K$ und $D$ bleiben gleich, solange die Kamera dieselbe ist. Also ist auch die Nachschlagetabelle für jedes Bild dieselbe — nur der Grauwert, der nachgeschlagen wird, ändert sich.
+***
 
-**Beispiel: Voxel-Downsampling mit Open3D**
+Ihr Roboter stößt gegen eine Wand, danach sitzt die Kamera etwas schief in ihrer Halterung. Linse und Fokus sind unberührt. Was müssen Sie neu bestimmen?
 
-```python
-import open3d as o3d
-import numpy as np
-from sensor_msgs_py import point_cloud2
+[( )] nur $K$ und $D$
+[(X)] nur die Homographie — die Linse ist dieselbe, aber die Lage der Kamera zum Boden hat sich geändert
+[( )] beides
+***
+$K$ und $D$ beschreiben die Kamera selbst, sie ändern sich durch ein Verdrehen in der Halterung nicht. Die Homographie enthält dagegen die Lage der Kamera zum Boden ($R$, $t$) — sie muss neu gemessen werden (P 2, Teil C). Wurde dagegen am Objektiv gedreht (Fokus) oder die Kamera getauscht, ist auch eine neue Kalibrierung fällig (P 2, Teil A).
+***
 
-class VoxelDownsampler(Node):
-    def __init__(self):
-        super().__init__('voxel_downsampler')
+**Nächste Schritte:** In **Ü 4** kalibrieren Sie an vorgegebenen Schachbrettbildern, schreiben einen Bildknoten und probieren `cameracalibrator` aus. In **P 2** bauen Sie die ganze Kette aus dieser Vorlesung an Ihrem TurtleBot auf.
 
-        self.declare_parameter('voxel_size', 0.05)  # 5cm Voxel-Größe
-        voxel_size = self.get_parameter('voxel_size').value
+## Aufgabe der Woche
 
-        self.sub = self.create_subscription(
-            PointCloud2, '/stereo/pointcloud', self.callback, 10
-        )
-        self.pub = self.create_publisher(
-            PointCloud2, '/stereo/pointcloud_downsampled', 10
-        )
+    --{{0}}--
+Die Aufgaben dieser Woche sind kurz. Wenn Sie sie lösen, haben Sie die drei Rechnungen im Kopf, die Sie in P 2 brauchen: ein Punkt ins Bild, ein Bodenpunkt in die Draufsicht und die Reihenfolge der Brettecken.
 
-        self.voxel_size = voxel_size
+1. **Von Hand projizieren:** Mit $f_x = f_y = 530$, $c_x = 318$, $c_y = 243$ — wo landet der Punkt $X = -0{,}2$ m, $Y = 0{,}1$ m, $Z = 0{,}8$ m? Ist er im Bild (640 × 480)?
 
-    def callback(self, msg):
-        # Konvertiere zu NumPy
-        points = np.array(list(point_cloud2.read_points(
-            msg, field_names=('x', 'y', 'z'), skip_nans=True
-        )))
+   <details>
+   <summary>Lösung anzeigen</summary>
 
-        # Erstelle Open3D PointCloud
-        pcd = o3d.geometry.PointCloud()
-        pcd.points = o3d.utility.Vector3dVector(points)
+   $u = 530 \cdot (-0{,}25) + 318 = 185{,}5$, $v = 530 \cdot 0{,}125 + 243 = 309{,}25$ — ja, im Bild.
 
-        # Voxel-Downsampling
-        pcd_down = pcd.voxel_down_sample(voxel_size=self.voxel_size)
+   </details>
 
-        # Zurück zu ROS 2
-        points_down = np.asarray(pcd_down.points)
+2. **Draufsicht:** Die Mittellinie liegt 0,40 m vor dem Roboter bei $y = +0{,}11$ m. Welche (Spalte, Zeile) hat sie in der Draufsicht?
 
-        self.get_logger().info(
-            f'Downsampling: {len(points)} → {len(points_down)} Punkte '
-            f'({100 * len(points_down) / len(points):.1f}%)',
-            throttle_duration_sec=2.0
-        )
+   <details>
+   <summary>Lösung anzeigen</summary>
 
-        # Publiziere downsampled PointCloud2
-        # ... (PointCloud2-Erstellung wie zuvor)
-```
+   Spalte $= (0{,}35 - 0{,}11) \cdot 400 = 96$, Zeile $= (0{,}62 - 0{,}40) \cdot 400 = 88$, also $(96, 88)$.
 
-**Ergebnis**: Von 2 Mio. auf 50.000 Punkte → 40× schnellere Verarbeitung!
+   </details>
 
-### 2. Rauschen und Ausreißer
+3. **Vorbereitung auf P 2:** Schreiben Sie für ein Brett mit $4 \times 3$ inneren Ecken, Feldgröße 3 cm, nächste Reihe bei 0,20 m, die Bodenpunkte aller 12 Ecken in der Reihenfolge von P 2 auf (Reihe $j = 0$ zuerst, darin von rechts nach links). Prüfen Sie: Liegt die Brettmitte auf $y = 0$?
 
-**Problem**: Messfehler führen zu ungültigen Punkten
+   <details>
+   <summary>Lösung anzeigen</summary>
 
-```ascii
-Ideale Punktwolke:        Reale Punktwolke mit Rauschen:
-      ████████                  ██ ████ ██
-      ████████                  ███•██•███  ← Ausreißer
-      ████████        vs.       ██ ████ ██
-      ████████                  •████████•
+   $y$ läuft über $-0{,}045;\ -0{,}015;\ 0{,}015;\ 0{,}045$, $x$ über $0{,}20;\ 0{,}23;\ 0{,}26$. Erste Ecke $(0{,}20;\ -0{,}045)$, letzte $(0{,}26;\ 0{,}045)$. Mittelwert der $y$-Werte: 0 — ja.
 
-Glatte Oberfläche         Rauschende Punkte + Ausreißer                                                     .
-```
+   </details>
 
-**Ursachen:**
+**Zum Weiterlesen**
 
-+ Sensorrauschen (schlechte Beleuchtung, reflektierende Oberflächen)
-+ Fehlende Disparität-Matches (texturlose Bereiche)
-+ Rand-Effekte bei Stereo-Matching
-+ Bewegungsunschärfe
++ [OpenCV: Camera Calibration (Python-Tutorial)](https://docs.opencv.org/4.x/dc/dbb/tutorial_py_calibration.html)
++ [ROS 2 Jazzy: camera_calibration – Monokamera kalibrieren](https://docs.ros.org/en/jazzy/p/camera_calibration/doc/tutorial_mono.html)
++ [OpenCV: Basic concepts of the homography](https://docs.opencv.org/4.x/d9/dab/tutorial_homography.html)
++ R. Szeliski: *Computer Vision: Algorithms and Applications*, 2. Aufl., Kap. 2.1 und 11.1 — [frei als PDF](https://szeliski.org/Book/)
 
-**Lösungsansätze:**
+<!-- kurslandkarte:ausblick-start -->
 
-**A) Statistischer Ausreißer-Filter**
+--------------------------------------------------------------------------------
 
-Entfernt Punkte, die zu weit von ihren Nachbarn entfernt sind.
+**🗺️ Nächster Halt:** VL 8 · LiDAR (Woche ab 14.12.2026) – Sie werten die Abstandsmessungen des LiDAR aus und erkennen, was vor dem Roboter liegt. [Auf der Kurslandkarte ansehen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=lid)
 
-```python
-# Open3D Statistischer Filter
-pcd_filtered, ind = pcd.remove_statistical_outlier(
-    nb_neighbors=20,      # Anzahl Nachbarn
-    std_ratio=2.0         # Standardabweichungs-Faktor
-)
-
-# Punkte, die weiter als 2×σ vom Mittelwert ihrer 20 Nachbarn
-# entfernt sind, werden entfernt
-```
-
-**B) Radius-Filter**
-
-Entfernt Punkte mit zu wenigen Nachbarn in einem bestimmten Radius.
-
-```python
-# Open3D Radius-Filter
-pcd_filtered, ind = pcd.remove_radius_outlier(
-    nb_points=16,      # Mind. 16 Nachbarn erforderlich
-    radius=0.05        # Innerhalb 5cm Radius
-)
-```
-
-### 3. Fehlende Daten (Holes/Gaps)
-
-**Problem**: Bereiche ohne gültige Tiefenwerte
-
-```ascii
-3D-Szene mit Lücken:
-    ████████          ← Objekt erkannt
-                      ← Lücke (keine Disparität)
-       ?????          ← Texturlose Fläche (Wand)
-                      ← Lücke (Okklusion)
-    ████████          ← Boden erkannt                                                                   .
-``` 
-
-**Ursachen:**
-
-+ **Texturlose Bereiche**: Glatte Wände, einfarbige Flächen → kein Matching möglich
-+ **Okklusionen**: Objekt nur in einem Bild sichtbar
-+ **Reflexionen**: Glänzende/spiegelnde Oberflächen
-+ **Zu nah/zu fern**: Außerhalb des Disparitätsbereichs
-
-
-**Lösungsansätze:**
-
-| Ansatz | Beschreibung | Anwendung |
-|--------|--------------|-----------|
-| **Interpolation** | Lücken aus Nachbarn schätzen | Kleine Löcher |
-| **Inpainting** | ML-basiertes Auffüllen | Größere Bereiche |
-| **Multi-View** | Mehrere Kameraperspektiven | Okklusionen |
-| **Strukturiertes Licht** | Projektor fügt Textur hinzu | Texturlose Flächen |
-
-### 4. Koordinatensystem-Transformation
-
-**Problem**: Punktwolke ist im Kamera-Koordinatensystem, nicht im Roboter-Koordinatensystem
-
-```ascii
-Kamera-Frame:              Roboter-Frame (base_link):
-    Y                           X (vorwärts)
-    ↑                           ↑
-    |                           |
-    └──→ X                      └──→ Y (links)
-   ╱
-  Z (vorwärts)              Z (nach oben)
-
-Transformation erforderlich!                                   .
-```
-
-**Lösung**: TF2-Integration
-
-```python
-import tf2_ros
-from tf2_sensor_msgs.tf2_sensor_msgs import do_transform_cloud
-
-class PointCloudTransformer(Node):
-    def __init__(self):
-        super().__init__('pointcloud_transformer')
-
-        # TF2 Buffer und Listener
-        self.tf_buffer = tf2_ros.Buffer()
-        self.tf_listener = tf2_ros.TransformListener(self.tf_buffer, self)
-
-        self.sub = self.create_subscription(
-            PointCloud2, '/stereo/pointcloud', self.callback, 10
-        )
-        self.pub = self.create_publisher(
-            PointCloud2, '/stereo/pointcloud_base', 10
-        )
-
-    def callback(self, msg):
-        try:
-            # Hole Transformation von camera_link → base_link
-            transform = self.tf_buffer.lookup_transform(
-                'base_link',           # Ziel-Frame
-                msg.header.frame_id,   # Quell-Frame (camera_link)
-                rclpy.time.Time(),     # Aktuellste Transformation
-                timeout=rclpy.duration.Duration(seconds=1.0)
-            )
-
-            # Transformiere Punktwolke
-            cloud_transformed = do_transform_cloud(msg, transform)
-
-            # Publiziere
-            self.pub.publish(cloud_transformed)
-
-        except (tf2_ros.LookupException,
-                tf2_ros.ConnectivityException,
-                tf2_ros.ExtrapolationException) as e:
-            self.get_logger().warn(f'TF-Fehler: {e}')
-```
-
-**Wichtig**: URDF/TF-Tree muss korrekt konfiguriert sein!
-
-### 5. Zeitstempel-Synchronisation
-
-**Problem**: Linkes und rechtes Bild kommen zu unterschiedlichen Zeiten an
-
-```ascii
-Zeit →
-  t=0      t=10ms    t=20ms    t=30ms
-Left:  ●─────────────●─────────────●
-Right:     ●─────────────●─────────────●
-
-❌ Falsch: Verwende Left(t=0) + Right(t=10)
-✅ Richtig: Warte auf passende Paare                                                                 .
-```
-
-**Lösung**: `message_filters` für Synchronisation
-
-```python
-from message_filters import ApproximateTimeSynchronizer, Subscriber
-
-class StereoSync(Node):
-    def __init__(self):
-        super().__init__('stereo_sync')
-
-        # Message Filter Subscriber
-        left_sub = Subscriber(self, Image, '/stereo/left/image_raw')
-        right_sub = Subscriber(self, Image, '/stereo/right/image_raw')
-
-        # Approximate Time Synchronizer
-        # (erlaubt kleine Zeitunterschiede)
-        self.sync = ApproximateTimeSynchronizer(
-            [left_sub, right_sub],
-            queue_size=10,
-            slop=0.1  # Max. 100ms Zeitunterschied
-        )
-
-        self.sync.registerCallback(self.callback)
-
-    def callback(self, left_msg, right_msg):
-        # Beide Bilder haben (fast) denselben Zeitstempel!
-        time_diff = abs(
-            left_msg.header.stamp.sec - right_msg.header.stamp.sec +
-            (left_msg.header.stamp.nanosec - right_msg.header.stamp.nanosec) * 1e-9
-        )
-
-        self.get_logger().info(
-            f'Synchronisiert: Δt = {time_diff*1000:.1f}ms',
-            throttle_duration_sec=2.0
-        )
-
-        # Verarbeite synchronisierte Bilder
-        # ...
-```
-
-### 6. Bewegungsartefakte
-
-**Problem**: Roboter/Kamera bewegt sich während der Aufnahme
-
-```ascii
-Statische Kamera:           Bewegte Kamera:
-    ████████                    ████
-    ████████                  ████  ████
-    ████████        vs.         ████████  ← Verschmiert
-    ████████                      ████
-
-Klare Tiefenkarte           Verzerrte Tiefenkarte                                                  .
-```
-
-**Lösungen:**
-
-+ **Höhere Bildrate**: Reduziert Motion Blur
-+ **Shutter-Synchronisation**: Beide Kameras gleichzeitig auslösen
-+ **IMU-Kompensation**: Bewegung herausrechnen
-+ **Nur bei Stillstand messen**: Roboter stoppt für Messung
-
-
-### Literatur und Ressourcen
-
-**Bücher:**
-
-+ Hartley & Zisserman: "Multiple View Geometry in Computer Vision"
-+ Szeliski: "Computer Vision: Algorithms and Applications"
-
-**Online-Ressourcen:**
-
-+ OpenCV Documentation: https://docs.opencv.org/
-+ ROS 2 sensor_msgs: https://docs.ros2.org/foxy/api/sensor_msgs/
-+ Open3D Documentation: http://www.open3d.org/
-
-**Tools:**
-
-+ Kalibr: Kamera- und IMU-Kalibrierung (https://github.com/ethz-asl/kalibr)
-+ Stereo Lab: Praktische Stereo-Tutorials
+<!-- kurslandkarte:ausblick-ende -->

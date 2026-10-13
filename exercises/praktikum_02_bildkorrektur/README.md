@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent
 email:    sebastian.zug@informatik.tu-freiberg.de
-version:  0.2.0
+version:  0.2.1
 language: de
 narrator: Deutsch Female
 
@@ -64,15 +64,28 @@ Ob der Knoten auch live mit voller Rate läuft, prüfen Sie zu Beginn von P 3.
 
 ## Wo stehen wir?
 
-**Block 2 · Sensorgrundlagen** · Termin 14 von 32 · P 2 in der Woche ab 11.1.2027
-
 **Ziel im Projekt:** Ihr TurtleBot liefert eine entzerrte, maßstäbliche Draufsicht auf die Fahrbahn – die Grundlage der Spurerkennung.
 
-- **Sie brauchen:** [Launch-Datei](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=launch) (VL 3) · [QoS-Verträglichkeit](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=qoscompat) (VL 4) · [cv\_bridge](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=cv_bridge) (VL 6) · [CompressedImage](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=compressed_image) (VL 6) · [Kamerakalibrierung](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=kalibrierung) (VL 7) · [Entzerrung (undistort)](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=entzerrung) (VL 7)
-- **Heute:** anwenden, nichts Neues – Ihre Arbeit hier ist die Prüfungsleistung
-- **Danach:** P 3 · Spurerkennung – Ihr TurtleBot erkennt die Fahrspur im Kamerabild.
+**Block 2 · Sensorgrundlagen** – Termin 14 von 32, heute markiert mit ▶
 
-**Der Weg zum autonomen TurtleBot** – die Praktika bauen aufeinander auf:
+<!-- data-type="none" -->
+| Woche ab | Vorlesung | Übung | Praktikum |
+| :-- | :-- | :-- | :-- |
+| 30.11.2026 | [VL 5 Sensorik](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/01_Sensorik/01_Sensorik.md) |  |  |
+| 7.12.2026 | [VL 6 Bildverarbeitung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/05_Bildverarbeitung/05_Bildverarbeitung.md)<br>[VL 7 Kamera + Draufsicht](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/06_Kamera_Stereo/06_Kamera_Stereo.md) |  |  |
+| 14.12.2026 | VL 8 LiDAR |  |  |
+| 4.1.2027 |  | Ü 3 Datenvisualisierung |  |
+| **11.1.2027** |  | Ü 4 Kameradaten | **▶ [P 2 Bildkorrektur](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_02_bildkorrektur/README.md)** |
+| 18.1.2027 |  |  | [P 3 Spurerkennung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_03_spurerkennung/README.md) |
+
+- **Sie brauchen:** [Launch-Datei](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=launch) (VL 3) · [QoS-Verträglichkeit](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=qoscompat) (VL 4) · [CompressedImage](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=compressed_image) (VL 6) · [Kamerakalibrierung](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=kalibrierung) (VL 7) · [Entzerren mit Tabellen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=entzerrung) (VL 7) · [Homographie](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=homographie) (VL 7) · [Draufsicht (Vogelperspektive)](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=draufsicht) (VL 7)
+- **Heute:** anwenden, nichts Neues – Ihre Arbeit hier ist die Prüfungsleistung
+
+[🗺️ Ganze Kurslandkarte öffnen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=p2) – dort finden Sie jeden Begriff mit Erklärung, typischer Stolperfalle und Link auf die passende Folie.
+
+### Der Weg zum autonomen TurtleBot
+
+Die Praktika bauen aufeinander auf:
 
 ```mermaid @mermaid
 flowchart LR
@@ -93,8 +106,6 @@ flowchart LR
   classDef jetzt fill:#ffd27f,stroke:#b36b00,stroke-width:3px,color:#000
   classDef kommt fill:#fff,stroke:#999,stroke-dasharray:4 3,color:#555
 ```
-
-[🗺️ Ganze Kurslandkarte öffnen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=p2) – dort finden Sie jeden Begriff mit Erklärung, typischer Stolperfalle und Link auf die passende Folie.
 
 <!-- kurslandkarte:wo-ende -->
 
@@ -398,7 +409,7 @@ Fällt der Roboter durch einen Defekt aus, den Ihre Gruppe nicht verschuldet hat
 - [ ] Auf dem eigenen Laptop für zu Hause wieder `ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST` aktivieren
 - [ ] Schachbrett und Roboter zurückgeben
 
-> **Wichtig für P 3:** Ihre Kalibrierung gilt, solange die Kamera Ihres Roboters genau so sitzt wie heute. Wurde sie verstellt (Stoß, Reparatur), melden Sie das den Betreuern — dann müssen Sie Teil A und C wiederholen.
+> **Wichtig für P 3:** Ihre Homographie gilt, solange die Kamera Ihres Roboters genau so sitzt wie heute. Wurde sie verstellt (Stoß, Reparatur), melden Sie das den Betreuern — dann wiederholen Sie Teil C. Teil A (Kalibrierung) nur dann, wenn am Objektiv gedreht oder die Kamera getauscht wurde: $K$ und $D$ gehören zur Kamera, nicht zu ihrer Lage (VL 7).
 
 <!-- kurslandkarte:ausblick-start -->
 

@@ -40,7 +40,7 @@ T = [
     ("p1",  "P 1",   "2026-11-23", "TurtleBot + Bags",    "exercises/praktikum_01_turtlebot/README.md",          "ausgearbeitet", 1),
     ("01",  "VL",    "2026-11-30", "Sensorik",            "01_Sensorik/01_Sensorik.md",                           "Bestand", 2),
     ("05",  "VL",    "2026-12-07", "Bildverarbeitung",    "05_Bildverarbeitung/05_Bildverarbeitung.md",           "Bestand", 2),
-    ("06",  "VL",    "2026-12-07", "Kamera",              "06_Kamera_Stereo/06_Kamera_Stereo.md",                 "Bestand", 2),
+    ("06",  "VL",    "2026-12-07", "Kamera + Draufsicht", "06_Kamera_Stereo/06_Kamera_Stereo.md",                 "ausgearbeitet", 2),
     ("lid", "VL",    "2026-12-14", "LiDAR",               None, "geplant", 2),
     ("ue3", "Ü 3",   "2027-01-04", "Datenvisualisierung", None, "geplant", 2),
     ("ue4", "Ü 4",   "2027-01-11", "Kameradaten",         None, "geplant", 2),
@@ -189,18 +189,21 @@ B = [
     ("cv_bridge", "cv_bridge", "ros", "05", 'cv_bridge – Die Brücke zwischen ROS und OpenCV', 1, 1, "Konvertiert sensor_msgs/Image in OpenCV-Bilder und zurück (imgmsg_to_cv2, cv2_to_imgmsg).", None),
     ("compressed_image", "CompressedImage", "ros", "05", 'Komprimierte Bilder: sensor_msgs/CompressedImage', 2, 1, "JPEG-komprimierte Bildnachricht: weniger Last im WLAN, dafür CPU-Zeit und Qualitätsverlust.", None),
     # --- VL 06 Kamera
-    ("pinhole", "Lochkameramodell", "mathe", "06", 'Abbildung eines 3D-Punkts auf die Bildebene', 1, 0, "Projiziert 3D-Punkte über ähnliche Dreiecke auf die Bildebene (u = f·X/Z) — die Tiefe geht verloren.", "„Aus einem einzelnen Kamerabild lässt sich die Entfernung direkt ablesen.“"),
-    ("homprojektion", "Projektion in Matrixform", "mathe", "06", 'Homogene Koordinaten und Matrixform', 2, 0, "Homogene Koordinaten machen die Projektion zu einer Matrixmultiplikation mit anschließender Normierung.", None),
+    ("pinhole", "Lochkameramodell", "mathe", "06", 'Vom 3D-Punkt zum Pixel', 1, 0, "Projiziert 3D-Punkte über ähnliche Dreiecke auf die Bildebene (u = fx·X/Z + cx) – alle Punkte eines Sehstrahls landen auf demselben Pixel, die Tiefe geht verloren.", "„Aus einem einzelnen Kamerabild lässt sich die Entfernung direkt ablesen.“"),
+    ("homprojektion", "Projektion in Matrixform", "mathe", "06", 'Die Kamera-Matrix K', 2, 0, "Homogene Koordinaten machen die Projektion zu einer Matrixmultiplikation λ·(u, v, 1) = K·(X, Y, Z) mit anschließender Division durch die Tiefe.", None),
     ("kmatrix", "Kamera-Matrix K", "mathe", "06", 'Die Kamera-Matrix K', 1, 0, "Intrinsische 3×3-Matrix mit Brennweiten fx, fy und Hauptpunkt cx, cy.", "„K beschreibt auch die Linsenverzerrung.“"),
-    ("verzerrung", "Verzerrungsparameter", "mathe", "06", 'Verzerrungsparameter', 2, 0, "Radiale und tangentiale Koeffizienten modellieren Tonnen- und Kissenverzeichnung realer Linsen.", None),
-    ("entzerrung", "Entzerrung (undistort)", "wahrnehmung", "06", 'Anwendung der intrinsischen Parameter', 2, 1, "cv2.undistort rechnet mit K und D ein verzerrtes Kamerabild in ein ideales Lochkamerabild um.", None),
-    ("kalibrierung", "Kamerakalibrierung", "wahrnehmung", "06", 'Intrinsische Kalibrierung mit Schachbrettmuster', 1, 0, "Aus vielen Schachbrettaufnahmen werden K und die Verzerrungskoeffizienten D bestimmt.", None),
-    ("extrinsik", "Extrinsische Parameter", "mathe", "06", 'Extrinsische Parameter', 2, 0, "Rotation R und Translation t beschreiben die Lage der Kamera relativ zu Welt oder Roboter.", None),
-    ("disparitaet", "Disparität & Tiefe", "wahrnehmung", "06", 'Prinzip der Stereo-Vision', 1, 0, "Zwei Kameras mit Basislinie b liefern über die Disparität d die Tiefe Z = f·b/d.", "„Große Disparität bedeutet ein weit entferntes Objekt.“"),
-    ("rektifizierung", "Stereo-Rektifizierung", "wahrnehmung", "06", 'Vorverarbeitung', 2, 0, "Beide Bilder werden so gedreht, dass korrespondierende Punkte in derselben Zeile liegen.", None),
-    ("camerainfo", "CameraInfo", "ros", "06", 'Kameraparameter in ROS2', 2, 1, "sensor_msgs/CameraInfo überträgt K, D, R und P einer kalibrierten Kamera.", None),
-    ("pointcloud2", "PointCloud2", "ros", "06", 'Das PointCloud2-Message-Format', 1, 1, "ROS-2-Format für 3D-Punktwolken: ein Byte-Strom, dessen Aufbau PointField-Einträge beschreiben.", None),
-    ("pc_transform", "Punktwolke transformieren", "ros", "06", '4. Koordinatensystem-Transformation', 2, 1, "Punktwolken liegen im Kamera-Frame vor und müssen per tf2 z. B. nach base_link überführt werden.", "„Die Punktwolke liegt automatisch im Roboterkoordinatensystem vor.“"),
+    ("verzerrung", "Verzeichnung", "mathe", "06", 'Reale Linsen: Verzeichnung', 1, 0, "Die Linse verschiebt Punkte abhängig vom Abstand r zur Bildmitte (k1·r² + k2·r⁴ + …); k1 < 0 ist tonnenförmig. Am Bildrand ist der Effekt am größten.", "„Eine Entzerrung prüft man am besten in der Bildmitte.“"),
+    ("entzerrung", "Entzerren mit Tabellen", "wahrnehmung", "06", 'Bilder entzerren', 1, 1, "Für jedes Zielpixel einmal berechnen, woher es im Rohbild stammt (initUndistortRectifyMap), dann jedes Bild nur nachschlagen (remap) – etwa 1 ms je Bild.", "„Man kehrt die Verzeichnungsformel für jedes Pixel des Rohbilds um.“"),
+    ("kalibrierung", "Kamerakalibrierung", "wahrnehmung", "06", 'Ablauf mit dem Schachbrett', 1, 0, "Aus vielen Lagen eines Schachbretts werden K und D einer bestimmten Kamera geschätzt; das Ergebnis steht in ost.yaml.", "„Baugleiche Kameras haben dieselbe Kalibrierung.“"),
+    ("extrinsik", "Lage der Kamera (R, t)", "mathe", "06", 'Homographie: vom Bild auf den Boden', 2, 0, "Rotation R und Translation t beschreiben die Lage der Kamera zum Boden bzw. zum Roboter – sie stecken in der Homographie und ändern sich, wenn die Kamera verstellt wird.", "„Nach einem Stoß muss man K und D neu kalibrieren.“"),
+    ("disparitaet", "Disparität & Tiefe", "wahrnehmung", "lid", None, 2, 0, "Zwei Kameras mit Basislinie b liefern über die Disparität d die Tiefe Z = f·b/d.", "„Große Disparität bedeutet ein weit entferntes Objekt.“"),
+    ("camerainfo", "ost.yaml und CameraInfo", "ros", "06", 'Das Ergebnis lesen: ost.yaml', 2, 1, "Die Kalibrierdatei ost.yaml und die Nachricht sensor_msgs/CameraInfo enthalten K (camera_matrix), D (distortion_coefficients) und P; zum Entzerren braucht man K und D.", "„Die projection_matrix ist die Kamera-Matrix.“"),
+    ("reprojektion", "Reprojektionsfehler", "wahrnehmung", "06", 'Ablauf mit dem Schachbrett', 2, 1, "Mittlerer Abstand zwischen erkannten und mit K, D zurückgerechneten Schachbrettecken – einige Zehntel Pixel bei guter Kalibrierung.", None),
+    ("homographie", "Homographie", "mathe", "06", 'Homographie: vom Bild auf den Boden', 1, 0, "3×3-Matrix H = K·[r1 r2 t], die Punkte einer Ebene (Boden) auf das Bild abbildet und zurück; 8 Freiheitsgrade, also genügen 4 Punktpaare (findHomography).", "„Mit einer Homographie lässt sich jeder Bildpunkt auf den Boden umrechnen, auch ein Verkehrsschild.“"),
+    ("draufsicht", "Draufsicht (Vogelperspektive)", "wahrnehmung", "06", 'Die Draufsicht auf die Fahrbahn', 1, 1, "warpPerspective erzeugt mit H eine maßstäbliche Ansicht von oben (bei uns 400 px/m), in der Fahrbahnlinien parallel sind und man in Metern messen kann.", "„Die Draufsicht bleibt gültig, auch wenn die Kamera verdreht wurde.“"),
+    ("vorausschau", "Vorausschau", "bewegung", "06", 'Brücke zu P 3: Abweichung mit Vorausschau', 1, 0, "Die Abweichung von der Spurmitte wird 0,30 m vor dem Roboter gemessen und enthält seitlichen Versatz plus Blickrichtung (≈ 0,30 m · sin ψ).", "„Die Abweichung vorn ist dasselbe wie der seitliche Versatz des Roboters.“"),
+    ("pointcloud2", "PointCloud2", "ros", "lid", None, 1, 1, "ROS-2-Format für 3D-Punktwolken: ein Byte-Strom, dessen Aufbau PointField-Einträge beschreiben.", None),
+    ("pc_transform", "Punktwolke transformieren", "ros", "lid", None, 2, 1, "Punktwolken liegen im Kamera-Frame vor und müssen per tf2 z. B. nach base_link überführt werden.", "„Die Punktwolke liegt automatisch im Roboterkoordinatensystem vor.“"),
     # --- VL 07 Objekterkennung
     ("detektion", "Detektion vs. Klassifikation", "wahrnehmung", "07", 'Begriffsdefinitionen', 1, 0, "Detektion: wo? (Bounding Box). Klassifikation: was? Tracking: wie bewegt es sich?", None),
     ("ecken", "Eckendetektoren", "wahrnehmung", "07", 'Corner Detection: Harris & Shi-Tomasi & FAST', 2, 0, "Harris und Shi-Tomasi finden Ecken über die Strukturmatrix, FAST über einen schnellen Pixelkreistest.", None),
@@ -339,6 +342,13 @@ R = [
     ("discovery", "qos", "nur bei passender"),
     ("frameid", "pc_transform", "nötig für"),
     ("homtrafo", "homprojektion", "angewandt in"),
+    ("homtrafo", "homographie", "Spezialfall für eine Ebene"),
+    ("kmatrix", "homographie", "steckt in"),
+    ("extrinsik", "homographie", "steckt in"),
+    ("entzerrung", "draufsicht", "Voraussetzung für"),
+    ("homographie", "draufsicht", "erzeugt"),
+    ("draufsicht", "vorausschau", "gemessen in"),
+    ("kalibrierung", "reprojektion", "geprüft mit"),
     ("extrinsik", "tf2", "veröffentlicht über"),
     ("faltung", "bewegfaltung", "gleiche Operation"),
     ("odometrie", "radodometrie", "berechnet als"),
@@ -360,7 +370,7 @@ F = [
     ("f_ros", "Vom Knoten zum System", "Wie aus einzelnen Knoten und Nachrichten ein vollständiges Robotersystem wird.",
      ["rosmotivation", "middleware", "node", "topic", "message", "paket", "launch", "tf2", "nav2"]),
     ("f_koord", "Koordinaten überall", "Bezugssysteme und Transformationen ziehen sich vom Roboter bis zur Kamera und zum Fahrwerk.",
-     ["frame", "homtrafo", "verkettung", "tf2", "pose", "kmatrix", "pc_transform", "bbox3d", "diffdrive"]),
+     ["frame", "homtrafo", "verkettung", "tf2", "pose", "kmatrix", "homographie", "pc_transform", "bbox3d", "diffdrive"]),
     ("f_bild", "Vom Pixel zum Objekt", "Von der Pixelmatrix bis zum erkannten Verkehrszeichen mit 3D-Position.",
      ["bildmatrix", "hsv", "thresholding", "canny", "kalibrierung", "disparitaet", "cnn", "yolo", "bbox3d"]),
     ("f_unsicher", "Unsicherheit beherrschen", "Kein Sensor ist perfekt: von Sensorfehlern über Bayes zur fusionierten Pose.",
@@ -383,6 +393,8 @@ for b in B:
     assert b[2] in linien, ("unbekannte Linie", b)
 
 def abschnitt_nr(key, titel):
+    if titel is None:
+        return 0  # Termin ohne Material: Abschnitt folgt
     heads = sections[key]
     if titel not in heads:
         raise SystemExit(f"Abschnitt nicht gefunden: {key} »{titel}« — vorhanden: {heads}")
@@ -428,13 +440,14 @@ assert set(PROJEKTZIEL) == set(IDX), set(IDX) ^ set(PROJEKTZIEL)
 # Praktika führen keine Begriffe ein, sie wenden an: welche Begriffe aus früheren Terminen?
 ANWENDUNG = {
     "p1": ["domainid", "tbtopics", "topiccli", "qoscompat", "tf2", "tftree", "rosbag"],
-    "p2": ["launch", "qoscompat", "cv_bridge", "compressed_image", "kalibrierung", "entzerrung"],
-    "p3": ["paramfile", "frame", "thresholding", "morphologie", "launch"],
+    "p2": ["launch", "qoscompat", "compressed_image", "kalibrierung", "entzerrung", "homographie", "draufsicht"],
+    "p3": ["paramfile", "thresholding", "morphologie", "draufsicht", "vorausschau"],
 }
 # Vorwissen und Faden werden aus Beziehungen und Fäden abgeleitet; wo das nicht trifft, hier festlegen
 BRAUCHEN = {
     "02": ["message", "topiccli", "discovery"],
     "04": ["source", "ros2cli", "message", "msgdef"],
+    "06": ["frame", "homtrafo", "verkettung", "bildmatrix"],
 }
 FADEN = {"04": "f_ros"}
 for k, ids_ in list(ANWENDUNG.items()) + list(BRAUCHEN.items()):
@@ -477,6 +490,22 @@ def faden_diagramm(stationen, jetzt):
                "```"]
     return zeilen
 
+def blocktabelle(key):
+    """Wochenraster des aktuellen Blocks: Zeilen = Wochen, Spalten = Vorlesung/Übung/Praktikum."""
+    blk = T[IDX[key]][6]
+    wochen = sorted({t[2] for t in T if t[6] == blk})
+    def zelle(t):
+        text = f"{t[1]} {t[3]}"
+        if t[4]:
+            text = f"[{text}]({KURS['basis']}{t[4]})"
+        return f"**▶ {text}**" if t[0] == key else text
+    z = ["<!-- data-type=\"none\" -->", "| Woche ab | Vorlesung | Übung | Praktikum |", "| :-- | :-- | :-- | :-- |"]
+    for w in wochen:
+        spalten = [[zelle(t) for t in T if t[2] == w and t[6] == blk and t[1].startswith(art)] for art in ("VL", "Ü", "P")]
+        tag = f"**{datum(w)}**" if w == T[IDX[key]][2] else datum(w)
+        z.append(f"| {tag} | " + " | ".join("<br>".join(c) for c in spalten) + " |")
+    return z
+
 def wo_stehen_wir(key):
     i = IDX[key]
     t = T[i]
@@ -496,7 +525,6 @@ def wo_stehen_wir(key):
                     brauchen.append(u)
         brauchen = sorted(brauchen, key=lambda x: -term_of[x])[:5]
         brauchen.sort(key=lambda x: term_of[x])
-    nach = T[i + 1] if i + 1 < len(T) else None
 
     z = [MARKE["wo"][0], "", "## Wo stehen wir?", ""]
     if t[1].startswith("VL"):
@@ -504,8 +532,9 @@ def wo_stehen_wir(key):
         if heute:
             sprech += " Neu sind heute: " + ", ".join(name_of[x] for x in heute) + "."
         z += ["    --{{0}}--", sprech, ""]
-    z += [f"**{BLOECKE[t[6]]}** · Termin {i + 1} von {len(T)} · {t[1]} in der Woche ab {datum(t[2])}", "",
-          f"**Ziel im Projekt:** {PROJEKTZIEL[key]}", ""]
+    z += [f"**Ziel im Projekt:** {PROJEKTZIEL[key]}", "",
+          f"**{BLOECKE[t[6]]}** – Termin {i + 1} von {len(T)}, heute markiert mit ▶", ""]
+    z += blocktabelle(key) + [""]
     if brauchen:
         z.append("- **Sie brauchen:** " + " · ".join(begriff_link(x) for x in brauchen))
     elif i == 0:
@@ -514,16 +543,14 @@ def wo_stehen_wir(key):
         z.append("- **Heute:** anwenden, nichts Neues – Ihre Arbeit hier ist die Prüfungsleistung")
     elif heute:
         z.append("- **Heute neu:** " + " · ".join(begriff_link(x, False) for x in heute))
-    if nach:
-        z.append(f"- **Danach:** {nach[1]} · {nach[3]} – {PROJEKTZIEL[nach[0]]}")
-    z.append("")
+    z += ["", f"[🗺️ Ganze Kurslandkarte öffnen]({KARTE_URL}#termin={key}) – dort finden Sie jeden Begriff mit Erklärung, typischer Stolperfalle und Link auf die passende Folie.", ""]
     if praktikum:
         kette = [(x[0], f"{x[1]} · {x[3]}", datum(x[2])) for x in T if x[1].startswith("P")]
         n = [x[0] for x in kette].index(key)
         fenster = kette[max(0, n - 1): n + 3]
         if n + 3 < len(kette):
             fenster.append(("mehr", "…", ""))
-        z += ["**Der Weg zum autonomen TurtleBot** – die Praktika bauen aufeinander auf:", ""]
+        z += ["### Der Weg zum autonomen TurtleBot", "", "Die Praktika bauen aufeinander auf:", ""]
         z += faden_diagramm(fenster + [("ziel", "autonome Fahrt", "Ende SoSe")], {key})
     else:
         eigene = {b[0] for b in B if b[3] == key}
@@ -532,10 +559,9 @@ def wo_stehen_wir(key):
             fid, fname, fbeschr, st = max(kandidaten, key=lambda f: len(eigene & set(f[3])))
             pos = [n for n, x in enumerate(st) if x in eigene]
             fenster = st[max(0, pos[0] - 1): pos[-1] + 3]
-            z += [f"**Roter Faden „{fname}“** – {fbeschr}", ""]
+            z += [f"### Roter Faden: {fname}", "", fbeschr, ""]
             z += faden_diagramm([(x, name_of[x], T[term_of[x]][1]) for x in fenster], eigene)
-    z += ["", f"[🗺️ Ganze Kurslandkarte öffnen]({KARTE_URL}#termin={key}) – dort finden Sie jeden Begriff mit Erklärung, typischer Stolperfalle und Link auf die passende Folie.",
-          "", MARKE["wo"][1]]
+    z += ["", MARKE["wo"][1]]
     return "\n".join(z)
 
 def ausblick(key):
@@ -606,6 +632,91 @@ open(os.path.join(ZIEL, "kurslandkarte.json"), "w", encoding="utf-8").write(text
 seite = open(os.path.join(HIER, "vorlage.html"), encoding="utf-8").read()
 seite = seite.replace("%%DATEN%%", text.replace("</", "<\\/")).replace("%%STAND%%", STAND)
 open(os.path.join(ZIEL, "index.html"), "w", encoding="utf-8").write(seite)
+
+# ---- Startseite der GitHub Page (docs/index.html): Kursübersicht aus denselben Daten
+def startseite():
+    import html
+    def kachel(t):
+        stand = {"ausgearbeitet": "neu 2026/27", "Bestand": "Bestand 2025/26"}.get(t[5], "in Planung")
+        if t[1].startswith("P"):
+            worte = "wendet an: " + ", ".join(name_of[x] for x in ANWENDUNG.get(t[0], [])[:4]) if t[0] in ANWENDUNG else ""
+        else:
+            worte = ", ".join([b[1] for b in B if b[3] == t[0] and b[5] == 1][:4])
+        innen = (f'<span class="kopf"><b>{html.escape(t[1])}</b> {html.escape(t[3])}</span>'
+                 f'<span class="worte">{html.escape(worte)}</span><span class="stand {t[5]}">{stand}</span>')
+        attr = f'class="kachel {t[5]}" data-iso="{t[2]}"'
+        return f'<a {attr} href="{KURS["basis"]}{t[4]}">{innen}</a>' if t[4] else f'<div {attr}>{innen}</div>'
+    zeilen = []
+    for blk in sorted(BLOECKE):
+        zeilen.append(f'<h2>{html.escape(BLOECKE[blk])}</h2>\n<div class="raster">\n'
+                      '<span class="rh">Woche ab</span><span class="rh">Vorlesung</span><span class="rh">Übung</span><span class="rh">Praktikum</span>')
+        for w in sorted({t[2] for t in T if t[6] == blk}):
+            zeilen.append(f'<span class="wk" data-iso="{w}">{datum(w)}</span>')
+            for art in ("VL", "Ü", "P"):
+                zeilen.append('<div class="zelle">' + "".join(kachel(t) for t in T if t[6] == blk and t[2] == w and t[1].startswith(art)) + '</div>')
+        zeilen.append('</div>')
+    inhalt = "\n".join(zeilen)
+    return f"""<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="{KURS['autoren']}">
+<title>Robotik: Kursübersicht</title>
+<style>
+:root {{ --bg: #f6f7f5; --fg: #1d2427; --muted: #5b6669; --line: #d5dad6; --card: #ffffff; --accent: #0f6e6e; --neu: #1f7a3a; --jetzt: #c0392b; }}
+@media (prefers-color-scheme: dark) {{ :root {{ --bg: #141a1b; --fg: #e4eae8; --muted: #9aa7a6; --line: #2d3a3b; --card: #1c2426; --accent: #5cc2c2; --neu: #6fcf8a; --jetzt: #ff7b6b; }} }}
+body {{ margin: 0; padding: 24px 16px 48px; background: var(--bg); color: var(--fg); font: 16px/1.5 system-ui, "Segoe UI", sans-serif; }}
+main {{ max-width: 1040px; margin: 0 auto; }}
+h1 {{ margin: 0 0 4px; font-size: 1.8rem; }}
+h2 {{ margin: 32px 0 8px; font-size: 1.15rem; }}
+a {{ color: var(--accent); }}
+.karte {{ display: inline-block; margin: 16px 0 8px; padding: 10px 16px; border: 1px solid var(--accent); border-radius: 8px; text-decoration: none; font-weight: 600; }}
+.raster {{ display: grid; grid-template-columns: max-content repeat(3, minmax(0, 1fr)); gap: 8px 10px; align-items: start; }}
+.rh {{ color: var(--muted); font-size: .8rem; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; border-bottom: 1px solid var(--line); padding-bottom: 2px; }}
+.wk {{ color: var(--muted); font-size: .85rem; padding-top: 10px; white-space: nowrap; font-variant-numeric: tabular-nums; }}
+.wk.jetzt {{ color: var(--jetzt); font-weight: 700; }}
+.zelle {{ display: grid; gap: 8px; min-width: 0; }}
+.kachel {{ display: grid; gap: 2px; padding: 8px 12px; background: var(--card); border: 1px solid var(--line); border-radius: 8px; color: var(--fg); text-decoration: none; }}
+a.kachel:hover, a.kachel:focus-visible {{ border-color: var(--accent); }}
+div.kachel {{ background: transparent; border-style: dashed; color: var(--muted); }}
+.kachel.jetzt {{ border-color: var(--jetzt); box-shadow: inset 4px 0 0 var(--jetzt); }}
+.kopf b {{ margin-right: 4px; }}
+.worte {{ font-size: .82rem; color: var(--muted); }}
+.stand {{ font-size: .75rem; color: var(--muted); }}
+.stand.ausgearbeitet {{ color: var(--neu); }}
+.kachel.jetzt .stand::after {{ content: " · diese Woche"; color: var(--jetzt); font-weight: 700; }}
+.fuss {{ margin-top: 32px; color: var(--muted); font-size: .85rem; }}
+@media (max-width: 700px) {{
+  .raster {{ grid-template-columns: minmax(0, 1fr); }}
+  .rh, .zelle:empty {{ display: none; }}
+  .wk {{ padding-top: 6px; }}
+}}
+</style>
+</head>
+<body>
+<main>
+<h1>Robotik – Vorlesung, Übung und Praktikum</h1>
+<p>TU Bergakademie Freiberg · WiSe 2026/27 und SoSe 2027 · Projektaufgabe: Ein TurtleBot fährt autonom durch eine Miniatur-Verkehrswelt.</p>
+<a class="karte" href="kurslandkarte/">🗺️ Kurslandkarte: Begriffe, Zusammenhänge und „Sie sind hier“</a>
+<p>Jede Kachel ist ein Termin mit seinen wichtigsten Stichworten; ein Klick öffnet das Material in <a href="https://liascript.github.io">LiaScript</a>. Termine nach dem vorläufigen Zeitplan, Datum = Montag der Woche.</p>
+{inhalt}
+<p class="fuss">Stand {STAND} · Autoren: {KURS['autoren']} · Quelle: <a href="https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik">GitHub</a></p>
+</main>
+<script>
+// aktuelle Woche markieren: die letzte Woche, deren Montag erreicht ist
+const heute = new Date().toISOString().slice(0, 10);
+const wochen = [...document.querySelectorAll(".wk")].map(w => w.dataset.iso).filter(d => d <= heute);
+if (wochen.length) {{
+  const w = wochen[wochen.length - 1];
+  document.querySelectorAll(`[data-iso="${{w}}"]`).forEach(e => e.classList.add("jetzt"));
+}}
+</script>
+</body>
+</html>
+"""
+
+open(os.path.join(REPO, "docs", "index.html"), "w", encoding="utf-8").write(startseite())
 
 e1 = sum(1 for b in B if b[5] == 1)
 print(f"{len(T)} Termine, {len(B)} Begriffe ({e1} Kern, {len(B)-e1} Detail), {len(R)} Beziehungen, {len(F)} Fäden")
