@@ -61,29 +61,7 @@ Kurz zur Orientierung. Wir sind in Block 2, Termin 10 von 32. Sie schließen von
 - **Sie brauchen:** [Bezugskoordinatensystem](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=frame) (VL 4) · [Homogene Koordinaten](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=homtrafo) (VL 4) · [Verkettung](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=verkettung) (VL 4) · [Bild als Pixelmatrix](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=bildmatrix) (VL 6)
 - **Heute neu:** [Lochkameramodell](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=pinhole) · [Kamera-Matrix K](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=kmatrix) · [Verzeichnung](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=verzerrung) · [Entzerren mit Tabellen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=entzerrung) · [Kamerakalibrierung](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=kalibrierung) · [Homographie](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=homographie) · [Draufsicht (Vogelperspektive)](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=draufsicht) · [Vorausschau](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=vorausschau)
 
-[🗺️ Ganze Kurslandkarte öffnen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=06) – dort finden Sie jeden Begriff mit Erklärung, typischer Stolperfalle und Link auf die passende Folie.
-
-### Roter Faden: Koordinaten überall
-
-Bezugssysteme und Transformationen ziehen sich vom Roboter bis zur Kamera und zum Fahrwerk.
-
-```mermaid @mermaid
-flowchart LR
-  s0["Pose (6 DoF)<br/><small>VL 5</small>"]
-  s1["Kamera-Matrix K<br/><small>VL 7</small>"]
-  s2["Homographie<br/><small>VL 7</small>"]
-  s3["Punktwolke transformieren<br/><small>VL 8</small>"]
-  s4["Bounding Box → 3D-Position<br/><small>VL 9</small>"]
-  s0 --> s1 --> s2 --> s3 --> s4
-  class s0 war
-  class s1 jetzt
-  class s2 jetzt
-  class s3 kommt
-  class s4 kommt
-  classDef war fill:#e8e8e8,stroke:#999,color:#555
-  classDef jetzt fill:#ffd27f,stroke:#b36b00,stroke-width:3px,color:#000
-  classDef kommt fill:#fff,stroke:#999,stroke-dasharray:4 3,color:#555
-```
+[🗺️ Ganze Kurslandkarte öffnen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=06) – dort finden Sie jeden Begriff mit Erklärung, typischer Stolperfalle, Link auf die passende Folie und die roten Fäden durch die Veranstaltung.
 
 <!-- kurslandkarte:wo-ende -->
 
@@ -137,7 +115,8 @@ Für die Rechnung legen wir die Bildebene gedanklich **vor** das Loch, im Abstan
 + $Z$ zeigt in Blickrichtung,
 + $X$ nach rechts, $Y$ nach **unten** — wie die Zeilen und Spalten eines Bildes.
 
-> Achtung: Das ist ein anderes Achsensystem als `base_link` und `base_footprint` des Roboters ($x$ vorn, $y$ links, $z$ oben). In ROS trägt es einen eigenen Frame-Namen mit `_optical_frame` am Ende; die Umrechnung übernimmt tf2 (VL 4).
+> [!WARNING]
+> **Stolperfalle:** Das ist ein anderes Achsensystem als `base_link` und `base_footprint` des Roboters ($x$ vorn, $y$ links, $z$ oben). In ROS trägt es einen eigenen Frame-Namen mit `_optical_frame` am Ende; die Umrechnung übernimmt tf2 (VL 4).
 
 ### Vom 3D-Punkt zum Pixel
 
@@ -164,7 +143,8 @@ Lässt man $f$ weg, bleiben die **normierten Koordinaten** $x_n = X/Z$, $y_n = Y
 Das hat für uns eine wichtige Folge, die wir gleich nutzen: Wenn wir zusätzlich wissen, dass ein Punkt auf dem Boden liegt, ist er wieder eindeutig. Der Strahl trifft den Boden nur an einer Stelle.
 
 {{1}}
-> **Merken Sie sich:** Aus *einem* Bild allein bekommt man keine Tiefe. Mit einer *Zusatzannahme* — „der Punkt liegt auf dem Boden“ — schon. Darauf baut die Draufsicht auf.
+> [!IMPORTANT]
+> **Merke:** Aus *einem* Bild allein bekommt man keine Tiefe. Mit einer *Zusatzannahme* — „der Punkt liegt auf dem Boden“ — schon. Darauf baut die Draufsicht auf.
 
 ### Die Kamera-Matrix K
 
@@ -414,7 +394,7 @@ Auf dem Laborrechner ist das nur ein Faktor zwei. Auf dem kleinen Rechner eines 
 Warum ist das rückwärts so viel einfacher als vorwärts? Vorwärts müssten wir die Verzeichnung umkehren, und dafür gibt es keine Formel, nur eine iterative Näherung. Rückwärts wenden wir die Verzeichnung einfach an, genau in der Richtung, in der die Formel geschrieben ist.
 
 {{1}}
-> **Warum rückwärts?** Vorwärts (Rohbild → Zielbild) müsste man die Verzeichnungsformel *umkehren* — das geht nur iterativ, und manche Zielpixel blieben leer. Rückwärts wendet man die Formel einfach an, und jedes Zielpixel bekommt genau einen Wert.
+**Warum rückwärts?** Vorwärts (Rohbild → Zielbild) müsste man die Verzeichnungsformel *umkehren* — das geht nur iterativ, und manche Zielpixel blieben leer. Rückwärts wendet man die Formel einfach an, und jedes Zielpixel bekommt genau einen Wert.
 
 ## Homographie: vom Bild auf den Boden
 
@@ -433,7 +413,8 @@ $$
 
 Die dritte Spalte $r_3$ fällt weg, weil $z = 0$ ist. Übrig bleibt eine $3 \times 3$-Matrix $H$, die **Homographie**: Sie bildet Punkte einer Ebene auf Punkte einer anderen Ebene ab — hier Boden → Bild, und mit $H^{-1}$ zurück.
 
-> Diese Rechnung müssen Sie in P 2 **nicht** von Hand ausführen. Sie zeigt nur, *warum* eine $3 \times 3$-Matrix genügt. Die Matrix selbst misst `findHomography` aus Punktpaaren — dann muss niemand $R$, $t$ und die Kamerahöhe genau kennen.
+> [!NOTE]
+> **Hinweis:** Diese Rechnung müssen Sie in P 2 **nicht** von Hand ausführen. Sie zeigt nur, *warum* eine $3 \times 3$-Matrix genügt. Die Matrix selbst misst `findHomography` aus Punktpaaren — dann muss niemand $R$, $t$ und die Kamerahöhe genau kennen.
 
 ### Vier Punktpaare genügen
 
@@ -506,7 +487,8 @@ flowchart LR
 
 Wir rechnen die Bodenpunkte der Brettecken deshalb *vorher* mit der Formel für Spalte und Zeile in Draufsicht-Pixel um und übergeben `findHomography` die Paare **Bildpixel → Draufsicht-Pixel**. Die gefundene Matrix enthält dann $S \cdot H^{-1}$ in einem — und `warpPerspective` kann damit direkt das Bild erzeugen.
 
-> **Falle:** OpenCV schreibt Bildpunkte immer als $(x, y) = (\text{Spalte}, \text{Zeile})$ — also *erst* die Spalte. NumPy-Bilder indiziert man dagegen mit `bild[zeile, spalte]`. Und `warpPerspective` will die Größe als (Breite, Höhe).
+> [!WARNING]
+> **Stolperfalle:** OpenCV schreibt Bildpunkte immer als $(x, y) = (\text{Spalte}, \text{Zeile})$ — also *erst* die Spalte. NumPy-Bilder indiziert man dagegen mit `bild[zeile, spalte]`. Und `warpPerspective` will die Größe als (Breite, Höhe).
 
 ```python
 import cv2

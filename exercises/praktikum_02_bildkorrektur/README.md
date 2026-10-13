@@ -81,31 +81,7 @@ Ob der Knoten auch live mit voller Rate läuft, prüfen Sie zu Beginn von P 3.
 - **Sie brauchen:** [Launch-Datei](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=launch) (VL 3) · [QoS-Verträglichkeit](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=qoscompat) (VL 4) · [CompressedImage](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=compressed_image) (VL 6) · [Kamerakalibrierung](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=kalibrierung) (VL 7) · [Entzerren mit Tabellen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=entzerrung) (VL 7) · [Homographie](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=homographie) (VL 7) · [Draufsicht (Vogelperspektive)](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=draufsicht) (VL 7)
 - **Heute:** anwenden, nichts Neues – Ihre Arbeit hier ist die Prüfungsleistung
 
-[🗺️ Ganze Kurslandkarte öffnen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=p2) – dort finden Sie jeden Begriff mit Erklärung, typischer Stolperfalle und Link auf die passende Folie.
-
-### Der Weg zum autonomen TurtleBot
-
-Die Praktika bauen aufeinander auf:
-
-```mermaid @mermaid
-flowchart LR
-  s0["P 1 · TurtleBot + Bags<br/><small>23.11.2026</small>"]
-  s1["P 2 · Bildkorrektur<br/><small>11.1.2027</small>"]
-  s2["P 3 · Spurerkennung<br/><small>18.1.2027</small>"]
-  s3["P 4 · Hinderniserkennung<br/><small>8.2.2027</small>"]
-  s4["…<br/><small></small>"]
-  s5["autonome Fahrt<br/><small>Ende SoSe</small>"]
-  s0 --> s1 --> s2 --> s3 --> s4 --> s5
-  class s0 war
-  class s1 jetzt
-  class s2 kommt
-  class s3 kommt
-  class s4 kommt
-  class s5 kommt
-  classDef war fill:#e8e8e8,stroke:#999,color:#555
-  classDef jetzt fill:#ffd27f,stroke:#b36b00,stroke-width:3px,color:#000
-  classDef kommt fill:#fff,stroke:#999,stroke-dasharray:4 3,color:#555
-```
+[🗺️ Ganze Kurslandkarte öffnen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=p2) – dort finden Sie jeden Begriff mit Erklärung, typischer Stolperfalle, Link auf die passende Folie und die roten Fäden durch die Veranstaltung.
 
 <!-- kurslandkarte:wo-ende -->
 
@@ -409,7 +385,8 @@ Fällt der Roboter durch einen Defekt aus, den Ihre Gruppe nicht verschuldet hat
 - [ ] Auf dem eigenen Laptop für zu Hause wieder `ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST` aktivieren
 - [ ] Schachbrett und Roboter zurückgeben
 
-> **Wichtig für P 3:** Ihre Homographie gilt, solange die Kamera Ihres Roboters genau so sitzt wie heute. Wurde sie verstellt (Stoß, Reparatur), melden Sie das den Betreuern — dann wiederholen Sie Teil C. Teil A (Kalibrierung) nur dann, wenn am Objektiv gedreht oder die Kamera getauscht wurde: $K$ und $D$ gehören zur Kamera, nicht zu ihrer Lage (VL 7).
+> [!IMPORTANT]
+> **Merke – für P 3:** Ihre Homographie gilt, solange die Kamera Ihres Roboters genau so sitzt wie heute. Wurde sie verstellt (Stoß, Reparatur), melden Sie das den Betreuern — dann wiederholen Sie Teil C. Teil A (Kalibrierung) nur dann, wenn am Objektiv gedreht oder die Kamera getauscht wurde: $K$ und $D$ gehören zur Kamera, nicht zu ihrer Lage (VL 7).
 
 <!-- kurslandkarte:ausblick-start -->
 

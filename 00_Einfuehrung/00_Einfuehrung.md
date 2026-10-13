@@ -64,27 +64,7 @@ Kurz zur Orientierung. Wir sind in Block 1, Termin 1 von 32. Sie lernen die Proj
 - **Sie brauchen:** nichts – wir fangen an
 - **Heute neu:** [Projektaufgabe Verkehrswelt](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=verkehrswelt) · [Roboter](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=roboter) · [Sense-Think-Act](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=sta) · [TurtleBot 3 Burger](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=turtlebot) · [Warum ROS?](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=rosmotivation)
 
-[🗺️ Ganze Kurslandkarte öffnen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=00) – dort finden Sie jeden Begriff mit Erklärung, typischer Stolperfalle und Link auf die passende Folie.
-
-### Roter Faden: Projektaufgabe
-
-Vom Ziel in der ersten Vorlesung zum autonom fahrenden TurtleBot in der Verkehrswelt.
-
-```mermaid @mermaid
-flowchart LR
-  s0["Projektaufgabe Verkehrswelt<br/><small>VL 1</small>"]
-  s1["TurtleBot 3 Burger<br/><small>VL 1</small>"]
-  s2["ROS_DOMAIN_ID<br/><small>VL 3</small>"]
-  s3["ros2 bag<br/><small>Ü 2</small>"]
-  s0 --> s1 --> s2 --> s3
-  class s0 jetzt
-  class s1 jetzt
-  class s2 kommt
-  class s3 kommt
-  classDef war fill:#e8e8e8,stroke:#999,color:#555
-  classDef jetzt fill:#ffd27f,stroke:#b36b00,stroke-width:3px,color:#000
-  classDef kommt fill:#fff,stroke:#999,stroke-dasharray:4 3,color:#555
-```
+[🗺️ Ganze Kurslandkarte öffnen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=00) – dort finden Sie jeden Begriff mit Erklärung, typischer Stolperfalle, Link auf die passende Folie und die roten Fäden durch die Veranstaltung.
 
 <!-- kurslandkarte:wo-ende -->
 
@@ -224,10 +204,15 @@ Beide Definitionen stammen aus der Industrie und beschreiben Roboterarme. Für m
     --{{2}}--
 Für diese Veranstaltung arbeiten wir deshalb mit einer einfachen, funktionalen Definition. Sie hat den Vorteil, dass sie direkt zum Aufbau eines Roboters führt — darum geht es gleich.
 
-         {{2}}
-> **Arbeitsdefinition:** Ein Roboter ist eine Maschine, die ihre Umgebung über **Sensoren wahrnimmt**, daraus **Entscheidungen ableitet** und über **Aktoren auf die Umgebung einwirkt** — und das wiederholt, ohne dass ein Mensch jeden Schritt vorgibt.
->
-> Prüfen Sie Ihre Abstimmung: Der Geschirrspüler misst zwar Wassertemperatur, entscheidet aber nichts über seine Umgebung; die ferngesteuerte Drohne nimmt wahr und handelt, aber ein Mensch entscheidet. Saugroboter, Spurhalteassistent und TurtleBot erfüllen die Definition.
+{{2}}
+****
+
+> [!IMPORTANT]
+> **Merke – Arbeitsdefinition:** Ein Roboter ist eine Maschine, die ihre Umgebung über **Sensoren wahrnimmt**, daraus **Entscheidungen ableitet** und über **Aktoren auf die Umgebung einwirkt** — und das wiederholt, ohne dass ein Mensch jeden Schritt vorgibt.
+
+Prüfen Sie Ihre Abstimmung: Der Geschirrspüler misst zwar Wassertemperatur, entscheidet aber nichts über seine Umgebung; die ferngesteuerte Drohne nimmt wahr und handelt, aber ein Mensch entscheidet. Saugroboter, Spurhalteassistent und TurtleBot erfüllen die Definition.
+
+****
 
 ## Klassifikation von Robotersystemen
 
@@ -334,10 +319,10 @@ Betrachten wir zwei konkrete Beispiele aus der Praxis: einen Lieferroboter für 
                   {{3-4}}
 *******************************************************************************
 
-> **Diskussion:** Welche dieser Herausforderungen sehen Sie als besonders relevant für folgende Szenarien?
-> 
-> 1. **Lieferroboter** in einer Fußgängerzone
-> 2. **Aquatischer Roboter** zur Gewässerüberwachung 
+**Diskussion:** Welche dieser Herausforderungen sehen Sie als besonders relevant für folgende Szenarien?
+
+1. **Lieferroboter** in einer Fußgängerzone
+2. **Aquatischer Roboter** zur Gewässerüberwachung 
 
 ![Autonomer Lieferroboter in einer Engstelle zwischen Passanten](images/Roboter_Engstelle2.png "Autonomer Roboter des Ready for Robots Projektes")
 ![Schwimmroboter der TU Freiberg auf einem See](images/Schwimmroboter.png "TUBAF Schwimmroboter mit Windmessungsaufsatz")
@@ -405,7 +390,7 @@ In der erweiterten Darstellung sehen Sie, welche Aufgaben auf den einzelnen Schi
 | Reaktive Überwachung   | Regelung, Energiemanagement, Notaus-Erkennung       |
 | Sensoren und Aktoren   | Hardwaretreiber                                     |
 
-> **Zentrale Frage:** Wer soll das denn alles implementieren?
+**Zentrale Frage:** Wer soll das denn alles implementieren?
 
 *************************************************
 
@@ -510,7 +495,8 @@ Bevor wir mit ROS 2 arbeiten können, brauchen wir ein solides Fundament: den si
 Wenn Sie noch kein Linux-System haben, nutzen Sie die Zeit bis zur Übung. Unter Windows ist das Linux-Subsystem WSL2 eine gute Alternative zu einer nativen Installation.
 
       {{1}}
-> **Bis zur Übung:** Stellen Sie sicher, dass Sie Zugriff auf ein Ubuntu-24.04-System haben — nativ, als WSL2 unter Windows oder im Rechnerpool.
+> [!NOTE]
+> **Hinweis – bis zur Übung:** Stellen Sie sicher, dass Sie Zugriff auf ein Ubuntu-24.04-System haben — nativ, als WSL2 unter Windows oder im Rechnerpool.
 
 ## Zusammenfassung
 
@@ -530,7 +516,7 @@ Fassen wir die wichtigsten Punkte dieser Einführungsvorlesung zusammen:
 Damit kennen Sie das Ziel und den Weg dorthin. In der nächsten Übung legen wir mit dem Linux-Terminal das Fundament. Ich freue mich auf die gemeinsame Reise durch die faszinierende Welt der mobilen Robotik!
 
       {{1}}
-> **Zum Nachdenken:** Welche Fähigkeiten braucht ein menschlicher Fahrer, um durch unsere Verkehrswelt zu kommen — und welcher Sensor des TurtleBots könnte jeweils die Augen und Ohren ersetzen? Notieren Sie Ihre Antwort: Wir greifen sie zu Beginn von Block 2 (Sensorgrundlagen) wieder auf.
+**Zum Nachdenken:** Welche Fähigkeiten braucht ein menschlicher Fahrer, um durch unsere Verkehrswelt zu kommen — und welcher Sensor des TurtleBots könnte jeweils die Augen und Ohren ersetzen? Notieren Sie Ihre Antwort: Wir greifen sie zu Beginn von Block 2 (Sensorgrundlagen) wieder auf.
 
 **Abschluss-Check**
 

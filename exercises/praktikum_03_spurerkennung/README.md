@@ -97,31 +97,7 @@ Warum 30 cm voraus und nicht an der Radachse? Ein Fahrer schaut auch nach vorn, 
 - **Sie brauchen:** [Parameter und Parameterdatei](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=paramfile) (Ü 2) · [Schwellwertoperation](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=thresholding) (VL 6) · [Morphologische Operationen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=morphologie) (VL 6) · [Draufsicht (Vogelperspektive)](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=draufsicht) (VL 7) · [Vorausschau](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=vorausschau) (VL 7)
 - **Heute:** anwenden, nichts Neues – Ihre Arbeit hier ist die Prüfungsleistung
 
-[🗺️ Ganze Kurslandkarte öffnen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=p3) – dort finden Sie jeden Begriff mit Erklärung, typischer Stolperfalle und Link auf die passende Folie.
-
-### Der Weg zum autonomen TurtleBot
-
-Die Praktika bauen aufeinander auf:
-
-```mermaid @mermaid
-flowchart LR
-  s0["P 2 · Bildkorrektur<br/><small>11.1.2027</small>"]
-  s1["P 3 · Spurerkennung<br/><small>18.1.2027</small>"]
-  s2["P 4 · Hinderniserkennung<br/><small>8.2.2027</small>"]
-  s3["P 5 · Streckenverlauf<br/><small>26.4.2027</small>"]
-  s4["…<br/><small></small>"]
-  s5["autonome Fahrt<br/><small>Ende SoSe</small>"]
-  s0 --> s1 --> s2 --> s3 --> s4 --> s5
-  class s0 war
-  class s1 jetzt
-  class s2 kommt
-  class s3 kommt
-  class s4 kommt
-  class s5 kommt
-  classDef war fill:#e8e8e8,stroke:#999,color:#555
-  classDef jetzt fill:#ffd27f,stroke:#b36b00,stroke-width:3px,color:#000
-  classDef kommt fill:#fff,stroke:#999,stroke-dasharray:4 3,color:#555
-```
+[🗺️ Ganze Kurslandkarte öffnen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=p3) – dort finden Sie jeden Begriff mit Erklärung, typischer Stolperfalle, Link auf die passende Folie und die roten Fäden durch die Veranstaltung.
 
 <!-- kurslandkarte:wo-ende -->
 
@@ -367,7 +343,8 @@ Fällt der Roboter durch einen Defekt aus, den Ihre Gruppe nicht verschuldet hat
 - [ ] Auf dem eigenen Laptop für zu Hause wieder `ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST` aktivieren
 - [ ] Roboter und Abdeckung zurückgeben
 
-> **Ausblick:** In Block 3 kommen Hindernisse dazu — in P 4 erkennen Sie sie mit dem LiDAR. Ihre Abweichung `/lane/offset` bleibt die Eingangsgröße für den Spurfolge-Regler in Block 5.
+> [!NOTE]
+> **Hinweis – Ausblick:** In Block 3 kommen Hindernisse dazu — in P 4 erkennen Sie sie mit dem LiDAR. Ihre Abweichung `/lane/offset` bleibt die Eingangsgröße für den Spurfolge-Regler in Block 5.
 
 <!-- kurslandkarte:ausblick-start -->
 

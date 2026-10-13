@@ -443,13 +443,12 @@ ANWENDUNG = {
     "p2": ["launch", "qoscompat", "compressed_image", "kalibrierung", "entzerrung", "homographie", "draufsicht"],
     "p3": ["paramfile", "thresholding", "morphologie", "draufsicht", "vorausschau"],
 }
-# Vorwissen und Faden werden aus Beziehungen und Fäden abgeleitet; wo das nicht trifft, hier festlegen
+# Vorwissen wird aus Beziehungen und Fäden abgeleitet; wo das nicht trifft, hier festlegen
 BRAUCHEN = {
     "02": ["message", "topiccli", "discovery"],
     "04": ["source", "ros2cli", "message", "msgdef"],
     "06": ["frame", "homtrafo", "verkettung", "bildmatrix"],
 }
-FADEN = {"04": "f_ros"}
 for k, ids_ in list(ANWENDUNG.items()) + list(BRAUCHEN.items()):
     for x in ids_:
         assert x in term_of and term_of[x] < IDX[k], (k, x)
@@ -467,28 +466,6 @@ def begriff_link(i, mit_termin=True):
     t = T[term_of[i]]
     zusatz = f" ({t[1]})" if mit_termin else ""
     return f"[{name_of[i].replace('_', chr(92) + '_')}]({KARTE_URL}#begriff={i}){zusatz}"
-
-def mm(text):
-    return text.replace('"', "#quot;")
-
-def faden_diagramm(stationen, jetzt):
-    """Mermaid-Kette; jetzt = Menge der Stationen, die heute dran sind."""
-    zeilen = ["```mermaid @mermaid", "flowchart LR"]
-    for n, (sid, label, termin) in enumerate(stationen):
-        zeilen.append(f'  s{n}["{mm(label)}<br/><small>{termin}</small>"]')
-    zeilen.append("  " + " --> ".join(f"s{n}" for n in range(len(stationen))))
-    phase = "war"
-    for n, (sid, _, _) in enumerate(stationen):
-        if sid in jetzt:
-            phase = "jetzt"
-        elif phase == "jetzt":
-            phase = "kommt"
-        zeilen.append(f"  class s{n} {phase}")
-    zeilen += ["  classDef war fill:#e8e8e8,stroke:#999,color:#555",
-               "  classDef jetzt fill:#ffd27f,stroke:#b36b00,stroke-width:3px,color:#000",
-               "  classDef kommt fill:#fff,stroke:#999,stroke-dasharray:4 3,color:#555",
-               "```"]
-    return zeilen
 
 def blocktabelle(key):
     """Wochenraster des aktuellen Blocks: Zeilen = Wochen, Spalten = Vorlesung/Übung/Praktikum."""
@@ -543,25 +520,8 @@ def wo_stehen_wir(key):
         z.append("- **Heute:** anwenden, nichts Neues – Ihre Arbeit hier ist die Prüfungsleistung")
     elif heute:
         z.append("- **Heute neu:** " + " · ".join(begriff_link(x, False) for x in heute))
-    z += ["", f"[🗺️ Ganze Kurslandkarte öffnen]({KARTE_URL}#termin={key}) – dort finden Sie jeden Begriff mit Erklärung, typischer Stolperfalle und Link auf die passende Folie.", ""]
-    if praktikum:
-        kette = [(x[0], f"{x[1]} · {x[3]}", datum(x[2])) for x in T if x[1].startswith("P")]
-        n = [x[0] for x in kette].index(key)
-        fenster = kette[max(0, n - 1): n + 3]
-        if n + 3 < len(kette):
-            fenster.append(("mehr", "…", ""))
-        z += ["### Der Weg zum autonomen TurtleBot", "", "Die Praktika bauen aufeinander auf:", ""]
-        z += faden_diagramm(fenster + [("ziel", "autonome Fahrt", "Ende SoSe")], {key})
-    else:
-        eigene = {b[0] for b in B if b[3] == key}
-        kandidaten = [f for f in F if eigene & set(f[3]) and FADEN.get(key, f[0]) == f[0]]
-        if kandidaten:
-            fid, fname, fbeschr, st = max(kandidaten, key=lambda f: len(eigene & set(f[3])))
-            pos = [n for n, x in enumerate(st) if x in eigene]
-            fenster = st[max(0, pos[0] - 1): pos[-1] + 3]
-            z += [f"### Roter Faden: {fname}", "", fbeschr, ""]
-            z += faden_diagramm([(x, name_of[x], T[term_of[x]][1]) for x in fenster], eigene)
-    z += ["", MARKE["wo"][1]]
+    z += ["", f"[🗺️ Ganze Kurslandkarte öffnen]({KARTE_URL}#termin={key}) – dort finden Sie jeden Begriff mit Erklärung, typischer Stolperfalle, Link auf die passende Folie und die roten Fäden durch die Veranstaltung.",
+          "", MARKE["wo"][1]]
     return "\n".join(z)
 
 def ausblick(key):

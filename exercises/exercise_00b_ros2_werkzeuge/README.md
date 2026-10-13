@@ -81,27 +81,7 @@ Alles üben wir am `turtlesim` — dieselben Befehle verwenden Sie später am Tu
 - **Sie brauchen:** [Service, Parameter, Action](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=kommmuster) (VL 2) · [Topic](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=topic) (VL 2) · [ROS\_DOMAIN\_ID](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=domainid) (VL 3)
 - **Heute neu:** [Parameter und Parameterdatei](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=paramfile) · [ros2 bag](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=rosbag)
 
-[🗺️ Ganze Kurslandkarte öffnen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=ue2) – dort finden Sie jeden Begriff mit Erklärung, typischer Stolperfalle und Link auf die passende Folie.
-
-### Roter Faden: Projektaufgabe
-
-Vom Ziel in der ersten Vorlesung zum autonom fahrenden TurtleBot in der Verkehrswelt.
-
-```mermaid @mermaid
-flowchart LR
-  s0["ROS_DOMAIN_ID<br/><small>VL 3</small>"]
-  s1["ros2 bag<br/><small>Ü 2</small>"]
-  s2["Schwellwertoperation<br/><small>VL 6</small>"]
-  s3["Kamerakalibrierung<br/><small>VL 7</small>"]
-  s0 --> s1 --> s2 --> s3
-  class s0 war
-  class s1 jetzt
-  class s2 kommt
-  class s3 kommt
-  classDef war fill:#e8e8e8,stroke:#999,color:#555
-  classDef jetzt fill:#ffd27f,stroke:#b36b00,stroke-width:3px,color:#000
-  classDef kommt fill:#fff,stroke:#999,stroke-dasharray:4 3,color:#555
-```
+[🗺️ Ganze Kurslandkarte öffnen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=ue2) – dort finden Sie jeden Begriff mit Erklärung, typischer Stolperfalle, Link auf die passende Folie und die roten Fäden durch die Veranstaltung.
 
 <!-- kurslandkarte:wo-ende -->
 
@@ -208,9 +188,9 @@ turtlesim.srv.Spawn_Response(name='turtle2')
 
 Im Fenster erscheint eine zweite Schildkröte. Sie hat eigene Topics und Services — prüfen Sie es mit `ros2 topic list`.
 
-> **Aufgabe S1:** Lassen Sie `turtle1` mit einem roten Stift der Breite 5 zeichnen und versetzen Sie sie anschließend mit einem Sprung an die Position (8, 8). Fahren Sie dann per Tastatur (`ros2 run turtlesim turtle_teleop_key` in **T3**) ein Stück, um den roten Strich zu sehen. Welche beiden Services brauchen Sie? Schauen Sie sich jeweils zuerst den Typ an.
->
-> Zwei Hinweise: Winkel werden in ROS im Bogenmaß angegeben (`1.57` rad ≈ 90°). Und manche Wörter haben in YAML eine Sonderbedeutung — `off`, `on`, `yes`, `no` werden als Wahrheitswerte gelesen. Setzen Sie solche Feldnamen in Anführungszeichen.
+**Aufgabe S1:** Lassen Sie `turtle1` mit einem roten Stift der Breite 5 zeichnen und versetzen Sie sie anschließend mit einem Sprung an die Position (8, 8). Fahren Sie dann per Tastatur (`ros2 run turtlesim turtle_teleop_key` in **T3**) ein Stück, um den roten Strich zu sehen. Welche beiden Services brauchen Sie? Schauen Sie sich jeweils zuerst den Typ an.
+
+Zwei Hinweise: Winkel werden in ROS im Bogenmaß angegeben (`1.57` rad ≈ 90°). Und manche Wörter haben in YAML eine Sonderbedeutung — `off`, `on`, `yes`, `no` werden als Wahrheitswerte gelesen. Setzen Sie solche Feldnamen in Anführungszeichen.
 
 <details>
 <summary>Lösung anzeigen</summary>
@@ -293,7 +273,7 @@ ros2 run turtlesim turtlesim_node --ros-args -p background_r:=0
 
 Die Datei wird im aktuellen Ordner des jeweiligen Terminals gesucht. Eine neue Datei legen Sie mit einem Editor an, z.B. `nano schwarz.yaml` (speichern mit `Ctrl+O`, beenden mit `Ctrl+X`) oder `code schwarz.yaml` in VS Code.
 
-> **Aufgabe P1:** Erstellen Sie eine Datei `schwarz.yaml`, mit der der Simulator mit schwarzem Hintergrund startet — wie der Boden der Verkehrswelt. Laden Sie sie einmal in den laufenden Knoten und starten Sie den Simulator einmal neu damit.
+**Aufgabe P1:** Erstellen Sie eine Datei `schwarz.yaml`, mit der der Simulator mit schwarzem Hintergrund startet — wie der Boden der Verkehrswelt. Laden Sie sie einmal in den laufenden Knoten und starten Sie den Simulator einmal neu damit.
 
 <details>
 <summary>Lösung anzeigen</summary>
@@ -358,7 +338,7 @@ Feedback:
 ...
 ```
 
-> **Aufgabe A0:** Drehen Sie `turtle1` mit `ros2 action send_goal` nach Westen (`theta: 3.14`) und lassen Sie sich die Rückmeldungen anzeigen. Wie entwickelt sich `remaining`, und welchen Status meldet der Client am Ende?
+**Aufgabe A0:** Drehen Sie `turtle1` mit `ros2 action send_goal` nach Westen (`theta: 3.14`) und lassen Sie sich die Rückmeldungen anzeigen. Wie entwickelt sich `remaining`, und welchen Status meldet der Client am Ende?
 
 <details>
 <summary>Lösung anzeigen</summary>
@@ -381,7 +361,7 @@ Goal finished with status: SUCCEEDED
 
 Auch `turtle_teleop_key` ist ein Action-Client: Mit den Buchstabentasten rund um `f` (`g`, `b`, `v`, `c`, `d`, `e`, `r`, `t`) dreht sich die Schildkröte in eine feste Richtung, `f` bricht die Drehung ab. Das Programm zeigt die Belegung beim Start an.
 
-> **Aufgabe A1:** Starten Sie eine Drehung per Tastatur (z.B. `g`) und brechen Sie sie mit `f` ab, bevor sie fertig ist. Was meldet T1? Was passiert, wenn Sie während einer laufenden Drehung eine zweite Taste drücken?
+**Aufgabe A1:** Starten Sie eine Drehung per Tastatur (z.B. `g`) und brechen Sie sie mit `f` ab, bevor sie fertig ist. Was meldet T1? Was passiert, wenn Sie während einer laufenden Drehung eine zweite Taste drücken?
 
 <details>
 <summary>Lösung anzeigen</summary>
@@ -429,7 +409,8 @@ Fahren Sie die Schildkröte jetzt etwa 10 Sekunden lang mit der Tastatur (T3) un
 ros2 topic echo --once /turtle1/pose       # in T2
 ```
 
-> Existiert der Ordner `fahrt` schon, bricht `ros2 bag record` ab. Wählen Sie dann einen neuen Namen (`-o fahrt2`) oder löschen Sie den alten Ordner (`rm -r fahrt`).
+> [!WARNING]
+> **Stolperfalle:** Existiert der Ordner `fahrt` schon, bricht `ros2 bag record` ab. Wählen Sie dann einen neuen Namen (`-o fahrt2`) oder löschen Sie den alten Ordner (`rm -r fahrt`).
 
 **Schritt 2: Untersuchen.** Die Aufnahme ist ein Ordner mit einer Datei im Format MCAP. Ihre Zahlen weichen ab, je nachdem, wie lange Sie gefahren sind:
 
@@ -463,7 +444,7 @@ ros2 bag play fahrt --topics /turtle1/cmd_vel        # in T4
 
 Die Schildkröte fährt die Strecke ein zweites Mal — ohne dass jemand eine Taste drückt.
 
-> **Aufgabe B1:** Lesen Sie nach dem Abspielen die Endposition mit `ros2 topic echo --once /turtle1/pose` ab und vergleichen Sie sie mit der notierten Position aus Schritt 1. Landet die Schildkröte exakt am selben Ort? Wiederholen Sie `reset` und `play` zwei-, dreimal.
+**Aufgabe B1:** Lesen Sie nach dem Abspielen die Endposition mit `ros2 topic echo --once /turtle1/pose` ab und vergleichen Sie sie mit der notierten Position aus Schritt 1. Landet die Schildkröte exakt am selben Ort? Wiederholen Sie `reset` und `play` zwei-, dreimal.
 
 <details>
 <summary>Lösung anzeigen</summary>
@@ -474,7 +455,7 @@ Das ist eine wichtige Einsicht für das Projekt: **Befehle blind abzuspielen ist
 
 </details>
 
-> **Zusatzaufgabe B2** (wenn Zeit bleibt)**:** Lassen Sie in T2 `ros2 topic echo /turtle1/pose` laufen und spielen Sie in T4 diesmal **nur** `/turtle1/pose` ab (`--topics /turtle1/pose`). Bewegt sich die Schildkröte im Fenster? Warum nicht — und wofür könnte so eine Wiedergabe trotzdem nützlich sein?
+**Zusatzaufgabe B2 (optional, wenn Zeit bleibt):** Lassen Sie in T2 `ros2 topic echo /turtle1/pose` laufen und spielen Sie in T4 diesmal **nur** `/turtle1/pose` ab (`--topics /turtle1/pose`). Bewegt sich die Schildkröte im Fenster? Warum nicht — und wofür könnte so eine Wiedergabe trotzdem nützlich sein?
 
 <details>
 <summary>Lösung anzeigen</summary>

@@ -75,31 +75,7 @@ Die Abschnitte „Zum Nachschlagen“ am Ende gehören nicht zum Zeitplan — Si
 
 - **Heute neu:** [Terminal & Shell](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=shell) · [Absolute & relative Pfade](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=pfade) · [Umgebungsvariable](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=umgebung) · [source](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=source)
 
-[🗺️ Ganze Kurslandkarte öffnen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=ue1) – dort finden Sie jeden Begriff mit Erklärung, typischer Stolperfalle und Link auf die passende Folie.
-
-### Roter Faden: Umgebung im Griff
-
-Von der Shell über Umgebungsvariablen zum lauffähigen ROS-2-Workspace.
-
-```mermaid @mermaid
-flowchart LR
-  s0["Terminal & Shell<br/><small>Ü 1</small>"]
-  s1["Umgebungsvariable<br/><small>Ü 1</small>"]
-  s2["source<br/><small>Ü 1</small>"]
-  s3["~/.bashrc<br/><small>Ü 1</small>"]
-  s4["ros2-Kommandozeile<br/><small>VL 2</small>"]
-  s5["source install/setup.bash<br/><small>VL 3</small>"]
-  s0 --> s1 --> s2 --> s3 --> s4 --> s5
-  class s0 jetzt
-  class s1 jetzt
-  class s2 jetzt
-  class s3 jetzt
-  class s4 kommt
-  class s5 kommt
-  classDef war fill:#e8e8e8,stroke:#999,color:#555
-  classDef jetzt fill:#ffd27f,stroke:#b36b00,stroke-width:3px,color:#000
-  classDef kommt fill:#fff,stroke:#999,stroke-dasharray:4 3,color:#555
-```
+[🗺️ Ganze Kurslandkarte öffnen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=ue1) – dort finden Sie jeden Begriff mit Erklärung, typischer Stolperfalle, Link auf die passende Folie und die roten Fäden durch die Veranstaltung.
 
 <!-- kurslandkarte:wo-ende -->
 
@@ -135,7 +111,8 @@ graph LR
 + **Interaktive Blöcke:** Nach dem Skript erscheint ein Prompt — tippen Sie weitere Befehle ein, `exit` beendet die Shell.
 + **Browser-Linux:** ein kleines Alpine-Linux (JSLinux), das komplett in Ihrem Browser läuft. Es nutzt die Shell `ash` statt `bash`; die Grundbefehle sind identisch.
 
-> **Hinweis:** Die Server-Beispiele laufen jeweils in einem frischen, temporären Verzeichnis. Arbeiten Sie dort mit **relativen Pfaden** — `~` zeigt auf dem Server nicht auf ein eigenes Home-Verzeichnis.
+> [!NOTE]
+> **Hinweis – Server-Beispiele:** Die Server-Beispiele laufen jeweils in einem frischen, temporären Verzeichnis. Arbeiten Sie dort mit **relativen Pfaden** — `~` zeigt auf dem Server nicht auf ein eigenes Home-Verzeichnis.
 
 Probieren Sie es aus: Starten Sie den Block und geben Sie danach `whoami` und `date` ein.
 
@@ -574,7 +551,7 @@ scp mein_skript.py ubuntu@192.168.0.42:~/   # Datei kopieren
 exit                               # Verbindung beenden
 ```
 
-> Im Praktikum arbeiten Sie meist direkt von Ihrem Laptop aus; `ssh` auf den TurtleBot brauchen Sie nur für Wartungsarbeiten.
+Im Praktikum arbeiten Sie meist direkt von Ihrem Laptop aus; `ssh` auf den TurtleBot brauchen Sie nur für Wartungsarbeiten.
 
 ## Zum Nachschlagen: Freies Terminal im Browser
 
@@ -589,7 +566,8 @@ Hier können Sie frei experimentieren. Das Linux läuft vollständig in Ihrem Br
 + `echo $PATH` und `env`
 + `ls -l /bin | head` — wem gehören die Programme, welche Rechte haben sie?
 
-> Das Browser-Linux nutzt `ash` statt `bash`: Einträge in `~/.bashrc` (Aufgaben 4 und 5) wirken dort nicht, und nach dem Neuladen ist alles weg.
+> [!NOTE]
+> **Hinweis – Browser-Linux:** Das Browser-Linux nutzt `ash` statt `bash`: Einträge in `~/.bashrc` (Aufgaben 4 und 5) wirken dort nicht, und nach dem Neuladen ist alles weg.
 
 ## Zum Nachschlagen: Git in sechs Befehlen
 

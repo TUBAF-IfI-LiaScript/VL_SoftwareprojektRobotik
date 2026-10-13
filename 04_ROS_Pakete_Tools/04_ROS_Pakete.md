@@ -69,29 +69,7 @@ Kurz zur Orientierung. Wir sind in Block 1, Termin 4 von 32. Sie bauen eigene Kn
 - **Sie brauchen:** [source](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=source) (Ü 1) · [ros2-Kommandozeile](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=ros2cli) (VL 2) · [Nachricht (Message)](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=message) (VL 2) · [Aufbau einer Nachricht](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=msgdef) (VL 2)
 - **Heute neu:** [ROS-2-Paket](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=paket) · [Workspace](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=workspace) · [colcon build](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=colcon) · [Eigener Nachrichtentyp](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=custommsg) · [Launch-Datei](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=launch)
 
-[🗺️ Ganze Kurslandkarte öffnen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=04) – dort finden Sie jeden Begriff mit Erklärung, typischer Stolperfalle und Link auf die passende Folie.
-
-### Roter Faden: Vom Knoten zum System
-
-Wie aus einzelnen Knoten und Nachrichten ein vollständiges Robotersystem wird.
-
-```mermaid @mermaid
-flowchart LR
-  s0["Nachricht (Message)<br/><small>VL 2</small>"]
-  s1["ROS-2-Paket<br/><small>VL 3</small>"]
-  s2["Launch-Datei<br/><small>VL 3</small>"]
-  s3["tf2<br/><small>VL 4</small>"]
-  s4["Nav2<br/><small>VL 14</small>"]
-  s0 --> s1 --> s2 --> s3 --> s4
-  class s0 war
-  class s1 jetzt
-  class s2 jetzt
-  class s3 kommt
-  class s4 kommt
-  classDef war fill:#e8e8e8,stroke:#999,color:#555
-  classDef jetzt fill:#ffd27f,stroke:#b36b00,stroke-width:3px,color:#000
-  classDef kommt fill:#fff,stroke:#999,stroke-dasharray:4 3,color:#555
-```
+[🗺️ Ganze Kurslandkarte öffnen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=04) – dort finden Sie jeden Begriff mit Erklärung, typischer Stolperfalle, Link auf die passende Folie und die roten Fäden durch die Veranstaltung.
 
 <!-- kurslandkarte:wo-ende -->
 
@@ -159,7 +137,7 @@ Beim Bauen legt `colcon` neben `src` drei weitere Ordner an:
 + `install/` — die fertigen Programme und das Skript `setup.bash`
 + `log/` — Protokolle jedes Build-Vorgangs
 
-> Diese drei Ordner gehören nicht in Git. Sie lassen sich jederzeit neu erzeugen.
+Diese drei Ordner gehören nicht in Git. Sie lassen sich jederzeit neu erzeugen.
 
 ## Bauen mit colcon
 
@@ -194,6 +172,7 @@ Danach muss die Shell den neuen Inhalt kennen. Wie in Ü 1 bei `source /opt/ros/
 source ~/ros2_ws/install/setup.bash
 ```
 
+> [!IMPORTANT]
 > **Merke:** Erst ROS laden, dann bauen, dann den Workspace laden — und das in **jedem neuen Terminal** erneut. Ein neues Terminal startet in Ihrem Home-Verzeichnis; der relative Pfad `source install/setup.bash` funktioniert nur, wenn Sie vorher mit `cd ~/ros2_ws` in den Workspace gewechselt sind. Mit dem vollständigen Pfad `~/ros2_ws/install/setup.bash` sind Sie auf der sicheren Seite.
 
 Zwei nützliche Optionen:
@@ -301,6 +280,7 @@ comment: Keine Evaluation des Wertes
 
 Das Feld `comment` haben wir beim Senden nicht angegeben — es enthält trotzdem den Standardwert aus der `.msg`-Datei.
 
+> [!WARNING]
 > **Stolperfalle:** Starten Sie `ros2 topic echo` für einen eigenen Nachrichtentyp, bevor ein Publisher läuft, meldet ROS `Could not determine the type for the passed topic`. Starten Sie dann zuerst den Publisher oder geben Sie den Typ mit an: `ros2 topic echo /counter my_msg_package/msg/MyMsg`.
 
 Eine ausführliche Anleitung, auch zu eigenen Service-Typen, bietet das Tutorial [Creating custom msg and srv files](https://docs.ros.org/en/jazzy/Tutorials/Beginner-Client-Libraries/Custom-ROS2-Interfaces.html).
@@ -534,7 +514,8 @@ Ein C++-Knoten und ein Python-Knoten tauschen also problemlos einen selbst defin
 | Nachrichtentyp einbinden | `#include "pkg/msg/my_msg.hpp"`        | `from pkg.msg import MyMsg`                  |
 | Nach Codeänderung       | neu bauen                               | mit `--symlink-install` sofort wirksam; nach Änderung an `setup.py` neu bauen |
 
-> Eigene Nachrichtentypen definieren Sie immer in einem CMake-Paket — auch wenn alle Knoten in Python geschrieben sind.
+> [!IMPORTANT]
+> **Merke:** Eigene Nachrichtentypen definieren Sie immer in einem CMake-Paket — auch wenn alle Knoten in Python geschrieben sind.
 
 **Kurze Kontrolle:** Sie legen im Paket `my_python_subscriber` eine neue Datei `lane_detector.py` mit einem Knoten und einer Funktion `main` an und bauen den Workspace. `ros2 run my_python_subscriber lane_detector` meldet `No executable found`. Was fehlt am wahrscheinlichsten?
 
@@ -634,6 +615,7 @@ ros2 run my_tutorial_package data_generator --ros-args --log-level warn         
 ros2 run my_tutorial_package data_generator --ros-args --log-level data_generator:=debug # Debug-Meldungen nur dieses Knotens
 ```
 
+> [!WARNING]
 > **Stolperfalle:** `--log-level debug` ohne Knotennamen schaltet auch die internen Debug-Meldungen von ROS selbst frei — das Terminal wird mit Hunderten Zeilen geflutet. Geben Sie deshalb den Namen des Loggers an, hier `data_generator`.
 
 <details>
@@ -663,7 +645,7 @@ RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 2000, "Kein Bild em
 
 Gerade die Variante `RCLCPP_x_THROTTLE` (höchstens einmal pro Zeitspanne) ist im Projekt wichtig: Ein Knoten, der 30-mal pro Sekunde „Keine Spur erkannt“ meldet, macht das Terminal unlesbar.
 
-> **Aufgabe:** Ändern Sie den `data_generator` so, dass die Logmeldung nur noch alle 10 Sekunden erscheint, die Nachrichten aber weiter zweimal pro Sekunde gesendet werden.
+**Aufgabe:** Ändern Sie den `data_generator` so, dass die Logmeldung nur noch alle 10 Sekunden erscheint, die Nachrichten aber weiter zweimal pro Sekunde gesendet werden.
 
 <details>
 <summary>Lösung anzeigen</summary>
@@ -693,7 +675,8 @@ ros2 topic list              # zeigt jetzt /scan, /odom, /cmd_vel ... des eigene
 
 Zu Hause wollen Sie dagegen niemanden im WLAN stören: Mit `export ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST` sucht ROS 2 nur auf dem eigenen Rechner nach Knoten.
 
-> **WSL2:** WSL2 hat standardmäßig ein eigenes, internes Netz, aus dem heraus der TurtleBot nicht sichtbar ist. Die Umstellung auf den gespiegelten Netzwerkmodus erledigen Sie vor dem ersten Praktikum zu Hause — die Anleitung steht in P 1 unter „Vorbereitung“. Für alle Übungen auf dem eigenen Rechner ist nichts zu tun.
+> [!NOTE]
+> **Hinweis – WSL2:** WSL2 hat standardmäßig ein eigenes, internes Netz, aus dem heraus der TurtleBot nicht sichtbar ist. Die Umstellung auf den gespiegelten Netzwerkmodus erledigen Sie vor dem ersten Praktikum zu Hause — die Anleitung steht in P 1 unter „Vorbereitung“. Für alle Übungen auf dem eigenen Rechner ist nichts zu tun.
 
 ## Zusammenfassung und Ausblick
 

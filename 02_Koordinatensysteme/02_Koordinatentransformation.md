@@ -61,31 +61,7 @@ Kurz zur Orientierung. Wir sind in Block 1, Termin 6 von 32. Der TurtleBot weiß
 - **Sie brauchen:** [Nachricht (Message)](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=message) (VL 2) · [ros2 topic …](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=topiccli) (VL 2) · [Discovery](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=discovery) (VL 2)
 - **Heute neu:** [Bezugskoordinatensystem](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=frame) · [Translation und Rotation](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=starrtrafo) · [Homogene Koordinaten](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=homtrafo) · [Verkettung](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=verkettung) · [Quaternion](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=quaternion) · [tf2](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=tf2) · [Quality of Service](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=qos)
 
-[🗺️ Ganze Kurslandkarte öffnen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=02) – dort finden Sie jeden Begriff mit Erklärung, typischer Stolperfalle und Link auf die passende Folie.
-
-### Roter Faden: Koordinaten überall
-
-Bezugssysteme und Transformationen ziehen sich vom Roboter bis zur Kamera und zum Fahrwerk.
-
-```mermaid @mermaid
-flowchart LR
-  s0["Bezugskoordinatensystem<br/><small>VL 4</small>"]
-  s1["Homogene Koordinaten<br/><small>VL 4</small>"]
-  s2["Verkettung<br/><small>VL 4</small>"]
-  s3["tf2<br/><small>VL 4</small>"]
-  s4["Pose (6 DoF)<br/><small>VL 5</small>"]
-  s5["Kamera-Matrix K<br/><small>VL 7</small>"]
-  s0 --> s1 --> s2 --> s3 --> s4 --> s5
-  class s0 jetzt
-  class s1 jetzt
-  class s2 jetzt
-  class s3 jetzt
-  class s4 kommt
-  class s5 kommt
-  classDef war fill:#e8e8e8,stroke:#999,color:#555
-  classDef jetzt fill:#ffd27f,stroke:#b36b00,stroke-width:3px,color:#000
-  classDef kommt fill:#fff,stroke:#999,stroke-dasharray:4 3,color:#555
-```
+[🗺️ Ganze Kurslandkarte öffnen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=02) – dort finden Sie jeden Begriff mit Erklärung, typischer Stolperfalle, Link auf die passende Folie und die roten Fäden durch die Veranstaltung.
 
 <!-- kurslandkarte:wo-ende -->
 
@@ -153,7 +129,8 @@ $$
 \end{bmatrix}
 $$
 
-> **Konvention:** Wir beschreiben immer die Pose eines **Kind-Systems** ($A$) in seinem **Eltern-System** ($O$). Genau so speichert ROS seine Transformationen.
+> [!IMPORTANT]
+> **Merke – Konvention:** Wir beschreiben immer die Pose eines **Kind-Systems** ($A$) in seinem **Eltern-System** ($O$). Genau so speichert ROS seine Transformationen.
 
 ### Homogene Koordinaten
 
@@ -296,7 +273,8 @@ $$
 
 ![Rechtshändiges 3D-Koordinatensystem mit x-, y- und z-Achse](./images/Coord_planes_color.svg.png "Rechtshändiges 3D-Koordinatensystem")<!-- style="width:40%;" -->
 
-> **Merke für RViz:** Achsen werden immer gleich eingefärbt — **rot = x** (vorwärts), **grün = y** (links), **blau = z** (oben). Beim TurtleBot zeigt $x$ in Fahrtrichtung.
+> [!TIP]
+> **Tipp – RViz:** Achsen werden immer gleich eingefärbt — **rot = x** (vorwärts), **grün = y** (links), **blau = z** (oben). Beim TurtleBot zeigt $x$ in Fahrtrichtung.
 
 ### Euler-Winkel
 
@@ -337,7 +315,8 @@ $$
 
 Vorteile: kein Gimbal Lock, numerisch stabil, gut zu interpolieren. (Einzige Mehrdeutigkeit: $\textbf{q}$ und $-\textbf{q}$ beschreiben dieselbe Drehung.) Deshalb verwendet ROS in allen Nachrichten Quaternionen — **in der Reihenfolge $x, y, z, w$**.
 
-> **Sie müssen Quaternionen nicht von Hand rechnen.** Für den TurtleBot, der sich nur um die Hochachse $z$ dreht, reicht eine Formel mit dem Gierwinkel $\psi$ (in der Ebene unser $\varphi$):
+> [!NOTE]
+> **Hinweis:** Sie müssen Quaternionen nicht von Hand rechnen. Für den TurtleBot, der sich nur um die Hochachse $z$ dreht, reicht eine Formel mit dem Gierwinkel $\psi$ (in der Ebene unser $\varphi$):
 >
 > $$\textbf{q} = \left(0,\ 0,\ \sin\tfrac{\psi}{2},\ \cos\tfrac{\psi}{2}\right)$$
 
@@ -445,7 +424,7 @@ from 'base_link' to 'camera_link'
 
 Erkennen Sie das Quaternion für 90° wieder? Winkel werden im **Bogenmaß** angegeben ($90° \approx 1{,}5708$), nicht angegebene Werte (`--y`, `--roll`, `--pitch`) sind 0.
 
-> **Live-Demo:** Beide Befehle führe ich jetzt im Terminal vor — ändern Sie in Gedanken den Winkel auf 180°: Was zeigt `tf2_echo`? (Antwort in der Aufgabe der Woche.)
+**Live-Demo:** Beide Befehle führe ich jetzt im Terminal vor — ändern Sie in Gedanken den Winkel auf 180°: Was zeigt `tf2_echo`? (Antwort in der Aufgabe der Woche.)
 
 **RViz in drei Schritten** — so stellen Sie im Praktikum einen Scan dar:
 

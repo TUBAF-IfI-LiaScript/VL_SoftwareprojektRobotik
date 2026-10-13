@@ -73,29 +73,7 @@ import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_Softwareproje
 - **Sie brauchen:** [Topics des TurtleBot](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=tbtopics) (VL 2) · [ros2 topic …](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=topiccli) (VL 2) · [ROS\_DOMAIN\_ID](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=domainid) (VL 3) · [ros2 bag](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=rosbag) (Ü 2) · [QoS-Verträglichkeit](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=qoscompat) (VL 4) · [tf2](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=tf2) (VL 4) · [tf-Baum](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=tftree) (VL 4)
 - **Heute:** anwenden, nichts Neues – Ihre Arbeit hier ist die Prüfungsleistung
 
-[🗺️ Ganze Kurslandkarte öffnen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=p1) – dort finden Sie jeden Begriff mit Erklärung, typischer Stolperfalle und Link auf die passende Folie.
-
-### Der Weg zum autonomen TurtleBot
-
-Die Praktika bauen aufeinander auf:
-
-```mermaid @mermaid
-flowchart LR
-  s0["P 1 · TurtleBot + Bags<br/><small>23.11.2026</small>"]
-  s1["P 2 · Bildkorrektur<br/><small>11.1.2027</small>"]
-  s2["P 3 · Spurerkennung<br/><small>18.1.2027</small>"]
-  s3["…<br/><small></small>"]
-  s4["autonome Fahrt<br/><small>Ende SoSe</small>"]
-  s0 --> s1 --> s2 --> s3 --> s4
-  class s0 jetzt
-  class s1 kommt
-  class s2 kommt
-  class s3 kommt
-  class s4 kommt
-  classDef war fill:#e8e8e8,stroke:#999,color:#555
-  classDef jetzt fill:#ffd27f,stroke:#b36b00,stroke-width:3px,color:#000
-  classDef kommt fill:#fff,stroke:#999,stroke-dasharray:4 3,color:#555
-```
+[🗺️ Ganze Kurslandkarte öffnen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=p1) – dort finden Sie jeden Begriff mit Erklärung, typischer Stolperfalle, Link auf die passende Folie und die roten Fäden durch die Veranstaltung.
 
 <!-- kurslandkarte:wo-ende -->
 
@@ -240,7 +218,7 @@ Prüfen Sie danach erneut mit `tf2_echo`.
 
 </details>
 
-> **Zwischenabnahme** (noch mit Verbindung zum Roboter): Zeigen Sie den Betreuern `ros2 topic list` und `tf2_echo` mit der Lage des LiDAR (Abnahme Nr. 1 und 3).
+**Zwischenabnahme** (noch mit Verbindung zum Roboter): Zeigen Sie den Betreuern `ros2 topic list` und `tf2_echo` mit der Lage des LiDAR (Abnahme Nr. 1 und 3).
 
 ## C: Fahren und Sensordaten ansehen
 
@@ -312,7 +290,8 @@ ros2 topic bw /scan
 
 📝 Wie viele Megabyte pro Sekunde erzeugen Kamera und LiDAR (`ros2 topic bw`, Ü 2)? Wie groß wird eine Aufnahme von 60 Sekunden? Reicht der freie Platz auf Ihrem Laptop?
 
-> **Richtwert:** Unkomprimierte Kamerabilder erzeugen schnell mehrere zehn Megabyte pro Sekunde — eine Minute kann über 1 GB groß werden, und über WLAN gehen dabei Bilder verloren. Nehmen Sie deshalb **30 bis 60 Sekunden** auf. Ist der Platz knapp, lassen Sie die Kamera beim ersten Versuch weg und nehmen sie in einem zweiten, kürzeren Durchgang auf.
+> [!TIP]
+> **Tipp – Aufnahmedauer:** Unkomprimierte Kamerabilder erzeugen schnell mehrere zehn Megabyte pro Sekunde — eine Minute kann über 1 GB groß werden, und über WLAN gehen dabei Bilder verloren. Nehmen Sie deshalb **30 bis 60 Sekunden** auf. Ist der Platz knapp, lassen Sie die Kamera beim ersten Versuch weg und nehmen sie in einem zweiten, kürzeren Durchgang auf.
 
 **D.2 Aufnehmen**
 
@@ -342,7 +321,8 @@ ros2 bag play fahrt_spur --loop
 
 Starten Sie RViz und `rqt` (Image View) erneut. 📝 Sehen Sie Scan und Kamerabild wie bei der echten Fahrt?
 
-> **Bewahren Sie die Aufnahme auf!** Sie brauchen sie in Ü 3 und P 2. Große Dateien gehören nicht ins Git-Repository — legen Sie sie auf einem gemeinsamen Speicher Ihrer Gruppe ab und notieren Sie im Protokoll, wo.
+> [!CAUTION]
+> **Sicherheit – Daten:** Bewahren Sie die Aufnahme auf! Sie brauchen sie in Ü 3 und P 2. Große Dateien gehören nicht ins Git-Repository — legen Sie sie auf einem gemeinsamen Speicher Ihrer Gruppe ab und notieren Sie im Protokoll, wo.
 
 ## Abnahme
 

@@ -80,33 +80,7 @@ Kurz zur Orientierung. Wir sind in Block 1, Termin 3 von 32. Sie verstehen, wie 
 - **Sie brauchen:** [Warum ROS?](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=rosmotivation) (VL 1) · [Terminal & Shell](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=shell) (Ü 1) · [~/.bashrc](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=bashrc) (Ü 1)
 - **Heute neu:** [ROS als Middleware](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=middleware) · [DDS / rmw-Schicht](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=dds) · [Knoten (Node)](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=node) · [Topic](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=topic) · [Nachricht (Message)](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=message) · [Topics des TurtleBot](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=tbtopics) · [ros2-Kommandozeile](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=ros2cli)
 
-[🗺️ Ganze Kurslandkarte öffnen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=03) – dort finden Sie jeden Begriff mit Erklärung, typischer Stolperfalle und Link auf die passende Folie.
-
-### Roter Faden: Vom Knoten zum System
-
-Wie aus einzelnen Knoten und Nachrichten ein vollständiges Robotersystem wird.
-
-```mermaid @mermaid
-flowchart LR
-  s0["Warum ROS?<br/><small>VL 1</small>"]
-  s1["ROS als Middleware<br/><small>VL 2</small>"]
-  s2["Knoten (Node)<br/><small>VL 2</small>"]
-  s3["Topic<br/><small>VL 2</small>"]
-  s4["Nachricht (Message)<br/><small>VL 2</small>"]
-  s5["ROS-2-Paket<br/><small>VL 3</small>"]
-  s6["Launch-Datei<br/><small>VL 3</small>"]
-  s0 --> s1 --> s2 --> s3 --> s4 --> s5 --> s6
-  class s0 war
-  class s1 jetzt
-  class s2 jetzt
-  class s3 jetzt
-  class s4 jetzt
-  class s5 kommt
-  class s6 kommt
-  classDef war fill:#e8e8e8,stroke:#999,color:#555
-  classDef jetzt fill:#ffd27f,stroke:#b36b00,stroke-width:3px,color:#000
-  classDef kommt fill:#fff,stroke:#999,stroke-dasharray:4 3,color:#555
-```
+[🗺️ Ganze Kurslandkarte öffnen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=03) – dort finden Sie jeden Begriff mit Erklärung, typischer Stolperfalle, Link auf die passende Folie und die roten Fäden durch die Veranstaltung.
 
 <!-- kurslandkarte:wo-ende -->
 
@@ -228,17 +202,18 @@ graph TD
     RMW --> F3["rmw_zenoh<br/>Zenoh"]
 ```
 
-> **Merkkasten: Ebenen der ROS-2-Architektur**
->
-> - **User Applications**: Programme in Python, C++, Java etc., die ROS 2 nutzen.
-> - **rcl/rclcpp/rclpy**: ROS-2-Client-Libraries – bieten die ROS-API für verschiedene Sprachen.
-> - **rmw**: Abstraktes Middleware-Interface – trennt ROS-2-Logik von der konkreten Kommunikations-Implementierung.
-> - **rmw-Implementierungen**: Bindeglied zu einer konkreten Middleware, z.B. Fast DDS, Cyclone DDS oder Zenoh.
-> - **Middleware**: Die eigentliche Kommunikationsschicht, die für Discovery, Nachrichtenübertragung und QoS sorgt — meist DDS (_Data Distribution Service_).
->
-> *Vorteil:* ROS 2 kann flexibel mit verschiedenen Kommunikations-Backends betrieben werden und ist nicht an einen Anbieter gebunden.
->
-> **Für Sie als Anwender zählt vor allem:** Sie programmieren gegen `rclcpp` oder `rclpy`. Was darunter passiert, merken Sie nur, wenn zwei Rechner sich nicht finden — dann lohnt der Blick auf die beiden Umgebungsvariablen unten.
+**Die Ebenen der ROS-2-Architektur im Überblick**
+
+- **User Applications**: Programme in Python, C++, Java etc., die ROS 2 nutzen.
+- **rcl/rclcpp/rclpy**: ROS-2-Client-Libraries – bieten die ROS-API für verschiedene Sprachen.
+- **rmw**: Abstraktes Middleware-Interface – trennt ROS-2-Logik von der konkreten Kommunikations-Implementierung.
+- **rmw-Implementierungen**: Bindeglied zu einer konkreten Middleware, z.B. Fast DDS, Cyclone DDS oder Zenoh.
+- **Middleware**: Die eigentliche Kommunikationsschicht, die für Discovery, Nachrichtenübertragung und QoS sorgt — meist DDS (_Data Distribution Service_).
+
+*Vorteil:* ROS 2 kann flexibel mit verschiedenen Kommunikations-Backends betrieben werden und ist nicht an einen Anbieter gebunden.
+
+> [!IMPORTANT]
+> **Merke:** Sie programmieren gegen `rclcpp` oder `rclpy`. Was darunter passiert, merken Sie nur, wenn zwei Rechner sich nicht finden — dann lohnt der Blick auf die beiden Umgebungsvariablen unten.
 
 
 <details>
@@ -467,7 +442,7 @@ Was passiert, wenn Sie in `main()` die Zeile mit `rclcpp::spin(...)` weglassen?
 Ohne `spin()` gibt niemand die Kontrolle an ROS ab: Kein Ereignis wird bearbeitet, `main()` läuft direkt zu `shutdown()` und beendet das Programm. Das Programm kompiliert aber problemlos — ein typischer Fehler, den erst die Laufzeit zeigt.
 ***
 
-> Den Subscriber zeigen wir hier in Python. Schlagen Sie im Tutorial jeweils die Umsetzung des Publishers in Python und die des Subscribers in C++ nach, um die Unterschiede der beiden Client-Bibliotheken zu erkennen. Die Struktur — Knotenklasse, `create_…`, Callback, `spin()` — ist in beiden Sprachen dieselbe.
+Den Subscriber zeigen wir hier in Python. Schlagen Sie im Tutorial jeweils die Umsetzung des Publishers in Python und die des Subscribers in C++ nach, um die Unterschiede der beiden Client-Bibliotheken zu erkennen. Die Struktur — Knotenklasse, `create_…`, Callback, `spin()` — ist in beiden Sprachen dieselbe.
 
 ```python    Subscriber.py
 import rclpy
@@ -626,7 +601,8 @@ source /opt/ros/jazzy/setup.bash
 ros2 run turtlesim turtle_teleop_key
 ```
 
-> **WSL2:** Fenster wie turtlesim oder `rqt` erscheinen unter Windows 11 automatisch (WSLg). Bleibt das Fenster aus, prüfen Sie mit `echo $DISPLAY`, ob eine Anzeige gesetzt ist, und aktualisieren Sie WSL mit `wsl --update` in der Windows-Eingabeaufforderung.
+> [!NOTE]
+> **Hinweis – WSL2:** Fenster wie turtlesim oder `rqt` erscheinen unter Windows 11 automatisch (WSLg). Bleibt das Fenster aus, prüfen Sie mit `echo $DISPLAY`, ob eine Anzeige gesetzt ist, und aktualisieren Sie WSL mit `wsl --update` in der Windows-Eingabeaufforderung.
 
 ![Fenster des turtlesim: eine Schildkröte auf blauem Hintergrund, die eine Spur zeichnet](images/turtleSim.png)<!-- width="90%" -->
 *Screenshot des TurtleSim-Knotens*
@@ -682,6 +658,7 @@ Ob `/cmd_vel` den Typ `Twist` oder `TwistStamped` (ein `Twist` mit Zeitstempel) 
 
 Wie Sie sich mit „Ihrem“ TurtleBot verbinden, lernen Sie in VL 3 und wenden es im ersten Praktikum an.
 
+> [!IMPORTANT]
 > **Merke:** Wer die Topics eines Systems kennt, kann es untersuchen, aufzeichnen und Teile davon ersetzen. Für unsere Verkehrswelt heißt das: Ihre Spurerkennung abonniert das Kamerabild, Ihr Fahrverhalten veröffentlicht auf `/cmd_vel`.
 
 ## Zusammenfassung und Ausblick
@@ -747,7 +724,8 @@ Die wichtigste Aufgabe dieser Woche ist die Installation. Die dritte Aufgabe, de
 | [Robotics Stack Exchange](https://robotics.stackexchange.com/questions/tagged/ros2)      | Fragen und Antworten (Nachfolger von ROS Answers)  |
 | [TurtleBot 3 e-Manual](https://emanual.robotis.com/docs/en/platform/turtlebot3/overview/) | Hardware und ROS-2-Pakete unseres Roboters         |
 
-> **Achtung bei Tutorials und Chatbot-Antworten:** Prüfen Sie immer, für welche ROS-Version ein Beispiel geschrieben ist. In der Dokumentation steht die Distribution in der Adresse (`docs.ros.org/en/jazzy/…`).
+> [!WARNING]
+> **Stolperfalle – Tutorials und Chatbot-Antworten:** Prüfen Sie immer, für welche ROS-Version ein Beispiel geschrieben ist. In der Dokumentation steht die Distribution in der Adresse (`docs.ros.org/en/jazzy/…`).
 
 <!-- kurslandkarte:ausblick-start -->
 
