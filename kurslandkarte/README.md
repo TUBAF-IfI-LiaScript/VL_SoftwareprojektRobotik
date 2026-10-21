@@ -19,8 +19,11 @@ Karte, Startseite und Orientierungsfolien erzeugt der gemeinsame Kern invivis Ku
 Nach Änderungen an Materialien, Terminen oder Begriffen im Wurzelverzeichnis des Repositorys:
 
 ```bash
-python3 kurslandkarte/erzeuge.py
+python3 kurslandkarte/erzeuge.py          # Karte und Startseite
+python3 kurslandkarte/erzeuge.py --pdf    # vorher fehlende/veraltete PDFs nach `docs/pdf/` (liaex)
 ```
+
+Kacheln und Startseite verlinken die PDFs aus `docs/pdf/`; sie werden mit eingecheckt.
 
 Begriffe verweisen in `erzeuge.py` auf den **Titel** ihres Abschnitts (ohne Backticks); das Skript liest die Abschnitte automatisch aus den Materialdateien und ermittelt daraus die LiaScript-Foliennummer. Das Skript bricht ab, wenn ein Abschnittstitel nicht mehr existiert, eine Beziehung auf einen unbekannten Begriff verweist, ein Faden nicht chronologisch verläuft oder die Termine nicht nach Datum sortiert sind. Die erzeugten Dateien in `docs/` werden mit eingecheckt.
 

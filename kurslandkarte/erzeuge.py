@@ -6,7 +6,8 @@ Kern invivis Kurslandkarte (kurslandkarte/invivis/, nicht hier ändern).
 
 Aufruf aus dem Repository-Wurzelverzeichnis:
 
-    python3 kurslandkarte/erzeuge.py
+    python3 kurslandkarte/erzeuge.py          # Karte, Startseite, Orientierungsfolien
+    python3 kurslandkarte/erzeuge.py --pdf    # vorher fehlende/veraltete PDFs nach docs/pdf/ (liaex)
 
 Schreibt docs/kurslandkarte/ (Karte), docs/index.html (Startseite) und
 erneuert in jedem ausgearbeiteten Material die Abschnitte zwischen den
@@ -452,5 +453,5 @@ kern.erzeuge(
     repo=os.path.dirname(HIER), kurs=KURS, termine=T, bloecke=BLOECKE, linien=LINIEN,
     begriffe=B, beziehungen=R, faeden=F, leitfragen=PROJEKTZIEL, freigegeben=FREIGEGEBEN,
     anwendet=ANWENDUNG, brauchen=BRAUCHEN,
-    karte="docs/kurslandkarte", startseite="docs/index.html", folien=True,
+    karte="docs/kurslandkarte", startseite="docs/index.html", folien=True, pdf_ordner="docs/pdf",
 )
