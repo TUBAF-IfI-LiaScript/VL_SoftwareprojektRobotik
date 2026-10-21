@@ -3,8 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="author" content="Sebastian Zug & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent; Vorlage aus der Kurslandkarte EAVD">
-<meta name="description" content="Kurslandkarte der Veranstaltung Robotik (TU Bergakademie Freiberg): Begriffe, Zusammenhänge und didaktische Fäden über Vorlesung, Übung und Praktikum in zwei Semestern.">
+<meta name="description" content="Kurslandkarte Robotik (TU Bergakademie Freiberg): Begriffe, Zusammenhänge und didaktische Fäden.">
+<meta name="author" content="Sebastian Zug &amp; Claude Code (Opus 5.5) mit LiaScript Teaching-Agent">
+<meta name="generator" content="invivis-kurslandkarte 0.1.0">
 <title>Robotik Kurslandkarte</title>
 <style>
 *, *::before, *::after { box-sizing: border-box; }
@@ -24,17 +25,17 @@ img { max-width: 100%; }
   --muted: #5d6c6f;
   --faint: #c9d1cf;
   --grid: #e3e8e5;
-  --phase-einstieg: #e7eee9;
-  --phase-grundlagen: #edf1f5;
-  --phase-zaesur: #f6ece7;
-  --phase-analyse: #eeecf5;
-  --l-werkzeuge: #5d6c6f;
-  --l-ros: #1f7a8c;
-  --l-mathe: #b7800f;
-  --l-wahrnehmung: #c2462e;
-  --l-schaetzung: #7a4e9c;
-  --l-bewegung: #2f5da8;
-  --l-projekt: #1b8a5a;
+  --ph1: #e7eee9;
+  --ph2: #edf1f5;
+  --ph3: #f6ece7;
+  --ph4: #eeecf5;
+  --c1: #1f7a8c;
+  --c2: #b7800f;
+  --c3: #7a4e9c;
+  --c4: #c2462e;
+  --c5: #2f5da8;
+  --c6: #1b8a5a;
+  --c7: #5d6c6f;
   --t1: #d4502b;
   --t2: #1b8a5a;
   --t3: #b08400;
@@ -56,17 +57,17 @@ img { max-width: 100%; }
     --muted: #9aa9ab;
     --faint: #3a4648;
     --grid: #263032;
-    --phase-einstieg: #1b2a23;
-    --phase-grundlagen: #1b2330;
-    --phase-zaesur: #2d201c;
-    --phase-analyse: #231f31;
-    --l-werkzeuge: #9aa9ab;
-    --l-ros: #4fb3c6;
-    --l-mathe: #e0ab3d;
-    --l-wahrnehmung: #ee7a60;
-    --l-schaetzung: #b58ad6;
-    --l-bewegung: #6f98e0;
-    --l-projekt: #3fbf86;
+    --ph1: #1b2a23;
+    --ph2: #1b2330;
+    --ph3: #2d201c;
+    --ph4: #231f31;
+    --c1: #4fb3c6;
+    --c2: #e0ab3d;
+    --c3: #b58ad6;
+    --c4: #ee7a60;
+    --c5: #6f98e0;
+  --c6: #3fbf86;
+  --c7: #9aa9ab;
     --t1: #f07a55;
     --t2: #3fbf86;
     --t3: #e0b53a;
@@ -88,17 +89,17 @@ img { max-width: 100%; }
   --muted: #9aa9ab;
   --faint: #3a4648;
   --grid: #263032;
-  --phase-einstieg: #1b2a23;
-  --phase-grundlagen: #1b2330;
-  --phase-zaesur: #2d201c;
-  --phase-analyse: #231f31;
-  --l-werkzeuge: #9aa9ab;
-  --l-ros: #4fb3c6;
-  --l-mathe: #e0ab3d;
-  --l-wahrnehmung: #ee7a60;
-  --l-schaetzung: #b58ad6;
-  --l-bewegung: #6f98e0;
-  --l-projekt: #3fbf86;
+  --ph1: #1b2a23;
+  --ph2: #1b2330;
+  --ph3: #2d201c;
+  --ph4: #231f31;
+  --c1: #4fb3c6;
+  --c2: #e0ab3d;
+  --c3: #b58ad6;
+  --c4: #ee7a60;
+  --c5: #6f98e0;
+  --c6: #3fbf86;
+  --c7: #9aa9ab;
   --t1: #f07a55;
   --t2: #3fbf86;
   --t3: #e0b53a;
@@ -169,6 +170,9 @@ h1 {
   gap: 12px 20px;
 }
 .control { display: grid; gap: 4px; }
+.control.off .seg { opacity: .4; }
+.control.off .lbl { opacity: .6; }
+.control.off button { cursor: not-allowed; }
 .control label, .control .lbl {
   font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
   font-weight: 600;
@@ -244,6 +248,8 @@ input[type=range] { width: 200px; accent-color: var(--here); }
   min-width: 0;
 }
 .mapbox #side { flex: none; }
+.mapbox { position: relative; }
+.mapbox::after { content: ""; position: absolute; top: 0; right: 0; bottom: 0; width: 28px; pointer-events: none; background: linear-gradient(to right, transparent, var(--surface)); }
 .scroller { overflow-x: auto; overflow-y: hidden; min-width: 0; flex: 1; }
 svg { display: block; }
 .lane-title {
@@ -289,7 +295,7 @@ svg { display: block; }
 }
 .station.code text { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 11.5px; }
 .station .dot { stroke-width: 3; fill: var(--surface); }
-.station.future { opacity: .28; }
+.station.future { opacity: .55; }
 .station.dim { opacity: .18; }
 .station.nb .dot { fill: currentColor; }
 .station.sel .dot { fill: currentColor; stroke: var(--focus); stroke-width: 3.5; }
@@ -317,6 +323,8 @@ svg { display: block; }
 .xchg { fill: var(--surface); stroke: var(--ink); stroke-width: 3; }
 .station.metro.sel .xchg, .station.metro.sel .mstop { stroke: var(--here); stroke-width: 4; }
 [hidden] { display: none !important; }
+a.eyebrow { color: inherit; text-decoration: none; }
+a.eyebrow:hover { color: var(--ink); text-decoration: underline; }
 .feedback { font-size: 13px; color: var(--muted); }
 .feedback:hover { color: var(--ink); }
 .legendrow { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; }
@@ -405,14 +413,89 @@ aside.panel {
   display: inline-block;
   width: fit-content;
   font-weight: 700;
-  color: var(--l-denken);
+  color: var(--c1);
   text-decoration: none;
   border-bottom: 2px solid currentColor;
 }
 .hint { font-size: 13px; color: var(--muted); }
+.vorbereitet { font: inherit; font-size: 13px; color: var(--muted); background: none; border: 0; padding: 0; text-align: left; cursor: pointer; }
+.vorbereitet u { color: var(--ink); text-decoration-color: var(--faint); text-underline-offset: 3px; }
+.vorbereitet:hover u { text-decoration-color: currentColor; }
+.intro { background: var(--surface); border: 1px solid var(--faint); border-radius: 6px; padding: 10px 14px; font-size: 14px; }
+.intro summary { cursor: pointer; font-family: "Barlow Condensed", "Arial Narrow", sans-serif; font-weight: 700; font-size: 17px; }
+.intro .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 4px 28px; margin-top: 8px; }
+.intro p { margin: 0 0 6px; }
+.intro table { border-collapse: collapse; margin: 0 0 6px; }
+.intro td { padding: 2px 12px 2px 0; vertical-align: top; }
+.intro td:first-child { color: var(--muted); white-space: nowrap; }
+.rels .s { color: var(--muted); }
+.rels button.satz { display: block; }
 footer { font-size: 13px; color: var(--muted); max-width: 70ch; }
+footer a { color: inherit; }
 footer p { margin: 0 0 6px; }
+/* ---------- Liste ---------- */
 .today { font: inherit; font-size: 12px; padding: 2px 8px; border: 1px solid var(--faint); border-radius: 4px; background: var(--surface); color: var(--ink); cursor: pointer; }
+.liste { display: grid; gap: 20px; min-width: 0; }
+.block h2 {
+  font-family: "Barlow Condensed", "Arial Narrow", sans-serif; font-weight: 700; font-size: 19px; letter-spacing: .02em;
+  margin: 0 0 8px; padding: 3px 10px; border-radius: 4px; background: var(--blk); width: fit-content;
+}
+.raster { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
+.liste.spalten .raster { grid-template-columns: max-content repeat(var(--n), minmax(0, 1fr)); gap: 8px 10px; align-items: start; }
+.rh {
+  font-family: "Barlow Condensed", "Arial Narrow", sans-serif; font-weight: 600; font-size: 13px; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--faint); padding-bottom: 2px;
+}
+.wk { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 12px; color: var(--muted); padding-top: 12px; white-space: nowrap; }
+.wk.now { color: var(--here); font-weight: 600; }
+.zelle { display: grid; gap: 8px; min-width: 0; }
+.kachel {
+  background: var(--surface);
+  border: 1px solid var(--faint);
+  border-radius: 6px;
+  padding: 10px 14px 12px;
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+.kachel.now { border-color: var(--here); box-shadow: inset 4px 0 0 var(--here); }
+.kachel.future .chips { opacity: .8; }
+.kachel.ohne { background: transparent; border-style: dashed; }
+.liste.spalten .vlhead .d { display: none; }
+@media (max-width: 980px) {
+  .liste.spalten .raster { grid-template-columns: minmax(0, 1fr); }
+  .liste.spalten .rh, .liste.spalten .wk, .liste.spalten .zelle:empty { display: none; }
+  .liste.spalten .vlhead .d { display: inline; }
+}
+.vlhead { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; }
+.vlhead b { font-family: "Barlow Condensed", "Arial Narrow", sans-serif; font-size: 20px; }
+.vlhead .d { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 12px; color: var(--muted); }
+.vlhead .s { font-size: 15px; }
+.vlhead .tag { font-family: "Barlow Condensed", "Arial Narrow", sans-serif; font-weight: 700; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--here); }
+.vlhead .tag.muted { color: var(--muted); }
+.vlhead a { margin-left: auto; font-size: 13px; color: var(--muted); }
+.vlhead a + a { margin-left: 0; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chips button {
+  font: inherit; font-size: 14px;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 3px 10px; border-radius: 14px;
+  border: 1px solid var(--faint); background: var(--surface); color: var(--ink); cursor: pointer;
+}
+.chips button i { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+.chips button.detail { font-size: 13px; padding: 2px 8px; color: var(--muted); }
+.chips button.code .n { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 13px; }
+.chips button[aria-pressed="true"] { border-color: var(--ink); box-shadow: 0 0 0 1px var(--ink); font-weight: 700; }
+.chips button:focus-visible { outline: 2px solid var(--here); outline-offset: 2px; }
+.liste .panel { margin-top: 2px; }
+.vlhead + .frage, .frage { font-size: 14px; font-style: italic; color: var(--muted); margin-top: -4px; }
+.chips.vorschau { opacity: .7; }
+.chips.vorschau button { border-style: dashed; }
+.chips.apps { padding-top: 6px; border-top: 1px dashed var(--faint); align-items: center; }
+.apps-lbl { font-family: "Barlow Condensed", "Arial Narrow", sans-serif; font-weight: 600; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-right: 4px; }
+.chips.apps button { border-radius: 4px; border-style: dashed; }
+.chips.apps .fach { font-size: 11.5px; color: var(--muted); margin-left: 2px; }
+.chips.apps .fach::before { content: "· "; }
 @media (min-width: 981px) {
   aside.panel { position: sticky; top: 12px; max-height: calc(100vh - 24px); overflow-y: auto; }
 }
@@ -428,43 +511,70 @@ footer p { margin: 0 0 6px; }
 <div class="wrap">
   <header>
     <div class="titleblock">
-      <span class="eyebrow">Robotik · Vorlesung, Übung und Praktikum · WiSe 2026/27 und SoSe 2027</span>
+      <a class="eyebrow" href="../" title="Zur Startseite des Kurses">← TU Bergakademie Freiberg · Robotik · WiSe 2026/27 und SoSe 2027</a>
       <h1>Kurslandkarte</h1>
-      <span class="sample">Stand 13.10.2026 · <span id="count"></span></span>
-      <a class="feedback" href="../">← Alle Termine auf einen Blick</a> · <a class="feedback" href="https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/issues/new?title=Kurslandkarte%3A%20&amp;labels=kurslandkarte" target="_blank" rel="noopener">Fehler oder Wunsch melden (GitHub) ↗</a>
+      <span class="sample"><span id="count"></span> · aktualisiert am 21.10.2026</span>
+      <span class="feedback">Begriff fehlt oder ist unklar? Sagen Sie es im Termin oder im OPAL-Forum. <a href="https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/issues/new?title=Kurslandkarte%3A%20&amp;labels=kurslandkarte" target="_blank" rel="noopener">GitHub ↗</a></span>
     </div>
     <div class="controls">
       <div class="control">
         <span class="lbl" id="modeLbl">Variante</span>
         <div class="seg" role="group" aria-labelledby="modeLbl">
-          <button id="mMetro" aria-pressed="true">Metrokarte</button>
-          <button id="mZeit" aria-pressed="false">Zeitleiste</button>
+          <button id="mListe" aria-pressed="false" title="Alle Termine im Wochenraster, mit Ziel im Projekt, Begriffen und Anwendungen">Termine</button>
+          <button id="mMetro" aria-pressed="true" title="Jede farbige Linie ist ein Faden: ein Thema, das sich durch mehrere Termine zieht">Metrokarte</button>
+          <button id="mZeit" aria-pressed="false" title="Alle Begriffe nach Themengebiet über die Zeit, mit Pfeilen für ihre Zusammenhänge">Zeitleiste</button>
         </div>
       </div>
       <div class="control">
-        <label for="here">Sie sind hier</label>
+        <label for="here" title="Folgt dem heutigen Datum; mit dem Regler blättern Sie vor und zurück">Sie sind hier</label>
         <div class="here-row">
-          <input id="here" type="range" min="0" max="1" step="1" value="0">
+          <input id="here" type="range" min="0" max="15" step="1" value="0">
           <span class="here-val" id="hereVal"></span>
           <button class="today" id="today" hidden>heute</button>
+        </div>
+      </div>
+      <div class="control" id="ctlAusblick">
+        <span class="lbl" id="ausLbl" title="Zeigt blass die vorbereiteten Begriffe kommender Termine">Ausblick</span>
+        <div class="seg" role="group" aria-labelledby="ausLbl">
+          <button id="ausAus" aria-pressed="true">Aus</button>
+          <button id="ausAn" aria-pressed="false">An</button>
         </div>
       </div>
       <div class="control" id="ctlLevel">
         <span class="lbl" id="lvlLbl">Begriffe</span>
         <div class="seg" role="group" aria-labelledby="lvlLbl">
-          <button id="eKern" aria-pressed="true">Kernbegriffe</button>
-          <button id="eAlle" aria-pressed="false">Alle</button>
+          <button id="eKern" aria-pressed="true" title="Begriffe, die Sie in einem Satz erklären können sollten">Kernbegriffe</button>
+          <button id="eAlle" aria-pressed="false" title="Kernbegriffe und ergänzende Detailbegriffe">Alle</button>
         </div>
       </div>
       <div class="control" id="ctlEdges">
         <span class="lbl" id="viewLbl">Verbindungen</span>
         <div class="seg" role="group" aria-labelledby="viewLbl">
-          <button id="vNb" aria-pressed="true">Nur Nachbarn</button>
-          <button id="vAll" aria-pressed="false">Ganzes Netz</button>
+          <button id="vNb" aria-pressed="true" title="Nur die Pfeile zum ausgewählten Begriff">Nur Nachbarn</button>
+          <button id="vAll" aria-pressed="false" title="Alle Pfeile zwischen den Begriffen">Ganzes Netz</button>
         </div>
       </div>
     </div>
   </header>
+
+  <details class="intro" id="intro" open>
+    <summary>So nutzen Sie die Karte</summary>
+    <div class="cols">
+      <div>
+        <p>Die Karte zeigt, welche Begriffe in welchem Termin dazukommen und wie sie zusammenhängen. Ein Klick auf einen Begriff erklärt ihn in einem Satz, nennt die typische Fehlvorstellung und führt zur passenden Folie.</p>
+        <table>
+          <tr><td>vor dem Termin</td><td>Was kommt heute dazu, und worauf baut es auf?</td></tr>
+          <tr><td>nach dem Termin</td><td>Kann ich jeden neuen Begriff in einem Satz erklären?</td></tr>
+          <tr><td>vor Übung und Praktikum</td><td>Kenne ich die typische Fehlvorstellung – und warum sie falsch ist?</td></tr>
+        </table>
+      </div>
+      <div>
+        <p><strong>Termine:</strong> alle Termine im Wochenraster, mit Ziel im Projekt, Begriffen und Anwendungen. <strong>Metrokarte:</strong> Jede farbige Linie ist ein <em>Faden</em>, ein Thema, das sich durch mehrere Termine zieht; weiße Stationen liegen auf mehreren Fäden. <strong>Zeitleiste:</strong> alle Begriffe nach Themengebiet, mit Pfeilen für ihre Zusammenhänge.</p>
+        <p><strong>Die Karte wächst mit dem Semester.</strong> Nach jedem Termin kommen seine Begriffe dazu. <strong>Kernbegriffe</strong> sollten Sie in einem Satz erklären können, Detailbegriffe ergänzen sie. Mit <strong>Ausblick: An</strong> sehen Sie blass, was für kommende Termine vorbereitet ist.</p>
+        <p><strong>Bedienung:</strong> <em>Sie sind hier</em> folgt dem heutigen Datum; mit dem Regler blättern Sie zu einer anderen Woche – er verschiebt nur die Markierung, freigeschaltet wird dadurch nichts, und „heute“ springt zurück. <em>Begriffe</em> wählt zwischen Kernbegriffen und allen Begriffen (Termine und Zeitleiste), <em>Verbindungen</em> zwischen den Pfeilen zum gewählten Begriff und dem ganzen Netz (nur Zeitleiste). Was in einer Ansicht nicht wirkt, ist ausgegraut. Die Farben stehen in der Metrokarte für Fäden, in Termine und Zeitleiste für Themengebiete.</p>
+      </div>
+    </div>
+  </details>
 
   <div class="legendrow"><span class="hint" id="legendHint"></span><div class="legend" id="legend"></div></div>
 
@@ -472,55 +582,88 @@ footer p { margin: 0 0 6px; }
     <div class="mapbox" id="mapwrap">
       <svg id="side" aria-hidden="true"></svg>
       <div class="scroller" id="mapbox">
-        <svg id="map" role="img" aria-labelledby="mapTitle"><title id="mapTitle">Kurslandkarte: Begriffe der Veranstaltung über alle Termine</title></svg>
+        <svg id="map" role="img" aria-labelledby="mapTitle"><title id="mapTitle">Kurslandkarte: Begriffe über alle Termine</title></svg>
       </div>
     </div>
+    <div class="liste" id="liste" hidden></div>
     <aside class="panel" id="panel" aria-live="polite"></aside>
   </div>
 
-  <footer>
-    <p><strong>Wozu die Karte?</strong> Sie zeigt, welche Begriffe in welchem Termin — Vorlesung (VL), Übung (Ü) oder Praktikum (P) — neu dazukommen und worauf sie aufbauen. Ein Klick auf einen Begriff erklärt ihn in einem Satz, nennt die typische Stolperfalle und führt direkt zur passenden Folie. Begriffe aus kommenden Terminen erscheinen blass. Die Termine folgen dem vorläufigen Zeitplan. „Sie sind hier“ richtet sich nach dem heutigen Datum, mit dem Schieberegler können Sie vor- und zurückblättern.</p>
-    <p><strong>Metrokarte:</strong> Jede Linie ist ein roter Faden durch die Veranstaltung, jede Station baut auf der vorigen auf. Weiße Stationen mit dunklem Rand liegen auf mehreren Fäden. <strong>Zeitleiste:</strong> alle Begriffe nach Themengebiet, mit ihren Verbindungen. Große Punkte sind Kernbegriffe, kleine Detailbegriffe.</p>
-    <p><strong>Autoren:</strong> Sebastian Zug &amp; Claude Code (Opus 5.5) mit <a href="https://github.com/LiaScript/teaching-agent" target="_blank" rel="noopener">LiaScript Teaching-Agent</a>. Begriffe, Erklärungen und Fäden wurden KI-gestützt aus den Materialien erstellt und werden redaktionell geprüft.</p>
-  </footer>
+  <footer><p>Erzeugt mit <a href="https://github.com/TUBAF-IfI-LiaScript/invivis-kurslandkarte">invivis Kurslandkarte</a> 0.1.0 · Autoren: Sebastian Zug &amp; Claude Code (Opus 5.5) mit LiaScript Teaching-Agent</p></footer>
 </div>
 
 <script id="kartendaten" type="application/json">
 {
- "stand": "13.10.2026",
+ "stand": "21.10.2026",
+ "version": "0.1.0",
  "kurs": {
   "basis": "https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/",
   "speicher": "robotik-map",
-  "autoren": "Sebastian Zug & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent"
+  "einheit": "Termin",
+  "einheiten": "Termine",
+  "einheiten_dat": "Terminen",
+  "gleich": "Im selben Termin",
+  "freigabe": "erscheinen nach dem Termin",
+  "folgen": "Die Begriffe dieses Termins folgen nach dem Termin.",
+  "spalten": [
+   [
+    "VL",
+    "Vorlesung"
+   ],
+   [
+    "Ü",
+    "Übung"
+   ],
+   [
+    "P",
+    "Praktikum"
+   ]
+  ],
+  "woche": "Woche ab",
+  "status": {
+   "ausgearbeitet": "",
+   "Bestand": "Bestand 2025/26",
+   "geplant": "in Planung"
+  },
+  "anwendung_daten": "Beispiel",
+  "start_ansicht": "metro",
+  "vorschau": "ausblick"
  },
  "linien": [
   {
    "id": "werkzeuge",
-   "name": "Linux & Werkzeuge"
+   "name": "Linux & Werkzeuge",
+   "farbe": "c7"
   },
   {
    "id": "ros",
-   "name": "ROS 2"
+   "name": "ROS 2",
+   "farbe": "c1"
   },
   {
    "id": "mathe",
-   "name": "Koordinaten & Modelle"
+   "name": "Koordinaten & Modelle",
+   "farbe": "c2"
   },
   {
    "id": "wahrnehmung",
-   "name": "Sensorik & Wahrnehmung"
+   "name": "Sensorik & Wahrnehmung",
+   "farbe": "c4"
   },
   {
    "id": "schaetzung",
-   "name": "Fusion & Schätzung"
+   "name": "Fusion & Schätzung",
+   "farbe": "c3"
   },
   {
    "id": "bewegung",
-   "name": "Regelung & Navigation"
+   "name": "Regelung & Navigation",
+   "farbe": "c5"
   },
   {
    "id": "projekt",
-   "name": "Projektaufgabe"
+   "name": "Projektaufgabe",
+   "farbe": "c6"
   }
  ],
  "phasen": [
@@ -528,37 +671,37 @@ footer p { margin: 0 0 6px; }
    "von": 0,
    "bis": 6,
    "name": "Block 1 · ROS-Grundlagen",
-   "farbe": "--phase-einstieg"
+   "farbe": "ph1"
   },
   {
    "von": 7,
    "bis": 14,
    "name": "Block 2 · Sensorgrundlagen",
-   "farbe": "--phase-grundlagen"
+   "farbe": "ph2"
   },
   {
    "von": 15,
    "bis": 19,
    "name": "Block 3 · Objekterkennung",
-   "farbe": "--phase-analyse"
+   "farbe": "ph4"
   },
   {
    "von": 20,
    "bis": 23,
    "name": "Block 4 · Sensorfusion",
-   "farbe": "--phase-einstieg"
+   "farbe": "ph1"
   },
   {
    "von": 24,
    "bis": 29,
    "name": "Block 5 · Regelung & Navigation",
-   "farbe": "--phase-grundlagen"
+   "farbe": "ph2"
   },
   {
    "von": 30,
    "bis": 31,
    "name": "Block 6 · Praktikum + X",
-   "farbe": "--phase-zaesur"
+   "farbe": "ph3"
   }
  ],
  "vorlesungen": [
@@ -566,16 +709,22 @@ footer p { margin: 0 0 6px; }
    "vl": 0,
    "key": "00",
    "label": "VL 1",
+   "typ": "VL",
    "datei": "00_Einfuehrung/00_Einfuehrung.md",
    "datum": "2026-10-19",
    "kurz": "Einführung",
+   "leitfrage": "Sie lernen die Projektaufgabe kennen: Ein TurtleBot soll autonom durch die Verkehrswelt fahren.",
+   "freigegeben": true,
    "status": "ausgearbeitet",
    "block": 1,
+   "pdf": null,
+   "anwendet": [],
    "abschnitte": [
     "Einführung",
     "Wo stehen wir?",
+    "Organisation",
+    "Wo stehen Sie?",
     "Unser Ziel: Autonomes Fahren im Miniaturformat",
-    "Wie läuft die Veranstaltung ab?",
     "Was ist ein Roboter?",
     "Klassifikation von Robotersystemen",
     "Relevanz und Bedeutung mobiler Roboter",
@@ -592,11 +741,16 @@ footer p { margin: 0 0 6px; }
    "vl": 1,
    "key": "ue1",
    "label": "Ü 1",
+   "typ": "Ü",
    "datei": "exercises/exercise_00_linux_shell/README.md",
    "datum": "2026-10-26",
    "kurz": "Linux Shell",
+   "leitfrage": "Ihr Rechner wird zur Werkbank: Ohne sicheren Umgang mit der Shell erreichen Sie weder ROS 2 noch den TurtleBot.",
+   "freigegeben": false,
    "status": "ausgearbeitet",
    "block": 1,
+   "pdf": null,
+   "anwendet": [],
    "abschnitte": [
     "Übung: OS + Linux Shell",
     "Wo stehen wir?",
@@ -626,11 +780,16 @@ footer p { margin: 0 0 6px; }
    "vl": 2,
    "key": "03",
    "label": "VL 2",
+   "typ": "VL",
    "datei": "03_ROS_Grundlagen_I/03_EinfuehrungROS.md",
    "datum": "2026-10-26",
    "kurz": "ROS 2 Grundlagen",
+   "leitfrage": "Sie verstehen, wie die Software des TurtleBots aus Knoten und Topics zusammengesetzt ist.",
+   "freigegeben": false,
    "status": "ausgearbeitet",
    "block": 1,
+   "pdf": null,
+   "anwendet": [],
    "abschnitte": [
     "Einführung in ROS 2",
     "Wo stehen wir?",
@@ -652,11 +811,16 @@ footer p { margin: 0 0 6px; }
    "vl": 3,
    "key": "04",
    "label": "VL 3",
+   "typ": "VL",
    "datei": "04_ROS_Pakete_Tools/04_ROS_Pakete.md",
    "datum": "2026-11-02",
    "kurz": "ROS 2 Pakete",
+   "leitfrage": "Sie bauen eigene Knoten und starten sie gemeinsam mit einer Launch-Datei – das Gerüst für jede spätere Projektfunktion.",
+   "freigegeben": false,
    "status": "ausgearbeitet",
    "block": 1,
+   "pdf": null,
+   "anwendet": [],
    "abschnitte": [
     "ROS 2 Pakete",
     "Wo stehen wir?",
@@ -678,11 +842,16 @@ footer p { margin: 0 0 6px; }
    "vl": 4,
    "key": "ue2",
    "label": "Ü 2",
+   "typ": "Ü",
    "datei": "exercises/exercise_00b_ros2_werkzeuge/README.md",
    "datum": "2026-11-09",
    "kurz": "ROS 2 Werkzeuge",
+   "leitfrage": "Sie untersuchen, konfigurieren und zeichnen ein laufendes ROS-2-System auf – genau das tun Sie in P 1 am Roboter.",
+   "freigegeben": false,
    "status": "ausgearbeitet",
    "block": 1,
+   "pdf": null,
+   "anwendet": [],
    "abschnitte": [
     "Übung: Werkzeuge von ROS 2",
     "Wo stehen wir?",
@@ -699,11 +868,16 @@ footer p { margin: 0 0 6px; }
    "vl": 5,
    "key": "02",
    "label": "VL 4",
+   "typ": "VL",
    "datei": "02_Koordinatensysteme/02_Koordinatentransformation.md",
    "datum": "2026-11-09",
    "kurz": "Koordinaten + QoS",
+   "leitfrage": "Der TurtleBot weiß, wo seine Sensoren sitzen, und seine Daten kommen beim Empfänger an – sonst bleibt RViz leer.",
+   "freigegeben": false,
    "status": "ausgearbeitet",
    "block": 1,
+   "pdf": null,
+   "anwendet": [],
    "abschnitte": [
     "Koordinaten und Kommunikationsqualität",
     "Wo stehen wir?",
@@ -733,11 +907,24 @@ footer p { margin: 0 0 6px; }
    "vl": 6,
    "key": "p1",
    "label": "P 1",
+   "typ": "P",
    "datei": "exercises/praktikum_01_turtlebot/README.md",
    "datum": "2026-11-23",
    "kurz": "TurtleBot + Bags",
+   "leitfrage": "Ihr TurtleBot ist verbunden, fährt sicher, und Sie haben eine Testfahrt aufgezeichnet – das Rohmaterial für Block 2.",
+   "freigegeben": false,
    "status": "ausgearbeitet",
    "block": 1,
+   "pdf": null,
+   "anwendet": [
+    "domainid",
+    "tbtopics",
+    "topiccli",
+    "qoscompat",
+    "tf2",
+    "tftree",
+    "rosbag"
+   ],
    "abschnitte": [
     "Praktikum 1: TurtleBot in Betrieb nehmen",
     "Wo stehen wir?",
@@ -753,11 +940,16 @@ footer p { margin: 0 0 6px; }
    "vl": 7,
    "key": "01",
    "label": "VL 5",
+   "typ": "VL",
    "datei": "01_Sensorik/01_Sensorik.md",
    "datum": "2026-11-30",
    "kurz": "Sensorik",
+   "leitfrage": "Sie wissen, was die Sensoren des TurtleBots messen und wo ihre Grenzen liegen.",
+   "freigegeben": false,
    "status": "Bestand",
    "block": 2,
+   "pdf": null,
+   "anwendet": [],
    "abschnitte": [
     "Sensorik mobiler Roboter",
     "Einordnung: Sensoren in der Roboterarchitektur",
@@ -783,11 +975,16 @@ footer p { margin: 0 0 6px; }
    "vl": 8,
    "key": "05",
    "label": "VL 6",
+   "typ": "VL",
    "datei": "05_Bildverarbeitung/05_Bildverarbeitung.md",
    "datum": "2026-12-07",
    "kurz": "Bildverarbeitung",
+   "leitfrage": "Sie heben Fahrbahnmarkierungen und Ampelfarben im Kamerabild hervor – der erste Schritt zur Spurerkennung.",
+   "freigegeben": false,
    "status": "Bestand",
    "block": 2,
+   "pdf": null,
+   "anwendet": [],
    "abschnitte": [
     "Bildverarbeitung GrundlagenRos2",
     "Motivation: Warum Bildverarbeitung in der Robotik?",
@@ -826,11 +1023,16 @@ footer p { margin: 0 0 6px; }
    "vl": 9,
    "key": "06",
    "label": "VL 7",
+   "typ": "VL",
    "datei": "06_Kamera_Stereo/06_Kamera_Stereo.md",
    "datum": "2026-12-07",
    "kurz": "Kamera + Draufsicht",
+   "leitfrage": "Sie schließen von einem Pixel auf eine Richtung in der Welt – dafür muss die Kamera kalibriert sein.",
+   "freigegeben": false,
    "status": "ausgearbeitet",
    "block": 2,
+   "pdf": null,
+   "anwendet": [],
    "abschnitte": [
     "Kamera: Modell, Kalibrierung, Draufsicht",
     "Wo stehen wir?",
@@ -858,44 +1060,72 @@ footer p { margin: 0 0 6px; }
    "vl": 10,
    "key": "lid",
    "label": "VL 8",
+   "typ": "VL",
    "datei": null,
    "datum": "2026-12-14",
    "kurz": "LiDAR",
+   "leitfrage": "Sie werten die Abstandsmessungen des LiDAR aus und erkennen, was vor dem Roboter liegt.",
+   "freigegeben": false,
    "status": "geplant",
    "block": 2,
+   "pdf": null,
+   "anwendet": [],
    "abschnitte": []
   },
   {
    "vl": 11,
    "key": "ue3",
    "label": "Ü 3",
+   "typ": "Ü",
    "datei": null,
    "datum": "2027-01-04",
    "kurz": "Datenvisualisierung",
+   "leitfrage": "Sie stellen Sensordaten so dar, dass Fehler darin sichtbar werden.",
+   "freigegeben": false,
    "status": "geplant",
    "block": 2,
+   "pdf": null,
+   "anwendet": [],
    "abschnitte": []
   },
   {
    "vl": 12,
    "key": "ue4",
    "label": "Ü 4",
+   "typ": "Ü",
    "datei": null,
    "datum": "2027-01-11",
    "kurz": "Kameradaten",
+   "leitfrage": "Sie verarbeiten aufgezeichnete Kamerabilder des TurtleBots selbst.",
+   "freigegeben": false,
    "status": "geplant",
    "block": 2,
+   "pdf": null,
+   "anwendet": [],
    "abschnitte": []
   },
   {
    "vl": 13,
    "key": "p2",
    "label": "P 2",
+   "typ": "P",
    "datei": "exercises/praktikum_02_bildkorrektur/README.md",
    "datum": "2027-01-11",
    "kurz": "Bildkorrektur",
+   "leitfrage": "Ihr TurtleBot liefert eine entzerrte, maßstäbliche Draufsicht auf die Fahrbahn – die Grundlage der Spurerkennung.",
+   "freigegeben": false,
    "status": "ausgearbeitet",
    "block": 2,
+   "pdf": null,
+   "anwendet": [
+    "launch",
+    "qoscompat",
+    "compressed_image",
+    "kalibrierung",
+    "entzerrung",
+    "homographie",
+    "draufsicht"
+   ],
    "abschnitte": [
     "Praktikum 2: Kamerabild korrigieren",
     "Wo stehen wir?",
@@ -912,11 +1142,22 @@ footer p { margin: 0 0 6px; }
    "vl": 14,
    "key": "p3",
    "label": "P 3",
+   "typ": "P",
    "datei": "exercises/praktikum_03_spurerkennung/README.md",
    "datum": "2027-01-18",
    "kurz": "Spurerkennung",
+   "leitfrage": "Ihr TurtleBot erkennt die Fahrspur im Kamerabild.",
+   "freigegeben": false,
    "status": "ausgearbeitet",
    "block": 2,
+   "pdf": null,
+   "anwendet": [
+    "paramfile",
+    "thresholding",
+    "morphologie",
+    "draufsicht",
+    "vorausschau"
+   ],
    "abschnitte": [
     "Praktikum 3: Fahrspur erkennen",
     "Wo stehen wir?",
@@ -933,11 +1174,16 @@ footer p { margin: 0 0 6px; }
    "vl": 15,
    "key": "07",
    "label": "VL 9",
+   "typ": "VL",
    "datei": "07_Objekterkennung/07_Objekterkennung.md",
    "datum": "2027-01-25",
    "kurz": "Objekterkennung",
+   "leitfrage": "Sie erkennen Schilder, Ampeln und Fußgängerfiguren im Kamerabild.",
+   "freigegeben": false,
    "status": "Bestand",
    "block": 3,
+   "pdf": null,
+   "anwendet": [],
    "abschnitte": [
     "Objekterkennung und Tracking",
     "Motivation: Warum Objekterkennung?",
@@ -972,55 +1218,80 @@ footer p { margin: 0 0 6px; }
    "vl": 16,
    "key": "pkw",
    "label": "VL 10",
+   "typ": "VL",
    "datei": null,
    "datum": "2027-01-25",
    "kurz": "… in Punktwolken",
+   "leitfrage": "Sie finden Objekte in den Messpunkten des LiDAR.",
+   "freigegeben": false,
    "status": "geplant",
    "block": 3,
+   "pdf": null,
+   "anwendet": [],
    "abschnitte": []
   },
   {
    "vl": 17,
    "key": "ue5",
    "label": "Ü 5",
+   "typ": "Ü",
    "datei": null,
    "datum": "2027-02-01",
    "kurz": "Objekte im LiDAR",
+   "leitfrage": "Sie trennen Hindernisse im LiDAR-Scan vom Hintergrund.",
+   "freigegeben": false,
    "status": "geplant",
    "block": 3,
+   "pdf": null,
+   "anwendet": [],
    "abschnitte": []
   },
   {
    "vl": 18,
    "key": "p4",
    "label": "P 4",
+   "typ": "P",
    "datei": null,
    "datum": "2027-02-08",
    "kurz": "Hinderniserkennung",
+   "leitfrage": "Ihr TurtleBot erkennt Hindernisse auf seiner Fahrbahn.",
+   "freigegeben": false,
    "status": "geplant",
    "block": 3,
+   "pdf": null,
+   "anwendet": [],
    "abschnitte": []
   },
   {
    "vl": 19,
    "key": "ue6",
    "label": "Ü 6",
+   "typ": "Ü",
    "datei": null,
    "datum": "2027-04-05",
    "kurz": "YOLO vs. klassisch",
+   "leitfrage": "Sie vergleichen gelernte und klassische Objekterkennung und wissen, wann welche taugt.",
+   "freigegeben": false,
    "status": "geplant",
    "block": 3,
+   "pdf": null,
+   "anwendet": [],
    "abschnitte": []
   },
   {
    "vl": 20,
    "key": "08",
    "label": "VL 11",
+   "typ": "VL",
    "datei": "08_Sensorfusion_I/08_Datenfusion.md",
    "datum": "2027-04-12",
    "kurz": "Sensorfusion I",
+   "leitfrage": "Sie verstehen, warum ein einzelner Sensor nicht reicht und wie man Messungen kombiniert.",
+   "freigegeben": false,
    "status": "Bestand",
    "block": 4,
+   "pdf": null,
+   "anwendet": [],
    "abschnitte": [
     "Datenfusion",
     "Wie weit waren wir gekommen?",
@@ -1040,11 +1311,16 @@ footer p { margin: 0 0 6px; }
    "vl": 21,
    "key": "09",
    "label": "VL 12",
+   "typ": "VL",
    "datei": "09_Sensorfusion_II/09_Sensorfusion_II.md",
    "datum": "2027-04-19",
    "kurz": "Sensorfusion II",
+   "leitfrage": "Sie schätzen die Pose des TurtleBots aus Odometrie, IMU und weiteren Messungen mit einem Kalman-Filter.",
+   "freigegeben": false,
    "status": "Bestand",
    "block": 4,
+   "pdf": null,
+   "anwendet": [],
    "abschnitte": [
     "Sensordatenfusion II: Kalman-Filter",
     "Einschub - Quality of Service (QoS) für Sensordaten",
@@ -1076,33 +1352,48 @@ footer p { margin: 0 0 6px; }
    "vl": 22,
    "key": "ue7",
    "label": "Ü 7",
+   "typ": "Ü",
    "datei": null,
    "datum": "2027-04-19",
    "kurz": "2D-EKF",
+   "leitfrage": "Sie implementieren einen Filter, der die Position eines Roboters in der Ebene schätzt.",
+   "freigegeben": false,
    "status": "geplant",
    "block": 4,
+   "pdf": null,
+   "anwendet": [],
    "abschnitte": []
   },
   {
    "vl": 23,
    "key": "p5",
    "label": "P 5",
+   "typ": "P",
    "datei": null,
    "datum": "2027-04-26",
    "kurz": "Streckenverlauf",
+   "leitfrage": "Ihr TurtleBot schätzt den Streckenverlauf vor sich aus mehreren Sensoren.",
+   "freigegeben": false,
    "status": "geplant",
    "block": 4,
+   "pdf": null,
+   "anwendet": [],
    "abschnitte": []
   },
   {
    "vl": 24,
    "key": "10",
    "label": "VL 13",
+   "typ": "VL",
    "datei": "10_Kinematik_Regelung/10_Kinematik_Regelung.md",
    "datum": "2027-05-03",
    "kurz": "Kinematik",
+   "leitfrage": "Sie verstehen, wie aus einem Fahrbefehl eine Radbewegung wird und wie ein Regler den TurtleBot auf Kurs hält.",
+   "freigegeben": false,
    "status": "Bestand",
    "block": 5,
+   "pdf": null,
+   "anwendet": [],
    "abschnitte": [
     "Kinematik und Regelung",
     "Einordnung",
@@ -1133,22 +1424,32 @@ footer p { margin: 0 0 6px; }
    "vl": 25,
    "key": "ue8",
    "label": "Ü 8",
+   "typ": "Ü",
    "datei": null,
    "datum": "2027-05-03",
    "kurz": "Reglervergleich",
+   "leitfrage": "Sie vergleichen Regler und sehen, welcher den Roboter am ruhigsten auf der Spur hält.",
+   "freigegeben": false,
    "status": "geplant",
    "block": 5,
+   "pdf": null,
+   "anwendet": [],
    "abschnitte": []
   },
   {
    "vl": 26,
    "key": "11",
    "label": "VL 14",
+   "typ": "VL",
    "datei": "11_Navigation/11_Navigation.md",
    "datum": "2027-05-10",
    "kurz": "Navigation",
+   "leitfrage": "Ihr TurtleBot plant einen Weg durch die Verkehrswelt und folgt ihm.",
+   "freigegeben": false,
    "status": "Bestand",
    "block": 5,
+   "pdf": null,
+   "anwendet": [],
    "abschnitte": [
     "Navigation und Pfadplanung",
     "Einordnung",
@@ -1182,55 +1483,80 @@ footer p { margin: 0 0 6px; }
    "vl": 27,
    "key": "slm",
    "label": "VL 15",
+   "typ": "VL",
    "datei": null,
    "datum": "2027-05-17",
    "kurz": "SLAM",
+   "leitfrage": "Der TurtleBot erstellt selbst eine Karte der Verkehrswelt und weiß, wo er darin steht.",
+   "freigegeben": false,
    "status": "geplant",
    "block": 5,
+   "pdf": null,
+   "anwendet": [],
    "abschnitte": []
   },
   {
    "vl": 28,
    "key": "ue9",
    "label": "Ü 9",
+   "typ": "Ü",
    "datei": null,
    "datum": "2027-05-17",
    "kurz": "Kartenerstellung",
+   "leitfrage": "Sie erstellen aus aufgezeichneten Daten eine Karte.",
+   "freigegeben": false,
    "status": "geplant",
    "block": 5,
+   "pdf": null,
+   "anwendet": [],
    "abschnitte": []
   },
   {
    "vl": 29,
    "key": "p6",
    "label": "P 6",
+   "typ": "P",
    "datei": null,
    "datum": "2027-05-24",
    "kurz": "Mapping + Bahnfolge",
+   "leitfrage": "Ihr TurtleBot kartiert die Verkehrswelt und folgt einer geplanten Bahn.",
+   "freigegeben": false,
    "status": "geplant",
    "block": 5,
+   "pdf": null,
+   "anwendet": [],
    "abschnitte": []
   },
   {
    "vl": 30,
    "key": "p7",
    "label": "P 7",
+   "typ": "P",
    "datei": null,
    "datum": "2027-05-31",
    "kurz": "Parken + Abbiegen",
+   "leitfrage": "Ihr TurtleBot parkt ein und biegt an Kreuzungen ab.",
+   "freigegeben": false,
    "status": "geplant",
    "block": 6,
+   "pdf": null,
+   "anwendet": [],
    "abschnitte": []
   },
   {
    "vl": 31,
    "key": "p8",
    "label": "P 8",
+   "typ": "P",
    "datei": null,
    "datum": "2027-06-07",
    "kurz": "Praktikum + X",
+   "leitfrage": "Ihr TurtleBot fährt autonom durch die Verkehrswelt – Abschluss der Projektaufgabe.",
+   "freigegeben": false,
    "status": "geplant",
    "block": 6,
+   "pdf": null,
+   "anwendet": [],
    "abschnitte": []
   }
  ],
@@ -1240,7 +1566,7 @@ footer p { margin: 0 0 6px; }
    "name": "Projektaufgabe Verkehrswelt",
    "linie": "projekt",
    "vl": 0,
-   "abschnitt": 3,
+   "abschnitt": 5,
    "ebene": 1,
    "code": false,
    "erklaerung": "Ein TurtleBot fährt autonom auf schwarzem Untergrund: Spur folgen, Ampeln und Schilder beachten, Fußgängern ausweichen, einparken.",
@@ -1251,7 +1577,7 @@ footer p { margin: 0 0 6px; }
    "name": "VL, Ü und P",
    "linie": "projekt",
    "vl": 0,
-   "abschnitt": 4,
+   "abschnitt": 3,
    "ebene": 2,
    "code": false,
    "erklaerung": "Vorlesung führt Konzepte ein, Übung festigt sie am eigenen Rechner, Praktikum setzt sie am TurtleBot um — je 90 Minuten.",
@@ -1262,7 +1588,7 @@ footer p { margin: 0 0 6px; }
    "name": "Roboter",
    "linie": "wahrnehmung",
    "vl": 0,
-   "abschnitt": 5,
+   "abschnitt": 6,
    "ebene": 1,
    "code": false,
    "erklaerung": "Keine einheitliche Definition (VDI, RIA, JRA); unsere Arbeitsdefinition: Eine Maschine, die wahrnimmt, entscheidet und handelt — wiederholt und ohne dass ein Mensch jeden Schritt vorgibt.",
@@ -1273,7 +1599,7 @@ footer p { margin: 0 0 6px; }
    "name": "Klassifikation",
    "linie": "wahrnehmung",
    "vl": 0,
-   "abschnitt": 6,
+   "abschnitt": 7,
    "ebene": 2,
    "code": false,
    "erklaerung": "Autonomie, Mobilität und Komplexität der Sensorik sind unabhängige Kriterien.",
@@ -1284,7 +1610,7 @@ footer p { margin: 0 0 6px; }
    "name": "Herausforderungen",
    "linie": "bewegung",
    "vl": 0,
-   "abschnitt": 8,
+   "abschnitt": 9,
    "ebene": 2,
    "code": false,
    "erklaerung": "Positionierung, Kartierung, Hinderniserkennung und Echtzeit — dazu wirtschaftliche und rechtliche Fragen.",
@@ -1295,10 +1621,10 @@ footer p { margin: 0 0 6px; }
    "name": "Sense-Think-Act",
    "linie": "bewegung",
    "vl": 0,
-   "abschnitt": 9,
+   "abschnitt": 10,
    "ebene": 1,
    "code": false,
-   "erklaerung": "Kreislauf aus Wahrnehmen, Entscheiden und Handeln; der Schritt Think gliedert sich in Handlungsplanung, Ausführung und reaktive Überwachung.",
+   "erklaerung": "Kreislauf aus Wahrnehmen, Entscheiden und Handeln; hybride Architekturen gliedern ihn in drei Schichten: Handlungsplanung und Ausführung bilden Think, die schnelle reaktive Schicht setzt Messwerte direkt in Steuerbefehle um und gehört zu Act.",
    "fehlvorstellung": "„Sense, Think und Act sind drei übereinanderliegende Ebenen.“"
   },
   {
@@ -1306,7 +1632,7 @@ footer p { margin: 0 0 6px; }
    "name": "TurtleBot 3 Burger",
    "linie": "projekt",
    "vl": 0,
-   "abschnitt": 10,
+   "abschnitt": 11,
    "ebene": 1,
    "code": false,
    "erklaerung": "Unsere Plattform: RPLIDAR C1, Pi-Kamera, Raspberry Pi 3 B+, Differentialantrieb, maximal 0,22 m/s.",
@@ -1317,7 +1643,7 @@ footer p { margin: 0 0 6px; }
    "name": "Warum ROS?",
    "linie": "ros",
    "vl": 0,
-   "abschnitt": 11,
+   "abschnitt": 12,
    "ebene": 1,
    "code": false,
    "erklaerung": "ROS 2 liefert Kommunikation, wiederverwendbare Pakete und Werkzeuge, damit nicht jedes Team alles neu baut.",
@@ -3433,7 +3759,8 @@ footer p { margin: 0 0 6px; }
     "purepursuit",
     "costmap",
     "nav2"
-   ]
+   ],
+   "weiter": false
   },
   {
    "id": "f_umgebung",
@@ -3447,7 +3774,8 @@ footer p { margin: 0 0 6px; }
     "ros2cli",
     "setupbash",
     "domainid"
-   ]
+   ],
+   "weiter": false
   },
   {
    "id": "f_ros",
@@ -3463,7 +3791,8 @@ footer p { margin: 0 0 6px; }
     "launch",
     "tf2",
     "nav2"
-   ]
+   ],
+   "weiter": false
   },
   {
    "id": "f_koord",
@@ -3480,7 +3809,8 @@ footer p { margin: 0 0 6px; }
     "pc_transform",
     "bbox3d",
     "diffdrive"
-   ]
+   ],
+   "weiter": false
   },
   {
    "id": "f_bild",
@@ -3496,7 +3826,8 @@ footer p { margin: 0 0 6px; }
     "cnn",
     "yolo",
     "bbox3d"
-   ]
+   ],
+   "weiter": false
   },
   {
    "id": "f_unsicher",
@@ -3511,30 +3842,42 @@ footer p { margin: 0 0 6px; }
     "kalman",
     "ekf",
     "robotlocalization"
-   ]
+   ],
+   "weiter": false
   }
- ]
+ ],
+ "anwendungen": []
 }
 </script>
 <script>
 const DATA = JSON.parse(document.getElementById("kartendaten").textContent);
-const BASE = DATA.kurs.basis;
+const KURS = DATA.kurs;
+const BASE = KURS.basis;
 const LECTURES = DATA.vorlesungen.map(v => {
   const [y, m, d] = v.datum.split("-");
-  return { nr: String(v.vl).padStart(2, "0"), label: v.label, iso: v.datum, date: `${d}.${m}.${String(y).slice(2)}`, short: v.kurz, file: v.datei, status: v.status, sections: v.abschnitte, block: v.block };
+  return { key: v.key, label: v.label, typ: v.typ, iso: v.datum, date: `${d}.${m}.`, short: v.kurz, frage: v.leitfrage, frei: v.freigegeben !== false,
+           file: v.datei, pdf: v.pdf, status: v.status, sections: v.abschnitte, block: v.block, uses: v.anwendet || [] };
 });
+const statusText = (l) => (KURS.status || {})[l.status] ?? (l.status === "ausgearbeitet" ? "" : "in Vorbereitung");
 // Aktueller Termin: der letzte, dessen Datum erreicht ist (vor Semesterbeginn: der erste)
 const TODAY = new Date().toISOString().slice(0, 10);
 document.getElementById("here").max = LECTURES.length - 1;
 const HERE_TODAY = Math.max(0, LECTURES.filter(l => l.iso <= TODAY).length - 1);
 const BEFORE_START = TODAY < LECTURES[0].iso;
-const PHASES = DATA.phasen.map(p => ({ from: p.von, to: p.bis, name: p.name, v: p.farbe }));
-const LINES = DATA.linien.map(l => ({ id: l.id, name: l.name, v: "--l-" + l.id }));
+const PHASES = DATA.phasen.map(p => ({ from: p.von, to: p.bis, name: p.name, v: "--" + p.farbe }));
+const LINES = DATA.linien.map(l => ({ id: l.id, name: l.name, v: "--" + l.farbe }));
+// Spalten des Rasters: nur Termintypen, die im Kurs vorkommen
+const SPALTEN = (KURS.spalten || [["VL", "Vorlesung"]]).filter(([t]) => LECTURES.some(l => l.typ === t));
 const THREADV = ["--t1", "--t2", "--t3", "--t4", "--t5", "--t6"];
-const THREADS = DATA.faeden.map((f, i) => ({ id: f.id, name: f.name, text: f.beschreibung, st: f.stationen, v: THREADV[i] }));
+const THREADS = DATA.faeden.map((f, i) => ({ id: f.id, name: f.name, text: f.beschreibung, st: f.stationen, weiter: f.weiter, v: THREADV[i] }));
 const ALL = DATA.begriffe.map(b => ({ id: b.id, name: b.name, line: b.linie, vl: b.vl, sec: b.abschnitt, level: b.ebene, code: b.code, text: b.erklaerung, mis: b.fehlvorstellung }));
 const EDGES = DATA.beziehungen.map(r => [r.von, r.nach, r.text]);
 const byId = Object.fromEntries(ALL.map(n => [n.id, n]));
+// Anwendungen: konkrete Beispielschaltungen und -programme, die mehrere Begriffe nutzen
+const APPS = (DATA.anwendungen || []).map(a => ({ id: a.id, name: a.titel, fach: a.fach, vl: a.vl, sec: a.abschnitt, data: a.datensatz, uses: a.schlagworte, from: a.herkunft }));
+const byApp = Object.fromEntries(APPS.map(a => [a.id, a]));
+const appsOf = {};
+APPS.forEach(a => a.uses.forEach(k => (appsOf[k] = appsOf[k] || []).push(a)));
 const lineById = Object.fromEntries(LINES.map(l => [l.id, l]));
 const threadById = Object.fromEntries(THREADS.map(t => [t.id, t]));
 const threadsOf = {};
@@ -3549,14 +3892,19 @@ const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v
 const reduce = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 const narrow = () => matchMedia("(max-width: 980px)").matches;
-const state = { mode: "metro", here: HERE_TODAY, view: "nb", detail: false, sel: null, thread: null, hidden: new Set() };
+// Begriffe erscheinen erst nach ihrer Vorlesung (Freigabe); „Ausblick“ zeigt die vorbereiteten blass
+const sichtbar = (n) => n && (state.ausblick || LECTURES[n.vl].frei);
+// Vorschau „keine“: nicht Freigegebenes steht gar nicht in den Daten, der Schalter Ausblick entfällt
+const VORSCHAU = KURS.vorschau !== "keine";
+const state = { mode: narrow() ? "liste" : (KURS.start_ansicht || "metro"), here: HERE_TODAY, view: "nb", detail: false, ausblick: VORSCHAU && !LECTURES.some(l => l.frei), sel: null, thread: null, hidden: new Set() };
 try {
-  const saved = JSON.parse(localStorage.getItem(DATA.kurs.speicher) || "{}");
+  const saved = JSON.parse(localStorage.getItem(KURS.speicher) || "{}");
   if (typeof saved.detail === "boolean") state.detail = saved.detail;
-  if (["metro", "zeit"].includes(saved.mode)) state.mode = saved.mode;
+  if (VORSCHAU && typeof saved.ausblick === "boolean") state.ausblick = saved.ausblick;
+  if (["liste", "metro", "zeit"].includes(saved.mode)) state.mode = saved.mode;
 } catch (e) {}
 // „Sie sind hier“ wird bewusst nicht gespeichert: Es folgt immer dem Datum.
-function save() { try { localStorage.setItem(DATA.kurs.speicher, JSON.stringify({ detail: state.detail, mode: state.mode })); } catch (e) {} }
+function save() { try { localStorage.setItem(KURS.speicher, JSON.stringify({ detail: state.detail, mode: state.mode, ausblick: state.ausblick })); } catch (e) {} }
 
 const TOP = 108;
 let SIDE = 150, COL = 118, W = 0, H = 0, pos = {}, shown = [], laneY = {}, trackY = {};
@@ -3584,7 +3932,7 @@ function setSize() {
 function layoutZeit() {
   COL = 118;
   const ROW = 30, PAD = 18;
-  shown = ALL.filter(n => !state.hidden.has(n.line) && (state.detail || n.level === 1 || n.id === state.sel));
+  shown = ALL.filter(n => sichtbar(n) && !state.hidden.has(n.line) && (state.detail || n.level === 1 || n.id === state.sel));
   const count = {};
   shown.forEach(n => { const k = n.line + "|" + n.vl; count[k] = (count[k] || 0) + 1; });
   let y = TOP;
@@ -3611,7 +3959,7 @@ function layoutMetro() {
   trackY = {};
   THREADS.forEach((t, i) => trackY[t.id] = TOP + 40 + i * TRACK);
   H = TOP + 40 + THREADS.length * TRACK + 10;
-  const ids = [...new Set(THREADS.flatMap(t => t.st))];
+  const ids = [...new Set(THREADS.flatMap(t => t.st))].filter(id => sichtbar(byId[id]));
   shown = ids.map(id => byId[id]);
   pos = {};
   for (let v = 0; v < LECTURES.length; v++) {
@@ -3658,11 +4006,11 @@ function drawBackground() {
     el("text", { x: x + 8, y: 46, class: "col-head" }, gBack).textContent = l.label;
     el("text", { x: x + 8, y: 62, class: "col-date" }, gBack).textContent = l.date;
     el("text", { x: x + 8, y: 78, class: "col-short" }, gBack).textContent = l.short;
-    if (l.status !== "ausgearbeitet") el("text", { x: x + 8, y: 94, class: "col-status" }, gBack).textContent = l.status === "Bestand" ? "Bestand 25/26" : "in Planung";
+    if (statusText(l)) el("text", { x: x + 8, y: 94, class: "col-status" }, gBack).textContent = statusText(l);
   });
   const hx = COL * state.here;
   el("rect", { x: hx, y: 24, width: COL, height: H - 24, class: "here-band" }, gBack);
-  el("text", { x: hx + COL - 8, y: H - 10, "text-anchor": "end", class: "here-tag" }, gBack).textContent = "▲ Sie sind hier";
+  el("text", { x: hx + COL - 8, y: 32, "text-anchor": "end", class: "here-tag" }, gBack).textContent = "▼ Sie sind hier";
   side.innerHTML = "";
   el("rect", { x: 0, y: 0, width: SIDE, height: H, fill: css("--surface") }, side);
   el("line", { x1: SIDE - 0.5, y1: 0, x2: SIDE - 0.5, y2: H, stroke: css("--faint") }, side);
@@ -3738,7 +4086,8 @@ function drawMetro() {
   const selThreads = state.sel ? (threadsOf[state.sel] || []) : [];
   const active = state.thread ? [state.thread] : selThreads;
   THREADS.forEach(t => {
-    const pts = t.st.map(s => pos[s]);
+    const pts = t.st.filter(s => pos[s]).map(s => pos[s]);
+    if (!pts.length) return;
     let d = `M${pts[0].x - 18},${pts[0].y} L${pts[0].x},${pts[0].y}`;
     for (let i = 1; i < pts.length; i++) d += octi(pts[i - 1], pts[i]);
     const last = pts[pts.length - 1];
@@ -3766,15 +4115,80 @@ function drawMetro() {
 }
 
 
+/* ---------- Raster: Blöcke × Wochen × Termintypen ---------- */
+function chip(n) {
+  return `<button data-id="${n.id}" class="${n.level === 2 ? "detail" : ""}${n.code ? " code" : ""}" aria-pressed="${n.id === state.sel}"><i style="background:${css(lineById[n.line].v)}"></i><span class="n">${n.name}</span></button>`;
+}
+function kachel(lec, v) {
+  const items = ALL.filter(n => n.vl === v && sichtbar(n) && !state.hidden.has(n.line) && (state.detail || n.level === 1 || n.id === state.sel))
+    .sort((a, b) => a.level - b.level || a.sec - b.sec);
+  const uses = lec.uses.map(k => byId[k]).filter(n => n && sichtbar(n) && !state.hidden.has(n.line));
+  const apps = APPS.filter(a => a.vl === v && sichtbar(a));
+  const tag = v === state.here
+    ? (BEFORE_START && v === HERE_TODAY ? `<span class="tag">Start am ${lec.date}</span>` : `<span class="tag">Sie sind hier</span>`)
+    : statusText(lec) ? `<span class="tag muted">${statusText(lec)}</span>` : "";
+  const begriffe = !lec.frei && !state.ausblick ? vorbereitetHinweis(v)
+    : !ALL.some(n => n.vl === v) ? ""
+    : `<div class="chips${lec.frei ? "" : " vorschau"}">${items.map(chip).join("") || '<span class="hint">keine Begriffe in den gewählten Gebieten</span>'}</div>`;
+  return `<div class="kachel${v === state.here ? " now" : v > state.here ? " future" : ""}${lec.file ? "" : " ohne"}" data-vl="${v}">
+    <div class="vlhead"><b>${lec.label}</b><span class="s">${lec.short}</span><span class="d">${lec.date}</span>${tag}
+      ${lec.file ? `<a href="${BASE + lec.file}" target="_blank" rel="noopener">Folien ↗</a>` : ""}${lec.pdf ? `<a class="pdf" href="${lec.pdf}" target="_blank" rel="noopener" title="Lehrbuchfassung zum Ausdrucken; Quizze und Code laufen nur in den Folien">PDF ↗</a>` : ""}</div>
+    ${lec.frage ? `<div class="frage">${lec.frage}</div>` : ""}
+    ${begriffe}
+    ${uses.length ? `<div class="chips apps"><span class="apps-lbl">wendet an</span>${uses.map(chip).join("")}</div>` : ""}
+    ${apps.length ? `<div class="chips apps"><span class="apps-lbl">Anwendungen</span>${apps.map(a => `<button data-id="${a.id}" aria-pressed="${a.id === state.sel}"><span class="n">${a.name}</span><span class="fach">${a.fach}</span></button>`).join("")}</div>` : ""}
+  </div>`;
+}
+function drawListe() {
+  const box = $("#liste");
+  const mehr = SPALTEN.length > 1;
+  box.classList.toggle("spalten", mehr);
+  box.style.setProperty("--n", SPALTEN.length);
+  box.innerHTML = PHASES.map(p => {
+    const idx = LECTURES.map((_, i) => i).filter(i => i >= p.from && i <= p.to);
+    const wochen = [...new Set(idx.map(i => LECTURES[i].iso))];
+    const kopf = mehr ? `<span class="rh">${KURS.woche || "Woche ab"}</span>${SPALTEN.map(([, name]) => `<span class="rh">${name}</span>`).join("")}` : "";
+    const zeilen = wochen.map(w => {
+      const now = LECTURES[state.here].iso === w;
+      const zellen = SPALTEN.map(([t]) => `<div class="zelle">${idx.filter(i => LECTURES[i].iso === w && LECTURES[i].typ === t).map(i => kachel(LECTURES[i], i)).join("")}</div>`).join("");
+      return mehr ? `<span class="wk${now ? " now" : ""}">${LECTURES.find(l => l.iso === w).date}</span>${zellen}` : zellen;
+    }).join("");
+    return `<section class="block"><h2 style="--blk:var(${p.v})">${p.name}</h2><div class="raster">${kopf}${zeilen}</div></section>`;
+  }).join("");
+  box.querySelectorAll("button[data-ausblick]").forEach(b => b.addEventListener("click", () => { state.ausblick = true; save(); render(); }));
+  box.querySelectorAll(".chips button").forEach(b => b.addEventListener("click", () => {
+    if (state.sel === b.dataset.id && narrow()) { state.sel = null; render(); return; }
+    select(b.dataset.id);
+    if (narrow()) $("#panel").scrollIntoView({ block: "nearest", behavior: reduce() ? "auto" : "smooth" });
+  }));
+}
+function plural(n, eins, viele) { return `${n} ${n === 1 ? eins : viele}`; }
+function vorbereitetHinweis(v) {
+  const n = ALL.filter(b => b.vl === v).length;
+  return n ? `<button class="vorbereitet" data-ausblick="1">${plural(n, "Begriff", "Begriffe")} vorbereitet – ${KURS.freigabe}. <u>Ausblick einschalten</u></button>`
+           : `<div class="hint">${KURS.folgen}</div>`;
+}
+function placePanel() {
+  const panel = $("#panel"), stage = $(".stage");
+  const inline = state.mode === "liste" && narrow() && state.sel;
+  if (inline) {
+    const k = $(`#liste .kachel[data-vl="${(byId[state.sel] || byApp[state.sel]).vl}"]`);
+    if (k && panel.parentNode !== k) k.appendChild(panel);
+  } else if (panel.parentNode !== stage) stage.appendChild(panel);
+  panel.hidden = state.mode === "liste" && narrow() && !state.sel;
+}
 function defaultSel() {
-  const cand = ALL.filter(n => n.level === 1 && n.vl === state.here && (state.mode !== "metro" || threadsOf[n.id]));
+  const cand = ALL.filter(n => sichtbar(n) && n.level === 1 && n.vl <= state.here && (state.mode !== "metro" || threadsOf[n.id])).sort((a, b) => b.vl - a.vl);
   return cand.length ? cand[0].id : null;
 }
 
 /* ---------- Seitenfeld ---------- */
-function relItem(r, arrow) {
-  const m = byId[r.id];
-  return `<li><button data-id="${r.id}">${arrow} <span class="t">${m.name}</span> <span class="v">${r.t} · ${LECTURES[m.vl].label}</span></button></li>`;
+// Beziehung als Satz: „A <Text> B“, der andere Begriff ist anklickbar
+function relItem(r, n) {
+  const m = byId[r.id], vl = `<span class="v"> · ${LECTURES[m.vl].label}</span>`;
+  return r.dir === "out"
+    ? `<li><button class="satz" data-id="${r.id}"><span class="s">${n.name} ${r.t}</span> <span class="t">${m.name}</span>${vl}</button></li>`
+    : `<li><button class="satz" data-id="${r.id}"><span class="t">${m.name}</span> <span class="s">${r.t} ${n.name}</span>${vl}</button></li>`;
 }
 function renderPanel() {
   const p = $("#panel");
@@ -3789,34 +4203,52 @@ function renderPanel() {
     p.querySelectorAll(".rels button").forEach(b => b.addEventListener("click", () => select(b.dataset.id, true)));
     return;
   }
+  const app = byApp[state.sel];
+  if (app) {
+    const lec = LECTURES[app.vl];
+    p.innerHTML = `
+      <h2>${app.name}</h2>
+      <div class="meta"><span class="chip">Anwendung · ${app.fach}</span><span>${lec.label} · ${lec.date}</span></div>
+      <p><strong>${KURS.anwendung_daten}:</strong> ${app.data}</p>
+      <h3>Nutzt die Begriffe</h3>
+      <ul class="rels">${app.uses.map(k => `<li><button data-id="${k}"><span class="t">${byId[k].name}</span> <span class="v">${LECTURES[byId[k].vl].label}</span></button></li>`).join("")}</ul>
+      <div class="goto">
+        <span class="hint">Abschnitt ${app.sec}: ${lec.sections[app.sec - 1] || ""}</span>
+        <a class="golink" href="${BASE + lec.file}#${app.sec}" target="_blank" rel="noopener">Zu ${lec.label}, Abschnitt ${app.sec} ↗</a>
+      </div>`;
+    p.querySelectorAll(".rels button").forEach(b => b.addEventListener("click", () => select(b.dataset.id, true)));
+    return;
+  }
   const n = byId[state.sel];
   if (!n) { p.innerHTML = '<p class="hint">Wählen Sie eine Station oder einen Faden.</p>'; return; }
   const l = lineById[n.line], lec = LECTURES[n.vl];
   const status = n.vl < state.here ? "bereits behandelt" : n.vl === state.here ? (BEFORE_START && state.here === HERE_TODAY ? "erster Termin" : "diese Woche") : "kommt noch";
-  const back = nbs[n.id].filter(r => r.dir === "in").sort((a, b) => byId[a.id].vl - byId[b.id].vl);
-  const fwd = nbs[n.id].filter(r => r.dir === "out").sort((a, b) => byId[a.id].vl - byId[b.id].vl);
+  const rels = nbs[n.id].filter(r => sichtbar(byId[r.id])).sort((a, b) => byId[a.id].vl - byId[b.id].vl);
+  const back = rels.filter(r => byId[r.id].vl < n.vl), same = rels.filter(r => byId[r.id].vl === n.vl), fwd = rels.filter(r => byId[r.id].vl > n.vl);
   const ths = threadsOf[n.id] || [];
-  const threadHtml = ths.length ? `<h3>${ths.length > 1 ? "Umsteigestation" : "Auf dem Faden"}</h3><ul class="rels threads">${ths.map(tid => {
-    const t = threadById[tid], k = t.st.indexOf(n.id), pv = t.st[k - 1], nx = t.st[k + 1];
+  const threadHtml = ths.length ? `<h3>${ths.length > 1 ? "Liegt auf mehreren Fäden" : "Liegt auf dem Faden"}</h3><ul class="rels threads">${ths.map(tid => {
+    const t = threadById[tid], st = t.st.filter(x => sichtbar(byId[x])), k = st.indexOf(n.id), pv = st[k - 1], nx = st[k + 1];
     return `<li><span class="tname"><i style="background:${css(t.v)}"></i>${t.name}</span>
       <span class="hop">${pv ? `<button data-id="${pv}">← ${byId[pv].name}</button>` : `<span class="v">Anfang</span>`}
-      ${nx ? `<button data-id="${nx}">${byId[nx].name} →</button>` : `<span class="v">Endstation</span>`}</span></li>`;
+      ${nx ? `<button data-id="${nx}">${byId[nx].name} →</button>` : `<span class="v">${t.weiter || t.st.indexOf(n.id) < t.st.length - 1 ? "Fortsetzung folgt" : "Endstation"}</span>`}</span></li>`;
   }).join("")}</ul>` : "";
   p.innerHTML = `
     <h2 class="${n.code ? "code" : ""}">${n.name}</h2>
     <div class="meta">
       <span class="chip"><i style="background:${css(l.v)}"></i>${l.name}</span>
-      <span class="chip">${n.level === 1 ? "Kernbegriff" : "Detailbegriff"}</span>
+      <span class="chip" title="${n.level === 1 ? "Sollten Sie in einem Satz erklären können" : "Ergänzt einen Kernbegriff"}">${n.level === 1 ? "Kernbegriff" : "Detailbegriff"}</span>
       <span>${lec.label} · ${lec.date} · ${status}</span>
     </div>
     <p>${n.text}</p>
     ${n.mis ? `<div class="misc"><strong>Typische Fehlvorstellung</strong>${n.mis}</div>` : ""}
     ${threadHtml}
-    ${back.length ? `<h3>Baut auf</h3><ul class="rels">${back.map(r => relItem(r, "←")).join("")}</ul>` : ""}
-    ${fwd.length ? `<h3>Führt weiter zu</h3><ul class="rels">${fwd.map(r => relItem(r, "→")).join("")}</ul>` : ""}
+    ${back.length ? `<h3>Aus früheren ${KURS.einheiten_dat}</h3><ul class="rels">${back.map(r => relItem(r, n)).join("")}</ul>` : ""}
+    ${same.length ? `<h3>${KURS.gleich}</h3><ul class="rels">${same.map(r => relItem(r, n)).join("")}</ul>` : ""}
+    ${fwd.length ? `<h3>Später im Kurs</h3><ul class="rels">${fwd.map(r => relItem(r, n)).join("")}</ul>` : ""}
+    ${(appsOf[n.id] || []).filter(sichtbar).length ? `<h3>Kommt vor in</h3><ul class="rels">${appsOf[n.id].filter(sichtbar).map(a => `<li><button data-id="${a.id}"><span class="t">${a.name}</span> <span class="v">${a.fach} · ${LECTURES[a.vl].label}</span></button></li>`).join("")}</ul>` : ""}
     <div class="goto">
-      ${lec.file && n.sec ? `<span class="hint">Eingeführt in Abschnitt ${n.sec}: ${lec.sections[n.sec - 1] || ""}${lec.status === "Bestand" ? " — Material aus 2025/26, wird überarbeitet" : lec.status !== "ausgearbeitet" ? " — in Vorbereitung" : ""}</span>
-      <a class="golink" href="${BASE + lec.file}#${n.sec}" target="_blank" rel="noopener">Zu ${lec.label}, Abschnitt ${n.sec} ↗</a>` : `<span class="hint">Kommt in ${lec.label} — Material folgt.</span>`}
+      ${lec.file && n.sec ? `<span class="hint">Eingeführt in Abschnitt ${n.sec}: ${lec.sections[n.sec - 1] || ""}${statusText(lec) ? " — " + statusText(lec) : ""}</span>
+      <a class="golink" href="${BASE + lec.file}#${n.sec}" target="_blank" rel="noopener">Zu ${lec.label}, Abschnitt ${n.sec} ↗</a>` : `<span class="hint">Material zu ${lec.label} folgt.</span>`}
     </div>`;
   p.querySelectorAll(".rels button, .hop button").forEach(b => b.addEventListener("click", () => select(b.dataset.id, true)));
 }
@@ -3824,6 +4256,11 @@ function renderPanel() {
 function select(id, scroll) {
   state.sel = id;
   state.thread = null;
+  if (byApp[id]) {               // Anwendungen gibt es nur in der Ansicht „Vorlesungen“
+    if (state.mode !== "liste") { state.mode = "liste"; save(); }
+    render();
+    return;
+  }
   state.hidden.delete(byId[id].line);
   if (state.mode === "metro" && !threadsOf[id]) { state.mode = "zeit"; save(); }
   render();
@@ -3833,13 +4270,18 @@ function select(id, scroll) {
   }
 }
 
-function renderLegend() {
+const LEGEND_HINT = {
+  metro: `Faden anklicken, um ihn hervorzuheben (spätere ${KURS.einheiten}: seitlich scrollen):`,
+  zeit: `Themengebiete ein- und ausblenden (spätere ${KURS.einheiten}: seitlich scrollen):`,
+  liste: "Themengebiete ein- und ausblenden:",
+};
+function fillLegend(mode) {
   const lg = $("#legend");
   lg.innerHTML = "";
-  const items = state.mode === "metro" ? THREADS : LINES;
+  const items = mode === "metro" ? THREADS : LINES;
   items.forEach(it => {
     const b = document.createElement("button");
-    const on = state.mode === "metro" ? (!state.thread || state.thread === it.id) : !state.hidden.has(it.id);
+    const on = mode === "metro" ? (!state.thread || state.thread === it.id) : !state.hidden.has(it.id);
     b.setAttribute("aria-pressed", String(on));
     b.innerHTML = `<span class="swatch" style="background:${css(it.v)}"></span>${it.name}`;
     b.addEventListener("click", () => {
@@ -3849,7 +4291,16 @@ function renderLegend() {
     });
     lg.appendChild(b);
   });
-  $("#legendHint").textContent = state.mode === "metro" ? "Faden anklicken, um ihn hervorzuheben:" : "Themengebiete ein- und ausblenden:";
+  $("#legendHint").textContent = LEGEND_HINT[mode];
+}
+function renderLegend() {
+  // Platz für die höchste Variante freihalten, damit der Inhalt beim Wechsel der Ansicht nicht springt
+  const row = $(".legendrow");
+  row.style.minHeight = "";
+  let h = 0;
+  for (const m of Object.keys(LEGEND_HINT)) { fillLegend(m); h = Math.max(h, row.offsetHeight); }
+  fillLegend(state.mode);
+  row.style.minHeight = h + "px";
 }
 
 function render() {
@@ -3857,30 +4308,47 @@ function render() {
   $("#hereVal").textContent = `${lec.label} · ${lec.date}`;
   $("#here").value = state.here;
   $("#today").hidden = state.here === HERE_TODAY;
-  const pressed = [["mMetro", state.mode === "metro"], ["mZeit", state.mode === "zeit"], ["vNb", state.view === "nb"], ["vAll", state.view === "all"], ["eKern", !state.detail], ["eAlle", state.detail]];
+  $("#ctlAusblick").hidden = !VORSCHAU;
+  const pressed = [["mListe", state.mode === "liste"], ["mMetro", state.mode === "metro"], ["mZeit", state.mode === "zeit"], ["vNb", state.view === "nb"], ["vAll", state.view === "all"], ["eKern", !state.detail], ["eAlle", state.detail], ["ausAus", !state.ausblick], ["ausAn", state.ausblick]];
   for (const [id, on] of pressed) $("#" + id).setAttribute("aria-pressed", String(on));
-  $("#ctlLevel").hidden = state.mode === "metro";
-  $("#ctlEdges").hidden = state.mode !== "zeit";
-  const nStations = new Set(THREADS.flatMap(t => t.st)).size;
+  // Bedienelemente bleiben in allen Ansichten stehen (sonst springt der Kopf); was nicht gilt, wird ausgegraut
+  const aus = (sel, off, hint) => {
+    const c = $(sel); c.classList.toggle("off", off);
+    c.querySelectorAll("button").forEach(b => { b.disabled = off; });
+    if (off) c.title = hint; else c.removeAttribute("title");
+  };
+  aus("#ctlLevel", state.mode === "metro", `Wirkt in den Ansichten ${$("#mListe").textContent} und Zeitleiste`);
+  aus("#ctlEdges", state.mode !== "zeit", "Wirkt nur in der Zeitleiste");
+  $("#mapwrap").hidden = state.mode === "liste";
+  $("#liste").hidden = state.mode !== "liste";
+  const vis = ALL.filter(sichtbar);
+  const nVisSt = [...new Set(THREADS.flatMap(t => t.st))].filter(id => sichtbar(byId[id])).length;
+  const nFrei = LECTURES.filter(l => l.frei).length, nFreiB = ALL.filter(n => LECTURES[n.vl].frei).length;
   $("#count").textContent = state.mode === "metro"
-    ? `${THREADS.length} Fäden · ${nStations} Stationen`
-    : state.detail ? `${ALL.length} Begriffe · ${EDGES.length} Beziehungen` : `${ALL.filter(n => n.level === 1).length} Kernbegriffe von ${ALL.length}`;
-  if (state.mode === "metro") layoutMetro(); else layoutZeit();
-  setSize();
-  drawBackground();
-  if (state.mode === "metro") drawMetro(); else drawZeit();
-  renderPanel(); renderLegend();
+    ? `${plural(nVisSt, "Begriff", "Begriffe")} auf ${plural(THREADS.length, "Faden", "Fäden")} ${state.ausblick ? "(mit Ausblick)" : "freigeschaltet"}`
+    : `${plural(nFreiB, "Begriff", "Begriffe")} aus ${plural(nFrei, KURS.einheit, KURS.einheiten_dat)}` + (ALL.length > nFreiB ? ` · ${ALL.length - nFreiB} weitere vorbereitet` : "");
+  if (state.mode === "liste") drawListe();
+  else {
+    if (state.mode === "metro") layoutMetro(); else layoutZeit();
+    setSize();
+    drawBackground();
+    if (state.mode === "metro") drawMetro(); else drawZeit();
+  }
+  placePanel(); renderPanel(); renderLegend();
 }
 
 $("#here").addEventListener("input", (e) => {
   state.here = +e.target.value; render();
+  if (state.mode === "liste") return;
   const box = $("#mapbox"), hx = COL * state.here;
   if (hx < box.scrollLeft || hx + COL > box.scrollLeft + box.clientWidth) box.scrollLeft = hx - box.clientWidth / 2;
 });
 function scrollToHere() {
+  if (state.mode === "liste") { const now = $(`#liste .kachel[data-vl="${state.here}"]`); if (now && state.here > 0) now.scrollIntoView({ block: "center" }); return; }
   const box = $("#mapbox"), hx = COL * state.here;
   box.scrollLeft = hx + COL > box.clientWidth ? hx - box.clientWidth / 2 : 0;
 }
+$("#mListe").addEventListener("click", () => { state.mode = "liste"; state.thread = null; save(); render(); });
 $("#mMetro").addEventListener("click", () => { state.mode = "metro"; if (!state.sel || !threadsOf[state.sel]) state.sel = defaultSel(); save(); render(); scrollToHere(); });
 $("#mZeit").addEventListener("click", () => { state.mode = "zeit"; state.thread = null; if (!state.sel) state.sel = defaultSel(); save(); render(); scrollToHere(); });
 $("#today").addEventListener("click", () => { state.here = HERE_TODAY; render(); scrollToHere(); });
@@ -3888,19 +4356,37 @@ $("#vNb").addEventListener("click", () => { state.view = "nb"; render(); });
 $("#vAll").addEventListener("click", () => { state.view = "all"; render(); });
 $("#eKern").addEventListener("click", () => { state.detail = false; save(); render(); });
 $("#eAlle").addEventListener("click", () => { state.detail = true; save(); render(); });
+$("#ausAus").addEventListener("click", () => { state.ausblick = false; if (state.sel && !sichtbar(byId[state.sel] || byApp[state.sel])) state.sel = defaultSel(); save(); render(); });
+$("#ausAn").addEventListener("click", () => { state.ausblick = true; save(); render(); });
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", render);
 new MutationObserver(render).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
+try {
+  const z = localStorage.getItem(KURS.speicher + "-intro");
+  $("#intro").open = z ? z === "auf" : !narrow();
+} catch (e) { $("#intro").open = !narrow(); }
+$("#intro").addEventListener("toggle", () => { try { localStorage.setItem(KURS.speicher + "-intro", $("#intro").open ? "auf" : "zu"); } catch (e) {} });
+if (!(state.mode === "liste" && narrow())) state.sel = defaultSel();
 // Direktlink aus den Materialien: #termin=<key> setzt „Sie sind hier“, #begriff=<id> wählt einen Begriff
 const LINK = new URLSearchParams(location.hash.slice(1));
-const KEYS = DATA.vorlesungen.map(v => v.key);
+const KEYS = LECTURES.map(l => String(l.key));
 if (KEYS.includes(LINK.get("termin"))) state.here = KEYS.indexOf(LINK.get("termin"));
-state.sel = defaultSel();
-if (byId[LINK.get("begriff")]) { state.sel = LINK.get("begriff"); if (byId[state.sel].level > 1) state.detail = true; }
+const ANSICHT = { termine: "liste", vorlesungen: "liste", liste: "liste", metro: "metro", metrokarte: "metro", zeit: "zeit", zeitleiste: "zeit" }[LINK.get("ansicht")];
+if (ANSICHT) state.mode = ANSICHT;
+const ziel = byId[LINK.get("begriff")] || byApp[LINK.get("begriff")];
+if (ziel) {
+  state.sel = ziel.id;
+  if (!sichtbar(ziel)) state.ausblick = true;        // noch nicht freigegeben: blass zeigen statt ins Leere führen
+  if (ziel.level > 1) state.detail = true;
+  if (byApp[ziel.id]) state.mode = "liste";
+  else if (state.mode === "metro" && !threadsOf[ziel.id]) state.mode = "zeit";
+}
 let lastW = innerWidth;  // nur auf Breitenänderung reagieren (mobile Adressleiste ändert die Höhe)
 addEventListener("resize", () => { if (innerWidth === lastW) return; lastW = innerWidth; clearTimeout(window._rs); window._rs = setTimeout(render, 150); });
 render();
 scrollToHere();
+if (ziel && state.mode !== "liste" && pos[ziel.id]) { const box = $("#mapbox"); box.scrollLeft = Math.max(0, pos[ziel.id].x - box.clientWidth / 2); }
+else if (ziel && state.mode === "liste") { const k = $(`#liste .kachel[data-vl="${ziel.vl}"]`); if (k) k.scrollIntoView({ block: "center" }); }
 </script>
 </body>
 </html>

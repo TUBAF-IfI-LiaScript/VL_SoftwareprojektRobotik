@@ -761,6 +761,8 @@ Der Nachrichtentyp liegt in einem eigenen Paket, damit Ampelerkennung und Fahrve
 
 --------------------------------------------------------------------------------
 
-**🗺️ Nächster Halt:** Ü 2 · ROS 2 Werkzeuge (Woche ab 9.11.2026) – Sie untersuchen, konfigurieren und zeichnen ein laufendes ROS-2-System auf – genau das tun Sie in P 1 am Roboter. [Auf der Kurslandkarte ansehen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=ue2)
+**🗺️ Nächster Halt:** VL 4 · Koordinaten + QoS (Woche ab 9.11.2026) – Der TurtleBot weiß, wo seine Sensoren sitzen, und seine Daten kommen beim Empfänger an – sonst bleibt RViz leer. [Auf der Kurslandkarte ansehen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=02)
+
+**Außerdem bis dahin:** [Ü 2 · ROS 2 Werkzeuge](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=ue2) (Woche ab 9.11.2026)
 
 <!-- kurslandkarte:ausblick-ende -->

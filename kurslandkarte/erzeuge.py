@@ -1,30 +1,61 @@
-"""Kurslandkarte Robotik: Daten und Seite erzeugen.
+"""Kurslandkarte Robotik: Kursdaten.
 
-Abschnitte (Foliennummern) werden automatisch aus den Materialien gelesen,
-Termine, Begriffe, Beziehungen und didaktische Fäden sind unten kuratiert.
+Termine, Begriffe, Beziehungen und didaktische Fäden sind hier kuratiert;
+Prüfung, Karte, Startseite und Orientierungsfolien erzeugt der gemeinsame
+Kern invivis Kurslandkarte (kurslandkarte/invivis/, nicht hier ändern).
 
 Aufruf aus dem Repository-Wurzelverzeichnis:
 
     python3 kurslandkarte/erzeuge.py
 
-Schreibt docs/kurslandkarte/kurslandkarte.json und docs/kurslandkarte/index.html und
-erneuert in jedem ausgearbeiteten Material die Abschnitte zwischen den Markierungen
-<!-- kurslandkarte:wo-start/-ende --> (Folie „Wo stehen wir?“) und
-<!-- kurslandkarte:ausblick-start/-ende --> (nächster Halt am Ende).
+Schreibt docs/kurslandkarte/ (Karte), docs/index.html (Startseite) und
+erneuert in jedem ausgearbeiteten Material die Abschnitte zwischen den
+Markierungen <!-- kurslandkarte:wo-… --> und <!-- kurslandkarte:ausblick-… -->.
 
 Autoren: Sebastian Zug & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent
 """
-import datetime, json, re, os
+import os, sys
 
 HIER = os.path.dirname(os.path.abspath(__file__))
-REPO = os.path.dirname(HIER)
-ZIEL = os.path.join(REPO, "docs", "kurslandkarte")
-STAND = datetime.date.today().strftime("%d.%m.%Y")
+sys.path.insert(0, os.path.join(HIER, "invivis"))
+import kern
 
 KURS = {
+    "titel": "Robotik",
+    "titel_lang": "Robotik – Vorlesung, Übung und Praktikum",
+    "name": "TU Bergakademie Freiberg · Robotik · WiSe 2026/27 und SoSe 2027",
+    "hochschule": "TU Bergakademie Freiberg",
+    "beschreibung": "Ein TurtleBot fährt autonom durch eine Miniatur-Verkehrswelt: Vorlesung, Übung und Praktikum führen Schritt für Schritt von ROS 2 über Sensorik und Objekterkennung bis zu Sensorfusion, Regelung und Navigation.",
     "basis": "https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/",
+    "pages": "https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/",
+    "repo": "https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik",
     "speicher": "robotik-map",
     "autoren": "Sebastian Zug & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent",
+    "feedback": 'Begriff fehlt oder ist unklar? Sagen Sie es im Termin oder im OPAL-Forum. <a href="https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/issues/new?title=Kurslandkarte%3A%20&amp;labels=kurslandkarte" target="_blank" rel="noopener">GitHub ↗</a>',
+    "einheit": "Termin", "einheiten": "Termine", "einheiten_dat": "Terminen", "gleich": "Im selben Termin",
+    "welche_einheit": "welchem Termin", "der_einheit": "dem Termin", "liste": "Termine",
+    "frage_label": "Ziel im Projekt", "vor_pruefung": "vor Übung und Praktikum",
+    "freigabe": "erscheinen nach dem Termin",
+    "folgen": "Die Begriffe dieses Termins folgen nach dem Termin.",
+    "freigabe_satz": "Nach jedem Termin kommen seine Begriffe dazu.",
+    "status": {"ausgearbeitet": "", "Bestand": "Bestand 2025/26", "geplant": "in Planung"},
+    "anwenden_text": "anwenden, nichts Neues – Ihre Arbeit hier ist die Prüfungsleistung",
+    "lernziele": [
+        # Entwurf aus Blöcken und Projektaufgabe – vom Dozenten durchzusehen
+        "eine Robotersoftware in ROS 2 aus Knoten, Topics, Services und Launch-Dateien aufbauen, starten und mit den ROS-2-Werkzeugen untersuchen,",
+        "Koordinatensysteme und Transformationen (tf2) aufstellen und Sensordaten des TurtleBots damit in ein gemeinsames Bezugssystem bringen,",
+        "Kamera- und LiDAR-Daten aufzeichnen, kalibrieren und auswerten – bis zur Spur- und Hinderniserkennung,",
+        "Messungen mehrerer Sensoren mit Bayes- und Kalman-Filtern zu einer Zustandsschätzung fusionieren,",
+        "Regelung, Kartierung und Navigation so kombinieren, dass ein TurtleBot autonom durch eine Verkehrswelt fährt.",
+    ],
+    "organisation": [
+        ("Formate", "Vorlesung (Konzepte), Übung (angeleitete Aufgaben am eigenen Rechner) und Praktikum (Gruppen zu 2–3 Personen am TurtleBot), je 90 Minuten"),
+        ("Zeitraum", "Wintersemester 2026/27 und Sommersemester 2027, sechs thematische Blöcke"),
+        ("Prüfung", "Die Prüfungsleistung erbringen Sie in den Praktika."),
+        ("Werkzeuge", "Ubuntu 24.04 (nativ oder WSL2), ROS 2 Jazzy, Python und C++"),
+    ],
+    "kontakt": 'Prof. Dr.-Ing. Sebastian Zug<br>Lehrstuhl für Softwaretechnologie und Robotik, TU Bergakademie Freiberg<br><a href="mailto:sebastian.zug@informatik.tu-freiberg.de">sebastian.zug@informatik.tu-freiberg.de</a>',
+    "lizenz": 'Lizenz: <a href="https://creativecommons.org/licenses/by/4.0/deed.de">CC BY 4.0</a>',
 }
 
 # ---- Termine nach dem vorläufigen Zeitplan (Zeitplan.ods, Ansatz 1; Datum = Montag der KW)
@@ -64,16 +95,6 @@ T = [
     ("p7",  "P 7",   "2027-05-31", "Parken + Abbiegen",   None, "geplant", 6),
     ("p8",  "P 8",   "2027-06-07", "Praktikum + X",       None, "geplant", 6),
 ]
-BLOECKE = {1: "Block 1 · ROS-Grundlagen", 2: "Block 2 · Sensorgrundlagen", 3: "Block 3 · Objekterkennung",
-           4: "Block 4 · Sensorfusion", 5: "Block 5 · Regelung & Navigation", 6: "Block 6 · Praktikum + X"}
-BLOCKFARBE = {1: "--phase-einstieg", 2: "--phase-grundlagen", 3: "--phase-analyse",
-              4: "--phase-einstieg", 5: "--phase-grundlagen", 6: "--phase-zaesur"}
-LINIEN = [
-    ("werkzeuge", "Linux & Werkzeuge"), ("ros", "ROS 2"), ("mathe", "Koordinaten & Modelle"),
-    ("wahrnehmung", "Sensorik & Wahrnehmung"), ("schaetzung", "Fusion & Schätzung"),
-    ("bewegung", "Regelung & Navigation"), ("projekt", "Projektaufgabe"),
-]
-assert [t[2] for t in T] == sorted(t[2] for t in T), "Termine nicht chronologisch"
 # Vorlesungen laufend nach Zeitplan nummerieren (VL 1, VL 2, …); die Ordnernummern
 # im Repo (03_…, 02_…) stammen aus der alten Reihenfolge und erscheinen nicht.
 _nr = 0
@@ -81,26 +102,26 @@ for _i, _t in enumerate(T):
     if _t[1] == "VL":
         _nr += 1
         T[_i] = (_t[0], f"VL {_nr}") + _t[2:]
-IDX = {t[0]: i for i, t in enumerate(T)}
 
-# ---- Abschnitte automatisch (LiaScript-Foliennummer = Position der Überschrift)
-def abschnitte(datei):
-    s = open(os.path.join(REPO, datei), encoding="utf-8").read()
-    s = s[s.find("-->") + 3:]
-    s = re.sub(r"^(`{3,4}).*?\n.*?\n\1", "", s, flags=re.S | re.M)
-    return [m.group(2).strip().replace("`", "") for m in re.finditer(r"^(#{1,6}) +(.+)$", s, re.M)]
-
-sections = {t[0]: abschnitte(t[4]) if t[4] else [] for t in T}
+BLOECKE = {1: ("Block 1 · ROS-Grundlagen", "ph1"), 2: ("Block 2 · Sensorgrundlagen", "ph2"),
+           3: ("Block 3 · Objekterkennung", "ph4"), 4: ("Block 4 · Sensorfusion", "ph1"),
+           5: ("Block 5 · Regelung & Navigation", "ph2"), 6: ("Block 6 · Praktikum + X", "ph3")}
+# Themengebiete: id, Name, Farbe aus der Palette des Kerns
+LINIEN = [
+    ("werkzeuge", "Linux & Werkzeuge", "c7"), ("ros", "ROS 2", "c1"), ("mathe", "Koordinaten & Modelle", "c2"),
+    ("wahrnehmung", "Sensorik & Wahrnehmung", "c4"), ("schaetzung", "Fusion & Schätzung", "c3"),
+    ("bewegung", "Regelung & Navigation", "c5"), ("projekt", "Projektaufgabe", "c6"),
+]
 
 # ---- Begriffe: id, Name, Linie, Termin-key, Abschnittstitel, Ebene, Code?, Erklärung, Fehlvorstellung
 B = [
     # --- VL 00 Einführung
     ("verkehrswelt", "Projektaufgabe Verkehrswelt", "projekt", "00", 'Unser Ziel: Autonomes Fahren im Miniaturformat', 1, 0, "Ein TurtleBot fährt autonom auf schwarzem Untergrund: Spur folgen, Ampeln und Schilder beachten, Fußgängern ausweichen, einparken.", None),
-    ("formate", "VL, Ü und P", "projekt", "00", 'Wie läuft die Veranstaltung ab?', 2, 0, "Vorlesung führt Konzepte ein, Übung festigt sie am eigenen Rechner, Praktikum setzt sie am TurtleBot um — je 90 Minuten.", None),
+    ("formate", "VL, Ü und P", "projekt", "00", 'Organisation', 2, 0, "Vorlesung führt Konzepte ein, Übung festigt sie am eigenen Rechner, Praktikum setzt sie am TurtleBot um — je 90 Minuten.", None),
     ("roboter", "Roboter", "wahrnehmung", "00", 'Was ist ein Roboter?', 1, 0, "Keine einheitliche Definition (VDI, RIA, JRA); unsere Arbeitsdefinition: Eine Maschine, die wahrnimmt, entscheidet und handelt — wiederholt und ohne dass ein Mensch jeden Schritt vorgibt.", "„Ein Roboter ist eine Maschine mit Armen.“"),
     ("klassifikation", "Klassifikation", "wahrnehmung", "00", 'Klassifikation von Robotersystemen', 2, 0, "Autonomie, Mobilität und Komplexität der Sensorik sind unabhängige Kriterien.", "„Mobil heißt autonom.“"),
     ("herausforderungen", "Herausforderungen", "bewegung", "00", 'Herausforderungen bei der Entwicklung mobiler Roboter', 2, 0, "Positionierung, Kartierung, Hinderniserkennung und Echtzeit — dazu wirtschaftliche und rechtliche Fragen.", None),
-    ("sta", "Sense-Think-Act", "bewegung", "00", 'Systemarchitektur: Das Sense-Think-Act-Paradigma', 1, 0, "Kreislauf aus Wahrnehmen, Entscheiden und Handeln; der Schritt Think gliedert sich in Handlungsplanung, Ausführung und reaktive Überwachung.", "„Sense, Think und Act sind drei übereinanderliegende Ebenen.“"),
+    ("sta", "Sense-Think-Act", "bewegung", "00", 'Systemarchitektur: Das Sense-Think-Act-Paradigma', 1, 0, "Kreislauf aus Wahrnehmen, Entscheiden und Handeln; hybride Architekturen gliedern ihn in drei Schichten: Handlungsplanung und Ausführung bilden Think, die schnelle reaktive Schicht setzt Messwerte direkt in Steuerbefehle um und gehört zu Act.", "„Sense, Think und Act sind drei übereinanderliegende Ebenen.“"),
     ("turtlebot", "TurtleBot 3 Burger", "projekt", "00", 'Sense-Think-Act am TurtleBot', 1, 0, "Unsere Plattform: RPLIDAR C1, Pi-Kamera, Raspberry Pi 3 B+, Differentialantrieb, maximal 0,22 m/s.", None),
     ("rosmotivation", "Warum ROS?", "ros", "00", 'Warum ROS? Das "Rad nicht neu erfinden"', 1, 0, "ROS 2 liefert Kommunikation, wiederverwendbare Pakete und Werkzeuge, damit nicht jedes Team alles neu baut.", "„ROS ist ein Betriebssystem.“"),
 
@@ -377,30 +398,6 @@ F = [
      ["sensorparam", "drift", "sensorfusion", "bayesfilter", "predictupdate", "kalman", "ekf", "robotlocalization"]),
 ]
 
-# ---- Prüfen
-ids = [b[0] for b in B]
-assert len(set(ids)) == len(ids), ("doppelte id", [i for i in ids if ids.count(i) > 1])
-term_of = {b[0]: IDX[b[3]] for b in B}
-for fid, _, _, st in F:
-    for x in st:
-        assert x in term_of, (fid, x)
-    for u, v in zip(st, st[1:]):
-        assert term_of[u] <= term_of[v], ("Faden nicht chronologisch", fid, u, v)
-for a, b, _ in R:
-    assert a in term_of and b in term_of, (a, b)
-linien = {l[0] for l in LINIEN}
-for b in B:
-    assert b[2] in linien, ("unbekannte Linie", b)
-
-def abschnitt_nr(key, titel):
-    if titel is None:
-        return 0  # Termin ohne Material: Abschnitt folgt
-    heads = sections[key]
-    if titel not in heads:
-        raise SystemExit(f"Abschnitt nicht gefunden: {key} »{titel}« — vorhanden: {heads}")
-    return heads.index(titel) + 1
-
-# ---- Terminkarte „Wo stehen wir?“ in den ausgearbeiteten Materialien
 # Ziel im Projekt je Termin (Entwurf, vom Dozenten durchzusehen)
 PROJEKTZIEL = {
     "00":  "Sie lernen die Projektaufgabe kennen: Ein TurtleBot soll autonom durch die Verkehrswelt fahren.",
@@ -436,7 +433,6 @@ PROJEKTZIEL = {
     "p7":  "Ihr TurtleBot parkt ein und biegt an Kreuzungen ab.",
     "p8":  "Ihr TurtleBot fährt autonom durch die Verkehrswelt – Abschluss der Projektaufgabe.",
 }
-assert set(PROJEKTZIEL) == set(IDX), set(IDX) ^ set(PROJEKTZIEL)
 # Praktika führen keine Begriffe ein, sie wenden an: welche Begriffe aus früheren Terminen?
 ANWENDUNG = {
     "p1": ["domainid", "tbtopics", "topiccli", "qoscompat", "tf2", "tftree", "rosbag"],
@@ -449,238 +445,12 @@ BRAUCHEN = {
     "04": ["source", "ros2cli", "message", "msgdef"],
     "06": ["frame", "homtrafo", "verkettung", "bildmatrix"],
 }
-for k, ids_ in list(ANWENDUNG.items()) + list(BRAUCHEN.items()):
-    for x in ids_:
-        assert x in term_of and term_of[x] < IDX[k], (k, x)
+# Begriffe eines Termins erscheinen in der Karte erst nach ihm (sonst nur mit „Ausblick“)
+FREIGEGEBEN = {"00"}
 
-KARTE_URL = "https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/"
-MARKE = {"wo": ("<!-- kurslandkarte:wo-start -->", "<!-- kurslandkarte:wo-ende -->"),
-         "aus": ("<!-- kurslandkarte:ausblick-start -->", "<!-- kurslandkarte:ausblick-ende -->")}
-name_of = {b[0]: b[1] for b in B}
-
-def datum(iso):
-    y, m, d = iso.split("-")
-    return f"{int(d)}.{int(m)}.{y}"
-
-def begriff_link(i, mit_termin=True):
-    t = T[term_of[i]]
-    zusatz = f" ({t[1]})" if mit_termin else ""
-    return f"[{name_of[i].replace('_', chr(92) + '_')}]({KARTE_URL}#begriff={i}){zusatz}"
-
-# Markierung des heutigen Termins: fett und farbig hinterlegt (LiaScript-Stilkommentar; GitHub zeigt nur fett)
-HEUTE = '<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" -->'
-
-def blocktabelle(key):
-    """Wochenraster des aktuellen Blocks: Zeilen = Wochen, Spalten = Vorlesung/Übung/Praktikum."""
-    blk = T[IDX[key]][6]
-    wochen = sorted({t[2] for t in T if t[6] == blk})
-    def zelle(t):
-        text = f"{t[1]} {t[3]}"
-        if t[4]:
-            text = f"[{text}]({KURS['basis']}{t[4]})"
-        return f"**{text}**{HEUTE}" if t[0] == key else text
-    z = ["<!-- data-type=\"none\" -->", "| Woche ab | Vorlesung | Übung | Praktikum |", "| :-- | :-- | :-- | :-- |"]
-    for w in wochen:
-        spalten = [[zelle(t) for t in T if t[2] == w and t[6] == blk and t[1].startswith(art)] for art in ("VL", "Ü", "P")]
-        tag = f"**{datum(w)}**{HEUTE}" if w == T[IDX[key]][2] else datum(w)
-        z.append(f"| {tag} | " + " | ".join("<br>".join(c) for c in spalten) + " |")
-    return z
-
-def wo_stehen_wir(key):
-    i = IDX[key]
-    t = T[i]
-    praktikum = t[1].startswith("P")
-    heute = [b[0] for b in B if b[3] == key and b[5] == 1]
-    if praktikum or key in BRAUCHEN:
-        brauchen = sorted((ANWENDUNG if praktikum else BRAUCHEN).get(key, []), key=lambda x: term_of[x])
-    else:
-        eigene = {b[0] for b in B if b[3] == key}
-        brauchen = []
-        for a, b_, _ in R:
-            if b_ in eigene and term_of[a] < i and a not in brauchen:
-                brauchen.append(a)
-        for _, _, _, st in F:
-            for u, v in zip(st, st[1:]):
-                if v in eigene and term_of[u] < i and u not in brauchen:
-                    brauchen.append(u)
-        brauchen = sorted(brauchen, key=lambda x: -term_of[x])[:5]
-        brauchen.sort(key=lambda x: term_of[x])
-
-    z = [MARKE["wo"][0], "", "## Wo stehen wir?", ""]
-    if t[1].startswith("VL"):
-        sprech = f"Kurz zur Orientierung. Wir sind in {BLOECKE[t[6]].split(' · ')[0]}, Termin {i + 1} von {len(T)}. {PROJEKTZIEL[key]}"
-        if heute:
-            sprech += " Neu sind heute: " + ", ".join(name_of[x] for x in heute) + "."
-        z += ["    --{{0}}--", sprech, ""]
-    z += [f"**Ziel im Projekt:** {PROJEKTZIEL[key]}", "",
-          f"**{BLOECKE[t[6]]}** – Termin {i + 1} von {len(T)}, heute farbig markiert", ""]
-    z += blocktabelle(key) + [""]
-    if brauchen:
-        z.append("- **Sie brauchen:** " + " · ".join(begriff_link(x) for x in brauchen))
-    elif i == 0:
-        z.append("- **Sie brauchen:** nichts – wir fangen an")
-    if praktikum:
-        z.append("- **Heute:** anwenden, nichts Neues – Ihre Arbeit hier ist die Prüfungsleistung")
-    elif heute:
-        z.append("- **Heute neu:** " + " · ".join(begriff_link(x, False) for x in heute))
-    z += ["", "> [!TIP]",
-          f"> **Tipp – Kurslandkarte:** [Ganze Kurslandkarte öffnen]({KARTE_URL}#termin={key}) – dort finden Sie jeden Begriff mit Erklärung, typischer Stolperfalle, Link auf die passende Folie und die roten Fäden durch die Veranstaltung.",
-          "", MARKE["wo"][1]]
-    return "\n".join(z)
-
-def ausblick(key):
-    i = IDX[key]
-    z = [MARKE["aus"][0], "", "--------------------------------------------------------------------------------", ""]
-    if i + 1 < len(T):
-        n = T[i + 1]
-        z.append(f"**🗺️ Nächster Halt:** {n[1]} · {n[3]} (Woche ab {datum(n[2])}) – {PROJEKTZIEL[n[0]]} [Auf der Kurslandkarte ansehen]({KARTE_URL}#termin={n[0]})")
-    z += ["", MARKE["aus"][1]]
-    return "\n".join(z)
-
-def einbetten(datei, wo, aus):
-    pfad = os.path.join(REPO, datei)
-    s = open(pfad, encoding="utf-8").read()
-    for art, block in (("wo", wo), ("aus", aus)):
-        a, e = MARKE[art]
-        if a in s:
-            s = s[:s.index(a)] + block + s[s.index(e) + len(e):]
-        elif art == "wo":
-            # vor die erste Überschrift zweiter Ebene außerhalb von Codeblöcken
-            kopf = s.index("-->") + 3
-            zeilen, pos, zaun = s[kopf:].split("\n"), kopf, False
-            for zl in zeilen:
-                if zl.lstrip().startswith("```"):
-                    zaun = not zaun
-                if not zaun and zl.startswith("## "):
-                    break
-                pos += len(zl) + 1
-            s = s[:pos] + block + "\n\n" + s[pos:]
-        else:
-            s = s.rstrip("\n") + "\n\n" + block + "\n"
-    open(pfad, "w", encoding="utf-8").write(s)
-
-for t in T:
-    if t[5] == "ausgearbeitet":
-        einbetten(t[4], wo_stehen_wir(t[0]), ausblick(t[0]))
-# Folien haben sich verschoben: Abschnitte neu lesen
-sections = {t[0]: abschnitte(t[4]) if t[4] else [] for t in T}
-
-phasen, start = [], 0
-for i in range(1, len(T) + 1):
-    if i == len(T) or T[i][6] != T[start][6]:
-        blk = T[start][6]
-        phasen.append({"von": start, "bis": i - 1, "name": BLOECKE[blk], "farbe": BLOCKFARBE[blk]})
-        start = i
-
-out = {
-    "stand": STAND,
-    "kurs": KURS,
-    "linien": [{"id": i, "name": n} for i, n in LINIEN],
-    "phasen": phasen,
-    "vorlesungen": [
-        {"vl": i, "key": t[0], "label": t[1], "datei": t[4], "datum": t[2], "kurz": t[3],
-         "status": t[5], "block": t[6], "abschnitte": sections[t[0]]}
-        for i, t in enumerate(T)
-    ],
-    "begriffe": [
-        {"id": b[0], "name": b[1], "linie": b[2], "vl": IDX[b[3]], "abschnitt": abschnitt_nr(b[3], b[4]),
-         "ebene": b[5], "code": bool(b[6]), "erklaerung": b[7], "fehlvorstellung": b[8]}
-        for b in B
-    ],
-    "beziehungen": [{"von": a, "nach": b, "text": t} for a, b, t in R],
-    "faeden": [{"id": f, "name": n, "beschreibung": d, "stationen": st} for f, n, d, st in F],
-}
-os.makedirs(ZIEL, exist_ok=True)
-text = json.dumps(out, ensure_ascii=False, indent=1)
-open(os.path.join(ZIEL, "kurslandkarte.json"), "w", encoding="utf-8").write(text + "\n")
-seite = open(os.path.join(HIER, "vorlage.html"), encoding="utf-8").read()
-seite = seite.replace("%%DATEN%%", text.replace("</", "<\\/")).replace("%%STAND%%", STAND)
-open(os.path.join(ZIEL, "index.html"), "w", encoding="utf-8").write(seite)
-
-# ---- Startseite der GitHub Page (docs/index.html): Kursübersicht aus denselben Daten
-def startseite():
-    import html
-    def kachel(t):
-        stand = {"ausgearbeitet": "neu 2026/27", "Bestand": "Bestand 2025/26"}.get(t[5], "in Planung")
-        if t[1].startswith("P"):
-            worte = "wendet an: " + ", ".join(name_of[x] for x in ANWENDUNG.get(t[0], [])[:4]) if t[0] in ANWENDUNG else ""
-        else:
-            worte = ", ".join([b[1] for b in B if b[3] == t[0] and b[5] == 1][:4])
-        innen = (f'<span class="kopf"><b>{html.escape(t[1])}</b> {html.escape(t[3])}</span>'
-                 f'<span class="worte">{html.escape(worte)}</span><span class="stand {t[5]}">{stand}</span>')
-        attr = f'class="kachel {t[5]}" data-iso="{t[2]}"'
-        return f'<a {attr} href="{KURS["basis"]}{t[4]}">{innen}</a>' if t[4] else f'<div {attr}>{innen}</div>'
-    zeilen = []
-    for blk in sorted(BLOECKE):
-        zeilen.append(f'<h2>{html.escape(BLOECKE[blk])}</h2>\n<div class="raster">\n'
-                      '<span class="rh">Woche ab</span><span class="rh">Vorlesung</span><span class="rh">Übung</span><span class="rh">Praktikum</span>')
-        for w in sorted({t[2] for t in T if t[6] == blk}):
-            zeilen.append(f'<span class="wk" data-iso="{w}">{datum(w)}</span>')
-            for art in ("VL", "Ü", "P"):
-                zeilen.append('<div class="zelle">' + "".join(kachel(t) for t in T if t[6] == blk and t[2] == w and t[1].startswith(art)) + '</div>')
-        zeilen.append('</div>')
-    inhalt = "\n".join(zeilen)
-    return f"""<!doctype html>
-<html lang="de">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="author" content="{KURS['autoren']}">
-<title>Robotik: Kursübersicht</title>
-<style>
-:root {{ --bg: #f6f7f5; --fg: #1d2427; --muted: #5b6669; --line: #d5dad6; --card: #ffffff; --accent: #0f6e6e; --neu: #1f7a3a; --jetzt: #c0392b; }}
-@media (prefers-color-scheme: dark) {{ :root {{ --bg: #141a1b; --fg: #e4eae8; --muted: #9aa7a6; --line: #2d3a3b; --card: #1c2426; --accent: #5cc2c2; --neu: #6fcf8a; --jetzt: #ff7b6b; }} }}
-body {{ margin: 0; padding: 24px 16px 48px; background: var(--bg); color: var(--fg); font: 16px/1.5 system-ui, "Segoe UI", sans-serif; }}
-main {{ max-width: 1040px; margin: 0 auto; }}
-h1 {{ margin: 0 0 4px; font-size: 1.8rem; }}
-h2 {{ margin: 32px 0 8px; font-size: 1.15rem; }}
-a {{ color: var(--accent); }}
-.karte {{ display: inline-block; margin: 16px 0 8px; padding: 10px 16px; border: 1px solid var(--accent); border-radius: 8px; text-decoration: none; font-weight: 600; }}
-.raster {{ display: grid; grid-template-columns: max-content repeat(3, minmax(0, 1fr)); gap: 8px 10px; align-items: start; }}
-.rh {{ color: var(--muted); font-size: .8rem; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; border-bottom: 1px solid var(--line); padding-bottom: 2px; }}
-.wk {{ color: var(--muted); font-size: .85rem; padding-top: 10px; white-space: nowrap; font-variant-numeric: tabular-nums; }}
-.wk.jetzt {{ color: var(--jetzt); font-weight: 700; }}
-.zelle {{ display: grid; gap: 8px; min-width: 0; }}
-.kachel {{ display: grid; gap: 2px; padding: 8px 12px; background: var(--card); border: 1px solid var(--line); border-radius: 8px; color: var(--fg); text-decoration: none; }}
-a.kachel:hover, a.kachel:focus-visible {{ border-color: var(--accent); }}
-div.kachel {{ background: transparent; border-style: dashed; color: var(--muted); }}
-.kachel.jetzt {{ border-color: var(--jetzt); box-shadow: inset 4px 0 0 var(--jetzt); }}
-.kopf b {{ margin-right: 4px; }}
-.worte {{ font-size: .82rem; color: var(--muted); }}
-.stand {{ font-size: .75rem; color: var(--muted); }}
-.stand.ausgearbeitet {{ color: var(--neu); }}
-.kachel.jetzt .stand::after {{ content: " · diese Woche"; color: var(--jetzt); font-weight: 700; }}
-.fuss {{ margin-top: 32px; color: var(--muted); font-size: .85rem; }}
-@media (max-width: 700px) {{
-  .raster {{ grid-template-columns: minmax(0, 1fr); }}
-  .rh, .zelle:empty {{ display: none; }}
-  .wk {{ padding-top: 6px; }}
-}}
-</style>
-</head>
-<body>
-<main>
-<h1>Robotik – Vorlesung, Übung und Praktikum</h1>
-<p>TU Bergakademie Freiberg · WiSe 2026/27 und SoSe 2027 · Projektaufgabe: Ein TurtleBot fährt autonom durch eine Miniatur-Verkehrswelt.</p>
-<a class="karte" href="kurslandkarte/">🗺️ Kurslandkarte: Begriffe, Zusammenhänge und „Sie sind hier“</a>
-<p>Jede Kachel ist ein Termin mit seinen wichtigsten Stichworten; ein Klick öffnet das Material in <a href="https://liascript.github.io">LiaScript</a>. Termine nach dem vorläufigen Zeitplan, Datum = Montag der Woche.</p>
-{inhalt}
-<p class="fuss">Stand {STAND} · Autoren: {KURS['autoren']} · Quelle: <a href="https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik">GitHub</a></p>
-</main>
-<script>
-// aktuelle Woche markieren: die letzte Woche, deren Montag erreicht ist
-const heute = new Date().toISOString().slice(0, 10);
-const wochen = [...document.querySelectorAll(".wk")].map(w => w.dataset.iso).filter(d => d <= heute);
-if (wochen.length) {{
-  const w = wochen[wochen.length - 1];
-  document.querySelectorAll(`[data-iso="${{w}}"]`).forEach(e => e.classList.add("jetzt"));
-}}
-</script>
-</body>
-</html>
-"""
-
-open(os.path.join(REPO, "docs", "index.html"), "w", encoding="utf-8").write(startseite())
-
-e1 = sum(1 for b in B if b[5] == 1)
-print(f"{len(T)} Termine, {len(B)} Begriffe ({e1} Kern, {len(B)-e1} Detail), {len(R)} Beziehungen, {len(F)} Fäden")
+kern.erzeuge(
+    repo=os.path.dirname(HIER), kurs=KURS, termine=T, bloecke=BLOECKE, linien=LINIEN,
+    begriffe=B, beziehungen=R, faeden=F, leitfragen=PROJEKTZIEL, freigegeben=FREIGEGEBEN,
+    anwendet=ANWENDUNG, brauchen=BRAUCHEN,
+    karte="docs/kurslandkarte", startseite="docs/index.html", folien=True,
+)

@@ -3,174 +3,85 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="author" content="Sebastian Zug & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent">
-<title>Robotik: Kursübersicht</title>
+<meta name="description" content="Ein TurtleBot fährt autonom durch eine Miniatur-Verkehrswelt: Vorlesung, Übung und Praktikum führen Schritt für Schritt von ROS 2 über Sensorik und Objekterkennung bis zu Sensorfusion, Regelung und Navigation.">
+<meta name="author" content="Sebastian Zug &amp; Claude Code (Opus 5.5) mit LiaScript Teaching-Agent">
+<meta name="generator" content="invivis-kurslandkarte 0.1.0">
+<title>Robotik – Vorlesung, Übung und Praktikum</title>
 <style>
-:root { --bg: #f6f7f5; --fg: #1d2427; --muted: #5b6669; --line: #d5dad6; --card: #ffffff; --accent: #0f6e6e; --neu: #1f7a3a; --jetzt: #c0392b; }
-@media (prefers-color-scheme: dark) { :root { --bg: #141a1b; --fg: #e4eae8; --muted: #9aa7a6; --line: #2d3a3b; --card: #1c2426; --accent: #5cc2c2; --neu: #6fcf8a; --jetzt: #ff7b6b; } }
-body { margin: 0; padding: 24px 16px 48px; background: var(--bg); color: var(--fg); font: 16px/1.5 system-ui, "Segoe UI", sans-serif; }
-main { max-width: 1040px; margin: 0 auto; }
-h1 { margin: 0 0 4px; font-size: 1.8rem; }
-h2 { margin: 32px 0 8px; font-size: 1.15rem; }
-a { color: var(--accent); }
-.karte { display: inline-block; margin: 16px 0 8px; padding: 10px 16px; border: 1px solid var(--accent); border-radius: 8px; text-decoration: none; font-weight: 600; }
-.raster { display: grid; grid-template-columns: max-content repeat(3, minmax(0, 1fr)); gap: 8px 10px; align-items: start; }
-.rh { color: var(--muted); font-size: .8rem; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; border-bottom: 1px solid var(--line); padding-bottom: 2px; }
-.wk { color: var(--muted); font-size: .85rem; padding-top: 10px; white-space: nowrap; font-variant-numeric: tabular-nums; }
-.wk.jetzt { color: var(--jetzt); font-weight: 700; }
-.zelle { display: grid; gap: 8px; min-width: 0; }
-.kachel { display: grid; gap: 2px; padding: 8px 12px; background: var(--card); border: 1px solid var(--line); border-radius: 8px; color: var(--fg); text-decoration: none; }
-a.kachel:hover, a.kachel:focus-visible { border-color: var(--accent); }
-div.kachel { background: transparent; border-style: dashed; color: var(--muted); }
-.kachel.jetzt { border-color: var(--jetzt); box-shadow: inset 4px 0 0 var(--jetzt); }
-.kopf b { margin-right: 4px; }
-.worte { font-size: .82rem; color: var(--muted); }
-.stand { font-size: .75rem; color: var(--muted); }
-.stand.ausgearbeitet { color: var(--neu); }
-.kachel.jetzt .stand::after { content: " · diese Woche"; color: var(--jetzt); font-weight: 700; }
-.fuss { margin-top: 32px; color: var(--muted); font-size: .85rem; }
-@media (max-width: 700px) {
-  .raster { grid-template-columns: minmax(0, 1fr); }
-  .rh, .zelle:empty { display: none; }
-  .wk { padding-top: 6px; }
+:root { --bg: #f3f5f2; --surface: #ffffff; --ink: #1d2a2c; --muted: #5d6c6f; --faint: #c9d1cf; --accent: #1f7a8c; --here: #c2462e; color-scheme: light; }
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #141a1b; --surface: #1c2426; --ink: #e4ebe9; --muted: #9aa9ab; --faint: #3a4648; --accent: #4fb3c6; --here: #ee7a60; color-scheme: dark; }
 }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: system-ui, "Segoe UI", sans-serif; line-height: 1.55; }
+main { max-width: 68ch; margin: 0 auto; padding: 40px 16px 48px; display: grid; gap: 14px; }
+h1 { margin: 0; font-size: 1.8rem; line-height: 1.2; }
+h2 { margin: 20px 0 0; font-size: 1.15rem; }
+p { margin: 0; }
+a { color: var(--accent); }
+.muted { color: var(--muted); }
+ol, ul { margin: 0; padding-left: 1.3em; display: grid; gap: 6px; }
+.karte { display: inline-block; width: fit-content; padding: 10px 16px; border: 1px solid var(--accent); border-radius: 8px; text-decoration: none; font-weight: 600; }
+.karte:hover, .karte:focus-visible { background: var(--surface); }
+.woche { background: var(--surface); border: 1px solid var(--faint); border-left: 4px solid var(--here); border-radius: 6px; padding: 12px 16px; display: grid; gap: 6px; }
+.woche h2 { margin: 0; font-size: 1rem; color: var(--here); }
+.woche ul { list-style: none; padding: 0; }
+.woche .frage { color: var(--muted); font-size: .92rem; }
+.woche .naechst { color: var(--muted); font-size: .92rem; }
+dl { margin: 0; display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; }
+dt { color: var(--muted); }
+dd { margin: 0; }
+@media (max-width: 560px) { dl { grid-template-columns: 1fr; } dd { margin-bottom: 6px; } }
+footer { margin-top: 24px; font-size: .85rem; color: var(--muted); display: grid; gap: 4px; }
 </style>
 </head>
 <body>
 <main>
-<h1>Robotik – Vorlesung, Übung und Praktikum</h1>
-<p>TU Bergakademie Freiberg · WiSe 2026/27 und SoSe 2027 · Projektaufgabe: Ein TurtleBot fährt autonom durch eine Miniatur-Verkehrswelt.</p>
-<a class="karte" href="kurslandkarte/">🗺️ Kurslandkarte: Begriffe, Zusammenhänge und „Sie sind hier“</a>
-<p>Jede Kachel ist ein Termin mit seinen wichtigsten Stichworten; ein Klick öffnet das Material in <a href="https://liascript.github.io">LiaScript</a>. Termine nach dem vorläufigen Zeitplan, Datum = Montag der Woche.</p>
-<h2>Block 1 · ROS-Grundlagen</h2>
-<div class="raster">
-<span class="rh">Woche ab</span><span class="rh">Vorlesung</span><span class="rh">Übung</span><span class="rh">Praktikum</span>
-<span class="wk" data-iso="2026-10-19">19.10.2026</span>
-<div class="zelle"><a class="kachel ausgearbeitet" data-iso="2026-10-19" href="https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/00_Einfuehrung/00_Einfuehrung.md"><span class="kopf"><b>VL 1</b> Einführung</span><span class="worte">Projektaufgabe Verkehrswelt, Roboter, Sense-Think-Act, TurtleBot 3 Burger</span><span class="stand ausgearbeitet">neu 2026/27</span></a></div>
-<div class="zelle"></div>
-<div class="zelle"></div>
-<span class="wk" data-iso="2026-10-26">26.10.2026</span>
-<div class="zelle"><a class="kachel ausgearbeitet" data-iso="2026-10-26" href="https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/03_ROS_Grundlagen_I/03_EinfuehrungROS.md"><span class="kopf"><b>VL 2</b> ROS 2 Grundlagen</span><span class="worte">ROS als Middleware, DDS / rmw-Schicht, Knoten (Node), Topic</span><span class="stand ausgearbeitet">neu 2026/27</span></a></div>
-<div class="zelle"><a class="kachel ausgearbeitet" data-iso="2026-10-26" href="https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/exercise_00_linux_shell/README.md"><span class="kopf"><b>Ü 1</b> Linux Shell</span><span class="worte">Terminal &amp; Shell, Absolute &amp; relative Pfade, Umgebungsvariable, source</span><span class="stand ausgearbeitet">neu 2026/27</span></a></div>
-<div class="zelle"></div>
-<span class="wk" data-iso="2026-11-02">2.11.2026</span>
-<div class="zelle"><a class="kachel ausgearbeitet" data-iso="2026-11-02" href="https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/04_ROS_Pakete_Tools/04_ROS_Pakete.md"><span class="kopf"><b>VL 3</b> ROS 2 Pakete</span><span class="worte">ROS-2-Paket, Workspace, colcon build, Eigener Nachrichtentyp</span><span class="stand ausgearbeitet">neu 2026/27</span></a></div>
-<div class="zelle"></div>
-<div class="zelle"></div>
-<span class="wk" data-iso="2026-11-09">9.11.2026</span>
-<div class="zelle"><a class="kachel ausgearbeitet" data-iso="2026-11-09" href="https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/02_Koordinatensysteme/02_Koordinatentransformation.md"><span class="kopf"><b>VL 4</b> Koordinaten + QoS</span><span class="worte">Bezugskoordinatensystem, Translation und Rotation, Homogene Koordinaten, Verkettung</span><span class="stand ausgearbeitet">neu 2026/27</span></a></div>
-<div class="zelle"><a class="kachel ausgearbeitet" data-iso="2026-11-09" href="https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/exercise_00b_ros2_werkzeuge/README.md"><span class="kopf"><b>Ü 2</b> ROS 2 Werkzeuge</span><span class="worte">Parameter und Parameterdatei, ros2 bag</span><span class="stand ausgearbeitet">neu 2026/27</span></a></div>
-<div class="zelle"></div>
-<span class="wk" data-iso="2026-11-23">23.11.2026</span>
-<div class="zelle"></div>
-<div class="zelle"></div>
-<div class="zelle"><a class="kachel ausgearbeitet" data-iso="2026-11-23" href="https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_01_turtlebot/README.md"><span class="kopf"><b>P 1</b> TurtleBot + Bags</span><span class="worte">wendet an: ROS_DOMAIN_ID, Topics des TurtleBot, ros2 topic …, QoS-Verträglichkeit</span><span class="stand ausgearbeitet">neu 2026/27</span></a></div>
-</div>
-<h2>Block 2 · Sensorgrundlagen</h2>
-<div class="raster">
-<span class="rh">Woche ab</span><span class="rh">Vorlesung</span><span class="rh">Übung</span><span class="rh">Praktikum</span>
-<span class="wk" data-iso="2026-11-30">30.11.2026</span>
-<div class="zelle"><a class="kachel Bestand" data-iso="2026-11-30" href="https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/01_Sensorik/01_Sensorik.md"><span class="kopf"><b>VL 5</b> Sensorik</span><span class="worte">Sensor, Propriozeptiv/exterozeptiv, Pose (6 DoF), IMU</span><span class="stand Bestand">Bestand 2025/26</span></a></div>
-<div class="zelle"></div>
-<div class="zelle"></div>
-<span class="wk" data-iso="2026-12-07">7.12.2026</span>
-<div class="zelle"><a class="kachel Bestand" data-iso="2026-12-07" href="https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/05_Bildverarbeitung/05_Bildverarbeitung.md"><span class="kopf"><b>VL 6</b> Bildverarbeitung</span><span class="worte">Bild als Pixelmatrix, HSV-Farbraum, Schwellwertoperation, Canny-Kantendetektor</span><span class="stand Bestand">Bestand 2025/26</span></a><a class="kachel ausgearbeitet" data-iso="2026-12-07" href="https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/06_Kamera_Stereo/06_Kamera_Stereo.md"><span class="kopf"><b>VL 7</b> Kamera + Draufsicht</span><span class="worte">Lochkameramodell, Kamera-Matrix K, Verzeichnung, Entzerren mit Tabellen</span><span class="stand ausgearbeitet">neu 2026/27</span></a></div>
-<div class="zelle"></div>
-<div class="zelle"></div>
-<span class="wk" data-iso="2026-12-14">14.12.2026</span>
-<div class="zelle"><div class="kachel geplant" data-iso="2026-12-14"><span class="kopf"><b>VL 8</b> LiDAR</span><span class="worte">PointCloud2</span><span class="stand geplant">in Planung</span></div></div>
-<div class="zelle"></div>
-<div class="zelle"></div>
-<span class="wk" data-iso="2027-01-04">4.1.2027</span>
-<div class="zelle"></div>
-<div class="zelle"><div class="kachel geplant" data-iso="2027-01-04"><span class="kopf"><b>Ü 3</b> Datenvisualisierung</span><span class="worte"></span><span class="stand geplant">in Planung</span></div></div>
-<div class="zelle"></div>
-<span class="wk" data-iso="2027-01-11">11.1.2027</span>
-<div class="zelle"></div>
-<div class="zelle"><div class="kachel geplant" data-iso="2027-01-11"><span class="kopf"><b>Ü 4</b> Kameradaten</span><span class="worte"></span><span class="stand geplant">in Planung</span></div></div>
-<div class="zelle"><a class="kachel ausgearbeitet" data-iso="2027-01-11" href="https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_02_bildkorrektur/README.md"><span class="kopf"><b>P 2</b> Bildkorrektur</span><span class="worte">wendet an: Launch-Datei, QoS-Verträglichkeit, CompressedImage, Kamerakalibrierung</span><span class="stand ausgearbeitet">neu 2026/27</span></a></div>
-<span class="wk" data-iso="2027-01-18">18.1.2027</span>
-<div class="zelle"></div>
-<div class="zelle"></div>
-<div class="zelle"><a class="kachel ausgearbeitet" data-iso="2027-01-18" href="https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_03_spurerkennung/README.md"><span class="kopf"><b>P 3</b> Spurerkennung</span><span class="worte">wendet an: Parameter und Parameterdatei, Schwellwertoperation, Morphologische Operationen, Draufsicht (Vogelperspektive)</span><span class="stand ausgearbeitet">neu 2026/27</span></a></div>
-</div>
-<h2>Block 3 · Objekterkennung</h2>
-<div class="raster">
-<span class="rh">Woche ab</span><span class="rh">Vorlesung</span><span class="rh">Übung</span><span class="rh">Praktikum</span>
-<span class="wk" data-iso="2027-01-25">25.1.2027</span>
-<div class="zelle"><a class="kachel Bestand" data-iso="2027-01-25" href="https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/07_Objekterkennung/07_Objekterkennung.md"><span class="kopf"><b>VL 9</b> Objekterkennung</span><span class="worte">Detektion vs. Klassifikation, CNN, YOLO, Bounding Box → 3D-Position</span><span class="stand Bestand">Bestand 2025/26</span></a><div class="kachel geplant" data-iso="2027-01-25"><span class="kopf"><b>VL 10</b> … in Punktwolken</span><span class="worte"></span><span class="stand geplant">in Planung</span></div></div>
-<div class="zelle"></div>
-<div class="zelle"></div>
-<span class="wk" data-iso="2027-02-01">1.2.2027</span>
-<div class="zelle"></div>
-<div class="zelle"><div class="kachel geplant" data-iso="2027-02-01"><span class="kopf"><b>Ü 5</b> Objekte im LiDAR</span><span class="worte"></span><span class="stand geplant">in Planung</span></div></div>
-<div class="zelle"></div>
-<span class="wk" data-iso="2027-02-08">8.2.2027</span>
-<div class="zelle"></div>
-<div class="zelle"></div>
-<div class="zelle"><div class="kachel geplant" data-iso="2027-02-08"><span class="kopf"><b>P 4</b> Hinderniserkennung</span><span class="worte"></span><span class="stand geplant">in Planung</span></div></div>
-<span class="wk" data-iso="2027-04-05">5.4.2027</span>
-<div class="zelle"></div>
-<div class="zelle"><div class="kachel geplant" data-iso="2027-04-05"><span class="kopf"><b>Ü 6</b> YOLO vs. klassisch</span><span class="worte"></span><span class="stand geplant">in Planung</span></div></div>
-<div class="zelle"></div>
-</div>
-<h2>Block 4 · Sensorfusion</h2>
-<div class="raster">
-<span class="rh">Woche ab</span><span class="rh">Vorlesung</span><span class="rh">Übung</span><span class="rh">Praktikum</span>
-<span class="wk" data-iso="2027-04-12">12.4.2027</span>
-<div class="zelle"><a class="kachel Bestand" data-iso="2027-04-12" href="https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/08_Sensorfusion_I/08_Datenfusion.md"><span class="kopf"><b>VL 11</b> Sensorfusion I</span><span class="worte">Sensordatenfusion, Diskreter Bayes-Filter, Prior, Likelihood, Posterior, Predict-Update-Zyklus</span><span class="stand Bestand">Bestand 2025/26</span></a></div>
-<div class="zelle"></div>
-<div class="zelle"></div>
-<span class="wk" data-iso="2027-04-19">19.4.2027</span>
-<div class="zelle"><a class="kachel Bestand" data-iso="2027-04-19" href="https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/09_Sensorfusion_II/09_Sensorfusion_II.md"><span class="kopf"><b>VL 12</b> Sensorfusion II</span><span class="worte">Normalverteilung, Kalman-Filter, Kalman-Gain, Extended Kalman Filter</span><span class="stand Bestand">Bestand 2025/26</span></a></div>
-<div class="zelle"><div class="kachel geplant" data-iso="2027-04-19"><span class="kopf"><b>Ü 7</b> 2D-EKF</span><span class="worte"></span><span class="stand geplant">in Planung</span></div></div>
-<div class="zelle"></div>
-<span class="wk" data-iso="2027-04-26">26.4.2027</span>
-<div class="zelle"></div>
-<div class="zelle"></div>
-<div class="zelle"><div class="kachel geplant" data-iso="2027-04-26"><span class="kopf"><b>P 5</b> Streckenverlauf</span><span class="worte"></span><span class="stand geplant">in Planung</span></div></div>
-</div>
-<h2>Block 5 · Regelung &amp; Navigation</h2>
-<div class="raster">
-<span class="rh">Woche ab</span><span class="rh">Vorlesung</span><span class="rh">Übung</span><span class="rh">Praktikum</span>
-<span class="wk" data-iso="2027-05-03">3.5.2027</span>
-<div class="zelle"><a class="kachel Bestand" data-iso="2027-05-03" href="https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/10_Kinematik_Regelung/10_Kinematik_Regelung.md"><span class="kopf"><b>VL 13</b> Kinematik</span><span class="worte">Differentialantrieb, Rad-Odometrie, Steuerung vs. Regelung, PID-Regler</span><span class="stand Bestand">Bestand 2025/26</span></a></div>
-<div class="zelle"><div class="kachel geplant" data-iso="2027-05-03"><span class="kopf"><b>Ü 8</b> Reglervergleich</span><span class="worte"></span><span class="stand geplant">in Planung</span></div></div>
-<div class="zelle"></div>
-<span class="wk" data-iso="2027-05-10">10.5.2027</span>
-<div class="zelle"><a class="kachel Bestand" data-iso="2027-05-10" href="https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/11_Navigation/11_Navigation.md"><span class="kopf"><b>VL 14</b> Navigation</span><span class="worte">Lifecycle-Knoten, Navigation, Occupancy Grid, Costmap</span><span class="stand Bestand">Bestand 2025/26</span></a></div>
-<div class="zelle"></div>
-<div class="zelle"></div>
-<span class="wk" data-iso="2027-05-17">17.5.2027</span>
-<div class="zelle"><div class="kachel geplant" data-iso="2027-05-17"><span class="kopf"><b>VL 15</b> SLAM</span><span class="worte"></span><span class="stand geplant">in Planung</span></div></div>
-<div class="zelle"><div class="kachel geplant" data-iso="2027-05-17"><span class="kopf"><b>Ü 9</b> Kartenerstellung</span><span class="worte"></span><span class="stand geplant">in Planung</span></div></div>
-<div class="zelle"></div>
-<span class="wk" data-iso="2027-05-24">24.5.2027</span>
-<div class="zelle"></div>
-<div class="zelle"></div>
-<div class="zelle"><div class="kachel geplant" data-iso="2027-05-24"><span class="kopf"><b>P 6</b> Mapping + Bahnfolge</span><span class="worte"></span><span class="stand geplant">in Planung</span></div></div>
-</div>
-<h2>Block 6 · Praktikum + X</h2>
-<div class="raster">
-<span class="rh">Woche ab</span><span class="rh">Vorlesung</span><span class="rh">Übung</span><span class="rh">Praktikum</span>
-<span class="wk" data-iso="2027-05-31">31.5.2027</span>
-<div class="zelle"></div>
-<div class="zelle"></div>
-<div class="zelle"><div class="kachel geplant" data-iso="2027-05-31"><span class="kopf"><b>P 7</b> Parken + Abbiegen</span><span class="worte"></span><span class="stand geplant">in Planung</span></div></div>
-<span class="wk" data-iso="2027-06-07">7.6.2027</span>
-<div class="zelle"></div>
-<div class="zelle"></div>
-<div class="zelle"><div class="kachel geplant" data-iso="2027-06-07"><span class="kopf"><b>P 8</b> Praktikum + X</span><span class="worte"></span><span class="stand geplant">in Planung</span></div></div>
-</div>
-<p class="fuss">Stand 13.10.2026 · Autoren: Sebastian Zug & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent · Quelle: <a href="https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik">GitHub</a></p>
+  <p class="muted">TU Bergakademie Freiberg · Robotik · WiSe 2026/27 und SoSe 2027</p>
+  <h1>Robotik – Vorlesung, Übung und Praktikum</h1>
+  <p>Ein TurtleBot fährt autonom durch eine Miniatur-Verkehrswelt: Vorlesung, Übung und Praktikum führen Schritt für Schritt von ROS 2 über Sensorik und Objekterkennung bis zu Sensorfusion, Regelung und Navigation.</p>
+
+  <section class="woche" id="woche" hidden aria-live="polite"></section>
+
+  <a class="karte" href="kurslandkarte/">🗺️ Kurslandkarte: alle Termine, Begriffe und Zusammenhänge</a>
+
+  <h2>Lernziele</h2>
+<p>Nach dem Kurs können Sie</p>
+<ol><li>eine Robotersoftware in ROS 2 aus Knoten, Topics, Services und Launch-Dateien aufbauen, starten und mit den ROS-2-Werkzeugen untersuchen,</li><li>Koordinatensysteme und Transformationen (tf2) aufstellen und Sensordaten des TurtleBots damit in ein gemeinsames Bezugssystem bringen,</li><li>Kamera- und LiDAR-Daten aufzeichnen, kalibrieren und auswerten – bis zur Spur- und Hinderniserkennung,</li><li>Messungen mehrerer Sensoren mit Bayes- und Kalman-Filtern zu einer Zustandsschätzung fusionieren,</li><li>Regelung, Kartierung und Navigation so kombinieren, dass ein TurtleBot autonom durch eine Verkehrswelt fährt.</li></ol>
+
+  <h2>Organisation</h2>
+<dl><dt>Formate</dt><dd>Vorlesung (Konzepte), Übung (angeleitete Aufgaben am eigenen Rechner) und Praktikum (Gruppen zu 2–3 Personen am TurtleBot), je 90 Minuten</dd><dt>Zeitraum</dt><dd>Wintersemester 2026/27 und Sommersemester 2027, sechs thematische Blöcke</dd><dt>Prüfung</dt><dd>Die Prüfungsleistung erbringen Sie in den Praktika.</dd><dt>Werkzeuge</dt><dd>Ubuntu 24.04 (nativ oder WSL2), ROS 2 Jazzy, Python und C++</dd></dl>
+
+  <h2>Kontakt</h2>
+<p>Prof. Dr.-Ing. Sebastian Zug<br>Lehrstuhl für Softwaretechnologie und Robotik, TU Bergakademie Freiberg<br><a href="mailto:sebastian.zug@informatik.tu-freiberg.de">sebastian.zug@informatik.tu-freiberg.de</a></p>
+
+  <footer>
+    <span>Lizenz: <a href="https://creativecommons.org/licenses/by/4.0/deed.de">CC BY 4.0</a></span>
+    <span>Quelle: <a href="https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik">https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik</a> · Stand 21.10.2026</span>
+    <span>Autoren: Sebastian Zug &amp; Claude Code (Opus 5.5) mit LiaScript Teaching-Agent · erzeugt mit invivis Kurslandkarte 0.1.0</span>
+  </footer>
 </main>
+<script id="termine" type="application/json">[{"key": "00", "label": "VL 1", "kurz": "Einführung", "datum": "2026-10-19", "url": "https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/00_Einfuehrung/00_Einfuehrung.md", "frage": "Sie lernen die Projektaufgabe kennen: Ein TurtleBot soll autonom durch die Verkehrswelt fahren."}, {"key": "ue1", "label": "Ü 1", "kurz": "Linux Shell", "datum": "2026-10-26", "url": "https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/exercise_00_linux_shell/README.md", "frage": "Ihr Rechner wird zur Werkbank: Ohne sicheren Umgang mit der Shell erreichen Sie weder ROS 2 noch den TurtleBot."}, {"key": "03", "label": "VL 2", "kurz": "ROS 2 Grundlagen", "datum": "2026-10-26", "url": "https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/03_ROS_Grundlagen_I/03_EinfuehrungROS.md", "frage": "Sie verstehen, wie die Software des TurtleBots aus Knoten und Topics zusammengesetzt ist."}, {"key": "04", "label": "VL 3", "kurz": "ROS 2 Pakete", "datum": "2026-11-02", "url": "https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/04_ROS_Pakete_Tools/04_ROS_Pakete.md", "frage": "Sie bauen eigene Knoten und starten sie gemeinsam mit einer Launch-Datei – das Gerüst für jede spätere Projektfunktion."}, {"key": "ue2", "label": "Ü 2", "kurz": "ROS 2 Werkzeuge", "datum": "2026-11-09", "url": "https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/exercise_00b_ros2_werkzeuge/README.md", "frage": "Sie untersuchen, konfigurieren und zeichnen ein laufendes ROS-2-System auf – genau das tun Sie in P 1 am Roboter."}, {"key": "02", "label": "VL 4", "kurz": "Koordinaten + QoS", "datum": "2026-11-09", "url": "https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/02_Koordinatensysteme/02_Koordinatentransformation.md", "frage": "Der TurtleBot weiß, wo seine Sensoren sitzen, und seine Daten kommen beim Empfänger an – sonst bleibt RViz leer."}, {"key": "p1", "label": "P 1", "kurz": "TurtleBot + Bags", "datum": "2026-11-23", "url": "https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_01_turtlebot/README.md", "frage": "Ihr TurtleBot ist verbunden, fährt sicher, und Sie haben eine Testfahrt aufgezeichnet – das Rohmaterial für Block 2."}, {"key": "01", "label": "VL 5", "kurz": "Sensorik", "datum": "2026-11-30", "url": "https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/01_Sensorik/01_Sensorik.md", "frage": "Sie wissen, was die Sensoren des TurtleBots messen und wo ihre Grenzen liegen."}, {"key": "05", "label": "VL 6", "kurz": "Bildverarbeitung", "datum": "2026-12-07", "url": "https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/05_Bildverarbeitung/05_Bildverarbeitung.md", "frage": "Sie heben Fahrbahnmarkierungen und Ampelfarben im Kamerabild hervor – der erste Schritt zur Spurerkennung."}, {"key": "06", "label": "VL 7", "kurz": "Kamera + Draufsicht", "datum": "2026-12-07", "url": "https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/06_Kamera_Stereo/06_Kamera_Stereo.md", "frage": "Sie schließen von einem Pixel auf eine Richtung in der Welt – dafür muss die Kamera kalibriert sein."}, {"key": "lid", "label": "VL 8", "kurz": "LiDAR", "datum": "2026-12-14", "url": null, "frage": "Sie werten die Abstandsmessungen des LiDAR aus und erkennen, was vor dem Roboter liegt."}, {"key": "ue3", "label": "Ü 3", "kurz": "Datenvisualisierung", "datum": "2027-01-04", "url": null, "frage": "Sie stellen Sensordaten so dar, dass Fehler darin sichtbar werden."}, {"key": "ue4", "label": "Ü 4", "kurz": "Kameradaten", "datum": "2027-01-11", "url": null, "frage": "Sie verarbeiten aufgezeichnete Kamerabilder des TurtleBots selbst."}, {"key": "p2", "label": "P 2", "kurz": "Bildkorrektur", "datum": "2027-01-11", "url": "https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_02_bildkorrektur/README.md", "frage": "Ihr TurtleBot liefert eine entzerrte, maßstäbliche Draufsicht auf die Fahrbahn – die Grundlage der Spurerkennung."}, {"key": "p3", "label": "P 3", "kurz": "Spurerkennung", "datum": "2027-01-18", "url": "https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_03_spurerkennung/README.md", "frage": "Ihr TurtleBot erkennt die Fahrspur im Kamerabild."}, {"key": "07", "label": "VL 9", "kurz": "Objekterkennung", "datum": "2027-01-25", "url": "https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/07_Objekterkennung/07_Objekterkennung.md", "frage": "Sie erkennen Schilder, Ampeln und Fußgängerfiguren im Kamerabild."}, {"key": "pkw", "label": "VL 10", "kurz": "… in Punktwolken", "datum": "2027-01-25", "url": null, "frage": "Sie finden Objekte in den Messpunkten des LiDAR."}, {"key": "ue5", "label": "Ü 5", "kurz": "Objekte im LiDAR", "datum": "2027-02-01", "url": null, "frage": "Sie trennen Hindernisse im LiDAR-Scan vom Hintergrund."}, {"key": "p4", "label": "P 4", "kurz": "Hinderniserkennung", "datum": "2027-02-08", "url": null, "frage": "Ihr TurtleBot erkennt Hindernisse auf seiner Fahrbahn."}, {"key": "ue6", "label": "Ü 6", "kurz": "YOLO vs. klassisch", "datum": "2027-04-05", "url": null, "frage": "Sie vergleichen gelernte und klassische Objekterkennung und wissen, wann welche taugt."}, {"key": "08", "label": "VL 11", "kurz": "Sensorfusion I", "datum": "2027-04-12", "url": "https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/08_Sensorfusion_I/08_Datenfusion.md", "frage": "Sie verstehen, warum ein einzelner Sensor nicht reicht und wie man Messungen kombiniert."}, {"key": "09", "label": "VL 12", "kurz": "Sensorfusion II", "datum": "2027-04-19", "url": "https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/09_Sensorfusion_II/09_Sensorfusion_II.md", "frage": "Sie schätzen die Pose des TurtleBots aus Odometrie, IMU und weiteren Messungen mit einem Kalman-Filter."}, {"key": "ue7", "label": "Ü 7", "kurz": "2D-EKF", "datum": "2027-04-19", "url": null, "frage": "Sie implementieren einen Filter, der die Position eines Roboters in der Ebene schätzt."}, {"key": "p5", "label": "P 5", "kurz": "Streckenverlauf", "datum": "2027-04-26", "url": null, "frage": "Ihr TurtleBot schätzt den Streckenverlauf vor sich aus mehreren Sensoren."}, {"key": "10", "label": "VL 13", "kurz": "Kinematik", "datum": "2027-05-03", "url": "https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/10_Kinematik_Regelung/10_Kinematik_Regelung.md", "frage": "Sie verstehen, wie aus einem Fahrbefehl eine Radbewegung wird und wie ein Regler den TurtleBot auf Kurs hält."}, {"key": "ue8", "label": "Ü 8", "kurz": "Reglervergleich", "datum": "2027-05-03", "url": null, "frage": "Sie vergleichen Regler und sehen, welcher den Roboter am ruhigsten auf der Spur hält."}, {"key": "11", "label": "VL 14", "kurz": "Navigation", "datum": "2027-05-10", "url": "https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/11_Navigation/11_Navigation.md", "frage": "Ihr TurtleBot plant einen Weg durch die Verkehrswelt und folgt ihm."}, {"key": "slm", "label": "VL 15", "kurz": "SLAM", "datum": "2027-05-17", "url": null, "frage": "Der TurtleBot erstellt selbst eine Karte der Verkehrswelt und weiß, wo er darin steht."}, {"key": "ue9", "label": "Ü 9", "kurz": "Kartenerstellung", "datum": "2027-05-17", "url": null, "frage": "Sie erstellen aus aufgezeichneten Daten eine Karte."}, {"key": "p6", "label": "P 6", "kurz": "Mapping + Bahnfolge", "datum": "2027-05-24", "url": null, "frage": "Ihr TurtleBot kartiert die Verkehrswelt und folgt einer geplanten Bahn."}, {"key": "p7", "label": "P 7", "kurz": "Parken + Abbiegen", "datum": "2027-05-31", "url": null, "frage": "Ihr TurtleBot parkt ein und biegt an Kreuzungen ab."}, {"key": "p8", "label": "P 8", "kurz": "Praktikum + X", "datum": "2027-06-07", "url": null, "frage": "Ihr TurtleBot fährt autonom durch die Verkehrswelt – Abschluss der Projektaufgabe."}]</script>
 <script>
-// aktuelle Woche markieren: die letzte Woche, deren Montag erreicht ist
-const heute = new Date().toISOString().slice(0, 10);
-const wochen = [...document.querySelectorAll(".wk")].map(w => w.dataset.iso).filter(d => d <= heute);
-if (wochen.length) {
-  const w = wochen[wochen.length - 1];
-  document.querySelectorAll(`[data-iso="${w}"]`).forEach(e => e.classList.add("jetzt"));
+// „Diese Woche“: alle Termine der laufenden Woche, sonst der nächste Termin
+const T = JSON.parse(document.getElementById("termine").textContent);
+const heute = new Date();
+const iso = (d) => d.toISOString().slice(0, 10);
+const montag = new Date(heute); montag.setDate(heute.getDate() - ((heute.getDay() + 6) % 7));
+const sonntag = new Date(montag); sonntag.setDate(montag.getDate() + 6);
+const datum = (s) => { const [y, m, d] = s.split("-"); return `${+d}.${+m}.`; };
+const eintrag = (t) => `<li>${t.url ? `<a href="${t.url}">${t.label} · ${t.kurz}</a>` : `${t.label} · ${t.kurz} <span class="muted">(Material folgt)</span>`}
+  <span class="muted">${datum(t.datum)}</span>${t.frage ? `<div class="frage">Ziel im Projekt: ${t.frage}</div>` : ""}</li>`;
+const diese = T.filter(t => t.datum >= iso(montag) && t.datum <= iso(sonntag));
+const naechster = T.find(t => t.datum > iso(sonntag));
+const box = document.getElementById("woche");
+if (diese.length) {
+  box.innerHTML = `<h2>Diese Woche</h2><ul>${diese.map(eintrag).join("")}</ul>` +
+    (naechster ? `<p class="naechst">Danach: ${naechster.label} · ${naechster.kurz} (${datum(naechster.datum)})</p>` : "");
+  box.hidden = false;
+} else if (naechster) {
+  box.innerHTML = `<h2>${T[0].datum > iso(heute) ? "Los geht es mit" : "Als Nächstes"}</h2><ul>${eintrag(naechster)}</ul>`;
+  box.hidden = false;
 }
 </script>
 </body>

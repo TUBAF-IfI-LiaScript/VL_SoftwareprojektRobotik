@@ -677,6 +677,8 @@ Die Aufgaben dieser Woche bereiten Sie direkt auf das erste Praktikum vor. Wenn 
 
 --------------------------------------------------------------------------------
 
-**🗺️ Nächster Halt:** P 1 · TurtleBot + Bags (Woche ab 23.11.2026) – Ihr TurtleBot ist verbunden, fährt sicher, und Sie haben eine Testfahrt aufgezeichnet – das Rohmaterial für Block 2. [Auf der Kurslandkarte ansehen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=p1)
+**🗺️ Nächster Halt:** VL 5 · Sensorik (Woche ab 30.11.2026) – Sie wissen, was die Sensoren des TurtleBots messen und wo ihre Grenzen liegen. [Auf der Kurslandkarte ansehen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=01)
+
+**Außerdem bis dahin:** [P 1 · TurtleBot + Bags](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=p1) (Woche ab 23.11.2026)
 
 <!-- kurslandkarte:ausblick-ende -->

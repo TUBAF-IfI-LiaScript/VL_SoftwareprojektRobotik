@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger & Copilot & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.3.0
+version:  0.3.1
 language: de
 narrator: Deutsch Female
 
@@ -69,7 +69,74 @@ Kurz zur Orientierung. Wir sind in Block 1, Termin 1 von 32. Sie lernen die Proj
 
 <!-- kurslandkarte:wo-ende -->
 
-## Unser Ziel: Autonomes Fahren im Miniaturformat
+## Organisation
+
+> [!TIP]
+> Die Veranstaltung beginnt im Wintersemester und setzt sich im Sommersemester fort. Für einige Studiengänge gibt es aber auch eine kleine Variante, die nur im Sommersemester läuft. 
+
+    --{{0}}--
+Anders als in den vergangenen Jahren trennen wir Vorlesung und Projekt nicht mehr auf zwei Semester. Vorlesung, Übung und Praktikum greifen von Anfang an ineinander. Jeder Termin dauert 90 Minuten. In manchen Wochen findet keine Vorlesung statt; diese Zeit gehört dann ganz der Arbeit am Roboter.
+
+<!-- data-type="none" -->
+| Format             | Wo?                           | Was passiert?                                                        |
+| ------------------ | ----------------------------- | -------------------------------------------------------------------- |
+| **Vorlesung (VL)** | Hörsaal                       | Konzepte und Methoden, Beispiele aus realen Robotersystemen          |
+| **Übung (Ü)**      | eigener Rechner / Pool        | angeleitete Aufgaben, z. B. mit aufgezeichneten Sensordaten (Bags)   |
+| **Praktikum (P)**  | Labor, TurtleBot              | Gruppenarbeit (2–3 Personen pro Roboter) an der Projektaufgabe      |
+
+https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=00
+
+> Mit der Veranstaltung erlangen Sie nominell 9 ECTS Punkte. Das bedeutet, dass Sie insgesamt 270 Stunden Arbeit investieren müssen. Die Vorlesung ist nur ein Teil davon: Sie vermittelt die Konzepte, die Sie in den Übungen und im Praktikum umsetzen. Die Prüfungsleistung erbringen Sie in den Praktika.
+
+    --{{1}}--
+Für die Arbeit benötigen Sie ein Linux-System. Wir arbeiten mit Ubuntu 24.04 und ROS 2 Jazzy. Wie Sie das auf Ihrem Rechner einrichten, klären wir in den ersten Übungen.
+
+     {{1}}
+*******************************************************************************
+
+**Werkzeuge**
+
++ Ubuntu 24.04 (nativ, alternativ WSL2 unter Windows)
++ ROS 2 Jazzy
++ Python und C++
++ Git / GitHub für die Gruppenarbeit
+
+*******************************************************************************
+
+**Organisatorisches**
+
+<!-- data-type="none" -->
+| Thema                 | Regelung                                                                                                  |
+| --------------------- | --------------------------------------------------------------------------------------------------------- |
+| **Prüfungsleistung**  | Ihre Arbeit in den **Praktika**: Dort wenden Sie das Gelernte am TurtleBot an und bauen Schritt für Schritt die Projektaufgabe auf. |
+| **Vorlesung, Übung**  | vermitteln und üben, was Sie im Praktikum brauchen — die Selbsttests zeigen Ihnen, ob Sie bereit sind     |
+| **Gruppen**           | 2–3 Personen pro TurtleBot, gebildet bis zum ersten Praktikum P 1                                        |
+| **Versionsverwaltung**| jede Gruppe arbeitet in einem eigenen Git-Repository                                                      |
+
+
+### Wo stehen Sie?
+
+Wichtig für Ihre Planung: Die Prüfungsleistung erbringen Sie in den Praktika. Vorlesung und Übung bereiten Sie darauf vor — wer die Übungen auslässt, steht im Praktikum vor dem Roboter und weiß nicht weiter.
+
+**Wo stehen Sie?** Ihre Antworten helfen uns, die Übungen und die Gruppen passend zu planen.
+
+Wie sicher sind Sie im Umgang mit dem Linux-Terminal?
+
+[(sicher)] sehr sicher
+[(grundlagen)] grundlegende Erfahrung
+[(keine)] kaum / keine Erfahrung
+
+Mit welchen Themen haben Sie schon gearbeitet?
+
+[[python]] Python
+[[cpp]] C++
+[[git]] Git
+[[ros]] ROS / ROS 2
+[[opencv]] OpenCV / Bildverarbeitung
+[[embedded]] Mikrocontroller / Embedded
+
+
+### Unser Ziel: Autonomes Fahren im Miniaturformat
 
     --{{0}}--
 Bevor wir über Definitionen sprechen, schauen wir auf das Ziel dieser Veranstaltung. Am Ende des Sommersemesters soll Ihr TurtleBot selbstständig durch eine kleine Verkehrswelt fahren: Er folgt der Straße, hält an der roten Ampel, beachtet Verkehrszeichen, lässt Fußgänger passieren und parkt am Ende ein. Alles, was Sie in Vorlesung und Übung lernen, ist ein Baustein für dieses Gesamtsystem.
@@ -103,79 +170,13 @@ Diese Aufgabe lösen Sie nicht an einem Stück, sondern Block für Block. Jeder 
 
 *******************************************************************************
 
-## Wie läuft die Veranstaltung ab?
-
-    --{{0}}--
-Anders als in den vergangenen Jahren trennen wir Vorlesung und Projekt nicht mehr auf zwei Semester. Vorlesung, Übung und Praktikum greifen von Anfang an ineinander. Jeder Termin dauert 90 Minuten. In manchen Wochen findet keine Vorlesung statt; diese Zeit gehört dann ganz der Arbeit am Roboter.
-
-<!-- data-type="none" -->
-| Format             | Wo?                           | Was passiert?                                                        |
-| ------------------ | ----------------------------- | -------------------------------------------------------------------- |
-| **Vorlesung (VL)** | Hörsaal                       | Konzepte und Methoden, Beispiele aus realen Robotersystemen          |
-| **Übung (Ü)**      | eigener Rechner / Pool        | angeleitete Aufgaben, z. B. mit aufgezeichneten Sensordaten (Bags)   |
-| **Praktikum (P)**  | Labor, TurtleBot              | Gruppenarbeit (2–3 Personen pro Roboter) an der Projektaufgabe      |
-
-    --{{1}}--
-Für die Arbeit benötigen Sie ein Linux-System. Wir arbeiten mit Ubuntu 24.04 und ROS 2 Jazzy. Wie Sie das auf Ihrem Rechner einrichten, klären wir in den ersten Übungen.
-
-     {{1}}
-*******************************************************************************
-
-**Werkzeuge**
-
-+ Ubuntu 24.04 (nativ, alternativ WSL2 unter Windows)
-+ ROS 2 Jazzy
-+ Python und C++
-+ Git / GitHub für die Gruppenarbeit — ich möchte in dieser Veranstaltung eine intensive Nutzung der Versionsverwaltung sehen!
-
-*******************************************************************************
-
-**Organisatorisches**
-
-<!-- data-type="none" -->
-| Thema                 | Regelung                                                                                                  |
-| --------------------- | --------------------------------------------------------------------------------------------------------- |
-| **Prüfungsleistung**  | Ihre Arbeit in den **Praktika**: Dort wenden Sie das Gelernte am TurtleBot an und bauen Schritt für Schritt die Projektaufgabe auf. |
-| **Vorlesung, Übung**  | vermitteln und üben, was Sie im Praktikum brauchen — die Selbsttests zeigen Ihnen, ob Sie bereit sind     |
-| **Gruppen**           | 2–3 Personen pro TurtleBot, gebildet bis zum ersten Praktikum P 1                                        |
-| **Versionsverwaltung**| jede Gruppe arbeitet in einem eigenen Git-Repository                                                      |
-
-    --{{2}}--
-Wichtig für Ihre Planung: Die Prüfungsleistung erbringen Sie in den Praktika. Vorlesung und Übung bereiten Sie darauf vor — wer die Übungen auslässt, steht im Praktikum vor dem Roboter und weiß nicht weiter.
-
-**Wo stehen Sie?** Ihre Antworten helfen uns, die Übungen und die Gruppen passend zu planen.
-
-Wie sicher sind Sie im Umgang mit dem Linux-Terminal?
-
-[(sicher)] sehr sicher
-[(grundlagen)] grundlegende Erfahrung
-[(keine)] kaum / keine Erfahrung
-
-Mit welchen Themen haben Sie schon gearbeitet?
-
-[[python]] Python
-[[cpp]] C++
-[[git]] Git
-[[ros]] ROS / ROS 2
-[[opencv]] OpenCV / Bildverarbeitung
-[[embedded]] Mikrocontroller / Embedded
 
 ## Was ist ein Roboter?
 
     --{{0}}--
 Bevor wir Definitionen lesen: Was halten Sie selbst für einen Roboter? Stimmen Sie ab — Sie werden sehen, dass wir uns im Saal nicht einig sind. Genau so geht es auch den Fachverbänden.
 
-**Roboter oder nicht?** Wählen Sie alle Systeme, die Sie als Roboter bezeichnen würden.
-
-[[saug]] Saugroboter
-[[spuel]] Geschirrspüler
-[[auto]] Auto mit Spurhalteassistent
-[[drohne]] ferngesteuerte Drohne
-[[arm]] Schweißroboter in der Autofabrik
-[[turtle]] TurtleBot in der Verkehrswelt
-
-    --{{1}}--
-Das Wort wurde 1920 vom Schriftsteller Karel Čapek geprägt. Seine Bedeutung hat sich seitdem gewandelt — und die offiziellen Definitionen gehen bis heute weit auseinander.
+> **Roboter oder nicht?** Welches bild haben Sie im Kopf, wenn Sie an einen Roboter denken?
 
          {{1}}
 *******************************************************************************
@@ -211,11 +212,11 @@ Für diese Veranstaltung arbeiten wir deshalb mit einer einfachen, funktionalen 
 > [!IMPORTANT]
 > **Merke – Arbeitsdefinition:** Ein Roboter ist eine Maschine, die ihre Umgebung über **Sensoren wahrnimmt**, daraus **Entscheidungen ableitet** und über **Aktoren auf die Umgebung einwirkt** — und das wiederholt, ohne dass ein Mensch jeden Schritt vorgibt.
 
-Prüfen Sie Ihre Abstimmung: Der Geschirrspüler misst zwar Wassertemperatur, entscheidet aber nichts über seine Umgebung; die ferngesteuerte Drohne nimmt wahr und handelt, aber ein Mensch entscheidet. Saugroboter, Spurhalteassistent und TurtleBot erfüllen die Definition.
+Der Geschirrspüler misst zwar Wassertemperatur, entscheidet aber nichts über seine Umgebung; die ferngesteuerte Drohne nimmt wahr und handelt, aber ein Mensch entscheidet. Saugroboter, Spurhalteassistent und TurtleBot erfüllen die Definition.
 
 ****
 
-## Klassifikation von Robotersystemen
+### Klassifikation von Robotersystemen
 
     --{{0}}--
 Roboter lassen sich anhand verschiedener Kriterien klassifizieren. Diese Unterscheidungsmerkmale helfen uns, die Vielfalt der Robotersysteme zu verstehen und ihre spezifischen Anforderungen zu erkennen. In dieser Veranstaltung konzentrieren wir uns vor allem auf autonome, mobile Roboter mit komplexer Sensorik.
@@ -248,7 +249,7 @@ In dieser Veranstaltung konzentrieren wir uns primär auf autonome, mobile Robot
 Autonomie und Mobilität sind voneinander unabhängig: Der ferngesteuerte Inspektionsroboter ist mobil und reich an Sensoren, trifft aber keine eigenen Entscheidungen. Der Mähroboter entscheidet selbst, kommt aber mit sehr einfacher Sensorik aus. Unser TurtleBot muss alle drei Eigenschaften vereinen.
 ***
 
-## Relevanz und Bedeutung mobiler Roboter
+### Relevanz und Bedeutung mobiler Roboter
 
     --{{0}}--
 Die Bedeutung mobiler Roboter hat in den letzten Jahrzehnten massiv zugenommen. Dies lässt sich anhand der Häufigkeit von Begriffen in wissenschaftlichen Publikationen nachvollziehen. Die folgende Grafik zeigt die Entwicklung der Begriffe "Autonomous Vehicle" und "Autonomous Robot". 
@@ -258,7 +259,7 @@ Die Bedeutung mobiler Roboter hat in den letzten Jahrzehnten massiv zugenommen. 
     --{{0}}--
 Besonders auffällig ist der exponentielle Anstieg ab den 2010er Jahren, der mit Fortschritten im Machine Learning und Deep Learning zusammenfällt. Diese Technologien sind heute unverzichtbare Werkzeuge für autonome Robotersysteme.
 
-## Herausforderungen bei der Entwicklung mobiler Roboter
+### Herausforderungen bei der Entwicklung mobiler Roboter
 
     --{{0}}--
 Die Entwicklung autonomer mobiler Roboter ist eine hochkomplexe Aufgabe, die Herausforderungen auf mehreren Ebenen mit sich bringt. Schauen wir uns diese systematisch an. 
@@ -347,38 +348,82 @@ Unsere Arbeitsdefinition beschreibt bereits den Aufbau jedes Roboters: wahrnehme
 
 ```mermaid @mermaid
 graph LR
-    S["Sense<br/>Sensoren nehmen wahr"] --> T["Think<br/>Verarbeitung, Entscheidung"]
+    S["Sense<br/>messen und wahrnehmen"] --> T["Think<br/>entscheiden"]
     T --> A["Act<br/>Aktoren handeln"]
     A --> U(["Umgebung"])
     U --> S
+    classDef sense fill:#d0ebff,stroke:#1c7ed6
+    classDef think fill:#fff3bf,stroke:#f08c00
+    classDef act fill:#d3f9d8,stroke:#2f9e44
+    class S sense
+    class T think
+    class A act
 ```
 
     --{{1}}--
-Der Schritt Think ist bei einem autonomen Roboter selbst wieder komplex. Er zerfällt in drei Schichten mit unterschiedlichen Zeithorizonten: Ganz unten reagiert die reaktive Überwachung in Millisekunden auf Sensordaten, etwa mit einem Notstopp. Darüber setzt die Ausführung Pläne in Fahrbewegungen um. Ganz oben plant die Handlungsplanung, welches Ziel als Nächstes angesteuert wird. Diese Drei-Schichten-Architektur ist also keine Alternative zu Sense-Think-Act, sondern eine Verfeinerung des Think-Kastens.
+Streng nacheinander ausgeführt hat der Kreislauf ein Problem: Er ist für schnelle Reaktionen zu langsam. Wenn plötzlich ein Fußgänger vor dem Roboter steht, darf der Notstopp nicht warten, bis ein neuer Plan berechnet ist. Reale Roboter nutzen deshalb eine hybride Architektur mit drei Schichten. Im Bild liegen sie übereinander: oben die langsamste, unten die schnellste. Die beiden oberen bilden das eigentliche Think. Die Handlungsplanung entscheidet in Sekunden bis Minuten, welches Ziel als Nächstes angesteuert wird, die Ausführung setzt das in Zehntelsekunden in Fahrmanöver um. Die unterste, die reaktive Schicht, ordnen wir Act zu. Sie bekommt die Messwerte direkt von den Sensoren und reagiert in Millisekunden, ohne zu überlegen. Warum sie trotzdem nicht zu Think gehört, obwohl sie den Notstopp auslöst, steht im Hinweis unter dem Bild.
 
                    {{1-2}}
 *************************************************
 
-**„Think“ genauer: die Drei-Schichten-Architektur**
+**Schnell und überlegt: die hybride Drei-Schichten-Architektur**
 
 ```mermaid @mermaid
-graph TD
-    N(["Nutzer"]) -- "Befehle" --> HP
-    subgraph think ["Think"]
-        HP["Handlungsplanung<br/>Strategie · Sekunden bis Minuten"] -- "Folge von Aktionen" --> AU["Ausführung<br/>Taktik · Zehntelsekunden"]
-        AU -- "geplante Trajektorie, Verhalten" --> RU["Reaktive Überwachung<br/>Reaktion · Millisekunden"]
+flowchart BT
+    %% Reihenfolge nicht ändern: Deklarations- und Kantenfolge plus unsichtbare Kanten (~~~) legen die Schichten übereinander (geprüft mit Mermaid 10.5 aus dem LiaScript-Template)
+    subgraph SENSE ["Sense"]
+        SN["Sensoren"]
+        WA["Wahrnehmung"]
     end
-    SE["Sense: Sensoren"] -- "Sensordaten" --> RU
-    RU -- "Steuerbefehle" --> AC["Act: Aktoren"]
-    AC --> UM(["Umgebung"])
-    UM --> SE
-    HP -. "Statusmeldungen" .-> N
+    subgraph THINK ["Think"]
+        AU["Ausführung<br/>Taktik · Zehntelsekunden"]
+        HP["Handlungsplanung<br/>Strategie · Sekunden bis Minuten"]
+    end
+    subgraph ACT ["Act"]
+        AK["Aktoren"]
+        RU["Reaktive Schicht<br/>Millisekunden"]
+    end
+    NU(["Nutzer"])
+    subgraph ENV [" "]
+        U(["Umgebung"])
+    end
+    U ~~~ AK
+    AK ~~~ RU
+    RU ~~~ AU
+    AU ~~~ HP
+    U --> SN
+    WA -- "Spur, Hindernisse" --> AU
+    WA --> HP
+    SN -- "Messwerte" --> RU
+    SN --> WA
+    HP -- "Statusmeldungen" --> NU
+    NU -- "Befehle" --> HP
+    HP -- "Folge von Aktionen" --> AU
+    AU -- "Sollbahn" --> RU
+    RU -- "Steuerbefehle" --> AK
+    AK --> U
+    style ENV fill:none,stroke:none
+    classDef box fill:#ffffff,stroke:#868e96
+    class SN,WA,HP,AU,AK,RU box
+    style SENSE fill:#d0ebff,stroke:#1c7ed6
+    style THINK fill:#fff3bf,stroke:#f08c00
+    style ACT fill:#d3f9d8,stroke:#2f9e44
 ```
+
+Sense (blau), Think (gelb) und Act (grün) sind dieselben Schritte wie im Kreislauf oben. Von den Sensoren führen zwei Wege zu den Aktoren:
+
+- der **überlegte** über Wahrnehmung, Handlungsplanung und Ausführung,
+- der **schnelle, direkte** über die reaktive Schicht.
+
+**Am Beispiel Kurve:** Die Ausführung entscheidet „jetzt der Spur folgen“ und gibt die *Sollbahn* vor, also den Weg, den der Roboter fahren soll. Die reaktive Schicht regelt die Räder alle paar Millisekunden so nach, dass er auf dieser Bahn bleibt.
+
+> [!CAUTION]
+> **Auch die reaktive Schicht entscheidet.** Der Notstopp wählt zwischen „weiterfahren“ und „stoppen“ — warum steht er dann bei Act und nicht bei Think? Weil er nur einer festen Regel folgt („Abstand unter 15 cm → stoppen“) und keine Alternativen abwägt. „Bei Gelb fahren oder halten?“ wägt dagegen ab, etwa Abstand, Geschwindigkeit und Verkehrslage, und gehört deshalb zu Think. Die Zuordnung ist eine Vereinfachung für diesen Kurs: In der Literatur wird die reaktive Schicht oft auch der Steuerung, also Think, zugerechnet.
 
 *************************************************
 
     --{{2}}--
-In der erweiterten Darstellung sehen Sie, welche Aufgaben auf den einzelnen Schichten anfallen — von Hardwaretreibern über Regelung und Weltmodell bis zur Verhaltensplanung. Und genau hier stellt sich die entscheidende Frage: Wer soll das alles implementieren?
+Die Tabelle zeigt, welche Aufgaben auf den einzelnen Schichten anfallen — von Hardwaretreibern über Regelung und Weltmodell bis zur Verhaltensplanung. Und genau hier stellt sich die entscheidende Frage: Wer soll das alles implementieren?
 
                    {{2}}
 *************************************************
@@ -386,10 +431,10 @@ In der erweiterten Darstellung sehen Sie, welche Aufgaben auf den einzelnen Schi
 <!-- data-type="none" -->
 | Schicht                | Typische Aufgaben                                   |
 | :--------------------- | :-------------------------------------------------- |
-| Handlungsplanung       | Verhaltensmodell, Kommunikation, Nutzerschnittstellen |
-| Ausführung             | Weltmodell, Handlungsmuster, Kontexterkennung       |
-| Reaktive Überwachung   | Regelung, Energiemanagement, Notaus-Erkennung       |
-| Sensoren und Aktoren   | Hardwaretreiber                                     |
+| Handlungsplanung       | Weltmodell und Karte, Routen- und Verhaltensplanung, Nutzerschnittstelle |
+| Ausführung             | Ablaufsteuerung, Handlungsmuster („Spur folgen“, „einparken“), passendes Manöver wählen |
+| Reaktive Schicht       | Regelung auf die Sollbahn, Notstopp, Überwachung von Akku und Motoren |
+| *Sensoren, Wahrnehmung, Aktoren (keine Schicht)* | Hardwaretreiber; Wahrnehmung, z.B. Spur im Bild erkennen |
 
 **Zentrale Frage:** Wer soll das denn alles implementieren?
 
@@ -414,24 +459,26 @@ In der erweiterten Darstellung sehen Sie, welche Aufgaben auf den einzelnen Schi
 [ [Sense] [Think] [Act] ]
 [  ( )     (X)     ( )  ] Entscheiden, ob bei Gelb noch gefahren wird
 [  (X)     ( )     ( )  ] Kamerabild der Fahrbahn erfassen
+[  (X)     ( )     ( )  ] Die Spur im Kamerabild erkennen
 [  ( )     ( )     (X)  ] Radgeschwindigkeiten über die Motoren einstellen
 [  (X)     ( )     ( )  ] Abstand zu einem Fußgänger mit dem LiDAR messen
 [  ( )     (X)     ( )  ] Einen Pfad in die Parklücke planen
 ***
-Sense liefert Messwerte (Kamerabild, Abstand), Think wertet sie aus und entscheidet (Gelb: fahren oder halten? Welcher Pfad?), Act setzt die Entscheidung in Bewegung um. Beachten Sie: Das Kamerabild allein sagt noch nichts über die Fahrbahn — die Spur darin zu *erkennen* gehört bereits zu Think.
+Sense umfasst Messen **und** Wahrnehmen: das Kamerabild aufnehmen, darin die Spur erkennen, den Abstand messen. Think entscheidet auf dieser Grundlage (Gelb: fahren oder halten? Welcher Pfad?), Act setzt die Entscheidung in Bewegung um. Die Wahrnehmung — etwa die Spurerkennung in P 3 — behandeln wir deshalb in Block 2 „Sensorgrundlagen“.
 ***
 
-**Selbsttest 2:** Welche Schicht innerhalb von Think ist zuständig?
+**Selbsttest 2:** Welche Schicht der hybriden Architektur ist zuständig?
 
-[ [Handlungsplanung] [Ausführung] [Reaktive Überwachung] ]
+[ [Handlungsplanung] [Ausführung] [Reaktive Schicht] ]
 [        (X)              ( )              ( )            ] Entscheiden, als Nächstes die Parklücke anzusteuern
-[        ( )              (X)              ( )            ] Der geplanten Spur durch eine Kurve folgen
+[        ( )              (X)              ( )            ] Entscheiden, jetzt der Spur zu folgen statt einzuparken
+[        ( )              ( )              (X)            ] Die Räder laufend nachregeln, damit der Roboter auf der Sollbahn bleibt
 [        ( )              ( )              (X)            ] Sofort stoppen, wenn der LiDAR einen Fußgänger direkt vor dem Roboter misst
 ***
-Die Schichten unterscheiden sich vor allem in ihrer Reaktionszeit: Der Notstopp darf nicht warten, bis ein Plan neu berechnet ist — er gehört deshalb in die unterste, schnellste Schicht.
+Die Schichten unterscheiden sich vor allem in ihrer Reaktionszeit: Der Notstopp darf nicht warten, bis ein Plan neu berechnet ist — er gehört deshalb in die reaktive Schicht, die Messwerte der Sensoren direkt in Steuerbefehle umsetzt.
 ***
 
-## Warum ROS? Das "Rad nicht neu erfinden"
+### Warum ROS? Das "Rad nicht neu erfinden"
 
     --{{0}}--
 Genau an diesem Punkt kommt das Robot Operating System ins Spiel. ROS ist nicht wirklich ein Betriebssystem im klassischen Sinne, sondern ein Framework, das Standardlösungen für wiederkehrende Robotik-Probleme bereitstellt. Statt alles von Grund auf neu zu entwickeln, können Entwickler auf eine riesige Bibliothek von Werkzeugen und Algorithmen zurückgreifen.
@@ -510,30 +557,8 @@ Fassen wir die wichtigsten Punkte dieser Einführungsvorlesung zusammen:
 + Ein Roboter **nimmt wahr, entscheidet und handelt** — wiederholt und ohne dass ein Mensch jeden Schritt vorgibt (unsere Arbeitsdefinition)
 + Robotersysteme lassen sich anhand **vieler Kriterien klassifizieren** (Autonomie, Mobilität, Sensorik, etc.)
 + Die Entwicklung mobiler Roboter bringt **technologische, wirtschaftliche und soziale Herausforderungen** mit sich
-+ Die **Systemarchitektur** folgt dem **Sense-Think-Act-Kreislauf**; der Schritt Think gliedert sich in **drei Schichten** (Planung, Ausführung, reaktive Überwachung)
++ Die **Systemarchitektur** folgt dem **Sense-Think-Act-Kreislauf**; reale Roboter ergänzen ihn zu einer **hybriden Architektur** mit drei Schichten: Handlungsplanung und Ausführung (Think) sowie eine reaktive Schicht (Act), die Messwerte direkt in Steuerbefehle umsetzt
 + **ROS 2** ermöglicht es uns, **auf vorhandenen Lösungen aufzubauen** statt alles neu zu entwickeln
-
-    --{{1}}--
-Damit kennen Sie das Ziel und den Weg dorthin. In der nächsten Übung legen wir mit dem Linux-Terminal das Fundament. Ich freue mich auf die gemeinsame Reise durch die faszinierende Welt der mobilen Robotik!
-
-      {{1}}
-**Zum Nachdenken:** Welche Fähigkeiten braucht ein menschlicher Fahrer, um durch unsere Verkehrswelt zu kommen — und welcher Sensor des TurtleBots könnte jeweils die Augen und Ohren ersetzen? Notieren Sie Ihre Antwort: Wir greifen sie zu Beginn von Block 2 (Sensorgrundlagen) wieder auf.
-
-**Abschluss-Check**
-
-Ein Rasenmäher fährt ein fest programmiertes Muster ab, ohne Sensoren. Ist er nach unserer Arbeitsdefinition ein Roboter?
-
-[( )] Ja, weil er sich selbstständig bewegt.
-[(X)] Nein, weil er seine Umgebung nicht wahrnimmt und nichts entscheidet.
-***
-Ohne Sensoren fehlt der Schritt Sense — und damit die Grundlage für Entscheidungen. Er ist ein Automat, kein Roboter im Sinne unserer Definition.
-***
-
-Der TurtleBot misst mit dem LiDAR ein Hindernis und bremst sofort ab. Welche Schicht von Think ist beteiligt? [[ Handlungsplanung | Ausführung | (reaktive Überwachung) ]]
-
-Welche Herausforderung ist für den TurtleBot in **unserer** Verkehrswelt am wenigsten relevant? [[ Hindernisidentifikation | Positionierung | (Kommunikationsabriss über große Entfernungen) ]]
-
-Was übernimmt ROS 2 für Sie im Projekt? [[ Die Fahrlogik für Spur und Ampel | (Treiber und Datenaustausch zwischen den Programmen) | Die Bewertung im Praktikum ]]
 
 ## Weiterführende Ressourcen
 
@@ -551,6 +576,8 @@ Für Interessierte hier noch einige Ressourcen zur Vertiefung:
 
 --------------------------------------------------------------------------------
 
-**🗺️ Nächster Halt:** Ü 1 · Linux Shell (Woche ab 26.10.2026) – Ihr Rechner wird zur Werkbank: Ohne sicheren Umgang mit der Shell erreichen Sie weder ROS 2 noch den TurtleBot. [Auf der Kurslandkarte ansehen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=ue1)
+**🗺️ Nächster Halt:** VL 2 · ROS 2 Grundlagen (Woche ab 26.10.2026) – Sie verstehen, wie die Software des TurtleBots aus Knoten und Topics zusammengesetzt ist. [Auf der Kurslandkarte ansehen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=03)
+
+**Außerdem bis dahin:** [Ü 1 · Linux Shell](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=ue1) (Woche ab 26.10.2026)
 
 <!-- kurslandkarte:ausblick-ende -->
