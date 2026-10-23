@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.2.0
+version:  0.3.0
 language: de
 narrator: Deutsch Female
 
@@ -38,15 +38,17 @@ import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_Softwareproje
 
 --------------------------------------------------------------------------------
 
-**Was wir schon wissen — und was morgen kommt**
+**Was wir schon wissen — und was am Donnerstag kommt**
+
+Wir zählen die Vorlesungen ab 00: Die Einführung war VL 00, heute ist VL 01.
 
     --{{0}}--
-Kurz vorweg: Wir zählen die Vorlesungen ab null, wie in den anderen Veranstaltungen des Instituts. Die Einführung war also VL 00, heute ist VL 01. Aus VL 00 brauchen wir heute den Sense-Think-Act-Kreislauf: Beim TurtleBot sind das getrennte Programme, die Daten austauschen müssen. Wie sie das tun, sehen wir heute. Morgen in der ersten Übung installieren Sie ROS 2 und lernen die Shell kennen. Eine Sache daraus greife ich heute schon auf, weil sie die häufigste Fehlerquelle ist: Jedes Terminal hat seine eigene Umgebung. Tippen Sie zur Frage unten einfach Ihre Vermutung — morgen probieren Sie es selbst aus.
+Kurz vorweg: Wir zählen die Vorlesungen ab null, wie in den anderen Veranstaltungen des Instituts. Die Einführung war also VL 00, heute ist VL 01. Aus VL 00 brauchen wir heute den Sense-Think-Act-Kreislauf: Beim TurtleBot sind das getrennte Programme, die Daten austauschen müssen. Wie sie das tun, sehen wir heute. Am Donnerstag in der ersten Übung installieren Sie ROS 2 und lernen die Shell kennen. Eine Sache daraus greife ich heute schon auf, weil sie die häufigste Fehlerquelle ist: Jedes Terminal hat seine eigene Umgebung. Tippen Sie zur Frage unten einfach Ihre Vermutung — am Donnerstag probieren Sie es selbst aus.
 
-+ **VL 00:** Sense, Think und Act sind beim TurtleBot eigene Programme — heute sehen wir, **wie sie Daten austauschen**. (Wir zählen die Vorlesungen ab 00, wie in den anderen Veranstaltungen des Instituts: Die Einführung war VL 00, heute ist VL 01.)
-+ **Morgen in Ü 1:** ROS 2 installieren und die Shell beherrschen. Vorab nur so viel: Eine **Umgebungsvariable** ist ein benannter Wert, den ein Terminal an die Programme weitergibt, die Sie darin starten (`export NAME=wert`). Mit `source` lädt man eine ganze Datei solcher Werte in das aktuelle Terminal.
++ **VL 00:** Sense, Think und Act sind beim TurtleBot eigene Programme — heute sehen wir, **wie sie Daten austauschen**.
++ **Am Donnerstag in Ü 1:** ROS 2 installieren und die Shell kennenlernen. Vorab nur so viel: Eine **Umgebungsvariable** ist ein benannter Wert, den ein Terminal an die Programme weitergibt, die Sie darin starten (`export NAME=wert`). Mit `source` lädt man eine ganze Datei solcher Werte in das aktuelle Terminal.
 
-**Ihre Vermutung:** Was gibt `echo $ROS_DOMAIN_ID` in einem **neuen** Terminal aus, wenn Sie den Wert im ersten Terminal mit `export ROS_DOMAIN_ID=12` gesetzt haben (und nichts in `~/.bashrc` steht)?
+**Ihre Vermutung:** Was gibt `echo $ROS_DOMAIN_ID` in einem **neuen** Terminal aus, wenn Sie den Wert im ersten Terminal mit `export ROS_DOMAIN_ID=12` gesetzt haben (ohne weitere Einstellungen)?
 
 [( )] `12`
 [(X)] eine leere Zeile
@@ -273,7 +275,7 @@ Das Beispiel zeigt einen Ausschnitt, wie er in unserem Projekt entstehen könnte
 | **Parameter** | Konfigurationswert eines Knotens, zur Laufzeit änderbar | Schwellwert der Spurerkennung, maximale Geschwindigkeit |
 | **Action**    | lang laufender Auftrag mit Zwischenständen und Abbruch | „Fahre zur Parklücke“ mit Rückmeldung zum Fortschritt  |
 
-In dieser Vorlesung konzentrieren wir uns auf Topics. Services, Parameter und Actions probieren Sie in der Übung mit der Kommandozeile aus.
+In dieser Vorlesung konzentrieren wir uns auf Topics. Parameter und Aufzeichnungen probieren Sie in Ü 2 aus, Services und Actions begegnen Ihnen später im Projekt und bei der Navigation.
 
 **Kurze Kontrolle:** Welches Kommunikationsmuster passt jeweils?
 
@@ -349,7 +351,7 @@ Ein laufendes ROS-2-System untersuchen Sie mit dem Kommandozeilenwerkzeug `ros2`
 | `ros2 node list / info`  | welche Knoten laufen, was veröffentlichen sie?             |
 | `ros2 topic list / echo / hz / pub` | Topics anzeigen, mitlesen, Takt messen, selbst senden |
 | `ros2 interface show`    | den Aufbau eines Nachrichtentyps anzeigen                  |
-| `ros2 service`, `ros2 param`, `ros2 action` | die übrigen Kommunikationsmuster (Parameter und Service in Ü 2) |
+| `ros2 service`, `ros2 param`, `ros2 action` | die übrigen Kommunikationsmuster (Parameter in Ü 2) |
 | `ros2 bag`               | Daten aufzeichnen und abspielen (Ü 2)                      |
 | `ros2 doctor`            | Installation und Netzwerk auf typische Probleme prüfen     |
 
@@ -485,7 +487,7 @@ if __name__ == '__main__':
     main()
 ```
 
-Wie lassen sich diese beiden Knoten nun starten? Wir nutzen die Beispiele, die mit ROS 2 bereits installiert werden: die Pakete `examples_rclcpp_minimal_publisher` und `examples_rclcpp_minimal_subscriber` (beide in C++). Jeder Knoten läuft in einem eigenen Terminal — und in jedem Terminal muss zuerst die ROS-2-Umgebung geladen werden (vgl. Ü 1).
+Wie lassen sich diese beiden Knoten nun starten? Wir nutzen die Beispiele, die mit ROS 2 bereits installiert werden: die Pakete `examples_rclcpp_minimal_publisher` und `examples_rclcpp_minimal_subscriber` (beide in C++). Jeder Knoten läuft in einem eigenen Terminal — und in jedem Terminal muss zuerst die ROS-2-Umgebung geladen werden (das üben Sie in Ü 1). Heute schauen Sie nur zu — ab Donnerstag läuft das auch bei Ihnen.
 
 ```bash
 # Terminal 1
@@ -698,12 +700,11 @@ Der Timer ruft den Callback alle 500 ms auf. Die `10` bei `create_publisher` ist
 ## Installation
 
     --{{0}}--
-ROS 2 installieren wir gemeinsam in der ersten Übung am Donnerstag — die Installation ist dort zugleich das Übungsbeispiel für die Shell. Bringen Sie deshalb Ihren Laptop mit dem Ubuntu mit, das Sie bis dahin eingerichtet haben, und aktualisieren Sie es vorher einmal zu Hause.
+ROS 2 installieren wir gemeinsam in der ersten Übung am Donnerstag — die Installation ist dort zugleich das Übungsbeispiel für die Shell. Bitte kommen Sie auch dann, wenn bis dahin noch kein Ubuntu läuft — niemand bleibt in der Übung ohne Rechner.
 
-ROS 2 Jazzy installieren wir **gemeinsam in Ü 1** (Donnerstag, 16:15 Uhr, Lessingstraße) — die Installation ist dort zugleich das Übungsbeispiel für die Shell.
+ROS 2 Jazzy installieren wir **gemeinsam in Ü 1** (Donnerstag, 16:15 Uhr, Lessingstraße).
 
-> [!NOTE]
-> **Hinweis – bis Ü 1 vorbereiten:** Laptop mit Ubuntu 24.04 (nativ oder WSL2), Netzteil, mindestens 10 GB frei. Führen Sie vorher zu Hause einmal `sudo apt update && sudo apt upgrade` aus — dann muss in der Übung nur noch ROS 2 geladen werden.
+**Bis Donnerstag vorbereiten:** Laptop mit Ubuntu 24.04, Netzteil, mindestens 10 GB frei. Führen Sie vorher zu Hause einmal `sudo apt update && sudo apt upgrade` aus — dann muss in der Übung nur noch ROS 2 geladen werden. Unter Windows richten Sie Ubuntu mit `wsl --install -d Ubuntu-24.04` (WSL2) ein. Läuft bis Donnerstag noch kein Ubuntu, kommen Sie trotzdem: Sie arbeiten dann zu zweit an einem Laptop oder am Pool-Rechner und holen die Installation zu Hause nach.
 
 Wir installieren das Paket `ros-jazzy-desktop` nach der offiziellen Anleitung [Ubuntu (deb packages)](https://docs.ros.org/en/jazzy/Installation/Ubuntu-Install-Debs.html); es enthält `rqt`, `turtlesim` und die Beispiele aus dieser Vorlesung. Wer in Ü 1 nicht fertig wird, schließt die Installation nach unserer [Installationsanleitung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/installation_ros2/README.md) bis VL 02 ab.
 
@@ -712,8 +713,8 @@ Wir installieren das Paket `ros-jazzy-desktop` nach der offiziellen Anleitung [U
     --{{0}}--
 Die wichtigste Aufgabe dieser Woche ist die Installation in der Übung. Die dritte Aufgabe, den ROS-Graphen für Spurfolgen und Ampelhalt zu skizzieren, ist der beste Test, ob Sie die heutige Vorlesung verstanden haben.
 
-1. Installieren Sie ROS 2 Jazzy in Ü 1 und führen Sie dort den Selbsttest aus. Nicht fertig geworden? Dann nach der [Installationsanleitung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/installation_ros2/README.md) — spätestens bis VL 02.
-2. Arbeiten Sie zwei Tutorials der ROS-2-Dokumentation durch: [Understanding nodes](https://docs.ros.org/en/jazzy/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Nodes/Understanding-ROS2-Nodes.html) und [Understanding topics](https://docs.ros.org/en/jazzy/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Topics/Understanding-ROS2-Topics.html). Die übrigen Tutorials dürfen Sie auslassen — Parameter und Aufzeichnungen folgen in Ü 2.
+1. Installieren Sie ROS 2 Jazzy in Ü 1 und führen Sie dort die drei Tests am Ende der Installation aus. Nicht fertig geworden? Dann nach der [Installationsanleitung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/installation_ros2/README.md) — spätestens bis VL 02.
+2. Nach Ü 1, sobald ROS 2 läuft: Arbeiten Sie zwei Tutorials der ROS-2-Dokumentation durch: [Understanding nodes](https://docs.ros.org/en/jazzy/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Nodes/Understanding-ROS2-Nodes.html) und [Understanding topics](https://docs.ros.org/en/jazzy/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Topics/Understanding-ROS2-Topics.html). Die übrigen Tutorials dürfen Sie auslassen — Parameter und Aufzeichnungen folgen in Ü 2.
 3. Überlegen Sie für die Verkehrswelt: Welche Knoten braucht ein TurtleBot, der einer Fahrspur folgt und an einer roten Ampel hält? Skizzieren Sie den ROS-Graphen mit Knoten und Topics wie in Abschnitt „Basiskonzepte“. Bewahren Sie die Skizze auf — in VL 02 ergänzen Sie sie um Pakete.
 
 **Zum Weiterlesen**
