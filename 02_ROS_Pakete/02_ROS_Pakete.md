@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger & Claude.ai & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.2.0
+version:  0.3.0
 language: de
 narrator: Deutsch Female
 
@@ -24,25 +24,33 @@ import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_Softwareproje
 | **Link auf GitHub:** | https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/02_ROS_Pakete/02_ROS_Pakete.md     |
 | **Autoren**          | @author                                                                                                                |
 
-**Zum Einstieg:** Wenn Sie im Praktikum den TurtleBot hochfahren, tippen Sie genau einen Befehl:
+**Zum Einstieg:** So startet der TurtleBot im Praktikum:
 
 ```bash
 ros2 launch turtlebot3_bringup robot.launch.py
 ```
 
-Dieser eine Befehl startet den LiDAR-Treiber, die Motorsteuerung und einen Knoten, der die Geometrie des Roboters veröffentlicht — verteilt auf drei Launch-Dateien in zwei Paketen. In VL 01 brauchten wir für zwei Knoten noch zwei Terminals. **Wie kommen wir von dort zu einem Befehl für ein ganzes System?** Das ist die Frage dieser Vorlesung.
++ ein Befehl → LiDAR-Treiber, Motorsteuerung, Robotergeometrie
++ verteilt auf drei Launch-Dateien in zwei Paketen
++ in VL 01: zwei Knoten, zwei Terminals
+
+**Wie kommen wir von dort zu einem Befehl für ein ganzes System?**
+
+    --{{0}}--
+Wenn Sie im Praktikum den TurtleBot hochfahren, tippen Sie genau diesen einen Befehl. Er startet den LiDAR-Treiber, die Motorsteuerung und einen Knoten, der die Geometrie des Roboters veröffentlicht. In VL 01 brauchten wir für zwei Knoten noch zwei Terminals mit je zwei source-Befehlen. Der Weg dazwischen ist das Thema dieser Vorlesung.
 
 --------------------------------------------------------------------------------
 
 **Zielstellung der heutigen Veranstaltung**
-
-In VL 01 haben wir fertige Knoten gestartet und untersucht. Heute schreiben wir eigene — so, wie Sie später Ihre Spurerkennung und Ihr Fahrverhalten für den TurtleBot umsetzen.
 
 + Aufbau eines ROS-2-Pakets und eines Workspace erklären
 + Pakete in C++ und Python anlegen, mit `colcon` bauen und starten
 + Einen eigenen Nachrichtentyp definieren und in beiden Sprachen verwenden
 + Mehrere Knoten mit einer Launch-Datei gemeinsam starten und konfigurieren
 + Log-Ausgaben gezielt einsetzen und ROS 2 über mehrere Rechner betreiben
+
+    --{{1}}--
+In VL 01 haben wir fertige Knoten gestartet und untersucht. Heute schreiben wir eigene, so wie Sie später Ihre Spurerkennung und Ihr Fahrverhalten für den TurtleBot umsetzen.
 
 --------------------------------------------------------------------------------
 
@@ -76,36 +84,33 @@ Kurz zur Orientierung. Wir sind in Block 1, Termin 4 von 32. Sie bauen eigene Kn
 
 ## Vom Beispiel zum eigenen Paket
 
+**Paket** = Ordner mit zusammengehörigem Code und einer Beschreibung für ROS
+
++ Quellcode der Knoten (C++ oder Python)
++ Abhängigkeiten: andere Pakete, die gebraucht werden
++ Anweisungen zum Bauen
++ bei Bedarf eigene Nachrichtentypen und Launch-Dateien
++ installierte Pakete anzeigen: `ros2 pkg list`
+
     --{{0}}--
-Ab heute schreiben Sie eigenen Code für ROS 2. Damit ROS ihn finden, bauen und starten kann, muss er in einem Paket liegen. Ein Paket ist nichts Magisches — ein Ordner mit Code und einer Beschreibung, die ROS lesen kann.
+Bisher haben wir mit ros2 run Programme gestartet, die mit ROS 2 installiert wurden. Für das Projekt brauchen Sie eigene Knoten: eine Spurerkennung, eine Ampelerkennung, ein Fahrverhalten. Damit ROS diese finden, bauen und starten kann, müssen sie in Paketen liegen. Ein Paket ist nichts Magisches, sondern ein Ordner mit Code und einer Beschreibung, die ROS lesen kann.
 
-Bisher haben wir mit `ros2 run` Programme gestartet, die mit ROS 2 installiert wurden. Für das Projekt brauchen Sie eigene Knoten — eine Spurerkennung, eine Ampelerkennung, ein Fahrverhalten. Damit ROS diese finden, bauen und starten kann, müssen sie in **Paketen** organisiert sein.
+**Wie fein aufteilen?**
 
-Ein Paket ist ein Ordner mit zusammengehörigem Code und einer Beschreibung, die ROS lesen kann. Es enthält
++ jedes Paket hat **eine** Aufgabe
++ Pakete sind nur über Nachrichten gekoppelt, nicht über gemeinsamen Code
++ Wiederverwendbares (z. B. Nachrichtentypen) in ein eigenes Paket
 
-+ den Quellcode der Knoten (C++ oder Python),
-+ eine Liste der Abhängigkeiten, also anderer Pakete, die gebraucht werden,
-+ die Anweisungen zum Bauen,
-+ bei Bedarf eigene Nachrichtentypen und Launch-Dateien.
-
-Welche Pakete installiert sind, verrät `ros2 pkg list`. Wie fein sollte man ein System in Pakete aufteilen? Einige Grundsätze aus dem Software-Engineering helfen:
-
-+ Jedes Paket hat **eine** Aufgabe — die Spurerkennung weiß nichts vom Motor.
-+ Pakete sind nur über Nachrichten gekoppelt, nicht über gemeinsamen Code.
-+ Was in einem anderen Projekt wiederverwendbar sein soll (z.B. eigene Nachrichtentypen), kommt in ein eigenes Paket.
+    --{{1}}--
+Wie fein man ein System in Pakete aufteilt, folgt Grundsätzen aus dem Software-Engineering. Die Spurerkennung weiß nichts vom Motor, sie veröffentlicht nur, wo die Spur liegt. So lässt sich jedes Paket einzeln testen und austauschen. Was mehrere Pakete brauchen, etwa ein gemeinsamer Nachrichtentyp für den Ampelzustand, bekommt ein eigenes Paket, damit die Nutzer nicht voneinander abhängen.
 
 ### Workspace und Paketstruktur
 
-    --{{0}}--
-Alle Ihre Pakete liegen in einem Arbeitsordner, dem Workspace. Merken Sie sich die vier Ordner: src schreiben Sie selbst, build, install und log erzeugt das Bauwerkzeug.
-
-Pakete liegen in einem **Workspace**, einem Arbeitsordner mit dem Unterordner `src`. Angelegt ist er mit einem Befehl:
+**Workspace** = Arbeitsordner mit Unterordner `src`
 
 ```bash
 mkdir -p ~/ros2_ws/src      # -p legt auch den übergeordneten Ordner an (Ü 1)
 ```
-
-Ein Workspace kann viele Pakete enthalten — C++ und Python gemischt. Am Ende dieser Vorlesung sieht unserer so aus:
 
 ```text
 ros2_ws/
@@ -127,88 +132,89 @@ ros2_ws/
         └── my_python_subscriber/data_receiver.py
 ```
 
-Zwei Dateien sind in jedem C++-Paket Pflicht:
+    --{{0}}--
+Alle Ihre Pakete liegen in einem Arbeitsordner, dem Workspace. Ein Workspace kann viele Pakete enthalten, C++ und Python gemischt. So sieht unserer am Ende dieser Vorlesung aus: ein Paket für den Nachrichtentyp, eines für einen Knoten in C++ und eines für einen Knoten in Python.
 
-+ `package.xml` — Name, Version, Autor, Lizenz und **Abhängigkeiten** des Pakets
-+ `CMakeLists.txt` — wie das Paket gebaut wird (bei Python-Paketen übernimmt das `setup.py`)
+**Pflicht in jedem Paket:** `package.xml` — Name, Version, Lizenz, **Abhängigkeiten**
 
-Beim Bauen legt `colcon` neben `src` drei weitere Ordner an:
++ C++: `CMakeLists.txt` beschreibt das Bauen · Python: `setup.py`
+
+**colcon legt neben `src` an:**
 
 + `build/` — Zwischendateien des Compilers
-+ `install/` — die fertigen Programme und das Skript `setup.bash`
-+ `log/` — Protokolle jedes Build-Vorgangs
++ `install/` — fertige Programme und `setup.bash`
++ `log/` — Protokolle der Build-Vorgänge
++ alle drei gehören **nicht** in Git
 
-Diese drei Ordner gehören nicht in Git. Sie lassen sich jederzeit neu erzeugen.
+    --{{1}}--
+Die package.xml sagt, was ein Paket braucht. Die CMakeLists.txt beziehungsweise die setup.py sagt, wie es gebaut wird. Merken Sie sich die vier Ordner des Workspace: src schreiben Sie selbst, build, install und log erzeugt das Bauwerkzeug. Weil sich diese drei jederzeit neu erzeugen lassen, gehören sie nicht ins Repository.
 
 ## Bauen mit colcon
 
-    --{{0}}--
-Warum brauchen wir ein eigenes Bauwerkzeug? Weil Pakete voneinander abhängen. colcon findet die richtige Reihenfolge und legt alles so ab, dass ROS es findet. Der häufigste Fehler danach ist das vergessene source.
+**Warum nicht einfach `g++ main.cpp`?** — Pakete hängen voneinander ab:
 
-Warum reicht nicht einfach `g++ main.cpp`? Bei einem einzelnen Programm würde das genügen. In einem Workspace hängen Pakete aber voneinander ab: Der Knoten in `my_tutorial_package` braucht den Nachrichtentyp aus `my_msg_package`, der vorher in C++- und Python-Code übersetzt werden muss. Ein Build-Werkzeug muss also
-
-+ die Abhängigkeiten aller Pakete erkennen und eine Reihenfolge festlegen,
-+ jedes Paket mit seinem eigenen Build-System bauen (CMake für C++, setuptools für Python),
-+ die Ergebnisse so installieren, dass ROS sie findet.
-
-ROS 2 teilt diese Aufgabe auf zwei Werkzeuge auf:
++ Abhängigkeiten erkennen, Reihenfolge festlegen
++ jedes Paket mit seinem Build-System bauen (CMake für C++, setuptools für Python)
++ Ergebnisse so ablegen, dass ROS sie findet
 
 <!-- data-type="none" -->
-| Werkzeug   | Ebene          | Aufgabe                                                                            |
-| :--------- | :------------- | :--------------------------------------------------------------------------------- |
-| **ament**  | ein Paket      | Build-Regeln für ein einzelnes Paket: `ament_cmake` (C++) oder `ament_python`      |
-| **colcon** | ganzer Workspace | baut alle Pakete in der richtigen Reihenfolge und erzeugt `install/setup.bash`  |
+| Werkzeug   | Ebene            | Aufgabe                                                        |
+| :--------- | :--------------- | :------------------------------------------------------------- |
+| **ament**  | ein Paket        | Build-Regeln: `ament_cmake` (C++) oder `ament_python`          |
+| **colcon** | ganzer Workspace | baut alle Pakete in Reihenfolge, erzeugt `install/setup.bash`  |
 
-Gebaut wird immer im Wurzelordner des Workspace, nicht in `src`:
+    --{{0}}--
+Bei einem einzelnen Programm würde der Compiler genügen. In einem Workspace braucht aber der Knoten in my_tutorial_package den Nachrichtentyp aus my_msg_package, und der muss vorher in C++- und Python-Code übersetzt werden. Ein Bauwerkzeug muss also die richtige Reihenfolge finden. ROS 2 teilt die Arbeit auf: ament kennt die Regeln für ein einzelnes Paket, colcon koordiniert den ganzen Workspace.
+
+**Bauen — immer im Wurzelordner, nicht in `src`:**
 
 ```bash
 cd ~/ros2_ws
 source /opt/ros/jazzy/setup.bash
 colcon build --symlink-install
-```
-
-Danach muss die Shell den neuen Inhalt kennen. Wie in Ü 1 bei `source /opt/ros/jazzy/setup.bash` erweitert `install/setup.bash` die Umgebungsvariablen — diesmal um Ihre eigenen Pakete:
-
-```bash
-source ~/ros2_ws/install/setup.bash
+source ~/ros2_ws/install/setup.bash    # Workspace in diesem Terminal bekannt machen
 ```
 
 > [!IMPORTANT]
-> **Merke:** Erst ROS laden, dann bauen, dann den Workspace laden — und das in **jedem neuen Terminal** erneut. Ein neues Terminal startet in Ihrem Home-Verzeichnis; der relative Pfad `source install/setup.bash` funktioniert nur, wenn Sie vorher mit `cd ~/ros2_ws` in den Workspace gewechselt sind. Mit dem vollständigen Pfad `~/ros2_ws/install/setup.bash` sind Sie auf der sicheren Seite.
+> **Merke:** Erst ROS laden, dann bauen, dann den Workspace laden — in **jedem neuen Terminal** erneut, am sichersten mit dem vollständigen Pfad `~/ros2_ws/install/setup.bash`.
 
-Zwei nützliche Optionen:
+    --{{1}}--
+Nach dem Bauen muss die Shell den neuen Inhalt kennen. Wie in Ü 1 bei der ROS-Installation erweitert die Datei setup.bash im Ordner install die Umgebungsvariablen, diesmal um Ihre eigenen Pakete. Ein neues Terminal startet in Ihrem Home-Verzeichnis. Der relative Pfad install/setup.bash funktioniert deshalb nur, wenn Sie vorher in den Workspace gewechselt sind.
 
-+ `--symlink-install` legt in `install/` nur Verweise (_Links_) auf Ihre Python- und Launch-Dateien an, statt sie zu kopieren. Änderungen am Code wirken dann sofort, ohne neuen Build. Ändern Sie dagegen `setup.py`, `package.xml` oder C++-Code, müssen Sie neu bauen.
-+ `--packages-select <paket>` baut nur das genannte Paket — spart Zeit, wenn Sie nur an einem Paket arbeiten.
+### Optionen und typische Fehler
 
-**Kurze Kontrolle:** Sie haben `colcon build` erfolgreich ausgeführt, aber `ros2 run my_tutorial_package data_generator` meldet `Package 'my_tutorial_package' not found`. Was fehlt?
++ `--symlink-install`: Python- und Launch-Dateien nur verlinkt → Änderungen wirken sofort
+  + neu bauen nach Änderung an `setup.py`, `package.xml` oder C++-Code
++ `--packages-select <paket>`: nur dieses Paket bauen
+
+    --{{0}}--
+Mit symlink-install legt colcon im Ordner install nur Verweise auf Ihre Python- und Launch-Dateien an, statt sie zu kopieren. Eine Änderung am Python-Code wirkt dann sofort, ohne neuen Build. C++-Code muss dagegen immer neu übersetzt werden, und auch Änderungen an den Beschreibungsdateien brauchen einen neuen Build. Mit packages-select sparen Sie Zeit, wenn Sie nur an einem Paket arbeiten.
+
+**Kurze Kontrolle:** `colcon build` lief fehlerfrei, aber `ros2 run my_tutorial_package data_generator` meldet `Package 'my_tutorial_package' not found`. Was fehlt?
 
 [( )] Das Paket muss zusätzlich mit `sudo apt install` installiert werden.
-[(X)] In diesem Terminal wurde `source install/setup.bash` nicht ausgeführt.
+[(X)] In diesem Terminal wurde `source ~/ros2_ws/install/setup.bash` nicht ausgeführt.
 [( )] `colcon build` muss im Ordner `src` aufgerufen werden.
 ***
-`colcon build` legt die Programme in `install/` ab. Welche Pakete `ros2` kennt, steht aber in den Umgebungsvariablen der Shell — erst `source install/setup.bash` trägt den Workspace dort ein. Das gilt für jedes Terminal einzeln (vgl. Ü 1).
+`colcon build` legt die Programme in `install/` ab. Welche Pakete `ros2` kennt, steht aber in den Umgebungsvariablen — erst `source ~/ros2_ws/install/setup.bash` trägt den Workspace dort ein, in jedem Terminal einzeln (vgl. Ü 1).
 ***
 
 ## Ein eigenes Paket Schritt für Schritt
 
+**Ziel:** der Zähler aus VL 01 — als Zahl mit Kommentar statt als Text
+
+1. eigener Nachrichtentyp (Paket `my_msg_package`)
+2. Publisher in **C++** (Paket `my_tutorial_package`) — der Publisher aus VL 01, jetzt in C++
+3. Subscriber in **Python** (Paket `my_python_subscriber`)
+
+Vollständiger, unter Jazzy getesteter Code: [02_ROS_Pakete/example](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/tree/master/02_ROS_Pakete/example/pkg_example)
+
     --{{0}}--
-Wir bauen jetzt in drei Schritten ein kleines System: einen eigenen Nachrichtentyp, einen Publisher in C++ und einen Subscriber in Python. Achten Sie darauf, was in jedem Schritt gleich bleibt — das ist das Muster für Ihre eigenen Pakete.
-
-Wir erweitern das Publisher/Subscriber-Beispiel aus VL 01. Statt eines Textes soll der Zählwert als Zahl übertragen werden, zusammen mit einem Kommentar. Dazu brauchen wir
-
-1. einen eigenen Nachrichtentyp (Paket `my_msg_package`),
-2. einen Publisher in C++ (Paket `my_tutorial_package`),
-3. einen Subscriber in Python (Paket `my_python_subscriber`).
-
-Den vollständigen, unter Jazzy getesteten Code finden Sie im Repository unter [02_ROS_Pakete/example](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/tree/master/02_ROS_Pakete/example/pkg_example).
+Wir erweitern das Beispiel aus VL 01 in drei Schritten. Statt eines Textes soll der Zählwert als Zahl übertragen werden, zusammen mit einem Kommentar. Den Publisher haben Sie in VL 01 in Python gelesen, heute schreiben wir ihn in C++. Den Subscriber kennen Sie aus VL 01 in C++, heute schreiben wir ihn in Python. Achten Sie darauf, was in jedem Schritt gleich bleibt: Das ist das Muster für Ihre eigenen Pakete.
 
 ### Schritt 1: Eigener Nachrichtentyp
 
-    --{{0}}--
-Für die Verkehrswelt brauchen Sie später eigene Nachrichten, etwa für den Zustand einer Ampel. Wie das geht, zeige ich an einem einfachen Zähler. Wichtig: Wir testen den neuen Typ zuerst nur mit der Kommandozeile, noch ohne eigenen Code.
-
-Neue Pakete legt `ros2 pkg create` an. Wir starten im Ordner `src` des Workspace:
+**Paket anlegen** — im Ordner `src` des Workspace:
 
 ```text
 > cd ~/ros2_ws/src
@@ -226,14 +232,27 @@ creating folder ./my_msg_package/include/my_msg_package
 creating ./my_msg_package/CMakeLists.txt
 ```
 
-Im Paket legen wir einen Ordner `msg` an (`mkdir ~/ros2_ws/src/my_msg_package/msg`) und darin die Datei `MyMsg.msg`. Sie beschreibt die Felder der Nachricht — ein Feld pro Zeile, erst der Typ, dann der Name, optional ein Standardwert:
+    --{{0}}--
+Für die Verkehrswelt brauchen Sie später eigene Nachrichten, etwa für den Zustand einer Ampel. Wie das geht, zeigen wir an einem einfachen Zähler. Neue Pakete legt ros2 pkg create an, und zwar immer im Ordner src des Workspace.
+
+**Nachricht beschreiben:** Ordner `msg` anlegen, darin die Datei `MyMsg.msg` — je Zeile Typ, Name, optional Standardwert
+
+```bash
+mkdir ~/ros2_ws/src/my_msg_package/msg
+code ~/ros2_ws/src/my_msg_package/msg/MyMsg.msg     # oder ein anderer Editor, z. B. nano
+```
 
 ```text  msg/MyMsg.msg
 int32 counter
 string comment "Keine Evaluation des Wertes"
 ```
 
-Aus dieser Beschreibung muss beim Bauen C++- und Python-Code entstehen. Das erledigt ein Code-Generator von ROS, das Paket `rosidl_default_generators`. Wir tragen ihn in die `CMakeLists.txt` ein — direkt nach der Zeile `find_package(ament_cmake REQUIRED)` und in jedem Fall vor der letzten Zeile `ament_package()`:
+    --{{1}}--
+Die Datei MyMsg.msg beschreibt die Felder der Nachricht, ein Feld pro Zeile: erst der Typ, dann der Name. Ein Standardwert ist nützlich, wenn ein Feld meist gleich bleibt. Wer sendet, muss es dann nicht jedes Mal angeben.
+
+### Code-Generator eintragen
+
+**`CMakeLists.txt` von `my_msg_package`** — nach `find_package(ament_cmake REQUIRED)`, vor `ament_package()`:
 
 ```cmake  CMakeLists.txt
 find_package(rosidl_default_generators REQUIRED)
@@ -243,7 +262,13 @@ rosidl_generate_interfaces(${PROJECT_NAME}
 )
 ```
 
-und in die `package.xml`, innerhalb von `<package>` und vor dem Abschnitt `<export>`:
++ `rosidl_generate_interfaces`: erzeugt beim Bauen C++- und Python-Code aus der `.msg`-Datei
++ `${PROJECT_NAME}`: Name des Pakets (aus `package.xml`)
+
+    --{{0}}--
+Aus der Beschreibung der Nachricht muss beim Bauen C++- und Python-Code entstehen. Das erledigt ein Code-Generator von ROS. Wir tragen ihn in die CMakeLists.txt ein, und zwar direkt nach dem Suchen von ament_cmake und in jedem Fall vor der letzten Zeile.
+
+**… und in `package.xml`** — innerhalb von `<package>`, vor `<export>`:
 
 ```xml  package.xml
 <buildtool_depend>rosidl_default_generators</buildtool_depend>
@@ -251,9 +276,15 @@ und in die `package.xml`, innerhalb von `<package>` und vor dem Abschnitt `<expo
 <member_of_group>rosidl_interface_packages</member_of_group>
 ```
 
-Die `package.xml` unterscheidet, **wofür** eine Abhängigkeit gebraucht wird: `buildtool_depend` nur zum Bauen (der Generator), `exec_depend` nur zur Laufzeit, `depend` für beides — das ist der Normalfall. `member_of_group` meldet das Paket als Nachrichtenpaket an.
++ `buildtool_depend`: nur zum Bauen · `exec_depend`: nur zur Laufzeit · `depend`: beides (Normalfall)
++ `member_of_group`: meldet das Paket als Nachrichtenpaket an
 
-Bauen und testen — noch ganz ohne eigenen Knoten, nur mit der Kommandozeile:
+    --{{1}}--
+Die package.xml unterscheidet, wofür eine Abhängigkeit gebraucht wird. Der Generator wird nur beim Bauen gebraucht, die Laufzeitbibliothek nur beim Ausführen. Im Normalfall braucht man ein Paket für beides, dann schreibt man einfach depend.
+
+### Den Nachrichtentyp testen
+
+**Bauen und prüfen** — noch ganz ohne eigenen Knoten:
 
 ```text
 > cd ~/ros2_ws
@@ -279,19 +310,19 @@ comment: Keine Evaluation des Wertes
 ---
 ```
 
-Das Feld `comment` haben wir beim Senden nicht angegeben — es enthält trotzdem den Standardwert aus der `.msg`-Datei.
++ `comment` nicht gesendet → trotzdem der Standardwert
+
+    --{{0}}--
+Wir testen den neuen Typ zuerst nur mit der Kommandozeile. So wissen wir, dass die Nachricht stimmt, bevor wir eigenen Code schreiben. Achten Sie auf die Ausgabe von echo: Sie zeigt beide Felder, obwohl wir nur den Zähler gesendet haben.
 
 > [!WARNING]
-> **Stolperfalle:** Starten Sie `ros2 topic echo` für einen eigenen Nachrichtentyp, bevor ein Publisher läuft, meldet ROS `Could not determine the type for the passed topic`. Starten Sie dann zuerst den Publisher oder geben Sie den Typ mit an: `ros2 topic echo /counter my_msg_package/msg/MyMsg`.
+> **Stolperfalle:** `ros2 topic echo` vor dem Publisher gestartet → `Could not determine the type for the passed topic`. Abhilfe: Typ mit angeben, `ros2 topic echo /counter my_msg_package/msg/MyMsg`.
 
-Eine ausführliche Anleitung, auch zu eigenen Service-Typen, bietet das Tutorial [Creating custom msg and srv files](https://docs.ros.org/en/jazzy/Tutorials/Beginner-Client-Libraries/Custom-ROS2-Interfaces.html).
+Auch eigene Service-Typen: [Creating custom msg and srv files](https://docs.ros.org/en/jazzy/Tutorials/Beginner-Client-Libraries/Custom-ROS2-Interfaces.html)
 
 ### Schritt 2: Publisher in C++
 
-    --{{0}}--
-Der Publisher ist fast der aus VL 01. Neu sind nur zwei Dinge: der eigene Nachrichtentyp und die Einträge in package.xml und CMakeLists.txt, mit denen das Paket seine Abhängigkeit erklärt.
-
-Das Paket für den Knoten legen wir gleich mit seinen Abhängigkeiten und einem Programmgerüst an:
+**Paket mit Abhängigkeiten und Programmgerüst anlegen:**
 
 ```text
 > cd ~/ros2_ws/src
@@ -303,7 +334,7 @@ node_name: data_generator
 creating ./my_tutorial_package/src/data_generator.cpp
 ```
 
-Durch `--dependencies` stehen die Abhängigkeiten bereits in beiden Beschreibungsdateien:
+**`--dependencies` trägt die Abhängigkeiten schon ein:**
 
 ```xml  package.xml
 <depend>rclcpp</depend>
@@ -321,17 +352,23 @@ install(TARGETS data_generator
   DESTINATION lib/${PROJECT_NAME})
 ```
 
-CMake ist das Build-System für C++, das hinter `ament_cmake` steckt. Die Befehle im Überblick:
+    --{{0}}--
+Das Paket für den Knoten legen wir gleich mit seinen Abhängigkeiten und einem Programmgerüst an. Durch die Option dependencies stehen die Abhängigkeiten bereits in beiden Beschreibungsdateien. In der CMakeLists.txt sehen Sie vier typische Befehle. CMake ist das Build-System für C++, das hinter ament_cmake steckt.
 
 <!-- data-type="none" -->
-| CMake-Befehl                  | Bedeutung                                                                     |
-| :---------------------------- | :---------------------------------------------------------------------------- |
-| `find_package(xyz REQUIRED)`  | Paket `xyz` suchen; Abbruch mit Fehlermeldung, wenn es nicht installiert ist  |
-| `add_executable(name datei)`  | aus der Quelldatei ein Programm `name` kompilieren                            |
-| `ament_target_dependencies`   | dem Programm die Header und Bibliotheken der genannten Pakete bereitstellen   |
-| `install(TARGETS ...)`        | das fertige Programm nach `install/` kopieren, damit `ros2 run` es findet      |
+| CMake-Befehl                  | Bedeutung                                                   |
+| :---------------------------- | :---------------------------------------------------------- |
+| `find_package(xyz REQUIRED)`  | Paket suchen; Abbruch, wenn es fehlt                        |
+| `add_executable(name datei)`  | aus der Quelldatei ein Programm `name` kompilieren          |
+| `ament_target_dependencies`   | Header und Bibliotheken der Pakete bereitstellen            |
+| `install(TARGETS ...)`        | Programm nach `install/` kopieren, damit `ros2 run` es findet |
 
-Das Gerüst `data_generator.cpp` ersetzen wir durch den Publisher aus VL 01 — mit zwei Änderungen: dem neuen Nachrichtentyp und dem Topic `counter`.
+    --{{1}}--
+Der letzte Befehl wird gern vergessen: Ohne install landet das Programm nur im Ordner build, und ros2 run findet es nicht.
+
+### Der Publisher aus VL 01 in C++
+
+**`src/data_generator.cpp`** — das erzeugte Gerüst vollständig durch diesen Code ersetzen:
 
 ```cpp  data_generator.cpp
 #include <chrono>
@@ -376,25 +413,41 @@ int main(int argc, char * argv[])
 }
 ```
 
-Beachten Sie den Zusammenhang der Namen: Aus der Datei `MyMsg.msg` im Paket `my_msg_package` wird der Header `my_msg_package/msg/my_msg.hpp` und der C++-Typ `my_msg_package::msg::MyMsg`. Die Felder `counter` und `comment` sind ganz normale Membervariablen.
+    --{{0}}--
+Das Programmgerüst ersetzen wir durch diesen Publisher. Er macht dasselbe wie der Python-Publisher aus VL 01, mit zwei Änderungen: Er verwendet unseren neuen Nachrichtentyp und sendet auf dem Topic counter. Legen Sie die beiden Fassungen gedanklich nebeneinander, die Tabelle hilft dabei.
 
-**Vorhersage, bevor wir weitermachen:** Der Subscriber soll in Python geschrieben werden. Was erwarten Sie — welche Datei übernimmt dort die Rolle von `add_executable` in der `CMakeLists.txt`?
+<!-- data-type="none" -->
+| Baustein     | Python (VL 01)                           | C++ (heute)                                          |
+| :----------- | :--------------------------------------- | :--------------------------------------------------- |
+| Knotenklasse | `class MinimalPublisher(Node)`           | `class DataGenerator : public rclcpp::Node`          |
+| Publisher    | `create_publisher(String, 'topic', 10)`  | `create_publisher<MyMsg>("counter", 10)`             |
+| Timer        | `create_timer(0.5, self.timer_callback)` | `create_wall_timer(500ms, std::bind(…, this))`       |
+| Senden       | `self.publisher_.publish(msg)`           | `publisher_->publish(message)`                       |
+| Logausgabe   | `self.get_logger().info(…)`              | `RCLCPP_INFO(this->get_logger(), …)`                 |
+| Starten      | `rclpy.spin(node)`                       | `rclcpp::spin(std::make_shared<DataGenerator>())`    |
+
++ `MyMsg.msg` in `my_msg_package` → Header `my_msg_package/msg/my_msg.hpp`, Typ `my_msg_package::msg::MyMsg`
++ `: Node("data_generator"), count_(0)`: Basisklasse mit Knotennamen und Zähler vorbelegen
++ `SharedPtr`: Zeiger, der den Speicher selbst freigibt · `.c_str()`: Text für das `printf`-Format
+
+    --{{1}}--
+Die Struktur ist dieselbe, C++ verlangt nur mehr Schreibarbeit. Spitze Klammern und std bind kennen Sie schon vom Subscriber aus VL 01. Neu ist die Zeitangabe 500 Millisekunden direkt im Code. Hinter dem Doppelpunkt des Konstruktors steht, womit die Basisklasse und der Zähler vorbelegt werden. Beachten Sie auch den Zusammenhang der Namen: Aus der Datei MyMsg.msg wird ein Header mit kleingeschriebenem Namen und ein C++-Typ. Die Felder counter und comment sind ganz normale Membervariablen.
+
+### Schritt 3: Subscriber in Python
+
+**Vorhersage:** Welche Datei übernimmt bei einem Python-Paket die Rolle von `add_executable`?
 
 [( )] ebenfalls eine `CMakeLists.txt`
 [(X)] eine Python-Datei, die das Paket beschreibt (`setup.py`)
 [( )] keine — Python-Dateien sind direkt ausführbar, ROS findet sie selbst
 ***
-Auch ein Python-Programm muss ROS bekannt gemacht werden, sonst findet `ros2 run` es nicht. Das übernimmt der Eintrag `entry_points` in `setup.py` — gleich im nächsten Schritt.
+Auch ein Python-Programm muss ROS bekannt gemacht werden, sonst findet `ros2 run` es nicht. Das übernimmt der Eintrag `entry_points` in `setup.py` — gleich auf dieser Folie.
 ***
 
-### Schritt 3: Subscriber in Python
-
-    --{{0}}--
-Jetzt die Gegenseite in Python. Die Struktur des Knotens kennen Sie schon. Neu ist, wie ein Python-Programm angemeldet wird. Am Ende sprechen ein C++-Knoten und ein Python-Knoten miteinander.
-
-Python-Pakete werden mit `--build-type ament_python` angelegt:
+**Python-Paket anlegen:** `--build-type ament_python`
 
 ```text
+> cd ~/ros2_ws/src
 > ros2 pkg create my_python_subscriber --build-type ament_python --license MIT --dependencies rclpy my_msg_package
 ...
 creating ./my_python_subscriber/setup.py
@@ -405,7 +458,7 @@ creating ./my_python_subscriber/my_python_subscriber/__init__.py
 ...
 ```
 
-Den Knoten legen wir in den inneren Ordner, der wie das Paket heißt: `my_python_subscriber/my_python_subscriber/data_receiver.py`.
+**Knoten** im inneren Ordner: `my_python_subscriber/my_python_subscriber/data_receiver.py`
 
 ```python  data_receiver.py
 import rclpy
@@ -441,9 +494,15 @@ if __name__ == '__main__':
     main()
 ```
 
-Der Aufbau entspricht dem C++-Knoten aus VL 01: eine Klasse, die von `Node` erbt, im Konstruktor (`__init__`) wird mit `create_subscription(Typ, Topic, Callback, Puffergröße)` das Abonnement angelegt, und `rclpy.spin()` wartet auf Nachrichten. `try/finally` sorgt dafür, dass der Knoten auch bei `Ctrl+C` sauber beendet wird.
++ Bausteine wie beim C++-Subscriber aus VL 01: Knotenklasse · `create_subscription` · Callback · `spin()`
++ C++: `create_subscription<String>("topic", 10, std::bind(…, _1))`
++ Python: `create_subscription(MyMsg, 'counter', self.listener_callback, 10)`
++ `try/finally`: sauberes Ende auch bei `Strg+C`
 
-Anders als in C++ gibt es kein `add_executable`. Stattdessen meldet ein Eintrag in `setup.py` die Funktion `main` als ausführbares Programm `data_receiver` an — das ist der Name, den `ros2 run` erwartet. Die generierte `setup.py` enthält bereits eine **leere** Liste `'console_scripts': []`; ergänzen Sie dort die Zeile, statt einen zweiten Block einzufügen:
+    --{{0}}--
+Jetzt die Gegenseite in Python. Den Subscriber haben Sie in VL 01 in C++ gelesen, die Bausteine sind dieselben: eine Klasse, die von Node erbt, ein Abonnement im Konstruktor und spin, das auf Nachrichten wartet. Neu ist der try-Block. Er sorgt dafür, dass der Knoten auch beim Abbruch mit Strg und C sauber beendet wird.
+
+**Programm anmelden** — in der vorhandenen, **leeren** Liste `console_scripts` von `setup.py` ergänzen:
 
 ```python  setup.py
     entry_points={
@@ -453,7 +512,12 @@ Anders als in C++ gibt es kein `add_executable`. Stattdessen meldet ein Eintrag 
     },
 ```
 
-Die Abhängigkeit zu `my_msg_package` steht durch `--dependencies` bereits in der `package.xml`. Jetzt bauen wir alle drei Pakete gemeinsam — `colcon` erkennt selbst, dass `my_msg_package` zuerst an der Reihe ist:
+    --{{1}}--
+Anders als in C++ gibt es kein add_executable. Stattdessen meldet ein Eintrag in setup.py die Funktion main als ausführbares Programm data_receiver an, das ist der Name, den ros2 run erwartet. Die generierte setup.py enthält bereits eine leere Liste. Ergänzen Sie dort die Zeile, statt einen zweiten Block einzufügen, sonst gilt nur einer von beiden.
+
+### Alles bauen und testen
+
+**Alle drei Pakete bauen** — `colcon` findet die Reihenfolge selbst:
 
 ```text
 > cd ~/ros2_ws
@@ -468,24 +532,14 @@ Finished <<< my_tutorial_package [4.81s]
 Summary: 3 packages finished [5.42s]
 ```
 
-Die Abhängigkeiten zwischen den Paketen gibt `colcon graph --dot` aus:
-
-```text
-> colcon graph --dot
-digraph graphname {
-  "my_tutorial_package";
-  "my_python_subscriber";
-  "my_msg_package";
-  "my_tutorial_package" -> "my_msg_package" [color="#0000ff:#ff0000"];
-  "my_python_subscriber" -> "my_msg_package" [color="#0000ff:#ff0000"];
-}
-```
-
-Mit dem Werkzeug Graphviz wird daraus ein Bild (`colcon graph --dot | dot -Tpng -o graph.png`):
-
 ![Abhängigkeitsgraph: my_tutorial_package und my_python_subscriber hängen beide von my_msg_package ab](images/colcon_graph.png)<!-- width="55%" -->
 
-Test in zwei Terminals (jeweils nach `source /opt/ros/jazzy/setup.bash` und `source ~/ros2_ws/install/setup.bash`):
+*Abhängigkeiten: `colcon graph --dot | dot -Tpng -o graph.png`*
+
+    --{{0}}--
+Die Abhängigkeit zu my_msg_package steht durch die Option dependencies bereits in der package.xml. colcon erkennt daraus, dass das Nachrichtenpaket zuerst gebaut werden muss, und baut die beiden anderen danach, sogar parallel. Den Abhängigkeitsgraphen gibt colcon graph aus, mit dem Werkzeug Graphviz wird daraus ein Bild.
+
+**Test in zwei Terminals** (jeweils nach `source /opt/ros/jazzy/setup.bash` und `source ~/ros2_ws/install/setup.bash`):
 
 ```text
 # Terminal 1
@@ -501,9 +555,13 @@ Test in zwei Terminals (jeweils nach `source /opt/ros/jazzy/setup.bash` und `sou
 [INFO] [...] [data_receiver]: Received: 2 (Keine Evaluation des Wertes)
 ```
 
-Ein C++-Knoten und ein Python-Knoten tauschen also problemlos einen selbst definierten Nachrichtentyp aus. Warum empfängt der Subscriber erst ab 1? Er wurde nach dem Publisher gestartet — Nachrichten, die vor seinem Start gesendet wurden, verpasst er. Topics sind ein Live-Strom, keine Ablage.
++ C++ und Python tauschen einen **eigenen** Nachrichtentyp aus
++ **Warum empfängt der Subscriber erst ab 1?**
 
-**C++- und Python-Pakete im Vergleich**
+    --{{1}}--
+Ein C++-Knoten und ein Python-Knoten tauschen also problemlos einen selbst definierten Nachrichtentyp aus. Warum empfängt der Subscriber erst ab eins? Er wurde nach dem Publisher gestartet. Nachrichten, die vor seinem Start gesendet wurden, verpasst er. Topics sind ein Live-Strom, keine Ablage.
+
+### C++- und Python-Pakete im Vergleich
 
 <!-- data-type="none" -->
 | Aspekt                  | C++ (`ament_cmake`)                     | Python (`ament_python`)                      |
@@ -511,30 +569,28 @@ Ein C++-Knoten und ein Python-Knoten tauschen also problemlos einen selbst defin
 | Build-Beschreibung      | `CMakeLists.txt`                        | `setup.py`, `setup.cfg`                      |
 | Quellcode-Ordner        | `src/`, `include/`                      | `<paketname>/`                               |
 | Programm anmelden       | `add_executable()` + `install()`        | `entry_points` in `setup.py`                 |
-| Abhängigkeiten          | `package.xml` (`<depend>`) und `find_package()` | `package.xml` (`<depend>`)           |
+| Abhängigkeiten          | `package.xml` und `find_package()`      | `package.xml`                                |
 | Nachrichtentyp einbinden | `#include "pkg/msg/my_msg.hpp"`        | `from pkg.msg import MyMsg`                  |
-| Nach Codeänderung       | neu bauen                               | mit `--symlink-install` sofort wirksam; nach Änderung an `setup.py` neu bauen |
+| Nach Codeänderung       | neu bauen                               | sofort wirksam (`--symlink-install`)         |
 
 > [!IMPORTANT]
 > **Merke:** Eigene Nachrichtentypen definieren Sie immer in einem CMake-Paket — auch wenn alle Knoten in Python geschrieben sind.
 
-**Kurze Kontrolle:** Sie legen im Paket `my_python_subscriber` eine neue Datei `lane_detector.py` mit einem Knoten und einer Funktion `main` an und bauen den Workspace. `ros2 run my_python_subscriber lane_detector` meldet `No executable found`. Was fehlt am wahrscheinlichsten?
+    --{{0}}--
+Die Tabelle fasst die Unterschiede zusammen. Die wichtigste Konsequenz für Ihr Projekt: Auch wenn Sie alle Knoten in Python schreiben, brauchen Sie für eigene Nachrichtentypen ein CMake-Paket, denn nur dort läuft der Code-Generator.
+
+**Kurze Kontrolle:** Sie legen in `my_python_subscriber` eine neue Datei `lane_detector.py` mit einer Funktion `main` an und bauen. `ros2 run my_python_subscriber lane_detector` meldet `No executable found`. Was fehlt?
 
 [( )] Ein Eintrag `add_executable(lane_detector ...)` in der `CMakeLists.txt`.
 [(X)] Ein Eintrag für `lane_detector` unter `console_scripts` in `setup.py` — und danach ein neuer Build.
 [( )] Die Abhängigkeit `rclcpp` in der `package.xml`.
 ***
-Python-Pakete haben keine `CMakeLists.txt`; ausführbare Programme werden über `entry_points` in `setup.py` angemeldet. Weil sich damit die Paketbeschreibung ändert, ist ein erneutes `colcon build` nötig — `--symlink-install` hilft nur bei Änderungen am Code selbst.
+Programme werden über `entry_points` in `setup.py` angemeldet. Weil sich damit die Paketbeschreibung ändert, ist ein neuer Build nötig — `--symlink-install` hilft nur bei Änderungen am Code selbst.
 ***
 
 ## Systeme starten mit Launch-Dateien
 
-    --{{0}}--
-Zurück zur Einstiegsfrage: Für zwei Knoten brauchen wir schon zwei Terminals. Eine Launch-Datei beschreibt, welche Knoten mit welchen Einstellungen starten. Ein Befehl genügt dann für das ganze System.
-
-Sie haben gesehen: Für zwei Knoten brauchen wir zwei Terminals, jeweils mit zwei `source`-Befehlen. Unser TurtleBot-System wird aus Kameratreiber, Spurerkennung, Ampelerkennung und Fahrverhalten bestehen — dazu Parameter und Umbenennungen. Das von Hand zu starten ist fehleranfällig.
-
-Eine **Launch-Datei** beschreibt, welche Knoten mit welchen Einstellungen gestartet werden. ROS 2 akzeptiert Launch-Dateien in Python, XML oder YAML; wir verwenden Python. Unsere Datei startet Publisher und Subscriber gemeinsam und erlaubt, den Topic-Namen beim Start festzulegen:
+**Launch-Datei** = welche Knoten mit welchen Einstellungen starten (Python, XML, YAML; wir: Python)
 
 ```python  launch/counter.launch.py
 from launch import LaunchDescription
@@ -555,28 +611,49 @@ def generate_launch_description():
     ])
 ```
 
-| Element                   | Bedeutung                                                                                     |
-| :------------------------ | :-------------------------------------------------------------------------------------------- |
-| `generate_launch_description()` | Diese Funktion ruft `ros2 launch` auf; sie gibt die Liste der zu startenden Elemente zurück. |
-| `DeclareLaunchArgument`   | ein Argument, das beim Start überschrieben werden kann, hier mit Standardwert `counter`       |
-| `Node(...)`               | ein Knoten: Paket, Programm und Einstellungen                                                  |
-| `LaunchConfiguration('topic')` | Platzhalter für den Wert des Arguments `topic` — wird erst beim Start eingesetzt          |
-| `remappings`              | Umbenennung wie `--ros-args -r topic:=topic2` in VL 01                                          |
-| `parameters=['datei.yaml']` | Parameter aus einer YAML-Datei laden — hier nicht verwendet, mehr zu Parametern in Ü 2      |
-| `output='screen'`         | Logausgaben des Knotens im Terminal anzeigen                                                   |
+    --{{0}}--
+Zurück zur Einstiegsfrage. Für zwei Knoten brauchen wir zwei Terminals, jeweils mit zwei source-Befehlen. Unser TurtleBot-System wird aus Kameratreiber, Spurerkennung, Ampelerkennung und Fahrverhalten bestehen, dazu kommen Parameter und Umbenennungen. Das von Hand zu starten ist fehleranfällig. Eine Launch-Datei beschreibt das System einmal, danach genügt ein Befehl. Unsere Datei startet Publisher und Subscriber gemeinsam und erlaubt, den Topic-Namen beim Start festzulegen.
 
-Die Datei liegt im Ordner `launch` des Pakets `my_tutorial_package` (`mkdir ~/ros2_ws/src/my_tutorial_package/launch`). Eine Launch-Datei darf Knoten aus beliebigen Paketen starten — sie müssen nur gebaut und per `source` bekannt sein. In größeren Projekten legt man dafür oft ein eigenes Paket an, z.B. `verkehrswelt_bringup`.
+| Element                         | Bedeutung                                                     |
+| :------------------------------ | :------------------------------------------------------------ |
+| `generate_launch_description()` | ruft `ros2 launch` auf; liefert die zu startenden Elemente     |
+| `DeclareLaunchArgument`         | beim Start überschreibbares Argument, Standard `counter`      |
+| `LaunchConfiguration('topic')`  | Platzhalter für den Wert — erst beim Start eingesetzt         |
+| `Node(...)`                     | ein Knoten: Paket, Programm, Einstellungen                    |
+| `remappings=[('counter', topic)]` | Topic `counter` aus dem Code → Wert von `topic`; wie `--ros-args -r` in VL 01 |
+| `parameters=['datei.yaml']`     | Parameter aus YAML laden — hier nicht verwendet, mehr in Ü 2  |
+| `output='screen'`               | Logausgaben im Terminal anzeigen                              |
 
-Damit die Launch-Datei beim Bauen mit installiert wird, ergänzen wir in der `CMakeLists.txt` von `my_tutorial_package` vor `ament_package()`:
+    --{{1}}--
+Wichtig ist der Unterschied zwischen Argument und Platzhalter. Das Argument wird deklariert und hat einen Standardwert. Der Platzhalter steht im Text der Launch-Datei und wird erst beim Start durch den tatsächlichen Wert ersetzt. So können beide Knoten mit einem einzigen Argument auf ein anderes Topic umgelenkt werden.
+
+### Launch-Datei installieren und starten
+
++ Ablage: Ordner `launch` in `my_tutorial_package`
++ darf Knoten aus **beliebigen** Paketen starten
++ in größeren Projekten: eigenes Paket, z. B. `verkehrswelt_bringup`
+
+**Ordner anlegen**, Datei `counter.launch.py` darin speichern:
+
+```bash
+mkdir ~/ros2_ws/src/my_tutorial_package/launch
+```
+
+**Mitinstallieren** — in der `CMakeLists.txt` von `my_tutorial_package` vor `ament_package()`:
 
 ```cmake  CMakeLists.txt
 install(DIRECTORY launch
   DESTINATION share/${PROJECT_NAME})
 ```
 
-Nach `colcon build` startet **ein** Befehl das ganze System:
+    --{{0}}--
+Die Launch-Datei legen wir in einen Ordner launch im Paket my_tutorial_package. Sie darf Knoten aus beliebigen Paketen starten, die nur gebaut und per source bekannt sein müssen. Damit ros2 launch die Datei findet, muss sie beim Bauen mitinstalliert werden, genau wie ein Programm.
+
+**Neu bauen, dann startet ein Befehl das ganze System:**
 
 ```text
+> cd ~/ros2_ws && colcon build --symlink-install
+> source ~/ros2_ws/install/setup.bash
 > ros2 launch my_tutorial_package counter.launch.py
 [INFO] [launch]: All log files can be found below /home/.../.ros/log/...
 [INFO] [data_generator-1]: process started with pid [202935]
@@ -587,29 +664,38 @@ Nach `colcon build` startet **ein** Befehl das ganze System:
 > ros2 launch my_tutorial_package counter.launch.py topic:=zaehler
 ```
 
-Mit `topic:=zaehler` senden beide Knoten über `/zaehler` — prüfen Sie es mit `ros2 topic list`. Welche Argumente eine Launch-Datei kennt, zeigt `ros2 launch my_tutorial_package counter.launch.py --show-args`.
++ mit `topic:=zaehler` senden beide über `/zaehler` — prüfen mit `ros2 topic list`
++ Argumente anzeigen: `--show-args`
 
-**Kurze Kontrolle:** Sie entfernen in der Launch-Datei die Zeile `remappings=[('counter', topic)]` beim **Subscriber** und starten mit `topic:=zaehler`. Was passiert?
+    --{{1}}--
+Nach colcon build startet ein einziger Befehl das ganze System. Mit dem Argument topic gleich zaehler senden und empfangen beide Knoten über das neue Topic. Welche Argumente eine Launch-Datei kennt, zeigt die Option show-args.
+
+**Kurze Kontrolle:** Sie entfernen in der Launch-Datei `remappings=[('counter', topic)]` beim **Subscriber** und starten mit `topic:=zaehler`. Was passiert?
 
 [( )] Beide Knoten verwenden weiterhin `/zaehler`.
 [(X)] Der Publisher sendet auf `/zaehler`, der Subscriber wartet auf `/counter` — er empfängt nichts.
 [( )] `ros2 launch` bricht mit einer Fehlermeldung ab.
 ***
-Das Remapping gilt nur für den Knoten, bei dem es eingetragen ist. Der Subscriber benutzt den Namen aus seinem Code, `counter`. Beide Knoten laufen fehlerfrei, sind aber nicht verbunden — ein typischer Fehler, den `ros2 topic info` oder `rqt_graph` sofort sichtbar machen.
+Ein Remapping gilt nur für den Knoten, bei dem es steht; der Subscriber benutzt den Namen aus seinem Code, `counter`. Beide Knoten laufen fehlerfrei, sind aber nicht verbunden — `ros2 topic info` oder `rqt_graph` zeigen es sofort.
 ***
 
-Launch-Dateien können noch mehr: andere Launch-Dateien einbinden (`IncludeLaunchDescription`), Parameter aus YAML-Dateien laden, Knoten zeitverzögert starten (`TimerAction`) oder abhängig von Bedingungen. Beispiele zeigt das Tutorial [Launch](https://docs.ros.org/en/jazzy/Tutorials/Intermediate/Launch/Launch-Main.html). Der TurtleBot selbst wird über die Launch-Datei `robot.launch.py` des Pakets `turtlebot3_bringup` gestartet — schauen Sie im ersten Praktikum hinein.
+**Mehr:** einbinden (`IncludeLaunchDescription`), verzögert starten (`TimerAction`), Parameter aus YAML — [Tutorial Launch](https://docs.ros.org/en/jazzy/Tutorials/Intermediate/Launch/Launch-Main.html)
+
+    --{{2}}--
+Launch-Dateien können noch mehr: andere Launch-Dateien einbinden, Parameter aus Dateien laden, Knoten zeitverzögert oder abhängig von Bedingungen starten. Der TurtleBot selbst startet über die Launch-Datei robot.launch.py des Pakets turtlebot3_bringup. Schauen Sie im ersten Praktikum hinein, dann erkennen Sie die Elemente von heute wieder.
 
 ## Logging
 
+**Logger statt `print`:** `RCLCPP_INFO(...)` in C++, `self.get_logger().info(...)` in Python
+
++ jede Meldung mit Zeitstempel und Knotenname
++ zusätzlich in Logdateien und auf `/rosout`
++ **Schweregrad:** `DEBUG` < `INFO` < `WARN` < `ERROR` < `FATAL`
+
     --{{0}}--
-Statt print nutzen Sie den Logger. Er sagt Ihnen, wann und von welchem Knoten eine Meldung kommt, und Sie können die Menge der Meldungen beim Start einstellen, ohne den Code zu ändern.
+Statt print nutzen ROS-Knoten den eingebauten Logger. Er sagt Ihnen, wann und von welchem Knoten eine Meldung kommt. Vor allem hat jede Meldung einen Schweregrad, und Sie können beim Start einstellen, ab welchem Schweregrad Meldungen erscheinen, ohne den Code zu ändern.
 
-Statt `printf` oder `print` nutzen ROS-Knoten den eingebauten Logger, der den Namen des Knotens trägt: `RCLCPP_INFO(...)` in C++, `self.get_logger().info(...)` in Python. Das hat Vorteile: Jede Meldung trägt Zeitstempel und Knotennamen, sie landet zusätzlich in Logdateien und auf dem Topic `/rosout`, und sie hat einen **Schweregrad**:
-
-`DEBUG` < `INFO` < `WARN` < `ERROR` < `FATAL`
-
-Beim Start lässt sich festlegen, ab welchem Schweregrad Meldungen erscheinen — ohne den Code zu ändern:
+**Schwelle beim Start festlegen:**
 
 ```bash
 ros2 run my_tutorial_package data_generator --ros-args --log-level warn                  # nur noch Warnungen und Fehler
@@ -617,7 +703,12 @@ ros2 run my_tutorial_package data_generator --ros-args --log-level data_generato
 ```
 
 > [!WARNING]
-> **Stolperfalle:** `--log-level debug` ohne Knotennamen schaltet auch die internen Debug-Meldungen von ROS selbst frei — das Terminal wird mit Hunderten Zeilen geflutet. Geben Sie deshalb den Namen des Loggers an, hier `data_generator`.
+> **Stolperfalle:** `--log-level debug` ohne Knotennamen schaltet auch die internen Debug-Meldungen von ROS frei — Hunderte Zeilen. Geben Sie den Logger an, hier `data_generator`.
+
+    --{{1}}--
+Der Name vor dem Doppelpunkt ist der Name des Loggers, also des Knotens. Ohne ihn gilt die Einstellung für alles, was in diesem Prozess läuft, auch für ROS selbst.
+
+### Logmeldungen filtern
 
 <details>
 <summary>Vertiefung: Logmeldungen filtern (zum Nachlesen)</summary>
@@ -644,9 +735,12 @@ RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 2000, "Kein Bild em
 
 </details>
 
-Gerade die Variante `RCLCPP_x_THROTTLE` (höchstens einmal pro Zeitspanne) ist im Projekt wichtig: Ein Knoten, der 30-mal pro Sekunde „Keine Spur erkannt“ meldet, macht das Terminal unlesbar.
++ im Projekt wichtig: `…_THROTTLE` — höchstens eine Meldung pro Zeitspanne
 
-**Aufgabe:** Ändern Sie den `data_generator` so, dass die Logmeldung nur noch alle 10 Sekunden erscheint, die Nachrichten aber weiter zweimal pro Sekunde gesendet werden.
+    --{{0}}--
+Gerade die Variante THROTTLE ist im Projekt wichtig. Ein Knoten, der dreißigmal pro Sekunde „Keine Spur erkannt“ meldet, macht das Terminal unlesbar. Mit THROTTLE erscheint die Meldung zum Beispiel nur noch einmal alle zwei Sekunden.
+
+**Aufgabe:** Die Logmeldung des `data_generator` soll nur alle 10 s erscheinen, gesendet wird weiter zweimal pro Sekunde.
 
 <details>
 <summary>Lösung anzeigen</summary>
@@ -662,27 +756,29 @@ Nach der Änderung muss das C++-Paket neu gebaut werden (`colcon build --package
 
 ## ROS 2 auf mehreren Rechnern
 
-    --{{0}}--
-Im Praktikum läuft Ihr System verteilt: die Treiber auf dem Roboter, Ihre Knoten auf dem Laptop. Programmieren müssen Sie dafür nichts. Entscheidend ist eine einzige Umgebungsvariable.
+**Im Praktikum verteilt:** Treiber auf dem TurtleBot (Raspberry Pi), Ihre Knoten auf dem Laptop
 
-Im Praktikum läuft Ihr System verteilt: Auf dem Raspberry Pi des TurtleBot laufen die Treiber für LiDAR, Kamera und Motoren, auf Ihrem Laptop Ihre eigenen Knoten und die Visualisierung. Programmieren müssen Sie dafür nichts — dank Discovery (VL 01) finden sich die Knoten im Netz von selbst, wenn beide Rechner im selben Netz sind und **dieselbe `ROS_DOMAIN_ID`** verwenden.
-
-Jede Gruppe bekommt eine eigene ID (0 bis 101), damit Ihr Laptop nicht die Fahrbefehle für den Roboter der Nachbargruppe sendet:
++ nichts zu programmieren — Discovery (VL 01) findet die Knoten
++ Voraussetzung: dasselbe Netz und **dieselbe `ROS_DOMAIN_ID`**
++ jede Gruppe eine eigene ID (0 bis 101)
 
 ```bash
 export ROS_DOMAIN_ID=12      # auf dem Laptop UND auf dem TurtleBot
 ros2 topic list              # zeigt jetzt /scan, /odom, /cmd_vel ... des eigenen Roboters
 ```
 
-Zu Hause wollen Sie dagegen niemanden im WLAN stören: Mit `export ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST` sucht ROS 2 nur auf dem eigenen Rechner nach Knoten.
+    --{{0}}--
+Im Praktikum läuft Ihr System verteilt. Auf dem Raspberry Pi des TurtleBot laufen die Treiber für LiDAR, Kamera und Motoren, auf Ihrem Laptop Ihre eigenen Knoten und die Visualisierung. Programmieren müssen Sie dafür nichts, die Knoten finden sich im Netz von selbst. Jede Gruppe bekommt eine eigene Domänennummer, damit Ihr Laptop nicht die Fahrbefehle für den Roboter der Nachbargruppe sendet.
+
+**Zu Hause:** niemanden im WLAN stören → `export ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST`
 
 > [!NOTE]
-> **Hinweis – WSL2:** WSL2 hat standardmäßig ein eigenes, internes Netz, aus dem heraus der TurtleBot nicht sichtbar ist. Die Umstellung auf den gespiegelten Netzwerkmodus erledigen Sie vor dem ersten Praktikum zu Hause — die Anleitung steht in P 1 unter „Vorbereitung“. Für alle Übungen auf dem eigenen Rechner ist nichts zu tun.
+> **Hinweis – WSL2:** WSL2 hat ein eigenes, internes Netz, aus dem der TurtleBot nicht sichtbar ist. Die Umstellung auf den gespiegelten Netzwerkmodus erledigen Sie vor P 1 zu Hause (Anleitung in P 1, „Vorbereitung“). Für die Übungen ist nichts zu tun.
+
+    --{{1}}--
+Zu Hause gilt das Umgekehrte: Mit dieser Variable sucht ROS 2 nur auf dem eigenen Rechner nach Knoten. Sie stören dann niemanden im WLAN, und niemand stört Sie.
 
 ## Zusammenfassung und Ausblick
-
-    --{{0}}--
-Halten wir den Weg vom Code zum laufenden System fest. Er ist für jedes Paket gleich und wird Ihnen in jedem Praktikum begegnen.
 
 **Vom Code zum laufenden System**
 
@@ -695,7 +791,18 @@ Halten wir den Weg vom Code zum laufenden System fest. Er ist für jedes Paket g
 | 4. Bekannt machen    | `source ~/ros2_ws/install/setup.bash` — in jedem neuen Terminal       |
 | 5. Starten           | `ros2 run <paket> <programm>` oder `ros2 launch <paket> <datei>`      |
 
-**Abschluss-Check**
+    --{{0}}--
+Halten wir den Weg vom Code zum laufenden System fest. Er ist für jedes Paket gleich und wird Ihnen in jedem Praktikum begegnen. Zurück zur Einstiegsfrage: Der TurtleBot startet mit einem Befehl, weil seine Knoten in Paketen liegen, mit colcon gebaut sind und eine Launch-Datei sie gemeinsam startet. Genau so werden Sie Ihr Verkehrswelt-System aufbauen.
+
+**Ausblick**
+
++ **Ü 2:** erster eigener Workspace, fremdes Paket zur Tastatursteuerung, Umsetzer auf Fahrbefehle, Launch-Datei mit Parametern, `ros2 bag`
++ **Block 5:** Lebenszyklus von Knoten (Navigation mit Nav2)
+
+    --{{1}}--
+In Ü 2 legen Sie Ihren ersten eigenen Workspace an, holen sich ein fremdes Paket zur Tastatursteuerung und schreiben einen Knoten, der daraus einen Fahrbefehl macht. Alles starten Sie mit einer Launch-Datei, mit Parametern aus einer YAML-Datei, und zum Schluss zeichnen Sie Daten auf. Später, beim Navigations-Stack Nav2, sehen Sie, dass große Systeme ihre Knoten geordnet über einen Lebenszyklus starten: konfigurieren, aktivieren, deaktivieren.
+
+### Abschluss-Check
 
 Ordnen Sie die Dateien ihrem Zweck zu.
 
@@ -705,10 +812,10 @@ Ordnen Sie die Dateien ihrem Zweck zu.
 [     ( )            ( )           (X)           ( )      ] Die Python-Funktion `main` soll als `data_receiver` startbar sein.
 [     ( )            ( )           ( )           (X)      ] Publisher und Subscriber sollen gemeinsam mit einem Topic-Namen starten.
 ***
-`package.xml` beschreibt, **was** ein Paket braucht; `CMakeLists.txt` und `setup.py` beschreiben, **wie** es gebaut wird und welche Programme entstehen; die Launch-Datei beschreibt, **wie das System gestartet** wird.
+`package.xml` beschreibt, **was** ein Paket braucht; `CMakeLists.txt` und `setup.py` beschreiben, **wie** es gebaut wird; die Launch-Datei, **wie das System startet**.
 ***
 
-Ihr C++-Knoten gibt plötzlich nur noch Warnungen aus, Sie wollen aber die Debug-Meldungen **dieses einen** Knotens sehen. Welche Option hängen Sie an `ros2 run` an?
+Sie wollen die Debug-Meldungen **dieses einen** C++-Knotens sehen. Welche Option hängen Sie an `ros2 run` an?
 
 [( )] `--ros-args --log-level debug`
 [(X)] `--ros-args --log-level data_generator:=debug`
@@ -717,26 +824,24 @@ Ihr C++-Knoten gibt plötzlich nur noch Warnungen aus, Sie wollen aber die Debug
 Ohne Knotennamen schaltet `--log-level debug` auch die internen Meldungen von ROS frei — das Terminal wird geflutet.
 ***
 
-**Ausblick auf Block 5:** Große Systeme wie der Navigations-Stack Nav2 starten ihre Knoten nicht einfach gleichzeitig, sondern geordnet über einen _Lebenszyklus_ (konfigurieren, aktivieren, deaktivieren). Das lernen Sie in der Vorlesung zur Navigation kennen.
-
-**Zurück zur Einstiegsfrage:** Der TurtleBot startet mit einem Befehl, weil seine Knoten in Paketen liegen, mit `colcon` gebaut sind und eine Launch-Datei sie gemeinsam startet. Genau so werden Sie Ihr Verkehrswelt-System aufbauen.
-
-**Ausblick:** In **Ü 2** legen Sie Ihren ersten eigenen Workspace an, holen sich ein fremdes Paket zur Tastatursteuerung, schreiben einen Knoten, der daraus einen Fahrbefehl macht, und starten alles mit einer Launch-Datei — mit Parametern aus einer YAML-Datei. Zum Schluss zeichnen Sie Daten mit `ros2 bag` auf. Ihre Skizze aus der Aufgabe der Woche (Nr. 3) bewahren Sie für das Gruppen-Repository im ersten Praktikum auf.
+    --{{0}}--
+Zwei Fragen zum Abschluss. Die erste prüft, ob Sie die Rollen der Beschreibungsdateien auseinanderhalten, die zweite greift die Stolperfalle beim Logging auf.
 
 ## Aufgabe der Woche
 
-    --{{0}}--
-Bauen Sie die drei Pakete selbst nach — erst dann merken Sie, wo es hakt. Und bringen Sie Ihre Skizze für die Verkehrswelt zur Übung mit.
+1. **Nachbauen:** Workspace `~/ros2_ws` mit den drei Paketen dieser Vorlesung ([Installationsanleitung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/installation_ros2/README.md), falls ROS noch fehlt)
+   + prüfen mit `ros2 interface show`, `ros2 topic echo` und `ros2 pkg executables my_tutorial_package` (zeigt die Programme eines Pakets)
+   + **erwartet:** `my_tutorial_package data_generator`; `ros2 launch my_tutorial_package counter.launch.py` liefert abwechselnd `Publishing:` und `Received:`
+2. **Erweitern:** `MyMsg.msg` um `float32 temperature`, Zufallswert senden (C++: `std::rand()` aus `<cstdlib>`) — was muss neu gebaut werden?
+3. **Skizze aus VL 01 ergänzen:** Pakete für Spurerkennung, Ampelerkennung, Fahrverhalten; wohin gehört ein Typ „Ampelzustand“?
 
-1. Legen Sie in Ihrer ROS-2-Umgebung (siehe [Installationsanleitung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/installation_ros2/README.md)) einen Workspace `~/ros2_ws` an und bauen Sie die drei Pakete dieser Vorlesung nach. Prüfen Sie jeden Schritt mit `ros2 interface show`, `ros2 pkg executables` und `ros2 topic echo`.
-   **Erwartetes Ergebnis:** `ros2 pkg executables my_tutorial_package` zeigt `my_tutorial_package data_generator`, und `ros2 launch my_tutorial_package counter.launch.py` liefert abwechselnd `Publishing:` und `Received:`.
-2. Ergänzen Sie `MyMsg.msg` um ein Feld `float32 temperature` und senden Sie einen Zufallswert. Was müssen Sie neu bauen?
-3. Erweitern Sie Ihre Graph-Skizze aus VL 01 (Aufgabe 3): Welche Pakete würden Sie für Spurerkennung, Ampelerkennung und Fahrverhalten anlegen? Wohin gehört ein eigener Nachrichtentyp „Ampelzustand“? Ordnen Sie Knoten und Topics den Paketen zu. Wir vergleichen die Skizzen zu Beginn von Ü 2.
+    --{{0}}--
+Bauen Sie die drei Pakete selbst nach, erst dann merken Sie, wo es hakt. Ihre ROS-2-Umgebung haben Sie in Ü 1 eingerichtet, sonst hilft die Installationsanleitung. Bei der dritten Aufgabe ordnen Sie die Knoten und Topics Ihrer Skizze aus VL 01 Paketen zu. Wir vergleichen die Skizzen zu Beginn von Ü 2, bewahren Sie Ihre danach für das Gruppen-Repository im ersten Praktikum auf.
 
 <details>
 <summary>Lösungshinweise zu Aufgabe 2 und 3 anzeigen</summary>
 
-**Aufgabe 2:** `my_msg_package` muss neu gebaut werden, damit der Code für das neue Feld entsteht, und `my_tutorial_package`, weil der C++-Knoten gegen den geänderten Header kompiliert wird. Am einfachsten bauen Sie mit `colcon build` alle Pakete; `colcon` hält die Reihenfolge ein. Danach zeigt `ros2 topic echo /counter` das Feld `temperature`.
+**Aufgabe 2:** Im Callback z. B. `message.temperature = 15.0f + std::rand() % 100 / 10.0f;` (dazu `#include <cstdlib>`). `my_msg_package` muss neu gebaut werden, damit der Code für das neue Feld entsteht, und `my_tutorial_package`, weil der C++-Knoten gegen den geänderten Header kompiliert wird. Am einfachsten bauen Sie mit `colcon build` alle Pakete; `colcon` hält die Reihenfolge ein. Danach zeigt `ros2 topic echo /counter` das Feld `temperature`; der Python-Subscriber gibt es erst aus, wenn Sie seine Logzeile ergänzen.
 
 **Aufgabe 3 — eine mögliche Lösung:**
 

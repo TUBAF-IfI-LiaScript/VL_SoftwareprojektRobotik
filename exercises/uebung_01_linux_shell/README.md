@@ -152,7 +152,7 @@ locale | grep -q UTF-8 && echo "UTF-8 ok" || echo "kein UTF-8: siehe Installatio
 
 Meldet die letzte Zeile „kein UTF-8“, stellen Sie den Zeichensatz nach der [Installationsanleitung, Abschnitt „Schritt 1: Paketquellen einrichten“](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/installation_ros2/README.md#3) um.
 
-Läuft bei Ihnen noch kein Ubuntu 24.04, arbeiten Sie heute zu zweit an einem Laptop (oder am Pool-Rechner, falls vorhanden — dort ist ROS 2 schon installiert) und holen die Installation zu Hause nach der [Installationsanleitung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/installation_ros2/README.md) nach. Die Teile „Blick ins Installations-Terminal“ lösen Sie dann am Rechner Ihrer Partnerin oder Ihres Partners.
+Läuft bei Ihnen noch kein Ubuntu 24.04, arbeiten Sie heute zu zweit an einem Laptop (oder an einem Pool-Rechner in der Lessingstraße — dort ist ROS 2 schon installiert) und holen die Installation zu Hause nach der [Installationsanleitung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/installation_ros2/README.md) nach. Die Teile „Blick ins Installations-Terminal“ lösen Sie dann am Rechner Ihrer Partnerin oder Ihres Partners.
 
 **Schritt 2: Die Paketquelle von ROS 2 eintragen** (Installations-Terminal). Ubuntu kennt ROS 2 nicht von sich aus. Sie sagen der Paketverwaltung, wo die ROS-Pakete liegen und woran sie echte Pakete erkennt:
 
