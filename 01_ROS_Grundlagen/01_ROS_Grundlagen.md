@@ -46,7 +46,7 @@ import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_Softwareproje
   + setzen: `export NAME=wert` · eine ganze Datei solcher Werte laden: `source datei`
 
     --{{0}}--
-Wir zählen die Vorlesungen ab null, wie in den anderen Veranstaltungen des Instituts: Die Einführung war Vorlesung null, heute ist Vorlesung eins. Aus der Einführung brauchen wir den Sense-Think-Act-Kreislauf. Beim TurtleBot sind Wahrnehmung, Planung und Ansteuerung getrennte Programme, die ständig Daten austauschen müssen. Wie sie das tun, ist das Thema heute. Eine Sache aus Ü 1 greifen wir schon vorab auf, weil sie die häufigste Fehlerquelle ist: Jedes Programm erbt die Umgebungsvariablen des Terminals, in dem es gestartet wird. Geben Sie zur folgenden Frage einfach Ihre Vermutung ab, am Donnerstag probieren Sie es selbst aus.
+Aus der Einführung brauchen wir den Sense-Think-Act-Kreislauf. Beim TurtleBot sind Wahrnehmung, Planung und Ansteuerung getrennte Programme, die ständig Daten austauschen müssen. Wie sie das tun, ist das Thema heute. Eine Sache aus Ü 1 greifen wir schon vorab auf, weil sie die häufigste Fehlerquelle ist: Jedes Programm erbt die Umgebungsvariablen des Terminals, in dem es gestartet wird. Geben Sie zur folgenden Frage einfach Ihre Vermutung ab, am Donnerstag probieren Sie es selbst aus.
 
 **Ihre Vermutung:** Terminal 1: `export ROS_DOMAIN_ID=12`. Was zeigt `echo $ROS_DOMAIN_ID` in einem **neuen** Terminal?
 
@@ -761,12 +761,12 @@ In VL 02 schreiben Sie selbst Pakete und bauen sie mit colcon. Dort begegnet Ihn
 + Laptop mit Ubuntu 24.04 (nativ oder in WSL2), Netzteil, 10 GB frei
 + unter Windows vorher: `wsl --install -d Ubuntu-24.04`
 + zu Hause: `sudo apt update && sudo apt upgrade`
-+ noch kein Ubuntu? **Trotzdem kommen** — zu zweit oder am Pool-Rechner
++ noch kein Ubuntu? **Trotzdem kommen** — vor Ort gibt es Rechner mit Ubuntu
 
 **Nicht fertig geworden?** → [Installationsanleitung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/installation_ros2/README.md), spätestens bis VL 02
 
     --{{0}}--
-ROS 2 installieren wir gemeinsam in der ersten Übung. Die Installation ist dort zugleich das Übungsbeispiel für die Shell. Wir installieren das Paket ros-jazzy-desktop nach der offiziellen Anleitung, es enthält rqt, turtlesim und die Beispiele von heute. Unter Windows zählt ein Ubuntu in WSL2 genauso wie ein natives Ubuntu. Damit in der Übung nur noch ROS 2 geladen werden muss, bringen Sie Ihr Ubuntu vorher zu Hause auf den aktuellen Stand. Bitte kommen Sie auch dann, wenn bis dahin noch kein Ubuntu läuft: Niemand bleibt in der Übung ohne Rechner.
+ROS 2 installieren wir gemeinsam in der ersten Übung. Die Installation ist dort zugleich das Übungsbeispiel für die Shell. Wir installieren das Paket ros-jazzy-desktop nach der offiziellen Anleitung, es enthält rqt, turtlesim und die Beispiele von heute. Unter Windows zählt ein Ubuntu in WSL2 genauso wie ein natives Ubuntu. Damit in der Übung nur noch ROS 2 geladen werden muss, bringen Sie Ihr Ubuntu vorher zu Hause auf den aktuellen Stand. Bitte kommen Sie auch dann, wenn bis dahin noch kein Ubuntu läuft: In der Lessingstraße stehen Rechner mit vorinstalliertem Ubuntu, an denen Sie genauso vorgehen wie alle anderen.
 
 Offizielle Anleitung: [Ubuntu (deb packages)](https://docs.ros.org/en/jazzy/Installation/Ubuntu-Install-Debs.html)
 

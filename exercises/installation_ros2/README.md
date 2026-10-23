@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent
 email:    sebastian.zug@informatik.tu-freiberg.de
-version:  0.2.0
+version:  0.2.1
 language: de
 narrator: Deutsch Female
 
@@ -43,8 +43,8 @@ ROS 2 Jazzy läuft auf **Ubuntu 24.04** („Noble“). Wählen Sie eine der folg
 | :--------------------------- | :---------------------------------------------------------------------------------------------- |
 | Ubuntu 24.04 nativ           | empfohlen; auch als zweites System neben Windows (Dual Boot)                                     |
 | Windows 11 mit WSL2          | gut geeignet; grafische Programme laufen über WSLg. Einrichtung siehe unten                      |
-| Rechnerpool des Instituts    | ROS 2 Jazzy ist installiert — Sie können diese Anleitung überspringen und direkt den Selbsttest machen |
-| macOS, ältere Ubuntu-Versionen | nicht unterstützt. Nutzen Sie den Rechnerpool oder melden Sie sich bei den Betreuern             |
+| Rechner in der Lessingstraße | Ubuntu vorinstalliert — ROS 2 installieren Sie wie auf dem eigenen Rechner                        |
+| macOS, ältere Ubuntu-Versionen | nicht unterstützt. Nutzen Sie die Rechner in der Lessingstraße oder melden Sie sich bei den Betreuern             |
 
 Welche Ubuntu-Version Sie haben, verrät:
 

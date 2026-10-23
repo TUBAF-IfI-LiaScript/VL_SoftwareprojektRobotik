@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.3.0
+version:  0.3.1
 language: de
 narrator: Deutsch Female
 
@@ -110,7 +110,7 @@ graph LR
 | ------------------------- | ------------------------------------------------------------------------------------------ |
 | Ubuntu 24.04 nativ        | empfohlen — alle Werkzeuge der Veranstaltung laufen direkt                                  |
 | WSL2 unter Windows        | gute Alternative, `wsl --install -d Ubuntu-24.04`                                           |
-| Rechnerpool               | Ausweichlösung für alle Aufgaben, falls Ihr eigenes System noch nicht läuft                  |
+| Rechner in der Lessingstraße | Ubuntu vorinstalliert — Ausweichlösung, solange Ihr eigenes System noch nicht läuft       |
 
 ### Wie funktionieren die Beispiele in diesem Skript?
 
@@ -152,7 +152,7 @@ locale | grep -q UTF-8 && echo "UTF-8 ok" || echo "kein UTF-8: siehe Installatio
 
 Meldet die letzte Zeile „kein UTF-8“, stellen Sie den Zeichensatz nach der [Installationsanleitung, Abschnitt „Schritt 1: Paketquellen einrichten“](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/installation_ros2/README.md#3) um.
 
-Läuft bei Ihnen noch kein Ubuntu 24.04, arbeiten Sie heute zu zweit an einem Laptop (oder an einem Pool-Rechner in der Lessingstraße — dort ist ROS 2 schon installiert) und holen die Installation zu Hause nach der [Installationsanleitung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/installation_ros2/README.md) nach. Die Teile „Blick ins Installations-Terminal“ lösen Sie dann am Rechner Ihrer Partnerin oder Ihres Partners.
+Läuft bei Ihnen noch kein Ubuntu 24.04, setzen Sie sich an einen der Rechner in der Lessingstraße. Dort ist Ubuntu vorinstalliert, und Sie gehen genauso vor wie Ihre Kommilitonen am eigenen Laptop. Auf Ihrem eigenen Rechner holen Sie die Installation später nach der [Installationsanleitung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/installation_ros2/README.md) nach.
 
 **Schritt 2: Die Paketquelle von ROS 2 eintragen** (Installations-Terminal). Ubuntu kennt ROS 2 nicht von sich aus. Sie sagen der Paketverwaltung, wo die ROS-Pakete liegen und woran sie echte Pakete erkennt:
 
@@ -446,7 +446,7 @@ Im Projekt laufen viele Knoten gleichzeitig — und manchmal bleibt einer hänge
 2. Finden Sie beide Prozessnummern mit `pgrep sleep`.
 3. Beenden Sie einen der beiden Prozesse mit `kill`.
 
-4. ⏱ **Blick ins Installations-Terminal:** Finden Sie den Prozess der laufenden Installation mit `pgrep -a apt` und beobachten Sie nur ihn mit `top -p $(pgrep -d, apt)` (`q` beendet). **Beenden Sie ihn nicht** — warum wäre `kill` hier eine schlechte Idee? (Ist Ihre Installation schon fertig oder arbeiten Sie zu zweit: Beobachten Sie stattdessen einen Ihrer `sleep`-Prozesse.)
+4. ⏱ **Blick ins Installations-Terminal:** Finden Sie den Prozess der laufenden Installation mit `pgrep -a apt` und beobachten Sie nur ihn mit `top -p $(pgrep -d, apt)` (`q` beendet). **Beenden Sie ihn nicht** — warum wäre `kill` hier eine schlechte Idee? (Ist Ihre Installation schon fertig, beobachten Sie stattdessen einen Ihrer `sleep`-Prozesse.)
 
 **Prüfkriterium:** `pgrep sleep` liefert danach genau eine Nummer. Räumen Sie zum Schluss mit `pkill sleep` auf.
 
