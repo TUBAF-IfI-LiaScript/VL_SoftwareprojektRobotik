@@ -13,7 +13,7 @@ Schreibt docs/kurslandkarte/ (Karte), docs/index.html (Startseite) und
 erneuert in jedem ausgearbeiteten Material die Abschnitte zwischen den
 Markierungen <!-- kurslandkarte:wo-… --> und <!-- kurslandkarte:ausblick-… -->.
 
-Autoren: Sebastian Zug & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent
+Autoren: Sebastian Zug, Ines Aubeln & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent
 """
 import os, sys
 
@@ -31,7 +31,7 @@ KURS = {
     "pages": "https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/",
     "repo": "https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik",
     "speicher": "robotik-map",
-    "autoren": "Sebastian Zug & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent",
+    "autoren": "Sebastian Zug, Ines Aubeln & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent",
     "feedback": 'Begriff fehlt oder ist unklar? Sagen Sie es im Termin oder im OPAL-Forum. <a href="https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/issues/new?title=Kurslandkarte%3A%20&amp;labels=kurslandkarte" target="_blank" rel="noopener">GitHub ↗</a>',
     "einheit": "Termin", "einheiten": "Termine", "einheiten_dat": "Terminen", "gleich": "Im selben Termin",
     "welche_einheit": "welchem Termin", "der_einheit": "dem Termin", "liste": "Termine",
@@ -172,16 +172,16 @@ B = [
     ("middleware", "ROS als Middleware", "ros", "03", 'ROS, was ist das?', 1, 0, "ROS bietet Hardwareabstraktion, Treiber, Nachrichtenaustausch und Paketverwaltung für verteilte Robotersoftware.", None),
     ("dds", "DDS / rmw-Schicht", "ros", "03", 'Architektur von ROS 2', 1, 0, "ROS 2 trennt Client-Libraries (rclcpp/rclpy) über die rmw-Schicht von der austauschbaren Middleware — Standard ist Fast DDS, Alternativen sind Cyclone DDS oder Zenoh.", "„Knoten mit unterschiedlicher RMW_IMPLEMENTATION finden sich trotzdem zuverlässig.“"),
     ("node", "Knoten (Node)", "ros", "03", 'Basiskonzepte', 1, 0, "Ein Knoten ist ein Teilnehmer im ROS-Graphen, der Topics veröffentlicht oder abonniert.", None),
-    ("topic", "Topic", "ros", "03", 'Basiskonzepte', 1, 0, "Topics sind benannte Kanäle, die Publisher und Subscriber entkoppeln (n:m-Kommunikation).", "„Publisher und Subscriber müssen einander kennen.“"),
-    ("message", "Nachricht (Message)", "ros", "03", 'Basiskonzepte', 1, 0, "Eine Message legt Struktur und Datentypen der übertragenen Daten fest, z. B. sensor_msgs/msg/LaserScan.", None),
-    ("msgdef", "Aufbau einer Nachricht", "ros", "03", 'Basiskonzepte', 2, 1, "ros2 interface show zeigt die Felder eines Nachrichtentyps — z. B. Twist mit linear.x (vorwärts) und angular.z (drehen).", "„Bei Twist ist linear.z die Vorwärtsgeschwindigkeit.“"),
+    ("topic", "Topic", "ros", "03", 'Topics', 1, 0, "Topics sind benannte Kanäle, die Publisher und Subscriber entkoppeln (n:m-Kommunikation).", "„Publisher und Subscriber müssen einander kennen.“"),
+    ("message", "Nachricht (Message)", "ros", "03", 'Nachrichten', 1, 0, "Eine Message legt Struktur und Datentypen der übertragenen Daten fest, z. B. sensor_msgs/msg/LaserScan.", None),
+    ("msgdef", "Aufbau einer Nachricht", "ros", "03", 'Nachrichten', 2, 1, "ros2 interface show zeigt die Felder eines Nachrichtentyps — z. B. Twist mit linear.x (vorwärts) und angular.z (drehen).", "„Bei Twist ist linear.z die Vorwärtsgeschwindigkeit.“"),
     ("discovery", "Discovery", "ros", "03", 'Basiskonzepte', 2, 0, "Knoten finden sich automatisch innerhalb derselben ROS_DOMAIN_ID, verbinden sich aber nur bei kompatiblen QoS-Einstellungen.", "„Zwei Knoten auf demselben Topic kommunizieren immer.“"),
-    ("kommmuster", "Service, Parameter, Action", "ros", "03", 'Basiskonzepte', 2, 0, "Neben Topics: Services für Anfrage/Antwort, Parameter zur Konfiguration, Actions für lang laufende Aufträge mit Rückmeldung.", "„Für jede Kommunikation nimmt man am besten ein Topic.“"),
+    ("kommmuster", "Service, Parameter, Action", "ros", "03", 'Kommunikationsmuster', 2, 0, "Neben Topics: Services für Anfrage/Antwort, Parameter zur Konfiguration, Actions für lang laufende Aufträge mit Rückmeldung.", "„Für jede Kommunikation nimmt man am besten ein Topic.“"),
     ("tbtopics", "Topics des TurtleBot", "ros", "03", 'Vom turtlesim zum TurtleBot', 1, 1, "Der TurtleBot stellt Sensoren und Antrieb als Topics bereit: /scan, /odom, /imu, Kamerabild und /cmd_vel.", "„Für den echten Roboter braucht man ganz andere Werkzeuge als für den turtlesim.“"),
     ("ros2cli", "ros2-Kommandozeile", "werkzeuge", "03", 'Einführungsbeispiele', 1, 1, "ros2 untersucht und steuert das System über Unterbefehle wie node, topic, service, param, bag und launch.", None),
     ("pubsub", "Publisher/Subscriber-API", "ros", "03", 'Hello-World Implementierung', 2, 1, "Knoten legen per create_publisher/create_subscription Kanäle an und laufen mit spin().", None),
-    ("topiccli", "ros2 topic …", "werkzeuge", "03", 'Hello-World Implementierung', 2, 1, "Mit ros2 topic list/info/hz/echo/pub lassen sich Topics inspizieren und von Hand Nachrichten senden.", None),
-    ("remap", "Remapping", "ros", "03", 'Hello-World Implementierung', 2, 1, "Mit --ros-args -r topic:=neu (oder __node:=name) werden Topic- und Knotennamen beim Start umgelenkt, ohne den Code zu ändern.", "„Der Topic-Name ist fest im Code verankert.“"),
+    ("topiccli", "ros2 topic …", "werkzeuge", "03", 'Das System untersuchen', 2, 1, "Mit ros2 topic list/info/hz/echo/pub lassen sich Topics inspizieren und von Hand Nachrichten senden.", None),
+    ("remap", "Remapping", "ros", "03", 'Remapping', 2, 1, "Mit --ros-args -r topic:=neu (oder __node:=name) werden Topic- und Knotennamen beim Start umgelenkt, ohne den Code zu ändern.", "„Der Topic-Name ist fest im Code verankert.“"),
     ("rqt", "rqt / rqt_graph", "werkzeuge", "03", 'turtlesim: ROS 2 zum Anfassen', 2, 1, "rqt bündelt die Inspektionsfunktionen der ros2-CLI grafisch, z. B. den Knoten-Topic-Graphen.", None),
     # --- VL 02 ROS 2 Pakete
     ("domainid", "ROS_DOMAIN_ID", "ros", "04", 'ROS 2 auf mehreren Rechnern', 2, 1, "Die Umgebungsvariable trennt ROS-2-Systeme im selben Netz — im Labor eine pro TurtleBot-Gruppe, gesetzt auf Laptop und Roboter.", "„Die ROS_DOMAIN_ID muss nur auf dem Laptop gesetzt werden.“"),

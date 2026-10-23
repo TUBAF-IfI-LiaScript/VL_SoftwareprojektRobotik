@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="Kurslandkarte Robotik (TU Bergakademie Freiberg): Begriffe, Zusammenhänge und didaktische Fäden.">
-<meta name="author" content="Sebastian Zug &amp; Claude Code (Opus 5.5) mit LiaScript Teaching-Agent">
+<meta name="author" content="Sebastian Zug, Ines Aubeln &amp; Claude Code (Opus 5.5) mit LiaScript Teaching-Agent">
 <meta name="generator" content="invivis-kurslandkarte 0.2.0">
 <title>Robotik Kurslandkarte</title>
 <style>
@@ -589,7 +589,7 @@ footer p { margin: 0 0 6px; }
     <aside class="panel" id="panel" aria-live="polite"></aside>
   </div>
 
-  <footer><p>Erzeugt mit <a href="https://github.com/TUBAF-IfI-LiaScript/invivis-kurslandkarte">invivis Kurslandkarte</a> 0.2.0 · Autoren: Sebastian Zug &amp; Claude Code (Opus 5.5) mit LiaScript Teaching-Agent</p></footer>
+  <footer><p>Erzeugt mit <a href="https://github.com/TUBAF-IfI-LiaScript/invivis-kurslandkarte">invivis Kurslandkarte</a> 0.2.0 · Autoren: Sebastian Zug, Ines Aubeln &amp; Claude Code (Opus 5.5) mit LiaScript Teaching-Agent</p></footer>
 </div>
 
 <script id="kartendaten" type="application/json">
@@ -759,8 +759,15 @@ footer p { margin: 0 0 6px; }
     "Was macht ROS 2 anders?",
     "Architektur von ROS 2",
     "Basiskonzepte",
+    "Topics",
+    "Kommunikationsmuster",
+    "Nachrichten",
     "Einführungsbeispiele",
     "Hello-World Implementierung",
+    "Kurze Kontrolle",
+    "Subscriber und Start",
+    "Das System untersuchen",
+    "Remapping",
     "turtlesim: ROS 2 zum Anfassen",
     "Vom turtlesim zum TurtleBot",
     "Zusammenfassung und Ausblick",
@@ -2094,7 +2101,7 @@ footer p { margin: 0 0 6px; }
    "name": "Topic",
    "linie": "ros",
    "vl": 1,
-   "abschnitt": 7,
+   "abschnitt": 8,
    "ebene": 1,
    "code": false,
    "erklaerung": "Topics sind benannte Kanäle, die Publisher und Subscriber entkoppeln (n:m-Kommunikation).",
@@ -2105,7 +2112,7 @@ footer p { margin: 0 0 6px; }
    "name": "Nachricht (Message)",
    "linie": "ros",
    "vl": 1,
-   "abschnitt": 7,
+   "abschnitt": 10,
    "ebene": 1,
    "code": false,
    "erklaerung": "Eine Message legt Struktur und Datentypen der übertragenen Daten fest, z. B. sensor_msgs/msg/LaserScan.",
@@ -2116,7 +2123,7 @@ footer p { margin: 0 0 6px; }
    "name": "Aufbau einer Nachricht",
    "linie": "ros",
    "vl": 1,
-   "abschnitt": 7,
+   "abschnitt": 10,
    "ebene": 2,
    "code": true,
    "erklaerung": "ros2 interface show zeigt die Felder eines Nachrichtentyps — z. B. Twist mit linear.x (vorwärts) und angular.z (drehen).",
@@ -2138,7 +2145,7 @@ footer p { margin: 0 0 6px; }
    "name": "Service, Parameter, Action",
    "linie": "ros",
    "vl": 1,
-   "abschnitt": 7,
+   "abschnitt": 9,
    "ebene": 2,
    "code": false,
    "erklaerung": "Neben Topics: Services für Anfrage/Antwort, Parameter zur Konfiguration, Actions für lang laufende Aufträge mit Rückmeldung.",
@@ -2149,7 +2156,7 @@ footer p { margin: 0 0 6px; }
    "name": "Topics des TurtleBot",
    "linie": "ros",
    "vl": 1,
-   "abschnitt": 11,
+   "abschnitt": 18,
    "ebene": 1,
    "code": true,
    "erklaerung": "Der TurtleBot stellt Sensoren und Antrieb als Topics bereit: /scan, /odom, /imu, Kamerabild und /cmd_vel.",
@@ -2160,7 +2167,7 @@ footer p { margin: 0 0 6px; }
    "name": "ros2-Kommandozeile",
    "linie": "werkzeuge",
    "vl": 1,
-   "abschnitt": 8,
+   "abschnitt": 11,
    "ebene": 1,
    "code": true,
    "erklaerung": "ros2 untersucht und steuert das System über Unterbefehle wie node, topic, service, param, bag und launch.",
@@ -2171,7 +2178,7 @@ footer p { margin: 0 0 6px; }
    "name": "Publisher/Subscriber-API",
    "linie": "ros",
    "vl": 1,
-   "abschnitt": 9,
+   "abschnitt": 12,
    "ebene": 2,
    "code": true,
    "erklaerung": "Knoten legen per create_publisher/create_subscription Kanäle an und laufen mit spin().",
@@ -2182,7 +2189,7 @@ footer p { margin: 0 0 6px; }
    "name": "ros2 topic …",
    "linie": "werkzeuge",
    "vl": 1,
-   "abschnitt": 9,
+   "abschnitt": 15,
    "ebene": 2,
    "code": true,
    "erklaerung": "Mit ros2 topic list/info/hz/echo/pub lassen sich Topics inspizieren und von Hand Nachrichten senden.",
@@ -2193,7 +2200,7 @@ footer p { margin: 0 0 6px; }
    "name": "Remapping",
    "linie": "ros",
    "vl": 1,
-   "abschnitt": 9,
+   "abschnitt": 16,
    "ebene": 2,
    "code": true,
    "erklaerung": "Mit --ros-args -r topic:=neu (oder __node:=name) werden Topic- und Knotennamen beim Start umgelenkt, ohne den Code zu ändern.",
@@ -2204,7 +2211,7 @@ footer p { margin: 0 0 6px; }
    "name": "rqt / rqt_graph",
    "linie": "werkzeuge",
    "vl": 1,
-   "abschnitt": 10,
+   "abschnitt": 17,
    "ebene": 2,
    "code": true,
    "erklaerung": "rqt bündelt die Inspektionsfunktionen der ros2-CLI grafisch, z. B. den Knoten-Topic-Graphen.",
