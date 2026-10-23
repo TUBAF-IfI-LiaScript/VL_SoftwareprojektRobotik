@@ -11,7 +11,7 @@ import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_Softwareproje
   
 -->
 
-[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/03_ROS_Grundlagen_I/03_EinfuehrungROS.md)
+[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/01_ROS_Grundlagen/01_ROS_Grundlagen.md)
 
 
 # Einführung in ROS 2
@@ -22,7 +22,7 @@ import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_Softwareproje
 | **Semester**         | @config.semester                                                                                              |
 | **Hochschule:**      | `Technische Universität Freiberg`                                                                                                                                                                   |
 | **Inhalte:**         | `Motivation für ROS 2, Architektur, Knoten, Topics und Nachrichten, erste Schritte mit der Kommandozeile`                                                                                           |
-| **Link auf GitHub:** | https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/03_ROS_Grundlagen_I/03_EinfuehrungROS.md |
+| **Link auf GitHub:** | https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/01_ROS_Grundlagen/01_ROS_Grundlagen.md |
 | **Autoren**          | @author                                                                                                       |
 
 ![Animation: ein kleiner Roboter, der sich bewegt](https://media.giphy.com/media/xT8qB2PQF93mUbGvle/giphy-downsized.gif)
@@ -38,21 +38,21 @@ import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_Softwareproje
 
 --------------------------------------------------------------------------------
 
-**Was wir schon wissen**
+**Was wir schon wissen — und was morgen kommt**
 
     --{{0}}--
-Zwei Dinge aus den letzten Terminen brauchen wir heute. Aus VL 1 den Sense-Think-Act-Kreislauf: Beim TurtleBot sind das getrennte Programme, die Daten austauschen müssen. Und aus Ü 1 die Umgebungsvariablen: Was Sie mit export setzen, gilt nur in diesem Terminal. Heute sehen wir, wie ROS 2 beides zusammenbringt.
+Kurz vorweg: Wir zählen die Vorlesungen ab null, wie in den anderen Veranstaltungen des Instituts. Die Einführung war also VL 00, heute ist VL 01. Aus VL 00 brauchen wir heute den Sense-Think-Act-Kreislauf: Beim TurtleBot sind das getrennte Programme, die Daten austauschen müssen. Wie sie das tun, sehen wir heute. Morgen in der ersten Übung installieren Sie ROS 2 und lernen die Shell kennen. Eine Sache daraus greife ich heute schon auf, weil sie die häufigste Fehlerquelle ist: Jedes Terminal hat seine eigene Umgebung. Tippen Sie zur Frage unten einfach Ihre Vermutung — morgen probieren Sie es selbst aus.
 
-+ **VL 1:** Sense, Think und Act sind beim TurtleBot eigene Programme — heute sehen wir, **wie sie Daten austauschen**.
-+ **Ü 1:** Umgebungsvariablen gelten pro Terminal, `source` lädt sie in die aktuelle Shell — das wird heute zur häufigsten Fehlerquelle.
++ **VL 00:** Sense, Think und Act sind beim TurtleBot eigene Programme — heute sehen wir, **wie sie Daten austauschen**. (Wir zählen die Vorlesungen ab 00, wie in den anderen Veranstaltungen des Instituts: Die Einführung war VL 00, heute ist VL 01.)
++ **Morgen in Ü 1:** ROS 2 installieren und die Shell beherrschen. Vorab nur so viel: Eine **Umgebungsvariable** ist ein benannter Wert, den ein Terminal an die Programme weitergibt, die Sie darin starten (`export NAME=wert`). Mit `source` lädt man eine ganze Datei solcher Werte in das aktuelle Terminal.
 
-Was gibt `echo $ROS_DOMAIN_ID` in einem **neuen** Terminal aus, wenn Sie den Wert im ersten Terminal mit `export ROS_DOMAIN_ID=12` gesetzt haben (und nichts in `~/.bashrc` steht)?
+**Ihre Vermutung:** Was gibt `echo $ROS_DOMAIN_ID` in einem **neuen** Terminal aus, wenn Sie den Wert im ersten Terminal mit `export ROS_DOMAIN_ID=12` gesetzt haben (und nichts in `~/.bashrc` steht)?
 
 [( )] `12`
 [(X)] eine leere Zeile
 [( )] eine Fehlermeldung
 ***
-Jedes Terminal hat seine eigene Umgebung. Das wird uns heute wiederbegegnen: Zwei ROS-Programme in Terminals mit unterschiedlicher `ROS_DOMAIN_ID` sehen sich nicht.
+Jedes Terminal hat seine eigene Umgebung — in Ü 1 sehen Sie das selbst. Das wird uns heute wiederbegegnen: Zwei ROS-Programme in Terminals mit unterschiedlicher `ROS_DOMAIN_ID` sehen sich nicht.
 ***
 
 --------------------------------------------------------------------------------
@@ -62,22 +62,22 @@ Jedes Terminal hat seine eigene Umgebung. Das wird uns heute wiederbegegnen: Zwe
 ## Wo stehen wir?
 
     --{{0}}--
-Kurz zur Orientierung. Wir sind in Block 1, Termin 3 von 32. Sie verstehen, wie die Software des TurtleBots aus Knoten und Topics zusammengesetzt ist. Neu sind heute: ROS als Middleware, DDS / rmw-Schicht, Knoten (Node), Topic, Nachricht (Message), Topics des TurtleBot, ros2-Kommandozeile.
+Kurz zur Orientierung. Wir sind in Block 1, Termin 2 von 32. Sie verstehen, wie die Software des TurtleBots aus Knoten und Topics zusammengesetzt ist. Neu sind heute: ROS als Middleware, DDS / rmw-Schicht, Knoten (Node), Topic, Nachricht (Message), Topics des TurtleBot, ros2-Kommandozeile.
 
 **Ziel im Projekt:** Sie verstehen, wie die Software des TurtleBots aus Knoten und Topics zusammengesetzt ist.
 
-**Block 1 · ROS-Grundlagen** – Termin 3 von 32, heute farbig markiert
+**Block 1 · ROS-Grundlagen** – Termin 2 von 32, heute farbig markiert
 
 <!-- data-type="none" -->
 | Woche ab | Vorlesung | Übung | Praktikum |
 | :-- | :-- | :-- | :-- |
-| 19.10.2026 | [VL 1 Einführung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/00_Einfuehrung/00_Einfuehrung.md) |  |  |
-| **26.10.2026**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> | **[VL 2 ROS 2 Grundlagen](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/03_ROS_Grundlagen_I/03_EinfuehrungROS.md)**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> | [Ü 1 Linux Shell](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/exercise_00_linux_shell/README.md) |  |
-| 2.11.2026 | [VL 3 ROS 2 Pakete](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/04_ROS_Pakete_Tools/04_ROS_Pakete.md) |  |  |
-| 9.11.2026 | [VL 4 Koordinaten + QoS](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/02_Koordinatensysteme/02_Koordinatentransformation.md) | [Ü 2 ROS 2 Werkzeuge](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/exercise_00b_ros2_werkzeuge/README.md) |  |
+| 19.10.2026 | [VL 00 Einführung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/00_Einfuehrung/00_Einfuehrung.md) |  |  |
+| **26.10.2026**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> | **[VL 01 ROS 2 Grundlagen](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/01_ROS_Grundlagen/01_ROS_Grundlagen.md)**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> | [Ü 1 Linux Shell](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/uebung_01_linux_shell/README.md) |  |
+| 2.11.2026 | [VL 02 ROS 2 Pakete](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/02_ROS_Pakete/02_ROS_Pakete.md) |  |  |
+| 9.11.2026 | [VL 03 Koordinaten + QoS](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/03_Koordinaten_QoS/03_Koordinaten_QoS.md) | [Ü 2 ROS 2 Werkzeuge](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/uebung_02_workspace/README.md) |  |
 | 23.11.2026 |  |  | [P 1 TurtleBot + Bags](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_01_turtlebot/README.md) |
 
-- **Sie brauchen:** [Warum ROS?](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=rosmotivation) (VL 1) · [Terminal & Shell](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=shell) (Ü 1) · [~/.bashrc](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=bashrc) (Ü 1)
+- **Sie brauchen:** [Warum ROS?](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=rosmotivation) (VL 00)
 - **Heute neu:** [ROS als Middleware](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=middleware) · [DDS / rmw-Schicht](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=dds) · [Knoten (Node)](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=node) · [Topic](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=topic) · [Nachricht (Message)](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=message) · [Topics des TurtleBot](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=tbtopics) · [ros2-Kommandozeile](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=ros2cli)
 
 > [!TIP]
@@ -180,7 +180,7 @@ ROS 2 wurde neu entworfen, weil ROS 1 für einzelne Forschungsroboter im Labor g
 | Austauschbare Middleware   | Kommunikation über ein abstraktes Interface (`rmw`), standardmäßig DDS — mehr dazu im nächsten Abschnitt.     |
 | Plattformen und Sprachen   | Linux, Windows, macOS; aktuelles C++ (`rclcpp`) und Python 3 (`rclpy`) mit gleichem Konzept.                  |
 
-Weitere Neuerungen — Quality of Service, Launch-Dateien, das Build-System `colcon` — lernen Sie in VL 3 und VL 4 kennen.
+Weitere Neuerungen — Quality of Service, Launch-Dateien, das Build-System `colcon` — lernen Sie in VL 02 und VL 03 kennen.
 
 Einen Überblick über die Entwurfsentscheidungen gibt die Seite [Changes between ROS 1 and ROS 2](http://design.ros2.org/articles/changes.html).
 
@@ -223,7 +223,7 @@ graph TD
 ROS 2 Jazzy nutzt standardmäßig `rmw_fastrtps_cpp`, also Fast DDS der Firma eProsima (Apache-2.0-Lizenz). Alternativen sind Cyclone DDS (Eclipse), RTI Connext und — als Paket auch für Jazzy verfügbar — `rmw_zenoh`, das ohne DDS auskommt und in WLAN-Netzen mit vielen Robotern oft robuster ist. Die Implementierungen unterscheiden sich in unterstützter Hardware, Overhead und Latenz. Welche verwendet wird, legt die Umgebungsvariable `RMW_IMPLEMENTATION` fest — der Code Ihrer Knoten bleibt derselbe.
 
 ```bash
-export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp   # wie in Ü 1: gilt nur für diese Shell und die daraus gestarteten Knoten
+export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp   # gilt nur für diese Shell und die daraus gestarteten Knoten (mehr dazu in Ü 1)
 ```
 
 </details>
@@ -247,7 +247,7 @@ Jetzt kommen die drei Begriffe, die Sie heute mitnehmen müssen: Knoten, Topics 
 
 + Knoten melden sich regelmäßig, damit auch Knoten, die später gestartet werden, Verbindungen aufbauen können.
 
-+ Knoten verbinden sich nur, wenn ihre Quality-of-Service-Einstellungen zueinander passen (VL 4).
++ Knoten verbinden sich nur, wenn ihre Quality-of-Service-Einstellungen zueinander passen (VL 03).
 
 **Topics** - Ein Topic ist ein benannter Kanal, vergleichbar mit einem Radiosender. Knoten, die Daten liefern, **veröffentlichen** (_publish_) auf diesem Kanal; Knoten, die Daten brauchen, **abonnieren** ihn (_subscribe_). Dieses Muster heißt _Publish-Subscribe_. Sender und Empfänger müssen sich nicht kennen, allein der Name des Topics verbindet sie. Topics sind für fortlaufende Datenströme in eine Richtung gedacht — wer eine Antwort auf eine Anfrage braucht, verwendet einen _Service_ (siehe unten).
 
@@ -320,9 +320,9 @@ float32[] ranges
 float32[] intensities
 ```
 
-Ein LiDAR-Scan enthält einen **Header** mit Zeitstempel und Bezugssystem (`frame_id`, dazu mehr in VL 4), die Winkelangaben des Scans und die eigentlichen Messwerte im Array `ranges` — eine Entfernung pro Winkelschritt.
+Ein LiDAR-Scan enthält einen **Header** mit Zeitstempel und Bezugssystem (`frame_id`, dazu mehr in VL 03), die Winkelangaben des Scans und die eigentlichen Messwerte im Array `ranges` — eine Entfernung pro Winkelschritt.
 
-Die Basistypen heißen ähnlich wie in C++ (`bool`, `int32`, `float64`, `string`). Arrays werden mit `[]` (beliebige Länge) oder `[5]` (feste Länge) angegeben. Eigene Nachrichtentypen definieren Sie in VL 3.
+Die Basistypen heißen ähnlich wie in C++ (`bool`, `int32`, `float64`, `string`). Arrays werden mit `[]` (beliebige Länge) oder `[5]` (feste Länge) angegeben. Eigene Nachrichtentypen definieren Sie in VL 02.
 
 **Kurze Kontrolle:** Ihr Fahrverhalten soll den TurtleBot mit 0,1 m/s geradeaus fahren lassen. Welches Feld der `Twist`-Nachricht setzen Sie auf `0.1`?
 
@@ -417,7 +417,7 @@ int main(int argc, char * argv[])
 | 4-5   | Einbinden der ROS-2-Bibliothek für C++ (`rclcpp.hpp`, immer nötig) und des verwendeten Nachrichtentyps `String`.                                                                                                                                                                                        |
 | 9     | Definition einer individuellen Knotenklasse, die von der API-Basisklasse `rclcpp::Node` erbt.                                                                                                                                                                                                                                                                                |
 | 12-13 | Der zugehörige Konstruktor der Klasse `MinimalPublisher()` ruft den Konstruktor der Basisklasse `Node` mit dem Knotennamen `minimal_publisher` auf und initialisiert die eigene Variable `count_`. Diese dient als variabler Dateninhalt unserer Kommunikation.                                                                                                                          |
-| 15    | Wir erzeugen einen Publisher für Nachrichten vom Typ `std_msgs::msg::String` (der Typ steht in spitzen Klammern, ein sogenannter Template-Parameter) auf dem Topic `"topic"`. Die `10` gibt die Größe des Nachrichtenpuffers an (Quality of Service, siehe VL 4).                                                                                                                                     |
+| 15    | Wir erzeugen einen Publisher für Nachrichten vom Typ `std_msgs::msg::String` (der Typ steht in spitzen Klammern, ein sogenannter Template-Parameter) auf dem Topic `"topic"`. Die `10` gibt die Größe des Nachrichtenpuffers an (Quality of Service, siehe VL 03).                                                                                                                                     |
 | 16-17 | Ein Timer soll alle 500 ms eine Methode aufrufen. Eine solche Funktion, die nicht wir selbst aufrufen, sondern ROS für uns, wenn ein Ereignis eintritt, heißt **Callback**. `std::bind(&MinimalPublisher::timer_callback, this)` bedeutet: „Rufe die Methode `timer_callback` dieses Objekts auf.“                                                                                                           |
 | 21-26 | Der Callback erledigt die eigentliche Arbeit: Nachricht anlegen und befüllen, mit `RCLCPP_INFO` eine Logzeile ausgeben (ein Makro, ähnlich `printf`), Nachricht mit `publish()` versenden. |
 | 28-30 | Die Membervariablen. `SharedPtr` ist ein _Smart Pointer_: ein Zeiger, der das Objekt automatisch freigibt, sobald ihn niemand mehr benutzt — kein `delete` nötig. |
@@ -657,7 +657,7 @@ ros2 run teleop_twist_keyboard teleop_twist_keyboard   # den Roboter per Tastatu
 
 Ob `/cmd_vel` den Typ `Twist` oder `TwistStamped` (ein `Twist` mit Zeitstempel) erwartet, hängt von der Konfiguration des Roboters ab. `ros2 topic info /cmd_vel` verrät es Ihnen.
 
-Wie Sie sich mit „Ihrem“ TurtleBot verbinden, lernen Sie in VL 3 und wenden es im ersten Praktikum an.
+Wie Sie sich mit „Ihrem“ TurtleBot verbinden, lernen Sie in VL 02 und wenden es im ersten Praktikum an.
 
 > [!IMPORTANT]
 > **Merke:** Wer die Topics eines Systems kennt, kann es untersuchen, aufzeichnen und Teile davon ersetzen. Für unsere Verkehrswelt heißt das: Ihre Spurerkennung abonniert das Kamerabild, Ihr Fahrverhalten veröffentlicht auf `/cmd_vel`.
@@ -693,27 +693,28 @@ In welcher Zeile des Publisher-Codes steht, **wie oft** gesendet wird?
 Der Timer ruft den Callback alle 500 ms auf. Die `10` bei `create_publisher` ist die Puffergröße, keine Rate.
 ***
 
-**Ausblick:** In **VL 3** schreiben Sie den Publisher als eigenes Paket, bauen ihn mit `colcon` und starten Publisher und Subscriber gemeinsam mit einer Launch-Datei. In **Ü 2** probieren Sie Services, Parameter und Actions selbst aus.
+**Ausblick:** In **VL 02** schreiben Sie den Publisher als eigenes Paket, bauen ihn mit `colcon` und starten Publisher und Subscriber gemeinsam mit einer Launch-Datei. In **Ü 2** legen Sie Ihren ersten eigenen Workspace an, nutzen ein fremdes Paket und arbeiten mit Parametern und Aufzeichnungen.
 
 ## Installation
 
     --{{0}}--
-Bis zur Übung Ü 2 installieren Sie ROS 2 Jazzy selbstständig. Die Anleitung führt Sie Schritt für Schritt hindurch und endet mit einem Selbsttest. Wenn etwas hakt, bringen Sie die Fehlermeldung in die Übung mit.
+ROS 2 installieren wir gemeinsam in der ersten Übung am Donnerstag — die Installation ist dort zugleich das Übungsbeispiel für die Shell. Bringen Sie deshalb Ihren Laptop mit dem Ubuntu mit, das Sie bis dahin eingerichtet haben, und aktualisieren Sie es vorher einmal zu Hause.
 
-Bis zur Übung Ü 2 installieren Sie ROS 2 Jazzy selbstständig — Schritt für Schritt nach unserer [Installationsanleitung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/installation_ros2/README.md). Die Übung selbst gehört dann ganz der Arbeit mit ROS 2. Mögliche Umgebungen:
+ROS 2 Jazzy installieren wir **gemeinsam in Ü 1** (Donnerstag, 16:15 Uhr, Lessingstraße) — die Installation ist dort zugleich das Übungsbeispiel für die Shell.
 
-Welche Umgebung Sie nutzen können (Ubuntu nativ, WSL2, Rechnerpool), steht am Anfang der Anleitung.
+> [!NOTE]
+> **Hinweis – bis Ü 1 vorbereiten:** Laptop mit Ubuntu 24.04 (nativ oder WSL2), Netzteil, mindestens 10 GB frei. Führen Sie vorher zu Hause einmal `sudo apt update && sudo apt upgrade` aus — dann muss in der Übung nur noch ROS 2 geladen werden.
 
-Unsere Anleitung folgt der offiziellen Anleitung [Ubuntu (deb packages)](https://docs.ros.org/en/jazzy/Installation/Ubuntu-Install-Debs.html) und installiert das Paket `ros-jazzy-desktop` — es enthält `rqt`, `turtlesim` und die Beispiele aus dieser Vorlesung. Am Ende steht ein Selbsttest; bringen Sie Probleme in die Übung mit.
+Wir installieren das Paket `ros-jazzy-desktop` nach der offiziellen Anleitung [Ubuntu (deb packages)](https://docs.ros.org/en/jazzy/Installation/Ubuntu-Install-Debs.html); es enthält `rqt`, `turtlesim` und die Beispiele aus dieser Vorlesung. Wer in Ü 1 nicht fertig wird, schließt die Installation nach unserer [Installationsanleitung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/installation_ros2/README.md) bis VL 02 ab.
 
 ## Aufgabe der Woche
 
     --{{0}}--
-Die wichtigste Aufgabe dieser Woche ist die Installation. Die dritte Aufgabe, den ROS-Graphen für Spurfolgen und Ampelhalt zu skizzieren, ist der beste Test, ob Sie die heutige Vorlesung verstanden haben.
+Die wichtigste Aufgabe dieser Woche ist die Installation in der Übung. Die dritte Aufgabe, den ROS-Graphen für Spurfolgen und Ampelhalt zu skizzieren, ist der beste Test, ob Sie die heutige Vorlesung verstanden haben.
 
-1. Installieren Sie ROS 2 Jazzy nach der [Installationsanleitung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/installation_ros2/README.md) und führen Sie den Selbsttest aus — spätestens bis zur Übung Ü 2.
-2. Arbeiten Sie zwei Tutorials der ROS-2-Dokumentation durch: [Understanding nodes](https://docs.ros.org/en/jazzy/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Nodes/Understanding-ROS2-Nodes.html) und [Understanding topics](https://docs.ros.org/en/jazzy/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Topics/Understanding-ROS2-Topics.html). Services, Parameter und Actions folgen in Ü 2 — die übrigen Tutorials dürfen Sie bis dahin auslassen.
-3. Überlegen Sie für die Verkehrswelt: Welche Knoten braucht ein TurtleBot, der einer Fahrspur folgt und an einer roten Ampel hält? Skizzieren Sie den ROS-Graphen mit Knoten und Topics wie in Abschnitt „Basiskonzepte“. Bewahren Sie die Skizze auf — in VL 3 ergänzen Sie sie um Pakete.
+1. Installieren Sie ROS 2 Jazzy in Ü 1 und führen Sie dort den Selbsttest aus. Nicht fertig geworden? Dann nach der [Installationsanleitung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/installation_ros2/README.md) — spätestens bis VL 02.
+2. Arbeiten Sie zwei Tutorials der ROS-2-Dokumentation durch: [Understanding nodes](https://docs.ros.org/en/jazzy/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Nodes/Understanding-ROS2-Nodes.html) und [Understanding topics](https://docs.ros.org/en/jazzy/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Topics/Understanding-ROS2-Topics.html). Die übrigen Tutorials dürfen Sie auslassen — Parameter und Aufzeichnungen folgen in Ü 2.
+3. Überlegen Sie für die Verkehrswelt: Welche Knoten braucht ein TurtleBot, der einer Fahrspur folgt und an einer roten Ampel hält? Skizzieren Sie den ROS-Graphen mit Knoten und Topics wie in Abschnitt „Basiskonzepte“. Bewahren Sie die Skizze auf — in VL 02 ergänzen Sie sie um Pakete.
 
 **Zum Weiterlesen**
 
@@ -732,6 +733,8 @@ Die wichtigste Aufgabe dieser Woche ist die Installation. Die dritte Aufgabe, de
 
 --------------------------------------------------------------------------------
 
-**🗺️ Nächster Halt:** VL 3 · ROS 2 Pakete (Woche ab 2.11.2026) – Sie bauen eigene Knoten und starten sie gemeinsam mit einer Launch-Datei – das Gerüst für jede spätere Projektfunktion. [Auf der Kurslandkarte ansehen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=04)
+**🗺️ Nächster Halt:** VL 02 · ROS 2 Pakete (Woche ab 2.11.2026) – Sie bauen eigene Knoten und starten sie gemeinsam mit einer Launch-Datei – das Gerüst für jede spätere Projektfunktion. [Auf der Kurslandkarte ansehen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=04)
+
+**Außerdem bis dahin:** [Ü 1 · Linux Shell](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=ue1) (Woche ab 26.10.2026)
 
 <!-- kurslandkarte:ausblick-ende -->

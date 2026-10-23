@@ -55,10 +55,10 @@ Kurz zur Orientierung. Wir sind in Block 1, Termin 1 von 32. Sie lernen die Proj
 <!-- data-type="none" -->
 | Woche ab | Vorlesung | Übung | Praktikum |
 | :-- | :-- | :-- | :-- |
-| **19.10.2026**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> | **[VL 1 Einführung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/00_Einfuehrung/00_Einfuehrung.md)**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> |  |  |
-| 26.10.2026 | [VL 2 ROS 2 Grundlagen](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/03_ROS_Grundlagen_I/03_EinfuehrungROS.md) | [Ü 1 Linux Shell](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/exercise_00_linux_shell/README.md) |  |
-| 2.11.2026 | [VL 3 ROS 2 Pakete](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/04_ROS_Pakete_Tools/04_ROS_Pakete.md) |  |  |
-| 9.11.2026 | [VL 4 Koordinaten + QoS](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/02_Koordinatensysteme/02_Koordinatentransformation.md) | [Ü 2 ROS 2 Werkzeuge](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/exercise_00b_ros2_werkzeuge/README.md) |  |
+| **19.10.2026**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> | **[VL 00 Einführung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/00_Einfuehrung/00_Einfuehrung.md)**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> |  |  |
+| 26.10.2026 | [VL 01 ROS 2 Grundlagen](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/01_ROS_Grundlagen/01_ROS_Grundlagen.md) | [Ü 1 Linux Shell](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/uebung_01_linux_shell/README.md) |  |
+| 2.11.2026 | [VL 02 ROS 2 Pakete](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/02_ROS_Pakete/02_ROS_Pakete.md) |  |  |
+| 9.11.2026 | [VL 03 Koordinaten + QoS](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/03_Koordinaten_QoS/03_Koordinaten_QoS.md) | [Ü 2 ROS 2 Werkzeuge](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/uebung_02_workspace/README.md) |  |
 | 23.11.2026 |  |  | [P 1 TurtleBot + Bags](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_01_turtlebot/README.md) |
 
 - **Sie brauchen:** nichts – wir fangen an
@@ -82,7 +82,7 @@ Anders als in den vergangenen Jahren trennen wir Vorlesung und Projekt nicht meh
 | ------------------ | ----------------------------- | -------------------------------------------------------------------- |
 | **Vorlesung (VL)** | Hörsaal                       | Konzepte und Methoden, Beispiele aus realen Robotersystemen          |
 | **Übung (Ü)**      | eigener Rechner / Pool        | angeleitete Aufgaben, z. B. mit aufgezeichneten Sensordaten (Bags)   |
-| **Praktikum (P)**  | Labor, TurtleBot              | Gruppenarbeit (2–3 Personen pro Roboter) an der Projektaufgabe      |
+| **Praktikum (P)**  | Labor, TurtleBot              | Gruppenarbeit (3–4 Personen pro Roboter) an der Projektaufgabe      |
 
 https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=00
 
@@ -110,7 +110,7 @@ Für die Arbeit benötigen Sie ein Linux-System. Wir arbeiten mit Ubuntu 24.04 u
 | --------------------- | --------------------------------------------------------------------------------------------------------- |
 | **Prüfungsleistung**  | Ihre Arbeit in den **Praktika**: Dort wenden Sie das Gelernte am TurtleBot an und bauen Schritt für Schritt die Projektaufgabe auf. |
 | **Vorlesung, Übung**  | vermitteln und üben, was Sie im Praktikum brauchen — die Selbsttests zeigen Ihnen, ob Sie bereit sind     |
-| **Gruppen**           | 2–3 Personen pro TurtleBot, gebildet bis zum ersten Praktikum P 1                                        |
+| **Gruppen**           | 3–4 Personen pro TurtleBot, gebildet bis zum ersten Praktikum P 1                                        |
 | **Versionsverwaltung**| jede Gruppe arbeitet in einem eigenen Git-Repository                                                      |
 
 
@@ -518,25 +518,25 @@ graph LR
 + einen **einheitlichen Datenaustausch** zwischen allen Programmen,
 + **Werkzeuge**, um Daten anzuzeigen, aufzuzeichnen und abzuspielen.
 
-Ihre Arbeit im Projekt ist der Kasten in der Mitte. Wie der Datenaustausch genau funktioniert, ist Thema von VL 2.
+Ihre Arbeit im Projekt ist der Kasten in der Mitte. Wie der Datenaustausch genau funktioniert, ist Thema von VL 01.
 
 ******************************************************
 
 ## Ausblick: Die nächsten Schritte
 
     --{{0}}--
-Bevor wir mit ROS 2 arbeiten können, brauchen wir ein solides Fundament: den sicheren Umgang mit dem Linux-Terminal. Genau darum geht es in der ersten Übung. Danach steigen wir in der Vorlesung in die Konzepte von ROS 2 ein. ROS 2 installieren Sie selbstständig nach einer Anleitung, bevor die zweite Übung beginnt.
+Bevor wir mit ROS 2 arbeiten können, brauchen wir ein solides Fundament: den sicheren Umgang mit dem Linux-Terminal. Genau darum geht es in der ersten Übung — dort installieren wir auch gemeinsam ROS 2, und Sie sehen gleich, wozu man die Kommandozeile braucht. In der Vorlesung steigen wir parallel in die Konzepte von ROS 2 ein.
 
 **Was kommt als Nächstes?**
 
 <!-- data-type="none" -->
 | Termin                                | Inhalt                                                                  |
 | ------------------------------------- | ----------------------------------------------------------------------- |
-| **Ü 1** OS + Linux Shell              | Terminal, Dateisystem, Rechte, Prozesse, Umgebungsvariablen             |
-| **VL 2** Grundlagen ROS 2             | Architektur, Knoten, Topics, Nachrichten                                |
-| **VL 3** ROS 2 Pakete                 | Pakete, Build-System, Launch-Files                                      |
-| **Ü 2** Werkzeuge von ROS 2           | Services, Parameter, Actions, Daten aufzeichnen (Installation vorab)    |
-| **VL 4** Koordinaten + QoS            | Transformationen, tf2, Quality of Service                               |
+| **Ü 1** OS + Linux Shell              | Terminal, Dateisystem, Rechte, Prozesse, Umgebungsvariablen — und ROS 2 gemeinsam installieren |
+| **VL 01** Grundlagen ROS 2             | Architektur, Knoten, Topics, Nachrichten                                |
+| **VL 02** ROS 2 Pakete                 | Pakete, Build-System, Launch-Files                                      |
+| **Ü 2** Erster eigener Workspace      | eigene und fremde Pakete bauen, Launch-Datei, Parameter, Daten aufzeichnen |
+| **VL 03** Koordinaten + QoS            | Transformationen, tf2, Quality of Service                               |
 | **P 1** TurtleBot in Betrieb nehmen   | erste Fahrt mit dem TurtleBot, Daten aufzeichnen und auswerten          |
 
     --{{1}}--
@@ -576,8 +576,6 @@ Für Interessierte hier noch einige Ressourcen zur Vertiefung:
 
 --------------------------------------------------------------------------------
 
-**🗺️ Nächster Halt:** VL 2 · ROS 2 Grundlagen (Woche ab 26.10.2026) – Sie verstehen, wie die Software des TurtleBots aus Knoten und Topics zusammengesetzt ist. [Auf der Kurslandkarte ansehen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=03)
-
-**Außerdem bis dahin:** [Ü 1 · Linux Shell](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=ue1) (Woche ab 26.10.2026)
+**🗺️ Nächster Halt:** VL 01 · ROS 2 Grundlagen (Woche ab 26.10.2026) – Sie verstehen, wie die Software des TurtleBots aus Knoten und Topics zusammengesetzt ist. [Auf der Kurslandkarte ansehen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=03)
 
 <!-- kurslandkarte:ausblick-ende -->

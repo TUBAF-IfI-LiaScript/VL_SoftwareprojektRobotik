@@ -12,7 +12,7 @@ import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_Softwareproje
 
 -->
 
-[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/06_Kamera_Stereo/06_Kamera_Stereo.md)
+[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/06_Kamera/06_Kamera.md)
 
 # Kamera: Modell, Kalibrierung, Draufsicht
 
@@ -22,7 +22,7 @@ import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_Softwareproje
 | **Semester**         | @config.semester                                                                                                      |
 | **Hochschule:**      | `Technische Universität Freiberg`                                                                                     |
 | **Inhalte:**         | `Lochkameramodell, Verzeichnung, Kalibrierung, Entzerren, Homographie und Vogelperspektive`                           |
-| **Link auf GitHub:** | https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/06_Kamera_Stereo/06_Kamera_Stereo.md |
+| **Link auf GitHub:** | https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/06_Kamera/06_Kamera.md |
 | **Autoren**          | @author                                                                                                               |
 
 --------------------------------------------------------------------------------
@@ -51,14 +51,14 @@ Kurz zur Orientierung. Wir sind in Block 2, Termin 10 von 32. Sie schließen von
 <!-- data-type="none" -->
 | Woche ab | Vorlesung | Übung | Praktikum |
 | :-- | :-- | :-- | :-- |
-| 30.11.2026 | [VL 5 Sensorik](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/01_Sensorik/01_Sensorik.md) |  |  |
-| **7.12.2026**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> | [VL 6 Bildverarbeitung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/05_Bildverarbeitung/05_Bildverarbeitung.md)<br>**[VL 7 Kamera + Draufsicht](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/06_Kamera_Stereo/06_Kamera_Stereo.md)**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> |  |  |
-| 14.12.2026 | VL 8 LiDAR |  |  |
-| 4.1.2027 |  | Ü 3 Datenvisualisierung |  |
-| 11.1.2027 |  | Ü 4 Kameradaten | [P 2 Bildkorrektur](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_02_bildkorrektur/README.md) |
+| 30.11.2026 | [VL 04 Sensorik](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/04_Sensorik/04_Sensorik.md) |  |  |
+| **7.12.2026**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> | [VL 05 Bildverarbeitung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/05_Bildverarbeitung/05_Bildverarbeitung.md)<br>**[VL 06 Kamera + Draufsicht](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/06_Kamera/06_Kamera.md)**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> |  |  |
+| 14.12.2026 | VL 07 LiDAR |  |  |
+| 4.1.2027 |  | Ü 3 Datenvisualisierung<br>Ü 4 Kameradaten |  |
+| 11.1.2027 |  |  | [P 2 Bildkorrektur](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_02_bildkorrektur/README.md) |
 | 18.1.2027 |  |  | [P 3 Spurerkennung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_03_spurerkennung/README.md) |
 
-- **Sie brauchen:** [Bezugskoordinatensystem](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=frame) (VL 4) · [Homogene Koordinaten](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=homtrafo) (VL 4) · [Verkettung](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=verkettung) (VL 4) · [Bild als Pixelmatrix](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=bildmatrix) (VL 6)
+- **Sie brauchen:** [Bezugskoordinatensystem](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=frame) (VL 03) · [Homogene Koordinaten](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=homtrafo) (VL 03) · [Verkettung](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=verkettung) (VL 03) · [Bild als Pixelmatrix](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=bildmatrix) (VL 05)
 - **Heute neu:** [Lochkameramodell](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=pinhole) · [Kamera-Matrix K](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=kmatrix) · [Verzeichnung](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=verzerrung) · [Entzerren mit Tabellen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=entzerrung) · [Kamerakalibrierung](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=kalibrierung) · [Homographie](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=homographie) · [Draufsicht (Vogelperspektive)](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=draufsicht) · [Vorausschau](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=vorausschau)
 
 > [!TIP]
@@ -110,14 +110,14 @@ Beginnen wir mit der einfachsten Kamera, die es gibt: einer Kiste mit einem Loch
 
 Für die Rechnung legen wir die Bildebene gedanklich **vor** das Loch, im Abstand $f$ (Brennweite). Dann steht das Bild nicht auf dem Kopf, und die Gleichungen werden einfacher.
 
-**Koordinatensystem der Kamera** (so verwenden es OpenCV und ROS im *optical frame*, VL 4):
+**Koordinatensystem der Kamera** (so verwenden es OpenCV und ROS im *optical frame*, VL 03):
 
 + Ursprung im optischen Zentrum (dem „Loch“),
 + $Z$ zeigt in Blickrichtung,
 + $X$ nach rechts, $Y$ nach **unten** — wie die Zeilen und Spalten eines Bildes.
 
 > [!WARNING]
-> **Stolperfalle:** Das ist ein anderes Achsensystem als `base_link` und `base_footprint` des Roboters ($x$ vorn, $y$ links, $z$ oben). In ROS trägt es einen eigenen Frame-Namen mit `_optical_frame` am Ende; die Umrechnung übernimmt tf2 (VL 4).
+> **Stolperfalle:** Das ist ein anderes Achsensystem als `base_link` und `base_footprint` des Roboters ($x$ vorn, $y$ links, $z$ oben). In ROS trägt es einen eigenen Frame-Namen mit `_optical_frame` am Ende; die Umrechnung übernimmt tf2 (VL 03).
 
 ### Vom 3D-Punkt zum Pixel
 
@@ -150,9 +150,9 @@ Das hat für uns eine wichtige Folge, die wir gleich nutzen: Wenn wir zusätzlic
 ### Die Kamera-Matrix K
 
     --{{0}}--
-Im Bild rechnen wir nicht in Millimetern, sondern in Pixeln, und der Ursprung liegt oben links, nicht in der Mitte. Beides fasst die Kamera-Matrix K zusammen: Brennweite in Pixeln und die Lage des Hauptpunkts. Mit homogenen Koordinaten aus VL 4 wird daraus eine einzige Matrixmultiplikation.
+Im Bild rechnen wir nicht in Millimetern, sondern in Pixeln, und der Ursprung liegt oben links, nicht in der Mitte. Beides fasst die Kamera-Matrix K zusammen: Brennweite in Pixeln und die Lage des Hauptpunkts. Mit homogenen Koordinaten aus VL 03 wird daraus eine einzige Matrixmultiplikation.
 
-**Aus VL 4:** In homogenen Koordinaten bekommt ein Punkt eine zusätzliche Komponente. Welcher Bildpunkt $(x, y)$ gehört zum homogenen Vektor $(6,\ 4,\ 2)$?
+**Aus VL 03:** In homogenen Koordinaten bekommt ein Punkt eine zusätzliche Komponente. Welcher Bildpunkt $(x, y)$ gehört zum homogenen Vektor $(6,\ 4,\ 2)$?
 
 [( )] $(6, 4)$
 [(X)] $(3, 2)$
@@ -161,7 +161,7 @@ Im Bild rechnen wir nicht in Millimetern, sondern in Pixeln, und der Ursprung li
 Man teilt durch die letzte Komponente: $(6/2,\ 4/2) = (3, 2)$. Genau dieses Teilen steckt gleich in der Kamera-Matrix — dort ist die letzte Komponente die Tiefe $Z$.
 ***
 
-Zwei Schritte machen aus $(x, y)$ Pixelkoordinaten $(u, v)$: in Pixel umrechnen (Brennweite in Pixeln $f_x, f_y$) und den Ursprung von der Bildmitte nach oben links schieben (Hauptpunkt $c_x, c_y$). In homogenen Koordinaten (VL 4) ist das eine Matrixmultiplikation:
+Zwei Schritte machen aus $(x, y)$ Pixelkoordinaten $(u, v)$: in Pixel umrechnen (Brennweite in Pixeln $f_x, f_y$) und den Ursprung von der Bildmitte nach oben links schieben (Hauptpunkt $c_x, c_y$). In homogenen Koordinaten (VL 03) ist das eine Matrixmultiplikation:
 
 $$
 \lambda \begin{bmatrix} u \\ v \\ 1 \end{bmatrix}
@@ -402,7 +402,7 @@ Warum ist das rückwärts so viel einfacher als vorwärts? Vorwärts müssten wi
     --{{0}}--
 Jetzt kommt der wichtigste Schritt für unser Projekt. Wir wissen: Ein einzelnes Bild verrät keine Tiefe. Aber die Fahrbahnlinien liegen alle auf dem Boden, also auf einer Ebene. Und zwischen einer Ebene in der Welt und dem Kamerabild gibt es eine besonders einfache Abbildung, die Homographie.
 
-Für einen Punkt, der auf dem **Boden** liegt, braucht man keine Tiefe: Der Sehstrahl trifft den Boden nur an einer Stelle. Als Boden-Koordinatensystem nehmen wir `base_footprint` (VL 4): Der Boden ist dort die Ebene $z = 0$, ein Bodenpunkt hat die Koordinaten $(x, y)$.
+Für einen Punkt, der auf dem **Boden** liegt, braucht man keine Tiefe: Der Sehstrahl trifft den Boden nur an einer Stelle. Als Boden-Koordinatensystem nehmen wir `base_footprint` (VL 03): Der Boden ist dort die Ebene $z = 0$, ein Bodenpunkt hat die Koordinaten $(x, y)$.
 
 Um einen Bodenpunkt ins Bild zu bringen, drückt man ihn zuerst im Kamera-System aus — mit Drehung $R = [\,r_1\ r_2\ r_3\,]$ und Verschiebung $t$ von $\textbf{T}_{\text{cam},\text{base}}$. Das ist die Umkehrung dessen, was tf2 für die montierte Kamera liefert: $\textbf{T}_{\text{cam},\text{base}} = \textbf{T}_{\text{base},\text{cam}}^{-1}$, einschließlich der Drehung ins *optical frame*. Danach wirkt $K$:
 
@@ -566,7 +566,7 @@ In der Draufsicht können wir jetzt messen. Aber wo? An der Radachse sieht die K
 
 In P 3 bestimmt Ihr Knoten in der Draufsicht die seitliche Lage der Spurmitte — und zwar an einer festen Stelle **0,30 m vor dem Roboter**, der *Vorausschau*. Dort sieht die Kamera die Fahrbahn gut, an der Radachse sieht sie gar nichts.
 
-Die Abweichung, die dort gemessen wird, setzt sich auf einer geraden Straße aus zwei Anteilen zusammen. Dabei ist $\Delta y > 0$, wenn der Roboter **links** der Spurmitte steht, und $\psi > 0$, wenn er nach **links** gedreht ist (mathematisch positiv, VL 4):
+Die Abweichung, die dort gemessen wird, setzt sich auf einer geraden Straße aus zwei Anteilen zusammen. Dabei ist $\Delta y > 0$, wenn der Roboter **links** der Spurmitte steht, und $\psi > 0$, wenn er nach **links** gedreht ist (mathematisch positiv, VL 03):
 
 $$
 \text{Abweichung} \approx \underbrace{\Delta y}_{\text{seitlicher Versatz}} + \underbrace{0{,}30\ \text{m} \cdot \sin\psi}_{\text{Blickrichtung}}
@@ -684,6 +684,6 @@ Die Aufgaben dieser Woche sind kurz. Wenn Sie sie lösen, haben Sie die drei Rec
 
 --------------------------------------------------------------------------------
 
-**🗺️ Nächster Halt:** VL 8 · LiDAR (Woche ab 14.12.2026) – Sie werten die Abstandsmessungen des LiDAR aus und erkennen, was vor dem Roboter liegt. [Auf der Kurslandkarte ansehen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=lid)
+**🗺️ Nächster Halt:** VL 07 · LiDAR (Woche ab 14.12.2026) – Sie werten die Abstandsmessungen des LiDAR aus und erkennen, was vor dem Roboter liegt. [Auf der Kurslandkarte ansehen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=lid)
 
 <!-- kurslandkarte:ausblick-ende -->

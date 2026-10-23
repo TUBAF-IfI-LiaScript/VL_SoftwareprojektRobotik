@@ -249,7 +249,7 @@ Vervollständigen Sie die Funktion `count_persons_yolo()` (ab Zeile 182).
 
 > Ein kleines Beispiel für die Anwendung wurde in der Vorlesung anhand von 
 > 
-> https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/07_Objekterkennung/yoloExample/detect_objects.py
+> https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/08_Objekterkennung/yoloExample/detect_objects.py
 > 
 > besprochen.
 

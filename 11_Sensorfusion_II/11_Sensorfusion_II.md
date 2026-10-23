@@ -13,7 +13,7 @@ import:   https://github.com/liascript/CodeRunner
 
 -->
 
-[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/09_Sensorfusion_II/09_Sensorfusion_II.md)
+[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/11_Sensorfusion_II/11_Sensorfusion_II.md)
 
 # Sensordatenfusion II: Kalman-Filter
 
@@ -24,7 +24,7 @@ import:   https://github.com/liascript/CodeRunner
 | **Semester**         | @config.semester                                                                                              |
 | **Hochschule:**      | `Technische Universität Freiberg`                                                                             |
 | **Inhalte:**         | `Kalman-Filter, Extended Kalman Filter, robot_localization`                                                   |
-| **Link auf GitHub:** | https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/09_Sensorfusion_II/09_Sensorfusion_II.md |
+| **Link auf GitHub:** | https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/11_Sensorfusion_II/11_Sensorfusion_II.md |
 | **Autoren**          | @author                                                                                                       |
 
 ![](https://media.giphy.com/media/3o7btPCcdNniyf0ArS/giphy.gif)

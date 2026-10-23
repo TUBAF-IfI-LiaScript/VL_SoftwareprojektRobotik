@@ -36,7 +36,7 @@ Die Karte zeigt die Begriffe freigegebener Termine; die übrigen erscheinen mit 
 ## Datenmodell
 
 * **Kurs:** `basis` (LiaScript-Link-Präfix), `speicher` (Schlüssel für Einstellungen im Browser)
-* **Termin** (`vorlesungen`): `vl` (Position), `key`, `label` (z. B. „VL 2“, „Ü 1“, „P 2“; Vorlesungen werden in `erzeuge.py` automatisch laufend nach Zeitplan nummeriert — die Ordnernummern im Repo stammen aus der alten Reihenfolge), `datei` (oder `null`, solange kein Material existiert), `datum` (Montag der KW nach `Zeitplan.ods`, ISO), `kurz`, `status` (`ausgearbeitet` | `Bestand` | `geplant`), `block`, `abschnitte`
+* **Termin** (`vorlesungen`): `vl` (Position), `key`, `label` (z. B. „VL 01“, „Ü 1“, „P 2“; Vorlesungen werden in `erzeuge.py` automatisch laufend nach Zeitplan nummeriert — die Ordnernummern im Repo stammen aus der alten Reihenfolge), `datei` (oder `null`, solange kein Material existiert), `datum` (Montag der KW nach `Zeitplan.ods`, ISO), `kurz`, `status` (`ausgearbeitet` | `Bestand` | `geplant`), `block`, `abschnitte`
 * **Phase:** `von`, `bis` (Terminpositionen), `name` (Block), `farbe`
 * **Linie** (Themengebiet): `id`, `name`, `farbe` (Palette `c1`…`c7` des Kerns)
 * **Begriff:** `id`, `name`, `linie`, `vl` (Terminposition), `abschnitt` (Foliennummer), `ebene` (1 = Kernbegriff, 2 = Detailbegriff), `code`, `erklaerung`, `fehlvorstellung`

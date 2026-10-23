@@ -48,7 +48,7 @@ flowchart LR
 | :-------------- | :-------------------------------------------------------------------------------------------------- |
 | Topic, Typ      | `/lane/offset`, `std_msgs/msg/Float32`                                                               |
 | Wert            | seitliche Abweichung des Roboters von der Spurmitte in **m**                                         |
-| Vorzeichen      | **positiv**, wenn der Roboter **links** von der Spurmitte steht ($y$ wächst nach links, VL 4)        |
+| Vorzeichen      | **positiv**, wenn der Roboter **links** von der Spurmitte steht ($y$ wächst nach links, VL 03)        |
 | Messstelle      | $x = 0{,}30$ m vor `base_footprint` (Parameter `vorausschau`, **fest**)                              |
 | Rate            | ein Wert je Kamerabild                                                                               |
 | keine Linie     | **keine** Nachricht — besser als ein geratener Wert                                                  |
@@ -66,12 +66,12 @@ Warum 30 cm voraus und nicht an der Radachse? Ein Fahrer schaut auch nach vorn, 
 <!-- data-type="none" -->
 | Zeit   | Teil                                                      | Wendet an           | Nachweis |
 | ------ | --------------------------------------------------------- | ------------------- | -------- |
-| vorab  | Vorbereitung zu Hause                                     | VL 3, VL 4, VL 6, Ü 3 | 1, 2   |
+| vorab  | Vorbereitung zu Hause                                     | VL 02, VL 03, VL 05, Ü 3 | 1, 2   |
 | 10 min | Sicherheit, Rollen, Verbinden, Kalibrierung prüfen        | P 1, P 2            | —        |
 | 10 min | A: Kette live starten (aus P 2 nachgeholt)                | P 2, Ü 2            | 3        |
-| 20 min | B: Erkennung an die Strecke anpassen                      | VL 6, Ü 2           | 4        |
-| 20 min | C: Abweichung nachmessen                                  | VL 4                | 5        |
-| 20 min | D: Licht und verdeckte Linien                             | VL 6                | 6, 7     |
+| 20 min | B: Erkennung an die Strecke anpassen                      | VL 05, Ü 2           | 4        |
+| 20 min | C: Abweichung nachmessen                                  | VL 03                | 5        |
+| 20 min | D: Licht und verdeckte Linien                             | VL 05                | 6, 7     |
 | 10 min | Verständnisfrage, Roboter zurückgeben, Puffer             | —                   | 8        |
 
 --------------------------------------------------------------------------------
@@ -87,14 +87,14 @@ Warum 30 cm voraus und nicht an der Radachse? Ein Fahrer schaut auch nach vorn, 
 <!-- data-type="none" -->
 | Woche ab | Vorlesung | Übung | Praktikum |
 | :-- | :-- | :-- | :-- |
-| 30.11.2026 | [VL 5 Sensorik](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/01_Sensorik/01_Sensorik.md) |  |  |
-| 7.12.2026 | [VL 6 Bildverarbeitung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/05_Bildverarbeitung/05_Bildverarbeitung.md)<br>[VL 7 Kamera + Draufsicht](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/06_Kamera_Stereo/06_Kamera_Stereo.md) |  |  |
-| 14.12.2026 | VL 8 LiDAR |  |  |
-| 4.1.2027 |  | Ü 3 Datenvisualisierung |  |
-| 11.1.2027 |  | Ü 4 Kameradaten | [P 2 Bildkorrektur](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_02_bildkorrektur/README.md) |
+| 30.11.2026 | [VL 04 Sensorik](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/04_Sensorik/04_Sensorik.md) |  |  |
+| 7.12.2026 | [VL 05 Bildverarbeitung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/05_Bildverarbeitung/05_Bildverarbeitung.md)<br>[VL 06 Kamera + Draufsicht](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/06_Kamera/06_Kamera.md) |  |  |
+| 14.12.2026 | VL 07 LiDAR |  |  |
+| 4.1.2027 |  | Ü 3 Datenvisualisierung<br>Ü 4 Kameradaten |  |
+| 11.1.2027 |  |  | [P 2 Bildkorrektur](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_02_bildkorrektur/README.md) |
 | **18.1.2027**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> |  |  | **[P 3 Spurerkennung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_03_spurerkennung/README.md)**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> |
 
-- **Sie brauchen:** [Parameter und Parameterdatei](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=paramfile) (Ü 2) · [Schwellwertoperation](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=thresholding) (VL 6) · [Morphologische Operationen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=morphologie) (VL 6) · [Draufsicht (Vogelperspektive)](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=draufsicht) (VL 7) · [Vorausschau](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=vorausschau) (VL 7)
+- **Sie brauchen:** [Parameter und Parameterdatei](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=paramfile) (Ü 2) · [Schwellwertoperation](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=thresholding) (VL 05) · [Morphologische Operationen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=morphologie) (VL 05) · [Draufsicht (Vogelperspektive)](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=draufsicht) (VL 06) · [Vorausschau](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=vorausschau) (VL 06)
 - **Heute:** anwenden, nichts Neues – Ihre Arbeit hier ist die Prüfungsleistung
 
 > [!TIP]
@@ -117,7 +117,7 @@ cp ~/kurs/exercises/praktikum_03_spurerkennung/spurerkennung.launch.py ~/ros2_ws
 cp ~/kurs/exercises/praktikum_03_spurerkennung/spur.yaml ~/ros2_ws/src/verkehrswelt/config/
 ```
 
-**2. Knoten anmelden.** Tragen Sie den neuen Knoten in `setup.py` unter `console_scripts` ein (VL 3), so wie die beiden aus P 2:
+**2. Knoten anmelden.** Tragen Sie den neuen Knoten in `setup.py` unter `console_scripts` ein (VL 02), so wie die beiden aus P 2:
 
 ```python
 'lane_detector = verkehrswelt.lane_detector:main',
@@ -136,11 +136,11 @@ source install/setup.bash
 <!-- data-type="none" -->
 | TODO | Was                                                                                  | Wo gelernt |
 | :--: | :----------------------------------------------------------------------------------- | :--------- |
-| 1    | Binärmaske mit Schwellwert (fest oder adaptiv)                                       | VL 6       |
-| 2    | Störpixel mit einem Opening entfernen                                                | VL 6       |
-| 3    | Flächen nach ihrer Länge einteilen: Strich der Mittellinie oder Stück Randlinie      | VL 6       |
-| 4    | $y$ der Spurmitte aus Mittel- und Randlinie; fehlt eine, aus der anderen schätzen    | VL 4       |
-| 5    | Abweichung des Roboters mit dem richtigen Vorzeichen                                 | VL 4       |
+| 1    | Binärmaske mit Schwellwert (fest oder adaptiv)                                       | VL 05       |
+| 2    | Störpixel mit einem Opening entfernen                                                | VL 05       |
+| 3    | Flächen nach ihrer Länge einteilen: Strich der Mittellinie oder Stück Randlinie      | VL 05       |
+| 4    | $y$ der Spurmitte aus Mittel- und Randlinie; fehlt eine, aus der anderen schätzen    | VL 03       |
+| 5    | Abweichung des Roboters mit dem richtigen Vorzeichen                                 | VL 03       |
 
 Zu TODO 4 und 5 ein Beispiel. Alle Werte sind $y$-Koordinaten in `base_footprint` bei $x = 0{,}30$ m; $y$ wächst nach **links**, der Roboter liegt bei $y = 0$, die Spurbreite ist $b = 0{,}22$ m:
 
@@ -228,11 +228,12 @@ Zeichnen Sie die Abweichung mit `rqt` auf (_Plugins → Visualization → Plot_,
 <!-- data-type="none" -->
 | Rolle          | Aufgabe                                                            |
 | :------------- | :----------------------------------------------------------------- |
-| Roboter        | schiebt und stellt den Roboter, misst mit dem Zollstock            |
+| Roboter        | schiebt und stellt den Roboter                                     |
+| Messen         | misst mit dem Zollstock, vergleicht mit dem Wert auf `/lane/offset` |
 | Tastatur       | startet die Befehle, ändert Parameter, prüft die Ausgaben           |
 | Protokoll      | hält die 📝-Antworten und Bildschirmfotos fest                     |
 
-In Zweiergruppen übernimmt die Person am Roboter auch das Protokoll. **Protokoll:** `praktikum_03/PROTOKOLL.md`, hochladen nach dem Praktikum, spätestens zu Beginn von P 4.
+In Dreiergruppen übernimmt die Person am Roboter auch das Messen. **Protokoll:** `praktikum_03/PROTOKOLL.md`, hochladen nach dem Praktikum, spätestens zu Beginn von P 4.
 
 **Verbinden** wie in P 1 und P 2.
 
@@ -280,7 +281,7 @@ Kommazahlen immer mit **Dezimalpunkt**, auch bei runden Werten (`1.0` statt `1`)
 | `strich_max_laenge`  | Striche werden blau oder Randlinien gelb → an die Strichlänge Ihrer Strecke anpassen  |
 | `vorausschau`        | **nie** — sie gehört zur Schnittstelle (Steckbrief)                                   |
 
-Reicht eine feste Schwelle nicht, dürfen Sie in TODO 1 auch den adaptiven Schwellwert aus VL 6 verwenden.
+Reicht eine feste Schwelle nicht, dürfen Sie in TODO 1 auch den adaptiven Schwellwert aus VL 05 verwenden.
 
 📝 Welche Werte haben Sie gewählt, und warum? Bildschirmfoto von `/lane/debug`: Mittellinie gelb, Randlinie blau, roter Punkt zwischen beiden.
 
@@ -351,6 +352,6 @@ Fällt der Roboter durch einen Defekt aus, den Ihre Gruppe nicht verschuldet hat
 
 --------------------------------------------------------------------------------
 
-**🗺️ Nächster Halt:** VL 9 · Objekterkennung (Woche ab 25.1.2027) – Sie erkennen Schilder, Ampeln und Fußgängerfiguren im Kamerabild. [Auf der Kurslandkarte ansehen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=07)
+**🗺️ Nächster Halt:** VL 08 · Objekterkennung (Woche ab 18.1.2027) – Sie erkennen Schilder, Ampeln und Fußgängerfiguren im Kamerabild. [Auf der Kurslandkarte ansehen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=07)
 
 <!-- kurslandkarte:ausblick-ende -->

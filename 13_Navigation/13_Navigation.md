@@ -14,7 +14,7 @@ import:   https://github.com/liascript/CodeRunner
 
 -->
 
-[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/11_Navigation/11_Navigation.md)
+[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/13_Navigation/13_Navigation.md)
 
 # Navigation und Pfadplanung
 
@@ -25,7 +25,7 @@ import:   https://github.com/liascript/CodeRunner
 | **Semester**         | @config.semester                                                                                                        |
 | **Hochschule:**      | `Technische Universität Freiberg`                                                                                       |
 | **Inhalte:**         | `Kartenformate, Pfadplanung, ROS2 Navigation Stack`                                                                    |
-| **Link auf GitHub:** | https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/11_Navigation/11_Navigation.md            |
+| **Link auf GitHub:** | https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/13_Navigation/13_Navigation.md            |
 | **Autoren**          | @author                                                                                                                 |
 
 ![](https://media.giphy.com/media/665kTzjPTFGL9J2fNf/giphy-downsized.gif)
@@ -115,7 +115,7 @@ Beginnen wir mit einer grundlegenden Frage: Ist Navigation ohne Karte überhaupt
 
 > Sofern keine Karte genutzt wird, erfolgt die Navigation allein anhand reaktiver Verhaltensweisen. Der Roboter trifft Entscheidungen ausschließlich auf Basis seiner aktuellen Sensorinformationen.
 
-> Analog Move-To-Pose Controller [(VL 10)](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/10_Kinematik_Regelung/10_Kinematik_Regelung.md#16)
+> Analog Move-To-Pose Controller [(VL 10)](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/12_Kinematik_Regelung/12_Kinematik_Regelung.md#16)
 
 ### Braitenberg Vehicle
 

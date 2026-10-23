@@ -42,9 +42,9 @@ import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_Softwareproje
 | Zeit   | Teil                                     | Wendet an                |
 | ------ | ---------------------------------------- | ------------------------ |
 | 5 min  | Sicherheit, Rollen                       | —                        |
-| 15 min | A: Verbinden                             | Ü 1, VL 2, VL 3          |
-| 20 min | B: Den Roboter untersuchen + **Zwischenabnahme** | VL 2, VL 4       |
-| 15 min | C: Fahren und Sensordaten ansehen        | VL 2, VL 4               |
+| 15 min | A: Verbinden                             | Ü 1, VL 01, VL 02          |
+| 20 min | B: Den Roboter untersuchen + **Zwischenabnahme** | VL 01, VL 03       |
+| 15 min | C: Fahren und Sensordaten ansehen        | VL 01, VL 03               |
 | 20 min | D: Eine Fahrt aufzeichnen                | Ü 2                      |
 | 10 min | Abnahme, Roboter zurückgeben             | —                        |
 | 5 min  | Puffer                                   |                          |
@@ -64,13 +64,13 @@ import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_Softwareproje
 <!-- data-type="none" -->
 | Woche ab | Vorlesung | Übung | Praktikum |
 | :-- | :-- | :-- | :-- |
-| 19.10.2026 | [VL 1 Einführung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/00_Einfuehrung/00_Einfuehrung.md) |  |  |
-| 26.10.2026 | [VL 2 ROS 2 Grundlagen](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/03_ROS_Grundlagen_I/03_EinfuehrungROS.md) | [Ü 1 Linux Shell](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/exercise_00_linux_shell/README.md) |  |
-| 2.11.2026 | [VL 3 ROS 2 Pakete](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/04_ROS_Pakete_Tools/04_ROS_Pakete.md) |  |  |
-| 9.11.2026 | [VL 4 Koordinaten + QoS](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/02_Koordinatensysteme/02_Koordinatentransformation.md) | [Ü 2 ROS 2 Werkzeuge](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/exercise_00b_ros2_werkzeuge/README.md) |  |
+| 19.10.2026 | [VL 00 Einführung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/00_Einfuehrung/00_Einfuehrung.md) |  |  |
+| 26.10.2026 | [VL 01 ROS 2 Grundlagen](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/01_ROS_Grundlagen/01_ROS_Grundlagen.md) | [Ü 1 Linux Shell](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/uebung_01_linux_shell/README.md) |  |
+| 2.11.2026 | [VL 02 ROS 2 Pakete](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/02_ROS_Pakete/02_ROS_Pakete.md) |  |  |
+| 9.11.2026 | [VL 03 Koordinaten + QoS](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/03_Koordinaten_QoS/03_Koordinaten_QoS.md) | [Ü 2 ROS 2 Werkzeuge](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/uebung_02_workspace/README.md) |  |
 | **23.11.2026**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> |  |  | **[P 1 TurtleBot + Bags](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_01_turtlebot/README.md)**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> |
 
-- **Sie brauchen:** [Topics des TurtleBot](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=tbtopics) (VL 2) · [ros2 topic …](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=topiccli) (VL 2) · [ROS\_DOMAIN\_ID](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=domainid) (VL 3) · [ros2 bag](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=rosbag) (Ü 2) · [QoS-Verträglichkeit](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=qoscompat) (VL 4) · [tf2](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=tf2) (VL 4) · [tf-Baum](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=tftree) (VL 4)
+- **Sie brauchen:** [Topics des TurtleBot](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=tbtopics) (VL 01) · [ros2 topic …](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=topiccli) (VL 01) · [ROS\_DOMAIN\_ID](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=domainid) (VL 02) · [QoS-Verträglichkeit](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=qoscompat) (VL 03) · [tf2](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=tf2) (VL 03) · [tf-Baum](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=tftree) (VL 03) · [ros2 bag](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=rosbag) (Ü 2)
 - **Heute:** anwenden, nichts Neues – Ihre Arbeit hier ist die Prüfungsleistung
 
 > [!TIP]
@@ -86,11 +86,11 @@ import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_Softwareproje
 sudo apt install ros-jazzy-teleop-twist-keyboard
 ```
 
-`teleop_twist_keyboard` funktioniert wie `turtle_teleop_key` aus VL 2 — nur für echte Roboter.
+`teleop_twist_keyboard` funktioniert wie `turtle_teleop_key` aus VL 01 — nur für echte Roboter.
 
 **Sicherheit**
 
-+ Der Roboter fährt auf dem Tisch bzw. im Parcours — **eine Person hat immer die Hand in der Nähe** und hebt ihn bei Gefahr hoch.
++ Der Roboter fährt auf dem Tisch bzw. im Parcours — **eine Person hat immer die Hand in der Nähe** und hebt ihn bei Gefahr hoch (Rolle *Sicherheit*, siehe unten).
 + Höchstgeschwindigkeit heute: **0,15 m/s**.
 + Teleop sendet beim Beenden mit `Ctrl+C` einen Stoppbefehl. Hängt das Programm oder bricht das WLAN ab, fährt der Roboter mit dem letzten Befehl weiter — halten Sie deshalb einen eigenen Stoppbefehl bereit (Aufgabe C.1) und im Zweifel den Roboter hoch.
 + Akku: Ist die Spannung zu niedrig, verhält sich der Roboter unberechenbar. Melden Sie das den Betreuern.
@@ -100,11 +100,12 @@ sudo apt install ros-jazzy-teleop-twist-keyboard
 <!-- data-type="none" -->
 | Rolle          | Aufgabe                                                     |
 | :------------- | :---------------------------------------------------------- |
-| Tastatur       | tippt die Befehle, in C: steuert den Roboter (Sicherheitsverantwortung) |
+| Tastatur       | tippt die Befehle, in C: steuert den Roboter                |
+| Sicherheit     | steht in C beim Roboter, stoppt ihn sofort (hochheben), achtet auf Kabel, Kanten und Akku |
 | Nachschlagen   | sucht in den Unterlagen von Block 1 den passenden Befehl, prüft die Ausgabe |
 | Protokoll      | hält die 📝-Antworten fest                                  |
 
-In Zweiergruppen übernimmt die Person am Nachschlagen auch das Protokoll.
+In Dreiergruppen übernimmt die Person am Nachschlagen auch das Protokoll.
 
 **Protokoll:** Führen Sie die Datei `praktikum_01/PROTOKOLL.md` lokal und tragen Sie alle Antworten ein, die mit 📝 markiert sind. Im WLAN des Roboters haben Sie in der Regel kein Internet — laden Sie das Protokoll deshalb **nach** dem Praktikum ins Git-Repository Ihrer Gruppe hoch, spätestens zu Beginn von P 2.
 
@@ -126,7 +127,7 @@ In Zweiergruppen übernimmt die Person am Nachschlagen auch das Protokoll.
 
 **Ein funktionierender Laptop pro Gruppe genügt für den Start.** Die anderen verbinden sich parallel.
 
-Auf dem TurtleBot läuft bereits ROS 2 Jazzy. Nach dem Einschalten starten die Treiber für LiDAR, Kamera und Motoren von selbst — so, wie es `robot.launch.py` aus VL 3 beschreibt.
+Auf dem TurtleBot läuft bereits ROS 2 Jazzy. Nach dem Einschalten starten die Treiber für LiDAR, Kamera und Motoren von selbst — so, wie es `robot.launch.py` aus VL 02 beschreibt.
 
 **A.1 Netz und Domäne**
 
@@ -157,7 +158,7 @@ Auf dem TurtleBot läuft bereits ROS 2 Jazzy. Nach dem Einschalten starten die T
 
 Dann findet Ihr Laptop den Roboter nicht. Prüfen Sie der Reihe nach:
 
-1. `printenv | grep ROS` — stimmt die `ROS_DOMAIN_ID`, ist `LOCALHOST` noch gesetzt? (Ü 1, VL 3)
+1. `printenv | grep ROS` — stimmt die `ROS_DOMAIN_ID`, ist `LOCALHOST` noch gesetzt? (Ü 1, VL 02)
 2. Sind Sie im richtigen WLAN?
 3. WSL2: gespiegelter Netzwerkmodus aktiv (siehe Vorbereitung)?
 4. Hilft das alles nicht: Betreuer fragen und am Laptop eines Gruppenmitglieds weiterarbeiten.
@@ -177,7 +178,7 @@ ros2 topic hz /camera/image_raw
 
 Ein Datenblatt kann veralten — Ihr Roboter selbst nicht. Ermitteln Sie mit den Werkzeugen aus Block 1, wie er tatsächlich konfiguriert ist.
 
-**B.1 Nachrichtentypen** (VL 2)
+**B.1 Nachrichtentypen** (VL 01)
 
 📝 Welchen Typ haben `/scan`, `/odom`, `/camera/image_raw` und `/cmd_vel`?
 
@@ -187,7 +188,7 @@ ros2 topic info /cmd_vel
 
 Achten Sie besonders auf `/cmd_vel`: `geometry_msgs/msg/Twist` oder `geometry_msgs/msg/TwistStamped`? Davon hängt ab, wie Sie in C fahren — und wie Ihr Fahrverhalten später senden muss.
 
-**B.2 Quality of Service** (VL 4)
+**B.2 Quality of Service** (VL 03)
 
 ```bash
 ros2 topic info -v /scan
@@ -195,7 +196,7 @@ ros2 topic info -v /scan
 
 📝 Welche `Reliability` und welche `Durability` verwendet der LiDAR-Treiber? Was folgt daraus für RViz und für Ihre eigenen Knoten?
 
-**B.3 Koordinatensysteme** (VL 4)
+**B.3 Koordinatensysteme** (VL 03)
 
 ```bash
 ros2 topic echo --once /scan | grep frame_id      # Pipe und grep aus Ü 1
@@ -204,12 +205,12 @@ ros2 run tf2_tools view_frames
 
 📝 In welchem Frame (`frame_id`) liefert der LiDAR seine Messungen? Kommt dieser Frame im tf-Baum aus `view_frames` vor? Fügen Sie die PDF-Datei ins Protokoll ein.
 
-📝 Fragen Sie mit `ros2 run tf2_ros tf2_echo base_footprint <Frame des LiDAR>` ab, wo der LiDAR sitzt. Stimmt der Wert mit dem Modell aus VL 4 überein (z = 0,182 m für `base_scan`)?
+📝 Fragen Sie mit `ros2 run tf2_ros tf2_echo base_footprint <Frame des LiDAR>` ab, wo der LiDAR sitzt. Stimmt der Wert mit dem Modell aus VL 03 überein (z = 0,182 m für `base_scan`)?
 
 <details>
 <summary>Der Frame des LiDAR fehlt im tf-Baum?</summary>
 
-Das ist Ursache 1 aus der Leitfrage von VL 4. Meldet der LiDAR-Treiber einen Frame, den das Modell des Roboters nicht kennt (z.B. `laser`), ergänzen Sie die fehlende Verbindung selbst mit einer statischen Transformation. Sitzt der Sensor genau im Ursprung von `base_scan`, ist das eine Transformation ohne Verschiebung:
+Das ist Ursache 1 aus der Leitfrage von VL 03. Meldet der LiDAR-Treiber einen Frame, den das Modell des Roboters nicht kennt (z.B. `laser`), ergänzen Sie die fehlende Verbindung selbst mit einer statischen Transformation. Sitzt der Sensor genau im Ursprung von `base_scan`, ist das eine Transformation ohne Verschiebung:
 
 ```bash
 ros2 run tf2_ros static_transform_publisher --frame-id base_scan --child-frame-id <Frame des LiDAR>
@@ -223,7 +224,7 @@ Prüfen Sie danach erneut mit `tf2_echo`.
 
 ## C: Fahren und Sensordaten ansehen
 
-**C.1 Stoppbefehl vorbereiten** — **bevor** Sie fahren. Verwenden Sie den Typ aus B.1 (VL 2):
+**C.1 Stoppbefehl vorbereiten** — **bevor** Sie fahren. Verwenden Sie den Typ aus B.1 (VL 01):
 
 ```bash
 # für Twist:
@@ -247,27 +248,27 @@ ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -p speed:=0.1 -p
 
 Erhöhen Sie die Geschwindigkeit mit den Tasten des Programms nicht über 0,15 m/s.
 
-📝 Welcher Wert für `linear.x` ergibt sich, wenn Sie geradeaus fahren? Prüfen Sie es mit `ros2 topic echo /cmd_vel`. (VL 2: `linear.x` ist vorwärts, `angular.z` die Drehung.)
+📝 Welcher Wert für `linear.x` ergibt sich, wenn Sie geradeaus fahren? Prüfen Sie es mit `ros2 topic echo /cmd_vel`. (VL 01: `linear.x` ist vorwärts, `angular.z` die Drehung.)
 
 **C.3 Sensordaten ansehen**
 
-*Kamerabild* mit `rqt` aus VL 2: Menü _Plugins → Visualization → Image View_, oben das Topic `/camera/image_raw` wählen.
+*Kamerabild* mit `rqt` aus VL 01: Menü _Plugins → Visualization → Image View_, oben das Topic `/camera/image_raw` wählen.
 
 ```bash
 rqt
 ```
 
-*LiDAR in RViz* — mit den drei Schritten aus VL 4:
+*LiDAR in RViz* — mit den drei Schritten aus VL 03:
 
 ```bash
 rviz2
 ```
 
-Erscheinen keine Punkte, prüfen Sie die beiden Ursachen aus VL 4: Fehlt die Transformation (Statusmeldung im _Displays_-Panel)? Passt die QoS (_Topic → Reliability Policy_)?
+Erscheinen keine Punkte, prüfen Sie die beiden Ursachen aus VL 03: Fehlt die Transformation (Statusmeldung im _Displays_-Panel)? Passt die QoS (_Topic → Reliability Policy_)?
 
 📝 Welche Einstellungen waren nötig, damit der Scan erscheint? Fügen Sie einen Screenshot ins Protokoll ein.
 
-*Kamera mit eigenem Skript (Kür, nur wenn Zeit bleibt):* Laden Sie das Skript [view_camera.py](https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/exercise_03_line_following/templates/view_camera.py) herunter (`wget` + Link). Es abonniert `/image_raw`, Ihr Roboter sendet aber auf `/camera/image_raw`. Starten Sie es trotzdem, **ohne den Code zu ändern** (VL 2, Remapping):
+*Kamera mit eigenem Skript (Kür, nur wenn Zeit bleibt):* Laden Sie das Skript [view_camera.py](https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/exercise_03_line_following/templates/view_camera.py) herunter (`wget` + Link). Es abonniert `/image_raw`, Ihr Roboter sendet aber auf `/camera/image_raw`. Starten Sie es trotzdem, **ohne den Code zu ändern** (VL 01, Remapping):
 
 <details>
 <summary>Lösung anzeigen</summary>
@@ -302,7 +303,7 @@ Prüfen Sie zuerst mit `ros2 topic list`, ob Ihr Roboter auch `/camera/camera_in
 ros2 bag record -o fahrt_spur --topics /camera/image_raw /camera/camera_info /scan /odom /tf /tf_static
 ```
 
-Warum `/tf` und `/tf_static`? Ohne sie weiß man beim Abspielen nicht, wo der LiDAR am Roboter sitzt (VL 4).
+Warum `/tf` und `/tf_static`? Ohne sie weiß man beim Abspielen nicht, wo der LiDAR am Roboter sitzt (VL 03).
 
 **Gütekriterium:** Die Fahrspur ist im Kamerabild die meiste Zeit zu sehen, und `ros2 bag info` zeigt für die Kamera annähernd so viele Bilder, wie die Rate aus A.3 erwarten lässt. Fehlen viele Bilder, nehmen Sie kürzer oder ohne LiDAR erneut auf.
 
@@ -354,6 +355,6 @@ Das Abspielen ohne Roboter (D.3) und das Hochladen des Protokolls erledigen Sie 
 
 --------------------------------------------------------------------------------
 
-**🗺️ Nächster Halt:** VL 5 · Sensorik (Woche ab 30.11.2026) – Sie wissen, was die Sensoren des TurtleBots messen und wo ihre Grenzen liegen. [Auf der Kurslandkarte ansehen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=01)
+**🗺️ Nächster Halt:** VL 04 · Sensorik (Woche ab 30.11.2026) – Sie wissen, was die Sensoren des TurtleBots messen und wo ihre Grenzen liegen. [Auf der Kurslandkarte ansehen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=01)
 
 <!-- kurslandkarte:ausblick-ende -->

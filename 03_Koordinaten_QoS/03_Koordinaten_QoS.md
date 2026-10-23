@@ -14,7 +14,7 @@ import:  https://github.com/liascript/CodeRunner
 
 -->
 
-[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/02_Koordinatensysteme/02_Koordinatentransformation.md)
+[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/03_Koordinaten_QoS/03_Koordinaten_QoS.md)
 
 # Koordinaten und Kommunikationsqualität
 
@@ -24,7 +24,7 @@ import:  https://github.com/liascript/CodeRunner
 | **Semester**         | @config.semester                                                                                                                        |
 | **Hochschule:**      | `Technische Universität Freiberg`                                                                                                       |
 | **Inhalte:**         | `Koordinatentransformationen, tf2 und Quality of Service in ROS 2`                                                                      |
-| **Link auf GitHub:** | https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/02_Koordinatensysteme/02_Koordinatentransformation.md       |
+| **Link auf GitHub:** | https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/03_Koordinaten_QoS/03_Koordinaten_QoS.md       |
 | **Autoren**          | @author                                                                                                                                 |
 
 --------------------------------------------------------------------------------
@@ -43,22 +43,22 @@ import:  https://github.com/liascript/CodeRunner
 ## Wo stehen wir?
 
     --{{0}}--
-Kurz zur Orientierung. Wir sind in Block 1, Termin 6 von 32. Der TurtleBot weiß, wo seine Sensoren sitzen, und seine Daten kommen beim Empfänger an – sonst bleibt RViz leer. Neu sind heute: Bezugskoordinatensystem, Translation und Rotation, Homogene Koordinaten, Verkettung, Quaternion, tf2, Quality of Service.
+Kurz zur Orientierung. Wir sind in Block 1, Termin 5 von 32. Der TurtleBot weiß, wo seine Sensoren sitzen, und seine Daten kommen beim Empfänger an – sonst bleibt RViz leer. Neu sind heute: Bezugskoordinatensystem, Translation und Rotation, Homogene Koordinaten, Verkettung, Quaternion, tf2, Quality of Service.
 
 **Ziel im Projekt:** Der TurtleBot weiß, wo seine Sensoren sitzen, und seine Daten kommen beim Empfänger an – sonst bleibt RViz leer.
 
-**Block 1 · ROS-Grundlagen** – Termin 6 von 32, heute farbig markiert
+**Block 1 · ROS-Grundlagen** – Termin 5 von 32, heute farbig markiert
 
 <!-- data-type="none" -->
 | Woche ab | Vorlesung | Übung | Praktikum |
 | :-- | :-- | :-- | :-- |
-| 19.10.2026 | [VL 1 Einführung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/00_Einfuehrung/00_Einfuehrung.md) |  |  |
-| 26.10.2026 | [VL 2 ROS 2 Grundlagen](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/03_ROS_Grundlagen_I/03_EinfuehrungROS.md) | [Ü 1 Linux Shell](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/exercise_00_linux_shell/README.md) |  |
-| 2.11.2026 | [VL 3 ROS 2 Pakete](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/04_ROS_Pakete_Tools/04_ROS_Pakete.md) |  |  |
-| **9.11.2026**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> | **[VL 4 Koordinaten + QoS](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/02_Koordinatensysteme/02_Koordinatentransformation.md)**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> | [Ü 2 ROS 2 Werkzeuge](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/exercise_00b_ros2_werkzeuge/README.md) |  |
+| 19.10.2026 | [VL 00 Einführung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/00_Einfuehrung/00_Einfuehrung.md) |  |  |
+| 26.10.2026 | [VL 01 ROS 2 Grundlagen](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/01_ROS_Grundlagen/01_ROS_Grundlagen.md) | [Ü 1 Linux Shell](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/uebung_01_linux_shell/README.md) |  |
+| 2.11.2026 | [VL 02 ROS 2 Pakete](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/02_ROS_Pakete/02_ROS_Pakete.md) |  |  |
+| **9.11.2026**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> | **[VL 03 Koordinaten + QoS](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/03_Koordinaten_QoS/03_Koordinaten_QoS.md)**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> | [Ü 2 ROS 2 Werkzeuge](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/uebung_02_workspace/README.md) |  |
 | 23.11.2026 |  |  | [P 1 TurtleBot + Bags](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_01_turtlebot/README.md) |
 
-- **Sie brauchen:** [Nachricht (Message)](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=message) (VL 2) · [ros2 topic …](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=topiccli) (VL 2) · [Discovery](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=discovery) (VL 2)
+- **Sie brauchen:** [Nachricht (Message)](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=message) (VL 01) · [ros2 topic …](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=topiccli) (VL 01) · [Discovery](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=discovery) (VL 01)
 - **Heute neu:** [Bezugskoordinatensystem](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=frame) · [Translation und Rotation](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=starrtrafo) · [Homogene Koordinaten](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=homtrafo) · [Verkettung](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=verkettung) · [Quaternion](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=quaternion) · [tf2](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=tf2) · [Quality of Service](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=qos)
 
 > [!TIP]
@@ -79,7 +79,7 @@ Im ersten Praktikum wird Ihnen das passieren: Der TurtleBot läuft, `ros2 topic 
 | `Frame [base_scan] does not exist` oder `No transform`  | RViz weiß nicht, **wo** der Sensor am Roboter sitzt | Koordinaten und tf2 |
 | keine Fehlermeldung, aber auch keine Daten               | Sender und Empfänger stellen **unverträgliche Anforderungen** an die Übertragung | Quality of Service |
 
-Was wir aus VL 2 schon wissen: Jede Sensornachricht trägt einen **Header** mit Zeitstempel und `frame_id`. Diese `frame_id` ist der Schlüssel zum ersten Teil der Vorlesung.
+Was wir aus VL 01 schon wissen: Jede Sensornachricht trägt einen **Header** mit Zeitstempel und `frame_id`. Diese `frame_id` ist der Schlüssel zum ersten Teil der Vorlesung.
 
 ## Bezugssysteme
 
@@ -440,7 +440,7 @@ Erkennen Sie das Quaternion für 90° wieder? Winkel werden im **Bogenmaß** ang
     --{{0}}--
 Woher kommen die statischen Transformationen des TurtleBot? Aus einem Modell des Roboters. Sie müssen sie also nicht von Hand eintragen.
 
-Die festen Transformationen eines Roboters stehen in seinem Modell im **Unified Robot Description Format** (URDF, XML): **Links** sind Bauteile, **Joints** die Verbindungen mit ihrer Pose. Der Knoten `robot_state_publisher` liest das Modell und veröffentlicht alle Transformationen — beim TurtleBot startet ihn `robot.launch.py` automatisch (VL 3).
+Die festen Transformationen eines Roboters stehen in seinem Modell im **Unified Robot Description Format** (URDF, XML): **Links** sind Bauteile, **Joints** die Verbindungen mit ihrer Pose. Der Knoten `robot_state_publisher` liest das Modell und veröffentlicht alle Transformationen — beim TurtleBot startet ihn `robot.launch.py` automatisch (VL 02).
 
 ```xml  turtlebot3_burger.urdf (Ausschnitt)
 <joint name="scan_joint" type="fixed">
@@ -455,14 +455,14 @@ Die festen Transformationen eines Roboters stehen in seinem Modell im **Unified 
     --{{0}}--
 Jetzt zur zweiten Ursache für ein leeres RViz. Nicht jede Nachricht ist gleich wichtig. Ein LiDAR-Scan ist nach einer Zehntelsekunde veraltet — geht einer verloren, nimmt man den nächsten. Ein Fahrbefehl oder eine Karte dagegen sollte ankommen. ROS 2 lässt Sie das pro Verbindung einstellen: mit Quality of Service.
 
-In VL 2 haben Sie gesehen: Bei `create_publisher(..., 10)` gibt die `10` die Puffergröße an. Sie ist Teil der **Quality of Service** (QoS) — Regeln, wie eine Verbindung mit Verlusten, Verspätungen und spät gestarteten Empfängern umgeht. Die drei wichtigsten Einstellungen:
+In VL 01 haben Sie gesehen: Bei `create_publisher(..., 10)` gibt die `10` die Puffergröße an. Sie ist Teil der **Quality of Service** (QoS) — Regeln, wie eine Verbindung mit Verlusten, Verspätungen und spät gestarteten Empfängern umgeht. Die drei wichtigsten Einstellungen:
 
 <!-- data-type="none" -->
 | Einstellung     | Werte                              | Bedeutung                                                                              |
 | :-------------- | :--------------------------------- | :------------------------------------------------------------------------------------- |
 | **Reliability** | `reliable` / `best_effort`         | Verlorene Nachrichten erneut senden — oder lieber gleich die nächste schicken?         |
 | **Durability**  | `volatile` / `transient_local`     | Bekommt ein später gestarteter Empfänger die letzte Nachricht noch nachgeliefert?      |
-| **History / Depth** | `keep_last` mit Tiefe $n$ / `keep_all` | Wie viele Nachrichten werden zwischengespeichert? — die `10` aus VL 2         |
+| **History / Depth** | `keep_last` mit Tiefe $n$ / `keep_all` | Wie viele Nachrichten werden zwischengespeichert? — die `10` aus VL 01         |
 
 Für typische Fälle gibt es fertige Profile, z.B. `sensor_data` (best effort, kleine Tiefe) für schnelle Sensordaten und den Standard (reliable, volatile, Tiefe 10) für alles andere.
 
@@ -559,7 +559,7 @@ QoS profile:
 
 `History (Depth): UNKNOWN` ist kein Fehler: Die Puffergröße ist eine lokale Einstellung jedes Knotens und wird den anderen nicht mitgeteilt.
 
-Im eigenen Code wählen Sie die QoS beim Anlegen von Publisher oder Subscriber — statt der `10` aus VL 2 ein Profil, z.B. für Sensordaten:
+Im eigenen Code wählen Sie die QoS beim Anlegen von Publisher oder Subscriber — statt der `10` aus VL 01 ein Profil, z.B. für Sensordaten:
 
 ```python
 # Python
@@ -677,8 +677,8 @@ Die Aufgaben dieser Woche bereiten Sie direkt auf das erste Praktikum vor. Wenn 
 
 --------------------------------------------------------------------------------
 
-**🗺️ Nächster Halt:** VL 5 · Sensorik (Woche ab 30.11.2026) – Sie wissen, was die Sensoren des TurtleBots messen und wo ihre Grenzen liegen. [Auf der Kurslandkarte ansehen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=01)
+**🗺️ Nächster Halt:** VL 04 · Sensorik (Woche ab 30.11.2026) – Sie wissen, was die Sensoren des TurtleBots messen und wo ihre Grenzen liegen. [Auf der Kurslandkarte ansehen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=01)
 
-**Außerdem bis dahin:** [P 1 · TurtleBot + Bags](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=p1) (Woche ab 23.11.2026)
+**Außerdem bis dahin:** [Ü 2 · ROS 2 Werkzeuge](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=ue2) (Woche ab 9.11.2026) · [P 1 · TurtleBot + Bags](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=p1) (Woche ab 23.11.2026)
 
 <!-- kurslandkarte:ausblick-ende -->

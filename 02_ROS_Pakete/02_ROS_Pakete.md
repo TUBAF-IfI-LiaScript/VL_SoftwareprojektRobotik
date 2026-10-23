@@ -11,7 +11,7 @@ import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_Softwareproje
 
 -->
 
-[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/04_ROS_Pakete_Tools/04_ROS_Pakete.md)
+[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/02_ROS_Pakete/02_ROS_Pakete.md)
 
 # ROS 2 Pakete
 
@@ -21,7 +21,7 @@ import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_Softwareproje
 | **Semester**         | @config.semester                                                                                                       |
 | **Hochschule:**      | `Technische Universität Freiberg`                                                                                      |
 | **Inhalte:**         | `Eigene ROS-2-Pakete anlegen und bauen, eigene Nachrichtentypen, Launch-Dateien, Logging, verteilte Systeme`           |
-| **Link auf GitHub:** | https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/04_ROS_Pakete_Tools/04_ROS_Pakete.md     |
+| **Link auf GitHub:** | https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/02_ROS_Pakete/02_ROS_Pakete.md     |
 | **Autoren**          | @author                                                                                                                |
 
 **Zum Einstieg:** Wenn Sie im Praktikum den TurtleBot hochfahren, tippen Sie genau einen Befehl:
@@ -30,13 +30,13 @@ import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_Softwareproje
 ros2 launch turtlebot3_bringup robot.launch.py
 ```
 
-Dieser eine Befehl startet den LiDAR-Treiber, die Motorsteuerung und einen Knoten, der die Geometrie des Roboters veröffentlicht — verteilt auf drei Launch-Dateien in zwei Paketen. In VL 2 brauchten wir für zwei Knoten noch zwei Terminals. **Wie kommen wir von dort zu einem Befehl für ein ganzes System?** Das ist die Frage dieser Vorlesung.
+Dieser eine Befehl startet den LiDAR-Treiber, die Motorsteuerung und einen Knoten, der die Geometrie des Roboters veröffentlicht — verteilt auf drei Launch-Dateien in zwei Paketen. In VL 01 brauchten wir für zwei Knoten noch zwei Terminals. **Wie kommen wir von dort zu einem Befehl für ein ganzes System?** Das ist die Frage dieser Vorlesung.
 
 --------------------------------------------------------------------------------
 
 **Zielstellung der heutigen Veranstaltung**
 
-In VL 2 haben wir fertige Knoten gestartet und untersucht. Heute schreiben wir eigene — so, wie Sie später Ihre Spurerkennung und Ihr Fahrverhalten für den TurtleBot umsetzen.
+In VL 01 haben wir fertige Knoten gestartet und untersucht. Heute schreiben wir eigene — so, wie Sie später Ihre Spurerkennung und Ihr Fahrverhalten für den TurtleBot umsetzen.
 
 + Aufbau eines ROS-2-Pakets und eines Workspace erklären
 + Pakete in C++ und Python anlegen, mit `colcon` bauen und starten
@@ -60,13 +60,13 @@ Kurz zur Orientierung. Wir sind in Block 1, Termin 4 von 32. Sie bauen eigene Kn
 <!-- data-type="none" -->
 | Woche ab | Vorlesung | Übung | Praktikum |
 | :-- | :-- | :-- | :-- |
-| 19.10.2026 | [VL 1 Einführung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/00_Einfuehrung/00_Einfuehrung.md) |  |  |
-| 26.10.2026 | [VL 2 ROS 2 Grundlagen](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/03_ROS_Grundlagen_I/03_EinfuehrungROS.md) | [Ü 1 Linux Shell](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/exercise_00_linux_shell/README.md) |  |
-| **2.11.2026**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> | **[VL 3 ROS 2 Pakete](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/04_ROS_Pakete_Tools/04_ROS_Pakete.md)**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> |  |  |
-| 9.11.2026 | [VL 4 Koordinaten + QoS](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/02_Koordinatensysteme/02_Koordinatentransformation.md) | [Ü 2 ROS 2 Werkzeuge](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/exercise_00b_ros2_werkzeuge/README.md) |  |
+| 19.10.2026 | [VL 00 Einführung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/00_Einfuehrung/00_Einfuehrung.md) |  |  |
+| 26.10.2026 | [VL 01 ROS 2 Grundlagen](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/01_ROS_Grundlagen/01_ROS_Grundlagen.md) | [Ü 1 Linux Shell](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/uebung_01_linux_shell/README.md) |  |
+| **2.11.2026**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> | **[VL 02 ROS 2 Pakete](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/02_ROS_Pakete/02_ROS_Pakete.md)**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> |  |  |
+| 9.11.2026 | [VL 03 Koordinaten + QoS](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/03_Koordinaten_QoS/03_Koordinaten_QoS.md) | [Ü 2 ROS 2 Werkzeuge](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/uebung_02_workspace/README.md) |  |
 | 23.11.2026 |  |  | [P 1 TurtleBot + Bags](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_01_turtlebot/README.md) |
 
-- **Sie brauchen:** [source](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=source) (Ü 1) · [ros2-Kommandozeile](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=ros2cli) (VL 2) · [Nachricht (Message)](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=message) (VL 2) · [Aufbau einer Nachricht](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=msgdef) (VL 2)
+- **Sie brauchen:** [ros2-Kommandozeile](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=ros2cli) (VL 01) · [Nachricht (Message)](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=message) (VL 01) · [Aufbau einer Nachricht](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=msgdef) (VL 01) · [source](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=source) (Ü 1)
 - **Heute neu:** [ROS-2-Paket](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=paket) · [Workspace](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=workspace) · [colcon build](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=colcon) · [Eigener Nachrichtentyp](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=custommsg) · [Launch-Datei](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=launch)
 
 > [!TIP]
@@ -195,13 +195,13 @@ Zwei nützliche Optionen:
     --{{0}}--
 Wir bauen jetzt in drei Schritten ein kleines System: einen eigenen Nachrichtentyp, einen Publisher in C++ und einen Subscriber in Python. Achten Sie darauf, was in jedem Schritt gleich bleibt — das ist das Muster für Ihre eigenen Pakete.
 
-Wir erweitern das Publisher/Subscriber-Beispiel aus VL 2. Statt eines Textes soll der Zählwert als Zahl übertragen werden, zusammen mit einem Kommentar. Dazu brauchen wir
+Wir erweitern das Publisher/Subscriber-Beispiel aus VL 01. Statt eines Textes soll der Zählwert als Zahl übertragen werden, zusammen mit einem Kommentar. Dazu brauchen wir
 
 1. einen eigenen Nachrichtentyp (Paket `my_msg_package`),
 2. einen Publisher in C++ (Paket `my_tutorial_package`),
 3. einen Subscriber in Python (Paket `my_python_subscriber`).
 
-Den vollständigen, unter Jazzy getesteten Code finden Sie im Repository unter [04_ROS_Pakete_Tools/example](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/tree/master/04_ROS_Pakete_Tools/example/pkg_example).
+Den vollständigen, unter Jazzy getesteten Code finden Sie im Repository unter [02_ROS_Pakete/example](https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/tree/master/02_ROS_Pakete/example/pkg_example).
 
 ### Schritt 1: Eigener Nachrichtentyp
 
@@ -289,7 +289,7 @@ Eine ausführliche Anleitung, auch zu eigenen Service-Typen, bietet das Tutorial
 ### Schritt 2: Publisher in C++
 
     --{{0}}--
-Der Publisher ist fast der aus VL 2. Neu sind nur zwei Dinge: der eigene Nachrichtentyp und die Einträge in package.xml und CMakeLists.txt, mit denen das Paket seine Abhängigkeit erklärt.
+Der Publisher ist fast der aus VL 01. Neu sind nur zwei Dinge: der eigene Nachrichtentyp und die Einträge in package.xml und CMakeLists.txt, mit denen das Paket seine Abhängigkeit erklärt.
 
 Das Paket für den Knoten legen wir gleich mit seinen Abhängigkeiten und einem Programmgerüst an:
 
@@ -331,7 +331,7 @@ CMake ist das Build-System für C++, das hinter `ament_cmake` steckt. Die Befehl
 | `ament_target_dependencies`   | dem Programm die Header und Bibliotheken der genannten Pakete bereitstellen   |
 | `install(TARGETS ...)`        | das fertige Programm nach `install/` kopieren, damit `ros2 run` es findet      |
 
-Das Gerüst `data_generator.cpp` ersetzen wir durch den Publisher aus VL 2 — mit zwei Änderungen: dem neuen Nachrichtentyp und dem Topic `counter`.
+Das Gerüst `data_generator.cpp` ersetzen wir durch den Publisher aus VL 01 — mit zwei Änderungen: dem neuen Nachrichtentyp und dem Topic `counter`.
 
 ```cpp  data_generator.cpp
 #include <chrono>
@@ -441,7 +441,7 @@ if __name__ == '__main__':
     main()
 ```
 
-Der Aufbau entspricht dem C++-Knoten aus VL 2: eine Klasse, die von `Node` erbt, im Konstruktor (`__init__`) wird mit `create_subscription(Typ, Topic, Callback, Puffergröße)` das Abonnement angelegt, und `rclpy.spin()` wartet auf Nachrichten. `try/finally` sorgt dafür, dass der Knoten auch bei `Ctrl+C` sauber beendet wird.
+Der Aufbau entspricht dem C++-Knoten aus VL 01: eine Klasse, die von `Node` erbt, im Konstruktor (`__init__`) wird mit `create_subscription(Typ, Topic, Callback, Puffergröße)` das Abonnement angelegt, und `rclpy.spin()` wartet auf Nachrichten. `try/finally` sorgt dafür, dass der Knoten auch bei `Ctrl+C` sauber beendet wird.
 
 Anders als in C++ gibt es kein `add_executable`. Stattdessen meldet ein Eintrag in `setup.py` die Funktion `main` als ausführbares Programm `data_receiver` an — das ist der Name, den `ros2 run` erwartet. Die generierte `setup.py` enthält bereits eine **leere** Liste `'console_scripts': []`; ergänzen Sie dort die Zeile, statt einen zweiten Block einzufügen:
 
@@ -561,7 +561,7 @@ def generate_launch_description():
 | `DeclareLaunchArgument`   | ein Argument, das beim Start überschrieben werden kann, hier mit Standardwert `counter`       |
 | `Node(...)`               | ein Knoten: Paket, Programm und Einstellungen                                                  |
 | `LaunchConfiguration('topic')` | Platzhalter für den Wert des Arguments `topic` — wird erst beim Start eingesetzt          |
-| `remappings`              | Umbenennung wie `--ros-args -r topic:=topic2` in VL 2                                          |
+| `remappings`              | Umbenennung wie `--ros-args -r topic:=topic2` in VL 01                                          |
 | `parameters=['datei.yaml']` | Parameter aus einer YAML-Datei laden — hier nicht verwendet, mehr zu Parametern in Ü 2      |
 | `output='screen'`         | Logausgaben des Knotens im Terminal anzeigen                                                   |
 
@@ -665,7 +665,7 @@ Nach der Änderung muss das C++-Paket neu gebaut werden (`colcon build --package
     --{{0}}--
 Im Praktikum läuft Ihr System verteilt: die Treiber auf dem Roboter, Ihre Knoten auf dem Laptop. Programmieren müssen Sie dafür nichts. Entscheidend ist eine einzige Umgebungsvariable.
 
-Im Praktikum läuft Ihr System verteilt: Auf dem Raspberry Pi des TurtleBot laufen die Treiber für LiDAR, Kamera und Motoren, auf Ihrem Laptop Ihre eigenen Knoten und die Visualisierung. Programmieren müssen Sie dafür nichts — dank Discovery (VL 2) finden sich die Knoten im Netz von selbst, wenn beide Rechner im selben Netz sind und **dieselbe `ROS_DOMAIN_ID`** verwenden.
+Im Praktikum läuft Ihr System verteilt: Auf dem Raspberry Pi des TurtleBot laufen die Treiber für LiDAR, Kamera und Motoren, auf Ihrem Laptop Ihre eigenen Knoten und die Visualisierung. Programmieren müssen Sie dafür nichts — dank Discovery (VL 01) finden sich die Knoten im Netz von selbst, wenn beide Rechner im selben Netz sind und **dieselbe `ROS_DOMAIN_ID`** verwenden.
 
 Jede Gruppe bekommt eine eigene ID (0 bis 101), damit Ihr Laptop nicht die Fahrbefehle für den Roboter der Nachbargruppe sendet:
 
@@ -731,7 +731,7 @@ Bauen Sie die drei Pakete selbst nach — erst dann merken Sie, wo es hakt. Und 
 1. Legen Sie in Ihrer ROS-2-Umgebung (siehe [Installationsanleitung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/installation_ros2/README.md)) einen Workspace `~/ros2_ws` an und bauen Sie die drei Pakete dieser Vorlesung nach. Prüfen Sie jeden Schritt mit `ros2 interface show`, `ros2 pkg executables` und `ros2 topic echo`.
    **Erwartetes Ergebnis:** `ros2 pkg executables my_tutorial_package` zeigt `my_tutorial_package data_generator`, und `ros2 launch my_tutorial_package counter.launch.py` liefert abwechselnd `Publishing:` und `Received:`.
 2. Ergänzen Sie `MyMsg.msg` um ein Feld `float32 temperature` und senden Sie einen Zufallswert. Was müssen Sie neu bauen?
-3. Erweitern Sie Ihre Graph-Skizze aus VL 2 (Aufgabe 3): Welche Pakete würden Sie für Spurerkennung, Ampelerkennung und Fahrverhalten anlegen? Wohin gehört ein eigener Nachrichtentyp „Ampelzustand“? Ordnen Sie Knoten und Topics den Paketen zu. Wir vergleichen die Skizzen zu Beginn von Ü 2.
+3. Erweitern Sie Ihre Graph-Skizze aus VL 01 (Aufgabe 3): Welche Pakete würden Sie für Spurerkennung, Ampelerkennung und Fahrverhalten anlegen? Wohin gehört ein eigener Nachrichtentyp „Ampelzustand“? Ordnen Sie Knoten und Topics den Paketen zu. Wir vergleichen die Skizzen zu Beginn von Ü 2.
 
 <details>
 <summary>Lösungshinweise zu Aufgabe 2 und 3 anzeigen</summary>
@@ -761,8 +761,6 @@ Der Nachrichtentyp liegt in einem eigenen Paket, damit Ampelerkennung und Fahrve
 
 --------------------------------------------------------------------------------
 
-**🗺️ Nächster Halt:** VL 4 · Koordinaten + QoS (Woche ab 9.11.2026) – Der TurtleBot weiß, wo seine Sensoren sitzen, und seine Daten kommen beim Empfänger an – sonst bleibt RViz leer. [Auf der Kurslandkarte ansehen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=02)
-
-**Außerdem bis dahin:** [Ü 2 · ROS 2 Werkzeuge](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=ue2) (Woche ab 9.11.2026)
+**🗺️ Nächster Halt:** VL 03 · Koordinaten + QoS (Woche ab 9.11.2026) – Der TurtleBot weiß, wo seine Sensoren sitzen, und seine Daten kommen beim Empfänger an – sonst bleibt RViz leer. [Auf der Kurslandkarte ansehen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=02)
 
 <!-- kurslandkarte:ausblick-ende -->

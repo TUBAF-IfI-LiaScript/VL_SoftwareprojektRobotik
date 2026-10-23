@@ -12,7 +12,7 @@ import: https://github.com/liascript/CodeRunner
 
 -->
 
-[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/07_Objekterkennung/07_Objekterkennung.md)
+[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/08_Objekterkennung/08_Objekterkennung.md)
 
 # Objekterkennung und Tracking
 
@@ -22,7 +22,7 @@ import: https://github.com/liascript/CodeRunner
 | **Semester**         | @config.semester                                                                                                      |
 | **Hochschule:**      | `Technische Universität Freiberg`                                                                                     |
 | **Inhalte:**         | `Objekterkennung mit Features und Deep Learning, Tracking, 3D-Objekterkennung`                                        |
-| **Link auf GitHub:** | https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/07_Objekterkennung/07_Objekterkennung.md |
+| **Link auf GitHub:** | https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/08_Objekterkennung/08_Objekterkennung.md |
 | **Autoren**          | @author                                                                                                               |
 
 ![](https://media.giphy.com/media/3o7btPCcdNniyf0ArS/giphy.gif)

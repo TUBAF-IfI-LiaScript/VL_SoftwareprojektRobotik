@@ -50,8 +50,9 @@ KURS = {
         "Regelung, Kartierung und Navigation so kombinieren, dass ein TurtleBot autonom durch eine Verkehrswelt fährt.",
     ],
     "organisation": [
-        ("Formate", "Vorlesung (Konzepte), Übung (angeleitete Aufgaben am eigenen Rechner) und Praktikum (Gruppen zu 2–3 Personen am TurtleBot), je 90 Minuten"),
+        ("Formate", "Vorlesung (Konzepte), Übung (angeleitete Aufgaben am eigenen Rechner) und Praktikum (Gruppen zu 3–4 Personen am TurtleBot), je 90 Minuten"),
         ("Zeitraum", "Wintersemester 2026/27 und Sommersemester 2027, sechs thematische Blöcke"),
+        ("Termine im WiSe", "Vorlesung mittwochs 11:30–13:00 Uhr · Übung und Praktikum donnerstags 16:15–17:45 Uhr, Lessingstraße"),
         ("Prüfung", "Die Prüfungsleistung erbringen Sie in den Praktika."),
         ("Werkzeuge", "Ubuntu 24.04 (nativ oder WSL2), ROS 2 Jazzy, Python und C++"),
     ],
@@ -59,50 +60,52 @@ KURS = {
     "lizenz": 'Lizenz: <a href="https://creativecommons.org/licenses/by/4.0/deed.de">CC BY 4.0</a>',
 }
 
-# ---- Termine nach dem vorläufigen Zeitplan (Zeitplan.ods, Ansatz 1; Datum = Montag der KW)
+# ---- Termine nach Zeitplan_03.ods (Herr Kohl, 2026-10-19), Ansatz 1 – gilt seit 2026-10-23; Datum = Montag der KW
 # key, Bezeichnung, Datum, Kurztitel, Datei (None = noch kein Material), Status, Block
 # Status: "ausgearbeitet" (neu für 2026/27), "Bestand" (Material aus 2025/26), "geplant"
+# Innerhalb einer Woche: Vorlesung mittwochs 11:30–13:00 Uhr vor Übung/Praktikum donnerstags 16:15–17:45 Uhr (Ausnahme KW 3: P 3 steht vor VL 08, weil die Blöcke zusammenhängen müssen).
+# Mehrwöchige Praktika (P 5 KW 15–16, P 6 KW 19–20) stehen mit ihrer ersten Woche; Block 6 (KW 21–28) ist noch nicht verplant.
 T = [
     ("00",  "VL",    "2026-10-19", "Einführung",          "00_Einfuehrung/00_Einfuehrung.md",                     "ausgearbeitet", 1),
-    ("ue1", "Ü 1",   "2026-10-26", "Linux Shell",         "exercises/exercise_00_linux_shell/README.md",          "ausgearbeitet", 1),
-    ("03",  "VL",    "2026-10-26", "ROS 2 Grundlagen",    "03_ROS_Grundlagen_I/03_EinfuehrungROS.md",             "ausgearbeitet", 1),
-    ("04",  "VL",    "2026-11-02", "ROS 2 Pakete",        "04_ROS_Pakete_Tools/04_ROS_Pakete.md",                 "ausgearbeitet", 1),
-    ("ue2", "Ü 2",   "2026-11-09", "ROS 2 Werkzeuge",     "exercises/exercise_00b_ros2_werkzeuge/README.md",     "ausgearbeitet", 1),
-    ("02",  "VL",    "2026-11-09", "Koordinaten + QoS",   "02_Koordinatensysteme/02_Koordinatentransformation.md", "ausgearbeitet", 1),
+    ("03",  "VL",    "2026-10-26", "ROS 2 Grundlagen",    "01_ROS_Grundlagen/01_ROS_Grundlagen.md",             "ausgearbeitet", 1),
+    ("ue1", "Ü 1",   "2026-10-26", "Linux Shell",         "exercises/uebung_01_linux_shell/README.md",          "ausgearbeitet", 1),
+    ("04",  "VL",    "2026-11-02", "ROS 2 Pakete",        "02_ROS_Pakete/02_ROS_Pakete.md",                 "ausgearbeitet", 1),
+    ("02",  "VL",    "2026-11-09", "Koordinaten + QoS",   "03_Koordinaten_QoS/03_Koordinaten_QoS.md", "ausgearbeitet", 1),
+    ("ue2", "Ü 2",   "2026-11-09", "ROS 2 Werkzeuge",     "exercises/uebung_02_workspace/README.md",     "ausgearbeitet", 1),
     ("p1",  "P 1",   "2026-11-23", "TurtleBot + Bags",    "exercises/praktikum_01_turtlebot/README.md",          "ausgearbeitet", 1),
-    ("01",  "VL",    "2026-11-30", "Sensorik",            "01_Sensorik/01_Sensorik.md",                           "Bestand", 2),
+    ("01",  "VL",    "2026-11-30", "Sensorik",            "04_Sensorik/04_Sensorik.md",                           "Bestand", 2),
     ("05",  "VL",    "2026-12-07", "Bildverarbeitung",    "05_Bildverarbeitung/05_Bildverarbeitung.md",           "Bestand", 2),
-    ("06",  "VL",    "2026-12-07", "Kamera + Draufsicht", "06_Kamera_Stereo/06_Kamera_Stereo.md",                 "ausgearbeitet", 2),
+    ("06",  "VL",    "2026-12-07", "Kamera + Draufsicht", "06_Kamera/06_Kamera.md",                 "ausgearbeitet", 2),
     ("lid", "VL",    "2026-12-14", "LiDAR",               None, "geplant", 2),
     ("ue3", "Ü 3",   "2027-01-04", "Datenvisualisierung", None, "geplant", 2),
-    ("ue4", "Ü 4",   "2027-01-11", "Kameradaten",         None, "geplant", 2),
+    ("ue4", "Ü 4",   "2027-01-04", "Kameradaten",         None, "geplant", 2),
     ("p2",  "P 2",   "2027-01-11", "Bildkorrektur",       "exercises/praktikum_02_bildkorrektur/README.md",       "ausgearbeitet", 2),
     ("p3",  "P 3",   "2027-01-18", "Spurerkennung",       "exercises/praktikum_03_spurerkennung/README.md",       "ausgearbeitet", 2),
-    ("07",  "VL",    "2027-01-25", "Objekterkennung",     "07_Objekterkennung/07_Objekterkennung.md",             "Bestand", 3),
+    ("07",  "VL",    "2027-01-18", "Objekterkennung",     "08_Objekterkennung/08_Objekterkennung.md",             "Bestand", 3),
     ("pkw", "VL",    "2027-01-25", "… in Punktwolken",    None, "geplant", 3),
     ("ue5", "Ü 5",   "2027-02-01", "Objekte im LiDAR",    None, "geplant", 3),
+    ("ue6", "Ü 6",   "2027-02-01", "YOLO vs. klassisch",  None, "geplant", 3),
     ("p4",  "P 4",   "2027-02-08", "Hinderniserkennung",  None, "geplant", 3),
-    ("ue6", "Ü 6",   "2027-04-05", "YOLO vs. klassisch",  None, "geplant", 3),
-    ("08",  "VL",    "2027-04-12", "Sensorfusion I",      "08_Sensorfusion_I/08_Datenfusion.md",                  "Bestand", 4),
-    ("09",  "VL",    "2027-04-19", "Sensorfusion II",     "09_Sensorfusion_II/09_Sensorfusion_II.md",             "Bestand", 4),
-    ("ue7", "Ü 7",   "2027-04-19", "2D-EKF",              None, "geplant", 4),
-    ("p5",  "P 5",   "2027-04-26", "Streckenverlauf",     None, "geplant", 4),
-    ("10",  "VL",    "2027-05-03", "Kinematik",           "10_Kinematik_Regelung/10_Kinematik_Regelung.md",       "Bestand", 5),
+    ("08",  "VL",    "2027-04-05", "Sensorfusion I",      "10_Sensorfusion_I/10_Sensorfusion_I.md",                  "Bestand", 4),
+    ("09",  "VL",    "2027-04-05", "Sensorfusion II",     "11_Sensorfusion_II/11_Sensorfusion_II.md",             "Bestand", 4),
+    ("ue7", "Ü 7",   "2027-04-12", "2D-EKF",              None, "geplant", 4),
+    ("p5",  "P 5",   "2027-04-12", "Streckenverlauf",     None, "geplant", 4),
+    ("10",  "VL",    "2027-04-26", "Kinematik",           "12_Kinematik_Regelung/12_Kinematik_Regelung.md",       "Bestand", 5),
+    ("11",  "VL",    "2027-04-26", "Navigation",          "13_Navigation/13_Navigation.md",                       "Bestand", 5),
+    ("slm", "VL",    "2027-05-03", "SLAM",                None, "geplant", 5),
     ("ue8", "Ü 8",   "2027-05-03", "Reglervergleich",     None, "geplant", 5),
-    ("11",  "VL",    "2027-05-10", "Navigation",          "11_Navigation/11_Navigation.md",                       "Bestand", 5),
-    ("slm", "VL",    "2027-05-17", "SLAM",                None, "geplant", 5),
-    ("ue9", "Ü 9",   "2027-05-17", "Kartenerstellung",    None, "geplant", 5),
-    ("p6",  "P 6",   "2027-05-24", "Mapping + Bahnfolge", None, "geplant", 5),
-    ("p7",  "P 7",   "2027-05-31", "Parken + Abbiegen",   None, "geplant", 6),
-    ("p8",  "P 8",   "2027-06-07", "Praktikum + X",       None, "geplant", 6),
+    ("ue9", "Ü 9",   "2027-05-10", "Kartenerstellung",    None, "geplant", 5),
+    ("p6",  "P 6",   "2027-05-10", "Mapping + Bahnfolge", None, "geplant", 5),
+    ("p7",  "P 7",   "2027-05-24", "Parken + Abbiegen",   None, "geplant", 6),
+    ("p8",  "P 8",   "2027-05-31", "Praktikum + X",       None, "geplant", 6),
 ]
-# Vorlesungen laufend nach Zeitplan nummerieren (VL 1, VL 2, …); die Ordnernummern
-# im Repo (03_…, 02_…) stammen aus der alten Reihenfolge und erscheinen nicht.
+# Vorlesungen laufend nach Zeitplan nummerieren, ab VL 00 wie in EAVD und Eingebettete Systeme
+# (Entscheidung Dozent 2026-10-23); die Ordner im Repo tragen dieselbe Nummer (00_Einfuehrung …).
 _nr = 0
 for _i, _t in enumerate(T):
     if _t[1] == "VL":
+        T[_i] = (_t[0], f"VL {_nr:02d}") + _t[2:]
         _nr += 1
-        T[_i] = (_t[0], f"VL {_nr}") + _t[2:]
 
 BLOECKE = {1: ("Block 1 · ROS-Grundlagen", "ph1"), 2: ("Block 2 · Sensorgrundlagen", "ph2"),
            3: ("Block 3 · Objekterkennung", "ph4"), 4: ("Block 4 · Sensorfusion", "ph1"),
@@ -128,6 +131,7 @@ B = [
 
     # --- Ü 1 Linux Shell
     ("shell", "Terminal & Shell", "werkzeuge", "ue1", 'Warum Terminal?', 1, 0, "Das Terminal zeigt Text, die Shell (bash) interpretiert die Eingaben — der Weg zu ROS 2 und zum TurtleBot.", None),
+    ("apt", "apt / Paketverwaltung", "werkzeuge", "ue1", 'ROS 2 installieren', 2, 1, "Installiert Software samt aller Abhängigkeiten aus eingetragenen Paketquellen; apt update holt die Paketlisten, sudo apt install … installiert – so kommt ROS 2 auf den Rechner.", "„apt install lädt nur das eine genannte Paket.“ (ros-jazzy-desktop zieht über 1500 Pakete nach.)"),
     ("pfade", "Absolute & relative Pfade", "werkzeuge", "ue1", 'Dateisystem', 1, 0, "Absolute Pfade beginnen bei /, relative beim aktuellen Verzeichnis; . und .. stehen für hier und darüber.", None),
     ("pipes", "Pipes & Umleitung", "werkzeuge", "ue1", 'Dateien ansehen, suchen und verknüpfen', 2, 1, "| reicht die Ausgabe weiter, > und >> schreiben sie in eine Datei — z. B. grep ERROR ros.log | wc -l.", None),
     ("rechte", "Dateirechte", "werkzeuge", "ue1", 'Rechte und Benutzer', 2, 1, "rwx für Besitzer, Gruppe und andere; chmod +x macht ein Skript ausführbar, chmod 754 setzt Rechte als Zahl.", "„Ein Skript, das ich geschrieben habe, darf ich ausführen.“"),
@@ -137,7 +141,7 @@ B = [
     ("source", "source", "werkzeuge", "ue1", 'source oder ausführen?', 1, 1, "Führt ein Skript in der aktuellen Shell aus, damit gesetzte Variablen erhalten bleiben — source /opt/ros/jazzy/setup.bash.", "„./setup.bash und source setup.bash sind dasselbe.“"),
     ("bashrc", "~/.bashrc", "werkzeuge", "ue1", 'Aufgabe 5: Zwei Terminals, zwei Welten', 2, 1, "Wird beim Öffnen jedes Terminals ausgeführt — der Ort für source und ROS_DOMAIN_ID.", None),
     ("ssh", "ssh", "werkzeuge", "ue1", 'Zum Nachschlagen: Pakete und Fernzugriff', 2, 1, "Anmelden auf einem entfernten Rechner, z. B. dem Raspberry Pi des TurtleBots.", None),
-    # --- VL 01 Sensorik
+    # --- VL 04 Sensorik
     ("sensor", "Sensor", "wahrnehmung", "01", 'Was ist ein Sensor?', 1, 0, "Ein Sensor wandelt physikalische, chemische oder biologische Messgrößen in elektrische Signale um.", None),
     ("propextero", "Propriozeptiv/exterozeptiv", "wahrnehmung", "01", 'Klassifikation von Sensoren', 1, 0, "Propriozeptive Sensoren messen den Roboterzustand (Encoder, IMU), exterozeptive die Umgebung (Kamera, Lidar, Ultraschall).", None),
     ("sensorparam", "Sensorparameter", "wahrnehmung", "01", 'Wichtige Sensorparameter', 2, 0, "Messbereich, Auflösung, Linearität, Messfrequenz, Querempfindlichkeit und Öffnungswinkel charakterisieren einen Sensor.", "„Eine hohe Auflösung bedeutet automatisch eine hohe Genauigkeit.“"),
@@ -150,7 +154,7 @@ B = [
     ("triangulation", "Triangulation", "wahrnehmung", "01", 'Triangulation', 2, 0, "Aus einer bekannten Basislinie zwischen Sender und Empfänger wird der Abstand geometrisch bestimmt, z. B. bei IR-Sensoren.", None),
     ("gnss", "GNSS-Positionsbestimmung", "wahrnehmung", "01", 'Mathematische Grundlagen der GNSS-Positionsbestimmung', 1, 0, "Pseudoranges zu mindestens vier Satelliten ergeben ein Gleichungssystem für Position und Empfänger-Uhrfehler.", "„Für eine 3D-Position genügen drei Satelliten.“"),
     ("dop", "GNSS-Fehler & DOP", "schaetzung", "01", 'Genauigkeit und Fehlerquellen bei GNSS', 2, 0, "Atmosphäre, Mehrwegeffekte und Satellitengeometrie (DOP) begrenzen die Genauigkeit; DGPS und SAPOS korrigieren.", None),
-    # --- VL 02 Koordinaten
+    # --- VL 03 Koordinaten
     ("frame", "Bezugskoordinatensystem", "mathe", "02", 'Bezugssysteme', 1, 0, "Koordinaten eines Punktes haben nur zusammen mit dem Bezugssystem eine Bedeutung, das als Index angegeben wird (p_A).", None),
     ("starrtrafo", "Translation und Rotation", "mathe", "02", 'Pose eines Koordinatensystems in 2D', 1, 0, "Die Pose (Position t, Winkel φ) eines Systems A in O rechnet Punkte um: p_O = R(φ)·p_A + t.", "Die Matrix T_OA rechnet von O nach A."),
     ("homtrafo", "Homogene Koordinaten", "mathe", "02", 'Homogene Koordinaten', 1, 0, "Eine zusätzliche Koordinate macht auch die Translation zu einer Matrixmultiplikation.", None),
@@ -163,7 +167,7 @@ B = [
     ("statictf", "Statische Transformation", "ros", "02", 'Transformationen abfragen und veröffentlichen', 2, 1, "tf2_echo fragt Transformationen ab; feste Relationen wie Sensor zu Roboter veröffentlicht static_transform_publisher (--x … --frame-id …).", None),
     ("tftree", "tf-Baum", "ros", "02", 'Der tf-Baum des TurtleBot', 2, 0, "Alle Frames bilden einen Baum (map → odom → base_footprint → base_link → base_scan …); tf2 multipliziert entlang des Pfades.", None),
     ("urdf", "URDF", "ros", "02", 'URDF: der Roboter als Modell', 2, 1, "XML-Beschreibung von Links, Joints, Geometrie und Sensoren eines Roboters — und damit seiner statischen Frames.", None),
-    # --- VL 03 ROS 2 Grundlagen
+    # --- VL 01 ROS 2 Grundlagen
     ("distro", "ROS-2-Distribution", "ros", "03", 'ROS, was ist das?', 2, 1, "Jährlich im Mai erscheint eine Distribution; wir nutzen die LTS-Version Jazzy Jalisco auf Ubuntu 24.04.", "„Beispiele mit roscore oder catkin funktionieren auch unter ROS 2.“"),
     ("middleware", "ROS als Middleware", "ros", "03", 'ROS, was ist das?', 1, 0, "ROS bietet Hardwareabstraktion, Treiber, Nachrichtenaustausch und Paketverwaltung für verteilte Robotersoftware.", None),
     ("dds", "DDS / rmw-Schicht", "ros", "03", 'Architektur von ROS 2', 1, 0, "ROS 2 trennt Client-Libraries (rclcpp/rclpy) über die rmw-Schicht von der austauschbaren Middleware — Standard ist Fast DDS, Alternativen sind Cyclone DDS oder Zenoh.", "„Knoten mit unterschiedlicher RMW_IMPLEMENTATION finden sich trotzdem zuverlässig.“"),
@@ -179,7 +183,7 @@ B = [
     ("topiccli", "ros2 topic …", "werkzeuge", "03", 'Hello-World Implementierung', 2, 1, "Mit ros2 topic list/info/hz/echo/pub lassen sich Topics inspizieren und von Hand Nachrichten senden.", None),
     ("remap", "Remapping", "ros", "03", 'Hello-World Implementierung', 2, 1, "Mit --ros-args -r topic:=neu (oder __node:=name) werden Topic- und Knotennamen beim Start umgelenkt, ohne den Code zu ändern.", "„Der Topic-Name ist fest im Code verankert.“"),
     ("rqt", "rqt / rqt_graph", "werkzeuge", "03", 'turtlesim: ROS 2 zum Anfassen', 2, 1, "rqt bündelt die Inspektionsfunktionen der ros2-CLI grafisch, z. B. den Knoten-Topic-Graphen.", None),
-    # --- VL 04 ROS 2 Pakete
+    # --- VL 02 ROS 2 Pakete
     ("domainid", "ROS_DOMAIN_ID", "ros", "04", 'ROS 2 auf mehreren Rechnern', 2, 1, "Die Umgebungsvariable trennt ROS-2-Systeme im selben Netz — im Labor eine pro TurtleBot-Gruppe, gesetzt auf Laptop und Roboter.", "„Die ROS_DOMAIN_ID muss nur auf dem Laptop gesetzt werden.“"),
     ("paket", "ROS-2-Paket", "ros", "04", 'Vom Beispiel zum eigenen Paket', 1, 0, "Ein Paket kapselt Code samt Abhängigkeiten, Build-Konfiguration, Nachrichten und Launch-Files.", None),
     ("workspace", "Workspace", "werkzeuge", "04", 'Workspace und Paketstruktur', 1, 0, "Pakete liegen in src/ eines Workspaces; colcon erzeugt daneben build/, install/ und log/.", None),
@@ -226,7 +230,7 @@ B = [
     ("vorausschau", "Vorausschau", "bewegung", "06", 'Brücke zu P 3: Abweichung mit Vorausschau', 1, 0, "Die Abweichung von der Spurmitte wird 0,30 m vor dem Roboter gemessen und enthält seitlichen Versatz plus Blickrichtung (≈ 0,30 m · sin ψ).", "„Die Abweichung vorn ist dasselbe wie der seitliche Versatz des Roboters.“"),
     ("pointcloud2", "PointCloud2", "ros", "lid", None, 1, 1, "ROS-2-Format für 3D-Punktwolken: ein Byte-Strom, dessen Aufbau PointField-Einträge beschreiben.", None),
     ("pc_transform", "Punktwolke transformieren", "ros", "lid", None, 2, 1, "Punktwolken liegen im Kamera-Frame vor und müssen per tf2 z. B. nach base_link überführt werden.", "„Die Punktwolke liegt automatisch im Roboterkoordinatensystem vor.“"),
-    # --- VL 07 Objekterkennung
+    # --- VL 08 Objekterkennung
     ("detektion", "Detektion vs. Klassifikation", "wahrnehmung", "07", 'Begriffsdefinitionen', 1, 0, "Detektion: wo? (Bounding Box). Klassifikation: was? Tracking: wie bewegt es sich?", None),
     ("ecken", "Eckendetektoren", "wahrnehmung", "07", 'Corner Detection: Harris & Shi-Tomasi & FAST', 2, 0, "Harris und Shi-Tomasi finden Ecken über die Strukturmatrix, FAST über einen schnellen Pixelkreistest.", None),
     ("orb", "ORB-Deskriptor", "wahrnehmung", "07", 'Feature Descriptoren: Rotated BRIEF', 2, 0, "FAST-Keypoints mit orientierungskorrigiertem binärem Deskriptor — rotationsinvariant.", None),
@@ -239,7 +243,7 @@ B = [
     ("deepsort", "DeepSORT-Tracking", "schaetzung", "07", 'DeepSORT: Deep Simple Online Realtime Tracking', 2, 0, "Multi-Object-Tracking mit Kalman-Prädiktion, Appearance-Features und ungarischer Zuordnung.", None),
     ("ransac", "RANSAC", "wahrnehmung", "07", 'RANSAC: Plane Segmentation', 1, 0, "Robuste Modellschätzung aus zufälligen Minimalstichproben — das Modell mit den meisten Inliern gewinnt.", None),
     ("icp", "ICP-Registrierung", "wahrnehmung", "07", 'ICP: Iterative Closest Point', 2, 0, "Richtet zwei Punktwolken iterativ über nächste Nachbarn und eine Starrkörpertransformation aus.", "„ICP findet von jeder Startlage aus die richtige Ausrichtung.“"),
-    # --- VL 08 Sensorfusion I
+    # --- VL 10 Sensorfusion I
     ("sensorfusion", "Sensordatenfusion", "schaetzung", "08", 'Grundlagen und Konzepte', 1, 0, "Kombination mehrerer Quellen zu einer Schätzung, die genauer oder vollständiger ist als jede einzelne.", None),
     ("fusionsarten", "Fusionsarten", "schaetzung", "08", 'Grundlagen und Konzepte', 2, 0, "Konkurrierend (genauer), komplementär (vollständiger) oder kooperativ (neue Information).", None),
     ("fusionsebenen", "Fusionsebenen", "schaetzung", "08", 'Grundlagen und Konzepte', 2, 0, "Fusion auf Rohdaten-, Merkmals- oder Entscheidungsebene; je später, desto stärker vorverarbeitet.", None),
@@ -250,7 +254,7 @@ B = [
     ("predictupdate", "Predict-Update-Zyklus", "schaetzung", "08", 'Und jetzt alles zusammen', 1, 0, "Vorhersage (Unsicherheit wächst) und Korrektur durch Messung (Unsicherheit sinkt) im Wechsel.", None),
     ("gridlokalisierung", "Grid-Lokalisierung", "schaetzung", "08", 'Erweiterung auf 2D: Roboter-Lokalisierung im Grid', 2, 0, "Aus Karte, Landmarken und Bewegungsmodell konvergiert eine 2D-Verteilung zur Pose.", "„Eine Landmarkenerkennung reicht für eine eindeutige Lokalisierung.“"),
     ("mapmmse", "MAP vs. Erwartungswert", "mathe", "08", 'Ausblick: Vom diskreten zum kontinuierlichen Filter', 2, 0, "argmax liefert springende Schätzungen; der Erwartungswert nutzt die ganze Verteilung.", None),
-    # --- VL 09 Sensorfusion II
+    # --- VL 11 Sensorfusion II
     ("qos", "Quality of Service", "ros", "02", 'Quality of Service', 1, 0, "Reliability, Durability und History/Depth regeln pro Verbindung den Umgang mit Verlusten und spät gestarteten Empfängern; sensor_data ist best effort.", "„Ein Empfänger mit reliable bekommt von jedem Sender Daten.“"),
     ("qoscompat", "QoS-Verträglichkeit", "ros", "02", 'Zuverlässigkeit: reliable oder best effort', 2, 1, "Der Empfänger darf nicht mehr verlangen, als der Sender bietet: best_effort-Sender und reliable-Empfänger verbinden sich nicht.", "„Bei unpassender QoS stürzt der Knoten ab.“"),
     ("durability", "Durability / transient_local", "ros", "02", 'Dauerhaftigkeit: Wer zu spät kommt …', 2, 0, "Mit transient_local erhalten spät gestartete Empfänger die letzten Nachrichten — deshalb nutzen /tf_static und Karten diese Einstellung.", None),
@@ -264,7 +268,7 @@ B = [
     ("robotlocalization", "robot_localization", "ros", "09", 'robot_localization in ROS 2', 1, 1, "ROS-2-Paket, das Odometrie, IMU und GPS per EKF zu /odometry/filtered fusioniert.", None),
     ("ekfconfig", "EKF-Konfiguration", "ros", "09", 'Konfiguration des EKF-Nodes', 2, 1, "In ekf.yaml legt pro Sensor eine Bool-Liste fest, zu welchen Zustandsgrößen er beiträgt.", None),
     ("kovarianzpraxis", "Sensor-Kovarianzen", "schaetzung", "09", 'Tipps für die Praxis', 2, 0, "Realistische Kovarianzen steuern das Sensorvertrauen; falsche Frames oder Zeitstempel sabotieren die Fusion.", "„Kovarianz 0 bedeutet einen perfekten Sensor.“"),
-    # --- VL 10 Kinematik und Regelung
+    # --- VL 12 Kinematik und Regelung
     ("diffdrive", "Differentialantrieb", "mathe", "10", 'Differentialantrieb (Differential Drive)', 1, 0, "Zwei unabhängig angetriebene Räder; die Kinematik verbindet Radgeschwindigkeiten mit v und ω.", None),
     ("nichtholonom", "Nichtholonome Einschränkung", "mathe", "10", 'Differentialantrieb (Differential Drive)', 2, 0, "Ein Differentialantrieb kann nicht seitwärts fahren — wichtig beim Einparken.", "„Wer auf der Stelle drehen kann, kann jede Pose direkt anfahren.“"),
     ("radodometrie", "Rad-Odometrie", "schaetzung", "10", 'Bewegung direkt messen - Odometrie', 1, 0, "Aus Encoder-Ticks und Kinematik aufintegrierte Pose; die Fehler summieren sich zur Drift.", "„Rad-Odometrie liefert dauerhaft eine zuverlässige Position.“"),
@@ -276,7 +280,7 @@ B = [
     ("purepursuit", "Pure Pursuit", "bewegung", "10", 'Pure Pursuit Controller', 1, 0, "Folgt einem Pfad über einen Kreisbogen zu einem Lookahead-Punkt auf der Bahn.", "„Je kleiner die Lookahead-Distanz, desto besser.“"),
     ("twist", "Twist / cmd_vel", "ros", "10", 'Twist-Messages', 1, 1, "geometry_msgs/Twist auf cmd_vel ist die Schnittstelle für Fahrbefehle; beim TurtleBot zählen linear.x und angular.z.", None),
     ("ros2control", "ros2_control", "ros", "10", 'ros2_control', 2, 1, "Framework zwischen Controllern und Hardware; der diff_drive_controller rechnet cmd_vel in Radgeschwindigkeiten um.", None),
-    # --- VL 11 Navigation
+    # --- VL 13 Navigation
     ("navigation", "Navigation", "bewegung", "11", 'Definitionen', 1, 0, "Selbstlokalisierung, bei Bedarf Kartenerstellung und Wegplanung zum Ziel.", None),
     ("bug", "Bug-Algorithmen", "bewegung", "11", 'Bug-Algorithmen', 2, 0, "Reaktive Strategien ohne Karte aus Zielrichtung und Konturfolge.", "„Direkt aufs Ziel zufahren und Hindernisse umfahren führt sicher ans Ziel.“"),
     ("occupancygrid", "Occupancy Grid", "bewegung", "11", 'Rasterbasierte Karten (Occupancy Grids)', 1, 0, "Rasterkarte mit Belegungswahrscheinlichkeit je Zelle — in ROS nav_msgs/OccupancyGrid.", None),
@@ -388,7 +392,7 @@ F = [
     ("f_projekt", "Projektaufgabe", "Vom Ziel in der ersten Vorlesung zum autonom fahrenden TurtleBot in der Verkehrswelt.",
      ["verkehrswelt", "turtlebot", "domainid", "rosbag", "thresholding", "kalibrierung", "yolo", "robotlocalization", "purepursuit", "costmap", "nav2"]),
     ("f_umgebung", "Umgebung im Griff", "Von der Shell über Umgebungsvariablen zum lauffähigen ROS-2-Workspace.",
-     ["shell", "umgebung", "source", "bashrc", "ros2cli", "setupbash", "domainid"]),
+     ["shell", "umgebung", "source", "bashrc", "setupbash", "domainid"]),
     ("f_ros", "Vom Knoten zum System", "Wie aus einzelnen Knoten und Nachrichten ein vollständiges Robotersystem wird.",
      ["rosmotivation", "middleware", "node", "topic", "message", "paket", "launch", "tf2", "nav2"]),
     ("f_koord", "Koordinaten überall", "Bezugssysteme und Transformationen ziehen sich vom Roboter bis zur Kamera und zum Fahrwerk.",

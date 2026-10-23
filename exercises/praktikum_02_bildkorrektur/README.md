@@ -21,13 +21,13 @@ import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_Softwareproje
 | **Veranstaltung:**   | @config.lecture                                                                                                            |
 | **Semester**         | @config.semester                                                                                                           |
 | **Hochschule:**      | `Technische Universität Freiberg`                                                                                          |
-| **Inhalte:**         | `Kamera kalibrieren, Bild entzerren, Vogelperspektive auf die Fahrbahn — Anwendung von VL 4, VL 6, VL 7 und Ü 4`           |
+| **Inhalte:**         | `Kamera kalibrieren, Bild entzerren, Vogelperspektive auf die Fahrbahn — Anwendung von VL 03, VL 05, VL 06 und Ü 4`           |
 | **Link auf GitHub:** | https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/exercises/praktikum_02_bildkorrektur/README.md |
 | **Autoren**          | @author                                                                                                                    |
 
 --------------------------------------------------------------------------------
 
-**Ihre Spurerkennung in P 3 braucht ein Bild, in dem man messen kann.** Das Rohbild der Kamera taugt dafür nicht: Die Linse verzerrt es, und durch die Perspektive laufen parallele Fahrbahnlinien aufeinander zu. Heute bauen Sie den Knoten, der daraus eine maßstäbliche Draufsicht auf die Fahrbahn macht, und nehmen damit die Daten für P 3 auf. Sie lernen nichts Neues — Sie wenden an, was Sie in VL 4, VL 6, VL 7 und Ü 4 gelernt haben.
+**Ihre Spurerkennung in P 3 braucht ein Bild, in dem man messen kann.** Das Rohbild der Kamera taugt dafür nicht: Die Linse verzerrt es, und durch die Perspektive laufen parallele Fahrbahnlinien aufeinander zu. Heute bauen Sie den Knoten, der daraus eine maßstäbliche Draufsicht auf die Fahrbahn macht, und nehmen damit die Daten für P 3 auf. Sie lernen nichts Neues — Sie wenden an, was Sie in VL 03, VL 05, VL 06 und Ü 4 gelernt haben.
 
 ```mermaid @mermaid
 flowchart LR
@@ -50,9 +50,9 @@ flowchart LR
 | Zeit   | Teil                                                      | Wendet an           | Nachweis |
 | ------ | --------------------------------------------------------- | ------------------- | -------- |
 | 10 min | Sicherheit, Rollen, Verbinden                             | P 1                 | —        |
-| 25 min | A: Kamera kalibrieren                                     | VL 7, Ü 4           | 2        |
-| 10 min | B: Bild entzerren                                         | VL 6, VL 7, Ü 4     | 3        |
-| 25 min | C: Vogelperspektive                                       | VL 4, VL 7          | 4, 5     |
+| 25 min | A: Kamera kalibrieren                                     | VL 06, Ü 4           | 2        |
+| 10 min | B: Bild entzerren                                         | VL 05, VL 06, Ü 4     | 3        |
+| 25 min | C: Vogelperspektive                                       | VL 03, VL 06          | 4, 5     |
 | 10 min | D: Daten für P 3 aufnehmen                                | Ü 2, P 1            | 6        |
 | 10 min | Verständnisfrage, Roboter zurückgeben, Puffer             | —                   | 7        |
 
@@ -71,14 +71,14 @@ Ob der Knoten auch live mit voller Rate läuft, prüfen Sie zu Beginn von P 3.
 <!-- data-type="none" -->
 | Woche ab | Vorlesung | Übung | Praktikum |
 | :-- | :-- | :-- | :-- |
-| 30.11.2026 | [VL 5 Sensorik](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/01_Sensorik/01_Sensorik.md) |  |  |
-| 7.12.2026 | [VL 6 Bildverarbeitung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/05_Bildverarbeitung/05_Bildverarbeitung.md)<br>[VL 7 Kamera + Draufsicht](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/06_Kamera_Stereo/06_Kamera_Stereo.md) |  |  |
-| 14.12.2026 | VL 8 LiDAR |  |  |
-| 4.1.2027 |  | Ü 3 Datenvisualisierung |  |
-| **11.1.2027**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> |  | Ü 4 Kameradaten | **[P 2 Bildkorrektur](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_02_bildkorrektur/README.md)**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> |
+| 30.11.2026 | [VL 04 Sensorik](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/04_Sensorik/04_Sensorik.md) |  |  |
+| 7.12.2026 | [VL 05 Bildverarbeitung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/05_Bildverarbeitung/05_Bildverarbeitung.md)<br>[VL 06 Kamera + Draufsicht](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/06_Kamera/06_Kamera.md) |  |  |
+| 14.12.2026 | VL 07 LiDAR |  |  |
+| 4.1.2027 |  | Ü 3 Datenvisualisierung<br>Ü 4 Kameradaten |  |
+| **11.1.2027**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> |  |  | **[P 2 Bildkorrektur](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_02_bildkorrektur/README.md)**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> |
 | 18.1.2027 |  |  | [P 3 Spurerkennung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_03_spurerkennung/README.md) |
 
-- **Sie brauchen:** [Launch-Datei](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=launch) (VL 3) · [QoS-Verträglichkeit](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=qoscompat) (VL 4) · [CompressedImage](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=compressed_image) (VL 6) · [Kamerakalibrierung](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=kalibrierung) (VL 7) · [Entzerren mit Tabellen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=entzerrung) (VL 7) · [Homographie](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=homographie) (VL 7) · [Draufsicht (Vogelperspektive)](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=draufsicht) (VL 7)
+- **Sie brauchen:** [Launch-Datei](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=launch) (VL 02) · [QoS-Verträglichkeit](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=qoscompat) (VL 03) · [CompressedImage](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=compressed_image) (VL 05) · [Kamerakalibrierung](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=kalibrierung) (VL 06) · [Entzerren mit Tabellen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=entzerrung) (VL 06) · [Homographie](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=homographie) (VL 06) · [Draufsicht (Vogelperspektive)](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=draufsicht) (VL 06)
 - **Heute:** anwenden, nichts Neues – Ihre Arbeit hier ist die Prüfungsleistung
 
 > [!TIP]
@@ -96,7 +96,7 @@ Im Labor reicht die Zeit nur, wenn Ihr Code vorher läuft. Rechnen Sie mit **2 b
 sudo apt install ros-jazzy-camera-calibration ros-jazzy-image-transport-plugins ros-jazzy-cv-bridge
 ```
 
-**2. Projektpaket anlegen.** Sie bauen ab heute ein Paket `verkehrswelt`, das bis zum Ende des Projekts wächst. Holen Sie das Kurs-Repository (einmalig; später genügt `git pull` in diesem Ordner) und kopieren Sie die Vorlage in Ihren Workspace (Ü 1, VL 3):
+**2. Projektpaket anlegen.** Sie bauen ab heute ein Paket `verkehrswelt`, das bis zum Ende des Projekts wächst. Holen Sie das Kurs-Repository (einmalig; später genügt `git pull` in diesem Ordner) und kopieren Sie die Vorlage in Ihren Workspace (Ü 1, VL 02):
 
 ```bash
 git clone https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik.git ~/kurs
@@ -113,10 +113,10 @@ Dank `--symlink-install` müssen Sie nach Änderungen an Python-Dateien **nicht*
 <!-- data-type="none" -->
 | Datei                   | TODO | Was                                                        | Wo gelernt |
 | :---------------------- | :--: | :--------------------------------------------------------- | :--------- |
-| `image_corrector.py`    | 1, 2 | Entzerrungstabellen berechnen, Bild entzerren              | Ü 4, VL 7  |
-| `image_corrector.py`    | 3    | Bild mit der Homographie in die Vogelperspektive abbilden  | VL 7       |
-| `boden_kalibrieren.py`  | 4    | Bodenkoordinaten der Schachbrettecken aufstellen           | VL 4       |
-| `boden_kalibrieren.py`  | 5    | Homographie aus Punktpaaren bestimmen                      | VL 7       |
+| `image_corrector.py`    | 1, 2 | Entzerrungstabellen berechnen, Bild entzerren              | Ü 4, VL 06  |
+| `image_corrector.py`    | 3    | Bild mit der Homographie in die Vogelperspektive abbilden  | VL 06       |
+| `boden_kalibrieren.py`  | 4    | Bodenkoordinaten der Schachbrettecken aufstellen           | VL 03       |
+| `boden_kalibrieren.py`  | 5    | Homographie aus Punktpaaren bestimmen                      | VL 06       |
 
 Zu TODO 4: Das Brett liegt flach und mittig vor dem Roboter. So sind die inneren Ecken nummeriert — Ansicht von oben, der Roboter steht unten und schaut nach oben, Beispiel mit 8 × 6 inneren Ecken:
 
@@ -151,7 +151,7 @@ Erwartete Ausgabe von Terminal 3:
 [INFO] [boden_kalibrieren]: 48 Ecken, mittlerer Fehler 0.2 mm -> homographie.yaml geschrieben
 ```
 
-Der mittlere Fehler zeigt nur, ob die Ecken in der **richtigen Reihenfolge** zugeordnet sind. Ob das Brett an der **richtigen Stelle** landet, sehen Sie erst im Bild: Beenden Sie Terminal 1, starten Sie es mit der Homographie neu und sehen Sie sich das Bild mit Raster in `rqt` an (Image View, VL 2):
+Der mittlere Fehler zeigt nur, ob die Ecken in der **richtigen Reihenfolge** zugeordnet sind. Ob das Brett an der **richtigen Stelle** landet, sehen Sie erst im Bild: Beenden Sie Terminal 1, starten Sie es mit der Homographie neu und sehen Sie sich das Bild mit Raster in `rqt` an (Image View, VL 01):
 
 ```bash
 ros2 launch verkehrswelt bildkorrektur.launch.py \
@@ -175,7 +175,7 @@ Im Topic `/camera/image_birdseye_raster` haben die grünen Linien 10 cm Abstand,
 | :------------------------------------------------------------- | :---------------------------------------------------------------------------- |
 | `Kalibrierdatei nicht gefunden`                                | Pfad falsch — absoluten Pfad angeben                                          |
 | `Schachbrett nicht gefunden`                                   | Läuft die Aufnahme? Liefert `/camera/image_rect` Bilder (`ros2 topic hz`)?    |
-| `Die Draufsicht wäre gespiegelt oder verdreht`                 | TODO 4: Vorzeichen — y wächst nach **links**, x nach **vorn** (VL 4)          |
+| `Die Draufsicht wäre gespiegelt oder verdreht`                 | TODO 4: Vorzeichen — y wächst nach **links**, x nach **vorn** (VL 03)          |
 | mittlerer Fehler mehrere cm                                    | TODO 4: Reihenfolge — erst alle Ecken der Reihe j = 0, dann j = 1 …          |
 | Brett liegt neben der roten Linie                              | TODO 4: Brettmitte nicht auf y = 0 gelegt                                     |
 | Brett liegt zu weit vorn oder hinten                           | TODO 4: `abstand` nicht für die Reihe j = 0 verwendet                         |
@@ -205,11 +205,12 @@ Im `rqt`-Fenster `/camera/image_rect` müssen gerade Kanten am Bildrand gerader 
 <!-- data-type="none" -->
 | Rolle          | Aufgabe                                                                 |
 | :------------- | :---------------------------------------------------------------------- |
-| Brett          | bewegt bzw. legt das Schachbrett, misst mit dem Zollstock               |
+| Brett          | bewegt bzw. legt das Schachbrett                                        |
+| Messen         | misst mit dem Zollstock, prüft im Kamerabild, ob das Brett ganz zu sehen ist |
 | Tastatur       | startet die Befehle, prüft die Ausgaben                                 |
 | Protokoll      | hält die 📝-Antworten und Bildschirmfotos fest                          |
 
-In Zweiergruppen übernimmt die Person am Brett auch das Protokoll.
+In Dreiergruppen übernimmt die Person am Brett auch das Messen.
 
 **Protokoll:** Führen Sie `praktikum_02/PROTOKOLL.md` lokal und laden Sie es nach dem Praktikum ins Git-Repository Ihrer Gruppe hoch, spätestens zu Beginn von P 3.
 
@@ -221,7 +222,7 @@ Ihre Gruppe arbeitet im ganzen Projekt mit **demselben Roboter**. 📝 Notieren 
 
 ## A: Kamera kalibrieren
 
-Jede Kamera ist ein wenig anders montiert und geschliffen. Die Werte aus Ü 4 stammen von einer baugleichen Kamera — für Messungen auf der Fahrbahn brauchen Sie die Werte **Ihrer** Kamera (VL 7).
+Jede Kamera ist ein wenig anders montiert und geschliffen. Die Werte aus Ü 4 stammen von einer baugleichen Kamera — für Messungen auf der Fahrbahn brauchen Sie die Werte **Ihrer** Kamera (VL 06).
 
 **A.1 Welche Kamerabilder sendet Ihr Roboter?**
 
@@ -247,7 +248,7 @@ ros2 run camera_calibration cameracalibrator --size 8x6 --square 0.025 --no-serv
   --ros-args -r image:=/camera/image_kalib
 ```
 
-Die letzte Zeile von Terminal 1 kennen Sie aus VL 4 und Ü 4: `republish` empfängt sonst nur von Sendern mit *reliable*. Sendet Ihre Kamera *best effort*, bleibt alles still — bis auf die Warnung `offering incompatible QoS`. Ein Empfänger mit *best effort* passt zu beiden. `--no-service-check` in Terminal 2: Sie speichern das Ergebnis auf Ihrem Laptop, nicht auf dem Roboter.
+Die letzte Zeile von Terminal 1 kennen Sie aus VL 03 und Ü 4: `republish` empfängt sonst nur von Sendern mit *reliable*. Sendet Ihre Kamera *best effort*, bleibt alles still — bis auf die Warnung `offering incompatible QoS`. Ein Empfänger mit *best effort* passt zu beiden. `--no-service-check` in Terminal 2: Sie speichern das Ergebnis auf Ihrem Laptop, nicht auf dem Roboter.
 
 📝 Mit welcher Reliability sendet Ihre Kamera (`ros2 topic info -v`, P 1)?
 
@@ -275,7 +276,7 @@ tar -xzf /tmp/calibrationdata.tar.gz -C ~/ros2_ws/src/verkehrswelt/kalibrierung 
 cat ~/ros2_ws/src/verkehrswelt/kalibrierung/ost.yaml
 ```
 
-📝 Tragen Sie `camera_matrix` (K) und `distortion_coefficients` (D) ins Protokoll ein und prüfen Sie sie mit VL 7:
+📝 Tragen Sie `camera_matrix` (K) und `distortion_coefficients` (D) ins Protokoll ein und prüfen Sie sie mit VL 06:
 
 + Sind $f_x$ und $f_y$ fast gleich groß?
 + Liegt der Hauptpunkt $(c_x, c_y)$ nahe der Bildmitte?
@@ -300,14 +301,14 @@ ros2 launch verkehrswelt bildkorrektur.launch.py \
 
 ## C: Vogelperspektive
 
-Die Homographie aus VL 7 bildet eine **Ebene** auf eine andere ab — hier den Boden auf die Draufsicht. Bestimmen Sie sie mit dem Schachbrett, diesmal flach auf dem Boden.
+Die Homographie aus VL 06 bildet eine **Ebene** auf eine andere ab — hier den Boden auf die Draufsicht. Bestimmen Sie sie mit dem Schachbrett, diesmal flach auf dem Boden.
 
 **C.1 Brett hinlegen und messen.** Stellen Sie den Roboter auf eine gerade Stelle der Fahrbahn. Legen Sie das Schachbrett flach davor:
 
 + lange Seite quer zur Fahrtrichtung, Mitte des Bretts auf der Mittelachse des Roboters,
 + so nah, dass das ganze Brett im Bild liegt (Kontrolle in `/camera/image_rect`).
 
-Messen Sie mit dem Zollstock den Abstand von der **Radachse** — dort liegt `base_footprint` (VL 4) — bis zur **nächsten Reihe innerer Ecken**, nicht bis zur Brettkante. Messen Sie zu zweit unabhängig voneinander: Ein falscher Abstand fällt später in keiner Fehlerzahl auf, er verschiebt nur die ganze Draufsicht.
+Messen Sie mit dem Zollstock den Abstand von der **Radachse** — dort liegt `base_footprint` (VL 03) — bis zur **nächsten Reihe innerer Ecken**, nicht bis zur Brettkante. Messen Sie zu zweit unabhängig voneinander: Ein falscher Abstand fällt später in keiner Fehlerzahl auf, er verschiebt nur die ganze Draufsicht.
 
 📝 Gemessener Abstand in m (beide Messungen)?
 
@@ -387,7 +388,7 @@ Fällt der Roboter durch einen Defekt aus, den Ihre Gruppe nicht verschuldet hat
 - [ ] Schachbrett und Roboter zurückgeben
 
 > [!IMPORTANT]
-> **Merke – für P 3:** Ihre Homographie gilt, solange die Kamera Ihres Roboters genau so sitzt wie heute. Wurde sie verstellt (Stoß, Reparatur), melden Sie das den Betreuern — dann wiederholen Sie Teil C. Teil A (Kalibrierung) nur dann, wenn am Objektiv gedreht oder die Kamera getauscht wurde: $K$ und $D$ gehören zur Kamera, nicht zu ihrer Lage (VL 7).
+> **Merke – für P 3:** Ihre Homographie gilt, solange die Kamera Ihres Roboters genau so sitzt wie heute. Wurde sie verstellt (Stoß, Reparatur), melden Sie das den Betreuern — dann wiederholen Sie Teil C. Teil A (Kalibrierung) nur dann, wenn am Objektiv gedreht oder die Kamera getauscht wurde: $K$ und $D$ gehören zur Kamera, nicht zu ihrer Lage (VL 06).
 
 <!-- kurslandkarte:ausblick-start -->
 

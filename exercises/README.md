@@ -8,9 +8,9 @@ _Stand WiSe 2026/27 — Termine nach dem neuen Format (VL, Ü und P à 90 min). 
 
 | Termin   | Material                                                       | Thema                                                   | Status          |
 | -------- | -------------------------------------------------------------- | ------------------------------------------------------- | --------------- |
-| **Ü 1**  | [exercise_00_linux_shell](exercise_00_linux_shell/)             | OS + Linux Shell                                        | neu 2026/27     |
-| vorab    | [installation_ros2](installation_ros2/)                         | ROS 2 Jazzy selbstständig installieren (vor Ü 2)        | neu 2026/27     |
-| **Ü 2**  | [exercise_00b_ros2_werkzeuge](exercise_00b_ros2_werkzeuge/)     | Services, Parameter, Actions, `ros2 bag` mit turtlesim  | neu 2026/27     |
+| **Ü 1**  | [uebung_01_linux_shell](uebung_01_linux_shell/)             | OS + Linux Shell, Installation von ROS 2              | neu 2026/27     |
+| zu Ü 1   | [installation_ros2](installation_ros2/)                         | ROS 2 Jazzy installieren: gemeinsam in Ü 1, hier zum Nachschlagen und Nachholen | neu 2026/27     |
+| **Ü 2**  | [uebung_02_workspace](uebung_02_workspace/)     | Services, Parameter, Actions, `ros2 bag` mit turtlesim  | neu 2026/27     |
 | **P 1**  | [praktikum_01_turtlebot](praktikum_01_turtlebot/)               | TurtleBot verbinden, untersuchen, fahren, aufzeichnen   | neu 2026/27     |
 | **P 2**  | [praktikum_02_bildkorrektur](praktikum_02_bildkorrektur/)       | Kamera kalibrieren, entzerren, Vogelperspektive; Projektpaket `verkehrswelt` | neu 2026/27 |
 | **P 3**  | [praktikum_03_spurerkennung](praktikum_03_spurerkennung/)       | Fahrspur erkennen, Abweichung `/lane/offset`            | neu 2026/27     |
@@ -27,7 +27,7 @@ _Stand WiSe 2026/27 — Termine nach dem neuen Format (VL, Ü und P à 90 min). 
 
 **Übung 1 & 2** basieren auf einem gemeinsamen ROS2-Bag-Datensatz:
 
-**Übung 3** verwendet echte TurtleBot 3 Burger Roboter (Gruppenarbeit, 2-3 Personen pro Roboter).
+**Übung 3** verwendet echte TurtleBot 3 Burger Roboter (Gruppenarbeit, 3–4 Personen pro Roboter).
 
 ### Bag-Datensatz (Übung 1 & 2)
 

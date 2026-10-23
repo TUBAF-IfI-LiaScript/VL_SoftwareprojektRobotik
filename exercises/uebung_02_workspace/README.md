@@ -11,7 +11,7 @@ import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_Softwareproje
 
 -->
 
-[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/exercise_00b_ros2_werkzeuge/README.md)
+[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/uebung_02_workspace/README.md)
 
 # Übung: Werkzeuge von ROS 2
 
@@ -22,7 +22,7 @@ import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_Softwareproje
 | **Semester**         | @config.semester                                                                                                               |
 | **Hochschule:**      | `Technische Universität Freiberg`                                                                                              |
 | **Inhalte:**         | `Services, Parameter und Actions mit der Kommandozeile, Daten aufzeichnen und abspielen mit ros2 bag`                           |
-| **Link auf GitHub:** | https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/exercises/exercise_00b_ros2_werkzeuge/README.md   |
+| **Link auf GitHub:** | https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/exercises/uebung_02_workspace/README.md   |
 | **Autoren**          | @author                                                                                                                        |
 
 --------------------------------------------------------------------------------
@@ -31,7 +31,7 @@ import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_Softwareproje
 
 **Zielstellung der heutigen Übung**
 
-In VL 2 haben Sie Topics kennengelernt, in VL 3 eigene Pakete gebaut. Heute probieren Sie die übrigen Kommunikationsmuster von ROS 2 aus und lernen, Daten aufzuzeichnen. Am Ende können Sie
+In VL 01 haben Sie Topics kennengelernt, in VL 02 eigene Pakete gebaut. Heute probieren Sie die übrigen Kommunikationsmuster von ROS 2 aus und lernen, Daten aufzuzeichnen. Am Ende können Sie
 
 + für eine Aufgabe des Roboters das passende Kommunikationsmuster begründet auswählen,
 + Services finden, ihren Aufbau lesen und sie aufrufen,
@@ -55,7 +55,7 @@ Alles üben wir am `turtlesim` — dieselben Befehle verwenden Sie später am Tu
 | 15 min | Actions (A0, A1)                                                 |
 | 25 min | Daten aufzeichnen und abspielen (B1)                             |
 | 5 min  | Selbsttest, Ausblick                                             |
-| 5 min  | Skizzen aus VL 3 (Aufgabe 3) in der Gruppe vergleichen           |
+| 5 min  | Skizzen aus VL 02 (Aufgabe 3) in der Gruppe vergleichen           |
 
 **Kür** für schnelle Gruppen oder zu Hause: Neustart mit Parameterdatei (P1, zweiter Teil), Zusatzaufgabe B2, Abschlussaufgabe, eigener Knoten (Kür K).
 
@@ -67,18 +67,18 @@ Alles üben wir am `turtlesim` — dieselben Befehle verwenden Sie später am Tu
 
 **Ziel im Projekt:** Sie untersuchen, konfigurieren und zeichnen ein laufendes ROS-2-System auf – genau das tun Sie in P 1 am Roboter.
 
-**Block 1 · ROS-Grundlagen** – Termin 5 von 32, heute farbig markiert
+**Block 1 · ROS-Grundlagen** – Termin 6 von 32, heute farbig markiert
 
 <!-- data-type="none" -->
 | Woche ab | Vorlesung | Übung | Praktikum |
 | :-- | :-- | :-- | :-- |
-| 19.10.2026 | [VL 1 Einführung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/00_Einfuehrung/00_Einfuehrung.md) |  |  |
-| 26.10.2026 | [VL 2 ROS 2 Grundlagen](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/03_ROS_Grundlagen_I/03_EinfuehrungROS.md) | [Ü 1 Linux Shell](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/exercise_00_linux_shell/README.md) |  |
-| 2.11.2026 | [VL 3 ROS 2 Pakete](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/04_ROS_Pakete_Tools/04_ROS_Pakete.md) |  |  |
-| **9.11.2026**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> | [VL 4 Koordinaten + QoS](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/02_Koordinatensysteme/02_Koordinatentransformation.md) | **[Ü 2 ROS 2 Werkzeuge](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/exercise_00b_ros2_werkzeuge/README.md)**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> |  |
+| 19.10.2026 | [VL 00 Einführung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/00_Einfuehrung/00_Einfuehrung.md) |  |  |
+| 26.10.2026 | [VL 01 ROS 2 Grundlagen](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/01_ROS_Grundlagen/01_ROS_Grundlagen.md) | [Ü 1 Linux Shell](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/uebung_01_linux_shell/README.md) |  |
+| 2.11.2026 | [VL 02 ROS 2 Pakete](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/02_ROS_Pakete/02_ROS_Pakete.md) |  |  |
+| **9.11.2026**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> | [VL 03 Koordinaten + QoS](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/03_Koordinaten_QoS/03_Koordinaten_QoS.md) | **[Ü 2 ROS 2 Werkzeuge](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/uebung_02_workspace/README.md)**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> |  |
 | 23.11.2026 |  |  | [P 1 TurtleBot + Bags](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_01_turtlebot/README.md) |
 
-- **Sie brauchen:** [Service, Parameter, Action](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=kommmuster) (VL 2) · [Topic](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=topic) (VL 2) · [ROS\_DOMAIN\_ID](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=domainid) (VL 3)
+- **Sie brauchen:** [Service, Parameter, Action](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=kommmuster) (VL 01) · [Topic](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=topic) (VL 01) · [ROS\_DOMAIN\_ID](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=domainid) (VL 02)
 - **Heute neu:** [Parameter und Parameterdatei](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=paramfile) · [ros2 bag](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=rosbag)
 
 > [!TIP]
@@ -94,7 +94,7 @@ Alles üben wir am `turtlesim` — dieselben Befehle verwenden Sie später am Tu
 2. Wie stellen Sie seine Höchstgeschwindigkeit ein, ohne den Code neu zu bauen?
 3. Wie schicken Sie ihn in die Parklücke — und erfahren unterwegs, wie weit er ist?
 
-Notieren Sie für jede Frage, welches Kommunikationsmuster aus VL 2 Sie vermuten (Topic, Service, Parameter oder Action). Am Ende der Übung lösen wir auf.
+Notieren Sie für jede Frage, welches Kommunikationsmuster aus VL 01 Sie vermuten (Topic, Service, Parameter oder Action). Am Ende der Übung lösen wir auf.
 
 Führen Sie die drei Tests aus der Installationsanleitung aus: `ros2 doctor`, Talker/Listener und das turtlesim-Fenster. Klappt etwas nicht, melden Sie sich jetzt — oder arbeiten Sie heute am Pool-Rechner und lösen das Problem nach der Übung.
 
@@ -151,7 +151,7 @@ In **T2** fragen Sie ihn nach seinen Schnittstellen:
 
 ```
 
-Alle vier Kommunikationsmuster aus VL 2 tauchen auf: Topics (Subscribers/Publishers), Services, Actions — und die Parameter, die intern ebenfalls über Services (`/turtlesim/…_parameters`) abgefragt werden. Die Einträge folgen immer dem Schema **Name: Typ**.
+Alle vier Kommunikationsmuster aus VL 01 tauchen auf: Topics (Subscribers/Publishers), Services, Actions — und die Parameter, die intern ebenfalls über Services (`/turtlesim/…_parameters`) abgefragt werden. Die Einträge folgen immer dem Schema **Name: Typ**.
 
 ## Services
 
@@ -176,7 +176,7 @@ string name # Optional.  A unique name will be created and returned if this is e
 string name
 ```
 
-Die Daten für den Aufruf schreiben Sie im YAML-Format wie bei `ros2 topic pub` in VL 2: `{feld: wert, feld: wert}`.
+Die Daten für den Aufruf schreiben Sie im YAML-Format wie bei `ros2 topic pub` in VL 01: `{feld: wert, feld: wert}`.
 
 ```text
 > ros2 service call /spawn turtlesim/srv/Spawn "{x: 2.0, y: 2.0, theta: 0.0, name: 'turtle2'}"
@@ -300,7 +300,7 @@ Beim Start (nach `Ctrl+C` in T1, im Ordner mit der Datei):
 ros2 run turtlesim turtlesim_node --ros-args --params-file schwarz.yaml
 ```
 
-In VL 3 haben Sie Launch-Dateien kennengelernt: Dort übergeben Sie dieselbe Datei mit `parameters=['schwarz.yaml']` an `Node(...)`.
+In VL 02 haben Sie Launch-Dateien kennengelernt: Dort übergeben Sie dieselbe Datei mit `parameters=['schwarz.yaml']` an `Node(...)`.
 
 </details>
 
@@ -382,7 +382,7 @@ Eine zweite Taste während einer Drehung schickt ein neues Ziel. Der Simulator b
 
 Der Client des verworfenen Auftrags erhält den Status `ABORTED`, der neue endet mit `SUCCEEDED`. Abbrechen (_cancel_) geht also vom Auftraggeber aus, Verwerfen (_abort_) vom ausführenden Knoten.
 
-Die Kennzeichnungen `INFO` und `WARN` sind die Log-Stufen aus VL 3. Alle Logmeldungen des Systems laufen auch über das Topic `/rosout` — mit `ros2 topic echo /rosout` oder dem Werkzeug `rqt_console` sehen Sie sie gesammelt.
+Die Kennzeichnungen `INFO` und `WARN` sind die Log-Stufen aus VL 02. Alle Logmeldungen des Systems laufen auch über das Topic `/rosout` — mit `ros2 topic echo /rosout` oder dem Werkzeug `rqt_console` sehen Sie sie gesammelt.
 
 </details>
 
@@ -494,7 +494,7 @@ Weitere nützliche Optionen: `ros2 bag play fahrt --rate 2.0` spielt doppelt so 
 | Action    | `ros2 action list -t`       | `ros2 interface show <typ>`    | `ros2 action send_goal … --feedback`       |
 | Aufnahme  | `ros2 bag info <ordner>`    | —                              | `ros2 bag record -o <ordner> --topics <topics>` / `ros2 bag play <ordner>` |
 
-**Abschlussaufgabe** (Kür oder zu Hause, ca. 10 min): Erzeugen Sie `turtle2` bei (5, 5) mit grünem Stift, drehen Sie sie per Action nach Norden (`theta: 1.57`) und zeichnen Sie 10 Sekunden lang nur ihre Position auf, während Sie sie fahren. Notieren Sie Ihre Befehlsfolge. Tipp: Die Tastatursteuerung sendet an `turtle1` — lenken Sie sie per Remapping (VL 2) auf `turtle2` um.
+**Abschlussaufgabe** (Kür oder zu Hause, ca. 10 min): Erzeugen Sie `turtle2` bei (5, 5) mit grünem Stift, drehen Sie sie per Action nach Norden (`theta: 1.57`) und zeichnen Sie 10 Sekunden lang nur ihre Position auf, während Sie sie fahren. Notieren Sie Ihre Befehlsfolge. Tipp: Die Tastatursteuerung sendet an `turtle1` — lenken Sie sie per Remapping (VL 01) auf `turtle2` um.
 
 **Prüfkriterium:** `ros2 bag info` zeigt nur das Topic `/turtle2/pose`, und im Fenster ist eine grüne Linie zu sehen, sobald `turtle2` fährt.
 
@@ -507,14 +507,14 @@ ros2 run turtlesim turtle_teleop_key --ros-args -r turtle1/cmd_vel:=turtle2/cmd_
 
 </details>
 
-**Kür K — ein eigener Knoten** (zu Hause, verbindet VL 3 mit heute): Legen Sie im Workspace aus VL 3 ein Python-Paket `turtle_watcher` an. Sein Knoten abonniert `/turtle1/pose` und gibt mit dem Logger eine Warnung aus, sobald die Schildkröte dem Rand näher als 1 kommt (das Fenster reicht von 0 bis etwa 11). Starten Sie Simulator und Knoten gemeinsam mit einer Launch-Datei, die den Simulator mit `schwarz.yaml` lädt (`parameters=['schwarz.yaml']`). **Prüfkriterium:** Fahren Sie an den Rand — im Terminal erscheint `[WARN]`.
+**Kür K — ein eigener Knoten** (zu Hause, verbindet VL 02 mit heute): Legen Sie im Workspace aus VL 02 ein Python-Paket `turtle_watcher` an. Sein Knoten abonniert `/turtle1/pose` und gibt mit dem Logger eine Warnung aus, sobald die Schildkröte dem Rand näher als 1 kommt (das Fenster reicht von 0 bis etwa 11). Starten Sie Simulator und Knoten gemeinsam mit einer Launch-Datei, die den Simulator mit `schwarz.yaml` lädt (`parameters=['schwarz.yaml']`). **Prüfkriterium:** Fahren Sie an den Rand — im Terminal erscheint `[WARN]`.
 
-**Ausblick:** In VL 4 geht es um Koordinatensysteme — die Position `x`, `y`, `theta` der Schildkröte ist schon eine solche Angabe — und um Quality of Service. Im Praktikum P 1 wenden Sie alles Gelernte am echten TurtleBot an: verbinden, fahren und eine Fahrt mit LiDAR- und Kameradaten aufzeichnen.
+**Ausblick:** In VL 03 geht es um Koordinatensysteme — die Position `x`, `y`, `theta` der Schildkröte ist schon eine solche Angabe — und um Quality of Service. Im Praktikum P 1 wenden Sie alles Gelernte am echten TurtleBot an: verbinden, fahren und eine Fahrt mit LiDAR- und Kameradaten aufzeichnen.
 
 <!-- kurslandkarte:ausblick-start -->
 
 --------------------------------------------------------------------------------
 
-**🗺️ Nächster Halt:** VL 4 · Koordinaten + QoS (Woche ab 9.11.2026) – Der TurtleBot weiß, wo seine Sensoren sitzen, und seine Daten kommen beim Empfänger an – sonst bleibt RViz leer. [Auf der Kurslandkarte ansehen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=02)
+**🗺️ Nächster Halt:** P 1 · TurtleBot + Bags (Woche ab 23.11.2026) – Ihr TurtleBot ist verbunden, fährt sicher, und Sie haben eine Testfahrt aufgezeichnet – das Rohmaterial für Block 2. [Auf der Kurslandkarte ansehen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=p1)
 
 <!-- kurslandkarte:ausblick-ende -->

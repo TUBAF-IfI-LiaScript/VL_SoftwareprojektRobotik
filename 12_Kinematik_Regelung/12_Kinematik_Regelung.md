@@ -17,7 +17,7 @@ attribute: Danke an Andre Dietrich für seinen Kurs "Einführung Regelungstechni
 
 -->
 
-[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/10_Kinematik_Regelung/10_Kinematik_Regelung.md)
+[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/12_Kinematik_Regelung/12_Kinematik_Regelung.md)
 
 # Kinematik und Regelung
 
@@ -28,7 +28,7 @@ attribute: Danke an Andre Dietrich für seinen Kurs "Einführung Regelungstechni
 | **Semester**         | @config.semester                                                                                                        |
 | **Hochschule:**      | `Technische Universität Freiberg`                                                                                       |
 | **Inhalte:**         | `Kinematik mobiler Roboter, Regelungstechnik, Bahnfolgeregelung`                                                        |
-| **Link auf GitHub:** | https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/10_Kinematik_Regelung/10_Kinematik_Regelung.md |
+| **Link auf GitHub:** | https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/12_Kinematik_Regelung/12_Kinematik_Regelung.md |
 | **Autoren**          | @author                                                                                                                 |
 
 ![](https://media.giphy.com/media/12psn8ymXy3dYs/giphy.gif)

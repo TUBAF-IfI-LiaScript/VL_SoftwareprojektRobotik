@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent
 email:    sebastian.zug@informatik.tu-freiberg.de
-version:  0.1.0
+version:  0.2.0
 language: de
 narrator: Deutsch Female
 
@@ -20,13 +20,13 @@ import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_Softwareproje
 | **Veranstaltung:**   | @config.lecture                                                                                                       |
 | **Semester**         | @config.semester                                                                                                      |
 | **Hochschule:**      | `Technische Universität Freiberg`                                                                                     |
-| **Inhalte:**         | `Selbstständige Installation von ROS 2 Jazzy vor der Übung Ü 2`                                                        |
+| **Inhalte:**         | `Installation von ROS 2 Jazzy – gemeinsam in Ü 1, zum Nachschlagen und Nachholen`                                      |
 | **Link auf GitHub:** | https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/exercises/installation_ros2/README.md     |
 | **Autoren**          | @author                                                                                                               |
 
 --------------------------------------------------------------------------------
 
-**Bis zur Übung Ü 2** installieren Sie ROS 2 Jazzy selbstständig nach dieser Anleitung. Rechnen Sie mit 30 bis 60 Minuten, der größte Teil ist Download. In der Übung prüfen wir in den ersten Minuten gemeinsam, ob alles läuft — die restliche Zeit gehört der Arbeit mit ROS 2.
+**ROS 2 installieren Sie gemeinsam in Ü 1** — als Anwendung der Shell. Diese Anleitung ist zum Nachschlagen und für alle, die in Ü 1 nicht fertig geworden sind oder später auf einem anderen Rechner neu installieren: Führen Sie die Schritte und den Selbsttest **spätestens bis VL 02** aus — dort arbeiten Sie mit `colcon`. Rechnen Sie mit 30 bis 60 Minuten, der größte Teil ist Download (gut 900 MB). Haben Sie die Paketquelle schon in Ü 1 eingetragen, beginnen Sie bei „Schritt 2: ROS 2 installieren“.
 
 **So lesen Sie die Befehle:** In grauen Kästen ohne `>` steht nur, was Sie eintippen. In Kästen mit Ausgaben stehen Ihre Eingaben hinter `>` — tippen Sie diese **ohne** das `>`, alle anderen Zeilen sind Ausgaben des Rechners. `sudo` fragt nach Ihrem Passwort; die Eingabe bleibt unsichtbar, das ist normal. Fragt `apt` mit `[Y/n]` nach, bestätigen Sie mit Enter.
 
@@ -98,12 +98,12 @@ sudo add-apt-repository universe
 
 ```bash
 sudo apt update && sudo apt install curl -y
-export ROS_APT_SOURCE_VERSION=$(curl -s https://api.github.com/repos/ros-infrastructure/ros-apt-source/releases/latest | grep -F "tag_name" | awk -F'"' '{print $4}')
+export ROS_APT_SOURCE_VERSION=$(curl -Ls -o /dev/null -w '%{url_effective}' https://github.com/ros-infrastructure/ros-apt-source/releases/latest | awk -F/ '{print $NF}')
 curl -L -o /tmp/ros2-apt-source.deb "https://github.com/ros-infrastructure/ros-apt-source/releases/download/${ROS_APT_SOURCE_VERSION}/ros2-apt-source_${ROS_APT_SOURCE_VERSION}.$(. /etc/os-release && echo ${UBUNTU_CODENAME:-${VERSION_CODENAME}})_all.deb"
 sudo dpkg -i /tmp/ros2-apt-source.deb
 ```
 
-> Die zweite Zeile fragt bei GitHub die aktuelle Version des Pakets ab und speichert sie in einer Umgebungsvariablen — genau das Prinzip aus Ü 1.
+> Die zweite Zeile folgt der Weiterleitung von GitHub auf die neueste Version, schneidet die Versionsnummer aus der Adresse und speichert sie in einer Umgebungsvariablen — genau das Prinzip aus Ü 1. (Die offizielle Anleitung fragt dafür die GitHub-API ab; die erlaubt ohne Anmeldung nur 60 Anfragen pro Stunde und Netzadresse und scheitert deshalb im Campus-WLAN.) Bleibt `echo $ROS_APT_SOURCE_VERSION` leer, setzen Sie die Version von Hand, z. B. `export ROS_APT_SOURCE_VERSION=1.3.0`.
 
 ## Schritt 2: ROS 2 installieren
 
@@ -130,7 +130,7 @@ Ergänzen Sie außerdem diese Zeile:
 echo "export ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST" >> ~/.bashrc
 ```
 
-ROS 2 sucht sonst im ganzen Netz nach anderen Knoten (VL 2, „Discovery“). Im WLAN der Universität würden Ihre Knoten dann die Knoten Ihrer Kommilitonen sehen und umgekehrt. Mit `LOCALHOST` bleibt alles auf Ihrem Rechner. Im Labor stellen wir das später auf die `ROS_DOMAIN_ID` Ihrer Gruppe um.
+ROS 2 sucht sonst im ganzen Netz nach anderen Knoten (VL 01, „Discovery“). Im WLAN der Universität würden Ihre Knoten dann die Knoten Ihrer Kommilitonen sehen und umgekehrt. Mit `LOCALHOST` bleibt alles auf Ihrem Rechner. Im Labor stellen wir das später auf die `ROS_DOMAIN_ID` Ihrer Gruppe um.
 
 ## Selbsttest
 

@@ -12,7 +12,7 @@ import: https://github.com/liascript/CodeRunner
 
 -->
 
-[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/01_Sensorik/01_Sensorik.md)
+[![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/04_Sensorik/04_Sensorik.md)
 
 # Sensorik mobiler Roboter
 
@@ -22,7 +22,7 @@ import: https://github.com/liascript/CodeRunner
 | **Semester**         | @config.semester                                                                                        |
 | **Hochschule:**      | `Technische Universität Freiberg`                                                                       |
 | **Inhalte:**         | `Sensorsysteme für mobile Roboter`                                                                      |
-| **Link auf GitHub:** | https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/01_Sensorik/01_Sensorik.md |
+| **Link auf GitHub:** | https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/04_Sensorik/04_Sensorik.md |
 | **Autoren**          | @author                                                                                                 |
 
 ![](https://media.giphy.com/media/md1gcbifqcZUs/giphy.gif)
