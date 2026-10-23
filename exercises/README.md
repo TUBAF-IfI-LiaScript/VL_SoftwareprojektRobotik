@@ -10,7 +10,7 @@ _Stand WiSe 2026/27 — Termine nach dem neuen Format (VL, Ü und P à 90 min). 
 | -------- | -------------------------------------------------------------- | ------------------------------------------------------- | --------------- |
 | **Ü 1**  | [uebung_01_linux_shell](uebung_01_linux_shell/)             | OS + Linux Shell, Installation von ROS 2              | neu 2026/27     |
 | zu Ü 1   | [installation_ros2](installation_ros2/)                         | ROS 2 Jazzy installieren: gemeinsam in Ü 1, hier zum Nachschlagen und Nachholen | neu 2026/27     |
-| **Ü 2**  | [uebung_02_workspace](uebung_02_workspace/)     | Services, Parameter, Actions, `ros2 bag` mit turtlesim  | neu 2026/27     |
+| **Ü 2**  | [uebung_02_workspace](uebung_02_workspace/)     | Eigener Workspace, fremdes Paket, Umsetzer nach `/cmd_vel`, Parameter, Launch, `ros2 bag` | neu 2026/27     |
 | **P 1**  | [praktikum_01_turtlebot](praktikum_01_turtlebot/)               | TurtleBot verbinden, untersuchen, fahren, aufzeichnen   | neu 2026/27     |
 | **P 2**  | [praktikum_02_bildkorrektur](praktikum_02_bildkorrektur/)       | Kamera kalibrieren, entzerren, Vogelperspektive; Projektpaket `verkehrswelt` | neu 2026/27 |
 | **P 3**  | [praktikum_03_spurerkennung](praktikum_03_spurerkennung/)       | Fahrspur erkennen, Abweichung `/lane/offset`            | neu 2026/27     |

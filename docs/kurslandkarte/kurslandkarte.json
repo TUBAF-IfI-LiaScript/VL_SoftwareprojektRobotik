@@ -292,22 +292,28 @@
    "typ": "Ü",
    "datei": "exercises/uebung_02_workspace/README.md",
    "datum": "2026-11-09",
-   "kurz": "ROS 2 Werkzeuge",
-   "leitfrage": "Sie untersuchen, konfigurieren und zeichnen ein laufendes ROS-2-System auf – genau das tun Sie in P 1 am Roboter.",
+   "kurz": "Erster Workspace",
+   "leitfrage": "Sie bauen Ihren ersten Workspace aus eigenen und fremden Paketen und steuern damit die Schildkröte – genau so starten, konfigurieren und belauschen Sie in P 1 den TurtleBot.",
    "freigegeben": false,
    "status": "ausgearbeitet",
    "block": 1,
    "pdf": null,
    "anwendet": [],
    "abschnitte": [
-    "Übung: Werkzeuge von ROS 2",
+    "Übung: Ihr erster Workspace",
     "Wo stehen wir?",
-    "Start: Läuft alles?",
-    "Was bietet ein Knoten an?",
-    "Services",
-    "Parameter",
-    "Actions",
-    "Daten aufzeichnen und abspielen",
+    "Organisation: Gruppen und GitHub",
+    "Läuft alles?",
+    "A: Ein eigener Workspace",
+    "Aufgabe A1: Hallo aus dem eigenen Paket",
+    "B: Pakete anderer Leute",
+    "Aufgabe B1: Wie wird ein Paket gebaut?",
+    "C: Der eigene Umsetzer",
+    "Aufgabe C1: Der Knoten",
+    "Aufgabe C2: Parameter",
+    "Aufgabe C3: Alles mit einer Launch-Datei",
+    "D: Aufzeichnen und abspielen",
+    "Aufgabe D1: Wiederholt sich die Fahrt?",
     "Selbsttest und Ausblick"
    ]
   },
@@ -328,6 +334,8 @@
     "domainid",
     "tbtopics",
     "topiccli",
+    "twist",
+    "paramfile",
     "qoscompat",
     "tf2",
     "tftree",
@@ -1740,14 +1748,47 @@
    "fehlvorstellung": null
   },
   {
+   "id": "fremdpaket",
+   "name": "Pakete anderer Leute",
+   "linie": "werkzeuge",
+   "vl": 5,
+   "abschnitt": 7,
+   "ebene": 1,
+   "code": false,
+   "erklaerung": "Fremde Pakete holt man als Quellcode mit git clone nach src/ und baut sie mit colcon mit; ihre package.xml nennt, wovon sie abhängen.",
+   "fehlvorstellung": "„Fremden Code kopiert man am besten in das eigene Paket.“"
+  },
+  {
+   "id": "depends",
+   "name": "depend und exec_depend",
+   "linie": "werkzeuge",
+   "vl": 5,
+   "abschnitt": 8,
+   "ebene": 2,
+   "code": true,
+   "erklaerung": "<depend> gilt fürs Bauen und zur Laufzeit, <exec_depend> nur zur Laufzeit; ament_cmake übersetzt mit CMakeLists.txt, ament_python installiert über setup.py.",
+   "fehlvorstellung": "„Was im Code importiert wird, findet colcon von selbst.“"
+  },
+  {
+   "id": "twist",
+   "name": "Twist / cmd_vel",
+   "linie": "ros",
+   "vl": 5,
+   "abschnitt": 9,
+   "ebene": 1,
+   "code": true,
+   "erklaerung": "geometry_msgs/Twist auf cmd_vel ist der Fahrbefehl eines mobilen Roboters: linear.x vorwärts in m/s, angular.z Drehung in rad/s.",
+   "fehlvorstellung": "„cmd_vel enthält eine Zielposition.“"
+  },
+  {
    "id": "srvcall",
    "name": "ros2 service call",
    "linie": "werkzeuge",
    "vl": 5,
-   "abschnitt": 5,
+   "abschnitt": 13,
    "ebene": 2,
    "code": true,
-   "erklaerung": "Ruft einen Service mit einer Anfrage im YAML-Format auf und zeigt die Antwort; den Aufbau verrät ros2 interface show.",
+   "erklaerung": "Ruft einen Service mit einer Anfrage im YAML-Format auf und zeigt die Antwort – etwa /reset, um die Schildkröte an den Start zu setzen.",
    "fehlvorstellung": "„Ein Service liefert fortlaufend Daten wie ein Topic.“"
   },
   {
@@ -1755,29 +1796,18 @@
    "name": "Parameter und Parameterdatei",
    "linie": "werkzeuge",
    "vl": 5,
-   "abschnitt": 6,
+   "abschnitt": 11,
    "ebene": 1,
    "code": true,
-   "erklaerung": "ros2 param get/set ändert Einstellungen zur Laufzeit; dump/load und --params-file speichern und laden sie als YAML.",
+   "erklaerung": "Ein Knoten deklariert Parameter mit Standardwert; gesetzt werden sie beim Start (-p name:=wert), aus einer YAML-Datei (Launch-Datei) oder zur Laufzeit mit ros2 param set.",
    "fehlvorstellung": "„Um einen Schwellwert zu ändern, muss man den Knoten neu kompilieren.“"
-  },
-  {
-   "id": "actioncli",
-   "name": "Action: Ziel, Feedback, Ergebnis",
-   "linie": "ros",
-   "vl": 5,
-   "abschnitt": 7,
-   "ebene": 2,
-   "code": true,
-   "erklaerung": "send_goal --feedback startet einen Auftrag mit Rückmeldungen; der Auftraggeber kann abbrechen (cancel), der Server verwerfen (abort).",
-   "fehlvorstellung": null
   },
   {
    "id": "rosbag",
    "name": "ros2 bag",
    "linie": "werkzeuge",
    "vl": 5,
-   "abschnitt": 8,
+   "abschnitt": 13,
    "ebene": 1,
    "code": true,
    "erklaerung": "ros2 bag record/play zeichnet Topics auf und spielt sie ab — reproduzierbare Tests ohne reale Sensoren.",
@@ -1788,7 +1818,7 @@
    "name": "Steuerung ohne Rückkopplung",
    "linie": "bewegung",
    "vl": 5,
-   "abschnitt": 8,
+   "abschnitt": 14,
    "ebene": 2,
    "code": false,
    "erklaerung": "Abgespielte Fahrbefehle führen nicht exakt zum selben Ziel — ohne Messung und Nachregeln summieren sich Abweichungen.",
@@ -2576,17 +2606,6 @@
    "fehlvorstellung": "„Je kleiner die Lookahead-Distanz, desto besser.“"
   },
   {
-   "id": "twist",
-   "name": "Twist / cmd_vel",
-   "linie": "ros",
-   "vl": 24,
-   "abschnitt": 20,
-   "ebene": 1,
-   "code": true,
-   "erklaerung": "geometry_msgs/Twist auf cmd_vel ist die Schnittstelle für Fahrbefehle; beim TurtleBot zählen linear.x und angular.z.",
-   "fehlvorstellung": null
-  },
-  {
    "id": "ros2control",
    "name": "ros2_control",
    "linie": "ros",
@@ -2756,9 +2775,24 @@
    "text": "erprobt mit"
   },
   {
-   "von": "kommmuster",
-   "nach": "actioncli",
-   "text": "erprobt mit"
+   "von": "paket",
+   "nach": "fremdpaket",
+   "text": "auch von anderen:"
+  },
+  {
+   "von": "fremdpaket",
+   "nach": "depends",
+   "text": "erkennbar an"
+  },
+  {
+   "von": "remap",
+   "nach": "twist",
+   "text": "leitet um auf das cmd_vel des Roboters:"
+  },
+  {
+   "von": "launch",
+   "nach": "paramfile",
+   "text": "lädt"
   },
   {
    "von": "paramfile",
