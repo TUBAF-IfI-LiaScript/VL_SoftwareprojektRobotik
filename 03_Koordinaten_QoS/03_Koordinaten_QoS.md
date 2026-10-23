@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.1.0
+version:  0.2.0
 language: de
 narrator: Deutsch Female
 
@@ -68,29 +68,29 @@ Kurz zur Orientierung. Wir sind in Block 1, Termin 5 von 32. Der TurtleBot weiß
 
 ## Leitfrage: Warum zeigt RViz den Scan nicht?
 
-    --{{0}}--
-Dieses Bild werden viele von Ihnen im ersten Praktikum sehen: ein schwarzes RViz-Fenster, obwohl der Roboter Daten liefert. Meist steckt eine von zwei Ursachen dahinter. Die erste Hälfte der Vorlesung erklärt die erste Ursache, die zweite Hälfte die zweite. Am Ende können Sie beide selbst prüfen.
-
-Im ersten Praktikum wird Ihnen das passieren: Der TurtleBot läuft, `ros2 topic echo /scan` zeigt Messwerte — aber RViz zeigt keinen einzigen Punkt. Zwei Ursachen sind typisch:
+**Im ersten Praktikum:** TurtleBot läuft, `ros2 topic echo /scan` zeigt Werte — RViz bleibt leer.
 
 <!-- data-type="none" -->
-| Symptom in RViz                                         | Ursache                                         | Thema heute             |
-| :------------------------------------------------------ | :---------------------------------------------- | :---------------------- |
-| `Frame [base_scan] does not exist` oder `No transform`  | RViz weiß nicht, **wo** der Sensor am Roboter sitzt | Koordinaten und tf2 |
-| keine Fehlermeldung, aber auch keine Daten               | Sender und Empfänger stellen **unverträgliche Anforderungen** an die Übertragung | Quality of Service |
+| Symptom in RViz                                         | Ursache                                             | Thema heute         |
+| :------------------------------------------------------ | :-------------------------------------------------- | :------------------ |
+| `Frame [base_scan] does not exist` oder `No transform`  | RViz weiß nicht, **wo** der Sensor sitzt            | Koordinaten und tf2 |
+| keine Fehlermeldung, aber keine Daten                   | **unverträgliche Anforderungen** an die Übertragung | Quality of Service  |
 
-Was wir aus VL 01 schon wissen: Jede Sensornachricht trägt einen **Header** mit Zeitstempel und `frame_id`. Diese `frame_id` ist der Schlüssel zum ersten Teil der Vorlesung.
++ aus VL 01: jede Sensornachricht hat einen **Header** mit `frame_id`
+
+    --{{0}}--
+Dieses Bild werden viele von Ihnen im ersten Praktikum sehen: ein leeres RViz-Fenster, obwohl der Roboter Daten liefert. Meist steckt eine von zwei Ursachen dahinter. Die erste Hälfte der Vorlesung erklärt die erste Ursache, die zweite Hälfte die zweite. Der Schlüssel zum ersten Teil ist die frame_id im Header, die Sie in VL 01 beim LiDAR-Scan gesehen haben. Am Ende können Sie beide Ursachen selbst prüfen.
 
 ## Bezugssysteme
 
-    --{{0}}--
-Eine Koordinatenangabe ist ohne Bezugssystem wertlos. Der LiDAR misst ein Hindernis einen halben Meter vor sich — vor dem Sensor, nicht vor der Mitte des Roboters und schon gar nicht relativ zur Kreuzung in der Verkehrswelt. Jede dieser Sichtweisen ist ein eigenes Koordinatensystem, in ROS Frame genannt.
+**Bezugssystem (_Frame_):** ein Punkt bedeutet nur etwas zusammen mit seinem System
 
-Ein Punkt hat nur zusammen mit seinem **Bezugssystem** (_Frame_) eine Bedeutung. Wir schreiben das Bezugssystem als Index: $\textbf{p}_A$ ist der Punkt $\textbf{p}$, ausgedrückt im System $A$.
++ Schreibweise: $\textbf{p}_A$ = Punkt $\textbf{p}$, ausgedrückt im System $A$
 
 ![Ein Punkt und vier verschiedene kartesische Koordinatensysteme A, B, C und D, in denen er jeweils andere Koordinaten hat](./images/MultipleCoordSystems.svg "Derselbe Punkt hat in den Koordinatensystemen $A$, $B$, $C$ und $D$ unterschiedliche Koordinaten.")<!-- style="width: 50%;"-->
 
-Beim TurtleBot in der Verkehrswelt gibt es mindestens drei wichtige Bezugssysteme:
+    --{{0}}--
+Eine Koordinatenangabe ist ohne Bezugssystem wertlos. Der LiDAR misst ein Hindernis einen halben Meter vor sich, also vor dem Sensor, nicht vor der Mitte des Roboters und schon gar nicht relativ zur Kreuzung in der Verkehrswelt. Jede dieser Sichtweisen ist ein eigenes Koordinatensystem, in ROS Frame genannt.
 
 <!-- data-type="none" -->
 | Frame         | Ursprung                         | Wofür?                                                    |
@@ -99,26 +99,29 @@ Beim TurtleBot in der Verkehrswelt gibt es mindestens drei wichtige Bezugssystem
 | `base_link`   | Mitte des Roboters               | so plant das Fahrverhalten: „Hindernis 40 cm voraus“      |
 | `map`         | fester Punkt in der Verkehrswelt | so sind Kreuzungen, Parklücken und Ampeln eingetragen     |
 
-**Kurze Kontrolle:** Der LiDAR misst ein Hindernis bei $\textbf{p}_{base\_scan} = (0{,}5;\ 0)$ m, also einen halben Meter geradeaus. Ist das Hindernis damit auch einen halben Meter vor der **Mitte** des Roboters?
+    --{{1}}--
+Beim TurtleBot in der Verkehrswelt gibt es mindestens diese drei wichtigen Bezugssysteme. Jedes beantwortet eine andere Frage: Was misst der Sensor? Wohin muss der Roboter ausweichen? Wo auf der Karte ist er?
+
+**Kurze Kontrolle:** Der LiDAR misst ein Hindernis bei $\textbf{p}_{base\_scan} = (0{,}5;\ 0)$ m. Liegt es auch 0,5 m vor der **Mitte** des Roboters?
 
 [( )] Ja, Koordinaten sind unabhängig vom Bezugssystem.
 [(X)] Nicht unbedingt — das hängt davon ab, wo der LiDAR relativ zur Robotermitte sitzt.
 ***
-Beim TurtleBot sitzt der LiDAR 3,2 cm hinter der Mitte. Das Hindernis liegt daher nur 46,8 cm vor der Robotermitte — die Werte dazu sehen Sie gleich im tf-Baum des TurtleBot.
+Beim TurtleBot sitzt der LiDAR 3,2 cm hinter der Mitte. Das Hindernis liegt daher nur 46,8 cm vor der Robotermitte — die Werte zeigt gleich der tf-Baum.
 ***
 
 ## Pose eines Koordinatensystems in 2D
 
-    --{{0}}--
-Um Koordinaten zwischen zwei Systemen umzurechnen, müssen wir wissen, wie das eine System im anderen liegt: wo sein Ursprung ist und wie es gedreht ist. Diese Kombination aus Position und Orientierung nennt man Pose. In der Ebene sind das drei Zahlen: x, y und ein Winkel.
+**Pose** = Position $\textbf{t} = (t_x, t_y)$ des Ursprungs + Drehwinkel $\varphi$
 
-Eine Pose kennen Sie schon aus Ü 2: `ros2 topic echo /turtle1/pose` liefert `x`, `y` und `theta` der Schildkröte — Position und Blickrichtung im Fenster des Simulators.
-
-Die Lage eines Systems $A$ im System $O$ beschreibt seine **Pose**: die Position $\textbf{t} = (t_x, t_y)$ seines Ursprungs in $O$ und den Drehwinkel $\varphi$ seiner Achsen.
++ kennen Sie aus VL 01: `/turtle1/pose` liefert `x`, `y`, `theta`
 
 ![Zwei Koordinatensysteme A und B, B ist gegenüber A verschoben und gedreht](./images/HomogenouseCoords.svg "Ein Koordinatensystem ist gegenüber dem anderen verschoben und gedreht.")<!-- style="width: 35%;"-->
 
-Ein Punkt $\textbf{p}_A$ lässt sich dann in $O$ ausdrücken: erst um $\varphi$ drehen, dann um $\textbf{t}$ verschieben. Die Drehmatrix $\textbf{R}(\varphi)$ kennen Sie aus der Linearen Algebra; positive Winkel drehen **gegen den Uhrzeigersinn**.
+    --{{0}}--
+Um Koordinaten zwischen zwei Systemen umzurechnen, müssen wir wissen, wie das eine System im anderen liegt: wo sein Ursprung ist und wie es gedreht ist. Diese Kombination aus Position und Orientierung heißt Pose. In der Ebene sind das drei Zahlen. Die Schildkröte im turtlesim aus VL 01 meldet genau diese drei Zahlen: Position und Blickrichtung im Fenster.
+
+**Umrechnung von $A$ nach $O$:** erst drehen, dann verschieben
 
 $$
 \textbf{p}_O = \textbf{R}(\varphi) \cdot \textbf{p}_A + \textbf{t}
@@ -130,15 +133,17 @@ $$
 \end{bmatrix}
 $$
 
++ positive Winkel drehen **gegen den Uhrzeigersinn**
+
 > [!IMPORTANT]
 > **Merke – Konvention:** Wir beschreiben immer die Pose eines **Kind-Systems** ($A$) in seinem **Eltern-System** ($O$). Genau so speichert ROS seine Transformationen.
 
+    --{{1}}--
+Ein Punkt im System A lässt sich so im System O ausdrücken: Wir drehen ihn um den Winkel des Systems und verschieben ihn dann um die Position des Ursprungs. Die Drehmatrix kennen Sie aus der Linearen Algebra.
+
 ### Homogene Koordinaten
 
-    --{{0}}--
-Die Formel hat einen Schönheitsfehler: Die Drehung ist eine Multiplikation, die Verschiebung eine Addition. Sobald wir mehrere Transformationen hintereinander ausführen, wird das unübersichtlich. Der Trick: Wir hängen an jeden Punkt eine Eins an. Dann wird auch die Verschiebung zur Matrixmultiplikation.
-
-Problem: Die Drehung ist eine Multiplikation, die Verschiebung eine Addition. Mit einer zusätzlichen Koordinate, die immer $1$ ist, wird beides **eine** Matrixmultiplikation:
+**Problem:** Drehung = Multiplikation, Verschiebung = Addition → **Trick:** zusätzliche Koordinate $1$
 
 $$
 \begin{bmatrix} \textbf{p}_O \\ 1 \end{bmatrix}
@@ -153,9 +158,13 @@ $$
 \begin{bmatrix} \textbf{p}_A \\ 1 \end{bmatrix}
 $$
 
-Der linke obere Block ist die Drehung, die rechte Spalte die Verschiebung. Diese Form heißt **homogene Transformationsmatrix**. Lesen Sie den Index von rechts nach links: $\textbf{T}_{OA}$ rechnet Koordinaten „von $A$ nach $O$“ um.
++ links oben: Drehung · rechte Spalte: Verschiebung
++ **homogene Transformationsmatrix** $\textbf{T}_{OA}$: rechnet „von $A$ nach $O$“ (Index von rechts nach links lesen)
 
-**Kurze Kontrolle:** System $A$ ist gegenüber $O$ um $(2;\ 0{,}5)$ verschoben und **nicht** gedreht. Ein Punkt liegt bei $\textbf{p}_A = (2;\ 3)$. Wo liegt er in $O$?
+    --{{0}}--
+Die Formel von eben hat einen Schönheitsfehler: Sobald wir mehrere Transformationen hintereinander ausführen, wechseln sich Multiplikationen und Additionen ab, und das wird unübersichtlich. Hängen wir an jeden Punkt eine Eins an, wird auch die Verschiebung zu einem Teil der Matrixmultiplikation. Eine einzige Matrix beschreibt dann die ganze Pose.
+
+**Kurze Kontrolle:** $A$ ist gegenüber $O$ um $(2;\ 0{,}5)$ verschoben, **nicht** gedreht. $\textbf{p}_A = (2;\ 3)$. Wo liegt der Punkt in $O$?
 
 $x_O =$ [[4]] , $y_O =$ [[3.5]]
 [[?]] Ohne Drehung ist $\textbf{R}$ die Einheitsmatrix — es bleibt nur die Verschiebung.
@@ -165,10 +174,7 @@ $\textbf{p}_O = \textbf{p}_A + \textbf{t} = (2 + 2;\ 3 + 0{,}5) = (4;\ 3{,}5)$.
 
 ### Inverse Transformation
 
-    --{{0}}--
-Oft brauchen wir die Gegenrichtung: Wir kennen die Lage eines Hindernisses in der Karte und wollen wissen, wo es aus Sicht des Roboters liegt. Dafür invertieren wir die Matrix — und das geht hier ohne aufwendige Rechnung.
-
-Für die Gegenrichtung $O \rightarrow A$ brauchen wir $\textbf{T}_{AO} = \textbf{T}_{OA}^{-1}$. Eine allgemeine Matrixinversion ist nicht nötig: Drehmatrizen sind orthogonal (Lineare Algebra), also gilt $\textbf{R}^{-1} = \textbf{R}^T$:
+**Gegenrichtung $O \rightarrow A$:** $\textbf{T}_{AO} = \textbf{T}_{OA}^{-1}$ — ohne allgemeine Inversion, denn $\textbf{R}^{-1} = \textbf{R}^T$
 
 $$
 \textbf{T}_{OA} =
@@ -178,9 +184,13 @@ $$
 \begin{bmatrix} \textbf{R}^T & -\textbf{R}^T\textbf{t} \\ \textbf{0} & 1 \end{bmatrix}
 $$
 
-Anschaulich: zurückverschieben, dann zurückdrehen. Die Verschiebung wird dabei mitgedreht ($-\textbf{R}^T\textbf{t}$, nicht einfach $-\textbf{t}$). Im Programm dürfen Sie auch einfach `np.linalg.inv` verwenden — das Ergebnis ist dasselbe.
++ zurückverschieben, dann zurückdrehen — die Verschiebung wird mitgedreht
++ im Programm genauso gut: `np.linalg.inv`
 
-**Kurze Kontrolle:** $A$ liegt bei $(2;\ 0)$ in $O$, ohne Drehung. Ein Punkt liegt bei $\textbf{p}_O = (3;\ 1)$. Wo liegt er in $A$?
+    --{{0}}--
+Oft brauchen wir die Gegenrichtung: Wir kennen die Lage eines Hindernisses in der Karte und wollen wissen, wo es aus Sicht des Roboters liegt. Dafür invertieren wir die Matrix, und das geht ohne aufwendige Rechnung, weil Drehmatrizen orthogonal sind. Achten Sie auf die rechte Spalte: Es heißt minus R transponiert mal t, nicht einfach minus t.
+
+**Kurze Kontrolle:** $A$ liegt bei $(2;\ 0)$ in $O$, ohne Drehung. $\textbf{p}_O = (3;\ 1)$. Wo liegt der Punkt in $A$?
 
 $x_A =$ [[1]] , $y_A =$ [[1]]
 ***
@@ -189,10 +199,7 @@ Ohne Drehung ist $\textbf{R}^T$ die Einheitsmatrix, es bleibt $\textbf{p}_A = \t
 
 ### Verkettung von Transformationen
 
-    --{{0}}--
-Die eigentliche Stärke der homogenen Matrizen zeigt sich beim Verketten. Ein Messpunkt des LiDAR soll in Kartenkoordinaten umgerechnet werden: vom Sensor zum Roboter, vom Roboter zur Karte. Wir multiplizieren einfach die Matrizen entlang der Kette.
-
-Transformationen entlang einer Kette werden multipliziert. Die Indizes „kürzen sich“ dabei von innen heraus:
+**Ketten werden multipliziert** — die Indizes „kürzen sich“ von innen heraus:
 
 $$
 \textbf{T}_{OC} = \textbf{T}_{OA} \cdot \textbf{T}_{AB} \cdot \textbf{T}_{BC}
@@ -200,39 +207,45 @@ $$
 \textbf{p}_O = \textbf{T}_{OA} \cdot \textbf{T}_{AB} \cdot \textbf{T}_{BC} \cdot \textbf{p}_C
 $$
 
-Für unseren Roboter heißt das zum Beispiel:
+**Am Roboter:**
 
 $$
 \textbf{p}_{map} = \textbf{T}_{map,\ base\_link} \cdot \textbf{T}_{base\_link,\ base\_scan} \cdot \textbf{p}_{base\_scan}
 $$
 
-**Die Reihenfolge ist entscheidend**, denn Matrixmultiplikation ist nicht vertauschbar. Merkregel: **Die Matrix direkt am Punkt wirkt zuerst.**
++ **Reihenfolge entscheidet** — die Matrix direkt am Punkt wirkt zuerst
 
-**Kurze Kontrolle:** $\textbf{T}_{trans}$ ist eine reine Verschiebung um 1 in $x$-Richtung, $\textbf{T}_{rot}$ eine reine Drehung um 90° gegen den Uhrzeigersinn (beide als homogene Matrizen). Wohin gelangt der Punkt $(1;\ 0)$?
+    --{{0}}--
+Die eigentliche Stärke der homogenen Matrizen zeigt sich beim Verketten. Ein Messpunkt des LiDAR soll in Kartenkoordinaten umgerechnet werden: vom Sensor zum Roboter, vom Roboter zur Karte. Wir multiplizieren einfach die Matrizen entlang der Kette. Weil Matrixmultiplikation nicht vertauschbar ist, kommt es auf die Reihenfolge an.
+
+**Kurze Kontrolle:** $\textbf{T}_{trans}$ verschiebt um 1 in $x$, $\textbf{T}_{rot}$ dreht um 90° gegen den Uhrzeigersinn. Wohin gelangt $(1;\ 0)$?
 
 [ [$(1;\ 1)$] [$(0;\ 2)$] ]
 [     (X)          ( )    ] mit $\textbf{T}_{trans} \cdot \textbf{T}_{rot}$ (erst drehen, dann verschieben)
 [     ( )          (X)    ] mit $\textbf{T}_{rot} \cdot \textbf{T}_{trans}$ (erst verschieben, dann drehen)
 ***
-$\textbf{T}_{trans}\cdot\textbf{T}_{rot}$: Die Drehung macht aus $(1;0)$ den Punkt $(0;1)$, die Verschiebung dann $(1;1)$. $\textbf{T}_{rot}\cdot\textbf{T}_{trans}$: Die Verschiebung ergibt $(2;0)$, die Drehung dann $(0;2)$. Eine Pose $\textbf{T}_{OA}$ ist übrigens genau $\textbf{T}_{trans} \cdot \textbf{T}_{rot}$: erst drehen, dann verschieben.
+$\textbf{T}_{trans}\cdot\textbf{T}_{rot}$: Drehung $(1;0) \to (0;1)$, Verschiebung $\to (1;1)$. $\textbf{T}_{rot}\cdot\textbf{T}_{trans}$: Verschiebung $\to (2;0)$, Drehung $\to (0;2)$. Eine Pose $\textbf{T}_{OA}$ ist genau $\textbf{T}_{trans} \cdot \textbf{T}_{rot}$.
 ***
 
-**Typische Fehlerquellen:**
+**Typische Fehlerquellen**
 
 + Reihenfolge der Matrizen vertauscht
-+ Richtung verwechselt: $\textbf{T}_{OA}$ statt $\textbf{T}_{AO}$ benutzt
-+ Winkel in Grad statt im Bogenmaß angegeben
++ Richtung verwechselt: $\textbf{T}_{OA}$ statt $\textbf{T}_{AO}$
++ Winkel in Grad statt im Bogenmaß
+
+    --{{1}}--
+Diese drei Fehler machen fast alle irgendwann. Der dritte ist besonders tückisch, weil das Programm ohne Fehlermeldung weiterrechnet: Ein Winkel von 90, als Bogenmaß gelesen, ist eine ganz andere Drehung.
 
 ## Beispiel: Ein Hindernis in Weltkoordinaten
 
-    --{{0}}--
-Probieren wir das an einem Beispiel aus. Ein Roboter mit dem Koordinatensystem A hat ein Hindernis bei zwei, drei erkannt. Wo liegt es in Weltkoordinaten? Verschieben Sie in der Grafik die Lage von A und beobachten Sie, wie sich die Weltkoordinaten ändern.
-
-Die Grafik zeigt ein System $A$, das im globalen System $O$ liegt. Das Hindernis liegt in $A$ bei $(2;\ 3)$. Mit den Schiebereglern verändern Sie Position und Drehung von $A$ — der grüne Vektor zeigt die Lage des Hindernisses in $O$.
+**System $A$ im globalen System $O$** — Hindernis in $A$ bei $(2;\ 3)$, grüner Vektor = Lage in $O$
 
 ??[Interaktive Darstellung: Koordinatensystem A im globalen System O mit einem Hindernis](https://www.geogebra.org/classic/htug5qmn?embed)
 
-Dieselbe Rechnung in Python. Verändern Sie den Winkel `phi_deg` und starten Sie neu:
+    --{{0}}--
+Probieren wir das an einem Beispiel aus. Ein Roboter mit dem Koordinatensystem A hat ein Hindernis bei zwei, drei erkannt. Wo liegt es in Weltkoordinaten? Verschieben Sie mit den Schiebereglern Position und Drehung von A und beobachten Sie, wie sich der grüne Vektor ändert.
+
+**Dieselbe Rechnung in Python** — `phi_deg` ändern und neu starten:
 
 ```python  main.py
 import numpy as np
@@ -257,12 +270,12 @@ print("zurück nach A: ", np.round((T_AO @ p_O)[:2], 3))
 ```
 @python
 
+    --{{1}}--
+Der Code macht genau das, was wir an der Tafel gerechnet haben: Er baut die homogene Matrix aus Winkel und Verschiebung, multipliziert sie mit dem Punkt und rechnet zur Probe wieder zurück. Beachten Sie die Umrechnung von Grad in Bogenmaß in der zweiten Zeile der Funktion.
+
 ## Drei Dimensionen
 
-    --{{0}}--
-Im Raum ändert sich am Prinzip nichts: Die homogene Matrix wird vier mal vier groß, mit einer drei mal drei Drehmatrix links oben und dem Verschiebungsvektor rechts. Schwieriger wird es bei der Beschreibung der Drehung selbst. Spätestens nach 45 Minuten sollten wir hier sein, damit für tf2 und Quality of Service genug Zeit bleibt.
-
-Im Raum wird die homogene Matrix $4 \times 4$ groß — das Prinzip bleibt gleich:
+**Im Raum:** homogene Matrix $4 \times 4$ — Prinzip unverändert
 
 $$
 \textbf{T}_{OA} =
@@ -277,19 +290,23 @@ $$
 > [!TIP]
 > **Tipp – RViz:** Achsen werden immer gleich eingefärbt — **rot = x** (vorwärts), **grün = y** (links), **blau = z** (oben). Beim TurtleBot zeigt $x$ in Fahrtrichtung.
 
+    --{{0}}--
+Im Raum ändert sich am Prinzip nichts: Die homogene Matrix wird vier mal vier groß, mit einer drei mal drei Drehmatrix links oben und dem Verschiebungsvektor rechts. Schwieriger wird die Beschreibung der Drehung selbst. Spätestens nach 45 Minuten sollten wir hier sein, damit für tf2 und Quality of Service genug Zeit bleibt.
+
 ### Euler-Winkel
 
+_Zum Nachlesen — für den TurtleBot brauchen Sie nur das Gieren._
+
++ **Gieren** (_yaw_, um $z$) · **Nicken** (_pitch_, um $y$) · **Rollen** (_roll_, um $x$)
++ $\varphi$ aus der Ebene = Gierwinkel — beim TurtleBot der einzige, der sich ändert
+
+**Nachteile**
+
++ **Reihenfolge:** viele Konventionen — gleiche Zahlen, verschiedene Orientierungen
++ **Gimbal Lock:** Nicken auf ±90° → Gier- und Rollachse fallen zusammen
+
     --{{0}}--
-Die naheliegende Idee: Wir zerlegen jede Drehung in drei Drehungen um die Achsen. Das ist anschaulich, hat aber zwei Haken, die in der Praxis zu schwer findbaren Fehlern führen. Für unseren TurtleBot ist nur einer der drei Winkel wichtig: das Gieren.
-
-_Dieser Abschnitt ist zum Nachlesen — für den TurtleBot brauchen Sie nur das Gieren._
-
-Eine Drehung im Raum lässt sich in drei Drehungen um die Koordinatenachsen zerlegen: **Gieren** (_yaw_, um $z$), **Nicken** (_pitch_, um $y$) und **Rollen** (_roll_, um $x$). Der Winkel $\varphi$ aus der Ebene ist genau der Gierwinkel — beim TurtleBot der einzige, der sich ändert.
-
-Euler-Winkel sind anschaulich, haben aber Nachteile:
-
-+ **Reihenfolge:** Es gibt viele Konventionen, in welcher Reihenfolge gedreht wird — gleiche Zahlen, verschiedene Orientierungen.
-+ **Gimbal Lock:** Steht der Nickwinkel auf ±90°, fallen Gier- und Rollachse zusammen; ein Freiheitsgrad geht verloren. Für Drohnen und Roboterarme ein echtes Problem.
+Die naheliegende Idee ist, jede Drehung in drei Drehungen um die Koordinatenachsen zu zerlegen. Das ist anschaulich, hat aber zwei Haken. Erstens gibt es viele Konventionen, in welcher Reihenfolge gedreht wird. Zweitens geht beim Gimbal Lock ein Freiheitsgrad verloren, wenn der Nickwinkel auf neunzig Grad steht. Für Drohnen und Roboterarme ist das ein echtes Problem, für unseren TurtleBot nicht.
 
 <details>
 <summary>Drehmatrizen um die drei Achsen anzeigen</summary>
@@ -305,23 +322,25 @@ Euler-Winkel sind anschaulich, haben aber Nachteile:
 
 ### Quaternionen
 
-    --{{0}}--
-ROS speichert Orientierungen deshalb nicht als Winkel, sondern als Quaternion — vier Zahlen, die eine Drehung um eine beliebige Achse beschreiben. Sie müssen Quaternionen nicht von Hand rechnen. Für unseren TurtleBot, der sich nur um die Hochachse dreht, reicht eine einzige Formel.
-
-Ein **Quaternion** beschreibt eine Drehung um eine Achse $\vec{u}$ (Einheitsvektor) mit dem Winkel $\alpha$ durch vier Zahlen:
+**Quaternion** = Drehung um eine Achse $\vec{u}$ (Einheitsvektor) mit Winkel $\alpha$, vier Zahlen:
 
 $$
 \textbf{q} = \left(q_x,\ q_y,\ q_z,\ q_w\right) = \left(u_x \sin\tfrac{\alpha}{2},\ u_y \sin\tfrac{\alpha}{2},\ u_z \sin\tfrac{\alpha}{2},\ \cos\tfrac{\alpha}{2}\right)
 $$
 
-Vorteile: kein Gimbal Lock, numerisch stabil, gut zu interpolieren. (Einzige Mehrdeutigkeit: $\textbf{q}$ und $-\textbf{q}$ beschreiben dieselbe Drehung.) Deshalb verwendet ROS in allen Nachrichten Quaternionen — **in der Reihenfolge $x, y, z, w$**.
++ kein Gimbal Lock, numerisch stabil, gut zu interpolieren
++ $\textbf{q}$ und $-\textbf{q}$ = dieselbe Drehung
++ ROS: in allen Nachrichten, Reihenfolge **$x, y, z, w$**
 
 > [!NOTE]
-> **Hinweis:** Sie müssen Quaternionen nicht von Hand rechnen. Für den TurtleBot, der sich nur um die Hochachse $z$ dreht, reicht eine Formel mit dem Gierwinkel $\psi$ (in der Ebene unser $\varphi$):
+> **Hinweis:** Für den TurtleBot, der sich nur um $z$ dreht, reicht eine Formel mit dem Gierwinkel $\psi$:
 >
 > $$\textbf{q} = \left(0,\ 0,\ \sin\tfrac{\psi}{2},\ \cos\tfrac{\psi}{2}\right)$$
 
-**Kurze Kontrolle:** Stellen Sie das Quaternion für eine Drehung um 180° auf: $q_z =$ [[1]] , $q_w =$ [[0]]
+    --{{0}}--
+ROS speichert Orientierungen deshalb nicht als Winkel, sondern als Quaternion: vier Zahlen, die eine Drehung um eine beliebige Achse beschreiben. Sie müssen Quaternionen nicht von Hand rechnen, das übernehmen Bibliotheken. Wichtig ist, dass Sie die Zahlen in einer Nachricht deuten können. Für eine Drehung um die Hochachse sind die ersten beiden Werte null, und die anderen beiden hängen nur vom halben Gierwinkel ab.
+
+**Kurze Kontrolle:** Quaternion für eine Drehung um 180°: $q_z =$ [[1]] , $q_w =$ [[0]]
 ***
 $\sin 90° = 1$, $\cos 90° = 0$ — also $(0;\ 0;\ 1;\ 0)$.
 ***
@@ -332,36 +351,29 @@ Der TurtleBot steht um 90° gedreht (nach links). Welches Quaternion meldet ROS?
 [(X)] $(0;\ 0;\ 0{,}707;\ 0{,}707)$
 [( )] $(0;\ 0;\ 90;\ 1)$
 ***
-$\sin 45° = \cos 45° \approx 0{,}707$. Das Quaternion $(0;0;1;0)$ wäre eine Drehung um 180°. In der Praxis rechnen Bibliotheken um, z.B. in Python `scipy.spatial.transform.Rotation.from_euler('z', 90, degrees=True).as_quat()` — auch dort in der Reihenfolge $x, y, z, w$.
+$\sin 45° = \cos 45° \approx 0{,}707$; $(0;0;1;0)$ wäre 180°. In Python rechnet z. B. `scipy.spatial.transform.Rotation.from_euler('z', 90, degrees=True).as_quat()` um — auch dort $x, y, z, w$.
 ***
 
 ## Transformationen in ROS 2: tf2
 
+**Zurück zur Leitfrage, Ursache 1:** Wie verwaltet ROS die Transformationen?
+
++ jede Sensornachricht nennt im Header ihre `frame_id`
++ Knoten veröffentlichen Transformationen auf `/tf` (veränderlich) und `/tf_static` (fest)
++ tf2 setzt alle Frames zu einem **Baum** zusammen — genau ein Weg zwischen zwei Frames
+
     --{{0}}--
-In einem echten Roboter gibt es Dutzende Koordinatensysteme, und einige davon bewegen sich ständig. Diese Buchführung übernimmt tf2. Jeder Knoten veröffentlicht nur die Transformationen, die er kennt. tf2 setzt daraus einen Baum zusammen und rechnet jede gewünschte Kette für Sie aus.
+In einem echten Roboter gibt es Dutzende Koordinatensysteme, und einige davon bewegen sich ständig. Diese Buchführung übernimmt tf2. Jeder Knoten veröffentlicht nur die Transformationen, die er kennt, jeweils zwischen zwei Frames. tf2 setzt daraus einen Baum zusammen und multipliziert für Sie die Matrizen entlang des Weges, genau wie bei der Verkettung von vorhin.
 
-**Zurück zur Leitfrage, Ursache 1:** Mit dem, was Sie jetzt über Transformationen wissen, schauen wir uns an, wie ROS sie verwaltet.
+**Statisch oder dynamisch?**
 
-ROS verwaltet alle Bezugssysteme mit **tf2**:
++ **statisch:** ändert sich nie (Montage des LiDAR) — einmal veröffentlicht
++ **dynamisch:** ändert sich laufend (Roboter in der Karte) — ständig neu, mit Zeitstempel
 
-+ Jede Sensornachricht nennt in ihrem Header die `frame_id`, in der ihre Daten gemessen wurden.
-+ Knoten veröffentlichen Transformationen zwischen je zwei Frames auf den Topics `/tf` (veränderlich) und `/tf_static` (fest).
-+ tf2 setzt alle Frames zu einem **Baum** zusammen. Zwischen zwei beliebigen Frames gibt es genau einen Weg — tf2 multipliziert die Matrizen entlang dieses Weges.
-
-Eine Transformation ist entweder
-
-+ **statisch:** ändert sich nie, z.B. die Montage des LiDAR am Roboter — wird einmal veröffentlicht;
-+ **dynamisch:** ändert sich laufend, z.B. die Position des Roboters in der Karte — wird ständig neu veröffentlicht, jeweils mit Zeitstempel.
+    --{{1}}--
+Der LiDAR ist fest an den Roboter geschraubt, diese Transformation ändert sich nie und wird deshalb nur einmal veröffentlicht. Die Lage des Roboters in der Karte ändert sich dagegen bei jeder Bewegung. Weil Sensordaten immer zu einem bestimmten Zeitpunkt gehören, trägt jede dynamische Transformation einen Zeitstempel. So kann tf2 für einen Scan die Lage des Roboters genau zum Messzeitpunkt liefern.
 
 ### Der tf-Baum des TurtleBot
-
-    --{{0}}--
-Hier ist der Baum unseres Roboters. Lesen Sie ihn von oben nach unten: Die Karte kennt den Startpunkt der Odometrie, die Odometrie kennt die Lage des Roboters, und der Roboter kennt die Montageorte seiner Bauteile. Gestrichelt ist, was erst in Block 5 dazukommt.
-
-So sieht der Baum unseres Roboters aus. Die Frames unterhalb von `base_footprint` stammen aus seinem Modell (URDF, siehe unten), die oberen kommen beim Fahren dazu. Zwei Frames sind neu:
-
-+ `odom` — der Punkt, an dem der Roboter losgefahren ist. Die Odometrie zählt die Radumdrehungen und schätzt daraus die Lage des Roboters relativ zu diesem Punkt; mit der Zeit driftet diese Schätzung.
-+ `base_footprint` — der Punkt auf dem Boden genau unter der Mitte der Radachse; um ihn dreht sich der Roboter. `base_link` liegt 1 cm darüber im Roboter.
 
 ```mermaid @mermaid
 graph TD
@@ -375,7 +387,11 @@ graph TD
     base_link -- "dynamisch, Raddrehung" --> wheel_right_link(["wheel_right_link"])
 ```
 
-Die Werte aus dem Modell des TurtleBot 3 Burger:
++ `odom`: Startpunkt der Fahrt; Odometrie schätzt die Lage aus Radumdrehungen — driftet
++ `base_footprint`: Boden unter der Radachse, Drehpunkt; `base_link` 1 cm darüber
+
+    --{{0}}--
+Hier ist der Baum unseres Roboters. Lesen Sie ihn von oben nach unten: Die Karte kennt den Startpunkt der Odometrie, die Odometrie kennt die Lage des Roboters, und der Roboter kennt die Montageorte seiner Bauteile. Die Frames unterhalb von base_footprint stammen aus dem Modell des Roboters, die oberen kommen beim Fahren dazu. Gestrichelt ist, was erst in Block 5 dazukommt. Die Odometrie zählt die Radumdrehungen. Mit der Zeit summieren sich kleine Fehler, die Schätzung driftet.
 
 <!-- data-type="none" -->
 | Eltern-Frame       | Kind-Frame   | Verschiebung $(x;\ y;\ z)$ in m |
@@ -383,20 +399,19 @@ Die Werte aus dem Modell des TurtleBot 3 Burger:
 | `base_footprint`   | `base_link`  | $(0;\ 0;\ 0{,}010)$             |
 | `base_link`        | `base_scan`  | $(-0{,}032;\ 0;\ 0{,}172)$      |
 
-**Kurze Kontrolle:** Wie liegt der LiDAR (`base_scan`) relativ zum Boden unter dem Roboter (`base_footprint`)? Beide Transformationen enthalten keine Drehung.
+*Werte aus dem Modell des TurtleBot 3 Burger*
+
+**Kurze Kontrolle:** Wo liegt der LiDAR (`base_scan`) relativ zu `base_footprint`? Beide Transformationen ohne Drehung.
 
 $x =$ [[-0.032]] m, $z =$ [[0.182]] m
 [[?]] Ohne Drehung addieren sich die Verschiebungen entlang der Kette.
 ***
-$\textbf{T}_{base\_footprint,\ base\_scan} = \textbf{T}_{base\_footprint,\ base\_link} \cdot \textbf{T}_{base\_link,\ base\_scan}$ — ohne Drehungen ergibt das $(0 - 0{,}032;\ 0;\ 0{,}010 + 0{,}172) = (-0{,}032;\ 0;\ 0{,}182)$. Genau das zeigt `tf2_echo` auf der nächsten Folie. Und das Hindernis von vorhin, 0,5 m vor dem LiDAR, liegt damit $0{,}5 - 0{,}032 = 0{,}468$ m vor der Robotermitte.
+$\textbf{T}_{base\_footprint,\ base\_scan} = \textbf{T}_{base\_footprint,\ base\_link} \cdot \textbf{T}_{base\_link,\ base\_scan}$ — ohne Drehungen $(-0{,}032;\ 0;\ 0{,}182)$. Genau das zeigt gleich `tf2_echo`. Das Hindernis 0,5 m vor dem LiDAR liegt also 0,468 m vor der Robotermitte.
 ***
 
 ### Transformationen abfragen und veröffentlichen
 
-    --{{0}}--
-Zwei Werkzeuge brauchen Sie ständig: tf2_echo fragt eine Transformation ab und zeigt sie als Verschiebung, Quaternion, Winkel und Matrix. Und mit dem static_transform_publisher tragen Sie selbst eine feste Transformation ein — etwa für eine Kamera, die im Modell des Roboters fehlt.
-
-**Abfragen** mit `tf2_echo <Eltern-Frame> <Kind-Frame>` — hier am Modell des TurtleBot:
+**Abfragen:** `tf2_echo <Eltern-Frame> <Kind-Frame>`
 
 ```text
 > ros2 run tf2_ros tf2_echo base_footprint base_scan
@@ -411,9 +426,12 @@ At time 0.0
   ...
 ```
 
-Die Ausgabe zeigt alles aus dieser Vorlesung: Verschiebung, Quaternion, Euler-Winkel (RPY) und die homogene Matrix. Mit `ros2 run tf2_tools view_frames` erzeugen Sie zusätzlich eine PDF-Grafik des gesamten Baums.
++ ganzer Baum als PDF: `ros2 run tf2_tools view_frames`
 
-**Veröffentlichen** einer festen Transformation mit `static_transform_publisher`. Angenommen, an Ihrem TurtleBot ist eine Kamera 10 cm vor und 15 cm über `base_link` montiert, um 90° nach links gedreht:
+    --{{0}}--
+Zwei Werkzeuge brauchen Sie ständig. Das erste, tf2_echo, fragt eine Transformation ab. Die Ausgabe zeigt alles aus dieser Vorlesung: die Verschiebung, das Quaternion, die Euler-Winkel und die homogene Matrix. Wer den ganzen Baum sehen will, erzeugt mit view_frames eine Grafik.
+
+**Veröffentlichen:** Kamera 10 cm vor, 15 cm über `base_link`, um 90° nach links gedreht
 
 ```text
 > ros2 run tf2_ros static_transform_publisher --x 0.1 --z 0.15 --yaw 1.5708 --frame-id base_link --child-frame-id camera_link
@@ -423,24 +441,26 @@ rotation: ('0.000000', '0.000000', '0.707108', '0.707105')
 from 'base_link' to 'camera_link'
 ```
 
-Erkennen Sie das Quaternion für 90° wieder? Winkel werden im **Bogenmaß** angegeben ($90° \approx 1{,}5708$), nicht angegebene Werte (`--y`, `--roll`, `--pitch`) sind 0.
++ Winkel im **Bogenmaß** ($90° \approx 1{,}5708$); fehlende Werte sind 0
++ **Vorhersage:** Winkel auf 180° — was zeigt `tf2_echo`? (Lösung: Aufgabe der Woche)
 
-**Live-Demo:** Beide Befehle führe ich jetzt im Terminal vor — ändern Sie in Gedanken den Winkel auf 180°: Was zeigt `tf2_echo`? (Antwort in der Aufgabe der Woche.)
+    --{{1}}--
+Mit dem zweiten Werkzeug, dem static_transform_publisher, tragen Sie selbst eine feste Transformation ein, etwa für eine Kamera, die im Modell des Roboters fehlt. Erkennen Sie das Quaternion für neunzig Grad wieder? Beide Befehle führe ich jetzt im Terminal vor. Ändern Sie in Gedanken den Winkel auf hundertachtzig Grad und überlegen Sie, was tf2_echo dann zeigt.
 
-**RViz in drei Schritten** — so stellen Sie im Praktikum einen Scan dar:
+### RViz in drei Schritten
 
-1. `rviz2` starten und links oben unter _Global Options_ den **Fixed Frame** wählen, z.B. `base_footprint` — in diesem Frame wird alles gezeichnet.
-2. _Add → By topic → /scan → LaserScan_ — eine Anzeige für das Topic hinzufügen.
-3. Bleibt die Anzeige leer: Statusmeldung im _Displays_-Panel lesen (fehlende Transformation?) und unter _Topic → Reliability Policy_ die QoS prüfen.
+1. `rviz2` starten, unter _Global Options_ den **Fixed Frame** wählen, z. B. `base_footprint`
+2. _Add → By topic → /scan → LaserScan_
+3. leer? Statusmeldung im _Displays_-Panel lesen (Transformation?) und _Topic → Reliability Policy_ prüfen (QoS)
 
 ![RViz mit Laserscan und eingeblendeten Koordinatenachsen der Frames](./images/LaserScannerWithCoordinateTransformation.png "Sobald tf2 die Lage des Sensors kennt, zeigt RViz die Messpunkte am richtigen Ort.")<!-- style="width:70%;" -->
 
+    --{{0}}--
+So stellen Sie im Praktikum einen Scan dar. Der Fixed Frame ist das System, in dem RViz alles zeichnet. Damit ein Scan erscheint, muss tf2 eine Kette vom Frame des Scans zu diesem Fixed Frame kennen. Bleibt die Anzeige leer, prüfen Sie genau die beiden Ursachen aus der Leitfrage.
+
 ### URDF: der Roboter als Modell
 
-    --{{0}}--
-Woher kommen die statischen Transformationen des TurtleBot? Aus einem Modell des Roboters. Sie müssen sie also nicht von Hand eintragen.
-
-Die festen Transformationen eines Roboters stehen in seinem Modell im **Unified Robot Description Format** (URDF, XML): **Links** sind Bauteile, **Joints** die Verbindungen mit ihrer Pose. Der Knoten `robot_state_publisher` liest das Modell und veröffentlicht alle Transformationen — beim TurtleBot startet ihn `robot.launch.py` automatisch (VL 02).
+**URDF** (_Unified Robot Description Format_, XML): **Links** = Bauteile, **Joints** = Verbindungen mit Pose
 
 ```xml  turtlebot3_burger.urdf (Ausschnitt)
 <joint name="scan_joint" type="fixed">
@@ -450,28 +470,31 @@ Die festen Transformationen eines Roboters stehen in seinem Modell im **Unified 
 </joint>
 ```
 
-## Quality of Service
++ `robot_state_publisher` liest das Modell und veröffentlicht alle festen Transformationen
++ beim TurtleBot startet ihn `robot.launch.py` (VL 02)
 
     --{{0}}--
-Jetzt zur zweiten Ursache für ein leeres RViz. Nicht jede Nachricht ist gleich wichtig. Ein LiDAR-Scan ist nach einer Zehntelsekunde veraltet — geht einer verloren, nimmt man den nächsten. Ein Fahrbefehl oder eine Karte dagegen sollte ankommen. ROS 2 lässt Sie das pro Verbindung einstellen: mit Quality of Service.
+Woher kommen die statischen Transformationen des TurtleBot? Aus einem Modell des Roboters, Sie müssen sie also nicht von Hand eintragen. Im Ausschnitt erkennen Sie die Werte aus dem tf-Baum wieder: Der LiDAR sitzt 3,2 Zentimeter hinter und 17,2 Zentimeter über base_link. Den Knoten, der das Modell liest, startet die Launch-Datei aus der Einstiegsfrage von VL 02.
 
-In VL 01 haben Sie gesehen: Bei `create_publisher(..., 10)` gibt die `10` die Puffergröße an. Sie ist Teil der **Quality of Service** (QoS) — Regeln, wie eine Verbindung mit Verlusten, Verspätungen und spät gestarteten Empfängern umgeht. Die drei wichtigsten Einstellungen:
+## Quality of Service
+
+**Zurück zur Leitfrage, Ursache 2:** Quality of Service (QoS) = Regeln für Verluste, Verspätungen, spät gestartete Empfänger
 
 <!-- data-type="none" -->
-| Einstellung     | Werte                              | Bedeutung                                                                              |
-| :-------------- | :--------------------------------- | :------------------------------------------------------------------------------------- |
-| **Reliability** | `reliable` / `best_effort`         | Verlorene Nachrichten erneut senden — oder lieber gleich die nächste schicken?         |
-| **Durability**  | `volatile` / `transient_local`     | Bekommt ein später gestarteter Empfänger die letzte Nachricht noch nachgeliefert?      |
-| **History / Depth** | `keep_last` mit Tiefe $n$ / `keep_all` | Wie viele Nachrichten werden zwischengespeichert? — die `10` aus VL 01         |
+| Einstellung         | Werte                                  | Bedeutung                                         |
+| :------------------ | :------------------------------------- | :------------------------------------------------ |
+| **Reliability**     | `reliable` / `best_effort`             | Verlorenes erneut senden — oder gleich das Nächste? |
+| **Durability**      | `volatile` / `transient_local`         | Bekommt ein Spätstarter die letzte Nachricht?     |
+| **History / Depth** | `keep_last` mit Tiefe $n$ / `keep_all` | Wie viele Nachrichten puffern? — die `10` aus VL 01 |
 
-Für typische Fälle gibt es fertige Profile, z.B. `sensor_data` (best effort, kleine Tiefe) für schnelle Sensordaten und den Standard (reliable, volatile, Tiefe 10) für alles andere.
++ Profile: `sensor_data` (best effort, kleine Tiefe) · Standard (reliable, volatile, Tiefe 10)
+
+    --{{0}}--
+Jetzt zur zweiten Ursache für ein leeres RViz. Nicht jede Nachricht ist gleich wichtig. Ein LiDAR-Scan ist nach einer Zehntelsekunde veraltet, geht einer verloren, nimmt man den nächsten. Ein Fahrbefehl oder eine Karte dagegen sollte ankommen. ROS 2 lässt Sie das pro Verbindung einstellen. Die Zahl zehn, die Sie in VL 01 bei create_publisher gesehen haben, ist bereits eine dieser Einstellungen: die Tiefe des Puffers. Für typische Fälle gibt es fertige Profile.
 
 ### Zuverlässigkeit: reliable oder best effort
 
-    --{{0}}--
-Was passiert, wenn Sender und Empfänger Unterschiedliches erwarten? Der Empfänger stellt Mindestanforderungen. Verlangt er reliable, der Sender bietet aber nur best effort, kommt keine Verbindung zustande — und zwar ohne Absturz, nur mit einer leicht zu übersehenden Warnung.
-
-Der Empfänger stellt **Mindestanforderungen**, der Sender macht ein **Angebot**. Eine Verbindung entsteht nur, wenn das Angebot reicht:
+**Empfänger verlangt, Sender bietet** — Verbindung nur, wenn das Angebot reicht:
 
 <!-- data-type="none" -->
 | Sender bietet    | Empfänger verlangt | Verbindung? |
@@ -481,7 +504,10 @@ Der Empfänger stellt **Mindestanforderungen**, der Sender macht ein **Angebot**
 | `best_effort`    | `best_effort`      | ja          |
 | `best_effort`    | `reliable`         | **nein**    |
 
-Der letzte Fall ist unsere zweite Ursache für ein leeres RViz: Viele Sensortreiber senden mit dem Profil `sensor_data` (best effort). Verlangt der Empfänger `reliable`, kommt nichts an. So sieht das aus:
+    --{{0}}--
+Was passiert, wenn Sender und Empfänger Unterschiedliches erwarten? Der Empfänger stellt Mindestanforderungen, der Sender macht ein Angebot. Der letzte Fall der Tabelle ist unsere zweite Ursache für ein leeres RViz: Viele Sensortreiber senden mit dem Profil sensor_data, also best effort. Verlangt der Empfänger reliable, kommt keine Verbindung zustande, und zwar ohne Absturz.
+
+**So sieht das aus:**
 
 ```text
 # Terminal 1: Sender mit best effort
@@ -494,7 +520,11 @@ Der letzte Fall ist unsere zweite Ursache für ein leeres RViz: Viele Sensortrei
 [WARN] [...]: New publisher discovered on topic '/chatter', offering incompatible QoS. No messages will be received from it. Last incompatible policy: RELIABILITY
 ```
 
-Kein Absturz, nur diese eine Warnung. In RViz lösen Sie das Problem, indem Sie in der Anzeige des Scans die _Reliability Policy_ auf `Best Effort` stellen.
++ kein Absturz, nur diese eine Warnung
++ in RViz: _Reliability Policy_ auf `Best Effort`
+
+    --{{1}}--
+Die Warnung erscheint genau einmal, wenn sich die beiden finden. Wer sie übersieht, sucht lange. In RViz lösen Sie das Problem, indem Sie in der Anzeige des Scans die Reliability Policy auf Best Effort stellen: Der Empfänger verlangt dann nicht mehr, als der Sender bietet.
 
 **Kurze Kontrolle:** Welche Kombinationen funktionieren?
 
@@ -508,39 +538,36 @@ Faustregel: Wer weniger verlangt, als angeboten wird, bekommt Daten. Ein Empfän
 
 ### Dauerhaftigkeit: Wer zu spät kommt …
 
-    --{{0}}--
-Die zweite wichtige Einstellung betrifft Knoten, die später starten. Normalerweise bekommen sie nur Nachrichten, die nach ihrem Start gesendet werden. Für Daten, die nur einmal veröffentlicht werden, ist das fatal. Hier schließt sich der Kreis zu tf2.
-
-Ein Empfänger, der **nach** dem Senden startet, bekommt mit `volatile` nichts — mit `transient_local` liefert der Sender die letzten Nachrichten nach. Ein Test: Der Sender schickt **eine** Nachricht und läuft danach noch 8 Sekunden weiter (`--keep-alive`), wartet aber nicht auf Empfänger (`-w 0`). Der Empfänger startet 3 Sekunden später:
+**`volatile`:** Spätstarter bekommt nichts · **`transient_local`:** Sender liefert die letzten Nachrichten nach
 
 ```text
-# Sender mit transient_local
+# Sender mit transient_local: eine Nachricht, danach noch 8 s aktiv
 > ros2 topic pub -w 0 --times 1 --keep-alive 8 --qos-durability transient_local /ampel std_msgs/msg/String "{data: rot}"
 
 # Empfänger, 3 s später gestartet
-> ros2 topic echo --once --qos-durability transient_local /ampel
+> ros2 topic echo --once --qos-durability transient_local --qos-reliability reliable /ampel
 data: rot
 ---
 ```
 
-Wiederholen Sie den Versuch mit `volatile` bei Sender und Empfänger: Der Empfänger zeigt nichts — die Nachricht war schon weg.
++ Nachlieferung nur an Empfänger mit `reliable` (sonst wählt `echo` selbst `best_effort`)
++ mit `volatile` auf beiden Seiten: Der Empfänger zeigt nichts
++ Empfänger `transient_local` + Sender `volatile` → keine Verbindung (`DURABILITY`)
 
-Auch hier gilt die Regel „nicht mehr verlangen, als angeboten wird“: Ein Empfänger mit `transient_local` verbindet sich **nicht** mit einem Sender, der nur `volatile` bietet (Warnung: `Last incompatible policy: DURABILITY`).
+    --{{0}}--
+Die zweite wichtige Einstellung betrifft Knoten, die später starten. Normalerweise bekommen sie nur Nachrichten, die nach ihrem Start gesendet werden. Im Versuch schickt der Sender genau eine Nachricht und bleibt danach noch acht Sekunden aktiv, ohne auf Empfänger zu warten. Der Empfänger startet drei Sekunden später und bekommt die Nachricht trotzdem, allerdings nur, wenn er reliable verlangt. Nachgeliefert wird nur an zuverlässige Empfänger. Ohne diese Angabe wählt ros2 topic echo seit Jazzy selbst eine passende Einstellung, hier best effort, und die Nachricht bleibt aus. Auch hier gilt die Regel von eben: nicht mehr verlangen, als angeboten wird. Hier schließt sich der Kreis zu tf2.
 
-**Kurze Kontrolle:** Feste Transformationen werden nur **einmal** auf `/tf_static` veröffentlicht. Sie starten RViz aber erst eine Minute später. Welche Durability braucht `/tf_static` deshalb?
+**Kurze Kontrolle:** `/tf_static` wird nur **einmal** veröffentlicht, RViz startet eine Minute später. Welche Durability braucht `/tf_static`?
 
 [( )] `volatile`
 [(X)] `transient_local`
 ***
-Mit `volatile` hätte RViz die feste Transformation des LiDAR verpasst — und Sie stünden wieder vor dem leeren Bildschirm. Darum verwendet `/tf_static` `transient_local`; genauso Karten, die nur einmal veröffentlicht werden.
+Mit `volatile` hätte RViz die feste Transformation des LiDAR verpasst — wieder ein leerer Bildschirm. Darum verwendet `/tf_static` `transient_local`; genauso Karten, die nur einmal veröffentlicht werden.
 ***
 
 ### QoS untersuchen
 
-    --{{0}}--
-Zum Schluss das Werkzeug, mit dem Sie im Labor jedes QoS-Problem eingrenzen: ros2 topic info mit der Option minus v. Es zeigt für jeden Sender und Empfänger, welche Einstellungen er tatsächlich verwendet.
-
-Welche Einstellungen eine Verbindung tatsächlich nutzt, zeigt `ros2 topic info --verbose`. Hier am Beispiel `/tf_static`, veröffentlicht vom `robot_state_publisher`:
+**Tatsächliche Einstellungen:** `ros2 topic info --verbose` (kurz `-v`)
 
 ```text
 > ros2 topic info -v /tf_static
@@ -557,9 +584,12 @@ QoS profile:
   ...
 ```
 
-`History (Depth): UNKNOWN` ist kein Fehler: Die Puffergröße ist eine lokale Einstellung jedes Knotens und wird den anderen nicht mitgeteilt.
++ `History (Depth): UNKNOWN` ist kein Fehler — die Tiefe ist lokal und wird nicht mitgeteilt
 
-Im eigenen Code wählen Sie die QoS beim Anlegen von Publisher oder Subscriber — statt der `10` aus VL 01 ein Profil, z.B. für Sensordaten:
+    --{{0}}--
+Mit diesem Werkzeug grenzen Sie im Labor jedes QoS-Problem ein. Es zeigt für jeden Sender und Empfänger, welche Einstellungen er tatsächlich verwendet, hier am Beispiel der festen Transformationen, veröffentlicht vom robot_state_publisher. Die Puffertiefe ist eine lokale Einstellung jedes Knotens, deshalb steht dort unbekannt.
+
+**Im eigenen Code** — Profil statt der `10` aus VL 01:
 
 ```python
 # Python
@@ -573,25 +603,37 @@ subscription_ = this->create_subscription<sensor_msgs::msg::LaserScan>(
   "scan", rclcpp::SensorDataQoS(), std::bind(&LaneDetector::callback, this, _1));
 ```
 
+    --{{1}}--
+Im eigenen Code wählen Sie die QoS beim Anlegen von Publisher oder Subscriber. Statt der Zahl zehn übergeben Sie ein Profil, für Sensordaten zum Beispiel das sensor_data-Profil. Ihre Spurerkennung empfängt dann auch von einem Kameratreiber, der nur best effort anbietet.
+
 ## Zusammenfassung und Ausblick
 
-    --{{0}}--
-Zurück zur Leitfrage: RViz zeigt den Scan nicht, wenn die Transformation zum Sensor fehlt oder wenn die QoS-Einstellungen nicht zusammenpassen. Beides können Sie jetzt prüfen — mit tf2_echo und mit ros2 topic info minus v.
+**Zurück zur Leitfrage — RViz bleibt leer, wenn …**
 
-**Zurück zur Leitfrage:** RViz bleibt leer, wenn
-
-1. tf2 den Frame des Sensors nicht kennt → mit `tf2_echo` bzw. `view_frames` prüfen, fehlende feste Transformationen mit `static_transform_publisher` ergänzen;
-2. die QoS nicht verträglich ist → mit `ros2 topic info -v` prüfen, in RViz `Best Effort` wählen.
+1. tf2 den Frame des Sensors nicht kennt → `tf2_echo`, `view_frames`; fehlende feste Transformation mit `static_transform_publisher`
+2. die QoS nicht verträglich ist → `ros2 topic info -v`; in RViz `Best Effort`
 
 **Das Wichtigste**
 
-+ Koordinaten gelten nur zusammen mit ihrem Bezugssystem (`frame_id`).
-+ $\textbf{T}_{OA}$ rechnet von $A$ nach $O$; Verkettung durch Multiplikation, die Reihenfolge zählt.
-+ ROS beschreibt Orientierungen als Quaternion $(x, y, z, w)$; für Drehungen um $z$: $(0;\ 0;\ \sin\frac{\psi}{2};\ \cos\frac{\psi}{2})$.
-+ tf2 verwaltet den Baum aller Frames; statische Transformationen kommen beim TurtleBot aus der URDF.
-+ QoS: Der Empfänger darf nicht mehr verlangen, als der Sender bietet; `transient_local` versorgt spät gestartete Knoten.
++ Koordinaten nur mit Bezugssystem (`frame_id`)
++ $\textbf{T}_{OA}$ rechnet von $A$ nach $O$; Verkettung = Multiplikation, Reihenfolge zählt
++ Orientierung als Quaternion $(x, y, z, w)$; um $z$: $(0;\ 0;\ \sin\frac{\psi}{2};\ \cos\frac{\psi}{2})$
++ tf2 verwaltet den Baum; feste Transformationen aus der URDF
++ QoS: nicht mehr verlangen als angeboten; `transient_local` für Spätstarter
 
-**Abschluss-Check**
+    --{{0}}--
+Zurück zur Leitfrage: RViz zeigt den Scan nicht, wenn die Transformation zum Sensor fehlt oder wenn die QoS-Einstellungen nicht zusammenpassen. Beides können Sie jetzt prüfen, mit tf2_echo und mit ros2 topic info minus v.
+
+**Ausblick**
+
++ **Ü 2** (diese Woche): erster Workspace, Parameter, `ros2 bag`
++ **P 1:** TurtleBot verbinden, `view_frames`, Scan in RViz, Fahrt aufzeichnen
++ **Block 2:** Sensoren selbst — und die Koordinatensysteme einer Kamera
+
+    --{{1}}--
+Im Praktikum P 1 wenden Sie das an: TurtleBot verbinden, den tf-Baum ansehen, den Scan in RViz darstellen und eine Fahrt aufzeichnen. In Block 2 geht es um die Sensoren selbst und um die Koordinatensysteme einer Kamera.
+
+### Abschluss-Check
 
 Sie kennen $\textbf{T}_{map,\ base\_link}$ und $\textbf{T}_{base\_link,\ base\_scan}$. Wie berechnen Sie einen LiDAR-Punkt in Kartenkoordinaten?
 
@@ -608,7 +650,7 @@ Ihre Spurerkennung abonniert das Kamerabild, erhält aber nichts. `ros2 topic in
 [(X)] In der Spurerkennung `qos_profile_sensor_data` (best effort) verwenden.
 [( )] Die `ROS_DOMAIN_ID` ändern.
 ***
-Den Treiber zu ändern ist oft nicht möglich und für Bilder auch nicht sinnvoll. Der Empfänger passt sich an. Die Domain-ID ist es nicht — sonst würde `ros2 topic info` den Publisher gar nicht zeigen.
+Den Treiber zu ändern ist oft nicht möglich und für Bilder nicht sinnvoll — der Empfänger passt sich an. Die Domain-ID ist es nicht, sonst würde `ros2 topic info` den Publisher gar nicht zeigen.
 ***
 
 Mit welchem Befehl prüfen Sie im Labor, ob tf2 die Lage des LiDAR kennt?
@@ -617,44 +659,48 @@ Mit welchem Befehl prüfen Sie im Labor, ob tf2 die Lage des LiDAR kennt?
 [( )] `ros2 topic echo /scan`
 [( )] `ros2 topic info -v /scan`
 ***
-`/scan` zu sehen beweist nur, dass Daten fließen. Ob tf2 die Transformation zum Frame des Sensors kennt, zeigt `tf2_echo` (oder `view_frames`). `topic info -v` hilft bei der zweiten Ursache, der QoS.
+`/scan` zu sehen beweist nur, dass Daten fließen. Ob tf2 die Transformation kennt, zeigt `tf2_echo` (oder `view_frames`); `topic info -v` hilft bei der QoS.
 ***
 
-**Ausblick:** Im Praktikum **P 1** wenden Sie das an: TurtleBot verbinden, den tf-Baum mit `view_frames` ansehen, den Scan in RViz darstellen und eine Fahrt aufzeichnen. In **Block 2** geht es um die Sensoren selbst — und um die Koordinatensysteme einer Kamera.
+    --{{0}}--
+Drei Fragen zum Abschluss: eine zur Verkettung und je eine zu den beiden Ursachen aus der Leitfrage.
 
 ## Aufgabe der Woche
 
-    --{{0}}--
-Die Aufgaben dieser Woche bereiten Sie direkt auf das erste Praktikum vor. Wenn Sie die Aufgaben 3 bis 5 lösen, wissen Sie im Labor sofort, wo Sie suchen müssen, falls RViz leer bleibt.
-
 **Optional (Rechnen üben):**
 
-1. **Zwei Roboter:** Ein zweiter Roboter $B$ steht bei $(5;\ 4)$ in $O$ und ist um 180° gedreht. Wo liegt das Hindernis aus seiner Sicht? Ergänzen Sie den Code um `T_OB` und berechnen Sie $\textbf{p}_B = \textbf{T}_{OB}^{-1} \cdot \textbf{p}_O$.
-   
+1. **Zwei Roboter:** Roboter $B$ steht bei $(5;\ 4)$ in $O$, um 180° gedreht. Wo liegt das Hindernis aus seiner Sicht? Ergänzen Sie den Code um `T_OB` und berechnen Sie $\textbf{p}_B = \textbf{T}_{OB}^{-1} \cdot \textbf{p}_O$.
+
    <details>
    <summary>Lösung anzeigen</summary>
-   
+
    ```python
    T_OB = T(180, [5, 4])
    p_B = np.linalg.inv(T_OB) @ p_O
    print(np.round(p_B[:2], 3))   # bei phi_deg = 90: [6.  1.5]
    ```
-   
+
    Bei $\varphi_A = 90°$ liegt das Hindernis in $O$ bei $(-1;\ 2{,}5)$. Vom Roboter $B$ aus gesehen sind das 6 m voraus und 1,5 m nach links — $B$ schaut ja in die Gegenrichtung.
-   
+
    </details>
-2. Rechnen Sie mit dem Python-Beispiel nach: Ein LiDAR-Punkt liegt bei $(0{,}5;\ 0;\ 0)$ in `base_scan`. Wo liegt er in `base_footprint`? (Werte aus der Tabelle zum tf-Baum.)
+2. Ein LiDAR-Punkt liegt bei $(0{,}5;\ 0;\ 0)$ in `base_scan`. Wo liegt er in `base_footprint`? (Werte aus der Tabelle zum tf-Baum.)
+
 **Pflicht als Vorbereitung auf P 1:**
 
-3. Starten Sie in drei Terminals: `static_transform_publisher` für `base_link` → `camera_link` wie oben, `tf2_echo base_link camera_link` und `view_frames`. Ändern Sie den Winkel auf 180° und vergleichen Sie Quaternion und Matrix. `view_frames` legt eine PDF-Datei im aktuellen Ordner ab; unter WSL2 öffnen Sie den Ordner mit `explorer.exe .` im Windows-Explorer.
-4. **Den TurtleBot ohne Roboter:** Installieren Sie das Modell (`sudo apt install ros-jazzy-turtlebot3-description`) und starten Sie es ohne Hardware:
+3. In drei Terminals: `static_transform_publisher` für `base_link` → `camera_link` wie oben, `tf2_echo base_link camera_link`, `view_frames`. Winkel auf 180° ändern, Quaternion und Matrix vergleichen.
+   + `view_frames` legt eine PDF im aktuellen Ordner ab; unter WSL2 öffnet `explorer.exe .` den Ordner
+4. **Den TurtleBot ohne Roboter:** Modell installieren (`sudo apt install ros-jazzy-turtlebot3-description`) und ohne Hardware starten:
 
    ```bash
    ros2 run robot_state_publisher robot_state_publisher --ros-args -p robot_description:="$(sed 's/${namespace}//g' /opt/ros/jazzy/share/turtlebot3_description/urdf/turtlebot3_burger.urdf)"
    ```
 
-   Prüfen Sie dann `tf2_echo base_footprint base_scan` und `ros2 topic info -v /tf_static`. (Der `sed`-Befehl entfernt einen Platzhalter, den sonst die Launch-Datei des TurtleBot ersetzt.) Starten Sie anschließend `rviz2`: Fixed Frame `base_footprint`, dann _Add → TF_ und _Add → RobotModel_ (Topic `/robot_description`) — Sie sehen den TurtleBot mit seinen Koordinatensystemen.
-5. Starten Sie einen Publisher mit `--qos-reliability best_effort` und einen Empfänger mit `--qos-reliability reliable`. Lesen Sie die Warnung und beheben Sie das Problem auf der Empfängerseite.
+   + prüfen: `tf2_echo base_footprint base_scan` und `ros2 topic info -v /tf_static`
+   + `rviz2`: Fixed Frame `base_footprint`, _Add → TF_ und _Add → RobotModel_ (Topic `/robot_description`)
+5. Publisher mit `--qos-reliability best_effort`, Empfänger mit `--qos-reliability reliable`: Warnung lesen, auf der Empfängerseite beheben.
+
+    --{{0}}--
+Die Aufgaben dieser Woche bereiten Sie direkt auf das erste Praktikum vor. Wenn Sie die Aufgaben drei bis fünf lösen, wissen Sie im Labor sofort, wo Sie suchen müssen, falls RViz leer bleibt. In Aufgabe vier entfernt der sed-Befehl einen Platzhalter aus dem Modell, den sonst die Launch-Datei des TurtleBot ersetzt. Danach sehen Sie den TurtleBot mit all seinen Koordinatensystemen, ganz ohne Hardware.
 
 <details>
 <summary>Lösungshinweise anzeigen</summary>
