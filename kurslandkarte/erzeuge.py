@@ -67,7 +67,9 @@ KURS = {
 # Zwei Slots: Termin 1 jede Woche mittwochs 11:30–13:00 Uhr, Termin 2 in geraden Wochen donnerstags 16:15–17:45 Uhr.
 # Welcher Termintyp in welchem Slot liegt, legt der Zeitplan je Woche fest (z. B. KW 50: VL 06 am Donnerstag,
 # KW 3: P 3 am Mittwoch). Mehrtägige Praktika tragen alle Tage (P 1: Doppeltermin Mi + Do, Dozent 2026-10-26). Kein Termin: KW 47 (Buß- und Bettag),
-# KW 52/53 (Weihnachten). Nur die Woche steht fest: SLAM (KW 18, Do 6.5.2027 ist Christi Himmelfahrt), Block 6.
+# KW 52/53 (Weihnachten).
+# SoSe 2027: Zeitplan steht noch nicht fest – nur die Kalenderwoche aus dem Entwurf, Tage folgen
+# (Entwurf: P 5 KW 15–16, P 6 KW 19–20; SLAM fiele auf Do 6.5.2027 = Christi Himmelfahrt).
 T = [
     ("00",  "VL",    "2026-10-21", "Einführung",          "00_Einfuehrung/00_Einfuehrung.md",                     "ausgearbeitet", 1),
     ("03",  "VL",    "2026-10-28", "ROS 2 Grundlagen",    "01_ROS_Grundlagen/01_ROS_Grundlagen.md",             "ausgearbeitet", 1),
@@ -89,16 +91,16 @@ T = [
     ("ue5", "Ü 5",   "2027-02-03", "YOLO vs. klassisch",  None, "geplant", 3),
     ("ue6", "Ü 6",   "2027-02-04", "Objekte im LiDAR",    None, "geplant", 3),
     ("p4",  "P 4",   "2027-02-10", "Hinderniserkennung",  None, "geplant", 3),
-    ("08",  "VL",    "2027-04-07", "Sensorfusion I",      "10_Sensorfusion_I/10_Sensorfusion_I.md",                  "Bestand", 4),
-    ("09",  "VL",    "2027-04-08", "Sensorfusion II",     "11_Sensorfusion_II/11_Sensorfusion_II.md",             "Bestand", 4),
-    ("ue7", "Ü 7",   "2027-04-14", "2D-EKF",              None, "geplant", 4),
-    ("p5",  "P 5",   ["2027-04-15", "2027-04-21", "2027-04-22"], "Streckenverlauf", None, "geplant", 4),
-    ("10",  "VL",    "2027-04-28", "Kinematik",           "12_Kinematik_Regelung/12_Kinematik_Regelung.md",       "Bestand", 5),
-    ("11",  "VL",    "2027-04-29", "Navigation",          "13_Navigation/13_Navigation.md",                       "Bestand", 5),
-    ("ue8", "Ü 8",   "2027-05-05", "Reglervergleich",     None, "geplant", 5),
+    ("08",  "VL",    "2027-W14",   "Sensorfusion I",      "10_Sensorfusion_I/10_Sensorfusion_I.md",                  "Bestand", 4),
+    ("09",  "VL",    "2027-W14",   "Sensorfusion II",     "11_Sensorfusion_II/11_Sensorfusion_II.md",             "Bestand", 4),
+    ("ue7", "Ü 7",   "2027-W15",   "2D-EKF",              None, "geplant", 4),
+    ("p5",  "P 5",   "2027-W15", "Streckenverlauf", None, "geplant", 4),
+    ("10",  "VL",    "2027-W17",   "Kinematik",           "12_Kinematik_Regelung/12_Kinematik_Regelung.md",       "Bestand", 5),
+    ("11",  "VL",    "2027-W17",   "Navigation",          "13_Navigation/13_Navigation.md",                       "Bestand", 5),
+    ("ue8", "Ü 8",   "2027-W18",   "Reglervergleich",     None, "geplant", 5),
     ("slm", "VL",    "2027-W18",   "SLAM",                None, "geplant", 5),
-    ("ue9", "Ü 9",   "2027-05-12", "Kartenerstellung",    None, "geplant", 5),
-    ("p6",  "P 6",   ["2027-05-13", "2027-05-19", "2027-05-20"], "Mapping + Bahnfolge", None, "geplant", 5),
+    ("ue9", "Ü 9",   "2027-W19",   "Kartenerstellung",    None, "geplant", 5),
+    ("p6",  "P 6",   "2027-W19", "Mapping + Bahnfolge", None, "geplant", 5),
     ("p7",  "P 7",   "2027-W21",   "Parken + Abbiegen",   None, "geplant", 6),
     ("p8",  "P 8",   "2027-W22",   "Praktikum + X",       None, "geplant", 6),
 ]
