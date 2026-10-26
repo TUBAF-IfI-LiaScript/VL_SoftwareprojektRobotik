@@ -69,14 +69,14 @@ Ob der Knoten auch live mit voller Rate läuft, prüfen Sie zu Beginn von P 3.
 **Block 2 · Sensorgrundlagen** – Termin 14 von 32, heute farbig markiert
 
 <!-- data-type="none" -->
-| Woche ab | Vorlesung | Übung | Praktikum |
+| Woche | Vorlesung | Übung | Praktikum |
 | :-- | :-- | :-- | :-- |
-| 30.11.2026 | [VL 04 Sensorik](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/04_Sensorik/04_Sensorik.md) |  |  |
-| 7.12.2026 | [VL 05 Bildverarbeitung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/05_Bildverarbeitung/05_Bildverarbeitung.md)<br>[VL 06 Kamera + Draufsicht](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/06_Kamera/06_Kamera.md) |  |  |
-| 14.12.2026 | VL 07 LiDAR |  |  |
-| 4.1.2027 |  | Ü 3 Datenvisualisierung<br>Ü 4 Kameradaten |  |
-| **11.1.2027**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> |  |  | **[P 2 Bildkorrektur](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_02_bildkorrektur/README.md)**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> |
-| 18.1.2027 |  |  | [P 3 Spurerkennung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_03_spurerkennung/README.md) |
+| KW 49 · 30.11.–4.12. | [VL 04 Sensorik](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/04_Sensorik/04_Sensorik.md) · Mi 2.12. |  |  |
+| KW 50 · 7.–11.12. | [VL 05 Bildverarbeitung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/05_Bildverarbeitung/05_Bildverarbeitung.md) · Mi 9.12.<br>[VL 06 Kamera + Draufsicht](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/06_Kamera/06_Kamera.md) · Do 10.12. |  |  |
+| KW 51 · 14.–18.12. | VL 07 LiDAR · Mi 16.12. |  |  |
+| KW 1 · 4.–8.1. |  | Ü 3 Datenvisualisierung · Mi 6.1.<br>Ü 4 Kameradaten · Do 7.1. |  |
+| **KW 2 · 11.–15.1.**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> |  |  | **[P 2 Bildkorrektur](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_02_bildkorrektur/README.md)**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> · Mi 13.1. |
+| KW 3 · 18.–22.1. |  |  | [P 3 Spurerkennung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_03_spurerkennung/README.md) · Mi 20.1. |
 
 - **Sie brauchen:** [Launch-Datei](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=launch) (VL 02) · [QoS-Verträglichkeit](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=qoscompat) (VL 03) · [CompressedImage](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=compressed_image) (VL 05) · [Kamerakalibrierung](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=kalibrierung) (VL 06) · [Entzerren mit Tabellen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=entzerrung) (VL 06) · [Homographie](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=homographie) (VL 06) · [Draufsicht (Vogelperspektive)](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=draufsicht) (VL 06)
 - **Heute:** anwenden, nichts Neues – Ihre Arbeit hier ist die Prüfungsleistung
@@ -394,6 +394,6 @@ Fällt der Roboter durch einen Defekt aus, den Ihre Gruppe nicht verschuldet hat
 
 --------------------------------------------------------------------------------
 
-**🗺️ Nächster Halt:** P 3 · Spurerkennung (Woche ab 18.1.2027) – Ihr TurtleBot erkennt die Fahrspur im Kamerabild. [Auf der Kurslandkarte ansehen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=p3)
+**🗺️ Nächster Halt:** P 3 · Spurerkennung (Mi 20.1. · 11:30–13:00) – Ihr TurtleBot erkennt die Fahrspur im Kamerabild. [Auf der Kurslandkarte ansehen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=p3)
 
 <!-- kurslandkarte:ausblick-ende -->

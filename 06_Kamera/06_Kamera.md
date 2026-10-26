@@ -49,14 +49,14 @@ Kurz zur Orientierung. Wir sind in Block 2, Termin 10 von 32. Sie schließen von
 **Block 2 · Sensorgrundlagen** – Termin 10 von 32, heute farbig markiert
 
 <!-- data-type="none" -->
-| Woche ab | Vorlesung | Übung | Praktikum |
+| Woche | Vorlesung | Übung | Praktikum |
 | :-- | :-- | :-- | :-- |
-| 30.11.2026 | [VL 04 Sensorik](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/04_Sensorik/04_Sensorik.md) |  |  |
-| **7.12.2026**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> | [VL 05 Bildverarbeitung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/05_Bildverarbeitung/05_Bildverarbeitung.md)<br>**[VL 06 Kamera + Draufsicht](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/06_Kamera/06_Kamera.md)**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> |  |  |
-| 14.12.2026 | VL 07 LiDAR |  |  |
-| 4.1.2027 |  | Ü 3 Datenvisualisierung<br>Ü 4 Kameradaten |  |
-| 11.1.2027 |  |  | [P 2 Bildkorrektur](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_02_bildkorrektur/README.md) |
-| 18.1.2027 |  |  | [P 3 Spurerkennung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_03_spurerkennung/README.md) |
+| KW 49 · 30.11.–4.12. | [VL 04 Sensorik](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/04_Sensorik/04_Sensorik.md) · Mi 2.12. |  |  |
+| **KW 50 · 7.–11.12.**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> | [VL 05 Bildverarbeitung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/05_Bildverarbeitung/05_Bildverarbeitung.md) · Mi 9.12.<br>**[VL 06 Kamera + Draufsicht](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/06_Kamera/06_Kamera.md)**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> · Do 10.12. |  |  |
+| KW 51 · 14.–18.12. | VL 07 LiDAR · Mi 16.12. |  |  |
+| KW 1 · 4.–8.1. |  | Ü 3 Datenvisualisierung · Mi 6.1.<br>Ü 4 Kameradaten · Do 7.1. |  |
+| KW 2 · 11.–15.1. |  |  | [P 2 Bildkorrektur](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_02_bildkorrektur/README.md) · Mi 13.1. |
+| KW 3 · 18.–22.1. |  |  | [P 3 Spurerkennung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_03_spurerkennung/README.md) · Mi 20.1. |
 
 - **Sie brauchen:** [Bezugskoordinatensystem](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=frame) (VL 03) · [Homogene Koordinaten](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=homtrafo) (VL 03) · [Verkettung](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=verkettung) (VL 03) · [Bild als Pixelmatrix](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=bildmatrix) (VL 05)
 - **Heute neu:** [Lochkameramodell](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=pinhole) · [Kamera-Matrix K](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=kmatrix) · [Verzeichnung](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=verzerrung) · [Entzerren mit Tabellen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=entzerrung) · [Kamerakalibrierung](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=kalibrierung) · [Homographie](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=homographie) · [Draufsicht (Vogelperspektive)](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=draufsicht) · [Vorausschau](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=vorausschau)
@@ -684,6 +684,6 @@ Die Aufgaben dieser Woche sind kurz. Wenn Sie sie lösen, haben Sie die drei Rec
 
 --------------------------------------------------------------------------------
 
-**🗺️ Nächster Halt:** VL 07 · LiDAR (Woche ab 14.12.2026) – Sie werten die Abstandsmessungen des LiDAR aus und erkennen, was vor dem Roboter liegt. [Auf der Kurslandkarte ansehen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=lid)
+**🗺️ Nächster Halt:** VL 07 · LiDAR (Mi 16.12. · 11:30–13:00) – Sie werten die Abstandsmessungen des LiDAR aus und erkennen, was vor dem Roboter liegt. [Auf der Kurslandkarte ansehen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=lid)
 
 <!-- kurslandkarte:ausblick-ende -->
