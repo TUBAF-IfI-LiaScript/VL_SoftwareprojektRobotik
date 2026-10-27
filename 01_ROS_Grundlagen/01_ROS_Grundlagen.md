@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.4.0
+version:  0.4.1
 language: de
 narrator: Deutsch Female
 
@@ -110,7 +110,7 @@ Stellen Sie sich vor, Sie sollen diesen Roboter ganz ohne Hilfsmittel programmie
 ![Comic: Jede Forschungsgruppe baut ihre eigene Robotersoftware von Grund auf neu](./images/willow_p1_02s.640w.jpg)<!-- width="80%" -->
 Comic der Firma Willow Garage: Jede Gruppe erfindet das Rad neu. [^2]
 
-[^2]: Willow Garage, http://www.willowgarage.com/blog/2010/04/27/reinventing-wheel, 2010
+[^2]: Willow Garage, [Reinventing the Wheel](https://web.archive.org/web/20110102044511/http://www.willowgarage.com/blog/2010/04/27/reinventing-wheel) (Archivfassung), 2010
 
 ********************************************************************************
 
@@ -145,7 +145,7 @@ Am Zeitverhalten sieht man, warum das mehr ist als Bequemlichkeit: Fährt der Tu
 + dazu **tausende Pakete**: Treiber, Algorithmen, Werkzeuge
 + seit 2007, koordiniert von der Open Source Robotics Foundation ([ros.org](https://www.ros.org/))
 + Standard in der Forschungsrobotik ([golem.de](https://www.golem.de/news/robot-operating-system-was-bratwurst-bot-und-autonome-autos-gemeinsam-haben-1612-124079-4.html))
-+ Grundlagenartikel: [Quigley et al. 2009](http://www.robotics.stanford.edu/~ang/papers/icraoss09-ROS.pdf)
++ Grundlagenartikel: [Quigley et al. 2009](https://web.archive.org/web/20191127025238/http://www.robotics.stanford.edu/~ang/papers/icraoss09-ROS.pdf)
 
     --{{0}}--
 ROS steht für Robot Operating System, ist aber trotz des Namens kein Betriebssystem. Eine Middleware ist eine Softwareschicht zwischen Betriebssystem und Anwendung, die den Datenaustausch zwischen Programmen übernimmt, auch über Rechnergrenzen hinweg. ROS entstand 2007 in Stanford. Heute nutzen nahezu alle Forschungsgruppen in der Robotik zumindest Teile davon, viele haben gar kein eigenes Framework mehr, und auch beim autonomen Fahren wird ROS eingesetzt.
