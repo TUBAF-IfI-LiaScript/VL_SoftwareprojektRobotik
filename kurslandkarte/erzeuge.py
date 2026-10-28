@@ -179,14 +179,15 @@ B = [
     ("topic", "Topic", "ros", "03", 'Topics', 1, 0, "Topics sind benannte Kanäle, die Publisher und Subscriber entkoppeln (n:m-Kommunikation).", "„Publisher und Subscriber müssen einander kennen.“"),
     ("message", "Nachricht (Message)", "ros", "03", 'Nachrichten', 1, 0, "Eine Message legt Struktur und Datentypen der übertragenen Daten fest, z. B. sensor_msgs/msg/LaserScan.", None),
     ("msgdef", "Aufbau einer Nachricht", "ros", "03", 'Nachrichten', 2, 1, "ros2 interface show zeigt die Felder eines Nachrichtentyps — z. B. Twist mit linear.x (vorwärts) und angular.z (drehen).", "„Bei Twist ist linear.z die Vorwärtsgeschwindigkeit.“"),
-    ("discovery", "Discovery", "ros", "03", 'Basiskonzepte', 2, 0, "Knoten finden sich automatisch innerhalb derselben ROS_DOMAIN_ID, verbinden sich aber nur bei kompatiblen QoS-Einstellungen.", "„Zwei Knoten auf demselben Topic kommunizieren immer.“"),
-    ("kommmuster", "Service, Parameter, Action", "ros", "03", 'Kommunikationsmuster', 2, 0, "Neben Topics: Services für Anfrage/Antwort, Parameter zur Konfiguration, Actions für lang laufende Aufträge mit Rückmeldung.", "„Für jede Kommunikation nimmt man am besten ein Topic.“"),
+    ("discovery", "Discovery", "ros", "03", 'Discovery', 2, 0, "Knoten finden sich automatisch innerhalb derselben ROS_DOMAIN_ID, verbinden sich aber nur bei kompatiblen QoS-Einstellungen.", "„Zwei Knoten auf demselben Topic kommunizieren immer.“"),
+    ("kommmuster", "Service, Parameter, Action", "ros", "03", 'Basiskommunikationsmuster', 2, 0, "Grundmuster sind Topic (Daten verteilen, Push, entkoppelt) und Service (Auftrag erteilen, Anfrage/Antwort); Actions und Parameter sind daraus aufgebaut.", "„Für jede Kommunikation nimmt man am besten ein Topic.“"),
     ("tbtopics", "Topics des TurtleBot", "ros", "03", 'Vom turtlesim zum TurtleBot', 1, 1, "Der TurtleBot stellt Sensoren und Antrieb als Topics bereit: /scan, /odom, /imu, Kamerabild und /cmd_vel.", "„Für den echten Roboter braucht man ganz andere Werkzeuge als für den turtlesim.“"),
     ("ros2cli", "ros2-Kommandozeile", "werkzeuge", "03", 'Einführungsbeispiele', 1, 1, "ros2 untersucht und steuert das System über Unterbefehle wie node, topic, service, param, bag und launch.", None),
     ("pubsub", "Publisher/Subscriber-API", "ros", "03", 'Hello-World Implementierung', 2, 1, "Knoten legen per create_publisher/create_subscription Kanäle an und laufen mit spin().", None),
     ("topiccli", "ros2 topic …", "werkzeuge", "03", 'Das System untersuchen', 2, 1, "Mit ros2 topic list/info/hz/echo/pub lassen sich Topics inspizieren und von Hand Nachrichten senden.", None),
     ("remap", "Remapping", "ros", "03", 'Remapping', 2, 1, "Mit --ros-args -r topic:=neu (oder __node:=name) werden Topic- und Knotennamen beim Start umgelenkt, ohne den Code zu ändern.", "„Der Topic-Name ist fest im Code verankert.“"),
     ("rqt", "rqt / rqt_graph", "werkzeuge", "03", 'turtlesim: ROS 2 zum Anfassen', 2, 1, "rqt bündelt die Inspektionsfunktionen der ros2-CLI grafisch, z. B. den Knoten-Topic-Graphen.", None),
+    ("verteilt", "Verteiltes System", "ros", "03", 'Einordnung', 1, 0, "Ein ROS-2-System besteht aus unabhängigen Prozessen, die nur über Nachrichten zusammenarbeiten – Nachrichten können ausbleiben, verspätet oder gar nicht ankommen.", "„Wenn mein Knoten läuft, kommen auch Daten an.“"),
     # --- VL 02 ROS 2 Pakete
     ("domainid", "ROS_DOMAIN_ID", "ros", "04", 'ROS 2 auf mehreren Rechnern', 2, 1, "Die Umgebungsvariable trennt ROS-2-Systeme im selben Netz — im Labor eine pro TurtleBot-Gruppe, gesetzt auf Laptop und Roboter.", "„Die ROS_DOMAIN_ID muss nur auf dem Laptop gesetzt werden.“"),
     ("paket", "ROS-2-Paket", "ros", "04", 'Vom Beispiel zum eigenen Paket', 1, 0, "Ein Paket kapselt Code samt Abhängigkeiten, Build-Konfiguration, Nachrichten und Launch-Files.", None),
@@ -301,6 +302,8 @@ B = [
 
 # ---- Beziehungen: von, nach, Beschriftung („von … text … nach“)
 R = [
+    ("discovery", "verteilt", "macht möglich"),
+    ("verteilt", "qoscompat", "erklärt stille Fehler durch"),
     ("roboter", "klassifikation", "wird geordnet durch"),
     ("qos", "qoscompat", "bestimmt"),
     ("durability", "tf2", "nötig für /tf_static"),
@@ -408,6 +411,8 @@ F = [
      ["bildmatrix", "hsv", "thresholding", "canny", "kalibrierung", "disparitaet", "cnn", "yolo", "bbox3d"]),
     ("f_unsicher", "Unsicherheit beherrschen", "Kein Sensor ist perfekt: von Sensorfehlern über Bayes zur fusionierten Pose.",
      ["sensorparam", "drift", "sensorfusion", "bayesfilter", "predictupdate", "kalman", "ekf", "robotlocalization"]),
+    ("f_verteilt", "Verteiltes System", "Vom Datenaustausch zwischen Prozessen bis zum Zusammenspiel vieler Knoten über Rechnergrenzen – und was dabei schiefgehen kann.",
+     ["middleware", "discovery", "verteilt", "domainid", "launch", "qoscompat", "durability", "frameid", "rosbag", "sensorfusion", "lifecycle"]),
 ]
 
 # Ziel im Projekt je Termin (Entwurf, vom Dozenten durchzusehen)
@@ -455,10 +460,11 @@ ANWENDUNG = {
 BRAUCHEN = {
     "02": ["message", "topiccli", "discovery"],
     "04": ["source", "ros2cli", "message", "msgdef"],
+    "ue2": ["kommmuster", "remap", "paket", "launch", "domainid"],
     "06": ["frame", "homtrafo", "verkettung", "bildmatrix"],
 }
 # Begriffe eines Termins erscheinen in der Karte erst nach ihm (sonst nur mit „Ausblick“)
-FREIGEGEBEN = {"00"}
+FREIGEGEBEN = {"00", "03"}
 
 kern.erzeuge(
     repo=os.path.dirname(HIER), kurs=KURS, termine=T, bloecke=BLOECKE, linien=LINIEN,
