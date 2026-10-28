@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.4.29
+version:  0.4.30
 language: de
 narrator: Deutsch Female
 
@@ -45,18 +45,6 @@ import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_Softwareproje
 
 --------------------------------------------------------------------------------
 
-**Was wir schon wissen — und was am Donnerstag kommt**
-
-+ **VL 00:** Sense, Think, Act sind getrennte Programme → heute: **wie sie Daten austauschen**
-+ **Ü 1 am Donnerstag:** ROS 2 installieren, die Shell kennenlernen
-+ **Umgebungsvariable** = benannter Wert, den ein Terminal an seine Programme weitergibt
-  + setzen: `export NAME=wert` · eine ganze Datei solcher Werte laden: `source datei`
-
-    --{{0}}--
-Aus der Einführung brauchen wir den Sense-Think-Act-Kreislauf. Beim TurtleBot sind Wahrnehmung, Planung und Ansteuerung getrennte Programme, die ständig Daten austauschen müssen. Wie sie das tun, ist das Thema heute. Eine Sache aus Ü 1 greifen wir schon vorab auf, weil sie die häufigste Fehlerquelle ist: Jedes Programm erbt die Umgebungsvariablen des Terminals, in dem es gestartet wird. Am Donnerstag probieren Sie das in Ü 1 selbst aus.
-
---------------------------------------------------------------------------------
-
 <!-- kurslandkarte:wo-start -->
 
 ## Wo stehen wir?
@@ -90,6 +78,8 @@ Kurz zur Orientierung. Wir sind in Block 1, Termin 2 von 32. Sie verstehen, wie 
                                    {{0-1}}
 ********************************************************************************
 
+**Aus VL 00:** Sense, Think, Act sind getrennte Programme → heute: **wie sie Daten austauschen**
+
 **Welche Herausforderungen stecken in der Programmierung eines Roboters?**
 
 ![Fußballroboter mit Kamera, Rechner, Antrieben und Akku — viele Komponenten, die zusammenarbeiten müssen](./images/RoboterNuernberg.jpg)<!-- width="100%" -->
@@ -100,7 +90,7 @@ Kurz zur Orientierung. Wir sind in Block 1, Termin 2 von 32. Sie verstehen, wie 
 ********************************************************************************
 
     --{{0}}--
-Stellen Sie sich vor, Sie sollen diesen Roboter ganz ohne Hilfsmittel programmieren. Kamera, Rechner, Antriebe und Akku brauchen jeweils eigene Treiber, die Programme müssen miteinander reden, und für die Fehlersuche bräuchten Sie eigene Werkzeuge.
+Aus der Einführung kennen Sie den Sense-Think-Act-Kreislauf: Wahrnehmung, Planung und Ansteuerung sind beim TurtleBot getrennte Programme, die ständig Daten austauschen müssen. Wie sie das tun, ist das Thema heute. Stellen Sie sich vor, Sie sollen diesen Roboter ganz ohne Hilfsmittel programmieren. Kamera, Rechner, Antriebe und Akku brauchen jeweils eigene Treiber, die Programme müssen miteinander reden, und für die Fehlersuche bräuchten Sie eigene Werkzeuge.
 
                                   {{1-2}}
 ********************************************************************************
@@ -408,12 +398,13 @@ graph TD
 + kündigen Knoten im Netz an (Discovery, bei DDS per Multicast)
 + Standard in Jazzy: **Fast DDS** (eProsima) — Paket `rmw_fastrtps_cpp`
 + Alternativen: **Cyclone DDS** (Eclipse, `rmw_cyclonedds_cpp`), **Zenoh** (ohne DDS, robust im WLAN, `rmw_zenoh_cpp`)
-+ Wahl per Umgebungsvariable:
++ Wahl per **Umgebungsvariable** = benannter Wert, den ein Terminal an seine Programme weitergibt:
 
 ```bash
 export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 ```
 
++ gilt nur für dieses Terminal · `source datei` lädt eine ganze Datei solcher Werte (Ü 1)
 + alle Knoten nutzen **dieselbe** Middleware — DDS ↔ Zenoh verbinden sich nie, verschiedene DDS-Anbieter nicht garantiert
 
 </div>
@@ -423,7 +414,7 @@ export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 ********************************************************************************
 
     --{{4}}--
-Ganz unten arbeitet die eigentliche Middleware. Sie verschickt die Bytes über das Netzwerk und sorgt dafür, dass sich Knoten finden. Standard in Jazzy ist Fast DDS der Firma eProsima. DDS steht für Data Distribution Service, einen Industriestandard für verteilte Systeme. Alternativen sind Cyclone DDS von Eclipse und Zenoh, das ohne DDS auskommt und in WLAN-Netzen mit vielen Robotern oft robuster ist. Welche Middleware ein Knoten nutzt, legt die Umgebungsvariable RMW_IMPLEMENTATION fest, und zwar nur für das Terminal, in dem Sie sie setzen. Der Code Ihrer Knoten bleibt dabei derselbe. Wichtig für das Praktikum: Stellen Sie auf allen Rechnern dieselbe Middleware ein. Zenoh und DDS verbinden sich gar nicht, und ob zwei verschiedene DDS-Implementierungen zusammenarbeiten, ist nicht garantiert.
+Ganz unten arbeitet die eigentliche Middleware. Sie verschickt die Bytes über das Netzwerk und sorgt dafür, dass sich Knoten finden. Standard in Jazzy ist Fast DDS der Firma eProsima. DDS steht für Data Distribution Service, einen Industriestandard für verteilte Systeme. Alternativen sind Cyclone DDS von Eclipse und Zenoh, das ohne DDS auskommt und in WLAN-Netzen mit vielen Robotern oft robuster ist. Welche Middleware ein Knoten nutzt, legt die Umgebungsvariable RMW_IMPLEMENTATION fest. Eine Umgebungsvariable ist ein benannter Wert, den ein Terminal an alle Programme weitergibt, die darin gestartet werden. Sie gilt also nur für das Terminal, in dem Sie sie setzen. Das ist die häufigste Fehlerquelle bei ROS 2, am Donnerstag in Ü 1 probieren Sie es selbst aus. Der Code Ihrer Knoten bleibt dabei derselbe. Wichtig für das Praktikum: Stellen Sie auf allen Rechnern dieselbe Middleware ein. Zenoh und DDS verbinden sich gar nicht, und ob zwei verschiedene DDS-Implementierungen zusammenarbeiten, ist nicht garantiert.
 
                                   {{5}}
 ********************************************************************************
