@@ -576,7 +576,9 @@ Warum der Shebang, wenn die Beispiele oben ohne ihn liefen? Startet die `bash` e
 
 </details>
 
-## Die Installation rückwärts lesen
+## Die ROS Installation verstehen
+
+Die ROS-2-Installation ist abgeschlossen, sobald das Installations-Terminal wieder den Prompt zeigt. In der Übung haben Sie die Befehle kopiert, ohne sie im Einzelnen zu verstehen. Jetzt kennen Sie die Werkzeuge — und können die Installation rückwärts lesen.
 
 ### Aufgabe 6: Was haben Sie da eingetippt?
 
