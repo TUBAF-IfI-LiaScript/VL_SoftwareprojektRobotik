@@ -135,17 +135,16 @@ B = [
     ("rosmotivation", "Warum ROS?", "ros", "00", 'Warum ROS? Das "Rad nicht neu erfinden"', 1, 0, "ROS 2 liefert Kommunikation, wiederverwendbare Pakete und Werkzeuge, damit nicht jedes Team alles neu baut.", "„ROS ist ein Betriebssystem.“"),
 
     # --- Ü 1 Linux Shell
-    ("shell", "Terminal & Shell", "werkzeuge", "ue1", 'Warum Terminal?', 1, 0, "Das Terminal zeigt Text, die Shell (bash) interpretiert die Eingaben — der Weg zu ROS 2 und zum TurtleBot.", None),
+    ("shell", "Terminal & Shell", "werkzeuge", "ue1", 'Terminal und Shell', 1, 0, "Das Terminal ist nur das Fenster; die Shell (bash) darin versteht die Eingaben und startet Programme — der Weg zu ROS 2.", "„Terminal und Shell sind dasselbe.“"),
     ("apt", "apt / Paketverwaltung", "werkzeuge", "ue1", 'ROS 2 installieren', 2, 1, "Installiert Software samt aller Abhängigkeiten aus eingetragenen Paketquellen; apt update holt die Paketlisten, sudo apt install … installiert – so kommt ROS 2 auf den Rechner.", "„apt install lädt nur das eine genannte Paket.“ (ros-jazzy-desktop zieht über 1500 Pakete nach.)"),
     ("pfade", "Absolute & relative Pfade", "werkzeuge", "ue1", 'Dateisystem', 1, 0, "Absolute Pfade beginnen bei /, relative beim aktuellen Verzeichnis; . und .. stehen für hier und darüber.", None),
     ("pipes", "Pipes & Umleitung", "werkzeuge", "ue1", 'Dateien ansehen, suchen und verknüpfen', 2, 1, "| reicht die Ausgabe weiter, > und >> schreiben sie in eine Datei — z. B. grep ERROR ros.log | wc -l.", None),
     ("rechte", "Dateirechte", "werkzeuge", "ue1", 'Rechte und Benutzer', 2, 1, "rwx für Besitzer, Gruppe und andere; chmod +x macht ein Skript ausführbar, chmod 754 setzt Rechte als Zahl.", "„Ein Skript, das ich geschrieben habe, darf ich ausführen.“"),
-    ("prozess", "Prozess", "werkzeuge", "ue1", 'Prozesse', 2, 0, "Jedes laufende Programm hat eine PID — jeder ROS-Knoten ist ein eigener Prozess.", None),
+    ("prozess", "Prozess", "werkzeuge", "ue1", 'Prozesse', 2, 0, "Jedes laufende Programm hat eine PID — jeder ROS-Knoten ist ein eigener Prozess. Strg+C und kill beenden ihn über Signale.", "„pkill name beendet genau den einen Prozess, den ich meine.“"),
     ("umgebung", "Umgebungsvariable", "werkzeuge", "ue1", 'Umgebungsvariablen', 1, 0, "Werte wie PATH oder ROS_DOMAIN_ID, die eine Shell an gestartete Programme weitergibt — nur mit export.", "„Eine Variable gilt in allen Terminals.“"),
     ("path", "PATH", "werkzeuge", "ue1", 'PATH — wo findet die Shell Programme?', 2, 1, "Die Shell sucht Befehle in den Verzeichnissen aus PATH; fehlt ROS 2 dort: command not found.", None),
     ("source", "source", "werkzeuge", "ue1", 'source oder ausführen?', 1, 1, "Führt ein Skript in der aktuellen Shell aus, damit gesetzte Variablen erhalten bleiben — source /opt/ros/jazzy/setup.bash.", "„./setup.bash und source setup.bash sind dasselbe.“"),
     ("bashrc", "~/.bashrc", "werkzeuge", "ue1", 'Aufgabe 5: Zwei Terminals, zwei Welten', 2, 1, "Wird beim Öffnen jedes Terminals ausgeführt — der Ort für source und ROS_DOMAIN_ID.", None),
-    ("ssh", "ssh", "werkzeuge", "ue1", 'Zum Nachschlagen: Pakete und Fernzugriff', 2, 1, "Anmelden auf einem entfernten Rechner, z. B. dem Raspberry Pi des TurtleBots.", None),
     # --- VL 04 Sensorik
     ("sensor", "Sensor", "wahrnehmung", "01", 'Was ist ein Sensor?', 1, 0, "Ein Sensor wandelt physikalische, chemische oder biologische Messgrößen in elektrische Signale um.", None),
     ("propextero", "Propriozeptiv/exterozeptiv", "wahrnehmung", "01", 'Klassifikation von Sensoren', 1, 0, "Propriozeptive Sensoren messen den Roboterzustand (Encoder, IMU), exterozeptive die Umgebung (Kamera, Lidar, Ultraschall).", None),
@@ -326,7 +325,6 @@ R = [
     ("umgebung", "path", "Beispiel"),
     ("umgebung", "source", "bleibt erhalten mit"),
     ("source", "bashrc", "dauerhaft in"),
-    ("ssh", "turtlebot", "Zugang zum"),
     ("prozess", "umgebung", "erbt"),
     ("imu", "drift", "leidet unter"),
     ("odometrie", "pose", "schätzt"),
@@ -415,7 +413,7 @@ F = [
 # Ziel im Projekt je Termin (Entwurf, vom Dozenten durchzusehen)
 PROJEKTZIEL = {
     "00":  "Sie lernen die Projektaufgabe kennen: Ein TurtleBot soll autonom durch die Verkehrswelt fahren.",
-    "ue1": "Ihr Rechner wird zur Werkbank: Ohne sicheren Umgang mit der Shell erreichen Sie weder ROS 2 noch den TurtleBot.",
+    "ue1": "Ihr Rechner wird zur Werkbank: Ohne sicheren Umgang mit der Shell können Sie ROS 2 weder installieren noch starten.",
     "03":  "Sie verstehen, wie die Software des TurtleBots aus Knoten und Topics zusammengesetzt ist.",
     "04":  "Sie bauen eigene Knoten und starten sie gemeinsam mit einer Launch-Datei – das Gerüst für jede spätere Projektfunktion.",
     "ue2": "Sie bauen Ihren ersten Workspace aus eigenen und fremden Paketen und steuern damit die Schildkröte – genau so starten, konfigurieren und belauschen Sie in P 1 den TurtleBot.",

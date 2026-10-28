@@ -1,0 +1,9 @@
+[1728550001.10] [INFO] [camera_node]: Camera started, 640x480 @ 30 fps
+[1728550001.20] [INFO] [lidar_node]: RPLIDAR C1 connected on /dev/ttyUSB0
+[1728550001.95] [WARN] [lidar_node]: Scan frequency below 10 Hz
+[1728550002.31] [INFO] [line_detector]: Subscribed to /camera/image_raw
+[1728550003.02] [ERROR] [line_detector]: No line found in image
+[1728550003.40] [WARN] [controller_node]: cmd_vel limited to 0.22 m/s
+[1728550004.12] [ERROR] [line_detector]: No line found in image
+[1728550004.80] [ERROR] [lidar_node]: Lost connection to /dev/ttyUSB0
+[1728550005.01] [INFO] [controller_node]: Emergency stop

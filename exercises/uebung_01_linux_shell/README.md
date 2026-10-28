@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.3.1
+version:  0.4.0
 language: de
 narrator: Deutsch Female
 
@@ -34,11 +34,11 @@ import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_Softwareproje
 
 **Zielstellung der heutigen Übung** — nach der Übung können Sie
 
-+ ROS 2 Jazzy über die Paketverwaltung installieren und den Zweck jedes Installationsbefehls benennen,
++ ROS 2 Jazzy über die Paketverwaltung installieren und die zentralen Installationsbefehle erklären,
 + sich im Linux-Dateisystem mit absoluten und relativen Pfaden bewegen,
 + Dateien anlegen, durchsuchen und Ausgaben mit Pipes verknüpfen,
 + Dateirechte lesen und eigene Skripte ausführbar machen,
-+ Prozesse starten, finden und beenden,
++ Prozesse starten, finden und über Signale gezielt beenden,
 + erklären, warum `source /opt/ros/jazzy/setup.bash` in jedem Terminal nötig ist.
 
 **Bitte mitbringen:** Ihren Laptop mit Ubuntu 24.04 (nativ oder WSL2), Netzteil und mindestens 10 GB freiem Speicher. Führen Sie **vorher zu Hause** einmal `sudo apt update && sudo apt upgrade` aus — dann muss in der Übung nur noch ROS 2 selbst geladen werden (gut 900 MB).
@@ -46,19 +46,20 @@ import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_Softwareproje
 **Ablauf (90 min)**
 
 <!-- data-type="none" -->
-| Zeit      | Inhalt                                                     |
-| --------- | ---------------------------------------------------------- |
-| 15 min    | ROS 2 installieren starten — währenddessen „Warum Terminal?“ |
-| 15 min    | Dateisystem + Aufgabe 1 (ab jetzt im Arbeits-Terminal)     |
-| 15 min    | Dateien und Pipes + Aufgabe 2                              |
-| 10 min    | Rechte, Prozesse + Aufgabe 3                               |
-| 20 min    | Umgebungsvariablen + Aufgaben 4 und 5                      |
-| 10 min    | ROS 2 einrichten und testen + Aufgabe 6                    |
-| 5 min     | Puffer                                                     |
+| Zeit      | Inhalt                                                         |
+| --------- | -------------------------------------------------------------- |
+| 15 min    | Terminal und Shell, ROS 2 installieren starten                 |
+| 10 min    | Dateisystem + Aufgabe 1 (ab jetzt im Arbeits-Terminal)         |
+| 15 min    | Dateien und Pipes + Aufgabe 2                                  |
+| 10 min    | Rechte, Prozesse und Signale + Aufgabe 3                       |
+| 20 min    | Umgebungsvariablen + Aufgaben 4 und 5                          |
+| 5 min     | Aufgabe 6: Die Installation rückwärts lesen                    |
+| 10 min    | ROS 2 einrichten und testen, sobald die Installation fertig ist |
+| 5 min     | Puffer                                                         |
 
-**Pflichtkern:** Aufgaben 1, 2, 4 und 6 sowie die drei Tests am Ende. Mit ⏱ markierte Teile bearbeiten Sie, wenn Zeit bleibt. Rechnen Sie damit, dass die Installation erst nach 45 bis 60 Minuten fertig ist — wenn alle gleichzeitig laden, wird das WLAN langsam.
+**Pflichtkern:** alle Aufgaben und die drei Tests am Ende. Mit ⏱ markierte Teile bearbeiten Sie nur, wenn Zeit bleibt. Rechnen Sie damit, dass die Installation erst nach 45 bis 60 Minuten fertig ist — wenn alle gleichzeitig laden, wird das WLAN langsam.
 
-Der Selbsttest eignet sich zur Wiederholung zu Hause. Die Abschnitte „Zum Nachschlagen“ am Ende gehören nicht zum Zeitplan — Sie brauchen sie im ersten Praktikum.
+Der Selbsttest eignet sich zur Wiederholung zu Hause. Die Abschnitte „Zum Nachschlagen“ am Ende gehören nicht zum Zeitplan.
 
 --------------------------------------------------------------------------------
 
@@ -66,7 +67,7 @@ Der Selbsttest eignet sich zur Wiederholung zu Hause. Die Abschnitte „Zum Nach
 
 ## Wo stehen wir?
 
-**Ziel im Projekt:** Ihr Rechner wird zur Werkbank: Ohne sicheren Umgang mit der Shell erreichen Sie weder ROS 2 noch den TurtleBot.
+**Ziel im Projekt:** Ihr Rechner wird zur Werkbank: Ohne sicheren Umgang mit der Shell können Sie ROS 2 weder installieren noch starten.
 
 **Block 1 · ROS-Grundlagen** – Termin 3 von 32, heute farbig markiert
 
@@ -86,22 +87,22 @@ Der Selbsttest eignet sich zur Wiederholung zu Hause. Die Abschnitte „Zum Nach
 
 <!-- kurslandkarte:wo-ende -->
 
-## Warum Terminal?
+## Terminal und Shell
 
-In der Robotik kommen Sie am Terminal nicht vorbei. Der TurtleBot hat keinen Bildschirm, Sie erreichen ihn über das Netzwerk mit `ssh`. ROS 2 wird über Kommandozeilenwerkzeuge gestartet, konfiguriert und untersucht. Und viele Fehler, die Ihnen in den nächsten Wochen begegnen, sind in Wahrheit keine ROS-Fehler, sondern Fehler in der Shell-Umgebung: eine vergessene Umgebungsvariable, ein falscher Pfad, fehlende Rechte.
+Heute bringen Sie ROS 2 auf Ihren Rechner — nicht per Klick, sondern mit ein paar Zeilen im Terminal. So läuft es in der Robotik fast immer: ROS 2 wird über die Kommandozeile installiert, gestartet und untersucht. Und viele Fehler der nächsten Wochen sind in Wahrheit keine ROS-Fehler, sondern Fehler in der Shell-Umgebung: eine vergessene Umgebungsvariable, ein falscher Pfad, fehlende Rechte.
 
-Erinnern Sie sich an VL 00: Sense, Think und Act sind beim TurtleBot getrennte Programme — Kameratreiber, Spurerkennung, Motorsteuerung. Unter Linux ist jedes davon ein **Prozess**, den Sie aus einem Terminal starten, beobachten und beenden. Und jedes liest seine Einstellungen aus der **Umgebung** dieses Terminals. Genau darum geht es heute.
+Zwei Begriffe werden dabei gern verwechselt:
+
++ **Terminal** — das Fenster, in das Sie Text tippen und in dem Ausgaben erscheinen. Es versteht selbst keinen einzigen Befehl, es reicht nur Text weiter. Unter Ubuntu heißt es einfach „Terminal“, unter Windows „Windows Terminal“.
++ **Shell** — das Programm, das im Terminal läuft, Ihre Eingabe liest, versteht und die passenden Programme startet. Bei Ubuntu ist das die `bash`.
++ **Prompt** — die Eingabeaufforderung der Shell, z. B. `student@laptop:~/ros2_ws$` (Benutzer, Rechner, aktuelles Verzeichnis). Steht der Prompt da, wartet die Shell auf Ihren nächsten Befehl.
 
 ```mermaid @mermaid
 graph LR
-    L["Ihr Laptop<br/>Terminal 1: rviz2<br/>Terminal 2: Ihr ROS-Knoten"] <-- "ssh / ROS 2" --> T["TurtleBot 3<br/>Raspberry Pi<br/>kein Bildschirm, nur Terminal"]
+    T["Terminal<br/>Fenster: Tastatur und Anzeige"] -- "Eingabe: ls -l" --> S["Shell (bash)<br/>versteht den Befehl"]
+    S -- "startet" --> P["Programm<br/>ls, apt, ros2 …"]
+    P -- "Ausgabe" --> T
 ```
-
-**Begriffe**
-
-+ **Terminal** — das Fenster, in dem Sie Text eingeben und Ausgaben sehen
-+ **Shell** — das Programm, das Ihre Eingaben interpretiert; bei Ubuntu ist das `bash`
-+ **Prompt** — die Eingabeaufforderung, z. B. `student@laptop:~/ros2_ws$` (Benutzer, Rechner, aktuelles Verzeichnis)
 
 **Ihre Arbeitsumgebung**
 
@@ -109,8 +110,71 @@ graph LR
 | Variante                  | Bemerkung                                                                                  |
 | ------------------------- | ------------------------------------------------------------------------------------------ |
 | Ubuntu 24.04 nativ        | empfohlen — alle Werkzeuge der Veranstaltung laufen direkt                                  |
-| WSL2 unter Windows        | gute Alternative, `wsl --install -d Ubuntu-24.04`                                           |
+| WSL2 unter Windows        | gute Alternative: `wsl --install -d Ubuntu-24.04` in der PowerShell als Administrator, danach Neustart — vor der Übung erledigen |
 | Rechner in der Lessingstraße | Ubuntu vorinstalliert — Ausweichlösung, solange Ihr eigenes System noch nicht läuft       |
+
+Läuft bei Ihnen noch kein Ubuntu 24.04, setzen Sie sich an einen der Rechner in der Lessingstraße. Dort gehen Sie genauso vor wie Ihre Kommilitonen am eigenen Laptop. Auf Ihrem eigenen Rechner holen Sie die Installation später nach der [Installationsanleitung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/installation_ros2/README.md) nach.
+
+**Die ersten Handgriffe**
+
++ **Terminal öffnen:** Ubuntu: `Strg+Alt+T`. Windows: Startmenü → „Ubuntu 24.04“ oder im _Windows Terminal_ das Profil „Ubuntu 24.04“.
++ **Befehle kopieren statt abtippen:** mit dem Kopierknopf rechts oben am grauen Kasten. Eingefügt wird im Terminal mit `Strg+Shift+V` oder per Rechtsklick, nicht mit `Strg+V`. Das Windows Terminal fragt beim Einfügen mehrerer Zeilen nach — bestätigen Sie mit „Trotzdem einfügen“.
++ **Passwort:** `sudo` fragt nach Ihrem Passwort; die Eingabe bleibt unsichtbar, das ist normal. Unter WSL2 ist es das Passwort, das Sie beim Einrichten von Ubuntu festgelegt haben.
+
+## ROS 2 installieren
+
+Der Download von ROS 2 dauert lange. Deshalb starten Sie die Installation jetzt in einem eigenen Terminal, lassen sie dort weiterlaufen und lernen währenddessen in einem zweiten Terminal die Shell kennen. Was die einzelnen Befehle bedeuten, können Sie am Ende der Übung selbst erklären — in Aufgabe 6 lesen Sie die Installation rückwärts.
+
+Öffnen Sie ein Terminal. Dieses erste Fenster ist ab jetzt Ihr **Installations-Terminal**.
+
+> [!WARNING]
+> **Stolperfalle – beim Einrichten nicht unterbrechen:** Solange `apt` nur herunterlädt, dürfen Sie abbrechen (`Strg+C`) und den Befehl später — auch zu Hause — neu starten; Geladenes bleibt erhalten. Sobald `Entpacken` bzw. `Unpacking` erscheint, schließen Sie das Installations-Terminal nicht mehr und klappen den Laptop nicht zu. Ist es doch passiert: `sudo dpkg --configure -a`, danach den Installationsbefehl wiederholen.
+
+**Schritt 1: Passt das System?**
+
+```bash
+lsb_release -a                 # erwartet: Release 24.04, Codename noble
+df -h ~                        # Spalte „Avail“: mindestens 10G frei
+locale | grep -q UTF-8 && echo "UTF-8 ok" || echo "kein UTF-8: siehe Installationsanleitung"
+```
+
+Meldet die letzte Zeile „kein UTF-8“, stellen Sie den Zeichensatz nach der [Installationsanleitung, Abschnitt „Schritt 1: Paketquellen einrichten“](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/installation_ros2/README.md#3) um.
+
+**Schritt 2: Die Paketquelle von ROS 2 eintragen.** Ubuntu kennt ROS 2 nicht von sich aus. Sie sagen der Paketverwaltung, wo die ROS-Pakete liegen und woran sie echte Pakete erkennt:
+
+```bash
+sudo apt update && sudo apt install -y software-properties-common curl
+sudo add-apt-repository -y universe
+export ROS_APT_SOURCE_VERSION=$(curl -Ls -o /dev/null -w '%{url_effective}' https://github.com/ros-infrastructure/ros-apt-source/releases/latest | awk -F/ '{print $NF}')
+echo "Version der Paketquelle: $ROS_APT_SOURCE_VERSION"
+curl -L -o /tmp/ros2-apt-source.deb "https://github.com/ros-infrastructure/ros-apt-source/releases/download/${ROS_APT_SOURCE_VERSION}/ros2-apt-source_${ROS_APT_SOURCE_VERSION}.$(. /etc/os-release && echo ${UBUNTU_CODENAME:-${VERSION_CODENAME}})_all.deb"
+sudo dpkg -i /tmp/ros2-apt-source.deb
+```
+
+Zeigt `echo` eine leere Version, hat die Anfrage an GitHub nicht geklappt — prüfen Sie die Internetverbindung und wiederholen Sie die `export`-Zeile. Hilft das nicht, setzen Sie die Version von Hand, die Betreuer nennen sie Ihnen (z. B. `export ROS_APT_SOURCE_VERSION=1.3.0`).
+
+**Schritt 3: ROS 2 installieren.** Erst die Paketlisten mit der neuen Quelle holen und das System aktualisieren, dann ROS 2 samt allen Abhängigkeiten installieren — gut 900 MB und rund 1500 Pakete:
+
+```bash
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y ros-jazzy-desktop ros-dev-tools
+```
+
+`ros-jazzy-desktop` bringt ROS 2 mit allen Werkzeugen der Vorlesung (`rqt`, RViz, `turtlesim`, Beispiele), `ros-dev-tools` das Build-Werkzeug `colcon`. An der Ausgabe erkennen Sie, wie weit die Installation ist:
+
+<!-- data-type="none" -->
+| Ausgabe (deutsch / englisch)                     | Phase                                  |
+| :----------------------------------------------- | :------------------------------------- |
+| `Holen: 812 http://…` / `Get: 812 http://…`      | Download — dauert am längsten          |
+| `Entpacken von ros-jazzy-…` / `Unpacking …`      | Pakete werden ausgepackt               |
+| `… wird eingerichtet` / `Setting up …`           | Pakete werden eingerichtet             |
+| der Prompt `…$` erscheint wieder                 | fertig — ein Fehler stünde in einer Zeile mit `E:` |
+
+**Öffnen Sie jetzt ein zweites Terminal** — Ihr **Arbeits-Terminal** (Ubuntu: `Strg+Alt+T`; Windows Terminal: neuer Tab mit „Ubuntu 24.04“). Darin arbeiten Sie den Rest der Übung. Das Installations-Terminal lassen Sie in Ruhe, bis wieder der Prompt erscheint; erst dann geht es mit „ROS 2 einrichten und testen“ weiter.
+
+## Während die Installation läuft
+
+Erinnern Sie sich an VL 00: Sense, Think und Act sind beim TurtleBot getrennte Programme — Kameratreiber, Spurerkennung, Motorsteuerung. Unter Linux ist jedes davon ein **Prozess**, den Sie aus einem Terminal starten, beobachten und beenden. Und jedes liest seine Einstellungen aus der **Umgebung** dieses Terminals. Genau darum geht es heute.
 
 ### Wie funktionieren die Beispiele in diesem Skript?
 
@@ -129,95 +193,9 @@ echo "Ich bin gerade in: $(pwd)"
 ```
 @bashShell
 
-## ROS 2 installieren
-
-Heute installieren Sie ROS 2 Jazzy — über die Shell. Das ist kein Umweg, sondern der Normalfall: Auf dem TurtleBot, auf Servern und in fast jeder Robotik-Anleitung wird Software so eingerichtet. In den wenigen Befehlen stecken schon fast alle Werkzeuge der heutigen Übung. Wir starten die Installation gleich zu Beginn, weil der Download dauert. Während er läuft, arbeiten Sie in einem zweiten Terminal an den Aufgaben weiter und schauen ab und zu nach, wie weit die Installation ist.
-
-Die Befehle geben Sie auf **Ihrem Rechner** ein, nicht in den Server-Beispielen:
-
-+ **Terminal öffnen:** Ubuntu: `Strg+Alt+T`. Windows: Startmenü → „Ubuntu 24.04“ oder im _Windows Terminal_ das Profil „Ubuntu 24.04“. Dieses erste Fenster ist ab jetzt Ihr **Installations-Terminal**.
-+ **Befehle kopieren statt abtippen:** mit dem Kopierknopf rechts oben am grauen Kasten. Eingefügt wird im Terminal mit `Strg+Shift+V` oder per Rechtsklick, nicht mit `Strg+V`. Das Windows Terminal fragt beim Einfügen mehrerer Zeilen nach — bestätigen Sie mit „Trotzdem einfügen“.
-+ **Passwort:** `sudo` fragt nach Ihrem Passwort; die Eingabe bleibt unsichtbar, das ist normal. Unter WSL2 ist es das Passwort, das Sie beim Einrichten von Ubuntu festgelegt haben.
-
-> [!WARNING]
-> **Stolperfalle – beim Einrichten nicht unterbrechen:** Solange `apt` nur herunterlädt, dürfen Sie abbrechen (`Strg+C`) und den Befehl später — auch zu Hause — neu starten; Geladenes bleibt erhalten. Sobald `Entpacken` bzw. `Unpacking` erscheint, schließen Sie das Installations-Terminal nicht mehr und klappen den Laptop nicht zu. Ist es doch passiert: `sudo dpkg --configure -a`, danach den Installationsbefehl wiederholen.
-
-**Schritt 1: Passt das System?**
-
-```bash
-lsb_release -a                 # erwartet: Release 24.04, Codename noble
-df -h ~                        # Spalte „Avail“: mindestens 10G frei
-locale | grep -q UTF-8 && echo "UTF-8 ok" || echo "kein UTF-8: siehe Installationsanleitung"
-```
-
-Meldet die letzte Zeile „kein UTF-8“, stellen Sie den Zeichensatz nach der [Installationsanleitung, Abschnitt „Schritt 1: Paketquellen einrichten“](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/installation_ros2/README.md#3) um.
-
-Läuft bei Ihnen noch kein Ubuntu 24.04, setzen Sie sich an einen der Rechner in der Lessingstraße. Dort ist Ubuntu vorinstalliert, und Sie gehen genauso vor wie Ihre Kommilitonen am eigenen Laptop. Auf Ihrem eigenen Rechner holen Sie die Installation später nach der [Installationsanleitung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/installation_ros2/README.md) nach.
-
-**Schritt 2: Die Paketquelle von ROS 2 eintragen** (Installations-Terminal). Ubuntu kennt ROS 2 nicht von sich aus. Sie sagen der Paketverwaltung, wo die ROS-Pakete liegen und woran sie echte Pakete erkennt:
-
-```bash
-sudo apt update && sudo apt install -y software-properties-common curl
-sudo add-apt-repository -y universe
-export ROS_APT_SOURCE_VERSION=$(curl -Ls -o /dev/null -w '%{url_effective}' https://github.com/ros-infrastructure/ros-apt-source/releases/latest | awk -F/ '{print $NF}')
-echo "Version der Paketquelle: $ROS_APT_SOURCE_VERSION"
-curl -L -o /tmp/ros2-apt-source.deb "https://github.com/ros-infrastructure/ros-apt-source/releases/download/${ROS_APT_SOURCE_VERSION}/ros2-apt-source_${ROS_APT_SOURCE_VERSION}.$(. /etc/os-release && echo ${UBUNTU_CODENAME:-${VERSION_CODENAME}})_all.deb"
-sudo dpkg -i /tmp/ros2-apt-source.deb
-```
-
-Zeigt `echo` eine leere Version, hat die Anfrage an GitHub nicht geklappt — prüfen Sie die Internetverbindung und wiederholen Sie die `export`-Zeile. Hilft das nicht, setzen Sie die Version von Hand, die Betreuer nennen sie Ihnen (z. B. `export ROS_APT_SOURCE_VERSION=1.3.0`).
-
-**Schritt 3: ROS 2 installieren** (Installations-Terminal). Erst die Paketlisten mit der neuen Quelle holen und das System aktualisieren, dann ROS 2 samt allen Abhängigkeiten installieren — gut 900 MB und rund 1500 Pakete:
-
-```bash
-sudo apt update && sudo apt upgrade -y
-sudo apt install -y ros-jazzy-desktop ros-dev-tools
-```
-
-`ros-jazzy-desktop` bringt ROS 2 mit allen Werkzeugen der Vorlesung (`rqt`, RViz, `turtlesim`, Beispiele), `ros-dev-tools` das Build-Werkzeug `colcon`. An der Ausgabe erkennen Sie, wie weit die Installation ist:
-
-<!-- data-type="none" -->
-| Ausgabe (deutsch / englisch)                     | Phase                                  |
-| :----------------------------------------------- | :------------------------------------- |
-| `Holen: 812 http://…` / `Get: 812 http://…`      | Download — dauert am längsten          |
-| `Entpacken von ros-jazzy-…` / `Unpacking …`      | Pakete werden ausgepackt               |
-| `… wird eingerichtet` / `Setting up …`           | Pakete werden eingerichtet             |
-| der Prompt `…$` erscheint wieder                 | fertig — ein Fehler stünde in einer Zeile mit `E:` |
-
-**Öffnen Sie jetzt ein zweites Terminal** — Ihr **Arbeits-Terminal** (Ubuntu: `Strg+Alt+T`; Windows Terminal: neuer Tab mit „Ubuntu 24.04“) — und arbeiten Sie dort weiter. Das Installations-Terminal lassen Sie in Ruhe.
-
-**Was haben Sie da eigentlich eingetippt?** Die Befehle aus Schritt 2 und 3, zerlegt:
-
-<!-- data-type="none" -->
-| Bestandteil                       | Bedeutung                                                            | kommt heute in           |
-| :-------------------------------- | :------------------------------------------------------------------- | :----------------------- |
-| `sudo befehl`                     | Befehl mit Administratorrechten ausführen                            | Rechte und Benutzer      |
-| `a && b`                          | `b` nur ausführen, wenn `a` erfolgreich war                          | —                        |
-| `apt update` / `upgrade` / `install` | Paketlisten holen / alles Installierte aktualisieren / Pakete samt Abhängigkeiten installieren | Zum Nachschlagen |
-| `-y`                              | alle Rückfragen von `apt` mit „ja“ beantworten                       | —                        |
-| `add-apt-repository universe`     | den Bereich „universe“ der Ubuntu-Pakete freischalten                | —                        |
-| `export NAME=…`                   | Umgebungsvariable setzen, sichtbar für gestartete Programme          | Umgebungsvariablen       |
-| `$( … )`                          | Befehl ausführen und seine Ausgabe an dieser Stelle einsetzen        | Umgebungsvariablen       |
-| `curl -Ls -o /dev/null -w '%{url_effective}' adresse` | der Weiterleitung von GitHub folgen und nur die Zieladresse ausgeben — sie endet mit der Versionsnummer | — |
-| `\| awk -F/ '{print $NF}'`        | Pipe: die Adresse an `/` zerlegen und das letzte Stück ausgeben      | Dateien und Pipes        |
-| `curl -L -o /tmp/datei adresse`   | Datei herunterladen und unter `/tmp` speichern                       | Dateisystem              |
-| `$(. /etc/os-release && echo …)`  | Ubuntu-Codenamen (`noble`) aus einer Systemdatei lesen               | Umgebungsvariablen       |
-| `dpkg -i datei.deb`               | ein einzelnes Paket aus einer Datei installieren — hier die Paketquelle selbst | —              |
-
-Die Pipe können Sie gefahrlos nachstellen — hier mit der Adresse, die GitHub zurückgibt:
-
-```bash  main.sh
-ADRESSE="https://github.com/ros-infrastructure/ros-apt-source/releases/tag/1.3.0"
-echo "$ADRESSE" | awk -F/ '{print $NF}'
-export VERSION=$(echo "$ADRESSE" | awk -F/ '{print $NF}')
-echo "Version: $VERSION"
-echo "$ADRESSE" | awk -F/ '{print $3}'     # welches Stück ist das?
-```
-@bash
-
 ## Dateisystem
 
-Linux kennt keine Laufwerksbuchstaben. Alles hängt in einem einzigen Baum, der bei der Wurzel `/` beginnt. Ihr persönliches Verzeichnis liegt unter `/home/benutzername` und hat die Abkürzung `~`. ROS 2 selbst wird später unter `/opt/ros/jazzy` installiert.
+Linux kennt keine Laufwerksbuchstaben. Alles hängt in einem einzigen Baum, der bei der Wurzel `/` beginnt. Ihr persönliches Verzeichnis liegt unter `/home/benutzername` und hat die Abkürzung `~`. ROS 2 landet bei der Installation unter `/opt/ros/jazzy`.
 
 ```text
 /
@@ -266,8 +244,7 @@ ls ../..
 
 ### Aufgabe 1: Workspace anlegen
 
-Die Aufgaben lösen Sie auf Ihrem eigenen Ubuntu-System, in WSL2 oder am Pool-Rechner — nicht in den Server-Beispielen, denn dort gibt es kein eigenes Home-Verzeichnis.
-
+Die Aufgaben lösen Sie im Arbeits-Terminal auf Ihrem eigenen Ubuntu-System, in WSL2 oder am Pool-Rechner — nicht in den Server-Beispielen, denn dort gibt es kein eigenes Home-Verzeichnis.
 
 Legen Sie in Ihrem Home-Verzeichnis folgende Struktur an — mit möglichst wenigen Befehlen:
 
@@ -282,9 +259,7 @@ Legen Sie in Ihrem Home-Verzeichnis folgende Struktur an — mit möglichst weni
 
 Kopieren Sie anschließend `notes.txt` nach `src/line_follower/` und benennen Sie die Kopie in `todo.txt` um.
 
-**Prüfkriterium:** `find ~/ros2_ws` listet genau die Dateien und Verzeichnisse oben plus `src/line_follower/todo.txt`.
-
-**Blick ins Installations-Terminal:** In welcher Phase ist die Installation (Tabelle oben)? Hat sie schon Dateien angelegt? `ls /opt/ros/jazzy` — meldet `ls` „No such file or directory“, ist noch nichts entpackt; schauen Sie nach Aufgabe 3 noch einmal nach. Dort liegt später auch die Datei `setup.bash`, um die es am Ende der Übung geht. Ist `/opt/ros/jazzy` ein absoluter oder ein relativer Pfad?
+**Prüfkriterium:** Direkt nach Aufgabe 1 listet `find ~/ros2_ws` genau die Dateien und Verzeichnisse oben plus `src/line_follower/todo.txt`.
 
 Den Übungsordner `~/ros2_ws` räumen Sie am Ende der Übung wieder weg — in Ü 2 legen Sie Ihren echten Workspace an.
 
@@ -315,6 +290,9 @@ Die eigentliche Stärke der Shell liegt im Kombinieren kleiner Werkzeuge. Jedes 
 | `wc -l`                 | Zeilen zählen                                     |
 | `a \| b`                | Pipe: Ausgabe von `a` wird Eingabe von `b`        |
 | `> datei` / `>> datei`  | Ausgabe in Datei schreiben / anhängen             |
+| `< datei`               | Datei als Eingabe lesen                           |
+| `a && b`                | `b` nur ausführen, wenn `a` erfolgreich war       |
+| `$(befehl)`             | Befehl ausführen und seine Ausgabe an dieser Stelle einsetzen |
 
 Das folgende Beispiel arbeitet mit einem (gekürzten) Log eines ROS-2-Systems:
 
@@ -345,12 +323,19 @@ echo "--- errors.txt hat $(wc -l < errors.txt) Zeilen"
 
 ### Aufgabe 2: Fehlersuche im Log
 
-Laden Sie das Log aus dem Abschnitt „Dateien ansehen, suchen und verknüpfen“ als `ros.log` in Ihren Workspace (oder kopieren Sie es per Copy & Paste mit `cat > ros.log`; die Eingabe beenden Sie mit `Strg+D`).
+Laden Sie dasselbe Log in Ihren Übungsordner herunter. `curl -O` speichert die Datei unter dem Namen, mit dem die Adresse endet; `-f` lässt `curl` bei einem Fehler abbrechen, statt eine Fehlerseite zu speichern:
+
+```bash
+cd ~/ros2_ws
+curl -fO https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/uebung_01_linux_shell/ros.log
+wc -l ros.log                     # 9 ros.log
+```
+
+Meldet `curl` einen Fehler oder zeigt `wc -l` nicht 9, fragen Sie die Betreuer.
 
 1. Wie viele Zeilen enthalten `INFO`, `WARN` und `ERROR`?
 2. Schreiben Sie alle Meldungen des `lidar_node` in die Datei `lidar.txt`.
 3. Welcher Knoten meldet die meisten Fehler?
-4. **Blick ins Installations-Terminal:** Wie viele ROS-2-Pakete sind schon installiert? `dpkg -l | grep ros-jazzy | wc -l` — und solange noch geladen wird: Wie viele Paketdateien liegen schon im Zwischenspeicher? `ls /var/cache/apt/archives/*.deb | wc -l`. Wiederholen Sie beides nach ein paar Minuten.
 
 Wie viele `ERROR`-Zeilen enthält das Log?
 
@@ -360,7 +345,7 @@ Wie viele `ERROR`-Zeilen enthält das Log?
 `grep -c` zählt die passenden Zeilen.
 ***
 
-**Prüfkriterium:** `INFO` 4, `WARN` 2, `ERROR` 3 Zeilen; `wc -l lidar.txt` ergibt 3. In Teil 4 wächst im Download die zweite Zahl, beim Entpacken und Einrichten die erste.
+**Prüfkriterium:** `INFO` 4, `WARN` 2, `ERROR` 3 Zeilen; `wc -l lidar.txt` ergibt 3.
 
 <details>
 <summary>**Lösungsvorschlag**</summary>
@@ -373,8 +358,6 @@ grep "lidar_node" ros.log > lidar.txt
 wc -l lidar.txt                   # 3 lidar.txt
 grep "ERROR" ros.log | cut -d' ' -f3 | sort | uniq -c | sort -rn
 ```
-
-`dpkg -l` listet alle installierten Pakete, `grep` behält die von ROS 2 Jazzy, `wc -l` zählt sie. Solange `apt` noch lädt, bleibt diese Zahl bei 0 — `apt` lädt erst alles herunter und packt dann aus. Am Ende sind es mehrere Hundert.
 
 Die letzte Pipe zählt die Fehler je Knoten und sortiert absteigend: Der `line_detector` meldet zwei Fehler — in der Verkehrswelt hieße das: Die Kamera liefert Bilder, aber die Spurerkennung findet keine Linie.
 
@@ -398,13 +381,9 @@ Jede Datei gehört einem Benutzer und einer Gruppe. Für den Besitzer, die Grupp
 + `chmod +x datei` — Ausführungsrecht hinzufügen
 + `chmod 754 datei` — Rechte als Zahl setzen (r = 4, w = 2, x = 1)
 + `sudo befehl` — Befehl mit Administratorrechten ausführen, z. B. `sudo apt install ...`. Warum die Installation das braucht, zeigt `ls -ld /opt /etc/apt/sources.list.d`: Beide Verzeichnisse gehören `root`, nur er darf dort schreiben.
-+ **Shebang:** Die erste Zeile `#!/bin/bash` legt fest, mit welchem Programm ein Skript ausgeführt wird.
 
 ```bash  main.sh
-cat > hello.sh << 'EOF'
-#!/bin/bash
-echo "Hallo, ich bin ein Skript!"
-EOF
+echo 'echo "Hallo, ich bin ein Skript!"' > hello.sh
 ls -l hello.sh
 ./hello.sh || echo ">>> Nicht ausführbar!"
 chmod +x hello.sh
@@ -415,40 +394,53 @@ ls -l hello.sh
 
 ## Prozesse
 
-Jedes laufende Programm ist ein Prozess mit einer eigenen Nummer, der PID. In ROS 2 ist jeder Knoten ein Prozess — Sie werden also oft mehrere Programme parallel laufen lassen, jedes in seinem eigenen Terminal. Ein Programm im Vordergrund beenden Sie mit `Strg+C`.
+Jedes laufende Programm ist ein Prozess mit einer eigenen Nummer, der PID. In ROS 2 ist jeder Knoten ein Prozess — Sie werden also oft mehrere Programme parallel laufen lassen, jedes in seinem eigenen Terminal.
 
 <!-- data-type="none" -->
 | Befehl / Taste       | Bedeutung                                              |
 | -------------------- | ------------------------------------------------------ |
-| `Strg+C`             | laufendes Programm im Vordergrund beenden              |
 | `befehl &`           | Programm im Hintergrund starten                        |
-| `ps aux`, `pgrep`    | Prozesse anzeigen / suchen                             |
+| `ps aux`, `pgrep`    | Prozesse anzeigen / suchen (`pgrep -a` mit Befehlszeile) |
 | `top`, `htop`        | Prozesse und Auslastung live anzeigen (`q` beendet)    |
-| `kill PID`           | Prozess beenden                                        |
-| `pkill name`         | alle Prozesse mit diesem Namen beenden                 |
+| `Strg+C`             | Programm im Vordergrund beenden                        |
+| `kill PID`           | einen bestimmten Prozess beenden                       |
+| `pkill muster`       | **alle** Prozesse beenden, deren Name `muster` enthält |
+
+`pgrep` und `pkill` suchen im Programmnamen, also z. B. `talker` aus `ros2 run demo_nodes_cpp talker` — nicht im ROS-Knotennamen, der davon abweichen kann.
+
+**Beenden heißt: ein Signal schicken.** Weder `Strg+C` noch `kill` „töten“ ein Programm direkt. Beide schicken dem Prozess ein **Signal**, eine kurze Nachricht des Betriebssystems. Auf die meisten Signale kann das Programm reagieren, etwa Dateien schließen oder einen Roboter noch anhalten:
+
+<!-- data-type="none" -->
+| Signal          | ausgelöst durch          | Wirkung                                                                      |
+| --------------- | ------------------------ | ---------------------------------------------------------------------------- |
+| `SIGINT`        | `Strg+C`                 | „Unterbrechen“ — das Programm darf aufräumen; ROS-Knoten fahren sauber herunter |
+| `SIGTERM`       | `kill PID` (Standard)    | „Bitte beenden“ — das Programm darf aufräumen                                |
+| `SIGKILL`       | `kill -9 PID`            | sofortiger Abbruch durch das Betriebssystem, kein Aufräumen — nur als letztes Mittel |
 
 ```bash  main.sh
 sleep 30 &
 PID=$!
 echo "Hintergrundprozess gestartet mit PID $PID"
 ps -o pid,cmd -p $PID
-kill $PID
+kill $PID                     # schickt SIGTERM
 sleep 0.5
 ps -p $PID > /dev/null || echo "Prozess $PID wurde beendet"
 ```
 @bash
 
+> [!WARNING]
+> **Stolperfalle – `pkill` trifft alle mit passendem Namen:** `pkill muster` beendet jeden Ihrer Prozesse, dessen Name `muster` **enthält** — auch in anderen Terminals. `pkill node` träfe `camera_node` und `lidar_node` zugleich. Schauen Sie vorher mit `pgrep -a muster` nach, wen es trifft, oder beenden Sie gezielt mit `kill PID`.
+
 ### Aufgabe 3: Prozesse im Griff
 
 Im Projekt laufen viele Knoten gleichzeitig — und manchmal bleibt einer hängen.
 
-1. Starten Sie zweimal `sleep 600 &`.
+1. Starten Sie zweimal `sleep 600 &`. Die Shell antwortet jeweils mit z. B. `[1] 4711`: in eckigen Klammern die Jobnummer in diesem Terminal, dahinter die PID.
 2. Finden Sie beide Prozessnummern mit `pgrep sleep`.
-3. Beenden Sie einen der beiden Prozesse mit `kill`.
+3. Beenden Sie einen der beiden Prozesse mit `kill`. Welches Signal haben Sie ihm geschickt? (Die Meldung `[1]- Beendet` bzw. `Terminated` beim nächsten Enter ist kein Fehler, sondern die Bestätigung.)
+4. ⏱ Lassen Sie sich mit `pgrep -a s` anzeigen, welche Prozesse `pkill s` beenden würde. **Führen Sie `pkill s` nicht aus!** Was wäre passiert?
 
-4. ⏱ **Blick ins Installations-Terminal:** Finden Sie den Prozess der laufenden Installation mit `pgrep -a apt` und beobachten Sie nur ihn mit `top -p $(pgrep -d, apt)` (`q` beendet). **Beenden Sie ihn nicht** — warum wäre `kill` hier eine schlechte Idee? (Ist Ihre Installation schon fertig, beobachten Sie stattdessen einen Ihrer `sleep`-Prozesse.)
-
-**Prüfkriterium:** `pgrep sleep` liefert danach genau eine Nummer. Räumen Sie zum Schluss mit `pkill sleep` auf.
+**Prüfkriterium:** Nach Teil 3 liefert `pgrep sleep` genau eine Nummer. Räumen Sie zum Schluss mit `pkill sleep` auf — vorher kurz mit `pgrep -a sleep` prüfen, dass nur Ihre `sleep`-Prozesse getroffen werden.
 
 <details>
 <summary>**Lösungsvorschlag**</summary>
@@ -457,12 +449,13 @@ Im Projekt laufen viele Knoten gleichzeitig — und manchmal bleibt einer hänge
 sleep 600 &
 sleep 600 &
 pgrep sleep          # z. B. 4711 und 4712
-kill 4711
+kill 4711            # schickt SIGTERM
 pgrep sleep          # nur noch 4712
-pkill sleep          # beendet alle Prozesse namens sleep
+pgrep -a sleep       # wen träfe pkill sleep?
+pkill sleep          # beendet alle Prozesse, deren Name „sleep“ enthält
 ```
 
-Zu Teil 4: `$(pgrep -d, apt)` setzt die Nummern aller `apt`-Prozesse, mit Komma getrennt, in den `top`-Befehl ein. Bricht man `apt` mitten im Einrichten ab, bleiben Pakete halb installiert zurück, und jede weitere Installation scheitert, bis `sudo dpkg --configure -a` aufräumt. Liefert `pgrep -a apt` nichts, ist die Installation schon fertig.
+Zu Teil 4: `pgrep -a s` listet alle Ihre Prozesse, in deren Namen irgendwo ein `s` vorkommt — darunter meist auch Teile Ihrer Desktop-Sitzung (z. B. `gnome-shell`, `systemd`). `pkill s` hätte sie alle beendet — auch `gnome-terminal-server`, also alle Terminals samt laufender Installation; im schlimmsten Fall wären Sie abgemeldet worden. Fremde Prozesse und Systemprozesse trifft `pkill` ohne `sudo` nicht.
 
 </details>
 
@@ -498,7 +491,7 @@ Wenn Sie einen Befehl wie ros2 eintippen, durchsucht die Shell der Reihe nach al
 
 ```bash  main.sh
 mkdir -p mybin
-printf '#!/bin/bash\necho "Hallo von mytool"\n' > mybin/mytool
+echo 'echo "Hallo von mytool"' > mybin/mytool
 chmod +x mybin/mytool
 mytool || echo ">>> mytool liegt nicht im PATH"
 export PATH="$PWD/mybin:$PATH"
@@ -513,10 +506,7 @@ which mytool
 Ein Skript, das Sie mit Punkt-Schrägstrich ausführen, läuft in einer neuen Shell. Alle Variablen, die es setzt, verschwinden mit dieser Shell. Mit source dagegen werden die Befehle in Ihrer aktuellen Shell ausgeführt, und die Variablen bleiben erhalten. Deshalb heißt es bei ROS 2 immer source /opt/ros/jazzy/setup.bash und nicht einfach ausführen.
 
 ```bash  main.sh
-cat > setup.bash << 'EOF'
-export ROS_DOMAIN_ID=42
-export MY_SETUP_DONE=yes
-EOF
+echo 'export ROS_DOMAIN_ID=42' > setup.bash
 chmod +x setup.bash
 
 ./setup.bash
@@ -527,19 +517,17 @@ echo "Nach source setup.bash: ROS_DOMAIN_ID='$ROS_DOMAIN_ID'"
 ```
 @bash
 
-**Was bedeutet das für ROS 2?** Probieren Sie es auf Ihrem Rechner aus, sobald die Installation fertig ist:
-
-```bash
-which ros2                               # keine Ausgabe: ros2 liegt nicht im PATH
-source /opt/ros/jazzy/setup.bash
-which ros2                               # /opt/ros/jazzy/bin/ros2
-echo $PATH | tr ':' '\n' | head -n 3     # ROS 2 steht jetzt vorn im PATH
-printenv | grep ROS                      # welche Variablen hat setup.bash gesetzt?
-```
-
-Öffnen Sie danach ein neues Terminal und geben Sie dort wieder `which ros2` ein. Das `source` gilt nur für das Terminal, in dem Sie es ausgeführt haben — am Ende der Übung tragen Sie es deshalb in `~/.bashrc` ein. Im Labor kommt später `export ROS_DOMAIN_ID=…` dazu; die ID Ihrer Gruppe gibt es in P 1.
+An Ihrer echten ROS-2-Installation sehen Sie denselben Effekt am Ende der Übung, im Abschnitt „ROS 2 einrichten und testen“.
 
 ### Aufgabe 4: Ein eigenes Werkzeug
+
+Ein Skript ist eine Textdatei mit Shell-Befehlen. Damit es sich wie jedes andere Programm aufrufen lässt, braucht es drei Dinge:
+
++ in der ersten Zeile den **Shebang** `#!/bin/bash` — er legt fest, welches Programm die Datei ausführt,
++ das Ausführungsrecht (`chmod +x`, Abschnitt „Rechte und Benutzer“),
++ ein Verzeichnis im `PATH`.
+
+Legen Sie zuerst das Verzeichnis an (`mkdir -p ~/bin`) und schreiben Sie die Datei dann mit einem Editor, z. B. `nano ~/bin/rosinfo.sh` (speichern mit `Strg+O` und Enter, beenden mit `Strg+X`).
 
 1. Schreiben Sie ein Skript `~/bin/rosinfo.sh`, das das aktuelle Datum, den Rechnernamen (`hostname`) und den Wert von `ROS_DOMAIN_ID` ausgibt.
 2. Machen Sie es ausführbar.
@@ -550,20 +538,24 @@ printenv | grep ROS                      # welche Variablen hat setup.bash geset
 <details>
 <summary>**Lösungsvorschlag**</summary>
 
+Inhalt von `~/bin/rosinfo.sh`:
+
 ```bash
-mkdir -p ~/bin
-cat > ~/bin/rosinfo.sh << 'EOF'
 #!/bin/bash
 echo "Datum:         $(date)"
 echo "Rechner:       $(hostname)"
 echo "ROS_DOMAIN_ID: ${ROS_DOMAIN_ID:-nicht gesetzt}"
-EOF
+```
+
+```bash
 chmod +x ~/bin/rosinfo.sh
 echo 'export PATH="$HOME/bin:$PATH"' >> ~/.bashrc
 source ~/.bashrc
 ```
 
 Unter Ubuntu wird `~/bin` beim Anmelden automatisch in den `PATH` aufgenommen, sofern das Verzeichnis existiert — der Eintrag in `~/.bashrc` macht das Verhalten aber explizit und sofort wirksam.
+
+Warum der Shebang, wenn die Beispiele oben ohne ihn liefen? Startet die `bash` eine Datei ohne Shebang, springt sie ersatzweise ein und führt sie selbst aus. Startet ein anderes Programm das Skript — später etwa eine Launch-Datei (VL 02) —, fehlt diese Angabe, und der Start scheitert mit `Exec format error`.
 
 </details>
 
@@ -584,9 +576,55 @@ Unter Ubuntu wird `~/bin` beim Anmelden automatisch in den `PATH` aufgenommen, s
 
 </details>
 
+## Die Installation rückwärts lesen
+
+### Aufgabe 6: Was haben Sie da eingetippt?
+
+Zu Beginn haben Sie die Installationsbefehle kopiert, ohne sie im Einzelnen zu verstehen. Jetzt kennen Sie die Werkzeuge. Für diese Aufgabe muss die Installation noch nicht fertig sein. Erklären Sie in je einem Satz, was diese drei Zeilen tun und welcher Teil der heutigen Übung darin steckt:
+
+1. `sudo apt update && sudo apt upgrade -y`
+2. `export ROS_APT_SOURCE_VERSION=$(curl -Ls -o /dev/null -w '%{url_effective}' … | awk -F/ '{print $NF}')`
+3. `echo "source /opt/ros/jazzy/setup.bash" >> ~/.bashrc` (diese Zeile führen Sie gleich im nächsten Abschnitt aus)
+
+**Prüfkriterium:** Jede Erklärung nennt den Zweck (was danach anders ist) und mindestens ein Werkzeug von heute (z. B. Rechte, Pipe, Umgebungsvariable, Umleitung).
+
+⏱ Die Pipe aus Zeile 2 können Sie gefahrlos nachstellen — hier mit der Adresse, die GitHub zurückgibt:
+
+```bash  main.sh
+ADRESSE="https://github.com/ros-infrastructure/ros-apt-source/releases/tag/1.3.0"
+echo "$ADRESSE" | awk -F/ '{print $NF}'
+export VERSION=$(echo "$ADRESSE" | awk -F/ '{print $NF}')
+echo "Version: $VERSION"
+echo "$ADRESSE" | awk -F/ '{print $3}'     # welches Stück ist das?
+```
+@bash
+
+<details>
+<summary>**Lösungsvorschlag**</summary>
+
+1. Holt mit Administratorrechten (`sudo`, Abschnitt Rechte) die aktuellen Paketlisten und aktualisiert danach alle installierten Pakete — `upgrade` läuft nur, wenn `update` geklappt hat (`&&`).
+2. Fragt GitHub nach der neuesten Version der Paketquelle: `curl` folgt der Weiterleitung, die Pipe gibt die Adresse an `awk` weiter, das die Versionsnummer abschneidet; `$( … )` setzt das Ergebnis ein, `export` macht es als Umgebungsvariable für die folgenden Befehle verfügbar.
+3. Hängt (`>>`, Umleitung) die Zeile `source …` an `~/.bashrc` an — damit lädt jedes neue Terminal die ROS-2-Umgebung (Abschnitt Umgebungsvariablen, `source` statt ausführen).
+
+</details>
+
+Alle Bestandteile der Installationsbefehle finden Sie zum Nachschlagen am Ende des Skripts.
+
 ## ROS 2 einrichten und testen
 
-Ist die Installation fertig (der Prompt ist wieder da, keine Zeile mit `E:` am Ende), richten Sie ROS 2 dauerhaft ein. Sie wenden dabei an, was Sie in den Aufgaben 4 und 5 geübt haben. Haben Sie den Block „Was bedeutet das für ROS 2?“ übersprungen, führen Sie ihn jetzt **zuerst** aus — danach sehen Sie den Unterschied nicht mehr.
+Weiter geht es, sobald die Installation fertig ist: Im Installations-Terminal steht wieder der Prompt, und keine Zeile am Ende beginnt mit `E:`.
+
+**Zuerst: der Unterschied, den `source` macht.** Probieren Sie in einem neuen Terminal:
+
+```bash
+which ros2                               # keine Ausgabe: ros2 liegt nicht im PATH
+source /opt/ros/jazzy/setup.bash
+which ros2                               # /opt/ros/jazzy/bin/ros2
+echo $PATH | tr ':' '\n' | head -n 3     # ROS 2 steht jetzt vorn im PATH
+printenv | grep ROS                      # welche Variablen hat setup.bash gesetzt?
+```
+
+Öffnen Sie danach noch ein neues Terminal und geben Sie dort wieder `which ros2` ein: keine Ausgabe. Das `source` gilt nur für das Terminal, in dem Sie es ausgeführt haben. Deshalb tragen Sie es jetzt in `~/.bashrc` ein — wie in Aufgabe 5 und mit der dritten Zeile aus Aufgabe 6:
 
 ```bash
 echo "source /opt/ros/jazzy/setup.bash" >> ~/.bashrc
@@ -619,25 +657,6 @@ Zwei Prozesse, zwei Terminals, beide mit derselben Umgebung. Lassen Sie beide la
 **Aufräumen:** `rm -r ~/ros2_ws` löscht den Übungsordner aus Aufgabe 1.
 
 **Nicht fertig geworden?** Starten Sie zu Hause `sudo apt install -y ros-jazzy-desktop ros-dev-tools` neu (die Paketquelle aus Schritt 2 ist schon eingetragen, Geladenes bleibt erhalten), richten Sie ROS 2 wie oben ein und führen Sie die drei Tests aus — **spätestens bis VL 02**, dort arbeiten Sie mit `colcon`. Typische Fehler und ihre Abhilfe stehen in der [Installationsanleitung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/installation_ros2/README.md#7); mit der genauen Fehlermeldung helfen Ihnen die Betreuer im Forum oder vor Ü 2.
-
-### Aufgabe 6: Die Installation rückwärts lesen
-
-Erklären Sie in je einem Satz, was diese drei Zeilen aus der Installation tun und welcher Teil der heutigen Übung darin steckt:
-
-1. `sudo apt update && sudo apt upgrade -y`
-2. `export ROS_APT_SOURCE_VERSION=$(curl -Ls -o /dev/null -w '%{url_effective}' … | awk -F/ '{print $NF}')`
-3. `echo "source /opt/ros/jazzy/setup.bash" >> ~/.bashrc`
-
-**Prüfkriterium:** Jede Erklärung nennt den Zweck (was danach anders ist) und mindestens ein Werkzeug von heute (z. B. Rechte, Pipe, Umgebungsvariable, Umleitung).
-
-<details>
-<summary>**Lösungsvorschlag**</summary>
-
-1. Holt mit Administratorrechten (`sudo`, Abschnitt Rechte) die aktuellen Paketlisten und aktualisiert danach alle installierten Pakete — `upgrade` läuft nur, wenn `update` geklappt hat (`&&`).
-2. Fragt GitHub nach der neuesten Version der Paketquelle: `curl` folgt der Weiterleitung, die Pipe gibt die Adresse an `awk` weiter, das die Versionsnummer abschneidet; `$( … )` setzt das Ergebnis ein, `export` macht es als Umgebungsvariable für die folgenden Befehle verfügbar.
-3. Hängt (`>>`, Umleitung) die Zeile `source …` an `~/.bashrc` an — damit lädt jedes neue Terminal die ROS-2-Umgebung (Abschnitt Umgebungsvariablen, `source` statt ausführen).
-
-</details>
 
 ## Selbsttest
 
@@ -708,14 +727,39 @@ Ein ROS-Knoten läuft im Vordergrund und reagiert nicht mehr. Wie beenden Sie ih
 [[ ]] das Terminal-Fenster mit `cd ..` verlassen
 [[ ]] `rm` auf die Programmdatei anwenden
 ***
-`Strg+C` sendet dem Vordergrundprozess das Signal zum Beenden; `kill` tut dasselbe von außen. `rm` löscht nur die Datei — der laufende Prozess bleibt davon unberührt.
+`Strg+C` schickt dem Vordergrundprozess das Signal `SIGINT`, `kill` von außen das Signal `SIGTERM` — beide fordern ihn auf, sich zu beenden. Reagiert er auf keins von beiden, bleibt `kill -9 PID` (`SIGKILL`). `rm` löscht nur die Datei — der laufende Prozess bleibt davon unberührt.
 ***
 
-## Zum Nachschlagen: Pakete und Fernzugriff
+In Terminal A läuft `camera_node`, in Terminal B `lidar_node`. Sie wollen nur den `lidar_node` beenden. Welcher Weg ist sicher?
 
-Die Paketverwaltung `apt` haben Sie heute bei der Installation benutzt, `ssh` begegnet Ihnen im ersten Praktikum — hier beides zum Nachschlagen.
+[[X]] `Strg+C` in Terminal B
+[[X]] `pgrep -a lidar_node`, dann `kill PID`
+[[ ]] `pkill node`
+***
+`pkill node` beendet jeden Prozess, dessen Name `node` enthält — also auch den `camera_node` in Terminal A.
+***
 
-**Paketverwaltung**
+## Zum Nachschlagen: Installationsbefehle und Paketverwaltung
+
+**Alle Bestandteile der Installationsbefehle**
+
+<!-- data-type="none" -->
+| Bestandteil                       | Bedeutung                                                            |
+| :-------------------------------- | :------------------------------------------------------------------- |
+| `sudo befehl`                     | Befehl mit Administratorrechten ausführen                            |
+| `a && b`                          | `b` nur ausführen, wenn `a` erfolgreich war                          |
+| `apt update` / `upgrade` / `install` | Paketlisten holen / alles Installierte aktualisieren / Pakete samt Abhängigkeiten installieren |
+| `-y`                              | alle Rückfragen von `apt` mit „ja“ beantworten                       |
+| `add-apt-repository universe`     | den Bereich „universe“ der Ubuntu-Pakete freischalten                |
+| `export NAME=…`                   | Umgebungsvariable setzen, sichtbar für gestartete Programme          |
+| `$( … )`                          | Befehl ausführen und seine Ausgabe an dieser Stelle einsetzen        |
+| `curl -Ls -o /dev/null -w '%{url_effective}' adresse` | der Weiterleitung von GitHub folgen und nur die Zieladresse ausgeben — sie endet mit der Versionsnummer |
+| `\| awk -F/ '{print $NF}'`        | Pipe: die Adresse an `/` zerlegen und das letzte Stück ausgeben      |
+| `curl -L -o /tmp/datei adresse`   | Datei herunterladen und unter `/tmp` speichern                       |
+| `$(. /etc/os-release && echo …)`  | Ubuntu-Codenamen (`noble`) aus einer Systemdatei lesen               |
+| `dpkg -i datei.deb`               | ein einzelnes Paket aus einer Datei installieren — hier die Paketquelle selbst |
+
+**Paketverwaltung im Alltag**
 
 ```bash
 sudo apt update                    # Paketlisten aktualisieren
@@ -723,19 +767,9 @@ sudo apt install tree htop tmux    # Pakete installieren
 apt search turtlebot3              # Pakete suchen
 ```
 
-**Fernzugriff auf einen anderen Rechner**
-
-```bash
-ssh ubuntu@192.168.0.42            # anmelden (Adresse bekommen Sie im Praktikum)
-scp mein_skript.py ubuntu@192.168.0.42:~/   # Datei kopieren
-exit                               # Verbindung beenden
-```
-
-Im Praktikum arbeiten Sie meist direkt von Ihrem Laptop aus; `ssh` auf den TurtleBot brauchen Sie nur für Wartungsarbeiten.
-
 ## Zum Nachschlagen: Freies Terminal im Browser
 
-Hier können Sie frei experimentieren. Das Linux läuft vollständig in Ihrem Browser, Sie können nichts kaputt machen. Nach dem Neuladen der Seite ist alles wieder im Ausgangszustand.
+Hier können Sie frei experimentieren. Das Linux läuft vollständig in Ihrem Browser, Sie können nichts kaputt machen. Nach dem Neuladen der Seite ist alles wieder im Ausgangszustand. Es nutzt die Shell `ash` statt `bash`, deshalb wirken Einträge in `~/.bashrc` (Aufgaben 4 und 5) dort nicht.
 
 ??[JSLinux: Alpine Linux im Browser](https://bellard.org/jslinux/vm.html?url=alpine-x86.cfg&mem=192 "JSLinux von Fabrice Bellard — Alpine Linux mit der Shell ash")
 
@@ -746,42 +780,24 @@ Hier können Sie frei experimentieren. Das Linux läuft vollständig in Ihrem Br
 + `echo $PATH` und `env`
 + `ls -l /bin | head` — wem gehören die Programme, welche Rechte haben sie?
 
-> [!NOTE]
-> **Hinweis – Browser-Linux:** Das Browser-Linux nutzt `ash` statt `bash`: Einträge in `~/.bashrc` (Aufgaben 4 und 5) wirken dort nicht, und nach dem Neuladen ist alles weg.
-
-## Zum Nachschlagen: Git in sechs Befehlen
-
-Im Praktikum arbeitet jede Gruppe in einem gemeinsamen **Git-Repository** — ein Ordner, dessen Änderungen Git aufzeichnet und mit einem Server abgleicht. Eine Person legt es auf dem Server an und lädt die anderen ein; dann:
-
-<!-- data-type="none" -->
-| Befehl                         | Bedeutung                                                     |
-| :----------------------------- | :------------------------------------------------------------ |
-| `git clone <adresse>`          | Repository einmalig auf den eigenen Rechner kopieren          |
-| `git status`                   | Was hat sich geändert, was ist vorgemerkt?                    |
-| `git add datei`                | Änderung für den nächsten Schnappschuss vormerken            |
-| `git commit -m "Nachricht"`    | Schnappschuss mit Beschreibung speichern                      |
-| `git push`                     | eigene Schnappschüsse auf den Server hochladen                |
-| `git pull`                     | Schnappschüsse der anderen herunterladen                      |
-
-Arbeitsablauf: zu Beginn `git pull`, am Ende `git add`, `git commit`, `git push`. Eine ausführliche Einführung bietet das [Git-Buch (deutsch)](https://git-scm.com/book/de/v2).
-
 ## Ausblick
 
 Mit diesen Grundlagen und einem laufenden ROS 2 sind Sie für die nächsten Schritte gerüstet. In der Vorlesung geht es um die Konzepte von ROS 2, in der nächsten Übung um Ihren ersten eigenen Workspace.
 
-**Das Wichtigste in 6 Zeilen**
+**Das Wichtigste in 7 Zeilen**
 
 <!-- data-type="none" -->
 | Thema               | Merksatz                                                                       |
 | ------------------- | ------------------------------------------------------------------------------ |
 | Pfade               | absolut beginnt bei `/`, relativ beim aktuellen Ordner; `~` ist Ihr Home       |
 | Pipes               | `a \| b` verkettet Werkzeuge, `>` überschreibt, `>>` hängt an                    |
-| Rechte              | eigene Skripte brauchen `chmod +x` und eine Shebang-Zeile                      |
-| Prozesse            | jeder ROS-Knoten ist ein Prozess: `Strg+C`, `pgrep`, `kill`                    |
+| Rechte              | `ls -l` zeigt `rwx` für Besitzer, Gruppe, andere; `chmod +x` macht ausführbar, `sudo` gibt Administratorrechte |
+| Skripte             | Shebang `#!/bin/bash` + `chmod +x` + Verzeichnis im `PATH` = eigener Befehl |
+| Prozesse            | jeder ROS-Knoten ist ein Prozess; `Strg+C` und `kill` schicken Signale, `pkill` trifft alle mit passendem Namen |
 | Umgebung            | gilt pro Terminal; `source` lädt in die aktuelle Shell, `~/.bashrc` in jede neue |
 | Installation        | `sudo apt update && sudo apt install …` holt Software samt Abhängigkeiten aus eingetragenen Paketquellen |
 
-**Transferfrage:** Ihre Spurerkennung startet auf dem TurtleBot nicht, die Meldung lautet `ros2: command not found`. Auf dem Laptop lief alles. Woran liegt es, und wie stellen Sie es dauerhaft ab? (Tipp: Aufgaben 4 und 5.)
+**Transferfrage:** Ein Kommilitone schreibt ein Skript `start.sh`, das `export ROS_DOMAIN_ID=7` setzt. Er startet es mit `./start.sh`, doch danach meldet `echo $ROS_DOMAIN_ID` in seinem Terminal nichts, und `ros2 topic list` zeigt die Topics seiner Gruppe nicht. Woran liegt es, und was raten Sie ihm? (Tipp: Aufgabe 5.)
 
 **Bis zur nächsten Übung:** Läuft ROS 2 bei Ihnen noch nicht vollständig, schließen Sie die Installation nach der [Installationsanleitung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/installation_ros2/README.md) ab und führen Sie die drei Tests aus — spätestens bis VL 02.
 
