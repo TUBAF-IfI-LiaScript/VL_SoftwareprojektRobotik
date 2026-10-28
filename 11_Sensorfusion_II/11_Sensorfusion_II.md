@@ -1,6 +1,6 @@
 <!--
 
-author:   Sebastian Zug & Georg Jäger
+author:   Sebastian Zug & Georg Jäger & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
 version:  1.0.3
 language: de
@@ -38,6 +38,12 @@ import:   https://github.com/liascript/CodeRunner
 + Erweiterung auf mehrdimensionale Systeme
 + Einführung des Extended Kalman Filters für nichtlineare Systeme
 + Kennenlernen des `robot_localization` Pakets in ROS 2
+
+<!-- kurslandkarte:knopf-start -->
+
+<a href="https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=09" style="display: inline-block; padding: 0.5em 1.1em; background-color: #00718A; color: #ffffff; text-decoration: none; font-family: 'IBM Plex Sans', 'Segoe UI', system-ui, sans-serif; font-weight: 600;">🗺️ Diese Vorlesung in der Kurslandkarte →</a>
+
+<!-- kurslandkarte:knopf-ende -->
 
 --------------------------------------------------------------------------------
 

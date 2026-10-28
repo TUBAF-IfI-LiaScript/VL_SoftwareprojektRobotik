@@ -37,6 +37,12 @@ import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_Softwareproje
 + die Bedingungen einer Verbindung nennen (Domäne, Middleware, Name, Typ, QoS) und Verbindungsfehler mit `ros2 topic` eingrenzen,
 + ROS 2 als **verteiltes System** einordnen: erklären, was daraus folgt (Ausfälle, verspätete Daten, stille Fehler), und ableiten, wie ein Knoten damit umgehen muss.
 
+<!-- kurslandkarte:knopf-start -->
+
+<a href="https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=03" style="display: inline-block; padding: 0.5em 1.1em; background-color: #00718A; color: #ffffff; text-decoration: none; font-family: 'IBM Plex Sans', 'Segoe UI', system-ui, sans-serif; font-weight: 600;">🗺️ Diese Vorlesung in der Kurslandkarte →</a>
+
+<!-- kurslandkarte:knopf-ende -->
+
 --------------------------------------------------------------------------------
 
 **Was wir schon wissen — und was am Donnerstag kommt**

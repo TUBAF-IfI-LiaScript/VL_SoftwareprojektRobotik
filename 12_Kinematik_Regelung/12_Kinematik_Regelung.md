@@ -1,6 +1,6 @@
 <!--
 
-author:   Sebastian Zug & Georg Jäger & Claude.ai
+author:   Sebastian Zug & Georg Jäger & Claude.ai & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
 version:  0.0.2
 language: de
@@ -32,6 +32,12 @@ attribute: Danke an Andre Dietrich für seinen Kurs "Einführung Regelungstechni
 | **Autoren**          | @author                                                                                                                 |
 
 ![](https://media.giphy.com/media/12psn8ymXy3dYs/giphy.gif)
+
+<!-- kurslandkarte:knopf-start -->
+
+<a href="https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=10" style="display: inline-block; padding: 0.5em 1.1em; background-color: #00718A; color: #ffffff; text-decoration: none; font-family: 'IBM Plex Sans', 'Segoe UI', system-ui, sans-serif; font-weight: 600;">🗺️ Diese Vorlesung in der Kurslandkarte →</a>
+
+<!-- kurslandkarte:knopf-ende -->
 
 --------------------------------------------------------------------------------
 

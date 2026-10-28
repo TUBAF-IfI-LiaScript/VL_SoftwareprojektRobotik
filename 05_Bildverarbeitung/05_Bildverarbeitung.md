@@ -39,6 +39,12 @@ import: https://github.com/liascript/CodeRunner
 + Einführung in Kameramodelle (Pinhole-Modell)
 + Integration von Bildverarbeitung in ROS 2 mit OpenCV
 
+<!-- kurslandkarte:knopf-start -->
+
+<a href="https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=05" style="display: inline-block; padding: 0.5em 1.1em; background-color: #00718A; color: #ffffff; text-decoration: none; font-family: 'IBM Plex Sans', 'Segoe UI', system-ui, sans-serif; font-weight: 600;">🗺️ Diese Vorlesung in der Kurslandkarte →</a>
+
+<!-- kurslandkarte:knopf-ende -->
+
 --------------------------------------------------------------------------------
 
 ## Motivation: Warum Bildverarbeitung in der Robotik?

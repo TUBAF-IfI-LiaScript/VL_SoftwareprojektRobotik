@@ -1,6 +1,6 @@
 {
  "stand": "28.10.2026",
- "version": "0.4.0",
+ "version": "0.5.0",
  "kurs": {
   "basis": "https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/",
   "speicher": "robotik-map",
@@ -247,7 +247,7 @@
     "source oder ausführen?",
     "Aufgabe 4: Ein eigenes Werkzeug",
     "Aufgabe 5: Zwei Terminals, zwei Welten",
-    "Die Installation rückwärts lesen",
+    "Die ROS Installation verstehen",
     "Aufgabe 6: Was haben Sie da eingetippt?",
     "ROS 2 einrichten und testen",
     "Selbsttest",

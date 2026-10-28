@@ -49,6 +49,12 @@ Wenn Sie im Praktikum den TurtleBot hochfahren, tippen Sie genau diesen einen Be
 + Mehrere Knoten mit einer Launch-Datei gemeinsam starten und konfigurieren
 + Log-Ausgaben gezielt einsetzen und ROS 2 über mehrere Rechner betreiben
 
+<!-- kurslandkarte:knopf-start -->
+
+<a href="https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=04" style="display: inline-block; padding: 0.5em 1.1em; background-color: #00718A; color: #ffffff; text-decoration: none; font-family: 'IBM Plex Sans', 'Segoe UI', system-ui, sans-serif; font-weight: 600;">🗺️ Diese Vorlesung in der Kurslandkarte →</a>
+
+<!-- kurslandkarte:knopf-ende -->
+
     --{{1}}--
 In VL 01 haben wir fertige Knoten gestartet und untersucht. Heute schreiben wir eigene, so wie Sie später Ihre Spurerkennung und Ihr Fahrverhalten für den TurtleBot umsetzen.
 

@@ -38,6 +38,12 @@ import: https://github.com/liascript/CodeRunner
 + Integration in ROS 2 mit vision_msgs
 + **Praktische Anwendung: Personendetektion mit YOLOv8 + Stereo-Positionsschätzung**
 
+<!-- kurslandkarte:knopf-start -->
+
+<a href="https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=07" style="display: inline-block; padding: 0.5em 1.1em; background-color: #00718A; color: #ffffff; text-decoration: none; font-family: 'IBM Plex Sans', 'Segoe UI', system-ui, sans-serif; font-weight: 600;">🗺️ Diese Vorlesung in der Kurslandkarte →</a>
+
+<!-- kurslandkarte:knopf-ende -->
+
 --------------------------------------------------------------------------------
 
 ## Motivation: Warum Objekterkennung?

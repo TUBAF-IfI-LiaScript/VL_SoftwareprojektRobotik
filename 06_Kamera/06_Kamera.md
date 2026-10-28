@@ -35,6 +35,12 @@ import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_Softwareproje
 + ein Bild mit vorab berechneten Tabellen entzerren und begründen, warum man die Tabellen nur einmal berechnet,
 + mit einer Homographie aus Punktpaaren eine maßstäbliche Draufsicht auf den Boden erzeugen, ihre Grenzen benennen und darin die Abweichung von der Spurmitte mit Vorausschau ablesen.
 
+<!-- kurslandkarte:knopf-start -->
+
+<a href="https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=06" style="display: inline-block; padding: 0.5em 1.1em; background-color: #00718A; color: #ffffff; text-decoration: none; font-family: 'IBM Plex Sans', 'Segoe UI', system-ui, sans-serif; font-weight: 600;">🗺️ Diese Vorlesung in der Kurslandkarte →</a>
+
+<!-- kurslandkarte:knopf-ende -->
+
 --------------------------------------------------------------------------------
 
 <!-- kurslandkarte:wo-start -->
