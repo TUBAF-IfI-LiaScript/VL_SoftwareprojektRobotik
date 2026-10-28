@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent
 email:    sebastian.zug@informatik.tu-freiberg.de
-version:  0.1.0
+version:  0.1.1
 language: de
 narrator: Deutsch Female
 
@@ -268,7 +268,7 @@ Erscheinen keine Punkte, prüfen Sie die beiden Ursachen aus VL 03: Fehlt die Tr
 
 📝 Welche Einstellungen waren nötig, damit der Scan erscheint? Fügen Sie einen Screenshot ins Protokoll ein.
 
-*Kamera mit eigenem Skript (Kür, nur wenn Zeit bleibt):* Laden Sie das Skript [view_camera.py](https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/exercise_03_line_following/templates/view_camera.py) herunter (`wget` + Link). Es abonniert `/image_raw`, Ihr Roboter sendet aber auf `/camera/image_raw`. Starten Sie es trotzdem, **ohne den Code zu ändern** (VL 01, Remapping):
+*Kamera mit eigenem Skript (Kür, nur wenn Zeit bleibt):* Laden Sie das Skript [view_camera.py](https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/praktikum_01_turtlebot/view_camera.py) herunter (`wget` + Link). Es abonniert `/image_raw`, Ihr Roboter sendet aber auf `/camera/image_raw`. Starten Sie es trotzdem, **ohne den Code zu ändern** (VL 01, Remapping):
 
 <details>
 <summary>Lösung anzeigen</summary>
