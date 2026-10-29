@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent; Konzept: Johannes Kohl
 email:    sebastian.zug@informatik.tu-freiberg.de
-version:  1.1.0
+version:  1.1.1
 language: de
 narrator: Deutsch Female
 
@@ -173,9 +173,10 @@ ros2 run mein_teleop hallo
 
 **Prüfkriterium:** In T1 erscheint `Hi from mein_teleop.`, nach Teil 3 Ihr eigener Text.
 
-<details>
-<summary>**Lösung zu Teil 2**</summary>
+**Lösung zu Teil 2** — erst aufdecken, wenn Sie es selbst versucht haben:
 
+[[!]]
+***
 T2 meldet `Package 'mein_teleop' not found`. Es kennt nur das, was in seiner Umgebung steht (Ü 1): `/opt/ros/jazzy` über `~/.bashrc`, aber nicht Ihren Workspace. Abhilfe in jedem neuen Terminal:
 
 ```bash
@@ -183,8 +184,7 @@ source ~/ros2_ws/install/setup.bash
 ```
 
 Wer das nicht jedes Mal tippen will, hängt die Zeile an `~/.bashrc` an — **nach** der Zeile für `/opt/ros/jazzy`. Teil 3 klappt ohne Bauen, weil `--symlink-install` auf Ihre Quelldatei verlinkt.
-
-</details>
+***
 
 ## B: Pakete anderer Leute
 
@@ -238,15 +238,15 @@ Drücken Sie in T2 einige Male `w` und `a`, dann die Leertaste. In T3 wandern di
 
 **Prüfkriterium:** Sie können für jedes Paket in einem Satz sagen, wie es gebaut wird und wovon es abhängt.
 
-<details>
-<summary>**Lösungsvorschlag**</summary>
+**Lösungsvorschlag** — erst aufdecken, wenn Sie es selbst versucht haben:
 
+[[!]]
+***
 1. `keyboard_teleop_cpp` und `keyboard_teleop`: `ament_cmake`; `keyboard_teleop_viz` und `mein_teleop`: `ament_python`.
 2. Von `rclcpp` und `std_msgs` — in `package.xml` (`<depend>`) und in `CMakeLists.txt` (`find_package`, `ament_target_dependencies`). Die `package.xml` sagt `colcon` und `rosdep`, *was* gebraucht wird; `CMakeLists.txt` sagt dem Compiler, *wo* er es findet.
 3. Das Bündel enthält keinen Code, es muss nichts gegen die anderen Pakete übersetzen. Es braucht sie erst, wenn es läuft — zur Laufzeit (`exec`). `<depend>` heißt „zum Bauen und zur Laufzeit“.
 4. `add_executable` übersetzt `keyboard_input.cpp` zu einem Programm, `install` legt es nach `install/keyboard_teleop_cpp/lib/keyboard_teleop_cpp/`, wo `ros2 run` es sucht. Bei Python erledigt das der Eintrag `entry_points` in `setup.py`.
-
-</details>
+***
 
 ## C: Der eigene Umsetzer
 
@@ -319,9 +319,10 @@ ros2 run keyboard_teleop_cpp keyboard_input                                     
 
 **Prüfkriterium:** Klicken Sie in T2 (das `turtlesim`-Fenster hat den Fokus übernommen). Mit `w`, `a`, `d` fährt die Schildkröte, mit der Leertaste hält sie an. `ros2 topic echo /turtle1/cmd_vel` in T4 zeigt Ihre Twist-Nachrichten.
 
-<details>
-<summary>**Lösung und Fehlersuche**</summary>
+**Lösung und Fehlersuche** — erst aufdecken, wenn Sie es selbst versucht haben:
 
+[[!]]
+***
 ```python
         self.create_subscription(Float64, '/keyboard_teleop/angular', self.bei_angular, 10)
 ```
@@ -334,8 +335,7 @@ ros2 run keyboard_teleop_cpp keyboard_input                                     
 + `No executable found` — das Komma in `setup.py` fehlt, der Eintrag fehlt, oder nach dem Eintrag wurde nicht gebaut.
 + Die Schildkröte bewegt sich nicht — zeigt `ros2 topic info /turtle1/cmd_vel` (T4) „Publisher count: 1“ *und* „Subscription count: 1“? Fehlt der Publisher, hat das Remapping nicht gegriffen oder der Umsetzer läuft nicht.
 + Die Balken bewegen sich, die Schildkröte nicht — die Tasten landen in einem anderen Fenster.
-
-</details>
+***
 
 ### Aufgabe C2: Parameter
 
@@ -381,15 +381,15 @@ cat ~/umsetzer_dump.yaml
 
 **Prüfkriterium:** Nach `ros2 param set … 0.1` zeigt `ros2 topic echo /turtle1/cmd_vel` auch bei vielen `w` höchstens `x: 0.1`. Nach dem Neustart in Teil 3 zeigt `ros2 param get /umsetzer max_linear` den Wert `0.5`.
 
-<details>
-<summary>**Lösung und Hinweise**</summary>
+**Lösung und Hinweise** — erst aufdecken, wenn Sie es selbst versucht haben:
 
+[[!]]
+***
 + Der Knoten liest die Parameter bei **jedem** Senden neu — deshalb wirkt `ros2 param set` sofort. Liest ein Knoten seine Parameter nur einmal im Konstruktor, merkt er von späteren Änderungen nichts. Genau so verändern Sie in P 3 die Schwelle Ihrer Spurerkennung bei laufendem Roboter.
 + `ros2 param set /umsetzer max_linear 1` scheitert mit `Wrong parameter type, expected 'Type.DOUBLE' got 'Type.INTEGER'`: Der Parameter wurde mit `0.22` als Kommazahl deklariert, `1` ist eine ganze Zahl. Schreiben Sie `1.0`.
 + `ros2 param list` zeigt keine `max_*`-Einträge? Dann läuft noch der alte Umsetzer — neu starten.
 + Die gesicherte Datei beginnt mit `/umsetzer:` und enthält zusätzlich `use_sim_time` und `start_type_description_service`. So sieht eine Parameterdatei aus; mit `--ros-args --params-file ~/umsetzer_dump.yaml` laden Sie sie beim Start wieder.
-
-</details>
+***
 
 ### Aufgabe C3: Alles mit einer Launch-Datei
 
@@ -517,14 +517,14 @@ Die Schildkröte fährt die Strecke ein zweites Mal — ohne dass jemand eine Ta
 
 **Prüfkriterium:** Sie können erklären, warum die Endpositionen voneinander abweichen. In Teil 3 fährt die Schildkröte die Strecke immer wieder, bis Sie abbrechen.
 
-<details>
-<summary>**Lösung**</summary>
+**Lösung** — erst aufdecken, wenn Sie es selbst versucht haben:
 
+[[!]]
+***
 1. Die Schildkröte landet nahe, aber nicht genau am selben Ort — und jede Wiedergabe weicht etwas anders ab. Die Aufnahme beginnt und endet nicht exakt mit Ihrem Tastendruck, die Nachrichten kommen beim Abspielen nicht auf die Millisekunde genau an, und der Umsetzer sendet im eigenen 10-Hz-Takt. Kleine Zeitunterschiede summieren sich über die Fahrt. **Befehle blind abzuspielen ist eine Steuerung ohne Rückkopplung** — ein Roboter, der einer Spur folgen soll, muss laufend messen und nachregeln (Block 5). Beim echten TurtleBot kämen Schlupf und Untergrund dazu.
 2. Etwa 62 Nachrichten pro Sekunde, rund 1,5 KB/s. Die Schildkröte meldet ihre Position fortlaufend, auch im Stillstand — genau wie Sensoren. Eine Kamera erzeugt so leicht einige Megabyte pro Sekunde; mit `ros2 topic bw` schätzen Sie vor einer Aufnahme ab, wie groß sie wird (P 1).
 3. `--loop` beginnt nach dem Ende wieder von vorn. Weil die Schildkröte dabei nicht zurückgesetzt wird, fährt sie die Figur jedes Mal von ihrer letzten Position aus weiter. Im Praktikum spielen Sie so eine Sensoraufnahme in Dauerschleife ab, während Sie Ihren Knoten entwickeln.
-
-</details>
+***
 
 Weitere nützliche Optionen: `--rate 2.0` spielt doppelt so schnell ab, und `ros2 bag record -a` nimmt **alle** Topics auf — beim Roboter mit Kamera ist das selten eine gute Idee. Existiert der Ordner `fahrt` schon, bricht `ros2 bag record` ab: neuen Namen wählen (`-o fahrt2`) oder den alten Ordner löschen.
 

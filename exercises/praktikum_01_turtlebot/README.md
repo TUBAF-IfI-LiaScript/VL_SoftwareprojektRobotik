@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent
 email:    sebastian.zug@informatik.tu-freiberg.de
-version:  0.1.1
+version:  0.1.2
 language: de
 narrator: Deutsch Female
 
@@ -270,14 +270,14 @@ Erscheinen keine Punkte, prüfen Sie die beiden Ursachen aus VL 03: Fehlt die Tr
 
 *Kamera mit eigenem Skript (Kür, nur wenn Zeit bleibt):* Laden Sie das Skript [view_camera.py](https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/praktikum_01_turtlebot/view_camera.py) herunter (`wget` + Link). Es abonniert `/image_raw`, Ihr Roboter sendet aber auf `/camera/image_raw`. Starten Sie es trotzdem, **ohne den Code zu ändern** (VL 01, Remapping):
 
-<details>
-<summary>Lösung anzeigen</summary>
+**Lösung** — erst aufdecken, wenn Sie es selbst versucht haben:
 
+[[!]]
+***
 ```bash
 python3 view_camera.py --ros-args -r /image_raw:=/camera/image_raw
 ```
-
-</details>
+***
 
 ## D: Eine Fahrt aufzeichnen
 
