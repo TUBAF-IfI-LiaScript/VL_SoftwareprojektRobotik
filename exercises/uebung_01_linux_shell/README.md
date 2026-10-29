@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.4.0
+version:  0.4.1
 language: de
 narrator: Deutsch Female
 
@@ -117,7 +117,7 @@ Läuft bei Ihnen noch kein Ubuntu 24.04, setzen Sie sich an einen der Rechner in
 
 **Die ersten Handgriffe**
 
-+ **Terminal öffnen:** Ubuntu: `Strg+Alt+T`. Windows: Startmenü → „Ubuntu 24.04“ oder im _Windows Terminal_ das Profil „Ubuntu 24.04“.
++ **Terminal öffnen:** Ubuntu: `Strg+Alt+T`. Windows: Startmenü → „Ubuntu 24.04“ oder im *Windows Terminal* das Profil „Ubuntu 24.04“.
 + **Befehle kopieren statt abtippen:** mit dem Kopierknopf rechts oben am grauen Kasten. Eingefügt wird im Terminal mit `Strg+Shift+V` oder per Rechtsklick, nicht mit `Strg+V`. Das Windows Terminal fragt beim Einfügen mehrerer Zeilen nach — bestätigen Sie mit „Trotzdem einfügen“.
 + **Passwort:** `sudo` fragt nach Ihrem Passwort; die Eingabe bleibt unsichtbar, das ist normal. Unter WSL2 ist es das Passwort, das Sie beim Einrichten von Ubuntu festgelegt haben.
 
@@ -229,18 +229,19 @@ Linux kennt keine Laufwerksbuchstaben. Alles hängt in einem einzigen Baum, der 
 + `.` ist das aktuelle, `..` das übergeordnete Verzeichnis
 
 ```bash  main.sh
-mkdir -p ros2_ws/src/my_package
-cd ros2_ws
+mkdir verkehrswelt
+mkdir verkehrswelt/fotos
+touch verkehrswelt/fotos/kreuzung.png
+cd verkehrswelt/fotos
 pwd
-touch src/my_package/package.xml
-ls -R
-cd src/my_package
-echo "Jetzt bin ich in: $(pwd)"
-ls ../..
+ls ..                        # relativ: eine Ebene höher
+cd ../..
+ls verkehrswelt/fotos
+mkdir karten/2026 || echo ">>> geht nicht: karten gibt es noch nicht"
 ```
 @bash
 
-**Variante:** Legen Sie zusätzlich ein Verzeichnis `build` an und löschen Sie es wieder. Was passiert, wenn Sie `mkdir` ohne die Option `-p` verwenden?
+**Variante:** Benennen Sie `kreuzung.png` mit `mv` um und löschen Sie danach das ganze Verzeichnis `verkehrswelt`. Wie bekommen Sie `karten/2026` mit **einem** Befehl angelegt (Tabelle oben)?
 
 ### Aufgabe 1: Workspace anlegen
 
@@ -263,17 +264,17 @@ Kopieren Sie anschließend `notes.txt` nach `src/line_follower/` und benennen Si
 
 Den Übungsordner `~/ros2_ws` räumen Sie am Ende der Übung wieder weg — in Ü 2 legen Sie Ihren echten Workspace an.
 
-<details>
-<summary>**Lösungsvorschlag**</summary>
+**Lösungsvorschlag** — erst aufdecken, wenn Sie es selbst versucht haben:
 
+[[!]]
+***
 ```bash
 mkdir -p ~/ros2_ws/src/turtle_tools ~/ros2_ws/src/line_follower
 touch ~/ros2_ws/src/turtle_tools/README.md ~/ros2_ws/notes.txt
 cp ~/ros2_ws/notes.txt ~/ros2_ws/src/line_follower/todo.txt
 find ~/ros2_ws
 ```
-
-</details>
+***
 
 ## Dateien ansehen, suchen und verknüpfen
 
@@ -288,11 +289,12 @@ Die eigentliche Stärke der Shell liegt im Kombinieren kleiner Werkzeuge. Jedes 
 | `grep muster datei`     | Zeilen mit einem Suchmuster finden (`-i`, `-c`, `-v`) |
 | `find . -name "*.py"`   | Dateien im Verzeichnisbaum suchen                 |
 | `wc -l`                 | Zeilen zählen                                     |
-| `a \| b`                | Pipe: Ausgabe von `a` wird Eingabe von `b`        |
 | `> datei` / `>> datei`  | Ausgabe in Datei schreiben / anhängen             |
 | `< datei`               | Datei als Eingabe lesen                           |
 | `a && b`                | `b` nur ausführen, wenn `a` erfolgreich war       |
 | `$(befehl)`             | Befehl ausführen und seine Ausgabe an dieser Stelle einsetzen |
+
+**Die Pipe:** `a | b` — die Ausgabe von `a` wird zur Eingabe von `b`.
 
 Das folgende Beispiel arbeitet mit einem (gekürzten) Log eines ROS-2-Systems:
 
@@ -347,9 +349,10 @@ Wie viele `ERROR`-Zeilen enthält das Log?
 
 **Prüfkriterium:** `INFO` 4, `WARN` 2, `ERROR` 3 Zeilen; `wc -l lidar.txt` ergibt 3.
 
-<details>
-<summary>**Lösungsvorschlag**</summary>
+**Lösungsvorschlag** — erst aufdecken, wenn Sie es selbst versucht haben:
 
+[[!]]
+***
 ```bash
 grep -c "INFO" ros.log            # 4
 grep -c "WARN" ros.log            # 2
@@ -360,8 +363,7 @@ grep "ERROR" ros.log | cut -d' ' -f3 | sort | uniq -c | sort -rn
 ```
 
 Die letzte Pipe zählt die Fehler je Knoten und sortiert absteigend: Der `line_detector` meldet zwei Fehler — in der Verkehrswelt hieße das: Die Kamera liefert Bilder, aber die Spurerkennung findet keine Linie.
-
-</details>
+***
 
 ## Rechte und Benutzer
 
@@ -415,7 +417,7 @@ Jedes laufende Programm ist ein Prozess mit einer eigenen Nummer, der PID. In RO
 | --------------- | ------------------------ | ---------------------------------------------------------------------------- |
 | `SIGINT`        | `Strg+C`                 | „Unterbrechen“ — das Programm darf aufräumen; ROS-Knoten fahren sauber herunter |
 | `SIGTERM`       | `kill PID` (Standard)    | „Bitte beenden“ — das Programm darf aufräumen                                |
-| `SIGKILL`       | `kill -9 PID`            | sofortiger Abbruch durch das Betriebssystem, kein Aufräumen — nur als letztes Mittel |
+| `SIGKILL`       | `kill -SIGKILL PID`      | sofortiger Abbruch durch das Betriebssystem, kein Aufräumen — nur als letztes Mittel |
 
 ```bash  main.sh
 sleep 30 &
@@ -442,9 +444,10 @@ Im Projekt laufen viele Knoten gleichzeitig — und manchmal bleibt einer hänge
 
 **Prüfkriterium:** Nach Teil 3 liefert `pgrep sleep` genau eine Nummer. Räumen Sie zum Schluss mit `pkill sleep` auf — vorher kurz mit `pgrep -a sleep` prüfen, dass nur Ihre `sleep`-Prozesse getroffen werden.
 
-<details>
-<summary>**Lösungsvorschlag**</summary>
+**Lösungsvorschlag** — erst aufdecken, wenn Sie es selbst versucht haben:
 
+[[!]]
+***
 ```bash
 sleep 600 &
 sleep 600 &
@@ -456,12 +459,11 @@ pkill sleep          # beendet alle Prozesse, deren Name „sleep“ enthält
 ```
 
 Zu Teil 4: `pgrep -a s` listet alle Ihre Prozesse, in deren Namen irgendwo ein `s` vorkommt — darunter meist auch Teile Ihrer Desktop-Sitzung (z. B. `gnome-shell`, `systemd`). `pkill s` hätte sie alle beendet — auch `gnome-terminal-server`, also alle Terminals samt laufender Installation; im schlimmsten Fall wären Sie abgemeldet worden. Fremde Prozesse und Systemprozesse trifft `pkill` ohne `sudo` nicht.
-
-</details>
+***
 
 ## Umgebungsvariablen
 
-Jetzt kommen wir zum wichtigsten Abschnitt für ROS 2. Jede Shell hat eine Umgebung: eine Sammlung von Variablen wie PATH, HOME oder später ROS_DOMAIN_ID. Programme lesen diese Variablen, um zu wissen, wo sie Dateien finden oder mit wem sie kommunizieren sollen. Entscheidend ist: Die Umgebung gilt nur für die aktuelle Shell und die Programme, die aus ihr heraus gestartet werden. Ein neues Terminal beginnt wieder von vorn.
+Jetzt kommen wir zum wichtigsten Abschnitt für ROS 2. Jede Shell hat eine Umgebung: eine Sammlung von Variablen wie `PATH`, `HOME` oder später `ROS_DOMAIN_ID`. Programme lesen diese Variablen, um zu wissen, wo sie Dateien finden oder mit wem sie kommunizieren sollen. Entscheidend ist: Die Umgebung gilt nur für die aktuelle Shell und die Programme, die aus ihr heraus gestartet werden. Ein neues Terminal beginnt wieder von vorn.
 
 <!-- data-type="none" -->
 | Befehl                       | Bedeutung                                                      |
@@ -487,7 +489,7 @@ Der Kindprozess, hier eine zweite bash, sieht nur die exportierte Variable. Gena
 
 ### `PATH` — wo findet die Shell Programme?
 
-Wenn Sie einen Befehl wie ros2 eintippen, durchsucht die Shell der Reihe nach alle Verzeichnisse, die in der Variablen PATH stehen. Ist ein Programm dort nicht zu finden, erhalten Sie die Meldung command not found. Genau das passiert, wenn Sie vergessen, ROS 2 zu sourcen.
+Wenn Sie einen Befehl wie `ros2` eintippen, durchsucht die Shell der Reihe nach alle Verzeichnisse, die in der Variablen `PATH` stehen. Ist ein Programm dort nicht zu finden, erhalten Sie die Meldung `command not found`. Genau das passiert, wenn Sie vergessen, ROS 2 zu sourcen.
 
 ```bash  main.sh
 mkdir -p mybin
@@ -503,7 +505,7 @@ which mytool
 
 ### `source` oder ausführen?
 
-Ein Skript, das Sie mit Punkt-Schrägstrich ausführen, läuft in einer neuen Shell. Alle Variablen, die es setzt, verschwinden mit dieser Shell. Mit source dagegen werden die Befehle in Ihrer aktuellen Shell ausgeführt, und die Variablen bleiben erhalten. Deshalb heißt es bei ROS 2 immer source /opt/ros/jazzy/setup.bash und nicht einfach ausführen.
+Ein Skript, das Sie mit Punkt-Schrägstrich ausführen, läuft in einer neuen Shell. Alle Variablen, die es setzt, verschwinden mit dieser Shell. Mit `source` dagegen werden die Befehle in Ihrer aktuellen Shell ausgeführt, und die Variablen bleiben erhalten. Deshalb heißt es bei ROS 2 immer `source /opt/ros/jazzy/setup.bash` und nicht einfach ausführen.
 
 ```bash  main.sh
 echo 'export ROS_DOMAIN_ID=42' > setup.bash
@@ -521,13 +523,13 @@ An Ihrer echten ROS-2-Installation sehen Sie denselben Effekt am Ende der Übung
 
 ### Aufgabe 4: Ein eigenes Werkzeug
 
-Ein Skript ist eine Textdatei mit Shell-Befehlen. Damit es sich wie jedes andere Programm aufrufen lässt, braucht es drei Dinge:
+Ein Skript ist eine Textdatei mit Shell-Befehlen. Mit `bash datei` können Sie jede solche Datei sofort ausführen, ganz ohne Vorbereitung. Damit Sie es aber wie jedes andere Programm einfach mit seinem Namen aufrufen können, braucht es drei Dinge:
 
 + in der ersten Zeile den **Shebang** `#!/bin/bash` — er legt fest, welches Programm die Datei ausführt,
 + das Ausführungsrecht (`chmod +x`, Abschnitt „Rechte und Benutzer“),
 + ein Verzeichnis im `PATH`.
 
-Legen Sie zuerst das Verzeichnis an (`mkdir -p ~/bin`) und schreiben Sie die Datei dann mit einem Editor, z. B. `nano ~/bin/rosinfo.sh` (speichern mit `Strg+O` und Enter, beenden mit `Strg+X`).
+Legen Sie zuerst das Verzeichnis an (`mkdir -p ~/bin`) und schreiben Sie die Datei dann mit einem Editor, z. B. `nano ~/bin/rosinfo.sh` (speichern mit `Strg+S`, beenden mit `Strg+X`).
 
 1. Schreiben Sie ein Skript `~/bin/rosinfo.sh`, das das aktuelle Datum, den Rechnernamen (`hostname`) und den Wert von `ROS_DOMAIN_ID` ausgibt.
 2. Machen Sie es ausführbar.
@@ -535,9 +537,10 @@ Legen Sie zuerst das Verzeichnis an (`mkdir -p ~/bin`) und schreiben Sie die Dat
 
 **Prüfkriterium:** `cd /tmp && rosinfo.sh` funktioniert — auch in einem neu geöffneten Terminal.
 
-<details>
-<summary>**Lösungsvorschlag**</summary>
+**Lösungsvorschlag** — erst aufdecken, wenn Sie es selbst versucht haben:
 
+[[!]]
+***
 Inhalt von `~/bin/rosinfo.sh`:
 
 ```bash
@@ -556,25 +559,24 @@ source ~/.bashrc
 Unter Ubuntu wird `~/bin` beim Anmelden automatisch in den `PATH` aufgenommen, sofern das Verzeichnis existiert — der Eintrag in `~/.bashrc` macht das Verhalten aber explizit und sofort wirksam.
 
 Warum der Shebang, wenn die Beispiele oben ohne ihn liefen? Startet die `bash` eine Datei ohne Shebang, springt sie ersatzweise ein und führt sie selbst aus. Startet ein anderes Programm das Skript — später etwa eine Launch-Datei (VL 02) —, fehlt diese Angabe, und der Start scheitert mit `Exec format error`.
-
-</details>
+***
 
 ### Aufgabe 5: Zwei Terminals, zwei Welten
 
 1. Öffnen Sie zwei **neue** Terminals A und B (nicht das Installations-Terminal). Setzen Sie in A `export ROS_DOMAIN_ID=7` und prüfen Sie den Wert in beiden Terminals mit `rosinfo.sh`. Erklären Sie das Ergebnis.
-2. Sorgen Sie dafür, dass `ROS_DOMAIN_ID` in **jedem** neuen Terminal automatisch auf `7` gesetzt ist. (Die echte ID Ihrer Gruppe erhalten Sie im ersten Praktikum — dann ersetzen Sie diese Zeile.)
+2. Sorgen Sie dafür, dass `ROS_DOMAIN_ID` in **jedem** neuen Terminal automatisch auf `7` gesetzt ist.
 3. ⏱ Warum reicht es nicht, die Zeile in eine Datei `setup.sh` zu schreiben und diese mit `./setup.sh` auszuführen?
 
 **Prüfkriterium:** Ein neues Terminal zeigt mit `echo $ROS_DOMAIN_ID` sofort `7`.
 
-<details>
-<summary>**Lösungsvorschlag**</summary>
+**Lösungsvorschlag** — erst aufdecken, wenn Sie es selbst versucht haben:
 
+[[!]]
+***
 1. Die Variable existiert nur in der Shell von Terminal A und in den daraus gestarteten Programmen. Das zweite Terminal ist eine eigene Shell mit eigener Umgebung.
 2. `echo 'export ROS_DOMAIN_ID=7' >> ~/.bashrc` — die `~/.bashrc` wird beim Öffnen jedes neuen Terminals ausgeführt.
 3. `./setup.sh` startet eine neue Shell als Kindprozess. Die Variable wird dort gesetzt und verschwindet mit dem Ende des Skripts. Nur `source setup.sh` führt die Befehle in der aktuellen Shell aus.
-
-</details>
+***
 
 ## Die ROS Installation verstehen
 
@@ -582,7 +584,7 @@ Die ROS-2-Installation ist abgeschlossen, sobald das Installations-Terminal wied
 
 ### Aufgabe 6: Was haben Sie da eingetippt?
 
-Zu Beginn haben Sie die Installationsbefehle kopiert, ohne sie im Einzelnen zu verstehen. Jetzt kennen Sie die Werkzeuge. Für diese Aufgabe muss die Installation noch nicht fertig sein. Erklären Sie in je einem Satz, was diese drei Zeilen tun und welcher Teil der heutigen Übung darin steckt:
+Für diese Aufgabe muss die Installation noch nicht fertig sein. Erklären Sie in je einem Satz, was diese drei Zeilen tun und welcher Teil der heutigen Übung darin steckt:
 
 1. `sudo apt update && sudo apt upgrade -y`
 2. `export ROS_APT_SOURCE_VERSION=$(curl -Ls -o /dev/null -w '%{url_effective}' … | awk -F/ '{print $NF}')`
@@ -601,14 +603,14 @@ echo "$ADRESSE" | awk -F/ '{print $3}'     # welches Stück ist das?
 ```
 @bash
 
-<details>
-<summary>**Lösungsvorschlag**</summary>
+**Lösungsvorschlag** — erst aufdecken, wenn Sie es selbst versucht haben:
 
+[[!]]
+***
 1. Holt mit Administratorrechten (`sudo`, Abschnitt Rechte) die aktuellen Paketlisten und aktualisiert danach alle installierten Pakete — `upgrade` läuft nur, wenn `update` geklappt hat (`&&`).
 2. Fragt GitHub nach der neuesten Version der Paketquelle: `curl` folgt der Weiterleitung, die Pipe gibt die Adresse an `awk` weiter, das die Versionsnummer abschneidet; `$( … )` setzt das Ergebnis ein, `export` macht es als Umgebungsvariable für die folgenden Befehle verfügbar.
 3. Hängt (`>>`, Umleitung) die Zeile `source …` an `~/.bashrc` an — damit lädt jedes neue Terminal die ROS-2-Umgebung (Abschnitt Umgebungsvariablen, `source` statt ausführen).
-
-</details>
+***
 
 Alle Bestandteile der Installationsbefehle finden Sie zum Nachschlagen am Ende des Skripts.
 
@@ -634,7 +636,7 @@ echo "export ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST" >> ~/.bashrc
 source ~/.bashrc
 ```
 
-Die zweite Zeile hält Ihre Knoten auf Ihrem Rechner. Ohne sie sucht ROS 2 im ganzen WLAN nach anderen Knoten (VL 01, „Discovery“) — und Ihr `listener` würde die `talker` Ihrer Kommilitonen hören.
+Die zweite Zeile hält Ihre Knoten auf Ihrem Rechner. Eigentlich trennt schon die `ROS_DOMAIN_ID` die Systeme verschiedener Personen (VL 01, „Discovery“) — aber in Aufgabe 5 haben alle dieselbe ID `7` eingetragen. Ohne die zweite Zeile würde Ihr `listener` deshalb auch die `talker` Ihrer Kommilitonen im WLAN hören.
 
 **Test 1: Umgebung** — `printenv ROS_DISTRO` gibt `jazzy` aus, `ros2 doctor` meldet `All … checks passed` und keine Zeile mit `failed` (einzelne Warnungen zum Netzwerk sind unkritisch).
 
@@ -729,7 +731,7 @@ Ein ROS-Knoten läuft im Vordergrund und reagiert nicht mehr. Wie beenden Sie ih
 [[ ]] das Terminal-Fenster mit `cd ..` verlassen
 [[ ]] `rm` auf die Programmdatei anwenden
 ***
-`Strg+C` schickt dem Vordergrundprozess das Signal `SIGINT`, `kill` von außen das Signal `SIGTERM` — beide fordern ihn auf, sich zu beenden. Reagiert er auf keins von beiden, bleibt `kill -9 PID` (`SIGKILL`). `rm` löscht nur die Datei — der laufende Prozess bleibt davon unberührt.
+`Strg+C` schickt dem Vordergrundprozess das Signal `SIGINT`, `kill` von außen das Signal `SIGTERM` — beide fordern ihn auf, sich zu beenden. Reagiert er auf keins von beiden, bleibt `kill -SIGKILL PID`. `rm` löscht nur die Datei — der laufende Prozess bleibt davon unberührt.
 ***
 
 In Terminal A läuft `camera_node`, in Terminal B `lidar_node`. Sie wollen nur den `lidar_node` beenden. Welcher Weg ist sicher?
@@ -756,7 +758,7 @@ In Terminal A läuft `camera_node`, in Terminal B `lidar_node`. Sie wollen nur d
 | `export NAME=…`                   | Umgebungsvariable setzen, sichtbar für gestartete Programme          |
 | `$( … )`                          | Befehl ausführen und seine Ausgabe an dieser Stelle einsetzen        |
 | `curl -Ls -o /dev/null -w '%{url_effective}' adresse` | der Weiterleitung von GitHub folgen und nur die Zieladresse ausgeben — sie endet mit der Versionsnummer |
-| `\| awk -F/ '{print $NF}'`        | Pipe: die Adresse an `/` zerlegen und das letzte Stück ausgeben      |
+| `awk -F/ '{print $NF}'` (hinter der Pipe) | die Adresse an `/` zerlegen und das letzte Stück ausgeben      |
 | `curl -L -o /tmp/datei adresse`   | Datei herunterladen und unter `/tmp` speichern                       |
 | `$(. /etc/os-release && echo …)`  | Ubuntu-Codenamen (`noble`) aus einer Systemdatei lesen               |
 | `dpkg -i datei.deb`               | ein einzelnes Paket aus einer Datei installieren — hier die Paketquelle selbst |
@@ -792,14 +794,14 @@ Mit diesen Grundlagen und einem laufenden ROS 2 sind Sie für die nächsten Schr
 | Thema               | Merksatz                                                                       |
 | ------------------- | ------------------------------------------------------------------------------ |
 | Pfade               | absolut beginnt bei `/`, relativ beim aktuellen Ordner; `~` ist Ihr Home       |
-| Pipes               | `a \| b` verkettet Werkzeuge, `>` überschreibt, `>>` hängt an                    |
+| Pipes               | die Pipe (senkrechter Strich) verkettet Werkzeuge, `>` überschreibt, `>>` hängt an |
 | Rechte              | `ls -l` zeigt `rwx` für Besitzer, Gruppe, andere; `chmod +x` macht ausführbar, `sudo` gibt Administratorrechte |
 | Skripte             | Shebang `#!/bin/bash` + `chmod +x` + Verzeichnis im `PATH` = eigener Befehl |
 | Prozesse            | jeder ROS-Knoten ist ein Prozess; `Strg+C` und `kill` schicken Signale, `pkill` trifft alle mit passendem Namen |
 | Umgebung            | gilt pro Terminal; `source` lädt in die aktuelle Shell, `~/.bashrc` in jede neue |
 | Installation        | `sudo apt update && sudo apt install …` holt Software samt Abhängigkeiten aus eingetragenen Paketquellen |
 
-**Transferfrage:** Ein Kommilitone schreibt ein Skript `start.sh`, das `export ROS_DOMAIN_ID=7` setzt. Er startet es mit `./start.sh`, doch danach meldet `echo $ROS_DOMAIN_ID` in seinem Terminal nichts, und `ros2 topic list` zeigt die Topics seiner Gruppe nicht. Woran liegt es, und was raten Sie ihm? (Tipp: Aufgabe 5.)
+**Transferfrage:** Ein Kommilitone schreibt ein Skript `start.sh`, das `export ROS_DOMAIN_ID=7` setzt. Er startet es mit `./start.sh`, doch danach meldet `echo $ROS_DOMAIN_ID` in seinem Terminal nichts. Woran liegt es, und was raten Sie ihm? (Tipp: Aufgabe 5.)
 
 **Bis zur nächsten Übung:** Läuft ROS 2 bei Ihnen noch nicht vollständig, schließen Sie die Installation nach der [Installationsanleitung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/installation_ros2/README.md) ab und führen Sie die drei Tests aus — spätestens bis VL 02.
 
