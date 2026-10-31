@@ -1,6 +1,6 @@
 {
- "stand": "28.10.2026",
- "version": "0.5.0",
+ "stand": "31.10.2026",
+ "version": "0.5.2",
  "kurs": {
   "basis": "https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/",
   "speicher": "robotik-map",
@@ -8,8 +8,8 @@
   "einheiten": "Termine",
   "einheiten_dat": "Terminen",
   "gleich": "Im selben Termin",
-  "freigabe": "erscheinen nach dem Termin",
-  "folgen": "Die Begriffe dieses Termins folgen nach dem Termin.",
+  "freigabe": "erscheinen zu Beginn des Termins",
+  "folgen": "Die Begriffe dieses Termins erscheinen zu Beginn des Termins.",
   "spalten": [
    [
     "VL",
@@ -222,7 +222,7 @@
    "wann": "Do 29.10. · 16:15–17:45",
    "wann_kurz": "Do 29.10.",
    "leitfrage": "Ihr Rechner wird zur Werkbank: Ohne sicheren Umgang mit der Shell können Sie ROS 2 weder installieren noch starten.",
-   "freigegeben": false,
+   "freigegeben": true,
    "status": "ausgearbeitet",
    "block": 1,
    "pdf": null,

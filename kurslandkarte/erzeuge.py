@@ -37,9 +37,9 @@ KURS = {
     "einheit": "Termin", "einheiten": "Termine", "einheiten_dat": "Terminen", "gleich": "Im selben Termin",
     "welche_einheit": "welchem Termin", "der_einheit": "dem Termin", "liste": "Termine",
     "frage_label": "Ziel im Projekt", "vor_pruefung": "vor Übung und Praktikum",
-    "freigabe": "erscheinen nach dem Termin",
-    "folgen": "Die Begriffe dieses Termins folgen nach dem Termin.",
-    "freigabe_satz": "Nach jedem Termin kommen seine Begriffe dazu.",
+    "freigabe": "erscheinen zu Beginn des Termins",
+    "folgen": "Die Begriffe dieses Termins erscheinen zu Beginn des Termins.",
+    "freigabe_satz": "Zu Beginn jedes Termins kommen seine Begriffe dazu.",
     "status": {"ausgearbeitet": "", "Bestand": "Bestand 2025/26", "geplant": "in Planung"},
     "anwenden_text": "anwenden, nichts Neues – Ihre Arbeit hier ist die Prüfungsleistung",
     "lernziele": [
@@ -464,7 +464,7 @@ BRAUCHEN = {
     "06": ["frame", "homtrafo", "verkettung", "bildmatrix"],
 }
 # Begriffe eines Termins erscheinen in der Karte erst nach ihm (sonst nur mit „Ausblick“)
-FREIGEGEBEN = {"00", "03"}
+FREIGEGEBEN = {"00", "03", "ue1"}
 
 kern.erzeuge(
     repo=os.path.dirname(HIER), kurs=KURS, termine=T, bloecke=BLOECKE, linien=LINIEN,
