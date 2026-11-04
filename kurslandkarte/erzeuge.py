@@ -189,14 +189,14 @@ B = [
     ("rqt", "rqt / rqt_graph", "werkzeuge", "03", 'turtlesim: ROS 2 zum Anfassen', 2, 1, "rqt bündelt die Inspektionsfunktionen der ros2-CLI grafisch, z. B. den Knoten-Topic-Graphen.", None),
     ("verteilt", "Verteiltes System", "ros", "03", 'Einordnung', 1, 0, "Ein ROS-2-System besteht aus unabhängigen Prozessen, die nur über Nachrichten zusammenarbeiten – Nachrichten können ausbleiben, verspätet oder gar nicht ankommen.", "„Wenn mein Knoten läuft, kommen auch Daten an.“"),
     # --- VL 02 ROS 2 Pakete
-    ("domainid", "ROS_DOMAIN_ID", "ros", "04", 'ROS 2 auf mehreren Rechnern', 2, 1, "Die Umgebungsvariable trennt ROS-2-Systeme im selben Netz — im Labor eine pro TurtleBot-Gruppe, gesetzt auf Laptop und Roboter.", "„Die ROS_DOMAIN_ID muss nur auf dem Laptop gesetzt werden.“"),
+    ("domainid", "ROS_DOMAIN_ID", "ros", "04", 'Zusammenfassung und Ausblick', 2, 1, "Die Umgebungsvariable trennt ROS-2-Systeme im selben Netz — im Labor eine pro TurtleBot-Gruppe, gesetzt auf Laptop und Roboter.", "„Die ROS_DOMAIN_ID muss nur auf dem Laptop gesetzt werden.“"),
     ("paket", "ROS-2-Paket", "ros", "04", 'Vom Beispiel zum eigenen Paket', 1, 0, "Ein Paket kapselt Code samt Abhängigkeiten, Build-Konfiguration, Nachrichten und Launch-Files.", None),
     ("workspace", "Workspace", "werkzeuge", "04", 'Workspace und Paketstruktur', 1, 0, "Pakete liegen in src/ eines Workspaces; colcon erzeugt daneben build/, install/ und log/.", None),
     ("ament", "ament_cmake/ament_python", "werkzeuge", "04", 'Bauen mit colcon', 2, 0, "ament ist das Buildsystem für ein einzelnes Paket, mit CMake (C++) oder setuptools (Python).", None),
     ("colcon", "colcon build", "werkzeuge", "04", 'Bauen mit colcon', 1, 1, "colcon baut alle Pakete eines Workspaces in der richtigen Abhängigkeitsreihenfolge.", "„colcon ist der Compiler.“"),
     ("pkgcreate", "ros2 pkg create", "werkzeuge", "04", 'Schritt 1: Eigener Nachrichtentyp', 2, 1, "Erzeugt ein Paketgerüst mit Build-Type, Abhängigkeiten und optional einem Knoten.", None),
     ("custommsg", "Eigener Nachrichtentyp", "ros", "04", 'Schritt 1: Eigener Nachrichtentyp', 1, 0, "Eigene .msg-Dateien werden per rosidl_generate_interfaces in C++/Python-Code übersetzt — immer in einem CMake-Paket.", "„Ein Python-Projekt kann seine Nachrichtentypen im Python-Paket definieren.“"),
-    ("setupbash", "source install/setup.bash", "werkzeuge", "04", 'Bauen mit colcon', 2, 1, "Erst das Sourcen des Install-Overlays macht neu gebaute Pakete im Terminal sichtbar.", "„Nach colcon build sind neue Pakete sofort in jedem Terminal verfügbar.“"),
+    ("setupbash", "source install/setup.bash", "werkzeuge", "04", 'Bauen im Workspace', 2, 1, "Erst das Sourcen des Install-Overlays macht neu gebaute Pakete im Terminal sichtbar.", "„Nach colcon build sind neue Pakete sofort in jedem Terminal verfügbar.“"),
     ("launch", "Launch-Datei", "ros", "04", 'Systeme starten mit Launch-Dateien', 1, 0, "Python-Launch-Files starten und parametrieren mehrere Knoten mit Argumenten, Remappings und Includes.", "„Ein Remapping in der Launch-Datei gilt automatisch für alle Knoten.“"),
     ("entrypoint", "entry_points (Python)", "werkzeuge", "04", 'Schritt 3: Subscriber in Python', 2, 1, "Python-Knoten werden in setup.py unter console_scripts als ausführbare Programme angemeldet.", "„Für Python-Knoten braucht man add_executable in der CMakeLists.txt.“"),
     ("logging", "Logging & Log-Level", "ros", "04", 'Logging', 2, 1, "Logger-Makros wie RCLCPP_INFO und einstellbare Log-Level strukturieren Debug-Ausgaben; --log-level knoten:=debug wirkt gezielt.", None),
@@ -464,7 +464,7 @@ BRAUCHEN = {
     "06": ["frame", "homtrafo", "verkettung", "bildmatrix"],
 }
 # Begriffe eines Termins erscheinen in der Karte erst nach ihm (sonst nur mit „Ausblick“)
-FREIGEGEBEN = {"00", "03", "ue1"}
+FREIGEGEBEN = {"00", "03", "ue1", "04"}
 
 kern.erzeuge(
     repo=os.path.dirname(HIER), kurs=KURS, termine=T, bloecke=BLOECKE, linien=LINIEN,

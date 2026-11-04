@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger & Claude.ai & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.3.0
+version:  0.4.1
 language: de
 narrator: Deutsch Female
 
@@ -20,7 +20,7 @@ import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_Softwareproje
 | **Veranstaltung:**   | @config.lecture                                                                                                        |
 | **Semester**         | @config.semester                                                                                                       |
 | **Hochschule:**      | `Technische Universität Freiberg`                                                                                      |
-| **Inhalte:**         | `Eigene ROS-2-Pakete anlegen und bauen, eigene Nachrichtentypen, Launch-Dateien, Logging, verteilte Systeme`           |
+| **Inhalte:**         | `Eigene ROS-2-Pakete anlegen und bauen, eigene Nachrichtentypen, Launch-Dateien, Logging`           |
 | **Link auf GitHub:** | https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/02_ROS_Pakete/02_ROS_Pakete.md     |
 | **Autoren**          | @author                                                                                                                |
 
@@ -37,7 +37,7 @@ ros2 launch turtlebot3_bringup robot.launch.py
 **Wie kommen wir von dort zu einem Befehl für ein ganzes System?**
 
     --{{0}}--
-Wenn Sie im Praktikum den TurtleBot hochfahren, tippen Sie genau diesen einen Befehl. Er startet den LiDAR-Treiber, die Motorsteuerung und einen Knoten, der die Geometrie des Roboters veröffentlicht. In VL 01 brauchten wir für zwei Knoten noch zwei Terminals mit je zwei source-Befehlen. Der Weg dazwischen ist das Thema dieser Vorlesung.
+Wenn Sie im Praktikum den TurtleBot hochfahren, tippen Sie genau diesen einen Befehl. Er startet den LiDAR-Treiber, die Motorsteuerung und einen Knoten, der die Geometrie des Roboters veröffentlicht. In VL 01 brauchten wir für zwei Knoten noch zwei Terminals, jedes mit eigenem source-Befehl. Der Weg dazwischen ist das Thema dieser Vorlesung.
 
 --------------------------------------------------------------------------------
 
@@ -47,7 +47,7 @@ Wenn Sie im Praktikum den TurtleBot hochfahren, tippen Sie genau diesen einen Be
 + Pakete in C++ und Python anlegen, mit `colcon` bauen und starten
 + Einen eigenen Nachrichtentyp definieren und in beiden Sprachen verwenden
 + Mehrere Knoten mit einer Launch-Datei gemeinsam starten und konfigurieren
-+ Log-Ausgaben gezielt einsetzen und ROS 2 über mehrere Rechner betreiben
++ Log-Ausgaben gezielt einsetzen und filtern
 
 <!-- kurslandkarte:knopf-start -->
 
@@ -157,53 +157,320 @@ Die package.xml sagt, was ein Paket braucht. Die CMakeLists.txt beziehungsweise 
 
 ## Bauen mit colcon
 
-**Warum nicht einfach `g++ main.cpp`?** — Pakete hängen voneinander ab:
+**Vom Quelltext zum Programm – fünf Werkzeuge, jedes löst ein Problem des vorigen**
 
-+ Abhängigkeiten erkennen, Reihenfolge festlegen
-+ jedes Paket mit seinem Build-System bauen (CMake für C++, setuptools für Python)
-+ Ergebnisse so ablegen, dass ROS sie findet
+                                  {{0-1}}
+********************************************************************************
 
-<!-- data-type="none" -->
-| Werkzeug   | Ebene            | Aufgabe                                                        |
-| :--------- | :--------------- | :------------------------------------------------------------- |
-| **ament**  | ein Paket        | Build-Regeln: `ament_cmake` (C++) oder `ament_python`          |
-| **colcon** | ganzer Workspace | baut alle Pakete in Reihenfolge, erzeugt `install/setup.bash`  |
+<section style="display: flex; flex-wrap: wrap; gap: 20px; align-items: center;">
+
+<div style="flex: 1; min-width: 260px;">
+
+```mermaid @mermaid
+graph TD
+    COL["⑤ colcon · ganzer Workspace"] --> AC["④ ament_cmake · ein ROS-Paket"]
+    COL --> AP["④ ament_python · ein ROS-Paket"]
+    AC --> CM["③ CMake · CMakeLists.txt"]
+    AP --> ST["setuptools · setup.py"]
+    CM --> MK["② make · Makefile"]
+    MK --> CC["① Compiler und Linker · g++"]
+    style CC fill:#ffa600,stroke:#b37400,color:#000
+```
+
+</div>
+
+<div style="flex: 1; min-width: 260px;">
+
+**① Compiler und Linker**
+
++ Compiler: `.cpp` → Objektdatei `.o` (Maschinencode)
++ Linker: `.o`-Dateien + Bibliotheken → Programm
+
+```bash
+g++ -c main.cpp                  # → main.o
+g++ -c motor.cpp                 # → motor.o
+g++ main.o motor.o -o roboter    # binden
+```
+
++ **Problem:** viele Dateien, Include-Pfade, Bibliotheken → lange Befehle
++ nach jeder Änderung: Was muss neu übersetzt werden?
+
+</div>
+
+</section>
+
+********************************************************************************
 
     --{{0}}--
-Bei einem einzelnen Programm würde der Compiler genügen. In einem Workspace braucht aber der Knoten in my_tutorial_package den Nachrichtentyp aus my_msg_package, und der muss vorher in C++- und Python-Code übersetzt werden. Ein Bauwerkzeug muss also die richtige Reihenfolge finden. ROS 2 teilt die Arbeit auf: ament kennt die Regeln für ein einzelnes Paket, colcon koordiniert den ganzen Workspace.
+Ein C++-Programm entsteht in zwei Schritten. Der Compiler übersetzt jede Quelldatei einzeln in eine Objektdatei mit Maschinencode. Der Linker fügt diese Objektdateien und die benötigten Bibliotheken zu einem ausführbaren Programm zusammen. Für zwei Dateien geht das noch von Hand. Unser data_generator braucht aber die Header und Bibliotheken von rclcpp und vom eigenen Nachrichtentyp, und die Befehlszeile wird schnell mehrere hundert Zeichen lang. Außerdem müssten Sie sich nach jeder Änderung selbst merken, welche Dateien neu übersetzt werden müssen.
+
+                                  {{1-2}}
+********************************************************************************
+
+<section style="display: flex; flex-wrap: wrap; gap: 20px; align-items: center;">
+
+<div style="flex: 1; min-width: 260px;">
+
+```mermaid @mermaid
+graph TD
+    COL["⑤ colcon · ganzer Workspace"] --> AC["④ ament_cmake · ein ROS-Paket"]
+    COL --> AP["④ ament_python · ein ROS-Paket"]
+    AC --> CM["③ CMake · CMakeLists.txt"]
+    AP --> ST["setuptools · setup.py"]
+    CM --> MK["② make · Makefile"]
+    MK --> CC["① Compiler und Linker · g++"]
+    style MK fill:#ffa600,stroke:#b37400,color:#000
+```
+
+</div>
+
+<div style="flex: 1; min-width: 260px;">
+
+**② make und Makefile**
+
+```makefile  Makefile
+roboter: main.o motor.o
+	g++ main.o motor.o -o roboter
+
+main.o: main.cpp motor.h
+	g++ -c main.cpp
+
+motor.o: motor.cpp motor.h
+	g++ -c motor.cpp
+```
+
++ Regel: `Ziel: Voraussetzungen`, darunter der Befehl
++ `make` vergleicht Zeitstempel → baut nur Geändertes neu
++ `motor.cpp` geändert → nur `motor.o` und `roboter`
++ **Problem:** Compiler, Pfade, Betriebssystem fest eingetragen
+
+</div>
+
+</section>
+
+********************************************************************************
+
+    --{{1}}--
+Das Werkzeug make nimmt Ihnen genau diese Buchführung ab. Ein Makefile besteht aus Regeln: Links vom Doppelpunkt steht, was entstehen soll, rechts, woraus es entsteht, und in der eingerückten Zeile darunter der Befehl. Make vergleicht die Zeitstempel der Dateien. Ändern Sie nur motor.cpp, übersetzt make nur motor.o neu und bindet das Programm neu, main.cpp bleibt unberührt. Bei großen Projekten spart das Minuten pro Build. Der Haken: Im Makefile stehen der Compiler, alle Pfade und alle Bibliotheken fest drin. Auf einem anderen Rechner oder Betriebssystem passt es nicht mehr, und die Pfade zu fremden Bibliotheken muss man von Hand suchen.
+
+                                  {{2-3}}
+********************************************************************************
+
+<section style="display: flex; flex-wrap: wrap; gap: 20px; align-items: center;">
+
+<div style="flex: 1; min-width: 260px;">
+
+```mermaid @mermaid
+graph TD
+    COL["⑤ colcon · ganzer Workspace"] --> AC["④ ament_cmake · ein ROS-Paket"]
+    COL --> AP["④ ament_python · ein ROS-Paket"]
+    AC --> CM["③ CMake · CMakeLists.txt"]
+    AP --> ST["setuptools · setup.py"]
+    CM --> MK["② make · Makefile"]
+    MK --> CC["① Compiler und Linker · g++"]
+    style CM fill:#ffa600,stroke:#b37400,color:#000
+```
+
+</div>
+
+<div style="flex: 1; min-width: 260px;">
+
+**③ CMake: erzeugt das Makefile**
+
+```cmake  CMakeLists.txt
+cmake_minimum_required(VERSION 3.8)
+project(roboter)
+add_executable(roboter main.cpp motor.cpp)
+```
+
+```bash
+mkdir build && cd build
+cmake ..        # erzeugt das Makefile
+make            # baut wie in ②
+```
+
++ beschreibt, **was** gebaut wird – nicht, **wie**
++ erzeugt Makefile, Ninja- oder Visual-Studio-Projekt
++ `find_package`: Bibliotheken samt Include-Pfaden finden
++ **Problem:** kennt keine ROS-Pakete, keine ROS-Ablageorte
+
+</div>
+
+</section>
+
+********************************************************************************
+
+    --{{2}}--
+CMake setzt eine Ebene höher an. In der Datei CMakeLists.txt beschreiben Sie nur noch, welches Programm aus welchen Quelldateien entstehen soll. Daraus erzeugt CMake ein Makefile, das zu Ihrem Rechner passt, unter Windows auf Wunsch auch ein Visual-Studio-Projekt. Mit find_package sucht CMake installierte Bibliotheken und kennt danach deren Include-Pfade und Bibliotheksdateien. Was CMake nicht weiß: wie ein ROS-Paket aufgebaut ist, wo die Programme liegen müssen, damit ros2 run sie findet, und wie aus einer msg-Datei Code wird.
+
+                                  {{3-4}}
+********************************************************************************
+
+<section style="display: flex; flex-wrap: wrap; gap: 20px; align-items: center;">
+
+<div style="flex: 1; min-width: 260px;">
+
+```mermaid @mermaid
+graph TD
+    COL["⑤ colcon · ganzer Workspace"] --> AC["④ ament_cmake · ein ROS-Paket"]
+    COL --> AP["④ ament_python · ein ROS-Paket"]
+    AC --> CM["③ CMake · CMakeLists.txt"]
+    AP --> ST["setuptools · setup.py"]
+    CM --> MK["② make · Makefile"]
+    MK --> CC["① Compiler und Linker · g++"]
+    style AC fill:#ffa600,stroke:#b37400,color:#000
+    style AP fill:#ffa600,stroke:#b37400,color:#000
+```
+
+</div>
+
+<div style="flex: 1; min-width: 260px;">
+
+**④ ament: CMake bzw. setuptools für ROS-Pakete**
+
++ `ament_cmake` = CMake + ROS-Befehle:
+  + `ament_target_dependencies`: andere ROS-Pakete einbinden
+  + `rosidl_generate_interfaces`: Code aus `.msg` erzeugen
+  + `ament_package()`: Paket für andere auffindbar machen
++ feste Ablage: Programme in `lib/<paket>`, Launch in `share/<paket>`
++ Eintrag im Paketindex → `ros2 pkg list`, `ros2 run`
++ `ament_python`: nichts zu übersetzen – nur **einrichten** (über `setup.py`):
+  + Startskript je `entry_points`-Eintrag → `lib/<paket>/`
+  + Modul importierbar machen → `site-packages/`
+  + Datei aus `resource/` → Eintrag im Paketindex
++ **Problem:** baut genau **ein** Paket
+
+</div>
+
+</section>
+
+********************************************************************************
+
+    --{{3}}--
+ament ist die ROS-Erweiterung dieser Werkzeuge. Für C++ heißt sie ament_cmake: Ihre CMakeLists.txt bleibt eine ganz normale CMake-Datei, bekommt aber zusätzliche Befehle. Damit binden Sie andere ROS-Pakete ein, erzeugen Code aus Nachrichtenbeschreibungen und machen Ihr Paket für andere Pakete auffindbar. Außerdem legt ament fest, wohin Programme und Launch-Dateien installiert werden, und trägt das Paket in einen Index ein. Diesen Index lesen ros2 pkg list und ros2 run. Bei Python gibt es nichts zu übersetzen, trotzdem muss das Paket eingerichtet werden, und das erledigt ament_python über die setup.py. Für jeden Eintrag unter entry_points entsteht ein kleines Startskript im Ordner lib des Pakets, genau dort sucht ros2 run, so wie bei C++ nach dem installierten Programm. Ihr Python-Modul wird importierbar gemacht, mit symlink-install nur als Verweis auf den Ordner src, deshalb wirken Änderungen sofort. Und die leere Datei im Ordner resource, die ros2 pkg create anlegt, wird zum Eintrag im Paketindex. Fehlt sie, kennt ros2 das Paket nicht.
+
+                                  {{4-5}}
+********************************************************************************
+
+<section style="display: flex; flex-wrap: wrap; gap: 20px; align-items: center;">
+
+<div style="flex: 1; min-width: 260px;">
+
+```mermaid @mermaid
+graph TD
+    COL["⑤ colcon · ganzer Workspace"] --> AC["④ ament_cmake · ein ROS-Paket"]
+    COL --> AP["④ ament_python · ein ROS-Paket"]
+    AC --> CM["③ CMake · CMakeLists.txt"]
+    AP --> ST["setuptools · setup.py"]
+    CM --> MK["② make · Makefile"]
+    MK --> CC["① Compiler und Linker · g++"]
+    style COL fill:#ffa600,stroke:#b37400,color:#000
+```
+
+</div>
+
+<div style="flex: 1; min-width: 260px;">
+
+**⑤ colcon: der ganze Workspace**
+
++ liest jede `package.xml` → Reihenfolge der Pakete
++ ruft je Paket dessen Werkzeug auf: CMake + make bzw. setuptools
++ unabhängige Pakete parallel
++ legt `build/`, `install/`, `log/` an, erzeugt `install/setup.bash`
+
+```bash
+ls ~/ros2_ws/build/my_tutorial_package/Makefile   # von CMake erzeugt
+```
+
+</div>
+
+</section>
+
+********************************************************************************
+
+    --{{4}}--
+Ganz oben steht colcon, das Werkzeug für den ganzen Workspace. Der Knoten in my_tutorial_package braucht den Nachrichtentyp aus my_msg_package, und der muss vorher gebaut werden. colcon liest dazu die package.xml jedes Pakets, bestimmt die Reihenfolge und ruft für jedes Paket dessen eigenes Werkzeug auf, für C++ also CMake und make. Pakete, die nicht voneinander abhängen, baut es gleichzeitig. Im Ordner build finden Sie nach dem Bauen tatsächlich das Makefile, das CMake erzeugt hat. Am Ende stehen im Ordner install alle Programme und eine setup.bash, die den Workspace bekannt macht.
+
+                                    {{5}}
+********************************************************************************
+
+<!-- data-type="none" -->
+| Schicht      | Sie schreiben                   | löst                                         |
+| :----------- | :------------------------------ | :------------------------------------------- |
+| ① Compiler   | Quelltext (`.cpp`)              | Quelltext → Programm                         |
+| ② make       | – (erzeugt CMake)               | nur Geändertes neu bauen                     |
+| ③ CMake      | `CMakeLists.txt`                | unabhängig von Rechner, Bibliotheken finden  |
+| ④ ament      | `package.xml`, `CMakeLists.txt` bzw. `setup.py` | ROS-Pakete finden einander   |
+| ⑤ colcon     | –                               | viele Pakete in richtiger Reihenfolge        |
+
+**Neben dem Quelltext schreiben Sie zwei Beschreibungsdateien:**
+
++ `package.xml`: **was** gebraucht wird – liest colcon (Reihenfolge), kein Compiler
++ `CMakeLists.txt` bzw. `setup.py`: **wie** gebaut und eingebunden wird
++ jede Abhängigkeit in **beide** eintragen
+
+********************************************************************************
+
+    --{{5}}--
+Fassen wir die Schichten zusammen. Jede löst ein Problem der Schicht darunter, und jede ruft die darunterliegende auf. Neben dem Quelltext schreiben Sie für Ihre Pakete zwei Beschreibungsdateien: die package.xml mit den Abhängigkeiten und die CMakeLists.txt beziehungsweise setup.py mit den Bauanweisungen. Makefiles schreiben Sie in ROS nie selbst. Die package.xml liest kein Compiler. Sie ist für die Werkzeuge gedacht: colcon bestimmt daraus die Reihenfolge, ament übernimmt daraus Name und Version des Pakets. Eingebunden wird eine Abhängigkeit erst in der CMakeLists.txt oder mit import in Python. Deshalb gehört jede Abhängigkeit in beide Dateien. Steht sie nur in der package.xml, wird sie installiert, aber nicht eingebunden. Steht sie nur in der CMakeLists.txt, kennt colcon sie nicht und baut das Paket womöglich zu früh. Wenn ein Build scheitert, hilft es außerdem zu wissen, auf welcher Schicht der Fehler auftritt: Eine fehlende Header-Datei meldet der Compiler, ein nicht gefundenes Paket meldet CMake bei find_package.
+
+### Bauen im Workspace
 
 **Bauen — immer im Wurzelordner, nicht in `src`:**
 
 ```bash
 cd ~/ros2_ws
-source /opt/ros/jazzy/setup.bash
-colcon build --symlink-install
+colcon build --symlink-install         # ROS selbst lädt Ihre ~/.bashrc (Ü 1)
 source ~/ros2_ws/install/setup.bash    # Workspace in diesem Terminal bekannt machen
 ```
 
 > [!IMPORTANT]
-> **Merke:** Erst ROS laden, dann bauen, dann den Workspace laden — in **jedem neuen Terminal** erneut, am sichersten mit dem vollständigen Pfad `~/ros2_ws/install/setup.bash`.
+> **Merke:** ROS lädt Ihre `~/.bashrc` seit Ü 1 — den **Workspace** laden Sie nach dem Bauen selbst, in **jedem neuen Terminal**, mit dem vollständigen Pfad `~/ros2_ws/install/setup.bash`.
 
-    --{{1}}--
-Nach dem Bauen muss die Shell den neuen Inhalt kennen. Wie in Ü 1 bei der ROS-Installation erweitert die Datei setup.bash im Ordner install die Umgebungsvariablen, diesmal um Ihre eigenen Pakete. Ein neues Terminal startet in Ihrem Home-Verzeichnis. Der relative Pfad install/setup.bash funktioniert deshalb nur, wenn Sie vorher in den Workspace gewechselt sind.
+    --{{0}}--
+Seit Ü 1 lädt jedes neue Terminal die ROS-Installation automatisch, denn der Befehl dafür steht in Ihrer bashrc. Ihre eigenen Pakete kennt das Terminal damit aber noch nicht. Die Datei setup.bash im Ordner install erweitert die Umgebungsvariablen um Ihren Workspace. Ein neues Terminal startet in Ihrem Home-Verzeichnis, der relative Pfad install/setup.bash funktioniert deshalb nur, wenn Sie vorher in den Workspace gewechselt sind. Wer mag, trägt auch diese Zeile in die bashrc ein, dann aber erst, wenn der Workspace einmal gebaut ist.
 
 ### Optionen und typische Fehler
 
-+ `--symlink-install`: Python- und Launch-Dateien nur verlinkt → Änderungen wirken sofort
-  + neu bauen nach Änderung an `setup.py`, `package.xml` oder C++-Code
 + `--packages-select <paket>`: nur dieses Paket bauen
++ `--symlink-install`: in `install/` Verweise statt Kopien
++ **Symlink** = Datei, die nur auf eine andere Datei zeigt (wie eine Verknüpfung)
+
+```mermaid @mermaid
+graph LR
+    subgraph OHNE["ohne --symlink-install"]
+        S1["src/…/counter.launch.py"] -- "kopiert beim Build" --> I1["install/…/counter.launch.py<br/>(eigene Kopie)"]
+    end
+    subgraph MIT["mit --symlink-install"]
+        I2["install/…/counter.launch.py<br/>(Symlink)"] -. "zeigt auf" .-> S2["src/…/counter.launch.py"]
+    end
+    style I2 fill:#ffa600,stroke:#b37400,color:#000
+```
+
+```text
+> ls -l ~/ros2_ws/install/my_tutorial_package/share/my_tutorial_package/launch/
+counter.launch.py -> /home/.../ros2_ws/src/my_tutorial_package/launch/counter.launch.py
+```
+
++ Python- und Launch-Dateien: Änderung wirkt sofort
++ neu bauen: C++-Code, neue Dateien, `setup.py`, `CMakeLists.txt`, `package.xml`
 
     --{{0}}--
-Mit symlink-install legt colcon im Ordner install nur Verweise auf Ihre Python- und Launch-Dateien an, statt sie zu kopieren. Eine Änderung am Python-Code wirkt dann sofort, ohne neuen Build. C++-Code muss dagegen immer neu übersetzt werden, und auch Änderungen an den Beschreibungsdateien brauchen einen neuen Build. Mit packages-select sparen Sie Zeit, wenn Sie nur an einem Paket arbeiten.
+Ein symbolischer Link, kurz Symlink, ist eine Datei, die nur den Pfad zu einer anderen Datei enthält, ähnlich einer Verknüpfung unter Windows. Ohne die Option kopiert colcon Ihre Launch- und Python-Dateien nach install. Ändern Sie danach etwas im Ordner src, läuft weiter die alte Kopie. Mit symlink-install liegt in install nur ein Verweis auf die Datei in src, Ihre Änderung wirkt also sofort. Der Befehl ls minus l zeigt den Verweis als Pfeil. C++-Code muss dagegen immer neu übersetzt werden. Auch neue Dateien und Änderungen an den Beschreibungsdateien brauchen einen neuen Build, denn erst der Build legt den Verweis an. Mit packages-select sparen Sie Zeit, wenn Sie nur an einem Paket arbeiten.
 
-**Kurze Kontrolle:** `colcon build` lief fehlerfrei, aber `ros2 run my_tutorial_package data_generator` meldet `Package 'my_tutorial_package' not found`. Was fehlt?
+<details>
+<summary>🧩 <b>Zwischenfrage</b> zum Selbststudium (zum Aufklappen)</summary>
 
-[( )] Das Paket muss zusätzlich mit `sudo apt install` installiert werden.
-[(X)] In diesem Terminal wurde `source ~/ros2_ws/install/setup.bash` nicht ausgeführt.
-[( )] `colcon build` muss im Ordner `src` aufgerufen werden.
+Ein **neues** Terminal meldet bei `source install/setup.bash` die Ausgabe `No such file or directory`, obwohl `colcon build` fehlerfrei lief. Warum?
+
+[( )] `colcon build` hat `install/` nicht angelegt, es fehlt `--symlink-install`.
+[(X)] Das Terminal startet in `~`; der relative Pfad gilt nur im Ordner `~/ros2_ws`.
+[( )] Die `~/.bashrc` überschreibt den Workspace.
 ***
-`colcon build` legt die Programme in `install/` ab. Welche Pakete `ros2` kennt, steht aber in den Umgebungsvariablen — erst `source ~/ros2_ws/install/setup.bash` trägt den Workspace dort ein, in jedem Terminal einzeln (vgl. Ü 1).
+Ein neues Terminal beginnt im Home-Verzeichnis. Dort gibt es kein `install/`. Abhilfe: vollständiger Pfad `source ~/ros2_ws/install/setup.bash`.
 ***
+
+</details>
 
 ## Ein eigenes Paket Schritt für Schritt
 
@@ -219,6 +486,8 @@ Vollständiger, unter Jazzy getesteter Code: [02_ROS_Pakete/example](https://git
 Wir erweitern das Beispiel aus VL 01 in drei Schritten. Statt eines Textes soll der Zählwert als Zahl übertragen werden, zusammen mit einem Kommentar. Den Publisher haben Sie in VL 01 in Python gelesen, heute schreiben wir ihn in C++. Den Subscriber kennen Sie aus VL 01 in C++, heute schreiben wir ihn in Python. Achten Sie darauf, was in jedem Schritt gleich bleibt: Das ist das Muster für Ihre eigenen Pakete.
 
 ### Schritt 1: Eigener Nachrichtentyp
+
+**Mitmachen:** Ihr ROS aus Ü 1 genügt – bauen Sie Schritt 1 auf Ihrem Laptop mit.
 
 **Paket anlegen** — im Ordner `src` des Workspace:
 
@@ -245,7 +514,7 @@ Für die Verkehrswelt brauchen Sie später eigene Nachrichten, etwa für den Zus
 
 ```bash
 mkdir ~/ros2_ws/src/my_msg_package/msg
-code ~/ros2_ws/src/my_msg_package/msg/MyMsg.msg     # oder ein anderer Editor, z. B. nano
+nano ~/ros2_ws/src/my_msg_package/msg/MyMsg.msg     # oder ein anderer Editor, z. B. code
 ```
 
 ```text  msg/MyMsg.msg
@@ -270,6 +539,20 @@ rosidl_generate_interfaces(${PROJECT_NAME}
 
 + `rosidl_generate_interfaces`: erzeugt beim Bauen C++- und Python-Code aus der `.msg`-Datei
 + `${PROJECT_NAME}`: Name des Pakets (aus `package.xml`)
+
+```mermaid @mermaid
+graph LR
+    classDef gen stroke-dasharray:5 5
+    MSG["msg/MyMsg.msg<br/>int32 counter<br/>string comment"] --> GEN["rosidl_generate_interfaces<br/>beim colcon build"]
+    GEN --> H["C++-Header<br/>my_msg_package/msg/my_msg.hpp"]
+    GEN --> PYM["Python-Modul<br/>my_msg_package.msg"]
+    H --> CPP["data_generator.cpp"]
+    PYM --> PY["data_receiver.py"]
+    class H,PYM gen
+    style MSG fill:#ffa600,stroke:#b37400,color:#000
+```
+
+*Code-Generator `rosidl`: eine `.msg`-Datei, generierter Code (gestrichelt) für beide Sprachen*
 
     --{{0}}--
 Aus der Beschreibung der Nachricht muss beim Bauen C++- und Python-Code entstehen. Das erledigt ein Code-Generator von ROS. Wir tragen ihn in die CMakeLists.txt ein, und zwar direkt nach dem Suchen von ament_cmake und in jedem Fall vor der letzten Zeile.
@@ -317,6 +600,7 @@ comment: Keine Evaluation des Wertes
 ```
 
 + `comment` nicht gesendet → trotzdem der Standardwert
++ `ros2 topic pub` läuft weiter → mit `Strg+C` beenden
 
     --{{0}}--
 Wir testen den neuen Typ zuerst nur mit der Kommandozeile. So wissen wir, dass die Nachricht stimmt, bevor wir eigenen Code schreiben. Achten Sie auf die Ausgabe von echo: Sie zeigt beide Felder, obwohl wir nur den Zähler gesendet haben.
@@ -441,14 +725,19 @@ Die Struktur ist dieselbe, C++ verlangt nur mehr Schreibarbeit. Spitze Klammern 
 
 ### Schritt 3: Subscriber in Python
 
+<details>
+<summary>🧩 <b>Zwischenfrage</b> zum Selbststudium (zum Aufklappen)</summary>
+
 **Vorhersage:** Welche Datei übernimmt bei einem Python-Paket die Rolle von `add_executable`?
 
 [( )] ebenfalls eine `CMakeLists.txt`
 [(X)] eine Python-Datei, die das Paket beschreibt (`setup.py`)
 [( )] keine — Python-Dateien sind direkt ausführbar, ROS findet sie selbst
 ***
-Auch ein Python-Programm muss ROS bekannt gemacht werden, sonst findet `ros2 run` es nicht. Das übernimmt der Eintrag `entry_points` in `setup.py` — gleich auf dieser Folie.
+Auch ein Python-Programm muss ROS bekannt gemacht werden, sonst findet `ros2 run` es nicht. Das übernimmt der Eintrag `entry_points` in `setup.py` — weiter unten.
 ***
+
+</details>
 
 **Python-Paket anlegen:** `--build-type ament_python`
 
@@ -538,9 +827,14 @@ Finished <<< my_tutorial_package [4.81s]
 Summary: 3 packages finished [5.42s]
 ```
 
-![Abhängigkeitsgraph: my_tutorial_package und my_python_subscriber hängen beide von my_msg_package ab](images/colcon_graph.png)<!-- width="55%" -->
+```mermaid @mermaid
+graph LR
+    M["① my_msg_package<br/>ament_cmake · MyMsg"] --> T["② my_tutorial_package<br/>ament_cmake · C++"]
+    M --> P["② my_python_subscriber<br/>ament_python"]
+    style M fill:#ffa600,stroke:#b37400,color:#000
+```
 
-*Abhängigkeiten: `colcon graph --dot | dot -Tpng -o graph.png`*
+*Bauabhängigkeiten wie in `colcon graph`: Pfeil = wird vorher gebaut; ② parallel. Selbst ausgeben: `colcon graph --dot | dot -Tpng -o graph.png`*
 
     --{{0}}--
 Die Abhängigkeit zu my_msg_package steht durch die Option dependencies bereits in der package.xml. colcon erkennt daraus, dass das Nachrichtenpaket zuerst gebaut werden muss, und baut die beiden anderen danach, sogar parallel. Den Abhängigkeitsgraphen gibt colcon graph aus, mit dem Werkzeug Graphviz wird daraus ein Bild.
@@ -585,7 +879,10 @@ Ein C++-Knoten und ein Python-Knoten tauschen also problemlos einen selbst defin
     --{{0}}--
 Die Tabelle fasst die Unterschiede zusammen. Die wichtigste Konsequenz für Ihr Projekt: Auch wenn Sie alle Knoten in Python schreiben, brauchen Sie für eigene Nachrichtentypen ein CMake-Paket, denn nur dort läuft der Code-Generator.
 
-**Kurze Kontrolle:** Sie legen in `my_python_subscriber` eine neue Datei `lane_detector.py` mit einer Funktion `main` an und bauen. `ros2 run my_python_subscriber lane_detector` meldet `No executable found`. Was fehlt?
+<details>
+<summary>🧩 <b>Zwischenfrage</b> zum Selbststudium (zum Aufklappen)</summary>
+
+Sie legen in `my_python_subscriber` eine neue Datei `lane_detector.py` mit einer Funktion `main` an und bauen. `ros2 run my_python_subscriber lane_detector` meldet `No executable found`. Was fehlt?
 
 [( )] Ein Eintrag `add_executable(lane_detector ...)` in der `CMakeLists.txt`.
 [(X)] Ein Eintrag für `lane_detector` unter `console_scripts` in `setup.py` — und danach ein neuer Build.
@@ -593,6 +890,8 @@ Die Tabelle fasst die Unterschiede zusammen. Die wichtigste Konsequenz für Ihr 
 ***
 Programme werden über `entry_points` in `setup.py` angemeldet. Weil sich damit die Paketbeschreibung ändert, ist ein neuer Build nötig — `--symlink-install` hilft nur bei Änderungen am Code selbst.
 ***
+
+</details>
 
 ## Systeme starten mit Launch-Dateien
 
@@ -676,7 +975,10 @@ Die Launch-Datei legen wir in einen Ordner launch im Paket my_tutorial_package. 
     --{{1}}--
 Nach colcon build startet ein einziger Befehl das ganze System. Mit dem Argument topic gleich zaehler senden und empfangen beide Knoten über das neue Topic. Welche Argumente eine Launch-Datei kennt, zeigt die Option show-args.
 
-**Kurze Kontrolle:** Sie entfernen in der Launch-Datei `remappings=[('counter', topic)]` beim **Subscriber** und starten mit `topic:=zaehler`. Was passiert?
+<details>
+<summary>🧩 <b>Zwischenfrage</b> zum Selbststudium (zum Aufklappen)</summary>
+
+Sie entfernen in der Launch-Datei `remappings=[('counter', topic)]` beim **Subscriber** und starten mit `topic:=zaehler`. Was passiert?
 
 [( )] Beide Knoten verwenden weiterhin `/zaehler`.
 [(X)] Der Publisher sendet auf `/zaehler`, der Subscriber wartet auf `/counter` — er empfängt nichts.
@@ -684,6 +986,8 @@ Nach colcon build startet ein einziger Befehl das ganze System. Mit dem Argument
 ***
 Ein Remapping gilt nur für den Knoten, bei dem es steht; der Subscriber benutzt den Namen aus seinem Code, `counter`. Beide Knoten laufen fehlerfrei, sind aber nicht verbunden — `ros2 topic info` oder `rqt_graph` zeigen es sofort.
 ***
+
+</details>
 
 **Mehr:** einbinden (`IncludeLaunchDescription`), verzögert starten (`TimerAction`), Parameter aus YAML — [Tutorial Launch](https://docs.ros.org/en/jazzy/Tutorials/Intermediate/Launch/Launch-Main.html)
 
@@ -746,44 +1050,6 @@ RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 2000, "Kein Bild em
     --{{0}}--
 Gerade die Variante THROTTLE ist im Projekt wichtig. Ein Knoten, der dreißigmal pro Sekunde „Keine Spur erkannt“ meldet, macht das Terminal unlesbar. Mit THROTTLE erscheint die Meldung zum Beispiel nur noch einmal alle zwei Sekunden.
 
-**Aufgabe:** Die Logmeldung des `data_generator` soll nur alle 10 s erscheinen, gesendet wird weiter zweimal pro Sekunde.
-
-<details>
-<summary>Lösung anzeigen</summary>
-
-```cpp
-RCLCPP_INFO_THROTTLE(this->get_logger(), *this->get_clock(), 10000,
-  "Publishing: %d, %s", message.counter, message.comment.c_str());
-```
-
-Nach der Änderung muss das C++-Paket neu gebaut werden (`colcon build --packages-select my_tutorial_package`).
-
-</details>
-
-## ROS 2 auf mehreren Rechnern
-
-**Im Praktikum verteilt:** Treiber auf dem TurtleBot (Raspberry Pi), Ihre Knoten auf dem Laptop
-
-+ nichts zu programmieren — Discovery (VL 01) findet die Knoten
-+ Voraussetzung: dasselbe Netz und **dieselbe `ROS_DOMAIN_ID`**
-+ jede Gruppe eine eigene ID (0 bis 101)
-
-```bash
-export ROS_DOMAIN_ID=12      # auf dem Laptop UND auf dem TurtleBot
-ros2 topic list              # zeigt jetzt /scan, /odom, /cmd_vel ... des eigenen Roboters
-```
-
-    --{{0}}--
-Im Praktikum läuft Ihr System verteilt. Auf dem Raspberry Pi des TurtleBot laufen die Treiber für LiDAR, Kamera und Motoren, auf Ihrem Laptop Ihre eigenen Knoten und die Visualisierung. Programmieren müssen Sie dafür nichts, die Knoten finden sich im Netz von selbst. Jede Gruppe bekommt eine eigene Domänennummer, damit Ihr Laptop nicht die Fahrbefehle für den Roboter der Nachbargruppe sendet.
-
-**Zu Hause:** niemanden im WLAN stören → `export ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST`
-
-> [!NOTE]
-> **Hinweis – WSL2:** WSL2 hat ein eigenes, internes Netz, aus dem der TurtleBot nicht sichtbar ist. Die Umstellung auf den gespiegelten Netzwerkmodus erledigen Sie vor P 1 zu Hause (Anleitung in P 1, „Vorbereitung“). Für die Übungen ist nichts zu tun.
-
-    --{{1}}--
-Zu Hause gilt das Umgekehrte: Mit dieser Variable sucht ROS 2 nur auf dem eigenen Rechner nach Knoten. Sie stören dann niemanden im WLAN, und niemand stört Sie.
-
 ## Zusammenfassung und Ausblick
 
 **Vom Code zum laufenden System**
@@ -797,41 +1063,20 @@ Zu Hause gilt das Umgekehrte: Mit dieser Variable sucht ROS 2 nur auf dem eigene
 | 4. Bekannt machen    | `source ~/ros2_ws/install/setup.bash` — in jedem neuen Terminal       |
 | 5. Starten           | `ros2 run <paket> <programm>` oder `ros2 launch <paket> <datei>`      |
 
++ eigene Nachrichtentypen: immer in einem `ament_cmake`-Paket
++ Workspace in jedem neuen Terminal laden, ROS selbst lädt die `~/.bashrc`
+
     --{{0}}--
 Halten wir den Weg vom Code zum laufenden System fest. Er ist für jedes Paket gleich und wird Ihnen in jedem Praktikum begegnen. Zurück zur Einstiegsfrage: Der TurtleBot startet mit einem Befehl, weil seine Knoten in Paketen liegen, mit colcon gebaut sind und eine Launch-Datei sie gemeinsam startet. Genau so werden Sie Ihr Verkehrswelt-System aufbauen.
 
 **Ausblick**
 
 + **Ü 2:** erster eigener Workspace, fremdes Paket zur Tastatursteuerung, Umsetzer auf Fahrbefehle, Launch-Datei mit Parametern, `ros2 bag`
++ **P 1:** eigener TurtleBot – Gruppen-ID statt `7` in `~/.bashrc`, `LOCALHOST` auskommentieren; WSL2: gespiegelter Netzwerkmodus (Anleitung in P 1)
 + **Block 5:** Lebenszyklus von Knoten (Navigation mit Nav2)
 
     --{{1}}--
-In Ü 2 legen Sie Ihren ersten eigenen Workspace an, holen sich ein fremdes Paket zur Tastatursteuerung und schreiben einen Knoten, der daraus einen Fahrbefehl macht. Alles starten Sie mit einer Launch-Datei, mit Parametern aus einer YAML-Datei, und zum Schluss zeichnen Sie Daten auf. Später, beim Navigations-Stack Nav2, sehen Sie, dass große Systeme ihre Knoten geordnet über einen Lebenszyklus starten: konfigurieren, aktivieren, deaktivieren.
-
-### Abschluss-Check
-
-Ordnen Sie die Dateien ihrem Zweck zu.
-
-[ [package.xml] [CMakeLists.txt] [setup.py] [Launch-Datei] ]
-[     (X)            ( )           ( )           ( )      ] Das Paket braucht `my_msg_package`.
-[     ( )            (X)           ( )           ( )      ] Aus `data_generator.cpp` soll ein Programm entstehen.
-[     ( )            ( )           (X)           ( )      ] Die Python-Funktion `main` soll als `data_receiver` startbar sein.
-[     ( )            ( )           ( )           (X)      ] Publisher und Subscriber sollen gemeinsam mit einem Topic-Namen starten.
-***
-`package.xml` beschreibt, **was** ein Paket braucht; `CMakeLists.txt` und `setup.py` beschreiben, **wie** es gebaut wird; die Launch-Datei, **wie das System startet**.
-***
-
-Sie wollen die Debug-Meldungen **dieses einen** C++-Knotens sehen. Welche Option hängen Sie an `ros2 run` an?
-
-[( )] `--ros-args --log-level debug`
-[(X)] `--ros-args --log-level data_generator:=debug`
-[( )] `--log debug`
-***
-Ohne Knotennamen schaltet `--log-level debug` auch die internen Meldungen von ROS frei — das Terminal wird geflutet.
-***
-
-    --{{0}}--
-Zwei Fragen zum Abschluss. Die erste prüft, ob Sie die Rollen der Beschreibungsdateien auseinanderhalten, die zweite greift die Stolperfalle beim Logging auf.
+In Ü 2 legen Sie Ihren ersten eigenen Workspace an, holen sich ein fremdes Paket zur Tastatursteuerung und schreiben einen Knoten, der daraus einen Fahrbefehl macht. Alles starten Sie mit einer Launch-Datei, mit Parametern aus einer YAML-Datei, und zum Schluss zeichnen Sie Daten auf. Für das erste Praktikum stellen Sie Ihre bashrc um: Statt der Übungsnummer sieben tragen Sie die Domänennummer Ihrer Gruppe ein, und die Beschränkung auf den eigenen Rechner kommentieren Sie aus, sonst findet Ihr Laptop den Roboter nicht. Wie Domänen und Discovery funktionieren, kennen Sie aus VL 01. Später, beim Navigations-Stack Nav2, sehen Sie, dass große Systeme ihre Knoten geordnet über einen Lebenszyklus starten: konfigurieren, aktivieren, deaktivieren.
 
 ## Aufgabe der Woche
 
@@ -840,14 +1085,19 @@ Zwei Fragen zum Abschluss. Die erste prüft, ob Sie die Rollen der Beschreibungs
    + **erwartet:** `my_tutorial_package data_generator`; `ros2 launch my_tutorial_package counter.launch.py` liefert abwechselnd `Publishing:` und `Received:`
 2. **Erweitern:** `MyMsg.msg` um `float32 temperature`, Zufallswert senden (C++: `std::rand()` aus `<cstdlib>`) — was muss neu gebaut werden?
 3. **Skizze aus VL 01 ergänzen:** Pakete für Spurerkennung, Ampelerkennung, Fahrverhalten; wohin gehört ein Typ „Ampelzustand“?
+4. **Prüfen** Sie sich mit der Selbstkontrolle auf den nächsten beiden Folien.
 
     --{{0}}--
-Bauen Sie die drei Pakete selbst nach, erst dann merken Sie, wo es hakt. Ihre ROS-2-Umgebung haben Sie in Ü 1 eingerichtet, sonst hilft die Installationsanleitung. Bei der dritten Aufgabe ordnen Sie die Knoten und Topics Ihrer Skizze aus VL 01 Paketen zu. Wir vergleichen die Skizzen zu Beginn von Ü 2, bewahren Sie Ihre danach für das Gruppen-Repository im ersten Praktikum auf.
+Bauen Sie die drei Pakete selbst nach, erst dann merken Sie, wo es hakt. Ihre ROS-2-Umgebung haben Sie in Ü 1 eingerichtet, sonst hilft die Installationsanleitung. Bei der dritten Aufgabe ordnen Sie die Knoten und Topics Ihrer Skizze aus VL 01 Paketen zu. Bewahren Sie Ihre Skizze für das Gruppen-Repository im ersten Praktikum auf. Zum Schluss prüfen Sie sich mit der Selbstkontrolle, die Fragen verbinden mehrere Abschnitte von heute.
 
 <details>
 <summary>Lösungshinweise zu Aufgabe 2 und 3 anzeigen</summary>
 
-**Aufgabe 2:** Im Callback z. B. `message.temperature = 15.0f + std::rand() % 100 / 10.0f;` (dazu `#include <cstdlib>`). `my_msg_package` muss neu gebaut werden, damit der Code für das neue Feld entsteht, und `my_tutorial_package`, weil der C++-Knoten gegen den geänderten Header kompiliert wird. Am einfachsten bauen Sie mit `colcon build` alle Pakete; `colcon` hält die Reihenfolge ein. Danach zeigt `ros2 topic echo /counter` das Feld `temperature`; der Python-Subscriber gibt es erst aus, wenn Sie seine Logzeile ergänzen.
+**Aufgabe 2:**
+
++ im Callback z. B. `message.temperature = 15.0f + std::rand() % 100 / 10.0f;` (dazu `#include <cstdlib>`)
++ neu bauen: `my_msg_package` (Code für das neue Feld) und `my_tutorial_package` (kompiliert gegen den geänderten Header) – am einfachsten `colcon build` für alle
++ Prüfung: `ros2 topic echo /counter` zeigt `temperature`; der Python-Subscriber erst, wenn Sie seine Logzeile ergänzen
 
 **Aufgabe 3 — eine mögliche Lösung:**
 
@@ -860,6 +1110,79 @@ verkehrswelt_bringup/     Launch-Datei, die alles zusammen mit dem TurtleBot sta
 ```
 
 Der Nachrichtentyp liegt in einem eigenen Paket, damit Ampelerkennung und Fahrverhalten ihn beide verwenden können, ohne voneinander abzuhängen.
+
+</details>
+
+### Selbstkontrolle: Bauen und Beschreibungsdateien
+
+Ordnen Sie jedem Fehler die Datei zu, die Sie korrigieren.
+
+[ [package.xml] [CMakeLists.txt] [setup.py] ]
+[     ( )            ( )             (X)    ] `ros2 run my_python_subscriber lane_detector` meldet `No executable found`.
+[     ( )            (X)             ( )    ] `data_generator` liegt nur in `build/`, `ros2 run` findet es nicht.
+[     ( )            (X)             ( )    ] `ros2 launch my_tutorial_package counter.launch.py` meldet, die Datei sei nicht gefunden.
+***
+`CMakeLists.txt` bzw. `setup.py` sagen, **was gebaut und installiert** wird.
+***
+
+Sie ergänzen `float32 temperature` in `MyMsg.msg`, setzen `message.temperature` in `data_generator.cpp` und bauen mit `colcon build --packages-select my_tutorial_package`. Was passiert?
+
+[( )] Läuft durch – colcon baut Abhängigkeiten automatisch mit.
+[(X)] Compilerfehler: `MyMsg` hat kein Element `temperature`.
+[( )] Läuft durch – `--symlink-install` macht die `.msg`-Änderung sofort wirksam.
+***
+`--packages-select` baut nur das genannte Paket. Der Header `my_msg.hpp` entsteht beim Bau von `my_msg_package` und ist noch alt. Abhilfe: `colcon build` ohne Auswahl.
+***
+
+Ihr Teampartner klont das Gruppen-Repository in einen frischen Workspace. `colcon build` bricht in `my_tutorial_package` ab: `Could not find a package configuration file provided by "my_msg_package"`. Bei Ihnen baut **dasselbe** Repository – gleiche Dateien – seit Wochen. Wahrscheinlichste Ursache?
+
+[( )] In der `CMakeLists.txt` fehlt `find_package(my_msg_package REQUIRED)`.
+[(X)] In der `package.xml` von `my_tutorial_package` fehlt `<depend>my_msg_package</depend>`.
+[( )] Der Teampartner hat vor dem Bauen `source install/setup.bash` vergessen.
+***
+Ein Fehler in der `CMakeLists.txt` träte auch bei Ihnen auf. Ohne `<depend>` kennt colcon die Reihenfolge nicht; Ihr Terminal hat das längst gebaute `my_msg_package` aus `install/` geladen, dort findet CMake es.
+***
+
+Ihre Gruppe schreibt nur Python und legt `TrafficLight.msg` in das `ament_python`-Paket `ampel_erkennung`. Was folgt daraus?
+
+[( )] Funktioniert, sofern `rosidl_default_generators` in der `package.xml` steht.
+[( )] Funktioniert, aber nur für Python-Knoten.
+[(X)] Es entsteht kein Code – der Typ gehört in ein eigenes CMake-Paket, z. B. `verkehrswelt_msgs`.
+***
+`rosidl_generate_interfaces` ist ein CMake-Befehl. Ein eigenes Nachrichtenpaket hält außerdem Ampelerkennung und Fahrverhalten unabhängig voneinander.
+***
+
+### Selbstkontrolle: Starten und Logging
+
+Es läuft `ros2 launch my_tutorial_package counter.launch.py topic:=zaehler`. In einem zweiten Terminal starten Sie zusätzlich `ros2 run my_python_subscriber data_receiver`. Was zeigt dieser Knoten?
+
+[( )] `Received: …` – das Argument gilt für das ganze System.
+[(X)] Nichts: Er hört auf `/counter`, gesendet wird auf `/zaehler`.
+[( )] Einen Abbruch, weil der Knotenname `data_receiver` schon vergeben ist.
+***
+Argumente und Remappings gelten nur für Knoten, die diese Launch-Datei startet. Der zusätzliche Knoten nutzt `counter` aus seinem Code. Abhilfe: `--ros-args -r counter:=zaehler`.
+***
+
+Sie wollen die Debug-Meldungen **dieses einen** C++-Knotens sehen. Welche Option hängen Sie an `ros2 run` an?
+
+[( )] `--ros-args --log-level debug`
+[(X)] `--ros-args --log-level data_generator:=debug`
+[( )] `--log debug`
+***
+Ohne Knotennamen schaltet `--log-level debug` auch die internen Meldungen von ROS frei – das Terminal wird geflutet.
+***
+
+**Aufgabe:** Die Logmeldung des `data_generator` soll nur alle 10 s erscheinen, gesendet wird weiter zweimal pro Sekunde.
+
+<details>
+<summary>Lösung anzeigen</summary>
+
+```cpp
+RCLCPP_INFO_THROTTLE(this->get_logger(), *this->get_clock(), 10000,
+  "Publishing: %d, %s", message.counter, message.comment.c_str());
+```
+
+Nach der Änderung muss das C++-Paket neu gebaut werden (`colcon build --packages-select my_tutorial_package`).
 
 </details>
 
