@@ -159,7 +159,7 @@ Ein TurtleBot 3 Burger bewegt sich autonom in einer Miniatur-Verkehrswelt auf sc
 + **einparken** und weitere Fahrmanöver ausführen.
 
     --{{1}}--
-Diese Aufgabe lösen Sie nicht an einem Stück, sondern Block für Block. Jeder Block der Veranstaltung liefert eine Teilfähigkeit, die Sie im Praktikum direkt auf dem Roboter umsetzen.
+Diese Aufgabe lösen Sie nicht an einem Stück, sondern Block für Block. Jeder Block der Veranstaltung liefert eine Teilfähigkeit, die Sie im Praktikum direkt mit dem Roboter umsetzen.
 
                    {{1}}
 *******************************************************************************

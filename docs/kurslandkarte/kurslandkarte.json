@@ -225,7 +225,7 @@
    "freigegeben": true,
    "status": "ausgearbeitet",
    "block": 1,
-   "pdf": null,
+   "pdf": "../pdf/uebung_01_linux_shell.pdf",
    "anwendet": [],
    "abschnitte": [
     "Übung: OS + Linux Shell",
@@ -276,7 +276,7 @@
    "freigegeben": true,
    "status": "ausgearbeitet",
    "block": 1,
-   "pdf": null,
+   "pdf": "../pdf/02_ROS_Pakete.pdf",
    "anwendet": [],
    "abschnitte": [
     "ROS 2 Pakete",
@@ -1427,6 +1427,17 @@
    "fehlvorstellung": "„./setup.bash und source setup.bash sind dasselbe.“"
   },
   {
+   "id": "domainid",
+   "name": "ROS_DOMAIN_ID",
+   "linie": "ros",
+   "vl": 2,
+   "abschnitt": 19,
+   "ebene": 2,
+   "code": true,
+   "erklaerung": "Die Umgebungsvariable trennt ROS-2-Systeme im selben Netz — im Labor eine pro TurtleBot-Gruppe. Auf dem Roboter ist sie fest eingestellt; Sie setzen sie nur auf Ihrem Rechner in ~/.bashrc.",
+   "fehlvorstellung": "„Für die Verbindung muss ich am Roboter etwas einstellen.“"
+  },
+  {
    "id": "bashrc",
    "name": "~/.bashrc",
    "linie": "werkzeuge",
@@ -1876,17 +1887,6 @@
    "code": false,
    "erklaerung": "Ein ROS-2-System besteht aus unabhängigen Prozessen, die nur über Nachrichten zusammenarbeiten – Nachrichten können ausbleiben, verspätet oder gar nicht ankommen.",
    "fehlvorstellung": "„Wenn mein Knoten läuft, kommen auch Daten an.“"
-  },
-  {
-   "id": "domainid",
-   "name": "ROS_DOMAIN_ID",
-   "linie": "ros",
-   "vl": 3,
-   "abschnitt": 21,
-   "ebene": 2,
-   "code": true,
-   "erklaerung": "Die Umgebungsvariable trennt ROS-2-Systeme im selben Netz — im Labor eine pro TurtleBot-Gruppe, gesetzt auf Laptop und Roboter.",
-   "fehlvorstellung": "„Die ROS_DOMAIN_ID muss nur auf dem Laptop gesetzt werden.“"
   },
   {
    "id": "paket",
@@ -3491,8 +3491,8 @@
     "umgebung",
     "source",
     "bashrc",
-    "setupbash",
-    "domainid"
+    "domainid",
+    "setupbash"
    ],
    "weiter": false
   },

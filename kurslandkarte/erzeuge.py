@@ -144,6 +144,7 @@ B = [
     ("umgebung", "Umgebungsvariable", "werkzeuge", "ue1", 'Umgebungsvariablen', 1, 0, "Werte wie PATH oder ROS_DOMAIN_ID, die eine Shell an gestartete Programme weitergibt — nur mit export.", "„Eine Variable gilt in allen Terminals.“"),
     ("path", "PATH", "werkzeuge", "ue1", 'PATH — wo findet die Shell Programme?', 2, 1, "Die Shell sucht Befehle in den Verzeichnissen aus PATH; fehlt ROS 2 dort: command not found.", None),
     ("source", "source", "werkzeuge", "ue1", 'source oder ausführen?', 1, 1, "Führt ein Skript in der aktuellen Shell aus, damit gesetzte Variablen erhalten bleiben — source /opt/ros/jazzy/setup.bash.", "„./setup.bash und source setup.bash sind dasselbe.“"),
+    ("domainid", "ROS_DOMAIN_ID", "ros", "ue1", 'Aufgabe 5: Zwei Terminals, zwei Welten', 2, 1, "Die Umgebungsvariable trennt ROS-2-Systeme im selben Netz — im Labor eine pro TurtleBot-Gruppe. Auf dem Roboter ist sie fest eingestellt; Sie setzen sie nur auf Ihrem Rechner in ~/.bashrc.", "„Für die Verbindung muss ich am Roboter etwas einstellen.“"),
     ("bashrc", "~/.bashrc", "werkzeuge", "ue1", 'Aufgabe 5: Zwei Terminals, zwei Welten', 2, 1, "Wird beim Öffnen jedes Terminals ausgeführt — der Ort für source und ROS_DOMAIN_ID.", None),
     # --- VL 04 Sensorik
     ("sensor", "Sensor", "wahrnehmung", "01", 'Was ist ein Sensor?', 1, 0, "Ein Sensor wandelt physikalische, chemische oder biologische Messgrößen in elektrische Signale um.", None),
@@ -189,7 +190,6 @@ B = [
     ("rqt", "rqt / rqt_graph", "werkzeuge", "03", 'turtlesim: ROS 2 zum Anfassen', 2, 1, "rqt bündelt die Inspektionsfunktionen der ros2-CLI grafisch, z. B. den Knoten-Topic-Graphen.", None),
     ("verteilt", "Verteiltes System", "ros", "03", 'Einordnung', 1, 0, "Ein ROS-2-System besteht aus unabhängigen Prozessen, die nur über Nachrichten zusammenarbeiten – Nachrichten können ausbleiben, verspätet oder gar nicht ankommen.", "„Wenn mein Knoten läuft, kommen auch Daten an.“"),
     # --- VL 02 ROS 2 Pakete
-    ("domainid", "ROS_DOMAIN_ID", "ros", "04", 'Zusammenfassung und Ausblick', 2, 1, "Die Umgebungsvariable trennt ROS-2-Systeme im selben Netz — im Labor eine pro TurtleBot-Gruppe, gesetzt auf Laptop und Roboter.", "„Die ROS_DOMAIN_ID muss nur auf dem Laptop gesetzt werden.“"),
     ("paket", "ROS-2-Paket", "ros", "04", 'Vom Beispiel zum eigenen Paket', 1, 0, "Ein Paket kapselt Code samt Abhängigkeiten, Build-Konfiguration, Nachrichten und Launch-Files.", None),
     ("workspace", "Workspace", "werkzeuge", "04", 'Workspace und Paketstruktur', 1, 0, "Pakete liegen in src/ eines Workspaces; colcon erzeugt daneben build/, install/ und log/.", None),
     ("ament", "ament_cmake/ament_python", "werkzeuge", "04", 'Bauen mit colcon', 2, 0, "ament ist das Buildsystem für ein einzelnes Paket, mit CMake (C++) oder setuptools (Python).", None),
@@ -402,7 +402,7 @@ F = [
     ("f_projekt", "Projektaufgabe", "Vom Ziel in der ersten Vorlesung zum autonom fahrenden TurtleBot in der Verkehrswelt.",
      ["verkehrswelt", "turtlebot", "domainid", "rosbag", "thresholding", "kalibrierung", "yolo", "robotlocalization", "purepursuit", "costmap", "nav2"]),
     ("f_umgebung", "Umgebung im Griff", "Von der Shell über Umgebungsvariablen zum lauffähigen ROS-2-Workspace.",
-     ["shell", "umgebung", "source", "bashrc", "setupbash", "domainid"]),
+     ["shell", "umgebung", "source", "bashrc", "domainid", "setupbash"]),
     ("f_ros", "Vom Knoten zum System", "Wie aus einzelnen Knoten und Nachrichten ein vollständiges Robotersystem wird.",
      ["rosmotivation", "middleware", "node", "topic", "message", "paket", "launch", "tf2", "nav2"]),
     ("f_koord", "Koordinaten überall", "Bezugssysteme und Transformationen ziehen sich vom Roboter bis zur Kamera und zum Fahrwerk.",
