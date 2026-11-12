@@ -75,7 +75,7 @@ T = [
     ("03",  "VL",    "2026-10-28", "ROS 2 Grundlagen",    "01_ROS_Grundlagen/01_ROS_Grundlagen.md",             "ausgearbeitet", 1),
     ("ue1", "Ü 1",   "2026-10-29", "Linux Shell",         "exercises/uebung_01_linux_shell/README.md",          "ausgearbeitet", 1),
     ("04",  "VL",    "2026-11-04", "ROS 2 Pakete",        "02_ROS_Pakete/02_ROS_Pakete.md",                 "ausgearbeitet", 1),
-    ("02",  "VL",    "2026-11-11", "Koordinaten + QoS",   "03_Koordinaten_QoS/03_Koordinaten_QoS.md", "ausgearbeitet", 1),
+    ("02",  "VL",    "2026-11-12", "Koordinaten + QoS",   "03_Koordinaten_QoS/03_Koordinaten_QoS.md", "ausgearbeitet", 1),
     ("ue2", "Ü 2",   "2026-11-12", "Erster Workspace",     "exercises/uebung_02_workspace/README.md",     "ausgearbeitet", 1),
     ("p1",  "P 1",   ["2026-11-25", "2026-11-26"], "TurtleBot + Bags", "exercises/praktikum_01_turtlebot/README.md", "ausgearbeitet", 1),
     ("01",  "VL",    "2026-12-02", "Sensorik",            "04_Sensorik/04_Sensorik.md",                           "Bestand", 2),
@@ -263,7 +263,7 @@ B = [
     ("mapmmse", "MAP vs. Erwartungswert", "mathe", "08", 'Ausblick: Vom diskreten zum kontinuierlichen Filter', 2, 0, "argmax liefert springende Schätzungen; der Erwartungswert nutzt die ganze Verteilung.", None),
     # --- VL 11 Sensorfusion II
     ("qos", "Quality of Service", "ros", "02", 'Quality of Service', 1, 0, "Reliability, Durability und History/Depth regeln pro Verbindung den Umgang mit Verlusten und spät gestarteten Empfängern; sensor_data ist best effort.", "„Ein Empfänger mit reliable bekommt von jedem Sender Daten.“"),
-    ("qoscompat", "QoS-Verträglichkeit", "ros", "02", 'Zuverlässigkeit: reliable oder best effort', 2, 1, "Der Empfänger darf nicht mehr verlangen, als der Sender bietet: best_effort-Sender und reliable-Empfänger verbinden sich nicht.", "„Bei unpassender QoS stürzt der Knoten ab.“"),
+    ("qoscompat", "QoS-Verträglichkeit", "ros", "02", 'Verträglichkeit: Wer verlangt, wer bietet?', 2, 1, "Der Empfänger darf nicht mehr verlangen, als der Sender bietet: best_effort-Sender und reliable-Empfänger verbinden sich nicht.", "„Bei unpassender QoS stürzt der Knoten ab.“"),
     ("durability", "Durability / transient_local", "ros", "02", 'Dauerhaftigkeit: Wer zu spät kommt …', 2, 0, "Mit transient_local erhalten spät gestartete Empfänger die letzten Nachrichten — deshalb nutzen /tf_static und Karten diese Einstellung.", None),
     ("normalverteilung", "Normalverteilung", "mathe", "09", 'Warum Normalverteilungen?', 1, 0, "Gaußverteilungen bleiben bei Predict und Update gaußförmig — μ und σ² genügen.", None),
     ("kalman", "Kalman-Filter", "schaetzung", "09", 'Der eindimensionale Kalman-Filter', 1, 0, "Optimaler Schätzer für lineare Systeme mit Gaußrauschen — der Predict-Update-Zyklus in geschlossener Form.", None),
@@ -464,7 +464,7 @@ BRAUCHEN = {
     "06": ["frame", "homtrafo", "verkettung", "bildmatrix"],
 }
 # Begriffe eines Termins erscheinen in der Karte erst nach ihm (sonst nur mit „Ausblick“)
-FREIGEGEBEN = {"00", "03", "ue1", "04"}
+FREIGEGEBEN = {"00", "03", "ue1", "04", "02", "ue2"}
 
 kern.erzeuge(
     repo=os.path.dirname(HIER), kurs=KURS, termine=T, bloecke=BLOECKE, linien=LINIEN,

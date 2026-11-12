@@ -1,5 +1,5 @@
 {
- "stand": "04.11.2026",
+ "stand": "12.11.2026",
  "version": "0.5.2",
  "kurs": {
   "basis": "https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/",
@@ -313,19 +313,19 @@
    "datei": "03_Koordinaten_QoS/03_Koordinaten_QoS.md",
    "datum": "2026-11-09",
    "kurz": "Koordinaten + QoS",
-   "ende": "2026-11-11",
+   "ende": "2026-11-12",
    "tage": [
-    "2026-11-11"
+    "2026-11-12"
    ],
    "kw": 46,
    "woche_tage": "9.–13.11.",
-   "wann": "Mi 11.11. · 11:30–13:00",
-   "wann_kurz": "Mi 11.11.",
+   "wann": "Do 12.11. · 16:15–17:45",
+   "wann_kurz": "Do 12.11.",
    "leitfrage": "Der TurtleBot weiß, wo seine Sensoren sitzen, und seine Daten kommen beim Empfänger an – sonst bleibt RViz leer.",
-   "freigegeben": false,
+   "freigegeben": true,
    "status": "ausgearbeitet",
    "block": 1,
-   "pdf": null,
+   "pdf": "../pdf/03_Koordinaten_QoS.pdf",
    "anwendet": [],
    "abschnitte": [
     "Koordinaten und Kommunikationsqualität",
@@ -346,12 +346,17 @@
     "RViz in drei Schritten",
     "URDF: der Roboter als Modell",
     "Quality of Service",
+    "Daten statt Nachrichten",
+    "Die QoS-Merkmale im Überblick",
     "Zuverlässigkeit: reliable oder best effort",
+    "Verträglichkeit: Wer verlangt, wer bietet?",
     "Dauerhaftigkeit: Wer zu spät kommt …",
+    "Puffer: History und Depth",
+    "Fristen und Lebenszeichen: Deadline, Lifespan, Liveliness",
     "QoS untersuchen",
     "Zusammenfassung und Ausblick",
-    "Abschluss-Check",
-    "Aufgabe der Woche"
+    "Aufgabe der Woche",
+    "Selbstkontrolle: Koordinaten, tf2 und QoS"
    ]
   },
   {
@@ -371,10 +376,10 @@
    "wann": "Do 12.11. · 16:15–17:45",
    "wann_kurz": "Do 12.11.",
    "leitfrage": "Sie bauen Ihren ersten Workspace aus eigenen und fremden Paketen und steuern damit die Schildkröte – genau so starten, konfigurieren und belauschen Sie in P 1 den TurtleBot.",
-   "freigegeben": false,
+   "freigegeben": true,
    "status": "ausgearbeitet",
    "block": 1,
-   "pdf": null,
+   "pdf": "../pdf/uebung_02_workspace.pdf",
    "anwendet": [],
    "abschnitte": [
     "Übung: Ihr erster Workspace",
@@ -2641,7 +2646,7 @@
    "name": "QoS-Verträglichkeit",
    "linie": "ros",
    "vl": 4,
-   "abschnitt": 19,
+   "abschnitt": 22,
    "ebene": 2,
    "code": true,
    "erklaerung": "Der Empfänger darf nicht mehr verlangen, als der Sender bietet: best_effort-Sender und reliable-Empfänger verbinden sich nicht.",
@@ -2652,7 +2657,7 @@
    "name": "Durability / transient_local",
    "linie": "ros",
    "vl": 4,
-   "abschnitt": 20,
+   "abschnitt": 23,
    "ebene": 2,
    "code": false,
    "erklaerung": "Mit transient_local erhalten spät gestartete Empfänger die letzten Nachrichten — deshalb nutzen /tf_static und Karten diese Einstellung.",
