@@ -2,7 +2,7 @@
 
 author:   Sebastian Zug & Georg Jäger & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.4.30
+version:  0.4.31
 language: de
 narrator: Deutsch Female
 
@@ -1144,20 +1144,21 @@ Die Topics zeigen das Prinzip, das uns durch die ganze Veranstaltung begleitet: 
 | `/scan`      | Abstandsmessungen des LiDAR, eine Umdrehung      | `sensor_msgs/msg/LaserScan`   |
 | `/odom`      | geschätzte Position aus den Radumdrehungen       | `nav_msgs/msg/Odometry`       |
 | `/imu`       | Beschleunigungen und Drehraten                   | `sensor_msgs/msg/Imu`         |
-| `/cmd_vel`   | Fahrbefehl: Vorwärts- und Drehgeschwindigkeit    | `Twist` oder `TwistStamped` (mit Zeitstempel) |
+| `/cmd_vel`   | Fahrbefehl: Vorwärts- und Drehgeschwindigkeit    | `geometry_msgs/msg/TwistStamped` |
 | Kamerabild   | je nach Treiber z.B. `/camera/image_raw`         | `sensor_msgs/msg/Image`       |
 
     --{{0}}--
-Was beim turtlesim funktioniert, funktioniert beim echten Roboter genauso. Der TurtleBot 3 stellt seine Sensoren und Antriebe ebenfalls als Topics bereit. Die Nachrichtentypen kennen Sie zum Teil schon: Der LiDAR liefert den LaserScan von vorhin, gefahren wird mit Twist.
+Was beim turtlesim funktioniert, funktioniert beim echten Roboter genauso. Der TurtleBot 3 stellt seine Sensoren und Antriebe ebenfalls als Topics bereit. Die Nachrichtentypen kennen Sie zum Teil schon: Der LiDAR liefert den LaserScan von vorhin. Gefahren wird mit TwistStamped, also einem Twist mit Kopfzeile und Zeitstempel. Unsere Roboter laufen mit ROS 2 Jazzy und nehmen ein einfaches Twist nicht an. Deshalb braucht auch die Tastatursteuerung den Parameter stamped.
 
 **Am Roboter (ab P 1):**
 
 ```bash
 ros2 topic echo /scan --once                           # eine einzelne LiDAR-Messung ansehen
-ros2 run teleop_twist_keyboard teleop_twist_keyboard   # den Roboter per Tastatur fahren — wie turtle_teleop_key
+ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -p stamped:=true   # per Tastatur fahren — wie turtle_teleop_key
 ```
 
-+ `Twist` oder `TwistStamped`? → `ros2 topic info /cmd_vel`
++ Fahrbefehl als `TwistStamped`, nicht `Twist` → prüfen mit `ros2 topic info /cmd_vel`
++ `--ros-args -p name:=wert` setzt beim Start einen Parameter (mehr in Ü 2)
 + Verbindung zum eigenen TurtleBot: VL 02, angewendet in P 1
 
 > [!IMPORTANT]
