@@ -2,13 +2,14 @@
 
 author:   Sebastian Zug & Georg Jäger & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent
 email:    sebastian.zug@informatik.tu-freiberg.de & Georg.Jaeger@informatik.tu-freiberg.de
-version:  0.3.0
+version:  0.3.1
 language: de
 narrator: Deutsch Female
 
 import:  https://github.com/liascript/CodeRunner
          https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/config.md
          https://raw.githubusercontent.com/liaTemplates/mermaid_template/master/README.md
+         https://raw.githubusercontent.com/LiaTemplates/ROS2Sim/0.5.3/README.md
 
 @python: @LIA.eval(`["main.py"]`, `none`, `python3 main.py`)
 
@@ -509,6 +510,27 @@ from 'base_link' to 'camera_link'
     --{{1}}--
 Mit dem zweiten Werkzeug, dem static_transform_publisher, tragen Sie selbst eine feste Transformation ein, etwa für eine Kamera, die im Modell des Roboters fehlt. Erkennen Sie das Quaternion für neunzig Grad wieder? Beide Befehle führe ich jetzt im Terminal vor. Ändern Sie in Gedanken den Winkel auf hundertachtzig Grad und überlegen Sie, was tf2_echo dann zeigt.
 
+<details>
+<summary>💻 <b>Selbst ausprobieren</b> im simulierten ROS 2 (zum Aufklappen)</summary>
+
+@ROS2.robot.with(0,C1,TwistStamped)
+
+```bash @ROS2.steps(Terminal 1)
+# Lage des LiDAR abfragen, danach mit Strg+C beenden
+ros2 run tf2_ros tf2_echo base_footprint base_scan
+# Kamera eintragen (läuft weiter)
+ros2 run tf2_ros static_transform_publisher --x 0.1 --z 0.15 --yaw 1.5708 --frame-id base_link --child-frame-id camera_link
+```
+
+```bash @ROS2.steps(Terminal 2)
+ros2 run tf2_ros tf2_echo base_link camera_link
+```
+
++ 180°: erst vorhersagen, dann `--yaw 3.1416` ausprobieren
++ „⧉ kopieren“ übernimmt die Befehle für den eigenen Rechner
+
+</details>
+
 ### RViz in drei Schritten
 
 1. `rviz2` starten, unter _Global Options_ den **Fixed Frame** wählen, z. B. `base_footprint`
@@ -521,6 +543,22 @@ Mit dem zweiten Werkzeug, dem static_transform_publisher, tragen Sie selbst eine
 
     --{{0}}--
 So stellen Sie im Praktikum einen Scan dar. Der Fixed Frame ist das System, in dem RViz alles zeichnet. Damit ein Scan erscheint, muss tf2 eine Kette vom Frame des Scans zu diesem Fixed Frame kennen. Bleibt die Anzeige leer, prüfen Sie genau die beiden Ursachen aus der Leitfrage.
+
+<details>
+<summary>💻 <b>Selbst ausprobieren</b> im simulierten ROS 2 (zum Aufklappen)</summary>
+
+@ROS2.robot.with(0,C1,TwistStamped)
+
+```bash @ROS2.steps(Terminal)
+ros2 run rviz2 rviz2
+```
+
+@ROS2.rviz
+
++ RViz starten, dann die drei Schritte von oben
++ Statuszeile lesen: Welche der beiden Ursachen liegt gerade vor?
+
+</details>
 
 ### URDF: der Roboter als Modell
 
@@ -640,6 +678,24 @@ Was passiert, wenn Sender und Empfänger Unterschiedliches erwarten? Hier greift
 
     --{{1}}--
 Die Warnung erscheint genau einmal, wenn sich die beiden finden. Wer sie übersieht, sucht lange. In RViz lösen Sie das Problem, indem Sie in der Anzeige des Scans die Reliability Policy auf Best Effort stellen: Der Empfänger verlangt dann nicht mehr, als der Sender bietet.
+
+<details>
+<summary>💻 <b>Selbst ausprobieren</b> im simulierten ROS 2 (zum Aufklappen)</summary>
+
+```bash @ROS2.steps(Terminal 1: Sender)
+ros2 topic pub --rate 2 --qos-reliability best_effort /chatter std_msgs/msg/String "{data: hallo}"
+```
+
+```bash @ROS2.steps(Terminal 2: Empfänger)
+ros2 topic echo --qos-reliability reliable /chatter
+```
+
+@ROS2.graph
+
++ Warnung auch beim Sender?
++ Empfänger mit `best_effort` neu starten: Kommen Daten an?
+
+</details>
 
 <details>
 <summary>🧩 <b>Zwischenfrage</b> zum Selbststudium (zum Aufklappen)</summary>
