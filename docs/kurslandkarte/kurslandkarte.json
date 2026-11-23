@@ -1,5 +1,5 @@
 {
- "stand": "12.11.2026",
+ "stand": "23.11.2026",
  "version": "0.5.2",
  "kurs": {
   "basis": "https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/",
@@ -98,14 +98,14 @@
   },
   {
    "von": 24,
-   "bis": 29,
+   "bis": 30,
    "name": "Block 5 · Regelung & Navigation",
    "farbe": "ph2"
   },
   {
-   "von": 30,
+   "von": 31,
    "bis": 31,
-   "name": "Block 6 · Praktikum + X",
+   "name": "Block 6 · Praktikum in Eigenarbeit",
    "farbe": "ph3"
   }
  ],
@@ -404,7 +404,7 @@
    "key": "p1",
    "label": "P 1",
    "typ": "P",
-   "datei": "exercises/praktikum_01_turtlebot/README.md",
+   "datei": "exercises/praktikum_01_ros2_bags/README.md",
    "datum": "2026-11-23",
    "kurz": "TurtleBot + Bags",
    "ende": "2026-11-26",
@@ -433,14 +433,25 @@
     "rosbag"
    ],
    "abschnitte": [
-    "Praktikum 1: TurtleBot in Betrieb nehmen",
+    "Praktikum 1: Organisation und Bag-Aufnahme",
     "Wo stehen wir?",
-    "Vorbereitung und Sicherheit",
-    "A: Verbinden",
-    "B: Den Roboter untersuchen",
-    "C: Fahren und Sensordaten ansehen",
-    "D: Eine Fahrt aufzeichnen",
-    "Abnahme"
+    "Teil 1: Organisation",
+    "Schritt 1: Gruppe und Verantwortlichkeit",
+    "Schritt 2: Workspace und Paketordner anlegen",
+    "Schritt 3: Remote-Repository anlegen",
+    "Schritt 4: Dateien und lokales Repository",
+    "Push ins Remote-Repository",
+    "Gemeinsamer Startpunkt",
+    "Checkpoint Teil 1",
+    "Teil 2: Bag-Aufnahme",
+    "Aufgabe: Planen, was aufgenommen wird",
+    "Denkanstöße: Sensorik und Bildverarbeitung",
+    "Denkanstöße: Erkennung, Fusion, Navigation",
+    "Querschnitt: Was fast immer dazugehört",
+    "Kurzvorstellung: 2 Minuten pro Gruppe",
+    "Gemeinsame Diskussion",
+    "Reihenfolge und Aufnahme",
+    "Checkliste und Ausblick"
    ]
   },
   {
@@ -618,7 +629,7 @@
    "typ": "Ü",
    "datei": null,
    "datum": "2027-01-04",
-   "kurz": "Datenvisualisierung",
+   "kurz": "Sensordaten prüfen & visualisieren",
    "ende": "2027-01-06",
    "tage": [
     "2027-01-06"
@@ -627,7 +638,7 @@
    "woche_tage": "4.–8.1.",
    "wann": "Mi 6.1. · 11:30–13:00",
    "wann_kurz": "Mi 6.1.",
-   "leitfrage": "Sie stellen Sensordaten so dar, dass Fehler darin sichtbar werden.",
+   "leitfrage": "Sie lernen Sensordaten darzustellen und Fehlerquellen darin sichtbar machen.",
    "freigegeben": false,
    "status": "geplant",
    "block": 2,
@@ -664,7 +675,7 @@
    "key": "p2",
    "label": "P 2",
    "typ": "P",
-   "datei": "exercises/praktikum_02_bildkorrektur/README.md",
+   "datei": null,
    "datum": "2027-01-11",
    "kurz": "Bildkorrektur",
    "ende": "2027-01-13",
@@ -677,7 +688,7 @@
    "wann_kurz": "Mi 13.1.",
    "leitfrage": "Ihr TurtleBot liefert eine entzerrte, maßstäbliche Draufsicht auf die Fahrbahn – die Grundlage der Spurerkennung.",
    "freigegeben": false,
-   "status": "ausgearbeitet",
+   "status": "geplant",
    "block": 2,
    "pdf": null,
    "anwendet": [
@@ -689,24 +700,14 @@
     "homographie",
     "draufsicht"
    ],
-   "abschnitte": [
-    "Praktikum 2: Kamerabild korrigieren",
-    "Wo stehen wir?",
-    "Vorbereitung zu Hause",
-    "Sicherheit, Rollen, Verbinden",
-    "A: Kamera kalibrieren",
-    "B: Bild entzerren",
-    "C: Vogelperspektive",
-    "D: Daten für P 3 aufnehmen",
-    "Abnahme"
-   ]
+   "abschnitte": []
   },
   {
    "vl": 14,
    "key": "p3",
    "label": "P 3",
    "typ": "P",
-   "datei": "exercises/praktikum_03_spurerkennung/README.md",
+   "datei": null,
    "datum": "2027-01-18",
    "kurz": "Spurerkennung",
    "ende": "2027-01-20",
@@ -719,7 +720,7 @@
    "wann_kurz": "Mi 20.1.",
    "leitfrage": "Ihr TurtleBot erkennt die Fahrspur im Kamerabild.",
    "freigegeben": false,
-   "status": "ausgearbeitet",
+   "status": "geplant",
    "block": 2,
    "pdf": null,
    "anwendet": [
@@ -729,17 +730,7 @@
     "draufsicht",
     "vorausschau"
    ],
-   "abschnitte": [
-    "Praktikum 3: Fahrspur erkennen",
-    "Wo stehen wir?",
-    "Vorbereitung zu Hause",
-    "Sicherheit, Rollen, Verbinden, Kalibrierung prüfen",
-    "A: Kette live starten",
-    "B: Erkennung an die Strecke anpassen",
-    "C: Abweichung nachmessen",
-    "D: Licht und verdeckte Linien",
-    "Abnahme"
-   ]
+   "abschnitte": []
   },
   {
    "vl": 15,
@@ -881,7 +872,7 @@
    "woche_tage": "8.–12.2.",
    "wann": "Mi 10.2. · 11:30–13:00",
    "wann_kurz": "Mi 10.2.",
-   "leitfrage": "Ihr TurtleBot erkennt Hindernisse auf seiner Fahrbahn.",
+   "leitfrage": "Ihr TurtleBot erkennt Hindernisse auf seiner Fahrbahn und Schilder am Fahrbahnrand.",
    "freigegeben": false,
    "status": "geplant",
    "block": 3,
@@ -1204,18 +1195,18 @@
    "label": "P 7",
    "typ": "P",
    "datei": null,
-   "datum": "2027-05-24",
+   "datum": "2027-05-17",
    "kurz": "Parken + Abbiegen",
-   "ende": "2027-05-30",
+   "ende": "2027-05-23",
    "tage": [],
-   "kw": 21,
-   "woche_tage": "24.–28.5.",
-   "wann": "KW 21 · Tag folgt",
-   "wann_kurz": "KW 21",
+   "kw": 20,
+   "woche_tage": "17.–21.5.",
+   "wann": "KW 20 · Tag folgt",
+   "wann_kurz": "KW 20",
    "leitfrage": "Ihr TurtleBot parkt ein und biegt an Kreuzungen ab.",
    "freigegeben": false,
    "status": "geplant",
-   "block": 6,
+   "block": 5,
    "pdf": null,
    "anwendet": [],
    "abschnitte": []
@@ -1252,7 +1243,7 @@
    "abschnitt": 5,
    "ebene": 1,
    "code": false,
-   "erklaerung": "Ein TurtleBot fährt autonom auf schwarzem Untergrund: Spur folgen, Ampeln und Schilder beachten, Fußgängern ausweichen, einparken.",
+   "erklaerung": "Ein TurtleBot fährt autonom auf schwarzem Untergrund: Spur folgen, Schilder beachten, einparken, etc.",
    "fehlvorstellung": null
   },
   {

@@ -77,15 +77,15 @@ T = [
     ("04",  "VL",    "2026-11-04", "ROS 2 Pakete",        "02_ROS_Pakete/02_ROS_Pakete.md",                 "ausgearbeitet", 1),
     ("02",  "VL",    "2026-11-12", "Koordinaten + QoS",   "03_Koordinaten_QoS/03_Koordinaten_QoS.md", "ausgearbeitet", 1),
     ("ue2", "Ü 2",   "2026-11-12", "Erster Workspace",     "exercises/uebung_02_workspace/README.md",     "ausgearbeitet", 1),
-    ("p1",  "P 1",   ["2026-11-25", "2026-11-26"], "TurtleBot + Bags", "exercises/praktikum_01_turtlebot/README.md", "ausgearbeitet", 1),
+    ("p1",  "P 1",   ["2026-11-25", "2026-11-26"], "TurtleBot + Bags", "exercises/praktikum_01_ros2_bags/README.md", "ausgearbeitet", 1),
     ("01",  "VL",    "2026-12-02", "Sensorik",            "04_Sensorik/04_Sensorik.md",                           "Bestand", 2),
     ("05",  "VL",    "2026-12-09", "Bildverarbeitung",    "05_Bildverarbeitung/05_Bildverarbeitung.md",           "Bestand", 2),
     ("06",  "VL",    "2026-12-10", "Kamera + Draufsicht", "06_Kamera/06_Kamera.md",                 "ausgearbeitet", 2),
     ("lid", "VL",    "2026-12-16", "LiDAR",               None, "geplant", 2),
-    ("ue3", "Ü 3",   "2027-01-06", "Datenvisualisierung", None, "geplant", 2),
+    ("ue3", "Ü 3",   "2027-01-06", "Sensordaten prüfen & visualisieren", None, "geplant", 2),
     ("ue4", "Ü 4",   "2027-01-07", "Kameradaten",         None, "geplant", 2),
-    ("p2",  "P 2",   "2027-01-13", "Bildkorrektur",       "exercises/praktikum_02_bildkorrektur/README.md",       "ausgearbeitet", 2),
-    ("p3",  "P 3",   "2027-01-20", "Spurerkennung",       "exercises/praktikum_03_spurerkennung/README.md",       "ausgearbeitet", 2),
+    ("p2",  "P 2",   "2027-01-13", "Bildkorrektur",       None, "geplant", 2),
+    ("p3",  "P 3",   "2027-01-20", "Spurerkennung",       None, "geplant", 2),
     ("07",  "VL",    "2027-01-21", "Objekterkennung",     "08_Objekterkennung/08_Objekterkennung.md",             "Bestand", 3),
     ("pkw", "VL",    "2027-01-27", "… in Punktwolken",    None, "geplant", 3),
     ("ue5", "Ü 5",   "2027-02-03", "YOLO vs. klassisch",  None, "geplant", 3),
@@ -101,7 +101,7 @@ T = [
     ("slm", "VL",    "2027-W18",   "SLAM",                None, "geplant", 5),
     ("ue9", "Ü 9",   "2027-W19",   "Kartenerstellung",    None, "geplant", 5),
     ("p6",  "P 6",   "2027-W19", "Mapping + Bahnfolge", None, "geplant", 5),
-    ("p7",  "P 7",   "2027-W21",   "Parken + Abbiegen",   None, "geplant", 6),
+    ("p7",  "P 7",   "2027-W20",   "Parken + Abbiegen",   None, "geplant", 5),
     ("p8",  "P 8",   "2027-W22",   "Praktikum + X",       None, "geplant", 6),
 ]
 # Vorlesungen laufend nach Zeitplan nummerieren, ab VL 00 wie in EAVD und Eingebettete Systeme
@@ -114,7 +114,7 @@ for _i, _t in enumerate(T):
 
 BLOECKE = {1: ("Block 1 · ROS-Grundlagen", "ph1"), 2: ("Block 2 · Sensorgrundlagen", "ph2"),
            3: ("Block 3 · Objekterkennung", "ph4"), 4: ("Block 4 · Sensorfusion", "ph1"),
-           5: ("Block 5 · Regelung & Navigation", "ph2"), 6: ("Block 6 · Praktikum + X", "ph3")}
+           5: ("Block 5 · Regelung & Navigation", "ph2"), 6: ("Block 6 · Praktikum in Eigenarbeit", "ph3")}
 # Themengebiete: id, Name, Farbe aus der Palette des Kerns
 LINIEN = [
     ("werkzeuge", "Linux & Werkzeuge", "c7"), ("ros", "ROS 2", "c1"), ("mathe", "Koordinaten & Modelle", "c2"),
@@ -125,7 +125,7 @@ LINIEN = [
 # ---- Begriffe: id, Name, Linie, Termin-key, Abschnittstitel, Ebene, Code?, Erklärung, Fehlvorstellung
 B = [
     # --- VL 00 Einführung
-    ("verkehrswelt", "Projektaufgabe Verkehrswelt", "projekt", "00", 'Unser Ziel: Autonomes Fahren im Miniaturformat', 1, 0, "Ein TurtleBot fährt autonom auf schwarzem Untergrund: Spur folgen, Ampeln und Schilder beachten, Fußgängern ausweichen, einparken.", None),
+    ("verkehrswelt", "Projektaufgabe Verkehrswelt", "projekt", "00", 'Unser Ziel: Autonomes Fahren im Miniaturformat', 1, 0, "Ein TurtleBot fährt autonom auf schwarzem Untergrund: Spur folgen, Schilder beachten, einparken, etc.", None),
     ("formate", "VL, Ü und P", "projekt", "00", 'Organisation', 2, 0, "Vorlesung führt Konzepte ein, Übung festigt sie am eigenen Rechner, Praktikum setzt sie am TurtleBot um — je 90 Minuten.", None),
     ("roboter", "Roboter", "wahrnehmung", "00", 'Was ist ein Roboter?', 1, 0, "Keine einheitliche Definition (VDI, RIA, JRA); unsere Arbeitsdefinition: Eine Maschine, die wahrnimmt, entscheidet und handelt — wiederholt und ohne dass ein Mensch jeden Schritt vorgibt.", "„Ein Roboter ist eine Maschine mit Armen.“"),
     ("klassifikation", "Klassifikation", "wahrnehmung", "00", 'Klassifikation von Robotersystemen', 2, 0, "Autonomie, Mobilität und Komplexität der Sensorik sind unabhängige Kriterien.", "„Mobil heißt autonom.“"),
@@ -428,14 +428,14 @@ PROJEKTZIEL = {
     "05":  "Sie heben Fahrbahnmarkierungen und Ampelfarben im Kamerabild hervor – der erste Schritt zur Spurerkennung.",
     "06":  "Sie schließen von einem Pixel auf eine Richtung in der Welt – dafür muss die Kamera kalibriert sein.",
     "lid": "Sie werten die Abstandsmessungen des LiDAR aus und erkennen, was vor dem Roboter liegt.",
-    "ue3": "Sie stellen Sensordaten so dar, dass Fehler darin sichtbar werden.",
+    "ue3": "Sie lernen Sensordaten darzustellen und Fehlerquellen darin sichtbar machen.",
     "ue4": "Sie verarbeiten aufgezeichnete Kamerabilder des TurtleBots selbst.",
     "p2":  "Ihr TurtleBot liefert eine entzerrte, maßstäbliche Draufsicht auf die Fahrbahn – die Grundlage der Spurerkennung.",
     "p3":  "Ihr TurtleBot erkennt die Fahrspur im Kamerabild.",
     "07":  "Sie erkennen Schilder, Ampeln und Fußgängerfiguren im Kamerabild.",
     "pkw": "Sie finden Objekte in den Messpunkten des LiDAR.",
     "ue5": "Sie vergleichen gelernte und klassische Objekterkennung und wissen, wann welche taugt.",
-    "p4":  "Ihr TurtleBot erkennt Hindernisse auf seiner Fahrbahn.",
+    "p4":  "Ihr TurtleBot erkennt Hindernisse auf seiner Fahrbahn und Schilder am Fahrbahnrand.",
     "ue6": "Sie trennen Hindernisse im LiDAR-Scan vom Hintergrund.",
     "08":  "Sie verstehen, warum ein einzelner Sensor nicht reicht und wie man Messungen kombiniert.",
     "09":  "Sie schätzen die Pose des TurtleBots aus Odometrie, IMU und weiteren Messungen mit einem Kalman-Filter.",
