@@ -1,360 +1,574 @@
 <!--
-
-author:   Sebastian Zug & Claude Code (Opus 5.5) mit LiaScript Teaching-Agent
-email:    sebastian.zug@informatik.tu-freiberg.de
-version:  0.1.2
+author: Johannes Kohl, Institut für Informatik, TU Bergakademie Freiberg
+email: johannes-georg.kohl@informatik.tu-freiberg.de
+version: 1.0.0
 language: de
 narrator: Deutsch Female
 
-import:   https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/config.md
-          https://raw.githubusercontent.com/liaTemplates/mermaid_template/master/README.md
-
+comment: Praktikum 1 des Robotik-Projekts. Inhalt: Gruppe, gemeinsamer Workspace mit Repository sowie Planung und Aufnahme von ROS2-Bags.
 -->
 
 [![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/praktikum_01_turtlebot/README.md)
 
-# Praktikum 1: TurtleBot in Betrieb nehmen
+# Praktikum 1: Organisation und Bag-Aufnahme
 
-<!-- data-type="none" -->
-| Parameter            | Kursinformationen                                                                                                       |
-| -------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| **Veranstaltung:**   | @config.lecture                                                                                                         |
-| **Semester**         | @config.semester                                                                                                        |
-| **Hochschule:**      | `Technische Universität Freiberg`                                                                                       |
-| **Inhalte:**         | `Verbinden, untersuchen, fahren und aufzeichnen am TurtleBot 3 — Anwendung von Block 1`                                 |
-| **Link auf GitHub:** | https://github.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/blob/master/exercises/praktikum_01_turtlebot/README.md  |
-| **Autoren**          | @author                                                                                                                 |
+--{{0}}--
+Willkommen zum ersten Praktikum. Heute schaffen wir die organisatorische Basis für Ihr Projekt und überlegen gemeinsam, welche Daten Sie für die späteren Praktika aufnehmen müssen.
 
---------------------------------------------------------------------------------
+| Teil | Inhalt | Dauer |
+|:-----|:-------|:------|
+| Teil 1 | Gruppe, Repository, Workspace | ≈ 30 min |
+| Teil 2 | Planung: Aufgabe, Denkanstöße, Querschnitt | ≈ 20 min |
+| Teil 2 | Kurzvorstellung der Ideen | ≈ 15 min |
+| Teil 2 | Gemeinsame Diskussion | ≈ 15 min |
+| Teil 2 | Reihenfolge und Aufnahme | verbleibende Zeit |
 
-**Heute zum ersten Mal am echten Roboter.** Sie lernen nichts Neues — Sie wenden an, was Sie in Block 1 gelernt haben. Am Ende haben Sie Ihren TurtleBot verbunden, untersucht, gesteuert und eine Fahrt durch die Verkehrswelt aufgezeichnet. Diese Aufzeichnung ist das Ausgangsmaterial für Ihre Spurerkennung in Block 2.
+Für das Praktikum stehen **zwei Termine à 90 Minuten** zur Verfügung; der Raum kann darüber hinaus jederzeit für weitere Aufnahmen frei genutzt werden.
 
-**Ziele** — am Ende dieses Praktikums können Sie als Gruppe
+     {{1}}
+************************************
 
-+ Ihren Laptop mit dem TurtleBot verbinden und die Verbindung prüfen,
-+ Topics, Nachrichtentypen, QoS und Transformationen des Roboters selbst ermitteln,
-+ den Roboter sicher steuern und seine Sensordaten in RViz darstellen,
-+ eine Fahrt als Bag aufzeichnen und ohne Roboter wieder abspielen.
+**Ziel des Tages:**
 
-**Ablauf (90 min)**
+- Jedes Team hat **ein** gemeinsames Repository mit einem Paketordner für alle eigenen Pakete.
+- Alle Teammitglieder arbeiten vom **gleichen Stand** aus.
+- Jedes Team hat erste Aufnahmen im Kasten und weiß, **welche Daten** es für die späteren Praktika braucht.
 
-<!-- data-type="none" -->
-| Zeit   | Teil                                     | Wendet an                |
-| ------ | ---------------------------------------- | ------------------------ |
-| 5 min  | Sicherheit, Rollen                       | —                        |
-| 15 min | A: Verbinden                             | Ü 1, VL 01, VL 02          |
-| 20 min | B: Den Roboter untersuchen + **Zwischenabnahme** | VL 01, VL 03       |
-| 15 min | C: Fahren und Sensordaten ansehen        | VL 01, VL 03               |
-| 20 min | D: Eine Fahrt aufzeichnen                | Ü 2                      |
-| 10 min | Abnahme, Roboter zurückgeben             | —                        |
-| 5 min  | Puffer                                   |                          |
+************************************
 
-**Vor dem Termin zu Hause erledigen** (spart im Labor die meiste Zeit): Paket aus der Vorbereitung installieren, bei WSL2 den Netzwerkmodus umstellen und den Selbsttest machen.
+## Teil 1: Organisation
 
---------------------------------------------------------------------------------
+--{{0}}--
+Der erste Teil ist kurz, Sie verteilen die Teamrollen und legen eine gemeinsame Basis für alle weiteren Praktika.
 
-<!-- kurslandkarte:wo-start -->
+In der Übung haben Sie, jeder für sich, ein eigenes Paket gebaut. Jetzt machen wir dasselbe **gemeinsam** und **versioniert**.
 
-## Wo stehen wir?
+     {{1}}
+************************************
 
-**Ziel im Projekt:** Ihr TurtleBot ist verbunden, fährt sicher, und Sie haben eine Testfahrt aufgezeichnet – das Rohmaterial für Block 2.
+**Ablauf in vier Schritten:**
 
-**Block 1 · ROS-Grundlagen** – Termin 7 von 32, heute farbig markiert
+1. Finden Sie sich in ihren Gruppen zusammen und entscheiden Sie, **wer** das Repository anlegt.
+2. Diese Person legt einen **ROS2-Workspace** mit einem Paketordner an, z.B. `ros_ws/src/turtlebot3_praktikum_pakete`.
+3. Während dessen wird in der [GitHub Organisation](https://github.com/orgs/IfI-TUBAF-Robotik-2026/people/pending_invitations) ein Repository angelegt.
+4. Danach wird im Paketordner ein lokales Repository angelegt und auf das remote Repository gepushed.
 
-<!-- data-type="none" -->
-| Woche | Vorlesung | Übung | Praktikum |
-| :-- | :-- | :-- | :-- |
-| KW 43 · 19.–23.10. | [VL 00 Einführung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/00_Einfuehrung/00_Einfuehrung.md) · Mi 21.10. |  |  |
-| KW 44 · 26.–30.10. | [VL 01 ROS 2 Grundlagen](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/01_ROS_Grundlagen/01_ROS_Grundlagen.md) · Mi 28.10. | [Ü 1 Linux Shell](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/uebung_01_linux_shell/README.md) · Do 29.10. |  |
-| KW 45 · 2.–6.11. | [VL 02 ROS 2 Pakete](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/02_ROS_Pakete/02_ROS_Pakete.md) · Mi 4.11. |  |  |
-| KW 46 · 9.–13.11. | [VL 03 Koordinaten + QoS](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/03_Koordinaten_QoS/03_Koordinaten_QoS.md) · Do 12.11. | [Ü 2 Erster Workspace](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/uebung_02_workspace/README.md) · Do 12.11. |  |
-| **KW 48 · 23.–27.11.**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> |  |  | **[P 1 TurtleBot + Bags](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/master/exercises/praktikum_01_turtlebot/README.md)**<!-- style="background-color: rgba(255, 166, 0, 0.35); padding: 2px 6px; border-radius: 4px;" --> · Mi 25.11. + Do 26.11. |
+************************************
 
-- **Sie brauchen:** [Topics des TurtleBot](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=tbtopics) (VL 01) · [ros2 topic …](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=topiccli) (VL 01) · [ROS\_DOMAIN\_ID](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=domainid) (Ü 1) · [QoS-Verträglichkeit](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=qoscompat) (VL 03) · [tf2](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=tf2) (VL 03) · [tf-Baum](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=tftree) (VL 03) · [Twist / cmd\_vel](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=twist) (Ü 2) · [Parameter und Parameterdatei](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=paramfile) (Ü 2) · [ros2 bag](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#begriff=rosbag) (Ü 2)
-- **Heute:** anwenden, nichts Neues – Ihre Arbeit hier ist die Prüfungsleistung
+     {{2}}
+> **Warum ein Repository pro Team?**
+>
+> Ab dem nächsten Praktikum schreiben Sie Code für Bildkorrektur, Spurerkennung und Sensorfusion. Ohne gemeinsamen Stand tauschen Sie am Ende Zip-Dateien aus und wissen nicht mehr, welche Version tatsächlich läuft.
 
-> [!TIP]
-> **Tipp – Kurslandkarte:** [Ganze Kurslandkarte öffnen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=p1) – dort finden Sie jeden Begriff mit Erklärung, typischer Stolperfalle, Link auf die passende Folie und die roten Fäden durch die Veranstaltung.
+### Schritt 1: Gruppe und Verantwortlichkeit
 
-<!-- kurslandkarte:wo-ende -->
+Wählen Sie eine Person aus Ihrem Team, welche sich initial um das Setup des Repositorys kümmert.
 
-## Vorbereitung und Sicherheit
+Am besten übernimmt dieselbe Person auch die Organisation innerhalb der Gruppe über den gesamten Verlauf des Kurses.
+Alternativ können Sie die Gruppenverantwortlichkeit auch zu gegebenem Zeitpunkt wechseln lassen.
+Entscheiden Sie dies bitte **vorher** untereinander und halten sie entsprechende Absprachen schriftlich fest um Missverständnisse zu vermeiden.
 
-**Mitbringen:** Laptop mit ROS 2 Jazzy (Selbsttest der [Installationsanleitung](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/installation_ros2/README.md) bestanden). Installieren Sie zusätzlich:
+Gute Kriterien:
+- [ ] heute bis zum Ende anwesend
+- [ ] kann Strukturfragen im Team entscheiden
+- [ ] GitHub-Zugang funktioniert (SSH-Key oder Personal Access Token)
 
-```bash
-sudo apt install ros-jazzy-teleop-twist-keyboard
-```
+### Schritt 2: Workspace und Paketordner anlegen
 
-`teleop_twist_keyboard` funktioniert wie `turtle_teleop_key` aus VL 01 — nur für echte Roboter.
+Die **Repository-Verantwortlichen** arbeiten jetzt vor, alle anderen können entweder kurz abwarten, das zugehörige Repository in GitHub anlegen oder schonmal Teil 2 vorarbeiten.
 
-**Sicherheit**
-
-+ Der Roboter fährt auf dem Tisch bzw. im Parcours — **eine Person hat immer die Hand in der Nähe** und hebt ihn bei Gefahr hoch (Rolle *Sicherheit*, siehe unten).
-+ Höchstgeschwindigkeit heute: **0,15 m/s**.
-+ Teleop sendet beim Beenden mit `Ctrl+C` einen Stoppbefehl. Hängt das Programm oder bricht das WLAN ab, fährt der Roboter mit dem letzten Befehl weiter — halten Sie deshalb einen eigenen Stoppbefehl bereit (Aufgabe C.1) und im Zweifel den Roboter hoch.
-+ Akku: Ist die Spannung zu niedrig, verhält sich der Roboter unberechenbar. Melden Sie das den Betreuern.
-
-**Rollen** — je Teil wechseln, damit alle alles einmal machen:
-
-<!-- data-type="none" -->
-| Rolle          | Aufgabe                                                     |
-| :------------- | :---------------------------------------------------------- |
-| Tastatur       | tippt die Befehle, in C: steuert den Roboter                |
-| Sicherheit     | steht in C beim Roboter, stoppt ihn sofort (hochheben), achtet auf Kabel, Kanten und Akku |
-| Nachschlagen   | sucht in den Unterlagen von Block 1 den passenden Befehl, prüft die Ausgabe |
-| Protokoll      | hält die 📝-Antworten fest                                  |
-
-In Dreiergruppen übernimmt die Person am Nachschlagen auch das Protokoll.
-
-**Protokoll:** Führen Sie die Datei `praktikum_01/PROTOKOLL.md` lokal und tragen Sie alle Antworten ein, die mit 📝 markiert sind. Im WLAN des Roboters haben Sie in der Regel kein Internet — laden Sie das Protokoll deshalb **nach** dem Praktikum ins Git-Repository Ihrer Gruppe hoch, spätestens zu Beginn von P 2.
-
-**Nur für WSL2 — Pflicht vor dem Praktikum:** Damit Ihr Laptop den Roboter im WLAN sieht, stellen Sie WSL auf den gespiegelten Netzwerkmodus um (einmalig, zu Hause):
-
-1. Unter Windows die Datei `%UserProfile%\.wslconfig` anlegen bzw. öffnen, z.B. in der PowerShell mit `notepad $env:USERPROFILE\.wslconfig`.
-2. Eintragen und speichern:
-
-   ```text
-   [wsl2]
-   networkingMode=mirrored
-   ```
-
-3. In der PowerShell `wsl --shutdown`, danach Ubuntu neu öffnen.
-4. Selbsttest zu Hause: `ip addr` in Ubuntu zeigt jetzt dieselbe IP-Adresse wie `ipconfig` unter Windows.
-5. Ist der Roboter im Praktikum trotzdem nicht sichtbar, blockiert meist die Windows-Firewall. Die Betreuer helfen — arbeiten Sie bis dahin am Laptop eines Gruppenmitglieds weiter.
-
-## A: Verbinden
-
-**Ein funktionierender Laptop pro Gruppe genügt für den Start.** Die anderen verbinden sich parallel.
-
-Auf dem TurtleBot läuft bereits ROS 2 Jazzy. Nach dem Einschalten starten die Treiber für LiDAR, Kamera und Motoren von selbst — so, wie es `robot.launch.py` aus VL 02 beschreibt.
-
-**A.1 Netz und Domäne**
-
-1. Verbinden Sie Ihren Laptop mit dem WLAN Ihres TurtleBots (Zugangsdaten von den Betreuern).
-2. Die `ROS_DOMAIN_ID` Ihrer Gruppe steht auf dem Roboter. Ersetzen Sie in `~/.bashrc` den Übungswert `7` aus Ü 1 (Aufgabe 5) durch diese ID, z.B. mit `nano ~/.bashrc`. Kein Eintrag vorhanden? Dann ergänzen Sie ihn:
-
-   ```bash
-   echo "export ROS_DOMAIN_ID=<Ihre ID>" >> ~/.bashrc
-   ```
-
-3. Haben Sie für zu Hause `ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST` gesetzt (Installationsanleitung), kommentieren Sie diese Zeile in `~/.bashrc` für das Praktikum aus — sonst sucht Ihr Laptop nur bei sich selbst. Öffnen Sie danach ein **neues** Terminal.
-
-**A.2 Verbindung prüfen**
-
-```text
-> ros2 topic list
-/camera/image_raw
-/cmd_vel
-/odom
-/scan
-...
-```
-
-📝 Welche Topics stellt Ihr Roboter bereit? Notieren Sie die Liste.
-
-<details>
-<summary>Sie sehen nur `/parameter_events` und `/rosout`?</summary>
-
-Dann findet Ihr Laptop den Roboter nicht. Prüfen Sie der Reihe nach:
-
-1. `printenv | grep ROS` — stimmt die `ROS_DOMAIN_ID`, ist `LOCALHOST` noch gesetzt? (Ü 1, VL 02)
-2. Sind Sie im richtigen WLAN?
-3. WSL2: gespiegelter Netzwerkmodus aktiv (siehe Vorbereitung)?
-4. Hilft das alles nicht: Betreuer fragen und am Laptop eines Gruppenmitglieds weiterarbeiten.
-
-</details>
-
-**A.3 Kommen die Daten an?**
+     {{0}}
+************************************
 
 ```bash
-ros2 topic hz /scan
-ros2 topic hz /camera/image_raw
+mkdir -p ros_ws/src/turtlebot3_praktikum_pakete
+cd ros_ws
+colcon build
 ```
 
-📝 Mit welcher Rate senden LiDAR und Kamera?
+> **Was passiert hier?**
+>
+> - `mkdir -p` legt fehlende Elternverzeichnisse gleich mit an. Ein einziger Aufruf genügt daher für den gesamten Pfad aus `ros_ws`, `src/` und Paketordner.
+> - `src/` ist der Ordner, in dem `colcon` nach Paketen sucht.
+> - `src/turtlebot3_praktikum_pakete/` ist ein **Sammelordner** für alle Pakete Ihres Teams. Er ist selbst **kein** ROS2-Paket, sondern nimmt in den nächsten Praktika mehrere davon auf.
+> - Mit `colcon` können Sie den noch leeren Workspace bauen, wobei `build/`, `install/` und `log/` entstehen.
 
-## B: Den Roboter untersuchen
+************************************
 
-Ein Datenblatt kann veralten — Ihr Roboter selbst nicht. Ermitteln Sie mit den Werkzeugen aus Block 1, wie er tatsächlich konfiguriert ist.
+     {{1}}
+************************************
 
-**B.1 Nachrichtentypen** (VL 01)
+Warum ein Sammelordner statt einem großen Paket?
 
-📝 Welchen Typ haben `/scan`, `/odom`, `/camera/image_raw` und `/cmd_vel`?
+- **Ein ROS2-Paket soll genau einen Zweck erfüllen.** Bildkorrektur, Spurerkennung und Sensorfusion werden deshalb getrennte Pakete.
+- `colcon` durchsucht `src/` **rekursiv** und findet daher Pakete in Unterordnern genauso wie solche direkt in `src/`.
+- **Das Repository ist der Paketordner, nicht der Workspace.** So landen `build/`, `install/` und `log/` nie im Repository, und ein `git clone` liefert direkt alle Pakete des Teams.
+
+> **Später:** Wenn Sie ein neues Paket brauchen, wechseln Sie mit `cd ros_ws/src/turtlebot3_praktikum_pakete` in diesen Ordner und legen es dort mit `ros2 pkg create ...` an.
+
+************************************
+
+     {{2}}
+************************************
+So sieht der Workspace danach aus:
+
+```txt
+ros_ws/
+├── src/
+│   └── turtlebot3_praktikum_pakete/   ← wird das Repository
+├── build/
+├── install/
+└── log/
+```
+
+> **Hinweis:** Der Ordnername `turtlebot3_praktikum_pakete` ist nur ein Beispiel. Sie dürfen ihn beliebig benennen, vermeiden Sie aber Bindestriche (`-`) und verwenden Sie stattdessen Underscores (`_`). Soll der Ordner beim Klonen nicht wie das Repository heißen, geben Sie den gewünschten Namen als zweites Argument an: `git clone <url> <ordnername>`.
+
+> **Hinweis:** In der Regel muss nach jedem `colcon build` in jeder betroffenen Shell einmal `source install/setup.bash` ausgeführt werden. Im noch leeren Workspace bewirkt das nichts, das Muster bleibt jedoch gleich.
+
+************************************
+
+     {{3}}
+************************************
+
+Welcher Befehl baut den Workspace?
+
+[( )] `ros2 build`
+[(X)] `colcon build`
+[( )] `colcon make`
+[( )] `ros2 pkg build --workspace`
+[[?]] Der Befehl stammt nicht aus dem ROS2-CLI, sondern aus dem Build-Werkzeug für ROS-Workspaces.
+
+************************************
+
+### Schritt 3: Remote-Repository anlegen
+
+Sie können das Repository anlegen, während der Workspace entsteht. Wichtig ist nur, dass es vor dem ersten Push existiert.
+
+1. Prüfen Sie, ob Sie in der Organisation [IfI-TUBAF-Robotik-2026](https://github.com/IfI-TUBAF-Robotik-2026) eingetragen sind. Offene Einladungen sehen Sie im Zweifel [hier](https://github.com/notifications).
+2. Legen Sie in der Organisation ein neues Repository an: [github.com/organizations/IfI-TUBAF-Robotik-2026/repositories/new](https://github.com/organizations/IfI-TUBAF-Robotik-2026/repositories/new)
+3. **Name:** nach Belieben, fühere Gruppen haben die Namen der Gruppenmitglieder verwendet (z.B. LaMaJaTa).
+4. **Ohne** README, **ohne** `.gitignore` und **ohne** Lizenz, denn diese Dateien legen Sie lokal an. Sonst gibt es beim ersten Push einen Konflikt.
+5. Zuletzt `Create repository`. Die angezeigten Befehle brauchen Sie gleich, führen Sie sie aber **im Paketordner** aus und nicht in einer höheren Ebene (z.B. `src/` oder Workspace).
+
+### Schritt 4: Dateien und lokales Repository
+
+Im Paketordner legen Sie zunächst nur zwei Dateien an, weil die eigentlichen Pakete erst in den nächsten Praktika entstehen. Beide sind trotzdem nötig, denn **Git versioniert keine leeren Ordner**: Ohne Inhalt gäbe es nichts zu committen.
+
+     {{1}}
+************************************
+
+**README.md**
+
+Legen Sie im Paketordner eine `README.md` an.
+Darin notieren Sie ihr Team, wichtige Befehle und eine Übersicht der Pakete, z.B.:
+
+```md
+# Praktikumspakete Team P1
+
+## Team
+
+| Name             | MNr   | Nutzername       |
+|:-----------------|:------|:-----------------|
+| Erika Mustermann | 12345 | @erikamustermann |
+
+## Bauen und starten
+
+~~~bash
+cd ros_ws
+colcon build
+source install/setup.bash
+~~~
+
+## Pakete
+| Paket | Zweck |
+|:------|:------|
+| ...   | ...   |
+```
+
+************************************
+
+     {{2}}
+************************************
+
+**.gitignore**
+
+Erstellen Sie eine .gitignore Datei mit folgendem Inhalt:
+
+```gitignore
+__pycache__/
+*.pyc
+
+# um versehentliche Uploads zu vermeiden:
+**/*.mcap
+**/*.db3
+**/build/
+**/install/
+**/log/
+```
+
+> **Was steht hier drin?**
+>
+> - `build/`, `install/` und `log/` liegen im Workspace **außerhalb** des Repositories, dafür braucht die `.gitignore` eigentlich keinen Eintrag. Um sicherzustellen, dass Sie diese Ordner nicht versehentlich mit hochladen, können Sie die entsprechenden Einträge übernehmen.
+> - `*.mcap` (und `*.db3` bei `--storage sqlite3`) sind die eigentlichen Bag-Daten und werden schnell mehrere GB groß. GitHub LFS wäre zwar eine Option, für große Bags empfehlen wir aber den **manuellen Transfer**, z. B. per USB-Stick.
+> - `__pycache__/` und `*.pyc` entstehen beim Ausführen von Python und gehören nicht ins Repository.
+
+************************************
+
+     {{3}}
+************************************
+
+**Lokales Repository**
 
 ```bash
-ros2 topic info /cmd_vel
+cd ros_ws/src/turtlebot3_praktikum_pakete
+
+git init -b main
+git add .
+git status          # Kontrolle: nur README.md und .gitignore
+git commit -m "Initiale Struktur für die Praktikumspakete"
 ```
 
-Achten Sie besonders auf `/cmd_vel`: `geometry_msgs/msg/Twist` oder `geometry_msgs/msg/TwistStamped`? Davon hängt ab, wie Sie in C fahren — und wie Ihr Fahrverhalten später senden muss.
+> **Was passiert hier?**
+>
+> - `git init -b main` legt einen Branch `main` an; bei älteren Git-Versionen geht das mit `git branch -M main`.
+> - `git status` zeigt vor dem Commit, was wirklich aufgenommen wurde.
 
-**B.2 Quality of Service** (VL 03)
+************************************
+
+     {{4}}
+************************************
+
+**Was gehört ins Repository?**
+
+[[X]] `README.md` mit Team und Befehlen
+[[X]] `.gitignore`
+[[ ]] `ros_ws/build/`
+[[ ]] `ros_ws/install/setup.bash`
+[[ ]] `ros_ws/src/turtlebot3_praktikum_pakete/__pycache__/`
+
+************************************
+
+### Push ins Remote-Repository
+
+Jetzt wird das lokale Repository mit dem Remote-Repository aus Schritt 3 verknüpft und hochgeladen:
 
 ```bash
-ros2 topic info -v /scan
+cd ros_ws/src/turtlebot3_praktikum_pakete
+git remote add origin <ssh oder https git url ihres Repositories>
+git push -u origin main
 ```
 
-📝 Welche `Reliability` und welche `Durability` verwendet der LiDAR-Treiber? Was folgt daraus für RViz und für Ihre eigenen Knoten?
+> **Was passiert hier?**
+>
+> - `git remote add origin ...` hinterlegt die Adresse des Remote-Repositories; `origin` ist nur der Name dieser Verknüpfung.
+> - `git push -u origin main` lädt den Branch `main` hoch und merkt sich die Verknüpfung. Später genügt `git push`.
+> - Laden Sie danach die Repository-Seite im Browser neu: `README.md` und `.gitignore` sollten dort auftauchen.
 
-**B.3 Koordinatensysteme** (VL 03)
+> **Hilfe, das geht nicht!**
+>
+> - `Permission denied (publickey)` → für Ihr Konto ist kein SSH-Key hinterlegt. Legen Sie einen Key an und tragen Sie ihn bei GitHub ein, oder verwenden Sie HTTPS mit Personal Access Token.
+> - `Repository not found` → Tippfehler im Namen, oder Sie sind noch nicht Mitglied der Organisation.
+> - Es wird nach Benutzername und Passwort gefragt → das Passwort funktioniert nicht; nutzen Sie ein Token (HTTPS) oder SSH.
+> - `src refspec main does not match any` → es gibt noch keinen Commit, oder der Branch heißt anders (`git branch -M main`).
+> - `remote origin already exists` → die Verknüpfung existiert schon. Prüfen Sie ob sie korrekt ist und korrigieren Sie sie gegebenenfalls mit `git remote set-url origin <neue-url>`.
+
+### Gemeinsamer Startpunkt
+
+     {{0}}
+************************************
+
+Alle anderen im Team holen sich jetzt genau diesen Stand:
 
 ```bash
-ros2 topic echo --once /scan | grep frame_id      # Pipe und grep aus Ü 1
-ros2 run tf2_tools view_frames
+mkdir -p ros_ws/src/
+cd ros_ws/src
+
+# Eine der beiden Varianten wählen:
+
+# Ordner soll wie das Repository heißen:
+git clone <ssh oder https git url ihres Repositories>
+
+# Eigener Name (zweites Argument), z.B. der Ihres Paketordners:
+git clone <ssh oder https git url ihres Repositories> turtlebot3_praktikum_pakete
+
+cd ..
+colcon build
+source install/setup.bash
 ```
 
-📝 In welchem Frame (`frame_id`) liefert der LiDAR seine Messungen? Kommt dieser Frame im tf-Baum aus `view_frames` vor? Fügen Sie die PDF-Datei ins Protokoll ein.
+> **Was passiert hier?**
+>
+> - Geklont wird **nach `src/`**, nicht in den Workspace. Nur dort sucht `colcon` nach Paketen.
+> - `git clone` legt den Ordner nach dem Repository-Namen an. Soll er anders heißen, geben Sie den gewünschten Namen als zweites Argument an: `git clone <url> <ordnername>`.
+> - Im Ordner liegt noch kein Paket, deshalb meldet `colcon build` nur `Summary: 0 packages finished`. Das ist an dieser Stelle richtig so.
+> - `build/`, `install/` und `log/` entstehen bei jeder Person lokal neu und sind nicht Teil des Repositories.
 
-📝 Fragen Sie mit `ros2 run tf2_ros tf2_echo base_footprint <Frame des LiDAR>` ab, wo der LiDAR sitzt. Stimmt der Wert mit dem Modell aus VL 03 überein (z = 0,182 m für `base_scan`)?
+************************************
 
-<details>
-<summary>Der Frame des LiDAR fehlt im tf-Baum?</summary>
+     {{1}}
+************************************
 
-Das ist Ursache 1 aus der Leitfrage von VL 03. Meldet der LiDAR-Treiber einen Frame, den das Modell des Roboters nicht kennt (z.B. `laser`), ergänzen Sie die fehlende Verbindung selbst mit einer statischen Transformation. Sitzt der Sensor genau im Ursprung von `base_scan`, ist das eine Transformation ohne Verschiebung:
+**Ab jetzt gilt für jede Änderung derselbe Ablauf:**
 
 ```bash
-ros2 run tf2_ros static_transform_publisher --frame-id base_scan --child-frame-id <Frame des LiDAR>
+cd ros_ws/src/...   # in den Paketordner (= das Repository)
+git pull            # erst holen, was die anderen gemacht haben
+
+# ... arbeiten ...
+
+cd ../..            # zurück in den Workspace
+colcon build        # bauen und testen
+source install/setup.bash
+
+cd src/...          # wieder in den Paketordner
+git status          # prüfen, was in den Commit soll
+git add .
+git commit -m "Was geändert wurde und warum"
+git push
 ```
 
-Prüfen Sie danach erneut mit `tf2_echo`.
+> **Tipp:** Bauen und starten Sie vor dem Push. Sonst merkt erst die nächste Person, dass etwas nicht kompiliert. Wenn Sie parallel an mehreren Features arbeiten, sprechen Sie sich ab und nutzen Branches, statt gleichzeitig auf `main` zu committen.
 
-</details>
+************************************
 
-**Zwischenabnahme** (noch mit Verbindung zum Roboter): Zeigen Sie den Betreuern `ros2 topic list` und `tf2_echo` mit der Lage des LiDAR (Abnahme Nr. 1 und 3).
+### Checkpoint Teil 1
 
-## C: Fahren und Sensordaten ansehen
+Bevor es mit den Bags weitergeht, hakt **jedes** Team diese Punkte ab:
 
-**C.1 Stoppbefehl vorbereiten** — **bevor** Sie fahren. Verwenden Sie den Typ aus B.1 (VL 01):
+- [ ] Alle Teammitglieder sind in der GitHub-Organisation eingetragen.
+- [ ] Das Remote-Repository existiert in der Organisation und ist Ihrem Team zuzuordnen (Name und/oder README).
+- [ ] Der Paketordner liegt in `ros_ws/src/` und enthält `README.md` und `.gitignore`.
+- [ ] Jedes Teammitglied hat geklont, und `colcon build` läuft ohne Fehler durch.
+- [ ] `README.md` nennt Teammitglieder, die Befehle zum Bauen und Starten und dokumentiert die Pakete.
 
-```bash
-# für Twist:
-ros2 topic pub --once /cmd_vel geometry_msgs/msg/Twist "{}"
-# für TwistStamped:
-ros2 topic pub --once /cmd_vel geometry_msgs/msg/TwistStamped "{}"
-```
+> **Warum der Aufwand?** Ab dem zweiten Praktikum arbeiten Sie an Sensorik und Bildverarbeitung. Wer dann noch unterschiedliche Stände zusammenführen muss, verliert Zeit, die für die eigentliche Aufgabe fehlt.
 
-Alle Felder sind 0 — der Roboter steht. Lassen Sie den passenden Befehl in einem Terminal bereitstehen.
+## Teil 2: Bag-Aufnahme
 
-**C.2 Per Tastatur fahren**
+In den nächsten Praktika bearbeiten Sie:
 
-Teleop startet ohne weitere Angaben mit **0,5 m/s** — viel zu schnell. Setzen Sie die Startgeschwindigkeit deshalb beim Start als Parameter (Ü 2):
+- **Bildkorrektur** von Farbstich und Fisheye-Verzerrung,
+- **Linien- und Spurerkennung** inklusive Haltelinien,
+- **Hindernis- und Schildererkennung**,
+- **Sensorfusion** von Kamera, LiDAR, IMU und Odometrie,
+- **Regelung und Navigation** auf einer Strecke mit Parkbuchten und Kreuzung.
 
-```bash
-# für Twist:
-ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -p speed:=0.1 -p turn:=0.5
-# für TwistStamped:
-ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -p speed:=0.1 -p turn:=0.5 -p stamped:=true
-```
+Dafür brauchen Sie Daten, die Sie vom Roboter erhalten. Aber ist es wirklich sinnvoll, für jeden Test vor Ort sein zu müssen?
 
-Erhöhen Sie die Geschwindigkeit mit den Tasten des Programms nicht über 0,15 m/s.
+**Ziel dieses Teils:** Jedes Team hat am Ende mindestens einen Bag, mit dem spätere Aufgaben **ohne Roboter** getestet werden können.
 
-📝 Welcher Wert für `linear.x` ergibt sich, wenn Sie geradeaus fahren? Prüfen Sie es mit `ros2 topic echo /cmd_vel`. (VL 01: `linear.x` ist vorwärts, `angular.z` die Drehung.)
+> **Hinweis:** Jeder Roboter sieht anders aus, jede Kamera hat einen anderen Farbstich, jeder LiDAR rauscht anders. Versteifen Sie sich also auch nicht zu sehr auf Ihr jeweiliges Bagfile!
 
-**C.3 Sensordaten ansehen**
+### Aufgabe: Planen, was aufgenommen wird
 
-*Kamerabild* mit `rqt` aus VL 01: Menü _Plugins → Visualization → Image View_, oben das Topic `/camera/image_raw` wählen.
+--{{0}}--
+Jetzt sind Sie dran: zehn bis fünfzehn Minuten Planung im Team. Danach stellt jede Gruppe ihre Ideen in zwei Minuten vor.
 
-```bash
-rqt
-```
+Beantworten Sie für Ihr Team die folgenden vier Fragen. Stichpunkte genügen:
 
-*LiDAR in RViz* — mit den drei Schritten aus VL 03:
+1. **Welche Szenarien** brauchen wir? (Gerade, Kurven, Kreuzung, Parkbuchten, Hindernisse, Schilder, Personen, …)
+2. **Wann muss was aufgenommen werden?** Reicht eine lange Fahrt mit allem, oder braucht es mehrere kurze Aufnahmen?
+3. **Welche Perspektiven und Edge Cases** gibt es? (Abstand, Winkel, Beleuchtung, Reflexionen, Verschmutzung, Verdeckung, …)
+4. **Wie speichern und verteilen** wir die Bags? (GitHub LFS, USB-Stick, Benennung, Zugriff für alle?)
 
-```bash
-rviz2
-```
+**Ergebnis:** eine Liste „Szenario → Zweck → benötigte Topics → geschätzte Dauer“, zum Beispiel:
 
-Erscheinen keine Punkte, prüfen Sie die beiden Ursachen aus VL 03: Fehlt die Transformation (Statusmeldung im _Displays_-Panel)? Passt die QoS (_Topic → Reliability Policy_)?
+| Szenario | Zweck (Praktikum) | Topics | geschätzte Dauer |
+|:---------|:------------------|:-------|:-----------------|
+| Gerade mit Haltelinie | Spurerkennung (P2) | Kamera, `/scan` | 30 s |
+| Kurve mit Begrenzungslinien | Krümmung (P2, P4) | Kamera, `/imu`, `/odom`, `/tf` | 60 s |
+| … | … | … | … |
 
-📝 Welche Einstellungen waren nötig, damit der Scan erscheint? Fügen Sie einen Screenshot ins Protokoll ein.
+> **Denken Sie an die Zeit:** Sie können heute nicht beliebig viel aufnehmen. Priorisieren Sie Szenarien, die sich später **nicht** mehr herstellen lassen, weil der Roboter dann belegt ist oder der Aufbau zu aufwändig wäre. Natürlich können Sie aber auch außerhalb des Vorlesungs-/Übungszeitslot Aufnahmen vor Ort tätigen.
 
-*Kamera mit eigenem Skript (Kür, nur wenn Zeit bleibt):* Laden Sie das Skript [view_camera.py](https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/praktikum_01_turtlebot/view_camera.py) herunter (`wget` + Link). Es abonniert `/image_raw`, Ihr Roboter sendet aber auf `/camera/image_raw`. Starten Sie es trotzdem, **ohne den Code zu ändern** (VL 01, Remapping):
+### Denkanstöße: Sensorik und Bildverarbeitung
 
-**Lösung** — erst aufdecken, wenn Sie es selbst versucht haben:
+Die folgenden Fragen stammen aus den Praktikumsinhalten der späteren Blöcke. Sie sind **Denkrichtungen, keine Pflichtliste**. Was davon für Ihre Aufnahmen relevant ist, entscheiden Sie.
 
-[[!]]
-***
-```bash
-python3 view_camera.py --ros-args -r /image_raw:=/camera/image_raw
-```
-***
+     {{1}}
+************************************
 
-## D: Eine Fahrt aufzeichnen
+**Bildkorrektur und Spurerkennung**
 
-Ab Block 2 entwickeln Sie Ihre Spurerkennung am Schreibtisch — mit Daten, die Sie heute aufnehmen. (Ü 2)
+- **Farbstich:** dieselbe Szene mit verschiedenen Kameras und bei unterschiedlicher Beleuchtung
+- **Fisheye-Verzerrung:** Muster mit geraden Linien (Schachbrett, Fliesen, Latten), aus denen sich später entzerren und kalibrieren lässt
+- **Haltelinien und Begrenzungslinien** aus verschiedenen Abständen, Winkeln und Krümmungen
+- **Lichtreflexionen und Schmutz:** Was macht die Erkennung, wenn der Boden spiegelt? Woran erkennt man den Unterschied zu einem Hindernis?
 
-**D.1 Abschätzen, bevor Sie aufnehmen**
+************************************
 
-```bash
-ros2 topic bw /camera/image_raw
-ros2 topic bw /scan
-```
+     {{2}}
+************************************
 
-📝 Wie viele Megabyte pro Sekunde erzeugen Kamera und LiDAR (`ros2 topic bw`, Ü 2)? Wie groß wird eine Aufnahme von 60 Sekunden? Reicht der freie Platz auf Ihrem Laptop?
+**LiDAR**
 
-> [!TIP]
-> **Tipp – Aufnahmedauer:** Unkomprimierte Kamerabilder erzeugen schnell mehrere zehn Megabyte pro Sekunde — eine Minute kann über 1 GB groß werden, und über WLAN gehen dabei Bilder verloren. Nehmen Sie deshalb **30 bis 60 Sekunden** auf. Ist der Platz knapp, lassen Sie die Kamera beim ersten Versuch weg und nehmen sie in einem zweiten, kürzeren Durchgang auf.
+- **Winkelauflösung:** wie verändert sich die Genauigkeit, wenn man langsam auf ein weit entferntes Objekt zufährt?
+- **Minimaler und maximaler Abstand:** bei welchen Entfernungen sind Objekte zu erkennen? Bei welchen nicht?
 
-**D.2 Aufnehmen**
+************************************
 
-Prüfen Sie zuerst mit `ros2 topic list`, ob Ihr Roboter auch `/camera/camera_info` sendet — falls ja, nehmen Sie es mit auf. (Die Kamera kalibrieren Sie in P 2 selbst.) Fahren Sie dann langsam (≤ 0,1 m/s) eine Runde entlang der Fahrspur und nehmen Sie auf:
+### Denkanstöße: Erkennung, Fusion, Navigation
 
-```bash
-ros2 bag record -o fahrt_spur --topics /camera/image_raw /camera/camera_info /scan /odom /tf /tf_static
-```
+Die folgenden Fragen stammen aus den Praktikumsinhalten der späteren Blöcke. Sie sind **Denkrichtungen, keine Pflichtliste**. Was davon für Ihre Aufnahmen relevant ist, entscheiden Sie.
 
-Warum `/tf` und `/tf_static`? Ohne sie weiß man beim Abspielen nicht, wo der LiDAR am Roboter sitzt (VL 03).
+     {{1}}
+************************************
 
-**Gütekriterium:** Die Fahrspur ist im Kamerabild die meiste Zeit zu sehen, und `ros2 bag info` zeigt für die Kamera annähernd so viele Bilder, wie die Rate aus A.3 erwarten lässt. Fehlen viele Bilder, nehmen Sie kürzer oder ohne LiDAR erneut auf.
+**Objekterkennung**
 
-**D.3 Prüfen und ohne Roboter abspielen**
+- **Höhe der Hindernisse:** welche Boxen liegen auf LiDAR-Ebene, welche sieht nur die Kamera? Bliebe dieser Unterschied in einem Bag erkennbar?
+- **Schilder:** aus welchen Winkeln und Entfernungen sind Wenden, Links, Rechts, Gerade und Parken noch lesbar? Und was macht wechselndes Licht daraus?
 
-```bash
-ros2 bag info fahrt_spur
-```
+************************************
 
-📝 Dauer, Anzahl der Nachrichten pro Topic und Größe der Aufnahme?
+     {{2}}
+************************************
 
-Erst **nach der Abnahme**: Trennen Sie Ihren Laptop vom Roboter-WLAN und spielen Sie die Aufnahme ab (das können Sie auch zu Hause machen):
+**Sensorfusion**
 
-```bash
-ros2 bag play fahrt_spur --loop
-```
+- **Kurvenradien:** wie gut folgt die Odometrie einer gleichmäßigen Kurve, wenn die Kamera die Krümmung liefert? Driften beide Messungen zeitlich auseinander?
+- **Bezug der Sensoren:** ließe sich ohne `/tf` und `/tf_static` noch sagen, wo ein Messwert relativ zum Roboter entstanden ist?
 
-Starten Sie RViz und `rqt` (Image View) erneut. 📝 Sehen Sie Scan und Kamerabild wie bei der echten Fahrt?
+************************************
 
-> [!CAUTION]
-> **Sicherheit – Daten:** Bewahren Sie die Aufnahme auf! Sie brauchen sie in Ü 3 und P 2. Große Dateien gehören nicht ins Git-Repository — legen Sie sie auf einem gemeinsamen Speicher Ihrer Gruppe ab und notieren Sie im Protokoll, wo.
+     {{3}}
+************************************
 
-## Abnahme
+**Regelung und Navigation**
 
-Die Praktika sind Ihre Prüfungsleistung. Zeigen Sie den Betreuern am Ende, dass Ihre Gruppe die folgenden Punkte erreicht hat:
+- **Streckenverlauf:** welche Teile sieht die Kamera aus der späteren Fahrtperspektive? Kommen Haltelinien, zwei Hindernisse und Parkbuchten darin vor?
+- **Parken:** belegte und freie Buchten, verschiedene Anfahrtswinkel, 3 s Wartezeit im Parkmodus. Welche dieser Zustände müsste eine Aufnahme zeigen?
+- **Kreuzung:** liegt die Zufahrt samt Haltelinie und abbiegenden Straßen im Sichtfeld? Oder bräuchte es dafür eine andere Blickrichtung?
 
-<!-- data-type="none" -->
-| Nr. | Nachweis                                                                                     | Aus Teil |
-| --- | -------------------------------------------------------------------------------------------- | -------- |
-| 1   | `ros2 topic list` auf Ihrem Laptop zeigt die Topics des Roboters (Zwischenabnahme)           | A        |
-| 2   | Im Protokoll: Typ von `/scan` und `/cmd_vel` **mit dem Befehl, mit dem er ermittelt wurde**; Reliability des LiDAR **und was daraus für RViz folgt** | B |
-| 3   | `tf2_echo` zeigt die Lage des LiDAR relativ zu `base_footprint` (Sollwert $z \approx 0{,}18$ m); die PDF aus `view_frames` liegt im Protokoll (Zwischenabnahme) | B |
-| 4   | Der vorbereitete Stoppbefehl hält den fahrenden Roboter an                                   | C        |
-| 5   | Scan in RViz und Kamerabild in `rqt` sind sichtbar; die nötigen RViz-Einstellungen stehen im Protokoll | C |
-| 6   | `ros2 bag info` zeigt eine Aufnahme von 30–60 s mit Kamera, LiDAR, Odometrie und tf, die das Gütekriterium erfüllt | D |
-| 7   | **Verständnisfrage** an ein von den Betreuern gewähltes Gruppenmitglied, z.B. „Warum erscheint der Scan in RViz erst mit Best Effort?“ | alle |
+************************************
 
-Das Abspielen ohne Roboter (D.3) und das Hochladen des Protokolls erledigen Sie bis zu Beginn von P 2. Fällt der Roboter durch einen Defekt aus, den Ihre Gruppe nicht verschuldet hat (Akku, WLAN), holen Sie die fehlenden Punkte zu Beginn von P 2 nach.
+### Querschnitt: Was fast immer dazugehört
 
-**Zum Schluss**
+Unabhängig vom Szenario lohnt es sich, über die folgenden Punkte vorher nachzudenken, weil sie erfahrungsgemäß vergessen werden:
 
-- [ ] Roboter über die Betreuer herunterfahren lassen bzw. ausschalten, Akku zum Laden abgeben
-- [ ] Auf dem eigenen Laptop für zu Hause wieder `ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST` aktivieren (Zeile in `~/.bashrc` wieder einkommentieren)
-- [ ] Aufnahme auf den Gruppenspeicher kopieren
+- **Alle Sensoren gleichzeitig:** würden eine Kamera- und eine LiDAR-Aufnahme, getrennt aufgenommen, für eine Fusion überhaupt noch zusammenfinden?
+- **Ruhephasen am Anfang und Ende:** wie lassen sich Offset, Drift und Ruhelage der IMU bestimmen, wenn die Aufnahme schon während der Fahrt beginnt?
+- **Gemeinsame Uhr:** decken in `ros2 bag info` alle Topics denselben Zeitraum ab? Und was macht `use_sim_time` beim Abspielen ohne `--clock`?
+- **Konstante Bedingungen:** ließe sich hinterher noch unterscheiden, ob ein Effekt aus der Szene stammt oder aus geänderter Belichtung bzw. verschobenen Hindernissen?
+- **Kalibrierszenario:** woraus sollte später die intrinsische Kalibrierung entstehen, wenn nie ein bekanntes Muster durchs Bild wandert?
+- **Dokumentation:** wüsste in zwei Wochen noch jemand, wer wann mit welchem Roboter welches Szenario aufgenommen hat und welche Topics enthalten sind?
 
-**Ausblick:** In Block 2 lernen Sie die Sensoren genauer kennen — und in **P 2** korrigieren Sie das Kamerabild Ihrer Aufnahme, bevor Sie in **P 3** die Fahrspur darin erkennen.
+> **Nicht vergessen:** Der Roboter wird für die Aufnahmen **manuell** per Teleoperation gefahren. Dafür brauchen Sie eine funktionierende Kette von der Tastatur bis `/cmd_vel`: entweder die eigene Teleop-Kette aus Übung 2 (wenn die noch nicht läuft, ist jetzt der Moment dafür) oder das fertige Paket `turtlebot3_teleop` mit `ros2 run turtlebot3_teleop teleop_keyboard`. Das ist deutlich weniger Aufwand, muss allerdings vorher noch installiert werden.
 
-<!-- kurslandkarte:ausblick-start -->
+### Kurzvorstellung: 2 Minuten pro Gruppe
 
---------------------------------------------------------------------------------
+Jede Gruppe stellt ihre Ideen vor:
 
-**🗺️ Nächster Halt:** VL 04 · Sensorik (Mi 2.12. · 11:30–13:00) – Sie wissen, was die Sensoren des TurtleBots messen und wo ihre Grenzen liegen. [Auf der Kurslandkarte ansehen](https://tubaf-ifi-liascript.github.io/VL_SoftwareprojektRobotik/kurslandkarte/#termin=01)
+- **Keine Präsentation nötig.** Ein Zuruf, ein Flipchart oder ein Blick auf die eigene Stichpunktliste reicht aus.
+- **Das ist kein „so machen wir das“-Vortrag**, sondern ein **„wir denken, das könnte gut funktionieren“**. Sie holen sich Feedback, bevor Sie Zeit in die Aufnahme stecken.
+- **Zwei Minuten.** Halten Sie sich kurz und bringen Sie Ihre Punkte prägnant herüber.
 
-<!-- kurslandkarte:ausblick-ende -->
+Struktur, die funktioniert:
+
+1. **Szenarien:** Was wollen Sie aufnehmen und wofür? (ein Satz pro Szenario)
+2. **Topics:** Was muss dafür mit in den Bag?
+3. **Offene Fragen:** Wo sind Sie unsicher und möchten eine Einschätzung?
+
+> **Für die Zuhörenden:** Notieren Sie sich pro Gruppe (a) eine Idee, die Sie übernehmen wollen, und (b) eine Lücke, die Sie sehen. Beides brauchen wir gleich in der Diskussion.
+
+### Gemeinsame Diskussion
+
+Nach allen Kurzvorstellungen sammeln wir das Wichtigste für den ganzen Kurs. Ziel ist **ein gemeinsames Verständnis** und nicht ein einziger Bag für alle.
+
+     {{1}}
+************************************
+
+**Leitfragen:**
+
+1. **Mehrfachnutzen:** Welche Aufnahme deckt mehrere Blöcke ab? Eine Fahrt mit Kamera, LiDAR, IMU und Odometrie kann Block 2, 4 und 5 bedienen.
+2. **Nicht nachholbar:** Welche Aufnahmen lassen sich später kaum wiederholen? Das betrifft etwa Szenarien, für die der Roboter belegt ist, der Aufbau aufwändig war oder die Bedingungen (Licht, Personen) nicht reproduzierbar sind. Solche Aufnahmen kommen zuerst.
+3. **Vergleichbarkeit:** Welche Topics sollte **jedes** Team aufnehmen, damit Ergebnisse zwischen den Gruppen vergleichbar sind?
+4. **Grenzen der Aufnahme:** Welche Fragen lassen sich mit Bags grundsätzlich nicht beantworten? <!--- (z. B. Regelverhalten auf Störgrößen, Latenz der gesamten Kette) --->
+5. **Ablage:** Wo liegen die Bags, wer hat Zugriff, wie werden sie benannt? Aufgrund der Größe von Bags empfehlen wir einen **manuellen Transfer** (z.B. USB-Stick) statt Git.
+
+************************************
+
+     {{2}}
+**Ergebnis der Diskussion:** eine gemeinsame Liste an Topics und Szenarien, welche für alle relevant aber nicht verpflichtend sind.
+
+> **Wichtig:** Wenn Sie sich für etwas entscheiden, halten Sie es schriftlich fest. Sonst diskutieren Sie in zwei Wochen dieselbe Frage noch einmal.
+
+### Reihenfolge und Aufnahme
+
+--{{0}}--
+Jetzt organisieren Sie sich untereinander: Wer fängt an, wer kommt danach? Denken Sie daran, dass Sie zwei Testkurse zur Verfügung haben!
+
+     {{1}}
+************************************
+
+**Reihenfolge festlegen**
+
+Damit die Reihenfolge nicht ausdiskutiert werden muss:
+
+- Wer noch **nicht fahrbereit** ist, kommt später und nutzt die Wartezeit sinnvoll für das Setup.
+- Planen Sie lieber **eine Aufnahme zu viel** als eine zu wenig: Ein zweiter Durchlauf am selben Tag ist billiger als ein neuer Termin.
+
+************************************
+
+     {{2}}
+************************************
+
+**Während der Aufnahme**
+
+- **Eine Gruppe fährt, alle anderen halten die Strecke frei.** Hindernisse und Schilder werden **vor** dem Start aufgebaut, nicht während der Fahrt.
+- **Vor dem Start prüfen:** `ros2 topic list`, `ros2 topic hz /scan` und `ros2 topic hz /camera/image_compressed`, dazu den Ladezustand des Akkus. Prüfen Sie auch, ob die Discovery der Bag Topics abgeschlossen ist.
+- **Nach dem Start prüfen:** `ros2 bag info` muss Dauer, Nachrichtenzahl und Topics bestätigen. Fehlt ein Topic, muss der Bag vielleicht verworfen und neu gestartet werden.
+- **Bags benennen:** `ros_ws/bags/<datum>_<teamname>_<domain id>_<szenario>/` und direkt nach der Aufnahme per Datentransfer sichern.
+- **Keine Aufnahme ohne Notiz:** Szenario, Roboter und Besonderheiten in `ros_ws/bags/README.md` eintragen.
+
+************************************
+
+     {{3}}
+************************************
+
+**Was machen die anderen?**
+
+- Offene Punkte aus **Übung 2** erledigen: Command-Velocity-Node, Parameterdatei, Launchdatei. Ohne funktionierende Teleoperation fährt kein Roboter.
+- Den eigenen Roboter für den nächsten Slot vorbereiten: Netzwerk, `ROS_DOMAIN_ID`, Topic-Check, Akku.
+- Die eigenen Nodes gegen einen **fremden Bag** testen und erste Auswertungen vorbereiten.
+
+************************************
+
+## Checkliste und Ausblick
+
+     {{1}}
+************************************
+
+**Organisation**
+
+- [ ] Gruppe steht, Repository-Verantwortliche:r ist benannt.
+- [ ] Workspace mit Paketordner in `src/` vorhanden, `colcon build` läuft fehlerfrei.
+- [ ] Remote-Repository angelegt und gepusht, alle Teammitglieder haben geklont.
+- [ ] `README.md` enthält Team, Mitglieder sowie Build- und Startbefehle.
+
+************************************
+
+     {{2}}
+************************************
+
+**Bag-Aufnahme**
+
+- [ ] Planung im Team abgeschlossen (Szenarien, Topics, Dauer).
+- [ ] Kurzvorstellung gehalten, Feedback notiert.
+- [ ] Ergebnis der Kursdiskussion zur Kenntnis genommen (gemeinsame Topics und Szenarien).
+- [ ] Zeitslot bekannt, Aufnahme durchgeführt und mit `ros2 bag info` geprüft.
+- [ ] Bag per Datentransfer gesichert und in `ros_ws/bags/README.md` dokumentiert.
+
+************************************
+
+     {{3}}
+************************************
+
+**Bis zum nächsten Praktikum**
+
+- Fehlende Aufnahmen nachholen. Sprechen Sie das mit der Betreuung ab und setzen Sie nicht einfach auf den Roboter.
+- Sicherstellen, dass die Teleoperation läuft. Sie ist das Fahrwerk für alle weiteren Aufnahmen.
+- Prüfen, ob Sie Ihren Bag **ohne Roboter** abspielen und in `rviz2` visualisieren können: Image, LaserScan und eine Punktwolke sollten sichtbar sein.
+
+************************************
+
