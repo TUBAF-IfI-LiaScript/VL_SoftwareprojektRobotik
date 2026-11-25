@@ -6,6 +6,14 @@ language: de
 narrator: Deutsch Female
 
 comment: Praktikum 1 des Robotik-Projekts. Inhalt: Gruppe, gemeinsamer Workspace mit Repository sowie Planung und Aufnahme von ROS2-Bags.
+
+@style
+/* Tabellen im Hauptfluss scrollen lassen statt in einem eigenen Kasten */
+.lia-table-responsive {
+  max-height: none;
+  margin-block-end: 1.5rem;
+}
+@end
 -->
 
 [![LiaScript](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/TUBAF-IfI-LiaScript/VL_SoftwareprojektRobotik/refs/heads/master/exercises/praktikum_01_ros2_bags/README.md)
@@ -18,7 +26,7 @@ Willkommen zum ersten Praktikum. Heute schaffen wir die organisatorische Basis f
 | Teil | Inhalt | Dauer |
 |:-----|:-------|:------|
 | Teil 1 | Gruppe, Repository, Workspace | ≈ 30 min |
-| Teil 2 | Planung: Aufgabe, Denkanstöße, Querschnitt | ≈ 20 min |
+| Teil 2 | Überblick, Aufgabe, Denkanstöße, Querschnitt | ≈ 20 min |
 | Teil 2 | Kurzvorstellung der Ideen | ≈ 15 min |
 | Teil 2 | Gemeinsame Diskussion | ≈ 15 min |
 | Teil 2 | Reihenfolge und Aufnahme | verbleibende Zeit |
@@ -370,13 +378,22 @@ Bevor es mit den Bags weitergeht, hakt **jedes** Team diese Punkte ab:
 
 ## Teil 2: Bag-Aufnahme
 
-In den nächsten Praktika bearbeiten Sie:
+In den nächsten Praktika bearbeiten Sie Schritt für Schritt einen Rundkurs: erst das Bild, dann die Spur, dann Hindernisse und Schilder, zuletzt Sensorfusion, Costmap, Parken und Abbiegen.
 
-- **Bildkorrektur** von Farbstich und Fisheye-Verzerrung,
-- **Linien- und Spurerkennung** inklusive Haltelinien,
-- **Hindernis- und Schildererkennung**,
-- **Sensorfusion** von Kamera, LiDAR, IMU und Odometrie,
-- **Regelung und Navigation** auf einer Strecke mit Parkbuchten und Kreuzung.
+### Die nächsten Praktika im Überblick
+
+Die folgende Übersicht zeigt, was in **P 2 bis P 8** auf Sie zukommt – und damit auch, welche Daten Sie heute aufnehmen sollten.
+
+<!-- data-type="none" -->
+| P | Block | Arbeitsauftrag | Ergebnis |
+|:--|:--|:--|:--|
+| **P 2**<br>Bildkorrektur | 2 | <ul class="lia-list--unordered"><li>Die Kamerabilder der eigenen Aufnahmen nutzbar machen.</li><li>Verzerrung und Farbstich so weit ausgleichen, dass die Strecke verlässlich beurteilt werden kann.</li><li>Festlegen, welcher Bildbereich in welcher Ansicht weiterverwendet wird.</li></ul> | entzerrte Draufsicht der Strecke, Kamerakalibrierung |
+| **P 3**<br>Spurerkennung | 2 | <ul class="lia-list--unordered"><li>Die Fahrspur im Bild zuverlässig wiederfinden.</li><li>Alltagsstörungen wie Licht, Schatten und Schmutz dürfen keine falsche Spur erzeugen.</li><li>Haltelinien gesondert behandeln und die Lage des Roboters in der Spur fortlaufend ausgeben.</li></ul> | erkannte Begrenzungs- und Haltelinien, Lage und Richtung des Roboters zur Spur |
+| **P 4**<br>Hindernisse und Schilder | 3 | <ul class="lia-list--unordered"><li>Hindernisse auf der Strecke finden, unabhängig von ihrer Höhe über dem Boden.</li><li>Die Funde zu einer gemeinsamen Hindernisübersicht zusammenführen.</li><li>Die Schilder der Strecke erkennen und ihrer Bedeutung zuordnen.</li></ul> | Hindernisübersicht, erkannte Schilder mit Bedeutung und Position |
+| **P 5**<br>Streckenverlauf | 4 | <ul class="lia-list--unordered"><li>Aus der aktuellen Wahrnehmung abschätzen, wie die Strecke weiterläuft.</li><li>Die momentane Krümmung der Strecke bestimmen.</li><li>Beides zu einer belastbaren Einschätzung des Streckenverlaufs verbinden.</li></ul> | durchgängige Einschätzung des Streckenverlaufs – aktuell und vorausschauend |
+| **P 6**<br>Costmap und Bahnfolge | 5 | <ul class="lia-list--unordered"><li>Aus der Wahrnehmung eine bewertete Karte der Strecke ableiten.</li><li>Die Bewertung so einstellen, dass die Fahrspurmitte erstrebenswert und alles andere unattraktiv ist.</li><li>Den Roboter anhand dieser Bewertung entlang der Strecke führen.</li></ul> | bewertete Streckenkarte und eine Regelung, die den Roboter darin führt |
+| **P 7**<br>Parken und Abbiegen | 5 | <ul class="lia-list--unordered"><li>Das Parken als eigenen Fahrabschnitt umsetzen.</li><li>Freie und belegte Parkbuchten unterscheiden und eine passende anfahren.</li><li>An der Kreuzung die vom Schild vorgegebene Richtung nehmen.</li></ul> | funktionierendes Parkmanöver und korrektes Abbiegen an der Kreuzung |
+| **P 8**<br>Rundkurs | X | <ul class="lia-list--unordered"><li>Alle Fähigkeiten der vorigen Praktika zu einem durchgängigen Ablauf verbinden.</li><li>Den Ablauf auch auf einer veränderten Strecke stabil halten.</li><li>Jederzeit erkennbar machen, was das System gerade tut, und es stoppen können.</li></ul> | lauffähiger Rundkurs mit Kurzdokumentation |
 
 Dafür brauchen Sie Daten, die Sie vom Roboter erhalten. Aber ist es wirklich sinnvoll, für jeden Test vor Ort sein zu müssen?
 
@@ -398,10 +415,10 @@ Beantworten Sie für Ihr Team die folgenden vier Fragen. Stichpunkte genügen:
 
 **Ergebnis:** eine Liste „Szenario → Zweck → benötigte Topics → geschätzte Dauer“, zum Beispiel:
 
-| Szenario | Zweck (Praktikum) | Topics | geschätzte Dauer |
-|:---------|:------------------|:-------|:-----------------|
-| Gerade mit Haltelinie | Spurerkennung (P2) | Kamera, `/scan` | 30 s |
-| Kurve mit Begrenzungslinien | Krümmung (P2, P4) | Kamera, `/imu`, `/odom`, `/tf` | 60 s |
+| Szenario | Zweck  | Topics | geschätzte Dauer |
+|:---------|:-------|:-------|:-----------------|
+| Gerade mit Haltelinie | Spurerkennung | Kamera, `/scan` | 30 s |
+| Kurve mit Begrenzungslinien | Streckenverlauf | Kamera, `/imu`, `/odom`, `/tf` | 60 s |
 | … | … | … | … |
 
 > **Denken Sie an die Zeit:** Sie können heute nicht beliebig viel aufnehmen. Priorisieren Sie Szenarien, die sich später **nicht** mehr herstellen lassen, weil der Roboter dann belegt ist oder der Aufbau zu aufwändig wäre. Natürlich können Sie aber auch außerhalb des Vorlesungs-/Übungszeitslot Aufnahmen vor Ort tätigen.
