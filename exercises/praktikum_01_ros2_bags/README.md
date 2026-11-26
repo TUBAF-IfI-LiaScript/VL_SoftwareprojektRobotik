@@ -495,7 +495,7 @@ Unabhängig vom Szenario lohnt es sich, über die folgenden Punkte vorher nachzu
 - **Kalibrierszenario:** woraus sollte später die intrinsische Kalibrierung entstehen, wenn nie ein bekanntes Muster durchs Bild wandert?
 - **Dokumentation:** wüsste in zwei Wochen noch jemand, wer wann mit welchem Roboter welches Szenario aufgenommen hat und welche Topics enthalten sind?
 
-> **Nicht vergessen:** Der Roboter wird für die Aufnahmen **manuell** per Teleoperation gefahren. Dafür brauchen Sie eine funktionierende Kette von der Tastatur bis `/cmd_vel`: entweder die eigene Teleop-Kette aus Übung 2 (wenn die noch nicht läuft, ist jetzt der Moment dafür) oder das fertige Paket `turtlebot3_teleop` mit `ros2 run turtlebot3_teleop teleop_keyboard`. Das ist deutlich weniger Aufwand, muss allerdings vorher noch installiert werden.
+> **Nicht vergessen:** Der Roboter wird für die Aufnahmen **manuell** per Teleoperation gefahren. Dafür brauchen Sie eine funktionierende Kette von der Tastatur bis `/cmd_vel`: entweder die eigene Teleop-Kette aus Übung 2 (wenn die noch nicht läuft, ist jetzt der Moment dafür) oder das fertige Paket `turtlebot3_teleop` mit `ros2 run turtlebot3_teleop teleop_keyboard`. Das ist deutlich weniger Aufwand, muss allerdings vorher noch installiert werden und benötigt die Environmentvariable `TURTLEBOT3_MODEL=burger`.
 
 ### Kurzvorstellung: 2 Minuten pro Gruppe
 
